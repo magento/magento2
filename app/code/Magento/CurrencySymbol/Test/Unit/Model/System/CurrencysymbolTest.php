@@ -14,7 +14,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
+class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object manager helper
@@ -77,14 +77,11 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMock(
+        $this->scopeConfigMock = $this->createPartialMock(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            ['getValue', 'isSetFlag'],
-            [],
-            '',
-            false
+            ['getValue', 'isSetFlag']
         );
-        $this->localeResolverMock = $this->getMock(
+        $this->localeResolverMock = $this->createPartialMock(
             \Magento\Framework\Locale\ResolverInterface::class,
             [
                 'getLocale',
@@ -94,53 +91,23 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
                 'setLocale',
                 'emulate',
                 'revert'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->systemStoreMock = $this->getMock(
+        $this->systemStoreMock = $this->createPartialMock(
             \Magento\Store\Model\System\Store::class,
-            ['getWebsiteCollection', 'getGroupCollection', 'getStoreCollection'],
-            [],
-            '',
-            false
+            ['getWebsiteCollection', 'getGroupCollection', 'getStoreCollection']
         );
-        $this->configFactoryMock = $this->getMock(
-            \Magento\Config\Model\Config\Factory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->eventManagerMock = $this->getMock(
+        $this->configFactoryMock = $this->createPartialMock(\Magento\Config\Model\Config\Factory::class, ['create']);
+        $this->eventManagerMock = $this->createPartialMock(
             \Magento\Framework\Event\ManagerInterface::class,
-            ['dispatch'],
-            [],
-            '',
-            false
+            ['dispatch']
         );
-        $this->coreConfigMock = $this->getMock(
+        $this->coreConfigMock = $this->createPartialMock(
             \Magento\Framework\App\Config\ReinitableConfigInterface::class,
-            ['reinit', 'setValue', 'getValue', 'isSetFlag'],
-            [],
-            '',
-            false
+            ['reinit', 'setValue', 'getValue', 'isSetFlag']
         );
-        $this->storeManagerMock = $this->getMock(
-            \Magento\Store\Model\StoreManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->cacheTypeListMock = $this->getMock(
-            \Magento\Framework\App\Cache\TypeListInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->cacheTypeListMock = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -319,17 +286,17 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
          */
-        $websiteMock = $this->getMock(\Magento\Store\Model\Website::class, ['getId', 'getConfig'], [], '', false);
+        $websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', 'getConfig']);
 
         /**
          * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
          */
-        $groupMock = $this->getMock(\Magento\Store\Model\Group::class, ['getId', 'getWebsiteId'], [], '', false);
+        $groupMock = $this->createPartialMock(\Magento\Store\Model\Group::class, ['getId', 'getWebsiteId']);
 
         /**
          * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
          */
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, ['getGroupId'], [], '', false);
+        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getGroupId']);
 
         $this->systemStoreMock->expects($this->once())
             ->method('getWebsiteCollection')

@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class SpecialTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SpecialTest extends \PHPUnit_Framework_TestCase
+class SpecialTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Rss\Product\Special
@@ -75,7 +75,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('store_id')->will($this->returnValue(null));
         $this->request->expects($this->at(1))->method('getParam')->with('cid')->will($this->returnValue(null));
 
@@ -83,30 +83,24 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getValue'])->disableOriginalConstructor()->getMock();
         $this->httpContext->expects($this->any())->method('getValue')->will($this->returnValue(1));
 
-        $this->imageHelper = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
-        $this->outputHelper = $this->getMock(
-            \Magento\Catalog\Helper\Output::class,
-            ['productAttribute'],
-            [],
-            '',
-            false
-        );
-        $this->msrpHelper = $this->getMock(\Magento\Msrp\Helper\Data::class, ['canApplyMsrp'], [], '', false);
-        $this->priceCurrency = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-        $this->rssModel = $this->getMock(\Magento\Catalog\Model\Rss\Product\Special::class, [], [], '', false);
-        $this->rssUrlBuilder = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $this->outputHelper = $this->createPartialMock(\Magento\Catalog\Helper\Output::class, ['productAttribute']);
+        $this->msrpHelper = $this->createPartialMock(\Magento\Msrp\Helper\Data::class, ['canApplyMsrp']);
+        $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->rssModel = $this->createMock(\Magento\Catalog\Model\Rss\Product\Special::class);
+        $this->rssUrlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
 
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $store->expects($this->any())->method('getFrontendName')->will($this->returnValue('Store 1'));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('en_US'));
 
-        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(

@@ -16,7 +16,7 @@ use Magento\Framework\View\Asset\ContextInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Image
@@ -76,7 +76,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->context = $this->createMock(\Magento\Framework\Model\Context::class);
 
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
@@ -98,11 +98,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create', 'isFile', 'isExist', 'getAbsolutePath'])
             ->getMock();
 
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->mediaDirectory));
-        $this->factory = $this->getMock(\Magento\Framework\Image\Factory::class, [], [], '', false);
+        $this->factory = $this->createMock(\Magento\Framework\Image\Factory::class);
 
         $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()

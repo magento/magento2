@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\CustomerData;
 
-class DefaultItemTest extends \PHPUnit_Framework_TestCase
+class DefaultItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\CustomerData\DefaultItem

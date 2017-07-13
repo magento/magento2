@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -50,19 +50,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->searchCriteriaBuilderMock = $this->getMock(
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            ['addFilters', 'create'],
-            [],
-            '',
-            false
+            ['addFilters', 'create']
         );
-        $this->filterBuilderMock = $this->getMock(
+        $this->filterBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\FilterBuilder::class,
-            ['setField', 'setValue', 'create'],
-            [],
-            '',
-            false
+            ['setField', 'setValue', 'create']
         );
 
         $this->product = $this->objectManager->getObject(
@@ -77,12 +71,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFlatColumns()
     {
-        $abstractAttrMock = $this->getMock(
+        $abstractAttrMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['getAttributeCode', '__wakeup']
         );
 
         $abstractAttrMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
@@ -111,20 +102,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllOptionsNameIntegrity(array $value)
     {
-        $filterMock = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $searchResultsMock = $this->getMockForAbstractClass(
             \Magento\Tax\Api\Data\TaxClassSearchResultsInterface::class,
             [],

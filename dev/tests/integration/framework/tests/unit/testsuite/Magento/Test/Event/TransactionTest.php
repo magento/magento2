@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Event;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Event\Transaction|\PHPUnit_Framework_MockObject_MockObject
@@ -28,23 +28,18 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManager = $this->getMock(
-            \Magento\TestFramework\EventManager::class,
-            ['fireEvent'],
-            [[]]
-        );
-        $this->_adapter = $this->getMock(
-            \Magento\TestFramework\Db\Adapter\Mysql::class,
-            ['beginTransaction', 'rollBack'],
-            [],
-            '',
-            false
-        );
-        $this->_object = $this->getMock(
-            \Magento\TestFramework\Event\Transaction::class,
-            ['_getConnection'],
-            [$this->_eventManager]
-        );
+        $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
+            ->setMethods(['fireEvent'])
+            ->setConstructorArgs([[]])
+            ->getMock();
+
+        $this->_adapter =
+            $this->createPartialMock(\Magento\TestFramework\Db\Adapter\Mysql::class, ['beginTransaction', 'rollBack']);
+        $this->_object = $this->getMockBuilder(\Magento\TestFramework\Event\Transaction::class)
+            ->setMethods(['_getConnection'])
+            ->setConstructorArgs([$this->_eventManager])
+            ->getMock();
+
         $this->_object->expects($this->any())->method('_getConnection')->will($this->returnValue($this->_adapter));
     }
 

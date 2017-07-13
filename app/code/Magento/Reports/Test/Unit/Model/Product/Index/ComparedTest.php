@@ -11,7 +11,7 @@ use Magento\Reports\Model\Product\Index\Compared;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ComparedTest extends \PHPUnit_Framework_TestCase
+class ComparedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\Product\Index\Compared

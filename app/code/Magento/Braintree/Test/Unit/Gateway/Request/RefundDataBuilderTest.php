@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class RefundDataBuilderTest extends \PHPUnit_Framework_TestCase
+class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubjectReader | \PHPUnit_Framework_MockObject_MockObject
@@ -36,7 +36,7 @@ class RefundDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $paymentModel = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class RefundDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildNullAmount()
     {
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $paymentModel = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
@@ -106,7 +106,7 @@ class RefundDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildCutOffLegacyTransactionIdPostfix()
     {
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $paymentModel = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()

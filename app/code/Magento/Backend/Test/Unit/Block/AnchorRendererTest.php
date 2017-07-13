@@ -11,7 +11,7 @@ use Magento\Backend\Model\Menu\Item;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AnchorRendererTest extends \PHPUnit_Framework_TestCase
+class AnchorRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Item|\PHPUnit_Framework_MockObject_MockObject

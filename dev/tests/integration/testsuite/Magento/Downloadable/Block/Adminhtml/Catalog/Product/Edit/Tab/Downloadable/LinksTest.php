@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml

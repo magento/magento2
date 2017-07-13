@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
  * Class SynchronizeWebsiteAttributesTest
  * @package Magento\Catalog\Test\Unit\Cron
  */
-class SynchronizeWebsiteAttributesTest extends \PHPUnit_Framework_TestCase
+class SynchronizeWebsiteAttributesTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecuteSuccess()
     {

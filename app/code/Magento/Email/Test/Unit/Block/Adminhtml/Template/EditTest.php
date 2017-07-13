@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Block\Adminhtml\Template\Edit
@@ -49,45 +49,27 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false, false);
-        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
-        $helperMock = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false, false);
-        $menuConfigMock = $this->getMock(\Magento\Backend\Model\Menu\Config::class, [], [], '', false, false);
-        $menuMock = $this->getMock(
-            \Magento\Backend\Model\Menu::class,
-            [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)],
-            '',
-            false,
-            false
-        );
-        $menuItemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false, false);
-        $urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false, false);
-        $this->_configStructureMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->_emailConfigMock = $this->getMock(\Magento\Email\Model\Template\Config::class, [], [], '', false);
+        $this->_registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['helper']);
+        $helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
+        $menuConfigMock = $this->createMock(\Magento\Backend\Model\Menu\Config::class);
+        $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
+            ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
+            ->getMock();
+        $menuItemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
+        $urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
+        $this->_configStructureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
+        $this->_emailConfigMock = $this->createMock(\Magento\Email\Model\Template\Config::class);
 
-        $this->filesystemMock = $this->getMock(
+        $this->filesystemMock = $this->createPartialMock(
             \Magento\Framework\Filesystem::class,
-            ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead'],
-            [],
-            '',
-            false
+            ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead']
         );
 
-        $viewFilesystem = $this->getMock(
-            \Magento\Framework\View\Filesystem::class,
-            ['getTemplateFileName'],
-            [],
-            '',
-            false
-        );
+        $viewFilesystem = $this->getMockBuilder('Magento\Framework\View\Filesystem')
+            ->setMethods(['getTemplateFileName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $viewFilesystem->expects(
             $this->any()
         )->method(
@@ -127,45 +109,25 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentlyUsedForPaths()
     {
-        $sectionMock = $this->getMock(
+        $sectionMock = $this->createPartialMock(
             \Magento\Config\Model\Config\Structure\Element\Section::class,
-            [],
-            [],
-            '',
-            false,
-            false
+            ['getLabel']
         );
-        $groupMock1 = $this->getMock(
+        $groupMock1 = $this->createPartialMock(
             \Magento\Config\Model\Config\Structure\Element\Group::class,
-            [],
-            [],
-            '',
-            false,
-            false
+            ['getLabel']
         );
-        $groupMock2 = $this->getMock(
+        $groupMock2 = $this->createPartialMock(
             \Magento\Config\Model\Config\Structure\Element\Group::class,
-            [],
-            [],
-            '',
-            false,
-            false
+            ['getLabel']
         );
-        $groupMock3 = $this->getMock(
+        $groupMock3 = $this->createPartialMock(
             \Magento\Config\Model\Config\Structure\Element\Group::class,
-            [],
-            [],
-            '',
-            false,
-            false
+            ['getLabel']
         );
-        $filedMock = $this->getMock(
+        $filedMock = $this->createPartialMock(
             \Magento\Config\Model\Config\Structure\Element\Field::class,
-            [],
-            [],
-            '',
-            false,
-            false
+            ['getLabel']
         );
         $map = [
             [['section1', 'group1'], $groupMock1],
@@ -190,7 +152,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getElementByPathParts')
             ->will($this->returnValueMap($map));
 
-        $templateMock = $this->getMock(\Magento\Email\Model\BackendTemplate::class, [], [], '', false, false);
+        $templateMock = $this->createMock(\Magento\Email\Model\BackendTemplate::class);
         $templateMock->expects($this->once())
             ->method('getSystemConfigPathsWhereCurrentlyUsed')
             ->will($this->returnValue($this->_fixtureConfigPath));
@@ -232,13 +194,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultTemplatesAsOptionsArray()
     {
-        $directoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Read::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')

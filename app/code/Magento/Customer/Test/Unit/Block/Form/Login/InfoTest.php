@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Block\Form\Login;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Form\Login\Info

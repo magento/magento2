@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CacheTest extends \PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cache
@@ -41,13 +41,13 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->selectMock = $this->getMock(Select::class, ['assemble'], [], '', false);
+        $this->selectMock = $this->createPartialMock(Select::class, ['assemble']);
         $this->selectMock->expects($this->once())
             ->method('assemble')
             ->willReturn('SELECT * FROM fixture_table');
-        $this->cacheMock = $this->getMock(FrontendInterface::class);
-        $this->fetchStrategyMock = $this->getMock(FetchStrategyInterface::class);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(FrontendInterface::class);
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->fetchStrategyCache = (new ObjectManager($this))->getObject(
             Cache::class,
             [

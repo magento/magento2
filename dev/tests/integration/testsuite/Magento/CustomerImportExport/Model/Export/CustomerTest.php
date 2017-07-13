@@ -9,7 +9,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Export;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CustomerImportExport\Model\Export\Customer

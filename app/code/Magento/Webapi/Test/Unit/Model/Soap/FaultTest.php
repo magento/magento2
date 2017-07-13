@@ -10,7 +10,7 @@ use \Magento\Webapi\Model\Soap\Fault;
 /**
  * Test SOAP fault model.
  */
-class FaultTest extends \PHPUnit_Framework_TestCase
+class FaultTest extends \PHPUnit\Framework\TestCase
 {
     const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
 
@@ -35,7 +35,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         /** Initialize SUT. */
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
@@ -61,7 +61,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('en_US')
         );
 
-        $this->_appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $this->_soapFault = new \Magento\Webapi\Model\Soap\Fault(
             $this->_requestMock,

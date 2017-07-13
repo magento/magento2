@@ -7,7 +7,7 @@ namespace Magento\Weee\Test\Unit\Model\Total\Creditmemo;
 
 use Magento\Framework\Serialize\Serializer\Json;
 
-class WeeeTest extends \PHPUnit_Framework_TestCase
+class WeeeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Model\Total\Creditmemo\Weee
@@ -62,7 +62,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $serializer = $this->getMock(Json::class, null);
+        $serializer = $this->objectManager->getObject(Json::class);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
         $this->model = $this->objectManager->getObject(
             \Magento\Weee\Model\Total\Creditmemo\Weee::class,
@@ -72,29 +72,17 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->order = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            [
+        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->creditmemo = $this->getMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            [
+        $this->creditmemo = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'getAllItems',
                 'getInvoice',
                 'roundPrice',
                 'getStore',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
     }
 
     /**
@@ -502,16 +490,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     protected function getInvoiceItem($creditmemoItemData)
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
-        $orderItem = $this->getMock(
-            \Magento\Sales\Model\Order\Item::class,
-            [
+        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -558,17 +540,11 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($orderItem->getBaseWeeeTaxAmountRefunded()));
 
         /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
-        $invoiceItem = $this->getMock(
-            \Magento\Sales\Model\Order\Invoice\Item::class,
-            [
+        $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
         $invoiceItem->expects($this->any())
             ->method('isLast')

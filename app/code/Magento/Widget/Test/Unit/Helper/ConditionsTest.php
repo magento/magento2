@@ -12,7 +12,7 @@ use Magento\Framework\Data\Wysiwyg\Normalizer;
 /**
  * Class ConditionsTest
  */
-class ConditionsTest extends \PHPUnit_Framework_TestCase
+class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Helper\Conditions
@@ -34,8 +34,8 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->normalizer = $this->getMock(Normalizer::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->normalizer = $this->createMock(Normalizer::class);
         $this->conditions = (new ObjectManager($this))->getObject(
             \Magento\Widget\Helper\Conditions::class,
             [

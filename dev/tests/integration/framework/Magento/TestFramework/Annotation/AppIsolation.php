@@ -55,10 +55,10 @@ class AppIsolation
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_hasNonIsolatedTests = true;
 

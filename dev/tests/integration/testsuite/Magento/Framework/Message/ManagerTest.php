@@ -8,7 +8,7 @@ namespace Magento\Framework\Message;
 /**
  * \Magento\Framework\Message\Manager test case
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\Manager

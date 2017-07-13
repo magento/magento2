@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tax helper

@@ -9,7 +9,7 @@ use Magento\Ui\Config\Converter\StorageConfig;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
 
-class StorageConfigTest extends \PHPUnit_Framework_TestCase
+class StorageConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StorageConfig

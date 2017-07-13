@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\Catalog\Model\Product;
 
-class ApplyRulesAfterReindexTest extends \PHPUnit_Framework_TestCase
+class ApplyRulesAfterReindexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ApplyRulesAfterReindex

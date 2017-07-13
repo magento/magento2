@@ -14,7 +14,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Catalog\Model\Product\Type as CatalogType;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -58,9 +58,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     {
         $this->modifiers = ['someClass' => 'namespase\SomeClass'];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->modifierFactoryMock = $this->getMock(ModifierFactory::class, [], [], '', false);
-        $this->locatorMock = $this->getMock(LocatorInterface::class);
-        $this->productMock = $this->getMock(ProductInterface::class);
+        $this->modifierFactoryMock = $this->createMock(ModifierFactory::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
         $this->composite = $this->objectManagerHelper->getObject(
             Composite::class,
             [

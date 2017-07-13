@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Argument;
 
-class XsdTest extends \PHPUnit_Framework_TestCase
+class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Path to xsd schema file for validating argument types

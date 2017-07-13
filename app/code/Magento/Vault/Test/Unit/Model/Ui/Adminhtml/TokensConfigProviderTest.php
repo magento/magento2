@@ -36,7 +36,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
+class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Global values
@@ -151,7 +151,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->initStoreMock();
 
-        $this->tokenComponentProvider = $this->getMock(TokenUiComponentProviderInterface::class);
+        $this->tokenComponentProvider = $this->createMock(TokenUiComponentProviderInterface::class);
 
         $this->configProvider = new TokensConfigProvider(
             $this->session,
@@ -470,12 +470,12 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private function initStoreMock()
     {
-        $this->store = $this->getMock(StoreInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
         $this->store->expects(static::any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
 
-        $this->storeManager = $this->getMock(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeManager->expects(static::any())
             ->method('getStore')
             ->with(null)
@@ -512,7 +512,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private function getTokenUiComponentProvider($token)
     {
-        $tokenUiComponent = $this->getMock(TokenUiComponentInterface::class);
+        $tokenUiComponent = $this->createMock(TokenUiComponentInterface::class);
         $this->tokenComponentProvider->expects(static::once())
             ->method('getComponentForToken')
             ->with($token)

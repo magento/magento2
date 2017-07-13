@@ -15,7 +15,7 @@ use Magento\Security\Model\SecurityCookie;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
+abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Integration\Controller\Adminhtml\Integration */
     protected $_controller;
@@ -126,7 +126,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  $objectManagerHelper */
         $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
@@ -209,7 +209,9 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         // Mock Layout passed into constructor
         $this->_viewMock = $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)
             ->getMock();
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->_layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+            ->setMethods(['getNode'])
+            ->getMockForAbstractClass();
         $this->_layoutMergeMock = $this->getMockBuilder(
             \Magento\Framework\View\Model\Layout\Merge::class
         )->disableOriginalConstructor()->getMock();
@@ -225,11 +227,9 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         // for _setActiveMenu
         $this->_viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->_layoutMock));
         $blockMock = $this->getMockBuilder(\Magento\Backend\Block\Menu::class)->disableOriginalConstructor()->getMock();
-        $menuMock = $this->getMock(
-            \Magento\Backend\Model\Menu::class,
-            [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
-        );
+        $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
+            ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
+            ->getMock();
         $loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
         $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
         $menuMock->expects($this->any())->method('getParentItems')->will($this->returnValue([]));
@@ -371,12 +371,9 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getIntegrationModelMock()
     {
-        $integrationModelMock = $this->getMock(
+        $integrationModelMock = $this->createPartialMock(
             \Magento\Integration\Model\Integration::class,
-            ['save', '__wakeup'],
-            [],
-            '',
-            false
+            ['save', '__wakeup', 'setStatus', 'getData']
         );
 
         $integrationModelMock->expects($this->any())->method('setStatus')->will($this->returnSelf());

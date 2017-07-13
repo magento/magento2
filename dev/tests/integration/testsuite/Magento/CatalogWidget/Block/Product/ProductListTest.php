@@ -9,7 +9,7 @@ namespace Magento\CatalogWidget\Block\Product;
 /**
  * Tests for @see \Magento\CatalogWidget\Block\Product\ProductsList
  */
-class ProductListTest extends \PHPUnit_Framework_TestCase
+class ProductListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogWidget\Block\Product\ProductsList

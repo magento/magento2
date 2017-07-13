@@ -15,7 +15,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
  * Class ProviderTest provides coverage
  * of Tax Rate model options provider.
  */
-class ProviderTest extends \PHPUnit_Framework_TestCase
+class ProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test of requesting tax rates by search criteria.

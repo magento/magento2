@@ -8,12 +8,12 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 use Magento\Setup\Module\Di\Code\Reader\InvalidFileException;
 
-class FileClassScannerTest extends \PHPUnit_Framework_TestCase
+class FileClassScannerTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testInvalidFileThrowsException()
     {
-        $this->setExpectedException(InvalidFileException::class);
+        $this->expectException(InvalidFileException::class);
         new FileClassScanner(false);
     }
 
@@ -218,7 +218,7 @@ PHP
 
     public function testInvalidPHPCodeThrowsExceptionWhenCannotDetermineBraceOrSemiColon()
     {
-        $this->setExpectedException(InvalidFileException::class);
+        $this->expectException(InvalidFileException::class);
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();

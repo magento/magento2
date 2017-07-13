@@ -10,7 +10,7 @@ use Magento\Framework\View\File\Collector\ThemeModular;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\View\File\Factory;
 
-class ThemeModularTest extends \PHPUnit_Framework_TestCase
+class ThemeModularTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ThemeModular
@@ -44,24 +44,15 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themeDirectory = $this->getMock(
+        $this->themeDirectory = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Read::class,
-            ['getAbsolutePath', 'search'],
-            [],
-            '',
-            false
+            ['getAbsolutePath', 'search']
         );
         $this->pathPatternHelperMock = $this->getMockBuilder(\Magento\Framework\View\Helper\PathPattern::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactory = $this->getMock(\Magento\Framework\View\File\Factory::class, [], [], '', false);
-        $this->readDirFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->fileFactory = $this->createMock(\Magento\Framework\View\File\Factory::class);
+        $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->themeDirectory));
@@ -126,7 +117,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $checkResult = [];
         foreach ($files as $key => $file) {
             $checkResult[$key] = new \Magento\Framework\View\File($file['handle'], $file['module'], $theme);
-            $checkResult[$key] = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
+            $checkResult[$key] = $this->createMock(\Magento\Framework\View\File::class);
             $this->fileFactory
                 ->expects($this->at($key))
                 ->method('create')

@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class NotSyncedDataProviderTest
  */
-class NotSyncedDataProviderTest extends \PHPUnit_Framework_TestCase
+class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetIdsEmpty()
     {

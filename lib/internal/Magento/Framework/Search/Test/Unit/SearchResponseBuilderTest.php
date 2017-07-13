@@ -9,7 +9,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
+class SearchResponseBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\SearchResponseBuilder

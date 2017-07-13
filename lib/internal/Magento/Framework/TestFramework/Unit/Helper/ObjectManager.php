@@ -27,16 +27,16 @@ class ObjectManager
     /**
      * Test object
      *
-     * @var \PHPUnit_Framework_TestCase
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
 
     /**
      * Class constructor
      *
-     * @param \PHPUnit_Framework_TestCase $testObject
+     * @param \PHPUnit\Framework\TestCase $testObject
      */
-    public function __construct(\PHPUnit_Framework_TestCase $testObject)
+    public function __construct(\PHPUnit\Framework\TestCase $testObject)
     {
         $this->_testObject = $testObject;
     }
@@ -88,13 +88,13 @@ class ObjectManager
      */
     protected function _getResourceModelMock()
     {
-        $resourceMock = $this->_testObject->getMock(
-            \Magento\Framework\Module\ModuleResource::class,
-            ['getIdFieldName', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $resourceMock = $this->_testObject->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
         )->method(
@@ -136,13 +136,12 @@ class ObjectManager
      */
     protected function _getMockWithoutConstructorCall($className)
     {
-        $class = new \ReflectionClass($className);
-        $mock = null;
-        if ($class->isAbstract()) {
-            $mock = $this->_testObject->getMockForAbstractClass($className, [], '', false, false);
-        } else {
-            $mock = $this->_testObject->getMock($className, [], [], '', false, false);
-        }
+        $mock = $this->_testObject->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
         return $mock;
     }
 
@@ -189,8 +188,12 @@ class ObjectManager
     protected function getBuilder($className, array $arguments)
     {
         if (!isset($arguments['objectFactory'])) {
-            $objectFactory =
-                $this->_testObject->getMock(\Magento\Framework\Api\ObjectFactory::class, [], [], '', false);
+            $objectFactory = $this->_testObject->getMockBuilder(\Magento\Framework\Api\ObjectFactory::class)
+                ->disableOriginalConstructor()
+                ->disableOriginalClone()
+                ->disableArgumentCloning()
+                ->disallowMockingUnknownTypes()
+                ->getMock();
 
             $objectFactory->expects($this->_testObject->any())
                 ->method('populateWithArray')
@@ -271,7 +274,12 @@ class ObjectManager
                 if ($firstPosition !== false) {
                     $parameterString = substr($parameterString, $firstPosition + 11);
                     $parameterString = substr($parameterString, 0, strpos($parameterString, ' '));
-                    $object = $this->_testObject->getMock($parameterString, [], [], '', false);
+                    $object = $this->_testObject->getMockBuilder($parameterString)
+                        ->disableOriginalConstructor()
+                        ->disableOriginalClone()
+                        ->disableArgumentCloning()
+                        ->disallowMockingUnknownTypes()
+                        ->getMock();
                 }
             }
 
@@ -295,7 +303,12 @@ class ObjectManager
                 $className . ' does not instance of \Magento\Framework\Data\Collection'
             );
         }
-        $mock = $this->_testObject->getMock($className, [], [], '', false, false);
+        $mock = $this->_testObject->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
         $iterator = new \ArrayIterator($data);
         $mock->expects(
             $this->_testObject->any()

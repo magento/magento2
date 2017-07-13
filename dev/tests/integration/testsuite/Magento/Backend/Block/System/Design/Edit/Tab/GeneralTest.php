@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\System\Design\Edit\Tab;
  * Test class for \Magento\Backend\Block\System\Design\Edit\Tab\General
  * @magentoAppArea adminhtml
  */
-class GeneralTest extends \PHPUnit_Framework_TestCase
+class GeneralTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

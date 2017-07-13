@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 
-class Base64JsonTest extends \PHPUnit_Framework_TestCase
+class Base64JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Base64Json

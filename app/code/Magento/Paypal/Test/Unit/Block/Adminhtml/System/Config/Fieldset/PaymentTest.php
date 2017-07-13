@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Activity config path
@@ -37,7 +37,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_group = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Group::class, [], [], '', false);
+        $this->_group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
         $this->_element = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [],
@@ -62,7 +62,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->_element->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('id'));
-        $this->_backendConfig = $this->getMock(\Magento\Config\Model\Config::class, [], [], '', false);
+        $this->_backendConfig = $this->createMock(\Magento\Config\Model\Config::class);
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment::class,
             ['backendConfig' => $this->_backendConfig]

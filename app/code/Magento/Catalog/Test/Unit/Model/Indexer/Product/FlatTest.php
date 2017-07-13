@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FlatTest extends \PHPUnit_Framework_TestCase
+class FlatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat
@@ -64,7 +64,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->cacheContextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
+        $this->cacheContextMock = $this->createMock(\Magento\Framework\Indexer\CacheContext::class);
 
         $cacheContextProperty = new \ReflectionProperty(
             \Magento\Catalog\Model\Indexer\Product\Flat::class,
@@ -91,7 +91,8 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         $ids = [1, 2, 3];
         $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($this->equalTo($ids));
 
-        $this->model->executeList($ids);
+        $result = $this->model->executeList($ids);
+        $this->assertNull($result);
     }
 
     public function testExecuteFull()
@@ -115,6 +116,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         $except = 5;
         $this->productFlatIndexerRow->expects($this->any())->method('execute')->with($this->equalTo($except));
 
-        $this->model->executeRow($except);
+        $result = $this->model->executeRow($except);
+        $this->assertNull($result);
     }
 }

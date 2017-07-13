@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup\Test\Unit\Option;
 use Magento\Framework\Setup\Option\MultiSelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
-class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
+class MultiSelectConfigOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

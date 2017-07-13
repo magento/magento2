@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Model\Indexer;
 /**
  * The proxy class around index switcher which allows to ensure that the IndexSwitcher was actually used
  */
-class IndexSwitcherMock extends \PHPUnit_Framework_Assert implements IndexSwitcherInterface
+class IndexSwitcherMock extends \PHPUnit\Framework\Assert implements IndexSwitcherInterface
 {
     private $isSwitched = false;
 

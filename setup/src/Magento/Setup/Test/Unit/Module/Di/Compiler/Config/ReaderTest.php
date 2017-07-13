@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config;
 use Magento\Framework\App\Area;
 use Magento\Setup\Module\Di\Definition\Collection;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Compiler\Config\Reader
@@ -48,35 +48,19 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->diContainerConfig =
-            $this->getMock(\Magento\Framework\ObjectManager\ConfigInterface::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\ObjectManager\ConfigInterface::class);
         $this->configLoader =
-            $this->getMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class);
 
-        $this->argumentsResolverFactory = $this->getMock(
-            \Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->argumentsResolver = $this->getMock(
-            \Magento\Setup\Module\Di\Compiler\ArgumentsResolver::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->argumentsResolverFactory =
+            $this->createMock(\Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory::class);
+        $this->argumentsResolver = $this->createMock(\Magento\Setup\Module\Di\Compiler\ArgumentsResolver::class);
         $this->argumentsResolverFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->argumentsResolver);
-        $this->classReaderDecorator = $this->getMock(
-            \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->typeReader = $this->getMock(\Magento\Setup\Module\Di\Code\Reader\Type::class, [], [], '', false);
+        $this->classReaderDecorator =
+            $this->createMock(\Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator::class);
+        $this->typeReader = $this->createMock(\Magento\Setup\Module\Di\Code\Reader\Type::class);
 
         $this->model = new \Magento\Setup\Module\Di\Compiler\Config\Reader(
             $this->diContainerConfig,

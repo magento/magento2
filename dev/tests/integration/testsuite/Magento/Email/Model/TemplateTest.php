@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Template|\PHPUnit_Framework_MockObject_MockObject
@@ -45,11 +45,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         }
 
-        $this->mail = $this->getMock(
-            \Zend_Mail::class,
-            ['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'],
-            ['utf-8']
-        );
+        $this->mail = $this->getMockBuilder(\Zend_Mail::class)
+            ->setMethods(['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'])
+            ->setConstructorArgs(['utf-8'])
+            ->getMock();
 
         $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods(['_getMail'])

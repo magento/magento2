@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Observer;
 
 use Magento\GiftMessage\Observer\MultishippingEventCreateOrdersObserver as Observer;
 
-class MultishippingEventCreateOrdersObserverTest extends \PHPUnit_Framework_TestCase
+class MultishippingEventCreateOrdersObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Observer\MultishippingEventCreateOrdersObserver
@@ -23,10 +23,10 @@ class MultishippingEventCreateOrdersObserverTest extends \PHPUnit_Framework_Test
     public function testMultishippingEventCreateOrders()
     {
         $giftMessageId = 42;
-        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
-        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getOrder', 'getAddress']);
-        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, ['getGiftMessageId'], [], '', false);
-        $orderMock = $this->getMock(\Magento\Sales\Model\Order::class, ['setGiftMessageId'], [], '', false);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getOrder', 'getAddress']);
+        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getGiftMessageId']);
+        $orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['setGiftMessageId']);
         $observerMock->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getGiftMessageId')->willReturn($giftMessageId);

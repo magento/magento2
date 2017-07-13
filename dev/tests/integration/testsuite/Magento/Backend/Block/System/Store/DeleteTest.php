@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\System\Store;
 /**
  * @magentoAppArea adminhtml
  */
-class DeleteTest extends \PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetHeaderText()
     {

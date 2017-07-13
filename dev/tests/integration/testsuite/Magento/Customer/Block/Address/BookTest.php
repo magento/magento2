@@ -8,7 +8,7 @@ namespace Magento\Customer\Block\Address;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class BookTest extends \PHPUnit_Framework_TestCase
+class BookTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Address\Book

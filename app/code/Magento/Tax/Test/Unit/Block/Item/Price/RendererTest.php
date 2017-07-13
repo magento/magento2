@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Block\Item\Price;
 
 use Magento\Framework\Pricing\Render;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Block\Item\Price\Renderer
@@ -78,7 +78,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $zone
      * @param string $methodName
-     * @dataProvider testDisplayPriceInclTaxDataProvider
+     * @dataProvider displayPriceInclTaxDataProvider
      */
     public function testDisplayPriceInclTax($zone, $methodName)
     {
@@ -96,7 +96,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
     }
 
-    public function testDisplayPriceInclTaxDataProvider()
+    public function displayPriceInclTaxDataProvider()
     {
         $data = [
             'cart' => [
@@ -125,7 +125,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $zone
      * @param string $methodName
-     * @dataProvider testDisplayPriceExclTaxDataProvider
+     * @dataProvider displayPriceExclTaxDataProvider
      */
     public function testDisplayPriceExclTax($zone, $methodName)
     {
@@ -143,7 +143,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
     }
 
-    public function testDisplayPriceExclTaxDataProvider()
+    public function displayPriceExclTaxDataProvider()
     {
         $data = [
             'cart' => [
@@ -172,7 +172,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $zone
      * @param string $methodName
-     * @dataProvider testDisplayBothPricesDataProvider
+     * @dataProvider displayBothPricesDataProvider
      */
     public function testDisplayBothPrices($zone, $methodName)
     {
@@ -190,7 +190,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flag, $this->renderer->displayBothPrices());
     }
 
-    public function testDisplayBothPricesDataProvider()
+    public function displayBothPricesDataProvider()
     {
         $data = [
             'cart' => [

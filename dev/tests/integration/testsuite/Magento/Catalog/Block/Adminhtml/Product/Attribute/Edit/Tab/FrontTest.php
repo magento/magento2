@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 /**
  * @magentoAppArea adminhtml
  */
-class FrontTest extends \PHPUnit_Framework_TestCase
+class FrontTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front

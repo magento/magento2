@@ -7,7 +7,7 @@ namespace Magento\Paypal\Test\Unit\Cron;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FetchReportsTest extends \PHPUnit_Framework_TestCase
+class FetchReportsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

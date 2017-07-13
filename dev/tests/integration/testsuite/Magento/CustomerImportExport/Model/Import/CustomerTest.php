@@ -14,7 +14,7 @@ use Magento\ImportExport\Model\Import;
 /**
  * Test for class \Magento\CustomerImportExport\Model\Import\Customer which covers validation logic
  */
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which used for tests

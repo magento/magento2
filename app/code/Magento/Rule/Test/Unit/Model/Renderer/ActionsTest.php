@@ -8,7 +8,7 @@ namespace Magento\Rule\Test\Unit\Model\Renderer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ActionsTest extends \PHPUnit_Framework_TestCase
+class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rule\Model\Renderer\Actions
@@ -29,12 +29,9 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->actions = $this->objectManagerHelper->getObject(\Magento\Rule\Model\Renderer\Actions::class);
-        $this->_element = $this->getMock(
+        $this->_element = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getRule'],
-            [],
-            '',
-            false
+            ['getRule']
         );
     }
 
@@ -44,7 +41,7 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getActions', '__sleep', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $actions = $this->getMock(\Magento\Rule\Model\Action\Collection::class, ['asHtmlRecursive'], [], '', false);
+        $actions = $this->createPartialMock(\Magento\Rule\Model\Action\Collection::class, ['asHtmlRecursive']);
 
         $this->_element->expects($this->any())
             ->method('getRule')

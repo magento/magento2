@@ -10,7 +10,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 /**
  * @magentoAppArea adminhtml
  */
-class RobotsTest extends \PHPUnit_Framework_TestCase
+class RobotsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Backend\Admin\Robots

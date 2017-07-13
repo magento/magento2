@@ -11,7 +11,7 @@ use Magento\Setup\Module\Di\Code\Scanner;
 /**
  * Class ServiceDataAttributesGeneratorTest
  */
-class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
+class ServiceDataAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit_Framework_MockObject_MockObject

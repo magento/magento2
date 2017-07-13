@@ -9,7 +9,7 @@
  */
 namespace Magento\Catalog\Model;
 
-class DesignTest extends \PHPUnit_Framework_TestCase
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Design

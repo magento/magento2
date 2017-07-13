@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
+class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportUrlProvider
@@ -46,11 +46,9 @@ class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
                 SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE,
                 'https://previous.example.com/'
             );
-        $this->setExpectedException(
-            SubscriptionUpdateException::class,
-            'Your Base URL has been changed and your reports are being updated. '
-            . 'Advanced Reporting will be available once this change has been processed. Please try again later.'
-        );
+        $this->expectException(SubscriptionUpdateException::class);
+        $this->expectExceptionMessage('Your Base URL has been changed and your reports are being updated. '
+            . 'Advanced Reporting will be available once this change has been processed. Please try again later.');
         $this->reportUrlProvider->getUrl();
     }
 }

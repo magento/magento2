@@ -10,7 +10,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class StoreManagerTest extends \PHPUnit_Framework_TestCase
+class StoreManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreManagerInterface

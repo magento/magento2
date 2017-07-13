@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PathConfigTest extends \PHPUnit_Framework_TestCase
+class PathConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $scopeConfigMock;

@@ -11,7 +11,7 @@ use \Magento\Wishlist\Observer\CartUpdateBefore as Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartUpdateBeforeTest extends \PHPUnit_Framework_TestCase
+class CartUpdateBeforeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Observer

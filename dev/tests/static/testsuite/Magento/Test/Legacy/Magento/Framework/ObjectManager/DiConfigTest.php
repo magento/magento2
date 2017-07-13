@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Legacy\Magento\Framework\ObjectManager;
 
-class DiConfigTest extends \PHPUnit_Framework_TestCase
+class DiConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testObsoleteDiFormat()
     {

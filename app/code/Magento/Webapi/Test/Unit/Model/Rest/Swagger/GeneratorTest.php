@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const OPERATION_NAME = 'operationName';
 
@@ -280,7 +280,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $typeName
      * @param array $result
-     * @dataProvider testGetObjectSchemaDataProvider
+     * @dataProvider getObjectSchemaDataProvider
      */
     public function testGetObjectSchema($typeName, $description, $result)
     {
@@ -295,7 +295,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($result), json_encode($actual));
     }
 
-    public function testGetObjectSchemaDataProvider()
+    public function getObjectSchemaDataProvider()
     {
         return [
             [
@@ -332,7 +332,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $typeData
      * @param array $expected
-     * @dataProvider testGenerateDefinitionDataProvider
+     * @dataProvider generateDefinitionDataProvider
      */
     public function testGenerateDefinition($typeData, $expected)
     {
@@ -354,7 +354,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($expected), json_encode($actual));
     }
 
-    public function testGenerateDefinitionDataProvider()
+    public function generateDefinitionDataProvider()
     {
         return [
             [

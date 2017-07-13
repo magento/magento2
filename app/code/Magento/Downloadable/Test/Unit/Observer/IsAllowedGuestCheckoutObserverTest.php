@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IsAllowedGuestCheckoutObserverTest extends \PHPUnit_Framework_TestCase
+class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var IsAllowedGuestCheckoutObserver */
     private $isAllowedGuestCheckoutObserver;

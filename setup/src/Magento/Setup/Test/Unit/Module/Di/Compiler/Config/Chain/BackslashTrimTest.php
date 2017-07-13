@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
 
 use \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim;
 
-class BackslashTrimTest extends \PHPUnit_Framework_TestCase
+class BackslashTrimTest extends \PHPUnit\Framework\TestCase
 {
     public function testModifyArgumentsDoNotExist()
     {

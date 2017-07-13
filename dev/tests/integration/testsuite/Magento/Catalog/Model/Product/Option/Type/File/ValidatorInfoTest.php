@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
  * @magentoDataFixture Magento/Catalog/_files/validate_image_info.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
+class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValidatorInfo
@@ -36,7 +36,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
         $fileSize = $this->objectManager->create(\Magento\Framework\File\Size::class);
         $this->maxFileSizeInMb = $fileSize->getMaxFileSizeInMb();
 
-        $this->validateFactoryMock = $this->getMock(
+        $this->validateFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory::class,
             ['create']
         );
@@ -53,7 +53,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionWithErrors()
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
@@ -64,7 +64,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $validateMock = $this->getMock(\Zend_Validate::class, ['isValid', 'getErrors']);
+        $validateMock = $this->createPartialMock(\Zend_Validate::class, ['isValid', 'getErrors']);
         $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
         $validateMock->expects($this->exactly(2))->method('getErrors')->will($this->returnValue([
             \Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION,
@@ -87,12 +87,12 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionWithoutErrors()
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             "Please specify product's required option(s)."
         );
 
-        $validateMock = $this->getMock(\Zend_Validate::class, ['isValid', 'getErrors']);
+        $validateMock = $this->createPartialMock(\Zend_Validate::class, ['isValid', 'getErrors']);
         $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
         $validateMock->expects($this->exactly(1))->method('getErrors')->will($this->returnValue(false));
         $this->validateFactoryMock->expects($this->once())
@@ -110,7 +110,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $validateMock = $this->getMock(\Zend_Validate::class, ['isValid']);
+        $validateMock = $this->createPartialMock(\Zend_Validate::class, ['isValid']);
         $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $this->validateFactoryMock->expects($this->once())
             ->method('create')

@@ -9,7 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Menu\Director;
 
-class DirectorTest extends \PHPUnit_Framework_TestCase
+class DirectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Director\Director
@@ -38,21 +38,15 @@ class DirectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_builderMock = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
-        $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->_commandMock = $this->getMock(
+        $this->_builderMock = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
+        $this->_logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->_commandMock = $this->createPartialMock(
             \Magento\Backend\Model\Menu\Builder\AbstractCommand::class,
-            ['getId', '_execute', 'execute', 'chain'],
-            [],
-            '',
-            false
+            ['getId', '_execute', 'execute', 'chain']
         );
-        $this->_commandFactoryMock = $this->getMock(
+        $this->_commandFactoryMock = $this->createPartialMock(
             \Magento\Backend\Model\Menu\Builder\CommandFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->_commandFactoryMock->expects(
             $this->any()

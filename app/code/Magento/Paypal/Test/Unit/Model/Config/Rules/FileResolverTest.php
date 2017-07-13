@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
  *
  * Test for class \Magento\Paypal\Model\Config\Rules\FileResolver
  */
-class FileResolverTest extends \PHPUnit_Framework_TestCase
+class FileResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @vat \Magento\Paypal\Model\Config\Rules\FileResolver

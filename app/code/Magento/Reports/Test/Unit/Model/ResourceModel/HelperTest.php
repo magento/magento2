@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Model\ResourceModel;
 
 use Magento\Reports\Model\ResourceModel\Helper;
 
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Helper

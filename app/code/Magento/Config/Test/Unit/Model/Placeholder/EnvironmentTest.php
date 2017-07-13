@@ -14,7 +14,7 @@ use \PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Class EnvironmentTest
  */
-class EnvironmentTest extends \PHPUnit_Framework_TestCase
+class EnvironmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Environment

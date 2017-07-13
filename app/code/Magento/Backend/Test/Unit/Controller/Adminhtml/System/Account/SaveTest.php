@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Controller\Adminhtml\System\Account;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\Controller\Adminhtml\System\Account */
     protected $_controller;
@@ -115,7 +115,19 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $contextMock = $this->createPartialMock(
+            \Magento\Backend\App\Action\Context::class,
+            [
+                'getRequest',
+                'getResponse',
+                'getObjectManager',
+                'getFrontController',
+                'getHelper',
+                'getMessageManager',
+                'getTranslator',
+                'getResultFactory'
+            ]
+        );
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_responseMock);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManagerMock);

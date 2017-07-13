@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Block\Share;
 
-class WishlistTest extends \PHPUnit_Framework_TestCase
+class WishlistTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager

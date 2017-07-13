@@ -10,7 +10,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 
-class WriteTest extends \PHPUnit_Framework_TestCase
+class WriteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * \Magento\Framework\Filesystem\Driver
@@ -41,14 +41,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->driver = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
-        $this->fileFactory = $this->getMock(
-            \Magento\Framework\Filesystem\File\WriteFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->driver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $this->fileFactory = $this->createMock(\Magento\Framework\Filesystem\File\WriteFactory::class);
         $this->path = 'PATH/';
         $this->write = new \Magento\Framework\Filesystem\Directory\Write(
             $this->fileFactory,
@@ -219,7 +213,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             [
                 'path/to/source.file',
                 'path/to/target.file',
-                $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass(),
+                $this->getMockBuilder(WriteInterface::class)
+                    ->setMethods(['isExists', 'getAbsolutePath', 'create'])
+                    ->getMockForAbstractClass(),
             ],
         ];
     }

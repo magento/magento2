@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy;
 
-class TemporaryTableStrategyTest extends \PHPUnit_Framework_TestCase
+class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy
@@ -27,8 +27,8 @@ class TemporaryTableStrategyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->tableStrategyMock = $this->getMock(\Magento\Framework\Indexer\Table\Strategy::class, [], [], '', false);
-        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->tableStrategyMock = $this->createMock(\Magento\Framework\Indexer\Table\Strategy::class);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy(
             $this->tableStrategyMock,
@@ -67,7 +67,7 @@ class TemporaryTableStrategyTest extends \PHPUnit_Framework_TestCase
         $tempTableName = $tablePrefix . \Magento\Framework\Indexer\Table\StrategyInterface::TMP_SUFFIX;
 
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(false);
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
         $this->resourceMock->expects($this->once())
             ->method('getConnection')

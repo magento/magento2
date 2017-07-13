@@ -13,7 +13,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\SerializerInterface;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Config
@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $this->typeFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\TypeFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -67,15 +67,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheStateMock = $this->getMock(\Magento\Framework\App\Cache\StateInterface::class);
+        $this->cacheStateMock = $this->createMock(\Magento\Framework\App\Cache\StateInterface::class);
         $this->universalFactoryMock = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
-        $this->typeMock = $this->getMock(Type::class, [], [], '', false);
+        $this->typeMock = $this->createMock(Type::class);
 
         $this->config = new Config(
             $this->cacheMock,
@@ -360,7 +360,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
-        $attributeCollectionMock = $this->getMock(Collection::class, [], [], '', false);
+        $attributeCollectionMock = $this->createMock(Collection::class);
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($attributeCollectionMock);

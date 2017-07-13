@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @see Validator
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data

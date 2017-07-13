@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider createDataProvider
@@ -16,17 +16,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($classType, $className, $classTypeMock)
     {
-        $classMock = $this->getMock(
+        $classMock = $this->createPartialMock(
             \Magento\Tax\Model\ClassModel::class,
-            ['getClassType', 'getId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getClassType', 'getId', '__wakeup']
         );
         $classMock->expects($this->once())->method('getClassType')->will($this->returnValue($classType));
         $classMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects(
             $this->once()
         )->method(
@@ -44,8 +41,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function createDataProvider()
     {
-        $customerClassMock = $this->getMock(\Magento\Tax\Model\TaxClass\Type\Customer::class, [], [], '', false);
-        $productClassMock = $this->getMock(\Magento\Tax\Model\TaxClass\Type\Product::class, [], [], '', false);
+        $customerClassMock = $this->createMock(\Magento\Tax\Model\TaxClass\Type\Customer::class);
+        $productClassMock = $this->createMock(\Magento\Tax\Model\TaxClass\Type\Product::class);
         return [
             [
                 \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER,
@@ -63,20 +60,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithWrongClassType()
     {
         $wrongClassType = 'TYPE';
-        $classMock = $this->getMock(
+        $classMock = $this->createPartialMock(
             \Magento\Tax\Model\ClassModel::class,
-            ['getClassType', 'getId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getClassType', 'getId', '__wakeup']
         );
         $classMock->expects($this->once())->method('getClassType')->will($this->returnValue($wrongClassType));
 
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $taxClassFactory = new \Magento\Tax\Model\TaxClass\Factory($objectManager);
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('Invalid type of tax class "%s"', $wrongClassType)
         );

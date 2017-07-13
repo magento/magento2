@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
@@ -34,15 +34,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock(
-            \Magento\ImportExport\Model\Import\Config\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(\Magento\ImportExport\Model\Import\Config\Reader::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**

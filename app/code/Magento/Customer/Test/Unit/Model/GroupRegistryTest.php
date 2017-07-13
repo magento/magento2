@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model;
 /**
  * Unit test for registry \Magento\Customer\Model\GroupRegistry
  */
-class GroupRegistryTest extends \PHPUnit_Framework_TestCase
+class GroupRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\GroupRegistry

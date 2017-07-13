@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testLoadDataAndGetViewsByStateMode()
     {

@@ -13,7 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Newsletter\Controller\Manage

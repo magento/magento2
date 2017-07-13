@@ -9,7 +9,7 @@ use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class TypePoolTest extends \PHPUnit_Framework_TestCase
+class TypePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ExcludeList|MockObject

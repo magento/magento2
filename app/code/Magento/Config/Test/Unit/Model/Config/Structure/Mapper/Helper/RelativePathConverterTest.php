@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper\Helper;
 
-class RelativePathConverterTest extends \PHPUnit_Framework_TestCase
+class RelativePathConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter
@@ -24,23 +24,23 @@ class RelativePathConverterTest extends \PHPUnit_Framework_TestCase
 
         $exceptionMessage = sprintf('Invalid relative path %s in %s node', $relativePath, $nodePath);
 
-        $this->setExpectedException('InvalidArgumentException', $exceptionMessage);
+        $this->expectException('InvalidArgumentException', $exceptionMessage);
         $this->_sut->convert($nodePath, $relativePath);
     }
 
     /**
-     * @dataProvider testConvertWithInvalidArgumentsDataProvider
+     * @dataProvider convertWithInvalidArgumentsDataProvider
      * @param string $nodePath
      * @param string $relativePath
      */
     public function testConvertWithInvalidArguments($nodePath, $relativePath)
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid arguments');
+        $this->expectException('InvalidArgumentException', 'Invalid arguments');
         $this->_sut->convert($nodePath, $relativePath);
     }
 
     /**
-     * @dataProvider testConvertDataProvider
+     * @dataProvider convertDataProvider
      * @param string $nodePath
      * @param string $relativePath
      * @param string $result
@@ -50,12 +50,12 @@ class RelativePathConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->_sut->convert($nodePath, $relativePath));
     }
 
-    public function testConvertWithInvalidArgumentsDataProvider()
+    public function convertWithInvalidArgumentsDataProvider()
     {
         return [['', ''], ['some/node', ''], ['', 'some/node']];
     }
 
-    public function testConvertDataProvider()
+    public function convertDataProvider()
     {
         return [
             ['currentNode', 'relativeNode', 'relativeNode'],

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class EventFactoryTest extends \PHPUnit_Framework_TestCase
+class EventFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\EventFactory
@@ -24,7 +24,7 @@ class EventFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\EventFactory($this->_objectManagerMock);
         $this->_expectedObject = $this->getMockBuilder(\Magento\Framework\Event::class)->getMock();
     }

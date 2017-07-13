@@ -7,7 +7,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DataProviderContainerTest extends \PHPUnit_Framework_TestCase
+class DataProviderContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * Test for class \Magento\Braintree\Model\Report\\Row\TransactionMap
  */
-class TransactionMapTest extends \PHPUnit_Framework_TestCase
+class TransactionMapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Transaction|\PHPUnit_Framework_MockObject_MockObject

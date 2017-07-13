@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
 
-class TabTest extends \PHPUnit_Framework_TestCase
+class TabTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

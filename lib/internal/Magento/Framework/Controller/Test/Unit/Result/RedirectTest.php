@@ -9,7 +9,7 @@ namespace Magento\Framework\Controller\Test\Unit\Result;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use \Magento\Framework\Controller\Result\Redirect;
 
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Controller\Result\Redirect */
     protected $redirect;
@@ -28,34 +28,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->redirectInterface = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlBuilder = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlInterface = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->response = $this->getMock(
-            HttpResponseInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->redirectInterface = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->response = $this->createMock(HttpResponseInterface::class);
         $this->redirect = new Redirect($this->redirectInterface, $this->urlInterface);
     }
 

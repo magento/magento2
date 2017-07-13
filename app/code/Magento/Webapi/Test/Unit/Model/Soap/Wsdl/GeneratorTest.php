@@ -7,7 +7,11 @@
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class GeneratorTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**  @var \Magento\Webapi\Model\Soap\Wsdl\Generator */
     protected $_wsdlGenerator;
@@ -71,13 +75,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
-        $this->_typeProcessor = $this->getMock(
-            \Magento\Framework\Reflection\TypeProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
 
         /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
         $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
@@ -100,7 +98,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                     return json_encode($value);
                 }
             );
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([

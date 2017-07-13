@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class MassDeleteTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassDeleteTest extends \PHPUnit_Framework_TestCase
+class MassDeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Adminhtml\Index\MassDelete
@@ -74,25 +74,16 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $resultRedirectFactory = $this->getMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $resultRedirectFactory = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock = $this->getMock(
+        $this->objectManagerMock = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
         $this->customerCollectionMock =
             $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
@@ -130,7 +121,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
-        $this->filterMock = $this->getMock(\Magento\Ui\Component\MassAction\Filter::class, [], [], '', false);
+        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->customerCollectionMock)

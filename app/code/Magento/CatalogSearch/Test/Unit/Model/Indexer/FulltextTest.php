@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FulltextTest extends \PHPUnit_Framework_TestCase
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext
@@ -57,21 +57,15 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
-        $fullActionFactory = $this->getMock(
+        $fullActionFactory = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
         $this->saveHandler = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\IndexerHandler::class);
-        $indexerHandlerFactory = $this->getMock(
+        $indexerHandlerFactory = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
 
@@ -85,7 +79,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             []
         );
 
-        $this->dimensionFactory = $this->getMock(DimensionFactory::class, ['create'], [], '', false);
+        $this->dimensionFactory = $this->createPartialMock(DimensionFactory::class, ['create']);
 
         $this->fulltextResource = $this->getClassMock(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class);
         $this->searchRequestConfig = $this->getClassMock(\Magento\Framework\Search\Request\Config::class);
@@ -117,7 +111,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     private function getClassMock($className)
     {
-        return $this->getMock($className, [], [], '', false);
+        return $this->createMock($className);
     }
 
     public function testExecute()
@@ -144,8 +138,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $indexData = new \ArrayObject([new \ArrayObject([]), new \ArrayObject([])]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
 
-        $dimensionScope1 = $this->getMock(Dimension::class, [], ['scope', '1']);
-        $dimensionScope2 = $this->getMock(Dimension::class, [], ['scope', '2']);
+        $dimensionScope1 = $this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])
+            ->getMock();
+        $dimensionScope2 = $this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '2'])
+            ->getMock();
 
         $this->dimensionFactory->expects($this->any())->method('create')->willReturnOnConsecutiveCalls(
             $dimensionScope1,

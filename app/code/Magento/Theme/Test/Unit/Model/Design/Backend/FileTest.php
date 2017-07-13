@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $mediaDirectory;

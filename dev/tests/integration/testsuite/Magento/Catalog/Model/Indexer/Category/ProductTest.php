@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Category;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     const DEFAULT_ROOT_CATEGORY = 2;
 

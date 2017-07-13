@@ -9,7 +9,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition\Product;
 use ReflectionMethod;
 use ReflectionProperty;
 
-class AbstractProductTest extends \PHPUnit_Framework_TestCase
+class AbstractProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tested condition
@@ -76,9 +76,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, ["getAttribute"]);
         $this->_condition->setAttribute('category_ids');
         $this->_condition->setValueParsed('1');
         $this->_condition->setOperator('{}');
@@ -103,12 +101,9 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateEmptyEntityAttributeValues()
     {
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ["getAttribute", 'getResource'],
-            [],
-            '',
-            false
+            ["getAttribute", 'getResource']
         );
         $product->expects($this->once())
             ->method('getResource')
@@ -125,12 +120,9 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateEmptyEntityAttributeValuesWithResource()
     {
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ["getAttribute", 'getResource'],
-            [],
-            '',
-            false
+            ["getAttribute", 'getResource']
         );
         $product->setId(1);
         $time = '04/19/2012 11:59 am';
@@ -140,30 +132,18 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
         $this->_configProperty->setValue(
             $this->_condition,
-            $this->getMock(
-                \Magento\Eav\Model\Config::class,
-                [],
-                [],
-                '',
-                false
-            )
+            $this->createMock(\Magento\Eav\Model\Config::class)
         );
 
         $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType('datetime');
 
-        $newResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['getAttribute'],
-            [],
-            '',
-            false
-        );
+        $newResource = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product::class, ['getAttribute']);
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
             ->will($this->returnValue($attribute));
-        $newResource->_config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
         $product->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($newResource);
@@ -174,18 +154,12 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
         $attribute->setBackendType('null');
         $attribute->setFrontendInput('multiselect');
 
-        $newResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['getAttribute'],
-            [],
-            '',
-            false
-        );
+        $newResource = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product::class, ['getAttribute']);
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
             ->will($this->returnValue($attribute));
-        $newResource->_config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->setResource($newResource);
         $this->assertFalse($this->_condition->validate($product));
@@ -194,40 +168,31 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     public function testValidateSetEntityAttributeValuesWithResource()
     {
         $this->_condition->setAttribute('someAttribute');
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ['getAttribute', 'getResource'],
-            [],
-            '',
-            false
+            ['getAttribute', 'getResource']
         );
         $product->setAtribute('attribute');
         $product->setId(12);
 
         $this->_configProperty->setValue(
             $this->_condition,
-            $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false)
+            $this->createMock(\Magento\Eav\Model\Config::class)
         );
         $this->_entityAttributeValuesProperty->setValue(
             $this->_condition,
-            $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false)
+            $this->createMock(\Magento\Eav\Model\Config::class)
         );
 
         $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType('datetime');
 
-        $newResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['getAttribute'],
-            [],
-            '',
-            false
-        );
+        $newResource = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product::class, ['getAttribute']);
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
             ->will($this->returnValue($attribute));
-        $newResource->_config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -246,12 +211,9 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateSetEntityAttributeValuesWithoutResource()
     {
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ['someMethod', 'getResource', 'load'],
-            [],
-            '',
-            false
+            ['someMethod', 'getResource', 'load']
         );
         $this->_condition->setAttribute('someAttribute');
         $product->setAtribute('attribute');
@@ -259,41 +221,23 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
         $this->_configProperty->setValue(
             $this->_condition,
-            $this->getMock(
-                \Magento\Eav\Model\Config::class,
-                [],
-                [],
-                '',
-                false
-            )
+            $this->createMock(\Magento\Eav\Model\Config::class)
         );
 
         $this->_entityAttributeValuesProperty->setValue(
             $this->_condition,
-            $this->getMock(
-                \Magento\Eav\Model\Config::class,
-                [],
-                [],
-                '',
-                false
-            )
+            $this->createMock(\Magento\Eav\Model\Config::class)
         );
 
         $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType('multiselect');
 
-        $newResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['getAttribute'],
-            [],
-            '',
-            false
-        );
+        $newResource = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product::class, ['getAttribute']);
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
             ->will($this->returnValue($attribute));
-        $newResource->_config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -314,18 +258,12 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
         $attribute->setBackendType(null);
         $attribute->setFrontendInput('multiselect');
 
-        $newResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['getAttribute'],
-            [],
-            '',
-            false
-        );
+        $newResource = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product::class, ['getAttribute']);
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
             ->will($this->returnValue($attribute));
-        $newResource->_config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->setResource($newResource);
         $product->setId(1);
@@ -397,12 +335,9 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $entityTypeMock->method('getId')->willReturn('SomeEntityType');
 
-        $configValueMock = $this->getMock(
+        $configValueMock = $this->createPartialMock(
             \Magento\Eav\Model\Config::class,
-            ['getAttribute', 'getEntityType'],
-            [],
-            '',
-            false
+            ['getAttribute', 'getEntityType']
         );
         $configValueMock->method('getAttribute')->willReturn($attributeObjectMock);
         $configValueMock->method('getEntityType')->willReturn($entityTypeMock);

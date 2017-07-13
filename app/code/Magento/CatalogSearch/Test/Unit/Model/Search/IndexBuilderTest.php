@@ -28,7 +28,7 @@ use Magento\Framework\DB\Select;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexBuilderTest extends \PHPUnit_Framework_TestCase
+class IndexBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DimensionsProcessor|\PHPUnit_Framework_MockObject_MockObject

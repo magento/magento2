@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 /**
  * Class OrderAdapterTest
  */
-class OrderAdapterTest extends \PHPUnit_Framework_TestCase
+class OrderAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderAdapter */
     protected $model;

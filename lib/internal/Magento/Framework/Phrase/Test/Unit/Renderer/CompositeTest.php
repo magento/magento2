@@ -8,7 +8,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
 use \Magento\Framework\Phrase\Renderer\Composite;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Composite
@@ -27,8 +27,8 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rendererOne = $this->getMock(\Magento\Framework\Phrase\RendererInterface::class);
-        $this->rendererTwo = $this->getMock(\Magento\Framework\Phrase\RendererInterface::class);
+        $this->rendererOne = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
+        $this->rendererTwo = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
         $this->object = new \Magento\Framework\Phrase\Renderer\Composite([$this->rendererOne, $this->rendererTwo]);
     }
 
@@ -85,7 +85,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->method('render')
             ->willThrowException($exception);
 
-        $this->setExpectedException('Exception', $message);
+        $this->expectException('Exception', $message);
         $this->object->render(['text'], []);
     }
 }

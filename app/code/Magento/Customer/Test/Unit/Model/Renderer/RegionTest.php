@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Renderer;
 
-class RegionTest extends \PHPUnit_Framework_TestCase
+class RegionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $regionCollection
@@ -13,50 +13,30 @@ class RegionTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($regionCollection)
     {
-        $countryFactoryMock = $this->getMock(
-            \Magento\Directory\Model\CountryFactory::class,
-            [],
-            [],
-            '',
-            false
+        $countryFactoryMock = $this->createMock(
+            \Magento\Directory\Model\CountryFactory::class
         );
-        $directoryHelperMock = $this->getMock(
+        $directoryHelperMock = $this->createPartialMock(
             \Magento\Directory\Helper\Data::class,
-            ['isRegionRequired'],
-            [],
-            '',
-            false
+            ['isRegionRequired']
         );
-        $escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
-        $elementMock = $this->getMock(
+        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $elementMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getForm', 'getHtmlAttributes'],
-            [],
-            '',
-            false
+            ['getForm', 'getHtmlAttributes']
         );
-        $countryMock = $this->getMock(
+        $countryMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getValue'],
-            [],
-            '',
-            false
+            ['getValue']
         );
-        $regionMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            [],
-            [],
-            '',
-            false
+        $regionMock = $this->createMock(
+            \Magento\Framework\Data\Form\Element\AbstractElement::class
         );
-        $countryModelMock = $this->getMock(
+        $countryModelMock = $this->createPartialMock(
             \Magento\Directory\Model\Country::class,
-            ['setId', 'getLoadedRegionCollection', 'toOptionArray', '__wakeup'],
-            [],
-            '',
-            false
+            ['setId', 'getLoadedRegionCollection', 'toOptionArray', '__wakeup']
         );
-        $formMock = $this->getMock(\Magento\Framework\Data\Form::class, ['getElement'], [], '', false);
+        $formMock = $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getElement']);
 
         $elementMock->expects($this->any())->method('getForm')->will($this->returnValue($formMock));
         $elementMock->expects(

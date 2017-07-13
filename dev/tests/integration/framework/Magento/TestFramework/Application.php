@@ -563,6 +563,9 @@ class Application
         \Magento\Framework\Data\Form::setFieldsetRenderer(null);
         \Magento\Framework\Data\Form::setFieldsetElementRenderer(null);
         $this->_appArea = null;
+        $_SESSION = [];
+        $_COOKIE = [];
+        session_write_close();
     }
 
     /**

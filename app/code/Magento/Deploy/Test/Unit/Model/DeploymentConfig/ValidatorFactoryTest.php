@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Config\Validator;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
+class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValidatorFactory

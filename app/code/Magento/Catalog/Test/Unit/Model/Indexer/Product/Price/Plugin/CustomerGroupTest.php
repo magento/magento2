@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
-class CustomerGroupTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -34,25 +34,11 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_subjectMock = $this->getMock(
-            \Magento\Customer\Api\GroupRepositoryInterface::class, [], [], '', false
-        );
+        $this->_subjectMock = $this->createMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
 
-        $indexerMock = $this->getMock(
-            \Magento\Indexer\Model\Indexer::class,
-            ['getId', 'invalidate'],
-            [],
-            '',
-            false
-        );
+        $indexerMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer::class, ['getId', 'invalidate']);
         $indexerMock->expects($this->once())->method('invalidate');
-        $this->indexerRegistryMock = $this->getMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->indexerRegistryMock = $this->createPartialMock(\Magento\Framework\Indexer\IndexerRegistry::class, ['get']);
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)

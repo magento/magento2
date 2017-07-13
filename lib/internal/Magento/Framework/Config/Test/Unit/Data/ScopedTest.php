@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Data;
 
-class ScopedTest extends \PHPUnit_Framework_TestCase
+class ScopedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -40,10 +40,10 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
-        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->_readerMock = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->_configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->_cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->_model = $this->objectManager->getObject(
             \Magento\Framework\Config\Data\Scoped::class,

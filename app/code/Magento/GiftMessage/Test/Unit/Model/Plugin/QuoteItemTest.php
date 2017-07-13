@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
-class QuoteItemTest extends \PHPUnit_Framework_TestCase
+class QuoteItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Plugin\QuoteItem
@@ -39,31 +39,22 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderItemMock = $this->getMock(
+        $this->orderItemMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
-            ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup'],
-            [],
-            '',
-            false
+            ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup']
         );
-        $this->quoteItemMock = $this->getMock(
+        $this->quoteItemMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getGiftMessageId', 'getStoreId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getGiftMessageId', 'getStoreId', '__wakeup']
         );
         $orderItems = $this->orderItemMock;
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
-        $this->subjectMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
-        $this->helperMock = $this->getMock(
+        $this->subjectMock = $this->createMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class);
+        $this->helperMock = $this->createPartialMock(
             \Magento\GiftMessage\Helper\Message::class,
-            ['setGiftMessageId', 'isMessagesAllowed'],
-            [],
-            '',
-            false
+            ['setGiftMessageId', 'isMessagesAllowed']
         );
         $this->model = new \Magento\GiftMessage\Model\Plugin\QuoteItem($this->helperMock);
     }

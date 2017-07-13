@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class IntegrationManagerTest
  */
-class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
+class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider elementNameDataProvider

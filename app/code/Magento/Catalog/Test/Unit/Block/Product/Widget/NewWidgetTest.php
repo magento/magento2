@@ -5,13 +5,13 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\Widget;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Block\Product\Widget\NewWidget;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewWidgetTest extends \PHPUnit_Framework_TestCase
+class NewWidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\Widget\NewWidget|\PHPUnit_Framework_MockObject_MockObject
@@ -58,29 +58,15 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->eventManager = $this->getMock(
-            \Magento\Framework\Event\Manager::class,
-            ['dispatch'],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false, false);
-        $this->cacheState = $this->getMock(
-            \Magento\Framework\App\Cache\State::class,
-            ['isEnabled'],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->localDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false, false);
+        $this->eventManager = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config::class);
+        $this->cacheState = $this->createPartialMock(\Magento\Framework\App\Cache\State::class, ['isEnabled']);
+        $this->localDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
         $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
             ->setMethods(['getProductAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -130,7 +116,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             </span>
         </div>';
         $type = 'widget-new-list';
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, ['getId'], [], '', false, false);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId']);
         $productMock->expects($this->once())
             ->method('getId')
             ->willReturn($id);
@@ -141,7 +127,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
         ];
 
-        $priceBoxMock = $this->getMock(\Magento\Framework\Pricing\Render::class, ['render'], [], '', false, false);
+        $priceBoxMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['render']);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
@@ -254,13 +240,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
      */
     protected function startTestGetProductCollection($displayType, $pagerEnable, $productsCount, $productsPerPage)
     {
-        $productCollectionFactory = $this->getMock(
+        $productCollectionFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
         $productCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($this->productCollection);

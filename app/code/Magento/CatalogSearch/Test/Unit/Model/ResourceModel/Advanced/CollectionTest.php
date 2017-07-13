@@ -6,15 +6,15 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends BaseCollectionTest
+class CollectionTest extends BaseCollection
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -57,21 +57,17 @@ class CollectionTest extends BaseCollectionTest
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
         $storeManager = $this->getStoreManager();
         $universalFactory = $this->getUniversalFactory();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
-        $this->filterBuilder = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
-        $this->temporaryStorageFactory = $this->getMock(
-            \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->temporaryStorageFactory = $this->createMock(
+            \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory::class
         );
-        $this->search = $this->getMock(\Magento\Search\Api\SearchInterface::class, [], [], '', false);
+        $this->search = $this->createMock(\Magento\Search\Api\SearchInterface::class);
 
-        $productLimitationMock = $this->getMock(
+        $productLimitationMock = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
@@ -108,7 +104,7 @@ class CollectionTest extends BaseCollectionTest
     {
         $attributeCode = 'description';
         $attributeCodeId = 42;
-        $attribute = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
         $this->eavConfig->expects($this->once())->method('getAttribute')->with(Product::ENTITY, $attributeCodeId)
             ->willReturn($attribute);
@@ -118,26 +114,20 @@ class CollectionTest extends BaseCollectionTest
         $this->filterBuilder->expects($this->once())->method('setValue')->with('search text')
             ->willReturn($this->filterBuilder);
 
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class);
+        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
         $this->filterBuilder->expects($this->once())->method('create')->willReturn($filter);
 
-        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
         $criteria->expects($this->once())
             ->method('setRequestName')
             ->with('advanced_search_container');
 
-        $tempTable = $this->getMock(\Magento\Framework\DB\Ddl\Table::class, [], [], '', false);
-        $temporaryStorage = $this->getMock(
-            \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $tempTable = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
+        $temporaryStorage = $this->createMock(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class);
         $temporaryStorage->expects($this->once())->method('storeApiDocuments')->willReturn($tempTable);
         $this->temporaryStorageFactory->expects($this->once())->method('create')->willReturn($temporaryStorage);
-        $searchResult = $this->getMock(\Magento\Framework\Api\Search\SearchResultInterface::class, [], [], '', false);
+        $searchResult = $this->createMock(\Magento\Framework\Api\Search\SearchResultInterface::class);
         $this->search->expects($this->once())->method('search')->willReturn($searchResult);
 
         // addFieldsToFilter will load filters,

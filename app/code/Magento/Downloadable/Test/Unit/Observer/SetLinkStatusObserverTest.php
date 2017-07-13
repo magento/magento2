@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
+class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order */
     private $orderMock;

@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer\State

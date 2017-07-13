@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
 use Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor;
 use Magento\Quote\Model\Quote\Item;
 
-class ItemIdProcessorTest extends \PHPUnit_Framework_TestCase
+class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ItemIdProcessor */
     protected $model;

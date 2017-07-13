@@ -12,7 +12,10 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TimezoneTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for @see Timezone
+ */
+class TimezoneTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string|null

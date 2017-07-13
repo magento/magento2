@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Plugin;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     private $plugin;
 

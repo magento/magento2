@@ -9,7 +9,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class PaginationProcessorTest extends \PHPUnit_Framework_TestCase
+class PaginationProcessorTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {

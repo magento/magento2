@@ -8,7 +8,7 @@ namespace Magento\Dhl\Block\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class UnitofmeasureTest extends \PHPUnit_Framework_TestCase
+class UnitofmeasureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

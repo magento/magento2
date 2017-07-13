@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 /**
  * Class PagingTest
  */
-class PagingTest extends \PHPUnit_Framework_TestCase
+class PagingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
     protected $urnResolver;
@@ -16,7 +16,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
+        $this->urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
     }
 
     public function testGetSchemaFile()

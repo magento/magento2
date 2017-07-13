@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\Unit\Model\Session;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
+class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;

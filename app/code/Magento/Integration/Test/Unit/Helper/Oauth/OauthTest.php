@@ -7,7 +7,7 @@ namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
 use Magento\Framework\Oauth\Helper\Oauth;
 
-class OauthTest extends \PHPUnit_Framework_TestCase
+class OauthTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Oauth */
     protected $_oauthHelper;

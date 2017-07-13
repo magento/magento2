@@ -11,7 +11,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 /**
  * Magento\Framework\Stdlib\DateTimeTest test case
  */
-class DateTimeTest extends \PHPUnit_Framework_TestCase
+class DateTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

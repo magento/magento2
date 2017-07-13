@@ -12,7 +12,7 @@ use Magento\ImportExport\Model\Import;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
+class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product

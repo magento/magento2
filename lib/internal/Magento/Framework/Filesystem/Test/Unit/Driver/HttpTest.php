@@ -7,7 +7,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use \Magento\Framework\Filesystem\Driver\Http;
 
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array Result of get_headers() function */
     public static $headers;

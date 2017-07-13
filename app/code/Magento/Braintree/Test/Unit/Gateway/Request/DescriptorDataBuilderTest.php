@@ -12,7 +12,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class DescriptorDataBuilderTest
  */
-class DescriptorDataBuilderTest extends \PHPUnit_Framework_TestCase
+class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|MockObject

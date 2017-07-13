@@ -11,7 +11,7 @@ namespace Magento\Integration\Test\Unit\Model;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
-class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
+class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\CustomerTokenService */
     protected $_tokenService;
@@ -54,7 +54,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
         )->disableOriginalConstructor()->setMethods(
-            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
+            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
         )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(

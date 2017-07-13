@@ -16,7 +16,7 @@ use Zend\Stdlib\Parameters;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -63,7 +63,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'websiteRepository' => $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class),
         ];
 
-        return $this->getMock(\Magento\Store\Model\Store::class, ['getUrl'], $this->modelParams);
+        return $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->setMethods(['getUrl'])
+            ->setConstructorArgs($this->modelParams)
+            ->getMock();
     }
 
     protected function tearDown()
@@ -338,8 +341,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testIsUseStoreInUrl($storeInUrl, $disableStoreInUrl, $expectedResult)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $configMock = $this->getMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false, false);
+        $configMock = $this->createMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $params = $this->modelParams;
         $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

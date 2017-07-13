@@ -50,23 +50,17 @@ class SaveTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
 
         $this->_request->expects($this->once(5))->method('getPostValue')->will($this->returnValue(true));
 
-        $themeMock = $this->getMock(
+        $themeMock = $this->createPartialMock(
             \Magento\Theme\Model\Theme::class,
-            ['save', 'load', 'setCustomization', 'getThemeImage', '__wakeup'],
-            [],
-            '',
-            false
+            ['save', 'load', 'setCustomization', 'getThemeImage', '__wakeup']
         );
 
-        $themeImage = $this->getMock(\Magento\Theme\Model\Theme\Data::class, [], [], '', false);
+        $themeImage = $this->createMock(\Magento\Theme\Model\Theme\Data::class);
         $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));
 
-        $themeFactory = $this->getMock(
+        $themeFactory = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\FlyweightFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeMock));
 

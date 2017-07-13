@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Payment;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
+class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     const PAYMENT_METHOD_NONCE = 'nonce';
     const MERCHANT_ACCOUNT_ID = '245345';
@@ -55,7 +55,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -65,7 +65,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderMock = $this->getMock(OrderAdapterInterface::class);
+        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
 
         $this->builder = new PaymentDataBuilder($this->configMock, $this->subjectReaderMock);
     }

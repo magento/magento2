@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 /**
  * Tests Magento\Webapi\Model\Authorization\GuestUserContext
  */
-class GuestUserContextTest extends \PHPUnit_Framework_TestCase
+class GuestUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

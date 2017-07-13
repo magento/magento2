@@ -5,7 +5,7 @@
  */
 namespace Magento\Reports\Test\Unit\Block\Product;
 
-class ViewedTest extends \PHPUnit_Framework_TestCase
+class ViewedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Block\Product\Viewed
@@ -27,7 +27,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     {
         $productTags = ['catalog_product_1'];
 
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
 
         $collection = new \ReflectionProperty(\Magento\Reports\Block\Product\Viewed::class, '_collection');

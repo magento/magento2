@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Block\Checkout;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Block\Checkout\Shipping
@@ -20,8 +20,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
-        $checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
         $checkoutSession->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
 
         $this->model = $objectManager->getObject(
@@ -37,7 +37,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testDisplayShipping($shippingMethod, $expectedResult)
     {
-        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, ['getShippingMethod'], [], '', false);
+        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getShippingMethod']);
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
 

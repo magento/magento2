@@ -10,7 +10,7 @@ use Magento\Security\Model\ConfigInterface;
 /**
  * Test class for \Magento\Security\Model\Config testing
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -33,21 +33,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scopeConfigMock =  $this->getMock(
+        $this->scopeConfigMock = $this->createPartialMock(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            ['getValue', 'isSetFlag'],
-            [],
-            '',
-            false
+            ['getValue', 'isSetFlag']
         );
 
-        $this->scopeMock =  $this->getMock(
-            \Magento\Framework\Config\ScopeInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->scopeMock =  $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(

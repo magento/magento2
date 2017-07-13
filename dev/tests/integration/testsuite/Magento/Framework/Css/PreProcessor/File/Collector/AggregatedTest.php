@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/code/Magento
  * @magentoDbIsolation enabled
  */
-class AggregatedTest extends \PHPUnit_Framework_TestCase
+class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated

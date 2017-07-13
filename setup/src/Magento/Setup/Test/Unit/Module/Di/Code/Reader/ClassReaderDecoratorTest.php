@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
 use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 
-class ClassReaderDecoratorTest extends \PHPUnit_Framework_TestCase
+class ClassReaderDecoratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator

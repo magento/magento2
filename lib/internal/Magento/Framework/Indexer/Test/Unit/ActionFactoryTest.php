@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-class ActionFactoryTest extends \PHPUnit_Framework_TestCase
+class ActionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -19,7 +19,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\Indexer\ActionFactory($this->objectManagerMock);
     }
 
@@ -29,7 +29,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithException()
     {
-        $notActionInterfaceMock = $this->getMock('NotAction', [], [], '', false);
+        $notActionInterfaceMock = $this->getMockBuilder('NotAction')->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with('NotAction', [])

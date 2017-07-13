@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Class PageCacheTest
  *
  */
-class ExportVarnishConfigTest extends \PHPUnit_Framework_TestCase
+class ExportVarnishConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject

@@ -8,7 +8,7 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml;
 /**
  * @covers Magento\Email\Block\Adminhtml\Template
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Email\Block\Adminhtml\Template */
     protected $template;

@@ -14,7 +14,7 @@ use Magento\Tax\Block\Grid\Renderer\Codes;
  *
  * Class CodesTest
  */
-class CodesTest extends \PHPUnit_Framework_TestCase
+class CodesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Codes

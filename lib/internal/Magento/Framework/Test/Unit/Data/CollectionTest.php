@@ -13,7 +13,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
  * Class CollectionTest
  * @package Magento\Framework\Test\Unit\Data
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collection
@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $factoryMock = $this->getMock(EntityFactoryInterface::class);
+        $factoryMock = $this->createMock(EntityFactoryInterface::class);
         $this->collection = new Collection($factoryMock);
     }
 

@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Circular\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ChainTest extends \PHPUnit_Framework_TestCase
+class ChainTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetModules()
     {

@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * @inheritdoc
  */
-class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
+class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProcessorFactory

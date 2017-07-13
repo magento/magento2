@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Controller;
 
-class WishlistProviderTest extends \PHPUnit_Framework_TestCase
+class WishlistProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProvider
@@ -41,31 +41,13 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
-        $this->wishlistFactory = $this->getMock(
-            \Magento\Wishlist\Model\WishlistFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->wishlistFactory = $this->createPartialMock(\Magento\Wishlist\Model\WishlistFactory::class, ['create']);
 
-        $this->customerSession = $this->getMock(
-            \Magento\Customer\Model\Session::class,
-            ['getCustomerId'],
-            [],
-            '',
-            false
-        );
+        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getCustomerId']);
 
-        $this->messageManager = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $this->wishlistProvider = $objectManager->getObject(
             \Magento\Wishlist\Controller\WishlistProvider::class,
@@ -80,7 +62,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWishlist()
     {
-        $wishlist = $this->getMock(\Magento\Wishlist\Model\Wishlist::class, [], [], '', false);
+        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
 
         $this->wishlistFactory->expects($this->once())
             ->method('create')
@@ -91,12 +73,9 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWishlistWithCustomer()
     {
-        $wishlist = $this->getMock(
+        $wishlist = $this->createPartialMock(
             \Magento\Wishlist\Model\Wishlist::class,
-            ['loadByCustomerId', 'getId', 'getCustomerId', '__wakeup'],
-            [],
-            '',
-            false
+            ['loadByCustomerId', 'getId', 'getCustomerId', '__wakeup']
         );
         $wishlist->expects($this->once())
             ->method('loadByCustomerId')
@@ -121,12 +100,9 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWishlistWithIdAndCustomer()
     {
-        $wishlist = $this->getMock(
+        $wishlist = $this->createPartialMock(
             \Magento\Wishlist\Model\Wishlist::class,
-            ['loadByCustomerId', 'load', 'getId', 'getCustomerId', '__wakeup'],
-            [],
-            '',
-            false
+            ['loadByCustomerId', 'load', 'getId', 'getCustomerId', '__wakeup']
         );
 
         $wishlist->expects($this->once())
@@ -156,12 +132,9 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWishlistWithIdWithoutCustomer()
     {
-        $wishlist = $this->getMock(
+        $wishlist = $this->createPartialMock(
             \Magento\Wishlist\Model\Wishlist::class,
-            ['loadByCustomerId', 'load', 'getId', 'getCustomerId', '__wakeup'],
-            [],
-            '',
-            false
+            ['loadByCustomerId', 'load', 'getId', 'getCustomerId', '__wakeup']
         );
 
         $wishlist->expects($this->once())

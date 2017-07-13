@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class ButtonTest extends \PHPUnit_Framework_TestCase
+class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,15 +23,9 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->_model = new \Magento\Framework\Data\Form\Element\Button(
             $factoryMock,
             $collectionFactoryMock,

@@ -10,7 +10,7 @@ use Magento\Ui\Config\Converter\Actions;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
 
-class ActionsTest extends \PHPUnit_Framework_TestCase
+class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Actions

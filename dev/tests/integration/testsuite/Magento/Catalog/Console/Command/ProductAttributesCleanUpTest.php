@@ -7,7 +7,7 @@ namespace Magento\Catalog\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
+class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CommandTester

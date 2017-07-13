@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Model\Processor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\Processor\CleanCache;
 
-class CleanCacheTest extends \PHPUnit_Framework_TestCase
+class CleanCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tested plugin
@@ -56,10 +56,10 @@ class CleanCacheTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->subjectMock = $this->getMock(\Magento\Indexer\Model\Processor::class, [], [], '', false);
-        $this->contextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
-        $this->cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false);
+        $this->subjectMock = $this->createMock(\Magento\Indexer\Model\Processor::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\Indexer\CacheContext::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $this->plugin = new CleanCache(
             $this->contextMock,
             $this->eventManagerMock

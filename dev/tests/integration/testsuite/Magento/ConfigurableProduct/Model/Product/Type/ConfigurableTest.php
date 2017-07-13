@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object under test

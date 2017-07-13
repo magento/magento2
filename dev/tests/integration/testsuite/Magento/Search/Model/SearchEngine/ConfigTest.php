@@ -10,7 +10,7 @@ namespace Magento\Search\Model\SearchEngine;
  *
  * @magentoAppIsolation enabled
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {

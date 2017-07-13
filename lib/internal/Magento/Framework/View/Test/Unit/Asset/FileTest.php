@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\View\Asset\File;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
@@ -32,7 +32,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->source = $this->getMock(\Magento\Framework\View\Asset\Source::class, [], [], '', false);
+        $this->source = $this->createMock(\Magento\Framework\View\Asset\Source::class);
         $this->context = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\ContextInterface::class);
         $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()

@@ -9,7 +9,7 @@ namespace Magento\Setup\Module\I18n\Parser\Adapter;
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Xml
  *
  */
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Xml

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\Element

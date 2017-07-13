@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see CompactDeploy
  */
-class CompactDeployTest extends \PHPUnit_Framework_TestCase
+class CompactDeployTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CompactDeploy
@@ -58,7 +58,7 @@ class CompactDeployTest extends \PHPUnit_Framework_TestCase
             'opt2' => ''
         ];
 
-        $virtualPackage = $this->getMock(Package::class, [], [], '', false);
+        $virtualPackage = $this->createMock(Package::class);
         $virtualPackage->expects($this->exactly(1))
             ->method('isVirtual')
             ->willReturn(true);
@@ -69,7 +69,7 @@ class CompactDeployTest extends \PHPUnit_Framework_TestCase
             ->method('setParam')
             ->willReturn('virtual');
 
-        $realPackage = $this->getMock(Package::class, [], [], '', false);
+        $realPackage = $this->createMock(Package::class);
         $realPackage->expects($this->exactly(1))
             ->method('isVirtual')
             ->willReturn(false);
@@ -84,25 +84,13 @@ class CompactDeployTest extends \PHPUnit_Framework_TestCase
             'virtual' => $virtualPackage,
             'real' => $realPackage
         ];
-        $this->packagePool = $this->getMock(
-            PackagePool::class,
-            ['getPackagesForDeployment'],
-            [],
-            '',
-            false
-        );
+        $this->packagePool = $this->createPartialMock(PackagePool::class, ['getPackagesForDeployment']);
         $this->packagePool->expects($this->once())
             ->method('getPackagesForDeployment')
             ->with($this->options)
             ->willReturn($this->packages);
 
-        $this->queue = $this->getMock(
-            Queue::class,
-            ['add', 'process'],
-            [],
-            '',
-            false
-        );
+        $this->queue = $this->createPartialMock(Queue::class, ['add', 'process']);
         $this->queue->expects($this->exactly(2))->method('add');
         $this->queue->expects($this->exactly(1))->method('process');
 

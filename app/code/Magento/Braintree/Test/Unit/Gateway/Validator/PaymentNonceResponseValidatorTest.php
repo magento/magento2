@@ -14,7 +14,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 /**
  * Class PaymentNonceResponseValidatorTest
  */
-class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
+class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentNonceResponseValidator
@@ -65,7 +65,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('readResponseObject')
             ->willReturn($obj);
 
-        $result = $this->getMock(ResultInterface::class);
+        $result = $this->createMock(ResultInterface::class);
         $this->resultInterfaceFactory->expects(self::once())
             ->method('create')
             ->with([
@@ -97,7 +97,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('readResponseObject')
             ->willReturn($obj);
 
-        $result = $this->getMock(ResultInterface::class);
+        $result = $this->createMock(ResultInterface::class);
         $this->resultInterfaceFactory->expects(self::once())
             ->method('create')
             ->with([

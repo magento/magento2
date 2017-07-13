@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 
-class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit_Framework_TestCase
+class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject

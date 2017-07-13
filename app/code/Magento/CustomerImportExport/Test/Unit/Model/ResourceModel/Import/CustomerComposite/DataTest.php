@@ -15,7 +15,7 @@ use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Array of customer attributes
@@ -34,12 +34,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _getDependencies($entityType, $bunchData)
     {
         /** @var $statementMock \Magento\Framework\DB\Statement\Pdo\Mysql */
-        $statementMock = $this->getMock(
+        $statementMock = $this->createPartialMock(
             \Magento\Framework\DB\Statement\Pdo\Mysql::class,
-            ['setFetchMode', 'getIterator'],
-            [],
-            '',
-            false
+            ['setFetchMode', 'getIterator']
         );
         $statementMock->expects(
             $this->any()
@@ -50,29 +47,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $selectMock \Magento\Framework\DB\Select */
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['from', 'order'], [], '', false);
+        $selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'order']);
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
 
         /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
-        $connectionMock = $this->getMock(
+        $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'from', 'order', 'query'],
-            [],
-            '',
-            false
+            ['select', 'from', 'order', 'query']
         );
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $connectionMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
 
         /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
-        $resourceModelMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $resourceModelMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resourceModelMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
 
         $data = ['resource' => $resourceModelMock, 'entity_type' => $entityType];
@@ -114,7 +102,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         unset($dependencies['resource'], $dependencies['json_helper']);
 
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

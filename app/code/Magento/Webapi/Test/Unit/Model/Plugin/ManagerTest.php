@@ -7,7 +7,7 @@ namespace Magento\Webapi\Test\Unit\Model\Plugin;
 
 use Magento\Integration\Model\Integration;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Integration service mock
@@ -67,13 +67,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ]
         )->getMock();
 
-        $this->subjectMock = $this->getMock(
-            \Magento\Integration\Model\ConfigBasedIntegrationManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->subjectMock = $this->createMock(\Magento\Integration\Model\ConfigBasedIntegrationManager::class);
 
         $this->integrationConfigMock = $this->getMockBuilder(\Magento\Integration\Model\IntegrationConfig::class)
             ->disableOriginalConstructor()

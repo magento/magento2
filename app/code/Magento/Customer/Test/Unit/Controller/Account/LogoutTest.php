@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
-class LogoutTest extends \PHPUnit_Framework_TestCase
+class LogoutTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Logout */
     protected $controller;

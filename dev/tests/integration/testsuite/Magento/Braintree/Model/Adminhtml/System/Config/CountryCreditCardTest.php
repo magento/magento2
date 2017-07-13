@@ -8,7 +8,7 @@ namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
+class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CountryCreditCard */
     private $countryCreditCardConfig;

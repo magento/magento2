@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
 
-class BaseSelectFullTextSearchStrategyTest extends \PHPUnit_Framework_TestCase
+class BaseSelectFullTextSearchStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BaseSelectFullTextSearchStrategy

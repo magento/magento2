@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\MergeDataProvider;
 
-class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrlRewriteHandler

@@ -9,7 +9,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
-class SetTest extends \PHPUnit_Framework_TestCase
+class SetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Set
@@ -18,16 +18,9 @@ class SetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resource = $this->getMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class, [], [], '', false);
-        $attrGroupFactory = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\GroupFactory::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $attrFactory = $this->getMock(\Magento\Eav\Model\Entity\AttributeFactory::class, [], [], '', false, false);
+        $resource = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
+        $attrGroupFactory = $this->createMock(\Magento\Eav\Model\Entity\Attribute\GroupFactory::class);
+        $attrFactory = $this->createMock(\Magento\Eav\Model\Entity\AttributeFactory::class);
         $arguments = [
             'attrGroupFactory' => $attrGroupFactory,
             'attributeFactory' => $attrFactory,
@@ -51,7 +44,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(false));
 
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
         $this->_model->setAttributeSetName($attributeSetName);
         $this->_model->validate();
     }

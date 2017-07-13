@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Element\Html;
 use \Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\Escaper;
 
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Select
@@ -22,9 +22,9 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()

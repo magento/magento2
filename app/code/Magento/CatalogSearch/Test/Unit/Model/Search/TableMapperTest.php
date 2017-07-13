@@ -20,7 +20,7 @@ use Magento\Framework\Search\Request\Filter\Term;
  * Test for \Magento\CatalogSearch\Model\Search\TableMapper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TableMapperTest extends \PHPUnit_Framework_TestCase
+class TableMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject

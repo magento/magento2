@@ -14,7 +14,7 @@ namespace Magento\Email\Test\Unit\Model;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
+class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -416,12 +416,12 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $designMock = $this->getMock(\Magento\Framework\View\DesignInterface::class);
+        $designMock = $this->createMock(\Magento\Framework\View\DesignInterface::class);
         $designMock->expects($this->any())->method('getArea')->willReturn('test_area');
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->any())->method('getId')->willReturn(2);
-        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $model = $this->getMockForAbstractClass(

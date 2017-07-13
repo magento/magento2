@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\Config
@@ -29,7 +29,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException(array $configData, $expectedException)
     {
-        $this->setExpectedException('InvalidArgumentException', $expectedException);
+        $this->expectException('InvalidArgumentException', $expectedException);
         new \Magento\Directory\Model\Currency\Import\Config($configData);
     }
 

@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Compiler;
 /**
  * Class IncludeElementTest
  */
-class IncludeElementTest extends \PHPUnit_Framework_TestCase
+class IncludeElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Compiler\IncludeElement

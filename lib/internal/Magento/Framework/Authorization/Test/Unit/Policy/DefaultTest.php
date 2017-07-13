@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
-class DefaultTest extends \PHPUnit_Framework_TestCase
+class DefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Authorization\Policy\DefaultPolicy

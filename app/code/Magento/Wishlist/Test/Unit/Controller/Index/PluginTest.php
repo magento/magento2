@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
@@ -50,16 +50,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->authenticationState = $this->getMock(
-            \Magento\Wishlist\Model\AuthenticationState::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->config = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
-        $this->redirector = $this->getMock(\Magento\Store\App\Response\Redirect::class, [], [], '', false);
-        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->authenticationState = $this->createMock(\Magento\Wishlist\Model\AuthenticationState::class);
+        $this->config = $this->createMock(\Magento\Framework\App\Config::class);
+        $this->redirector = $this->createMock(\Magento\Store\App\Response\Redirect::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
     }
 
     protected function tearDown()
@@ -93,8 +87,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'product' => 1,
         ];
 
-        $actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $indexController = $this->getMock(\Magento\Wishlist\Controller\Index\Index::class, [], [], '', false);
+        $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $indexController = $this->createMock(\Magento\Wishlist\Controller\Index\Index::class);
 
         $actionFlag
             ->expects($this->once())

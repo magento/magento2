@@ -11,7 +11,7 @@ namespace Magento\Customer\Test\Unit\Block\Widget;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Taxvat;
 
-class TaxvatTest extends \PHPUnit_Framework_TestCase
+class TaxvatTest extends \PHPUnit\Framework\TestCase
 {
     /** Constants used in the unit tests */
     const CUSTOMER_ENTITY_TYPE = 'customer';
@@ -46,8 +46,8 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
-            $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false),
-            $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false),
+            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
+            $this->createMock(\Magento\Customer\Helper\Address::class),
             $this->customerMetadata
         );
     }

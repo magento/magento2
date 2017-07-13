@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Link as LinkResourceModel;
 
-class RelationPersisterTest extends \PHPUnit_Framework_TestCase
+class RelationPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RelationPersister|PHPUnit_Framework_MockObject_MockObject */
     private $object;

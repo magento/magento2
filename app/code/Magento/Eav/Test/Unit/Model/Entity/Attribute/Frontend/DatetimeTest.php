@@ -7,7 +7,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Frontend;
 
 use Magento\Eav\Model\Entity\Attribute\Frontend\Datetime;
 
-class DatetimeTest extends \PHPUnit_Framework_TestCase
+class DatetimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,20 +31,11 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->booleanFactoryMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->localeDateMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->attributeMock = $this->getMock(
+        $this->booleanFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory::class);
+        $this->localeDateMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->attributeMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getAttributeCode', 'getFrontendLabel'],
-            [],
-            '',
-            false
+            ['getAttributeCode', 'getFrontendLabel', 'getData']
         );
 
         $this->model = new Datetime($this->booleanFactoryMock, $this->localeDateMock);

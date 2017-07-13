@@ -10,7 +10,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class IndexBuilderTest extends \PHPUnit_Framework_TestCase
+class IndexBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder
@@ -129,53 +129,35 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resource = $this->getMock(
+        $this->resource = $this->createPartialMock(
             \Magento\Framework\App\ResourceConnection::class,
-            ['getConnection', 'getTableName'],
-            [],
-            '',
-            false
+            ['getConnection', 'getTableName']
         );
-        $this->ruleCollectionFactory = $this->getMock(
+        $this->ruleCollectionFactory = $this->createPartialMock(
             \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory::class,
-            ['create', 'addFieldToFilter'],
-            [],
-            '',
-            false
+            ['create', 'addFieldToFilter']
         );
-        $this->backend = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
-        $this->metadataPool = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $this->backend = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
+        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->metadataPool = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
-        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->db = $this->getMock(\Zend_Db_Statement_Interface::class, [], [], '', false);
-        $this->website = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
-        $this->combine = $this->getMock(\Magento\Rule\Model\Condition\Combine::class, [], [], '', false);
-        $this->rules = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
-        $this->attribute = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->priceCurrency = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-        $this->dateFormat = $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false);
-        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, [], [], '', false);
-        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->db = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $this->website = $this->createMock(\Magento\Store\Model\Website::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->combine = $this->createMock(\Magento\Rule\Model\Condition\Combine::class);
+        $this->rules = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->dateFormat = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $this->eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getAttribute']);
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
         $this->connection->expects($this->any())->method('query')->will($this->returnValue($this->db));
         $this->select->expects($this->any())->method('distinct')->will($this->returnSelf());
@@ -234,26 +216,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateCatalogRuleGroupWebsiteData()
     {
-        $priceAttrMock = $this->getMock(
-            \Magento\Catalog\Model\Entity\Attribute::class,
-            ['getBackend'],
-            [],
-            '',
-            false
-        );
-        $backendModelMock = $this->getMock(
+        $priceAttrMock = $this->createPartialMock(\Magento\Catalog\Model\Entity\Attribute::class, ['getBackend']);
+        $backendModelMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice::class,
-            ['getResource'],
-            [],
-            '',
-            false
+            ['getResource']
         );
-        $resourceMock = $this->getMock(
+        $resourceMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice::class,
-            ['getMainTable'],
-            [],
-            '',
-            false
+            ['getMainTable']
         );
         $resourceMock->expects($this->any())
             ->method('getMainTable')

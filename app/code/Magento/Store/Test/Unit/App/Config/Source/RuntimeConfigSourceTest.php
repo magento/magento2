@@ -24,7 +24,7 @@ use Magento\Store\Model\WebsiteFactory;
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
+class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

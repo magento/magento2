@@ -15,7 +15,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
+class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject

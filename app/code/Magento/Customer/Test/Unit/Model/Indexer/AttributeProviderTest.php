@@ -9,7 +9,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Indexer\AttributeProvider;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 
-class AttributeProviderTest extends \PHPUnit_Framework_TestCase
+class AttributeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject

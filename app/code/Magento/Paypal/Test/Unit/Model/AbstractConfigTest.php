@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class AbstractConfigTest
  * @package Magento\Paypal\Test\Unit\Model
  */
-class AbstractConfigTest extends \PHPUnit_Framework_TestCase
+class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

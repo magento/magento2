@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-class RuleProductPricesPersistorTest extends \PHPUnit_Framework_TestCase
+class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor

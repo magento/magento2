@@ -9,7 +9,7 @@ namespace Magento\TaxImportExport\Test\Unit\Controller\Adminhtml\Rate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ExportPostTest extends \PHPUnit_Framework_TestCase
+class ExportPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost
@@ -34,14 +34,8 @@ class ExportPostTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->fileFactoryMock = $this->getMock(
-            \Magento\Framework\App\Response\Http\FileFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->fileFactoryMock = $this->createMock(\Magento\Framework\App\Response\Http\FileFactory::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->controller = $this->objectManagerHelper->getObject(
             \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost::class,
             [
@@ -69,7 +63,7 @@ class ExportPostTest extends \PHPUnit_Framework_TestCase
             ',"{{zip_is_range}}","{{zip_from}}","{{zip_to}}"';
         $content = $headers->toString($template);
         $content .= "\n";
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeCollectionMock = $this->objectManagerHelper->getCollectionMock(
             \Magento\Store\Model\ResourceModel\Store\Collection::class,
             []
@@ -84,7 +78,7 @@ class ExportPostTest extends \PHPUnit_Framework_TestCase
             []
         );
         $storeCollectionMock->expects($this->once())->method('setLoadDefault')->willReturnSelf();
-        $rateTitleMock = $this->getMock(\Magento\Tax\Model\Calculation\Rate\Title::class, [], [], '', false);
+        $rateTitleMock = $this->createMock(\Magento\Tax\Model\Calculation\Rate\Title::class);
         $rateTitleMock->expects($this->once())->method('getCollection')->willReturn($taxCollectionMock);
         $storeMock->expects($this->once())->method('getCollection')->willReturn($storeCollectionMock);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap([

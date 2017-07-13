@@ -10,7 +10,7 @@ namespace Magento\Test\Legacy;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Glob;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     public function testRelocations()
     {

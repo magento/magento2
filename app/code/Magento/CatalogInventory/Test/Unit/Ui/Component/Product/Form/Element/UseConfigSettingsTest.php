@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
+class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -41,8 +41,8 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
-        $this->serializerMock = $this->getMock(Json::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
+        $this->serializerMock = $this->createMock(Json::class);
         $this->jsonValidatorMock = $this->getMockBuilder(\Magento\Framework\Serialize\JsonValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -58,14 +58,7 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepare()
     {
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $processorMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\Processor::class);
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         $config = ['valueFromConfig' => 123];
@@ -87,18 +80,11 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
         $serializedCalledNum = 0,
         $isValidCalledNum = 0
     ) {
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $processorMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\Processor::class);
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         /** @var ValueSourceInterface|\PHPUnit_Framework_MockObject_MockObject $source */
-        $source = $this->getMock(ValueSourceInterface::class);
+        $source = $this->createMock(ValueSourceInterface::class);
         $source->expects($this->once())
             ->method('getValue')
             ->with($expectedResult['keyInConfiguration'])

@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\Attribute

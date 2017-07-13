@@ -17,7 +17,7 @@ use Magento\Store\Model\Store;
 /**
  * Class BaseUrlConfigPluginTest
  */
-class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
+class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubscriptionUpdateHandler | \PHPUnit_Framework_MockObject_MockObject

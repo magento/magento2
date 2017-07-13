@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Model;
 /**
  * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Newsletter\Model\Template

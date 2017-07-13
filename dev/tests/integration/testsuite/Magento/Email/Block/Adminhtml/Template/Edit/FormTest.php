@@ -13,7 +13,7 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var string[] */
     protected $expectedFields;

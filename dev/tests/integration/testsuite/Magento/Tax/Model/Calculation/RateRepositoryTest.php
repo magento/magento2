@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RateRepositoryTest extends \PHPUnit_Framework_TestCase
+class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager

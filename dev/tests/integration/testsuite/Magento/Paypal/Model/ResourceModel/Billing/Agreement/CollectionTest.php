@@ -7,7 +7,7 @@ namespace Magento\Paypal\Model\ResourceModel\Billing\Agreement;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php

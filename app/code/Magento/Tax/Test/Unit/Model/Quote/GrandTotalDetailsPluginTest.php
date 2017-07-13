@@ -11,7 +11,7 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
+class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Api\Data\TotalSegmentExtensionFactory|\PHPUnit_Framework_MockObject_MockObject

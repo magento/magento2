@@ -16,7 +16,7 @@ use Magento\Framework\View\Asset\MergeStrategyInterface;
 /**
  * Class MergedTest
  */
-class MergedTest extends \PHPUnit_Framework_TestCase
+class MergedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -61,8 +61,8 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->willReturn('script_two.js');
 
-        $this->logger = $this->getMock(LoggerInterface::class);
-        $this->mergeStrategy = $this->getMock(MergeStrategyInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->mergeStrategy = $this->createMock(MergeStrategyInterface::class);
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,7 +126,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'assets' => $assets,
         ]);
 
-        $mergedAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $mergedAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $this->mergeStrategy
             ->expects($this->once())
             ->method('merge')

@@ -5,7 +5,7 @@
  */
 namespace Magento\Weee\Test\Unit\Observer;
 
-class AfterAddressSaveTest extends \PHPUnit_Framework_TestCase
+class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer

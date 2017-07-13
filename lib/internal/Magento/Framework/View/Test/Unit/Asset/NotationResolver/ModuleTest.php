@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
@@ -27,8 +27,8 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
-        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->assetRepo = $this->createPartialMock(\Magento\Framework\View\Asset\Repository::class, ['createUsingContext', 'createSimilar']);
         $this->object = new \Magento\Framework\View\Asset\NotationResolver\Module($this->assetRepo);
     }
 
@@ -53,7 +53,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     public function testConvertModuleNotationToPathModularSeparator(
         $assetRelPath, $relatedFieldId, $similarRelPath, $expectedResult
     ) {
-        $similarAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $similarAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $similarAsset->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue($similarRelPath));

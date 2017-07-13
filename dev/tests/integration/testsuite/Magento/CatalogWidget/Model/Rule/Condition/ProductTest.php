@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogWidget\Model\Rule\Condition\Product

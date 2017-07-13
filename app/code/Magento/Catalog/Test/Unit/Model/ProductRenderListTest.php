@@ -16,7 +16,7 @@ use Magento\Framework\Data\CollectionModifier;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductRenderListTest extends \PHPUnit_Framework_TestCase
+class ProductRenderListTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Model\ProductRenderRepository */
     private $model;

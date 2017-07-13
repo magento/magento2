@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product;
  * Class RowSizeEstimatorTest
  * @package Magento\Catalog\Test\Unit\Model\Indexer\Category
  */
-class RowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
+class RowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

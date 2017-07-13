@@ -8,7 +8,7 @@ namespace Magento\Framework\Crontab\Test\Unit;
 
 use Magento\Framework\Crontab\TasksProvider;
 
-class TasksProviderTest extends \PHPUnit_Framework_TestCase
+class TasksProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

@@ -9,7 +9,7 @@ use Magento\OfflinePayments\Model\CheckmoConfigProvider;
 use Magento\OfflinePayments\Model\Checkmo;
 use Magento\Framework\Escaper;
 
-class CheckmoConfigProviderTest extends \PHPUnit_Framework_TestCase
+class CheckmoConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CheckmoConfigProvider */
     protected $model;
@@ -22,15 +22,15 @@ class CheckmoConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->methodMock = $this->getMock(\Magento\OfflinePayments\Model\Checkmo::class, [], [], '', false);
+        $this->methodMock = $this->createMock(\Magento\OfflinePayments\Model\Checkmo::class);
 
-        $paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
         $paymentHelperMock->expects($this->once())
             ->method('getMethodInstance')
             ->with(Checkmo::PAYMENT_METHOD_CHECKMO_CODE)
             ->willReturn($this->methodMock);
 
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);

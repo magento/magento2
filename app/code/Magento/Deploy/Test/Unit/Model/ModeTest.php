@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @inheritdoc
  */
-class ModeTest extends \PHPUnit_Framework_TestCase
+class ModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Mode

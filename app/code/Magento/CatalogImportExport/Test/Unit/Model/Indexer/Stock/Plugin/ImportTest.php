@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Stock\Plugin;
 
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     public function testAfterImportSource()
     {
@@ -13,15 +13,12 @@ class ImportTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|
          *      \PHPUnit_Framework_MockObject_MockObject $processorMock
          */
-        $processorMock = $this->getMock(
+        $processorMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class,
-            ['markIndexerAsInvalid', 'isIndexerScheduled'],
-            [],
-            '',
-            false
+            ['markIndexerAsInvalid', 'isIndexerScheduled']
         );
 
-        $subjectMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
+        $subjectMock = $this->createMock(\Magento\ImportExport\Model\Import::class);
         $processorMock->expects($this->any())->method('markIndexerAsInvalid');
         $processorMock->expects($this->any())->method('isIndexerScheduled')->willReturn(false);
 

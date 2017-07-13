@@ -5,17 +5,17 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection as AttributeOptionCollection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Source\Table
@@ -62,7 +62,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->collectionFactory = $this->getMock(
+        $this->collectionFactory = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory::class,
             [
                 'create',
@@ -72,10 +72,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
                 'setStoreFilter',
                 'load',
                 'toOptionArray'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
         $this->attributeOptionCollectionMock = $this->getMockBuilder(AttributeOptionCollection::class)
@@ -83,12 +80,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attrOptionFactory = $this->getMock(
+        $this->attrOptionFactory = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->sourceMock = $this->getMockBuilder(AbstractSource::class)
@@ -126,13 +120,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFlatColumns()
     {
-        $abstractFrontendMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $abstractFrontendMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class);
 
         $this->abstractAttributeMock->expects($this->any())->method('getFrontend')->willReturn(($abstractFrontendMock));
         $this->abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');

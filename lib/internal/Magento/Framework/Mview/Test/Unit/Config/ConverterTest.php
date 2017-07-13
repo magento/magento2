@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mview\Test\Unit\Config;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\Config\Converter|\PHPUnit_Framework_MockObject_MockObject

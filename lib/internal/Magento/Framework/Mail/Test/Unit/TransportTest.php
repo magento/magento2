@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
-class TransportTest extends \PHPUnit_Framework_TestCase
+class TransportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit\Framework_MockObject
      */
     protected $_messageMock;
 
@@ -19,7 +19,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\Message::class, [], [], '', false);
+        $this->_messageMock = $this->createMock(\Magento\Framework\Mail\Message::class);
         $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
     }
 
@@ -29,7 +29,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransportWithIncorrectMessageObject()
     {
-        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\MessageInterface::class);
+        $this->_messageMock = $this->createMock(\Magento\Framework\Mail\MessageInterface::class);
         $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
     }
 

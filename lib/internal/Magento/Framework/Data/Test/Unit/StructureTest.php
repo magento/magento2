@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-class StructureTest extends \PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Structure

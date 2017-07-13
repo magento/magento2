@@ -15,7 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeleteOutdatedPriceValuesTest extends \PHPUnit_Framework_TestCase
+class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Cron\DeleteOutdatedPriceValues

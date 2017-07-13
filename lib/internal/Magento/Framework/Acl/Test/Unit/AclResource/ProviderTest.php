@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Acl\Test\Unit\AclResource;
 
-class ProviderTest extends \PHPUnit_Framework_TestCase
+class ProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Acl\AclResource\Provider
@@ -34,20 +34,11 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configReaderMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
-        $this->_treeBuilderMock = $this->getMock(
-            \Magento\Framework\Acl\AclResource\TreeBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->serializerMock = $this->getMock(
+        $this->_configReaderMock = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->_treeBuilderMock = $this->createMock(\Magento\Framework\Acl\AclResource\TreeBuilder::class);
+        $this->serializerMock = $this->createPartialMock(
             \Magento\Framework\Serialize\Serializer\Json::class,
-            ['serialize', 'unserialize'],
-            [],
-            '',
-            false
+            ['serialize', 'unserialize']
         );
         $this->serializerMock->expects($this->any())
             ->method('serialize')
@@ -69,13 +60,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->aclDataCacheMock = $this->getMock(
-            \Magento\Framework\Acl\Data\CacheInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->aclDataCacheMock = $this->createMock(\Magento\Framework\Acl\Data\CacheInterface::class);
 
         $this->_model = new \Magento\Framework\Acl\AclResource\Provider(
             $this->_configReaderMock,

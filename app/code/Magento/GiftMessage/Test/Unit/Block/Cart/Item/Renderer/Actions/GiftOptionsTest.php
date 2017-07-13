@@ -11,7 +11,7 @@ use Magento\Framework\Json\Encoder;
 use Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions;
 use Magento\Quote\Model\Quote\Item;
 
-class GiftOptionsTest extends \PHPUnit_Framework_TestCase
+class GiftOptionsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var GiftOptions */
     protected $model;

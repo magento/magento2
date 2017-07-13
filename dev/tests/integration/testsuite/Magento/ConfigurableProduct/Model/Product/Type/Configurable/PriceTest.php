@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product\Type\AbstractType;
 /**
  * Class PriceTest
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;

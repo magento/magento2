@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Helper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Helper\Data

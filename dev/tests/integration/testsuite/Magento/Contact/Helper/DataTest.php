@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Data

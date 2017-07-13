@@ -10,7 +10,7 @@ use Magento\Framework\App\Utility\Files;
 /**
  * Tests @api annotated code integrity
  */
-class PublicCodeTest extends \PHPUnit_Framework_TestCase
+class PublicCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of simple return types that are used in docblocks.

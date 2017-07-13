@@ -15,7 +15,7 @@ use Magento\Config\Model\Placeholder\PlaceholderFactory;
 /**
  * Test class for checking settings that defined in config file
  */
-class SettingCheckerTest extends \PHPUnit_Framework_TestCase
+class SettingCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject

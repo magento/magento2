@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi\Controller;
 
-class SoapTest extends \PHPUnit_Framework_TestCase
+class SoapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Webapi\Controller\Soap

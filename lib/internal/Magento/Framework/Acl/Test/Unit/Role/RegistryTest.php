@@ -8,7 +8,7 @@ namespace Magento\Framework\Acl\Test\Unit\Role;
 
 use \Magento\Framework\Acl\Role\Registry;
 
-class RegistryTest extends \PHPUnit_Framework_TestCase
+class RegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Registry
@@ -22,10 +22,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function initRoles($roleId, $parentRoleId)
     {
-        $parentRole = $this->getMock(\Zend_Acl_Role_Interface::class);
+        $parentRole = $this->createMock(\Zend_Acl_Role_Interface::class);
         $parentRole->expects($this->any())->method('getRoleId')->will($this->returnValue($parentRoleId));
 
-        $role = $this->getMock(\Zend_Acl_Role_Interface::class);
+        $role = $this->createMock(\Zend_Acl_Role_Interface::class);
         $role->expects($this->any())->method('getRoleId')->will($this->returnValue($roleId));
 
         $this->model->add($role);

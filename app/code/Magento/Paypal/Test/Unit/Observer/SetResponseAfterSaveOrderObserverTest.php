@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Observer;
 /**
  * Class SetResponseAfterSaveOrderObserverTest
  */
-class SetResponseAfterSaveOrderObserverTest extends \PHPUnit_Framework_TestCase
+class SetResponseAfterSaveOrderObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\SetResponseAfterSaveOrderObserver
@@ -47,20 +47,8 @@ class SetResponseAfterSaveOrderObserverTest extends \PHPUnit_Framework_TestCase
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->coreRegistryMock = $this->getMock(
-            \Magento\Framework\Registry::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->paypalHssMock = $this->getMock(
-            \Magento\Paypal\Helper\Hss::class,
-            ['getHssMethods'],
-            [],
-            '',
-            false
-        );
+        $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->paypalHssMock = $this->createPartialMock(\Magento\Paypal\Helper\Hss::class, ['getHssMethods']);
         $this->viewMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\ViewInterface::class,
             [],

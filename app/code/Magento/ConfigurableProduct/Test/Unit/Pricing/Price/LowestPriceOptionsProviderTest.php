@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
-class LowestPriceOptionsProviderTest extends \PHPUnit_Framework_TestCase
+class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider

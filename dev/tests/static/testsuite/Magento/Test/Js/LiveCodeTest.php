@@ -15,7 +15,7 @@ use Magento\Framework\App\Utility\Files;
 /**
  * JSHint static code analysis tests for javascript files
  */
-class LiveCodeTest extends \PHPUnit_Framework_TestCase
+class LiveCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

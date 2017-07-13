@@ -14,7 +14,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class IndexSwitcherTest extends \PHPUnit_Framework_TestCase
+class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject

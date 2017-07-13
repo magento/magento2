@@ -14,7 +14,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Class SignupTest
  */
-class SubscriptionStatusLabelTest extends \PHPUnit_Framework_TestCase
+class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubscriptionStatusLabel

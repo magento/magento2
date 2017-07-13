@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @see RegisterCaptureNotificationCommand
  */
-class RegisterCaptureNotificationCommandTest extends \PHPUnit_Framework_TestCase
+class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var float

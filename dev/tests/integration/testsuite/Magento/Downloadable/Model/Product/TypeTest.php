@@ -12,7 +12,7 @@ namespace Magento\Downloadable\Model\Product;
 /**
  * Test for \Magento\Downloadable\Model\Product\Type
  */
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Model\Product\Type

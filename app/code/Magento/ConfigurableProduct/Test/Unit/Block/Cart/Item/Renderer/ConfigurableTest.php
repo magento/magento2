@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Block\Cart\Item\Renderer;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Renderer;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_configManager;
@@ -29,22 +29,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_configManager = $this->getMock(\Magento\Framework\View\ConfigInterface::class, [], [], '', false);
-        $this->_imageHelper = $this->getMock(
+        $this->_configManager = $this->createMock(\Magento\Framework\View\ConfigInterface::class);
+        $this->_imageHelper = $this->createPartialMock(
             \Magento\Catalog\Helper\Image::class,
-            ['init', 'resize', '__toString'],
-            [],
-            '',
-            false
+            ['init', 'resize', '__toString']
         );
-        $this->_scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->productConfigMock = $this->getMock(
-            \Magento\Catalog\Helper\Product\Configuration::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->productConfigMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
         $this->_renderer = $objectManagerHelper->getObject(
             \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::class,
             [
@@ -133,26 +124,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** Initialized parent product */
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $parentProduct */
-        $parentProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $parentProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         /** Initialize child product */
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $childProduct */
-        $childProduct = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getThumbnail', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $childProduct = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getThumbnail', '__wakeup']);
         $childThumbnail = $childHasThumbnail ? 'thumbnail.jpg' : 'no_selection';
         $childProduct->expects($this->any())->method('getThumbnail')->will($this->returnValue($childThumbnail));
 
         /** Mock methods which return parent and child products */
         /** @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject $itemOption */
-        $itemOption = $this->getMock(\Magento\Quote\Model\Quote\Item\Option::class, [], [], '', false);
+        $itemOption = $this->createMock(\Magento\Quote\Model\Quote\Item\Option::class);
         $itemOption->expects($this->any())->method('getProduct')->will($this->returnValue($childProduct));
         /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($parentProduct));
         $item->expects(
             $this->any()
@@ -170,7 +155,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionList()
     {
-        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $this->_renderer->setItem($itemMock);
         $this->productConfigMock->expects($this->once())->method('getOptions')->with($itemMock);
         $this->_renderer->getOptionList();
@@ -179,9 +164,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
-        $item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
         $this->_renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->_renderer->getIdentities());

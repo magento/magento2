@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
-class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
+class ModuleDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\Collector\Decorator\ModuleDependency
@@ -28,7 +28,7 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
-        $this->_moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->_moduleListMock = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
         $this->_moduleListMock->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Fixture_ModuleB', 'Fixture_ModuleA']));

@@ -14,7 +14,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class ConfigWriterTest extends \PHPUnit_Framework_TestCase
+class ConfigWriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Writer|MockObject

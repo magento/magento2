@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email;
 
-use \Magento\Sales\Model\Order\Email\SenderBuilder;
+use Magento\Sales\Model\Order\Email\SenderBuilder;
 
-class SenderBuilderTest extends \PHPUnit_Framework_TestCase
+class SenderBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SenderBuilder
@@ -37,45 +37,30 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         $emailIdentity = 'email_identity_test';
         $emailCopyTo = ['example@mail.com'];
 
-        $this->templateContainerMock = $this->getMock(
+        $this->templateContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\Template::class,
-            ['getTemplateVars', 'getTemplateOptions', 'getTemplateId'],
-            [],
-            '',
-            false
+            ['getTemplateVars', 'getTemplateOptions', 'getTemplateId']
         );
 
-        $this->storeMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['getStoreId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getStoreId', '__wakeup']);
 
-        $this->identityContainerMock = $this->getMock(
+        $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
             [
-                'getEmailIdentity', 'getCustomerEmail',
-                'getCustomerName', 'getTemplateOptions', 'getEmailCopyTo',
+                'getEmailIdentity',
+                'getCustomerEmail',
+                'getCustomerName',
+                'getTemplateOptions',
+                'getEmailCopyTo',
                 'getCopyMethod'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
-        $this->transportBuilder = $this->getMock(
-            \Magento\Framework\Mail\Template\TransportBuilder::class,
-            [
+        $this->transportBuilder = $this->createPartialMock(\Magento\Framework\Mail\Template\TransportBuilder::class, [
                 'addTo', 'addBcc', 'getTransport',
                 'setTemplateIdentifier', 'setTemplateOptions', 'setTemplateVars',
                 'setFrom',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $this->templateContainerMock->expects($this->once())
             ->method('getTemplateId')
@@ -118,12 +103,8 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $customerName = 'test_name';
         $customerEmail = 'test_email';
-        $transportMock = $this->getMock(
-            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class,
-            [],
-            [],
-            '',
-            false
+        $transportMock = $this->createMock(
+            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
 
         $this->identityContainerMock->expects($this->once())
@@ -151,12 +132,8 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSendCopyTo()
     {
-        $transportMock = $this->getMock(
-            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class,
-            [],
-            [],
-            '',
-            false
+        $transportMock = $this->createMock(
+            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
         $this->identityContainerMock->expects($this->once())
             ->method('getCopyMethod')

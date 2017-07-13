@@ -10,7 +10,7 @@ use \Magento\Framework\Data\SearchResultProcessor;
 /**
  * Class SearchResultProcessorTest
  */
-class SearchResultProcessorTest extends \PHPUnit_Framework_TestCase
+class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SearchResultProcessor

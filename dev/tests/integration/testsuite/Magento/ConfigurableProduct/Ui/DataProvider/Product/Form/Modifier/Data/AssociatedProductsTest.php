@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data;
 
-class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
+class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface $objectManager

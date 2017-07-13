@@ -6,7 +6,7 @@
 
 namespace Magento\Swagger\Test\Unit\Controller\Index;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {

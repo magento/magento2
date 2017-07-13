@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
+class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject

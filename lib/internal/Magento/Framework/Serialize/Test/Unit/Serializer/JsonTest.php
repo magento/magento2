@@ -8,7 +8,7 @@ namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json

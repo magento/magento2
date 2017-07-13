@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
     protected $collection;
@@ -77,21 +77,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMock(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class);
-        $this->managerInterfaceMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->configMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
-        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $this->entityFactoryMock2 = $this->getMock(\Magento\Eav\Model\EntityFactory::class, [], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Helper::class, [], [], '', false);
-        $entity = $this->getMock(\Magento\Eav\Model\Entity\AbstractEntity::class, [], [], '', false);
+        $this->managerInterfaceMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->configMock = $this->createMock(\Magento\Eav\Model\Config::class);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->entityFactoryMock2 = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
+        $this->helperMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Helper::class);
+        $entity = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -103,13 +99,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($select);
         $entity->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
-        $this->universalFactoryMock = $this->getMock(
-            \Magento\Framework\Validator\UniversalFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
         $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
         $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock
@@ -120,26 +110,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     return is_object($store) ? $store : new \Magento\Framework\DataObject(['id' => 42]);
                 }
             ));
-        $this->catalogHelperMock = $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false);
-        $this->stateMock = $this->getMock(\Magento\Catalog\Model\Indexer\Product\Flat\State::class, [], [], '', false);
-        $this->scopeConfigInterfaceMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->optionFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\Product\OptionFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Url::class, [], [], '', false);
-        $this->timezoneInterfaceMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->sessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->catalogHelperMock = $this->createMock(\Magento\Catalog\Helper\Data::class);
+        $this->stateMock = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\State::class);
+        $this->scopeConfigInterfaceMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->optionFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\OptionFactory::class);
+        $this->urlMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Url::class);
+        $this->timezoneInterfaceMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->sessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
-            ->willReturn($this->getMock(ProductLimitation::class));
+            ->willReturn($this->createMock(ProductLimitation::class));
 
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
@@ -170,7 +154,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testSetProduct()
     {
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getId')->will($this->returnValue('5'));
         $productStore = new \Magento\Framework\DataObject(['id' => 33]);
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));

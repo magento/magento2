@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 /**
  * Unit test for ProductIdLocator class.
  */
-class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject

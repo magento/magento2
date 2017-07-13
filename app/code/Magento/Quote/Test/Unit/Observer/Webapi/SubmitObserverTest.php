@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Observer\Webapi;
 
-class SubmitObserverTest extends \PHPUnit_Framework_TestCase
+class SubmitObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Observer\Webapi\SubmitObserver
@@ -44,17 +44,17 @@ class SubmitObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
-        $this->orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
-        $this->paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $this->orderSenderMock =
-            $this->getMock(\Magento\Sales\Model\Order\Email\Sender\OrderSender::class, [], [], '', false);
+            $this->createMock(\Magento\Sales\Model\Order\Email\Sender\OrderSender::class);
         $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', 'getOrder'])
             ->getMock();
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, ['getEvent'], [], '', false);
+        $this->observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);

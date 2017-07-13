@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
@@ -19,11 +19,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
-        $optionFactoryMock = $this->getMock(\Magento\Catalog\Model\Product\OptionFactory::class, [], [], '', false);
-        $filterManagerMock = $this->getMock(\Magento\Framework\Filter\FilterManager::class, [], [], '', false);
-        $stringUtilsMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false);
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $optionFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\OptionFactory::class);
+        $filterManagerMock = $this->createMock(\Magento\Framework\Filter\FilterManager::class);
+        $stringUtilsMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->helper = new \Magento\Catalog\Helper\Product\Configuration(
             $contextMock,
@@ -41,28 +41,14 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $additionalOptionResult = ['additional_option' => 1];
 
-        $itemMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class,
-            [],
-            [],
-            '',
-            false
+        $itemMock = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
+        $optionMock = $this->createMock(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
         );
-        $optionMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class,
-            [],
-            [],
-            '',
-            false
+        $additionalOptionMock = $this->createMock(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
         );
-        $additionalOptionMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $this->serializer->expects($this->once())->method('unserialize')->willReturn($additionalOptionResult);
         $optionMock->expects($this->once())->method('getValue')->willReturn(null);

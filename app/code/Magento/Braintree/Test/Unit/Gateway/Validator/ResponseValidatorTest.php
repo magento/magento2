@@ -18,7 +18,7 @@ use Braintree\Result\Successful;
 /**
  * Class ResponseValidatorTest
  */
-class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
+class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseValidator
@@ -103,7 +103,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate(array $validationSubject, $isValid, $messages)
     {
         /** @var ResultInterface|MockObject $result */
-        $result = $this->getMock(ResultInterface::class);
+        $result = $this->createMock(ResultInterface::class);
 
         $this->subjectReader->expects(self::once())
             ->method('readResponseObject')

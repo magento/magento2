@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initializa
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 
-class DownloadableTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable
@@ -36,20 +36,13 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->productMock = $this->getMock(
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['setDownloadableData', 'getExtensionAttributes', '__wakeup'],
-            [],
-            '',
-            false
+            ['setDownloadableData', 'getExtensionAttributes', '__wakeup']
         );
-        $this->subjectMock = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class,
-            [],
-            [],
-            '',
-            false
+        $this->subjectMock = $this->createMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
         );
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()

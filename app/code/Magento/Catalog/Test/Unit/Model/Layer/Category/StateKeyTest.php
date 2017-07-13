@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
 use \Magento\Catalog\Model\Layer\Category\StateKey;
 
-class StateKeyTest extends \PHPUnit_Framework_TestCase
+class StateKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,8 +27,8 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->model = new StateKey($this->storeManagerMock, $this->customerSessionMock);
     }
 
@@ -38,10 +38,10 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
+        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $categoryMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue('2'));
 

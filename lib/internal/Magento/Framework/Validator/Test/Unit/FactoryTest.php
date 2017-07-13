@@ -8,7 +8,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -69,26 +69,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->validatorConfigMock = $this->getMock(
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->validatorConfigMock = $this->createPartialMock(
             \Magento\Framework\Validator\Config::class,
-            ['createValidatorBuilder', 'createValidator'],
-            [],
-            '',
-            false
+            ['createValidatorBuilder', 'createValidator']
         );
-        $translateAdapterMock = $this->getMock(\Magento\Framework\Translate\Adapter::class, [], [], '', false);
+        $translateAdapterMock = $this->createMock(\Magento\Framework\Translate\Adapter::class);
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with(\Magento\Framework\Translate\Adapter::class)
             ->willReturn($translateAdapterMock);
-        $this->fileIteratorMock = $this->getMock(
-            \Magento\Framework\Config\FileIterator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->fileIteratorMock = $this->createMock(\Magento\Framework\Config\FileIterator::class);
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with(
@@ -96,14 +87,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 ['configFiles' => $this->fileIteratorMock]
             )
             ->willReturn($this->validatorConfigMock);
-        $this->readerMock = $this->getMock(
+        $this->readerMock = $this->createPartialMock(
             \Magento\Framework\Module\Dir\Reader::class,
-            ['getConfigurationFiles'],
-            [],
-            '',
-            false
+            ['getConfigurationFiles']
         );
-        $this->cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -116,14 +104,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->fileIteratorFactoryMock = $this->getMock(
-            \Magento\Framework\Config\FileIteratorFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->fileIteratorFactoryMock = $this->createMock(\Magento\Framework\Config\FileIteratorFactory::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->factory,
             'serializer',
@@ -212,7 +194,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fileIteratorMock);
         $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
-        $builderMock = $this->getMock(\Magento\Framework\Validator\Builder::class, [], [], '', false);
+        $builderMock = $this->createMock(\Magento\Framework\Validator\Builder::class);
         $this->validatorConfigMock->expects($this->once())
             ->method('createValidatorBuilder')
             ->with('test', 'class', [])
@@ -230,7 +212,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fileIteratorMock);
         $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
-        $validatorMock = $this->getMock(\Magento\Framework\Validator::class, [], [], '', false);
+        $validatorMock = $this->createMock(\Magento\Framework\Validator::class);
         $this->validatorConfigMock->expects($this->once())
             ->method('createValidator')
             ->with('test', 'class', [])

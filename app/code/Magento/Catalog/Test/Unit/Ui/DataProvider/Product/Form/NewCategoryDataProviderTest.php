@@ -9,7 +9,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-class NewCategoryDataProviderTest extends \PHPUnit_Framework_TestCase
+class NewCategoryDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NewCategoryDataProvider
@@ -29,7 +29,7 @@ class NewCategoryDataProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->collectionFactoryMock = $this->getMock(CollectionFactory::class, ['create'], [], '', false);
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->newCategoryDataProvider = $this->objectManagerHelper->getObject(
             NewCategoryDataProvider::class,
             ['collectionFactory' => $this->collectionFactoryMock]

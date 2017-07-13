@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Model\Cart\SalesModel\Factory */
     protected $_model;
@@ -15,7 +15,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Factory($this->_objectManagerMock);
     }
 
@@ -26,7 +26,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($salesModelClass, $expectedType)
     {
-        $salesModel = $this->getMock($salesModelClass, ['__wakeup'], [], '', false);
+        $salesModel = $this->createPartialMock($salesModelClass, ['__wakeup']);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

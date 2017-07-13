@@ -5,7 +5,7 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
-class AbstractStorageTest extends \PHPUnit_Framework_TestCase
+class AbstractStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject

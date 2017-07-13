@@ -10,7 +10,7 @@ use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
+class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject

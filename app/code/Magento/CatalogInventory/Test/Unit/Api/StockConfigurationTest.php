@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class StockConfigurationTest
  */
-class StockConfigurationTest extends \PHPUnit_Framework_TestCase
+class StockConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface */
     protected $stockConfiguration;
@@ -49,13 +49,7 @@ class StockConfigurationTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->minsaleqtyHelper = $this->getMock(
-            \Magento\CatalogInventory\Helper\Minsaleqty::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->minsaleqtyHelper = $this->createMock(\Magento\CatalogInventory\Helper\Minsaleqty::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->stockConfiguration = $this->objectManagerHelper->getObject(

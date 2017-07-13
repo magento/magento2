@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $indexValues

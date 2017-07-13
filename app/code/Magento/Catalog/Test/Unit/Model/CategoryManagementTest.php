@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
-class CategoryManagementTest extends \PHPUnit_Framework_TestCase
+class CategoryManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\CategoryManagement
@@ -44,16 +44,12 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->categoryRepositoryMock = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-        $this->categoryTreeMock = $this->getMock(\Magento\Catalog\Model\Category\Tree::class, [], [], '', false);
-        $this->categoriesFactoryMock = $this->getMock(
+        $this->categoryRepositoryMock = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $this->categoryTreeMock = $this->createMock(\Magento\Catalog\Model\Category\Tree::class);
+        $this->categoriesFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
-            ['create', 'addFilter', 'getFirstItem'],
-            [],
-            '',
-            false
+            ['create', 'addFilter', 'getFirstItem']
         );
 
         $this->model = $this->objectManagerHelper->getObject(
@@ -65,9 +61,9 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->scopeResolverMock = $this->getMock(\Magento\Framework\App\ScopeResolverInterface::class);
+        $this->scopeResolverMock = $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
 
-        $this->scopeMock = $this->getMock(\Magento\Framework\App\ScopeInterface::class);
+        $this->scopeMock = $this->createMock(\Magento\Framework\App\ScopeInterface::class);
 
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->model,
@@ -80,8 +76,8 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $rootCategoryId = 1;
         $depth = 2;
-        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
-        $nodeMock = $this->getMock(\Magento\Framework\Data\Tree\Node::class, [], [], '', false);
+        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $nodeMock = $this->createMock(\Magento\Framework\Data\Tree\Node::class);
 
         $this->categoryRepositoryMock
             ->expects($this->once())
@@ -136,20 +132,11 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetTreeForAllScope()
     {
         $depth = null;
-        $categoriesMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $categoryMock = $this->getMock(
-            \Magento\Catalog\Model\Category::class,
-            [],
-            [],
-            'categoryMock',
-            false
-        );
+        $categoriesMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->setMockClassName('categoryMock')
+            ->disableOriginalConstructor()
+            ->getMock();
         $categoriesMock
             ->expects($this->once())
             ->method('getFirstItem')
@@ -163,13 +150,7 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($categoriesMock);
-        $nodeMock = $this->getMock(
-            \Magento\Framework\Data\Tree\Node::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $nodeMock = $this->createMock(\Magento\Framework\Data\Tree\Node::class);
 
         $this->categoryTreeMock
             ->expects($this->once())
@@ -202,14 +183,14 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], 'categoryMock', false);
-        $parentCategoryMock = $this->getMock(
-            \Magento\Catalog\Model\Category::class,
-            [],
-            [],
-            'parentCategoryMock',
-            false
-        );
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->setMockClassName('categoryMock')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $parentCategoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->setMockClassName('parentCategoryMock')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -237,14 +218,14 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], 'categoryMock', false);
-        $parentCategoryMock = $this->getMock(
-            \Magento\Catalog\Model\Category::class,
-            [],
-            [],
-            'parentCategoryMock',
-            false
-        );
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->setMockClassName('categoryMock')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $parentCategoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->setMockClassName('parentCategoryMock')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -269,14 +250,14 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], 'categoryMock', false);
-        $parentCategoryMock = $this->getMock(
-            \Magento\Catalog\Model\Category::class,
-            [],
-            [],
-            'parentCategoryMock',
-            false
-        );
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->disableOriginalConstructor()
+            ->setMockClassName('categoryMock')
+            ->getMock();
+        $parentCategoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->disableOriginalConstructor()
+            ->setMockClassName('parentCategoryMock')
+            ->getMock();
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -296,13 +277,7 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCount()
     {
-        $categoriesMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $categoriesMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
 
         $this->categoriesFactoryMock
             ->expects($this->once())

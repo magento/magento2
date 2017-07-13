@@ -7,7 +7,7 @@ namespace Magento\Framework\Code\Reader;
 
 require_once __DIR__ . '/_files/SourceArgumentsReaderTest.php.sample';
 
-class SourceArgumentsReaderTest extends \PHPUnit_Framework_TestCase
+class SourceArgumentsReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\Reader\SourceArgumentsReader

@@ -21,7 +21,7 @@ use Magento\Checkout\Model\Session;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
+class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuantityValidator
@@ -62,9 +62,9 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\ObjectManagerInterface objectManager */
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->observerMock = $this->getMock(Observer::class, [], [], '', false);
-        $this->optionInitializer = $this->getMock(Option::class, [], [], '', false);
-        $this->stockState = $this->getMock(StockState::class, [], [], '', false);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->optionInitializer = $this->createMock(Option::class);
+        $this->stockState = $this->createMock(StockState::class);
         $this->quantityValidator = $this->objectManager->create(
             QuantityValidator::class,
             [
@@ -78,7 +78,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                 'quantityValidator' => $this->quantityValidator
             ]
         );
-        $this->eventMock = $this->getMock(Event::class, ['getItem'], [], '', false);
+        $this->eventMock = $this->createPartialMock(Event::class, ['getItem']);
     }
 
     /**
@@ -95,7 +95,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('bundle-product');
-        $resultMock = $this->getMock(DataObject::class, [], [], '', false);
+        $resultMock = $this->createMock(DataObject::class);
         $this->stockState->expects($this->any())->method('checkQtyIncrements')->willReturn($resultMock);
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), $product->getId());
@@ -121,12 +121,9 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $product = $productRepository->get('bundle-product');
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), $product->getId());
-        $resultMock = $this->getMock(
+        $resultMock = $this->createPartialMock(
             DataObject::class,
-            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'],
-            [],
-            '',
-            false
+            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError']
         );
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects($this->once())->method('getItem')->willReturn($quoteItem);

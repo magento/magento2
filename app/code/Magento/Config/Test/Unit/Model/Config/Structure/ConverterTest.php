@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Converter
@@ -14,23 +14,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Mapper\Factory::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $factoryMock = $this->createMock(\Magento\Config\Model\Config\Structure\Mapper\Factory::class);
 
-        $mapperMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Mapper\Dependencies::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $mapperMock = $this->createMock(\Magento\Config\Model\Config\Structure\Mapper\Dependencies::class);
         $mapperMock->expects($this->any())->method('map')->will($this->returnArgument(0));
         $factoryMock->expects($this->any())->method('create')->will($this->returnValue($mapperMock));
 

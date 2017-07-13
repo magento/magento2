@@ -15,7 +15,7 @@ use Magento\CatalogInventory\Model\StockItemSave\StockItemDataChecker;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ByStockItemTest extends \PHPUnit_Framework_TestCase
+class ByStockItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StockItemInterfaceFactory

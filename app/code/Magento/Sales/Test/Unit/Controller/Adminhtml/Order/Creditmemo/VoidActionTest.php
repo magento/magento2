@@ -9,8 +9,9 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
  * Class VoidActionTest
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class VoidActionTest extends \PHPUnit_Framework_TestCase
+class VoidActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\AddComment
@@ -110,7 +111,7 @@ class VoidActionTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -124,6 +125,19 @@ class VoidActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+            ->setMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getTitle',
+                    'getSession',
+                    'getHelper',
+                    'getActionFlag',
+                    'getMessageManager',
+                    'getResultRedirectFactory'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->loaderMock = $this->getMockBuilder(\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class)

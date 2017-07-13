@@ -12,7 +12,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
+class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceConnection

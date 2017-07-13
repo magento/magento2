@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Argument\Interpreter;
 
-class StringUtilsTest extends \PHPUnit_Framework_TestCase
+class StringUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Argument\Interpreter\StringUtils
@@ -19,7 +19,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_booleanUtils = $this->getMock(\Magento\Framework\Stdlib\BooleanUtils::class);
+        $this->_booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->_booleanUtils->expects(
             $this->any()
         )->method(

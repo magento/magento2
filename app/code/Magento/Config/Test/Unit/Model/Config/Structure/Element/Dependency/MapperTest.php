@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Dependency;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Field prefix

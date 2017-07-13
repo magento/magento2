@@ -6,7 +6,7 @@
 
 namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_paypalConfigFactory;
@@ -25,22 +25,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_paypalConfigFactory = $this->getMock(
-            \Magento\Paypal\Model\ConfigFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->_productTypeConfig = $this->getMock(
-            \Magento\Catalog\Model\ProductTypes\ConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->_paymentData = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $this->_paypalConfigFactory = $this->createPartialMock(\Magento\Paypal\Model\ConfigFactory::class, ['create']);
+        $this->_productTypeConfig = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
+        $this->_registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_paymentData = $this->createMock(\Magento\Payment\Helper\Data::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helper = $objectManager->getObject(
@@ -55,7 +43,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testIsContextAvailableDataProvider
+     * @dataProvider isContextAvailableDataProvider
      * @param bool $isVisible
      * @param bool $expected
      */
@@ -79,7 +67,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testIsContextAvailableDataProvider()
+    public function isContextAvailableDataProvider()
     {
         return [
             [false, false],
@@ -88,7 +76,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testIsPriceOrSetAvailableDataProvider
+     * @dataProvider isPriceOrSetAvailableDataProvider
      * @param bool $isInCatalog
      * @param double $productPrice
      * @param bool $isProductSet
@@ -127,7 +115,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testIsPriceOrSetAvailableDataProvider()
+    public function isPriceOrSetAvailableDataProvider()
     {
         return [
             [false, 1, true, true],
@@ -139,7 +127,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testIsMethodAvailableDataProvider
+     * @dataProvider isMethodAvailableDataProvider
      * @param bool $methodIsAvailable
      * @param bool $expected
      */
@@ -163,7 +151,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testIsMethodAvailableDataProvider()
+    public function isMethodAvailableDataProvider()
     {
         return [
             [true, true],

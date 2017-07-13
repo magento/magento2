@@ -17,7 +17,7 @@ use \Magento\Tax\Model\TaxRuleRepository;
  * @package Magento\Tax\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
+class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Model\TaxRuleRepository
@@ -74,50 +74,25 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxRuleRegistry =
-            $this->getMock(\Magento\Tax\Model\Calculation\TaxRuleRegistry::class, [], [], '', false);
-        $this->taxRuleRegistry = $this->getMock(
-            \Magento\Tax\Model\Calculation\TaxRuleRegistry::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultFactory = $this->getMock(
+            $this->createMock(\Magento\Tax\Model\Calculation\TaxRuleRegistry::class);
+        $this->taxRuleRegistry = $this->createMock(\Magento\Tax\Model\Calculation\TaxRuleRegistry::class);
+        $this->searchResultFactory = $this->createPartialMock(
             \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->searchResultsMock = $this->getMock(
-            \Magento\Tax\Api\Data\TaxRuleSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->ruleFactory = $this->getMock(\Magento\Tax\Model\Calculation\RuleFactory::class, [], [], '', false);
-        $this->collectionFactory = $this->getMock(
+        $this->searchResultsMock = $this->createMock(\Magento\Tax\Api\Data\TaxRuleSearchResultsInterface::class);
+        $this->ruleFactory = $this->createMock(\Magento\Tax\Model\Calculation\RuleFactory::class);
+        $this->collectionFactory = $this->createPartialMock(
             \Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resource = $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class, [], [], '', false);
-        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+        $this->resource = $this->createMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
+        $this->extensionAttributesJoinProcessorMock = $this->createPartialMock(
             \Magento\Framework\Api\ExtensionAttribute\JoinProcessor::class,
-            ['process'],
-            [],
-            '',
-            false
+            ['process']
         );
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
         $this->model = new TaxRuleRepository(
             $this->taxRuleRegistry,
@@ -132,14 +107,14 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $rule = $this->getMock(\Magento\Tax\Model\Calculation\Rule::class, [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
         $this->assertEquals($rule, $this->model->get(10));
     }
 
     public function testDelete()
     {
-        $rule = $this->getMock(\Magento\Tax\Model\Calculation\Rule::class, [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
         $this->resource->expects($this->once())->method('delete')->with($rule);
         $this->taxRuleRegistry->expects($this->once())->method('removeTaxRule')->with(10);
@@ -148,7 +123,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteById()
     {
-        $rule = $this->getMock(\Magento\Tax\Model\Calculation\Rule::class, [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
 
         $rule->expects($this->once())->method('getId')->willReturn(10);
@@ -159,7 +134,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $rule = $this->getMock(\Magento\Tax\Model\Calculation\Rule::class, [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
 
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
@@ -180,7 +155,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
     {
-        $rule = $this->getMock(\Magento\Tax\Model\Calculation\Rule::class, [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
 
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
@@ -188,7 +163,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exceptionObject);
         $this->taxRuleRegistry->expects($this->never())->method('registerTaxRule');
 
-        $this->setExpectedException($exceptionName, $exceptionMessage);
+        $this->expectException($exceptionName, $exceptionMessage);
         $this->model->save($rule);
     }
 
@@ -210,10 +185,10 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $collectionMock =
-            $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
-            $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
+            $this->createMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class);
+        $this->createMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')

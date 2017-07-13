@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ByStockItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class ByStockItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface

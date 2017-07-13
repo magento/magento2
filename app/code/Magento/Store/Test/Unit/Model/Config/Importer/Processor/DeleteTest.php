@@ -27,7 +27,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see Delete
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeleteTest extends \PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Delete

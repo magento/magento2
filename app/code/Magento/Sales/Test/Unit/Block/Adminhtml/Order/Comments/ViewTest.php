@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Comments;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Helper\Admin|\PHPUnit_Framework_MockObject_MockObject

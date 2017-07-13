@@ -9,7 +9,7 @@ namespace Magento\Framework\App;
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  * @magentoAppArea frontend
  */
-class FrontControllerTest extends \PHPUnit_Framework_TestCase
+class FrontControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

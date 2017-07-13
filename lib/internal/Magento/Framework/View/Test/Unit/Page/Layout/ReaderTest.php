@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Page\Layout;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Page\Layout\Reader
@@ -53,28 +53,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->processorInterface = $this->getMock(
-            \Magento\Framework\View\Layout\ProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->themeInterface = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
-        $this->processorFactory = $this->getMock(
+        $this->processorInterface = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        $this->themeInterface = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $this->processorFactory = $this->createPartialMock(
             \Magento\Framework\View\Layout\ProcessorFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->themeResolver = $this->getMock(
-            \Magento\Framework\View\Design\Theme\ResolverInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->themeResolver = $this->createMock(\Magento\Framework\View\Design\Theme\ResolverInterface::class);
         $this->pageLayoutFileSource = $this->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)
             ->getMock();
         $this->readerPool = $this->getMockBuilder(\Magento\Framework\View\Layout\ReaderPool::class)

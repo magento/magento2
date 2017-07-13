@@ -10,7 +10,7 @@ namespace Magento\Backend\Block;
  *
  * @magentoAppArea adminhtml
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Template

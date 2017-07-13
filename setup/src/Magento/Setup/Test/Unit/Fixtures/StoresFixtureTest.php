@@ -18,7 +18,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManager;
 
-class StoresFixtureTest extends \PHPUnit_Framework_TestCase
+class StoresFixtureTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

@@ -19,7 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
  * Class TermDropdownStrategyTest.
  * Unit test for \Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy.
  */
-class TermDropdownStrategyTest extends \PHPUnit_Framework_TestCase
+class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

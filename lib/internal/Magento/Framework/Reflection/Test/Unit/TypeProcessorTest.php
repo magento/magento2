@@ -12,7 +12,7 @@ use Magento\Framework\Exception\SerializationException;
 /**
  * Type processor Test
  */
-class TypeProcessorTest extends \PHPUnit_Framework_TestCase
+class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
@@ -211,7 +211,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessSimpleTypeException($value, $type)
     {
-        $this->setExpectedException(
+        $this->expectException(
             SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
         );
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);

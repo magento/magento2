@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity;
 /**
  * A test that enforces composer.lock is up to date with composer.json
  */
-class ComposerLockTest extends \PHPUnit_Framework_TestCase
+class ComposerLockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return string

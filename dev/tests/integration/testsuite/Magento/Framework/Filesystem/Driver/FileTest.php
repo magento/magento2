@@ -9,7 +9,7 @@ namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Filesystem\DriverInterface;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Driver\File

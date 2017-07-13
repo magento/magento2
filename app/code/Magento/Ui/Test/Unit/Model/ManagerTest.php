@@ -23,7 +23,7 @@ use Magento\Framework\View\Element\UiComponent\Config\Converter;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Manager
@@ -152,7 +152,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareDataWithoutName()
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             __("Invalid UI Component element name: ''")
         );

@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see DefaultProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
+class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultProcessor

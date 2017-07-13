@@ -9,7 +9,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rules.php

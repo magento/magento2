@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Items;
 /**
  * @magentoAppArea adminhtml
  */
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetItemExtraInfoHtml()
     {

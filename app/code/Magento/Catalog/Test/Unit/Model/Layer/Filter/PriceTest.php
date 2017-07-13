@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     private $itemDataBuilder;
 

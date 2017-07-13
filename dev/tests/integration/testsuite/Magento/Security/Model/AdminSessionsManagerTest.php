@@ -5,7 +5,7 @@
  */
 namespace Magento\Security\Model;
 
-class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
+class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth

@@ -7,7 +7,7 @@ namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
+class ProductTypesConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductTypes\Config\Reader
@@ -24,9 +24,9 @@ class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
             $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/product_types.xml,product_types.xml}')
         );
 
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
-        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $objectManager->create(

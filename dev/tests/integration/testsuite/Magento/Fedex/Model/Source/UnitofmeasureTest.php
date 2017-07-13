@@ -6,7 +6,7 @@
 
 namespace Magento\Fedex\Model\Source;
 
-class UnitofmeasureTest extends \PHPUnit_Framework_TestCase
+class UnitofmeasureTest extends \PHPUnit\Framework\TestCase
 {
     public function testToOptionArray()
     {

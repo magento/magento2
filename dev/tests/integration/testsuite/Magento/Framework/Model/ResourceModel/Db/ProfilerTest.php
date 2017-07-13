@@ -9,7 +9,7 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
-class ProfilerTest extends \PHPUnit_Framework_TestCase
+class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection

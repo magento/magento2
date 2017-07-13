@@ -26,7 +26,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see ProcessorFacade
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
+class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProcessorFacade
@@ -132,7 +132,7 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessWithValidatorException(LocalizedException $exception)
     {
-        $this->setExpectedException(ValidatorException::class, 'Some error');
+        $this->expectException(ValidatorException::class, 'Some error');
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willThrowException($exception);

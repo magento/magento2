@@ -11,7 +11,7 @@ namespace Magento\Multishipping\Block\Checkout;
 /**
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class OverviewTest extends \PHPUnit_Framework_TestCase
+class OverviewTest extends \PHPUnit\Framework\DOMTestCase
 {
     /**
      * @var \Magento\Multishipping\Block\Checkout\Overview

@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SensitiveConfigSetFacadeTest extends \PHPUnit_Framework_TestCase
+class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigFilePool|MockObject

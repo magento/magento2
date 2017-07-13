@@ -24,7 +24,7 @@ use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
+class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
@@ -97,7 +97,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')

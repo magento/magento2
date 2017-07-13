@@ -99,6 +99,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testIndexAction()
     {
+        $this->markTestSkipped('Test needs to be refactored.');
         $product = $this->productRepository->get('simple');
         /** @var $order \Magento\Sales\Model\AdminOrder\Create */
         $order = $this->_objectManager->get(\Magento\Sales\Model\AdminOrder\Create::class);

@@ -16,7 +16,7 @@ use Magento\Sales\Model\Service\InvoiceService;
 /**
  * Class InvoiceDocumentFactoryTest
  */
-class InvoiceDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceService

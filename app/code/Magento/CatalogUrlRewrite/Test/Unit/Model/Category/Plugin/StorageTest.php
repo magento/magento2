@@ -16,7 +16,7 @@ use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ProductRes
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CategoryStoragePlugin

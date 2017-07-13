@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Test SensitiveCookieMetaData
  *
  */
-class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
+class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;

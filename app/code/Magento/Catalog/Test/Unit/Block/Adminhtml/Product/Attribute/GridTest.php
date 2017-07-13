@@ -5,16 +5,16 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute;
 
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetRowUrl()
     {
-        $attribute = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $attribute->expects($this->once())->method('getAttributeId')->will($this->returnValue(2));
 
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
 
-        $urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $urlBuilder->expects(
             $this->once()
         )->method(
@@ -26,7 +26,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('catalog/product_attribute/edit/id/2')
         );
 
-        $context = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
         $context->expects($this->any())->method('getFilesystem')->will($this->returnValue($filesystem));
 

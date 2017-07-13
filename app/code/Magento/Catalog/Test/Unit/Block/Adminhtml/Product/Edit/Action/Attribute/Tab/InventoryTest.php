@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribut
 /**
  * Class InventoryTest
  */
-class InventoryTest extends \PHPUnit_Framework_TestCase
+class InventoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders|\PHPUnit_Framework_MockObject_MockObject
@@ -44,20 +44,8 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock(
-            \Magento\Backend\Block\Template\Context::class,
-            ['getRequest'],
-            [],
-            '',
-            false
-        );
-        $this->backordersMock = $this->getMock(
-            \Magento\CatalogInventory\Model\Source\Backorders::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getRequest']);
+        $this->backordersMock = $this->createMock(\Magento\CatalogInventory\Model\Source\Backorders::class);
         $this->stockConfigurationMock = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
             [],

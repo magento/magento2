@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
  */
-class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
+class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDbIsolation enabled

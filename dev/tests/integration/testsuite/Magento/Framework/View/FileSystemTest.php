@@ -12,7 +12,7 @@ use \Magento\TestFramework\Helper\Bootstrap;
  * @magentoComponentsDir Magento/Theme/Model/_files/design
  * @magentoDbIsolation enabled
  */
-class FileSystemTest extends \PHPUnit_Framework_TestCase
+class FileSystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\FileSystem

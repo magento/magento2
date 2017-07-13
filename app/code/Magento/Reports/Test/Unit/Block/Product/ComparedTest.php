@@ -9,7 +9,7 @@ namespace Magento\Reports\Test\Unit\Block\Product;
 use \Magento\Reports\Block\Product\Compared;
 use \Magento\Reports\Model\Product\Index\Factory;
 
-class ComparedTest extends \PHPUnit_Framework_TestCase
+class ComparedTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

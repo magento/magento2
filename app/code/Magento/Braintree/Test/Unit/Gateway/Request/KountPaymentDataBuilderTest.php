@@ -17,7 +17,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
  *
  * @see \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder
  */
-class KountPaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
+class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     const DEVICE_DATA = '{"test": "test"}';
 
@@ -48,7 +48,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -11,7 +11,7 @@ use \Magento\Framework\App\ProductMetadata;
 use \Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class LandingInstallerTest extends \PHPUnit_Framework_TestCase
+class LandingInstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test Product Version Value

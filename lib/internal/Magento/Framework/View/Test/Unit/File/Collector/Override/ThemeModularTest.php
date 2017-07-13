@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ThemeModularTest extends \PHPUnit_Framework_TestCase
+class ThemeModularTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\Collector\Override\ThemeModular
@@ -41,7 +41,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themeDirectory = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
+        $this->themeDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $this->themeDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturnArgument(0);
@@ -49,14 +49,8 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileFactory = $this->getMock(\Magento\Framework\View\File\Factory::class, [], [], '', false);
-        $this->readDirFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->fileFactory = $this->createMock(\Magento\Framework\View\File\Factory::class);
+        $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->themeDirectory));
@@ -110,8 +104,8 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             ->with($inputPath)
             ->willReturn('[^/]*\\.xml');
 
-        $fileOne = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
-        $fileTwo = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
+        $fileOne = $this->createMock(\Magento\Framework\View\File::class);
+        $fileTwo = $this->createMock(\Magento\Framework\View\File::class);
         $this->fileFactory
             ->expects($this->exactly(2))
             ->method('create')
@@ -150,7 +144,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             ->with('*_*/override/theme/*/*/preset/3.xml')
             ->willReturn([$filePathOne]);
 
-        $fileOne = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
+        $fileOne = $this->createMock(\Magento\Framework\View\File::class);
         $this->fileFactory
             ->expects($this->once())
             ->method('create')
@@ -175,7 +169,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $filePath = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
         $expectedMessage = "Trying to override modular view file '$filePath' for theme 'vendor/parent_theme'"
             . ", which is not ancestor of theme 'vendor/theme_path'";
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $expectedMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $expectedMessage);
 
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);

@@ -8,7 +8,7 @@ namespace Magento\Framework\Notification\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class NotifierListTest extends \PHPUnit_Framework_TestCase
+class NotifierListTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -18,7 +18,7 @@ class NotifierListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
 
@@ -33,7 +33,7 @@ class NotifierListTest extends \PHPUnit_Framework_TestCase
                 'notifiers' => [$notifier1, $notifier2]
             ]
         );
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $result = $notifierList->asArray();
         foreach ($result as $notifier) {
             $this->assertInstanceOf(\Magento\Framework\Notification\NotifierInterface::class, $notifier);
@@ -51,7 +51,7 @@ class NotifierListTest extends \PHPUnit_Framework_TestCase
                 'notifiers' => [$notifierCorrect, $notifierIncorrect]
             ]
         );
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $notifierList->asArray();
     }
 }

@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class SubscriptionStatusProviderTest.
  */
-class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
+class SubscriptionStatusProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject

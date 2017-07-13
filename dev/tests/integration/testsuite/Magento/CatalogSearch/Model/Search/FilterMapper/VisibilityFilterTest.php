@@ -13,7 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\DB\Select;
 
-class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
+class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;

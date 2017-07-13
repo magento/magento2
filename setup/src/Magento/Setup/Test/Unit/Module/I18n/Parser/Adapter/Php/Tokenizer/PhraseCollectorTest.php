@@ -13,7 +13,7 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
  */
-class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
+class PhraseCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PhraseCollector

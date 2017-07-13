@@ -12,7 +12,7 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Controller\Product\Frontend\Action\Synchronize;
 
-class SynchronizeTest extends \PHPUnit_Framework_TestCase
+class SynchronizeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Controller\Product\Frontend\Action\Synchronize

@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -27,19 +27,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRuleProcessor = $this->getMock(
-            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $this->productRuleProcessor = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class
         );
-        $this->subject = $this->getMock(
+        $this->subject = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
-            ['getAffectedProductIds', '__wakeUp'],
-            [],
-            '',
-            false
+            ['getAffectedProductIds', '__wakeUp']
         );
 
         $this->plugin = (new ObjectManager($this))->getObject(

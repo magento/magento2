@@ -7,7 +7,7 @@ namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
+class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +37,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->adapterFactory = $this->helper->getObject(
             \Magento\Search\Model\AdapterFactory::class,

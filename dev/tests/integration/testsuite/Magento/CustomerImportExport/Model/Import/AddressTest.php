@@ -14,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tested class name

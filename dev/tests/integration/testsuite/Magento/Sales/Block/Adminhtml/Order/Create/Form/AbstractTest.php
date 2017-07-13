@@ -18,7 +18,7 @@ use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @magentoAppArea adminhtml
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetAdditionalActionBlock()
     {

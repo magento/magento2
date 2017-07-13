@@ -20,7 +20,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Class LinksTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -76,12 +76,12 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getLinksTitle', 'getId', 'getTypeId'])
             ->getMockForAbstractClass();
-        $this->locatorMock = $this->getMock(LocatorInterface::class);
-        $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
-        $this->escaperMock = $this->getMock(Escaper::class, [], [], '', false);
-        $this->downloadableFileMock = $this->getMock(DownloadableFile::class, [], [], '', false);
-        $this->urlBuilderMock = $this->getMock(UrlInterface::class);
-        $this->linkModelMock = $this->getMock(LinkModel::class, [], [], '', false);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $this->downloadableFileMock = $this->createMock(DownloadableFile::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->linkModelMock = $this->createMock(LinkModel::class);
         $this->links = $this->objectManagerHelper->getObject(
             Links::class,
             [

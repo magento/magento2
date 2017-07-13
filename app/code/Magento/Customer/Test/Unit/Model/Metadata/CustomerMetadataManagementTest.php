@@ -9,7 +9,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\CustomerMetadataManagement;
 
-class CustomerMetadataManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerMetadataManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerMetadataManagement */
     protected $model;

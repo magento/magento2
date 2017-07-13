@@ -7,7 +7,7 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class SetLoadPersistentQuoteObserverTest extends \PHPUnit_Framework_TestCase
+class SetLoadPersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\SetLoadPersistentQuoteObserver
@@ -41,11 +41,11 @@ class SetLoadPersistentQuoteObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
-        $this->sessionHelperMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $this->model = new \Magento\Persistent\Observer\SetLoadPersistentQuoteObserver(
             $this->sessionHelperMock,

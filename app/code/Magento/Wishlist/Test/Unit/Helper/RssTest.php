@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Helper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RssTest extends \PHPUnit_Framework_TestCase
+class RssTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Helper\Rss

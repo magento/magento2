@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Url\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

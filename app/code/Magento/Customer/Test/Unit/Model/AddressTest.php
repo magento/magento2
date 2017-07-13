@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     const ORIG_CUSTOMER_ID = 1;
     const ORIG_PARENT_ID = 2;

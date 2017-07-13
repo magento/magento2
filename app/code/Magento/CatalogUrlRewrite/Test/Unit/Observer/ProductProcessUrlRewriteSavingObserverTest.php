@@ -6,10 +6,8 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use Magento\Store\Model\Store;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
@@ -18,7 +16,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
+class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -60,32 +58,23 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
      */
     protected function setUp()
     {
-        $this->urlPersist = $this->getMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class, [], [], '', false);
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getId',
                 'dataHasChangedFor',
                 'isVisibleInSiteVisibility',
                 'getIsChangedWebsites',
                 'getIsChangedCategories',
                 'getStoreId'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
-        $this->event = $this->getMock(\Magento\Framework\Event::class, ['getProduct'], [], '', false);
+        $this->event = $this->createPartialMock(\Magento\Framework\Event::class, ['getProduct']);
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
-        $this->observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getEvent'], [], '', false);
+        $this->observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
-        $this->productUrlRewriteGenerator = $this->getMock(
+        $this->productUrlRewriteGenerator = $this->createPartialMock(
             \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::class,
-            ['generate'],
-            [],
-            '',
-            false
+            ['generate']
         );
         $this->productUrlRewriteGenerator->expects($this->any())
             ->method('generate')
@@ -105,7 +94,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
      *
      * @return array
      */
-    public function testUrlKeyDataProvider()
+    public function urlKeyDataProvider()
     {
         return [
             'url changed' => [
@@ -175,7 +164,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
      * @param int $expectedDeleteCount
      * @param int $expectedReplaceCount
      *
-     * @dataProvider testUrlKeyDataProvider
+     * @dataProvider urlKeyDataProvider
      */
     public function testExecuteUrlKey(
         $isChangedUrlKey,

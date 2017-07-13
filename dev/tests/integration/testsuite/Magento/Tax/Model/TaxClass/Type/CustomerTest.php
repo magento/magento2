@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager

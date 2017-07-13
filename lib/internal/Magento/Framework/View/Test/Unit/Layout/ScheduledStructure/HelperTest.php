@@ -13,7 +13,7 @@ use Magento\Framework\App\State;
  * Class HelperTest
  * @covers \Magento\Framework\View\Layout\ScheduledStructure\Helper
  */
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
@@ -51,8 +51,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->dataStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helper = $helperObjectManager->getObject(

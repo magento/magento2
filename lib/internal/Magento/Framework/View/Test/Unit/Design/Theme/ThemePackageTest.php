@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
 use Magento\Framework\View\Design\Theme\ThemePackage;
 
-class ThemePackageTest extends \PHPUnit_Framework_TestCase
+class ThemePackageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $key

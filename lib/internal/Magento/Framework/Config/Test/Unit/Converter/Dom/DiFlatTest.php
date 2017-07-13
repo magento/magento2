@@ -9,7 +9,7 @@ namespace Magento\Framework\Config\Test\Unit\Converter\Dom;
 /**
  * Class DiFlatTest @covers \Magento\Framework\Config\Converter\Dom\DiFlat
  */
-class DiFlatTest extends \PHPUnit_Framework_TestCase
+class DiFlatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test subject.

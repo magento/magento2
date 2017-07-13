@@ -8,13 +8,13 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Class DataProviderTest
@@ -23,7 +23,7 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_CODE = 'test-code';
     const OPTIONS_RESULT = 'test-options';
@@ -68,12 +68,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerCollectionFactoryMock = $this->getMock(
+        $this->customerCollectionFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->eavValidationRulesMock = $this
             ->getMockBuilder(\Magento\Ui\DataProvider\EavValidationRules::class)
@@ -410,7 +407,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $shareMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
@@ -419,7 +416,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ]);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $countryAttrMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
+            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource', 'getLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

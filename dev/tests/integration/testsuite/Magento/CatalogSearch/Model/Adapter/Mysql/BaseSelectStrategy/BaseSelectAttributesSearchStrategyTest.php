@@ -11,7 +11,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
 
-class BaseSelectAttributesSearchStrategyTest extends \PHPUnit_Framework_TestCase
+class BaseSelectAttributesSearchStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BaseSelectAttributesSearchStrategy

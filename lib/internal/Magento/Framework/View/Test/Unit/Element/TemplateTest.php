@@ -14,7 +14,7 @@ use Magento\Store\Model\StoreManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template
@@ -58,60 +58,39 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resolver = $this->getMock(
-            \Magento\Framework\View\Element\Template\File\Resolver::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resolver = $this->createMock(\Magento\Framework\View\Element\Template\File\Resolver::class);
 
-        $this->validator = $this->getMock(
-            \Magento\Framework\View\Element\Template\File\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->validator = $this->createMock(\Magento\Framework\View\Element\Template\File\Validator::class);
 
-        $this->rootDirMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
+        $this->rootDirMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $this->rootDirMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnArgument(0);
 
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT, DriverPool::FILE)
             ->willReturn($this->rootDirMock);
 
-        $this->templateEngine = $this->getMock(
+        $this->templateEngine = $this->createPartialMock(
             \Magento\Framework\View\TemplateEnginePool::class,
-            ['render', 'get'],
-            [],
-            '',
-            false
+            ['render', 'get']
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
-        $this->appState = $this->getMock(
-            \Magento\Framework\App\State::class,
-            ['getAreaCode', 'getMode'],
-            [],
-            '',
-            false
-        );
+        $this->appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode', 'getMode']);
         $this->appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
-        $storeManagerMock = $this->getMock(StoreManager::class, [], [], '', false);
-        $storeMock = $this->getMock(Store::class, [], [], '', false);
+        $storeManagerMock = $this->createMock(StoreManager::class);
+        $storeMock = $this->createMock(Store::class);
         $storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($storeMock);
         $storeMock->expects($this->any())
             ->method('getCode')
             ->willReturn('storeCode');
-        $urlBuilderMock = $this->getMock(UrlInterface::class, [], [], '', false);
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $urlBuilderMock->expects($this->any())
             ->method('getBaseUrl')
             ->willReturn('baseUrl');
@@ -196,7 +175,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
 
-        $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, $exception);
+        $this->expectException(\Magento\Framework\Exception\ValidatorException::class, $exception);
         $this->block->fetchView($template);
     }
 

@@ -13,7 +13,7 @@ use Magento\Downloadable\Helper\Download;
 /**
  * Class BuilderTest
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

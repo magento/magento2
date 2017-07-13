@@ -29,7 +29,7 @@ use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
+class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaptureStrategyCommand

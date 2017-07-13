@@ -7,7 +7,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
+class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

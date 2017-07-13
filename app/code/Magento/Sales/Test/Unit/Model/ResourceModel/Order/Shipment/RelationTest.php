@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
 /**
  * Class RelationTest
  */
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Relation

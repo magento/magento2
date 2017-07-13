@@ -16,7 +16,7 @@ use Magento\Tax\Model\System\Message\NotificationInterface;
 /**
  * Test class for @see \Magento\Tax\Model\System\Message\Notifications
  */
-class NotificationsTest extends \PHPUnit_Framework_TestCase
+class NotificationsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Notifications
@@ -47,10 +47,10 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class, [], [], '', false);
-        $this->urlBuilderMock = $this->getMock(UrlInterface::class, [], [], '', false);
-        $this->taxConfigMock = $this->getMock(TaxConfig::class, [], [], '', false);
-        $this->notificationMock = $this->getMock(NotificationInterface::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->taxConfigMock = $this->createMock(TaxConfig::class);
+        $this->notificationMock = $this->createMock(NotificationInterface::class);
         $this->notifications = (new ObjectManager($this))->getObject(
             Notifications::class,
             [

@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoCache all disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Translate */
     private $translate;
@@ -21,12 +21,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
-        $viewFileSystem = $this->getMock(
+        $viewFileSystem = $this->createPartialMock(
             \Magento\Framework\View\FileSystem::class,
-            ['getLocaleFileName', 'getDesignTheme'],
-            [],
-            '',
-            false
+            ['getLocaleFileName', 'getDesignTheme']
         );
 
         $viewFileSystem->expects($this->any())
@@ -36,7 +33,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
-        $theme = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, []);
+        $theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->any())->method('getId')->will($this->returnValue(10));
 
         $viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
@@ -59,19 +56,20 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var \Magento\Theme\Model\View\Design $designModel */
-        $designModel = $this->getMock(
-            \Magento\Theme\Model\View\Design::class,
-            ['getDesignTheme'],
-            [
-                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
-                $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
-                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
-                $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
-                $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
-                $objectManager->get(\Magento\Framework\App\State::class),
-                ['frontend' => 'Test/default']
-            ]
-        );
+        $designModel = $this->getMockBuilder(\Magento\Theme\Model\View\Design::class)
+            ->setMethods(['getDesignTheme'])
+            ->setConstructorArgs(
+                [
+                    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
+                    $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
+                    $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                    $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
+                    $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
+                    $objectManager->get(\Magento\Framework\App\State::class),
+                    ['frontend' => 'Test/default']
+                ]
+            )
+            ->getMock();
 
         $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 

@@ -17,7 +17,7 @@ require __DIR__ . '/_files/Aggregate/AggregateParent.php';
 require __DIR__ . '/_files/Aggregate/Child.php';
 require __DIR__ . '/_files/Aggregate/WithOptional.php';
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\ObjectManager

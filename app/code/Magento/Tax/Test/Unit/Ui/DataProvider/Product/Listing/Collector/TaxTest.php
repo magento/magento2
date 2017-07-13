@@ -17,7 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Tax\Ui\DataProvider\Product\Listing\Collector\Tax;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tax

@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation enabled
  */
-class ByStockItemTest extends \PHPUnit_Framework_TestCase
+class ByStockItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterfaceFactory

@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Store\Model\Information;
 
-class InformationTest extends \PHPUnit_Framework_TestCase
+class InformationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Information
@@ -58,7 +58,7 @@ class InformationTest extends \PHPUnit_Framework_TestCase
             Information::XML_PATH_STORE_INFO_VAT_NUMBER => '123456789',
         ];
 
-        $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
 
         $this->store->expects($this->any())
             ->method('getConfig')
@@ -77,18 +77,18 @@ class InformationTest extends \PHPUnit_Framework_TestCase
                 return implode("\n", $storeInfo->getData());
             });
 
-        $region = $this->getMock(\Magento\Framework\DataObject::class, ['load', 'getName']);
+        $region = $this->createPartialMock(\Magento\Framework\DataObject::class, ['load', 'getName']);
         $region->expects($this->once())->method('load')->willReturnSelf();
         $region->expects($this->once())->method('getName')->willReturn('Rohan');
 
-        $this->regionFactory = $this->getMock(\Magento\Directory\Model\RegionFactory::class, [], [], '', false);
+        $this->regionFactory = $this->createMock(\Magento\Directory\Model\RegionFactory::class);
         $this->regionFactory->expects($this->once())->method('create')->willReturn($region);
 
-        $country = $this->getMock(\Magento\Framework\DataObject::class, ['loadByCode', 'getName']);
+        $country = $this->createPartialMock(\Magento\Framework\DataObject::class, ['loadByCode', 'getName']);
         $country->expects($this->once())->method('loadByCode')->with('ED')->willReturnSelf();
         $country->expects($this->once())->method('getName')->willReturn('Edoras');
 
-        $this->countryFactory = $this->getMock(\Magento\Directory\Model\CountryFactory::class, [], [], '', false);
+        $this->countryFactory = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
         $this->countryFactory->expects($this->once())->method('create')->willReturn($country);
 
         $this->model = new Information(

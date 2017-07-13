@@ -9,7 +9,7 @@ namespace Magento\Downloadable\Model\Observer;
  * Integration test for case, when customer is able to download
  * downloadable product, after order was canceled.
  */
-class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
+class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object manager

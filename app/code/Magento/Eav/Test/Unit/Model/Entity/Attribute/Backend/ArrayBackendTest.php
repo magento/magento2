@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
-class ArrayBackendTest extends \PHPUnit_Framework_TestCase
+class ArrayBackendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend
@@ -19,14 +19,11 @@ class ArrayBackendTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_attribute = $this->getMock(
+        $this->_attribute = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute::class,
-            ['getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['getAttributeCode', '__wakeup']
         );
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);
         $this->_model->setAttribute($this->_attribute);
     }

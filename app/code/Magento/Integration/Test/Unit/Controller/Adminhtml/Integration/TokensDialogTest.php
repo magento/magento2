@@ -83,7 +83,7 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
 
         $this->_oauthSvcMock->expects($this->once())->method('deleteIntegrationToken');
         $this->_oauthSvcMock->expects($this->once())->method('postToConsumer');
-        $consumerMock = $this->getMock(\Magento\Integration\Model\Oauth\Consumer::class, [], [], '', false);
+        $consumerMock = $this->createMock(\Magento\Integration\Model\Oauth\Consumer::class);
         $consumerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->_oauthSvcMock->expects($this->once())->method('loadConsumer')->willReturn($consumerMock);
 

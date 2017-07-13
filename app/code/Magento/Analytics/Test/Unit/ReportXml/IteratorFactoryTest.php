@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class IteratorFactoryTest
  */
-class IteratorFactoryTest extends \PHPUnit_Framework_TestCase
+class IteratorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject

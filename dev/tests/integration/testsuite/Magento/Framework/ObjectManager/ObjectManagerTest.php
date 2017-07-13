@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Test classes for basic instantiation

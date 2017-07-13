@@ -19,7 +19,7 @@ use Magento\Framework\App\DeploymentConfig;
  * Class DebugTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DebugTest extends \PHPUnit_Framework_TestCase
+class DebugTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Debug

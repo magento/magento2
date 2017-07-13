@@ -19,7 +19,7 @@ use Magento\Framework\App\ResourceConnection;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ClearProductUrlsObserverTest extends \PHPUnit_Framework_TestCase
+class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver
@@ -79,24 +79,18 @@ class ClearProductUrlsObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->importProduct = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Product::class,
-            [
+        $this->importProduct = $this->createPartialMock(\Magento\CatalogImportExport\Model\Import\Product::class, [
                 'getNewSku',
                 'getProductCategories',
                 'getProductWebsites',
                 'getStoreIdByCode',
                 'getCategoryProcessor',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->event = $this->getMock(\Magento\Framework\Event::class, ['getAdapter', 'getBunch'], [], '', false);
+        $this->event = $this->createPartialMock(\Magento\Framework\Event::class, ['getAdapter', 'getBunch']);
         $this->event->expects($this->any())->method('getAdapter')->willReturn($this->importProduct);
         $this->event->expects($this->any())->method('getBunch')->willReturn($this->products);
-        $this->observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getEvent'], [], '', false);
+        $this->observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
         $this->urlPersist = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlPersistInterface::class)
             ->disableOriginalConstructor()
@@ -116,6 +110,7 @@ class ClearProductUrlsObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testClearProductUrls()
     {
-        $this->clearProductUrlsObserver->execute($this->observer);
+        $result = $this->clearProductUrlsObserver->execute($this->observer);
+        $this->assertNull($result);
     }
 }

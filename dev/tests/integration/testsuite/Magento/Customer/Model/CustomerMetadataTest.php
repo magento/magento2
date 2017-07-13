@@ -11,7 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
+class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerRepositoryInterface */
     private $customerRepository;

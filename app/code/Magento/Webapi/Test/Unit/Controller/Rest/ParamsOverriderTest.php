@@ -11,7 +11,7 @@ use \Magento\Authorization\Model\UserContextInterface;
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider
  */
-class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
+class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $requestData Data from the request

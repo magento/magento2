@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class AnalyticsTokenTest
  */
-class AnalyticsTokenTest extends \PHPUnit_Framework_TestCase
+class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject

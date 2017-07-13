@@ -7,7 +7,7 @@ namespace Magento\Framework\Url\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class HostCheckerTest extends \PHPUnit_Framework_TestCase
+class HostCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Url\HostChecker */
     private $object;

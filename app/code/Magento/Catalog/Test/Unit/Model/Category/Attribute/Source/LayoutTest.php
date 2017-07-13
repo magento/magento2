@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     private $testArray = ['test1', ['test1']];
 

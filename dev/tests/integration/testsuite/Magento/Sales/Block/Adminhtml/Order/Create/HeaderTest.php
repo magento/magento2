@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class HeaderTest extends \PHPUnit_Framework_TestCase
+class HeaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Header */
     protected $_block;

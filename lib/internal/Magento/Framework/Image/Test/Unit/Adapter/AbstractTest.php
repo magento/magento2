@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Image\Adapter\AbstractAdapter
@@ -33,20 +33,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directoryWriteMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filesystemMock = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            ['getDirectoryWrite', 'createDirectory'],
-            [],
-            '',
-            false
-        );
+        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->filesystemMock =
+            $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite', 'createDirectory']);
         $this->filesystemMock->expects(
             $this->once()
         )->method(

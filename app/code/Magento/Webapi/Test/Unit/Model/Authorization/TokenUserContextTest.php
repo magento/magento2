@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 /**
  * Tests \Magento\Webapi\Model\Authorization\TokenUserContext
  */
-class TokenUserContextTest extends \PHPUnit_Framework_TestCase
+class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

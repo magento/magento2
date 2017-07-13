@@ -10,7 +10,7 @@ use \Magento\Framework\App\View\Asset\MaterializationStrategy\Factory;
 
 use Magento\Framework\ObjectManagerInterface;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -87,7 +87,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new Factory($this->objectManager, []);
 
-        $this->setExpectedException('LogicException', 'No materialization strategy is supported');
+        $this->expectException('LogicException', 'No materialization strategy is supported');
         $factory->create($asset);
     }
 

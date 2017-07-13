@@ -8,7 +8,7 @@ namespace Magento\Framework\Unserialize\Test\Unit;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Unserialize\Unserialize;
 
-class UnserializeTest extends \PHPUnit_Framework_TestCase
+class UnserializeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Serialize|\PHPUnit_Framework_MockObject_MockObject

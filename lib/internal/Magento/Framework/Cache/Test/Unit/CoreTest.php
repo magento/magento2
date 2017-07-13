@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit;
 
-class CoreTest extends \PHPUnit_Framework_TestCase
+class CoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Cache\Core
@@ -31,7 +31,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mockBackend = $this->getMock(\Zend_Cache_Backend_File::class);
+        $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
     }
 
     protected function tearDown()
@@ -74,7 +74,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveDisabled()
     {
-        $backendMock = $this->getMock(\Zend_Cache_Backend_BlackHole::class);
+        $backendMock = $this->createMock(\Zend_Cache_Backend_BlackHole::class);
         $backendMock->expects($this->never())->method('save');
         $frontend = new \Magento\Framework\Cache\Core(['disable_save' => true]);
         $frontend->setBackend($backendMock);
@@ -84,7 +84,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveNoCaching()
     {
-        $backendMock = $this->getMock(\Zend_Cache_Backend_BlackHole::class);
+        $backendMock = $this->createMock(\Zend_Cache_Backend_BlackHole::class);
         $backendMock->expects($this->never())->method('save');
         $frontend = new \Magento\Framework\Cache\Core(['disable_save' => false, 'caching' => false]);
         $frontend->setBackend($backendMock);
@@ -99,7 +99,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $prefix = 'prefix_';
         $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
 
-        $backendMock = $this->getMock(\Zend_Cache_Backend_BlackHole::class);
+        $backendMock = $this->createMock(\Zend_Cache_Backend_BlackHole::class);
         $backendMock->expects($this->once())
             ->method('save')
             ->with($data, $this->anything(), $prefixedTags)
@@ -124,7 +124,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
         $expectedResult = true;
 
-        $backendMock = $this->getMock(\Zend_Cache_Backend_BlackHole::class);
+        $backendMock = $this->createMock(\Zend_Cache_Backend_BlackHole::class);
         $backendMock->expects($this->once())
             ->method('clean')
             ->with($mode, $prefixedTags)
@@ -146,7 +146,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
         $ids = ['id', 'id2', 'id3'];
 
-        $backendMock = $this->getMock(\Magento\Framework\Cache\Test\Unit\CoreTestMock::class);
+        $backendMock = $this->createMock(\Magento\Framework\Cache\Test\Unit\CoreTestMock::class);
         $backendMock->expects($this->once())
             ->method('getIdsMatchingTags')
             ->with($prefixedTags)
@@ -171,7 +171,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
         $ids = ['id', 'id2', 'id3'];
 
-        $backendMock = $this->getMock(\Magento\Framework\Cache\Test\Unit\CoreTestMock::class);
+        $backendMock = $this->createMock(\Magento\Framework\Cache\Test\Unit\CoreTestMock::class);
         $backendMock->expects($this->once())
             ->method('getIdsNotMatchingTags')
             ->with($prefixedTags)

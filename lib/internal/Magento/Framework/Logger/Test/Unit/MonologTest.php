@@ -8,7 +8,7 @@ namespace Magento\Framework\Logger\Test\Unit;
 use Magento\Framework\Logger\Monolog;
 use Monolog\Handler\TestHandler;
 
-class MonologTest extends \PHPUnit_Framework_TestCase
+class MonologTest extends \PHPUnit\Framework\TestCase
 {
     public function testAddRecord()
     {

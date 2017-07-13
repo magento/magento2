@@ -11,7 +11,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
+class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor
@@ -48,33 +48,18 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectFactoryMock = $this->getMock(
-            \Magento\Framework\DataObject\Factory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->optionFactoryMock = $this->getMock(
+        $this->objectFactoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
+        $this->optionFactoryMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\ProductOptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->optionExtensionFactoryMock = $this->getMock(
+        $this->optionExtensionFactoryMock = $this->createPartialMock(
             \Magento\Quote\Api\Data\ProductOptionExtensionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->optionValueFactoryMock = $this->getMock(
+        $this->optionValueFactoryMock = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->productOptionExtensionAttributes = $this->getMockForAbstractClass(
@@ -87,13 +72,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             ['setConfigurableItemOptions']
         );
 
-        $this->serializer = $this->getMock(
-            \Magento\Framework\Serialize\Serializer\Json::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->serializer->expects($this->any())
             ->method('serialize')
@@ -122,7 +101,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToBuyRequestIfNoProductOption()
     {
-        $cartItemMock = $this->getMock(\Magento\Quote\Api\Data\CartItemInterface::class);
+        $cartItemMock = $this->createMock(\Magento\Quote\Api\Data\CartItemInterface::class);
         $cartItemMock->expects($this->once())->method('getProductOption')->willReturn(null);
         $this->assertNull($this->model->convertToBuyRequest($cartItemMock));
     }
@@ -132,22 +111,19 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $optionId = 'option_id';
         $optionValue = 'option_value';
 
-        $productOptionMock = $this->getMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
-        $cartItemMock = $this->getMock(\Magento\Quote\Api\Data\CartItemInterface::class);
+        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $cartItemMock = $this->createMock(\Magento\Quote\Api\Data\CartItemInterface::class);
         $cartItemMock->expects($this->exactly(3))->method('getProductOption')->willReturn($productOptionMock);
-        $extAttributesMock = $this->getMock(
-            \Magento\Quote\Api\Data\ProductOption::class,
-            ['getConfigurableItemOptions'],
-            [],
-            '',
-            false
-        );
+        $extAttributesMock = $this->getMockBuilder(\Magento\Quote\Api\Data\ProductOption::class)
+            ->setMethods(['getConfigurableItemOptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productOptionMock
             ->expects($this->exactly(2))
             ->method('getExtensionAttributes')
             ->willReturn($extAttributesMock);
 
-        $optionValueMock = $this->getMock(
+        $optionValueMock = $this->createMock(
             \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface::class
         );
         $extAttributesMock->expects($this->once())
@@ -173,19 +149,13 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessProductOptionsIfOptionNotSelected()
     {
-        $customOption = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $customOption = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option::class);
         $customOption->expects($this->once())->method('getValue')->willReturn('');
 
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($customOption);
 
-        $cartItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, ['getProduct'], [], '', false);
+        $cartItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getProduct']);
         $cartItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
     }
@@ -195,35 +165,26 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $optionId = 'option_id';
         $optionValue = 'option_value';
 
-        $customOption = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $customOption = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option::class);
         $customOption->expects($this->once())->method('getValue')->willReturn(json_encode([$optionId => $optionValue]));
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($customOption);
 
-        $cartItemMock = $this->getMock(
+        $cartItemMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getProduct', 'getProductOption', 'setProductOption'],
-            [],
-            '',
-            false
+            ['getProduct', 'getProductOption', 'setProductOption']
         );
         $cartItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $cartItemMock->expects($this->once())->method('getProductOption')->willReturn(null);
 
-        $optionValueMock = $this->getMock(
+        $optionValueMock = $this->createMock(
             \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface::class
         );
         $this->optionValueFactoryMock->expects($this->once())->method('create')->willReturn($optionValueMock);
         $optionValueMock->expects($this->once())->method('setOptionId')->with($optionId)->willReturnSelf();
         $optionValueMock->expects($this->once())->method('setOptionValue')->with($optionValue)->willReturnSelf();
 
-        $productOptionMock = $this->getMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
 
@@ -248,26 +209,17 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $optionId = 'option_id';
         $optionValue = 'option_value';
 
-        $customOption = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $customOption = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option::class);
         $customOption->expects($this->once())->method('getValue')->willReturn(json_encode([$optionId => $optionValue]));
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($customOption);
 
-        $cartItemMock = $this->getMock(
+        $cartItemMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getProduct', 'getProductOption', 'setProductOption'],
-            [],
-            '',
-            false
+            ['getProduct', 'getProductOption', 'setProductOption']
         );
 
-        $optionValueMock = $this->getMock(
+        $optionValueMock = $this->createMock(
             \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface::class
         );
         $this->optionValueFactoryMock->expects($this->once())->method('create')->willReturn($optionValueMock);
@@ -279,7 +231,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             ->with([$optionValueMock])
             ->willReturnSelf();
 
-        $productOptionMock = $this->getMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
         $productOptionMock->expects(static::exactly(2))
             ->method('getExtensionAttributes')
             ->willReturn($this->productOptionExtensionAttributes);

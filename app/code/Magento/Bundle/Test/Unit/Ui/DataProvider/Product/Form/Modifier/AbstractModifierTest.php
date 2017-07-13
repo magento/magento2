@@ -12,7 +12,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModifierInterface

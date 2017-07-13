@@ -10,7 +10,7 @@ use Magento\Catalog\Plugin\Model\ResourceModel\Config;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $cache;
@@ -26,10 +26,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cache = $this->getMock(\Magento\Framework\App\CacheInterface::class);
-        $this->cacheState = $this->getMock(\Magento\Framework\App\Cache\StateInterface::class);
-        $this->serializer = $this->getMock(SerializerInterface::class);
-        $this->subject = $this->getMock(\Magento\Catalog\Model\ResourceModel\Config::class, [], [], '', false);
+        $this->cache = $this->createMock(\Magento\Framework\App\CacheInterface::class);
+        $this->cacheState = $this->createMock(\Magento\Framework\App\Cache\StateInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
+        $this->subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Config::class);
     }
 
     public function testGetAttributesUsedInListingOnCacheDisabled()

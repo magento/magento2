@@ -5,7 +5,7 @@
  */
 namespace Magento;
 
-class MemoryUsageTest extends \PHPUnit_Framework_TestCase
+class MemoryUsageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Number of application reinitialization iterations to be conducted by tests

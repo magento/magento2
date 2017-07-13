@@ -10,7 +10,7 @@ use Magento\Backend\Block\Widget\Form;
 use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\UrlInterface;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Form */
     protected $model;

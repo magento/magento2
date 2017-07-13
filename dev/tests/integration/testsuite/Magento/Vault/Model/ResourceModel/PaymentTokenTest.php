@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Setup\InstallSchema;
 
-class PaymentTokenTest extends \PHPUnit_Framework_TestCase
+class PaymentTokenTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOMER_ID = 1;
     const TOKEN = 'mx29vk';

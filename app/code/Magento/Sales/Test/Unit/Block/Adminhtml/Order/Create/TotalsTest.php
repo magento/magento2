@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Totals block test
  */
-class TotalsTest extends \PHPUnit_Framework_TestCase
+class TotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -39,12 +39,8 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->quoteMock = $this->getMock(
-            \Magento\Quote\Model\Quote::class, ['getCustomerNoteNotify'], [], '', false
-        );
-        $this->sessionQuoteMock = $this->getMock(
-            \Magento\Backend\Model\Session\Quote::class, [], [], '', false
-        );
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCustomerNoteNotify']);
+        $this->sessionQuoteMock = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
 
         $this->sessionQuoteMock->expects($this->any())
             ->method('getQuote')

@@ -8,7 +8,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
 use Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded;
 
-class JsonEncodedTest extends \PHPUnit_Framework_TestCase
+class JsonEncodedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded

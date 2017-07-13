@@ -7,7 +7,7 @@ namespace Magento\Backup\Test\Unit\Cron;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SystemBackupTest extends \PHPUnit_Framework_TestCase
+class SystemBackupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

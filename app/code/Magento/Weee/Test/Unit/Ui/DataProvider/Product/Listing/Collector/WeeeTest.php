@@ -18,7 +18,7 @@ use Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WeeeTest extends \PHPUnit_Framework_TestCase
+class WeeeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Weee */
     protected $model;
@@ -110,7 +110,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->getMock(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
         $productRender->expects($this->exactly(5))
             ->method('getStoreId')
             ->willReturn(1);

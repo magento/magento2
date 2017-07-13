@@ -8,23 +8,17 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecuteWithAdapterErrorThrowsException()
     {
-        $eavDecimalFactory = $this->getMock(
+        $eavDecimalFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $eavSourceFactory = $this->getMock(
+        $eavSourceFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $exceptionMessage = 'exception message';
@@ -34,15 +28,11 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->throwException($exception));
 
-        $metadataMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
-        $batchProviderMock = $this->getMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
+        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $batchProviderMock = $this->createMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
 
-        $batchManagementMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class,
-            [],
-            [],
-            '',
-            false
+        $batchManagementMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class
         );
 
         $tableSwitcherMock = $this->getMockBuilder(
@@ -58,7 +48,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             $tableSwitcherMock
         );
 
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
 
         $model->execute();
     }
@@ -68,19 +58,13 @@ class FullTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $eavDecimalFactory = $this->getMock(
+        $eavDecimalFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $eavSourceFactory = $this->getMock(
+        $eavSourceFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $ids = [1, 2, 3];
@@ -121,7 +105,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
-        $metadataMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $entityMetadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
             ->getMockForAbstractClass();
 
@@ -130,7 +114,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->willReturn($entityMetadataMock);
 
-        $batchProviderMock = $this->getMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
+        $batchProviderMock = $this->createMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
         $batchProviderMock->expects($this->atLeastOnce())
             ->method('getBatches')
             ->willReturn([['from' => 10, 'to' => 100]]);
@@ -138,12 +122,8 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ->method('getBatchIds')
             ->willReturn($ids);
 
-        $batchManagementMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class,
-            [],
-            [],
-            '',
-            false
+        $batchManagementMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class
         );
         $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()

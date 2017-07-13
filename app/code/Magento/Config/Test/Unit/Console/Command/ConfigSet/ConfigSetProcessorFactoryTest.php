@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see ConfigSetProcessorFactory
  */
-class ConfigSetProcessorFactoryTest extends \PHPUnit_Framework_TestCase
+class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSetProcessorFactory

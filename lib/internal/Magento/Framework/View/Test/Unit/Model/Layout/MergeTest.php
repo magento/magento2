@@ -10,7 +10,7 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MergeTest extends \PHPUnit_Framework_TestCase
+class MergeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge

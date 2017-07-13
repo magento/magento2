@@ -8,7 +8,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * @magentoDataFixture Magento/Bundle/_files/product_with_tier_pricing.php
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Product\Price

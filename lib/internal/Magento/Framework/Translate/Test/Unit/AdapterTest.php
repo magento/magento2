@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Translate\Test\Unit;
 
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Check that translate calls are passed to given translator

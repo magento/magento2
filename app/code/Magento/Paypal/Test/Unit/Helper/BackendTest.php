@@ -12,7 +12,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\StructurePlugin;
 
-class BackendTest extends \PHPUnit_Framework_TestCase
+class BackendTest extends \PHPUnit\Framework\TestCase
 {
     const SCOPE = 'website';
 
@@ -53,7 +53,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->context->expects(static::once())
             ->method('getRequest')
             ->willReturn($this->request);

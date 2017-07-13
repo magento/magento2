@@ -6,14 +6,14 @@
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\Group as GroupModel;
+use Magento\Store\Model\ResourceModel\Group;
 
-class StoreGroupTest extends \PHPUnit_Framework_TestCase
+class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
@@ -56,24 +56,15 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->stateMock = $this->getMock(State::class, ['isFlatEnabled'], [], '', false);
-        $this->subjectMock = $this->getMock(Group::class, [], [], '', false);
+        $this->stateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
+        $this->subjectMock = $this->createMock(Group::class);
 
-        $this->groupMock = $this->getMock(
+        $this->groupMock = $this->createPartialMock(
             GroupModel::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
+            ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
 
-        $this->indexerRegistryMock = $this->getMock(
-            IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);
 
         $this->model = (new ObjectManager($this))
             ->getObject(

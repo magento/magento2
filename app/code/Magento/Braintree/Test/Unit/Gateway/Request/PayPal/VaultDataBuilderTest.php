@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class VaultDataBuilderTest
  */
-class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
+class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -39,9 +39,9 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDataObject = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDataObject = $this->createMock(PaymentDataObjectInterface::class);
 
-        $this->paymentInfo = $this->getMock(InfoInterface::class);
+        $this->paymentInfo = $this->createMock(InfoInterface::class);
 
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()

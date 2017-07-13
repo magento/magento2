@@ -20,7 +20,7 @@ use Magento\Framework\App\Cache\StateInterface as CacheState;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassEnableTest extends \PHPUnit_Framework_TestCase
+class MassEnableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MassEnable

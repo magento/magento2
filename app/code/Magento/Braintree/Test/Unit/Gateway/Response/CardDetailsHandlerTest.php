@@ -16,7 +16,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 /**
  * Class CardDetailsHandlerTest
  */
-class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Braintree\Gateway\Response\CardDetailsHandler

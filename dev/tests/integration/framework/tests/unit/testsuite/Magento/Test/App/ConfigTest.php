@@ -12,7 +12,7 @@ namespace Magento\Test\App;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\TestFramework\App\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config

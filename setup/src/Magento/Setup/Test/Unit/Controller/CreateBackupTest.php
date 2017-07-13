@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\CreateBackup;
 
-class CreateBackupTest extends \PHPUnit_Framework_TestCase
+class CreateBackupTest extends \PHPUnit\Framework\TestCase
 {
     public function testIndexAction()
     {

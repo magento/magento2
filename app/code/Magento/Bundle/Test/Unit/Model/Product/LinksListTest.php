@@ -9,7 +9,7 @@ namespace Magento\Bundle\Test\Unit\Model\Product;
 
 use \Magento\Bundle\Model\Product\LinksList;
 
-class LinksListTest extends \PHPUnit_Framework_TestCase
+class LinksListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LinksList
@@ -43,21 +43,13 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->linkFactoryMock = $this->getMock(
-            \Magento\Bundle\Api\Data\LinkInterfaceFactory::class,
-            [
+        $this->linkFactoryMock = $this->createPartialMock(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class, [
                 'create',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectionMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $this->selectionMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getSelectionPriceType',
                 'getSelectionPriceValue',
                 'getData',
@@ -66,24 +58,14 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
                 'getSelectionCanChangeQty',
                 'getSelectionId',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+            ]);
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getTypeInstance',
                 'getStoreId',
                 'getPriceType',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->productTypeMock = $this->getMock(\Magento\Bundle\Model\Product\Type::class, [], [], '', false);
+            ]);
+        $this->productTypeMock = $this->createMock(\Magento\Bundle\Model\Product\Type::class);
         $this->model = new LinksList($this->linkFactoryMock, $this->productTypeMock, $this->dataObjectHelperMock);
     }
 
@@ -105,7 +87,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
         $this->selectionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
         $this->selectionMock->expects($this->once())->method('getSelectionQty')->willReturn(66);
         $this->selectionMock->expects($this->once())->method('getSelectionCanChangeQty')->willReturn(22);
-        $linkMock = $this->getMock(\Magento\Bundle\Api\Data\LinkInterface::class);
+        $linkMock = $this->createMock(\Magento\Bundle\Api\Data\LinkInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($linkMock, ['some data'], \Magento\Bundle\Api\Data\LinkInterface::class)->willReturnSelf();

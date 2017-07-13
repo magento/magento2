@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
+class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php

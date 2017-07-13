@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 /**
  * Class AddBillingAgreementToSessionObserverTest
  */
-class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCase
+class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\AddBillingAgreementToSessionObserver
@@ -44,14 +44,11 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->_agreementFactory = $this->getMock(
+        $this->_agreementFactory = $this->createPartialMock(
             \Magento\Paypal\Model\Billing\AgreementFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->_checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             \Magento\Paypal\Observer\AddBillingAgreementToSessionObserver::class,
@@ -64,7 +61,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
 
     public function testAddBillingAgreementToSessionNoData()
     {
-        $payment = $this->getMock(\Magento\Sales\Model\Order\Payment::class, [], [], '', false);
+        $payment = $this->createMock(\Magento\Sales\Model\Order\Payment::class);
         $payment->expects(
             $this->once()
         )->method(
@@ -86,7 +83,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
      */
     public function testAddBillingAgreementToSession($isValid)
     {
-        $agreement = $this->getMock(\Magento\Paypal\Model\Billing\Agreement::class, [], [], '', false);
+        $agreement = $this->createMock(\Magento\Paypal\Model\Billing\Agreement::class);
         $agreement->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
         $comment = $this->getMockForAbstractClass(
             \Magento\Framework\Model\AbstractModel::class,
@@ -97,7 +94,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
             true,
             ['__wakeup']
         );
-        $order = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $order = $this->createMock(\Magento\Sales\Model\Order::class);
         $order->expects(
             $this->once()
         )->method(
@@ -144,7 +141,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
         }
         $order->expects(new MethodInvokedAtIndex($isValid ? 1 : 0))->method('addRelatedObject')->with($comment);
 
-        $payment = $this->getMock(\Magento\Sales\Model\Order\Payment::class, [], [], '', false);
+        $payment = $this->createMock(\Magento\Sales\Model\Order\Payment::class);
         $payment->expects(
             $this->once()
         )->method(

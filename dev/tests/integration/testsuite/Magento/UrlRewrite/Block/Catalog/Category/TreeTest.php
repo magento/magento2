@@ -10,7 +10,7 @@ namespace Magento\UrlRewrite\Block\Catalog\Category;
  *
  * @magentoAppArea adminhtml
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Block\Catalog\Category\Tree

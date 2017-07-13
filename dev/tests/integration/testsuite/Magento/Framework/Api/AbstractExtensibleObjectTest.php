@@ -8,7 +8,7 @@ namespace Magento\Framework\Api;
 /**
  * Test for \Magento\Framework\Api\AbstractExtensibleObject
  */
-class AbstractExtensibleObjectTest extends \PHPUnit_Framework_TestCase
+class AbstractExtensibleObjectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;

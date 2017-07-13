@@ -8,7 +8,7 @@ namespace Magento\Swatches\Test\Unit\Observer;
 /**
  * Observer test
  */
-class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
+class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $moduleManagerMock;
@@ -21,20 +21,11 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleManagerMock = $this->getMock(
-            \Magento\Framework\Module\Manager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
 
-        $this->eventObserverMock = $this->getMock(
+        $this->eventObserverMock = $this->createPartialMock(
             \Magento\Framework\Event\Observer::class,
-            ['getForm', 'getEvent', 'getAttribute'],
-            [],
-            '',
-            false
+            ['getForm', 'getEvent', 'getAttribute']
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $objectManager->getObject(
@@ -55,13 +46,13 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
             ->method('isOutputEnabled')
             ->willReturn($exp['isOutputEnabled']);
 
-        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getResponse'], [], '', false);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getResponse']);
         $this->eventObserverMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getEvent')
             ->willReturn($eventMock);
 
-        $response = $this->getMock(\Magento\Framework\DataObject::class, ['getTypes'], [], '', false);
+        $response = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getTypes']);
         $eventMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getResponse')

@@ -10,7 +10,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
  *
  * Contains helper methods to get commonly used mocks used for collection tests.
  **/
-class BaseCollectionTest extends \PHPUnit_Framework_TestCase
+class BaseCollection extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get Mocks for StoreManager so Collection can be used.

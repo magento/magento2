@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.ph
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/DoubleColon.php';
 
-class PhpScannerTest extends \PHPUnit_Framework_TestCase
+class PhpScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Scanner\PhpScanner
@@ -34,7 +34,7 @@ class PhpScannerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\PhpScanner(
-            $this->_logMock = $this->getMock(\Magento\Setup\Module\Di\Compiler\Log\Log::class, [], [], '', false)
+            $this->_logMock = $this->createMock(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
         );
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
         $this->_testFiles = [

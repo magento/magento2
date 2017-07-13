@@ -21,7 +21,7 @@ use Magento\Translation\Model\Source\InitialTranslationSource;
  *
  * @deprecated translation config source was removed.
  */
-class InitialTranslationSourceTest extends \PHPUnit_Framework_TestCase
+class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TranslateFactory|\PHPUnit_Framework_MockObject_MockObject

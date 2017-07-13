@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Console;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Console\Response

@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
-class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
+class DownloadCustomOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Controller\Index\DownloadCustomOption
@@ -98,6 +98,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
 
         $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getProductId', 'load', 'getId', 'getValue'])
             ->getMock();
         $optionMock->expects($this->any())
             ->method('load')
@@ -114,6 +115,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
 
         $productOptionMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getProductId', 'load', 'getId', 'getType'])
             ->getMock();
         $productOptionMock->expects($this->any())
             ->method('load')

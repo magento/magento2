@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class PayflowConfigTest
  */
-class PayflowConfigTest extends \PHPUnit_Framework_TestCase
+class PayflowConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

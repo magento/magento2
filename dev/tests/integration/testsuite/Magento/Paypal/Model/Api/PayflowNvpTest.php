@@ -15,9 +15,12 @@ use Magento\Paypal\Model\Config;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 
-class PayflowNvpTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class PayflowNvpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PayflowNvp

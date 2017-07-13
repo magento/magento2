@@ -13,7 +13,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 /**
  * Class FactoryTest
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModifierFactory

@@ -8,7 +8,7 @@ namespace Magento\Rule\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ConditionFactoryTest extends \PHPUnit_Framework_TestCase
+class ConditionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rule\Model\ConditionFactory
@@ -27,7 +27,7 @@ class ConditionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->conditionFactory = $this->objectManagerHelper->getObject(

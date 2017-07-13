@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Method\Specification;
 /**
  * Factory Test
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -22,7 +22,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->factory = $objectManagerHelper->getObject(
@@ -34,7 +34,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateMethod()
     {
         $className = \Magento\Payment\Model\Method\SpecificationInterface::class;
-        $methodMock = $this->getMock($className);
+        $methodMock = $this->createMock($className);
         $this->objectManagerMock->expects(
             $this->once()
         )->method(
@@ -55,7 +55,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testWrongTypeException()
     {
         $className = 'WrongClass';
-        $methodMock = $this->getMock($className);
+        $methodMock = $this->createMock($className);
         $this->objectManagerMock->expects(
             $this->once()
         )->method(

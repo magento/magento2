@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\CmsPage;
 
-class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
+class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -44,14 +44,14 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperMock = $this->getMock(\Magento\GoogleOptimizer\Helper\Data::class, [], [], '', false);
-        $this->_codeMock = $this->getMock(\Magento\GoogleOptimizer\Model\Code::class, [], [], '', false);
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
+        $this->_helperMock = $this->createMock(\Magento\GoogleOptimizer\Helper\Data::class);
+        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
-        $this->_pageMock = $this->getMock(\Magento\Cms\Model\Page::class, [], [], '', false);
-        $event = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
+        $this->_pageMock = $this->createMock(\Magento\Cms\Model\Page::class);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
         $event->expects($this->once())->method('getObject')->will($this->returnValue($this->_pageMock));
-        $this->_eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

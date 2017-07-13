@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class SaveHandlerTest
  */
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler

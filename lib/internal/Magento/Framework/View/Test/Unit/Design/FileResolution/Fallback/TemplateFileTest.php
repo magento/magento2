@@ -11,7 +11,7 @@ use Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 
-class TemplateFileTest extends \PHPUnit_Framework_TestCase
+class TemplateFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -40,10 +40,10 @@ class TemplateFileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resolver = $this->getMock(
+        $this->resolver = $this->createMock(
             \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class
         );
-        $this->minifier = $this->getMock(\Magento\Framework\View\Template\Html\MinifierInterface::class);
+        $this->minifier = $this->createMock(\Magento\Framework\View\Template\Html\MinifierInterface::class);
         $this->state = $this->getMockBuilder(
             \Magento\Framework\App\State::class
         )->disableOriginalConstructor()->getMock();

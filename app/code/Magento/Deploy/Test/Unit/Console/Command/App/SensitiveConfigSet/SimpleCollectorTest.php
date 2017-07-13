@@ -15,7 +15,7 @@ use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class SimpleCollectorTest extends \PHPUnit_Framework_TestCase
+class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuestionFactory|MockObject

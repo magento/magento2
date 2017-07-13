@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * A unit test for testing of the 'from' assembler.
  */
-class FromAssemblerTest extends \PHPUnit_Framework_TestCase
+class FromAssemblerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\ReportXml\DB\Assembler\FromAssembler

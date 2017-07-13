@@ -56,10 +56,10 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     protected function _getModelDependencies()
     {
         $string = new \Magento\Framework\Stdlib\StringUtils();
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $importFactory = $this->getMock(\Magento\ImportExport\Model\ImportFactory::class, [], [], '', false);
-        $resourceHelper = $this->getMock(\Magento\ImportExport\Model\ResourceModel\Helper::class, [], [], '', false);
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $importFactory = $this->createMock(\Magento\ImportExport\Model\ImportFactory::class);
+        $resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $data = [
             'coreString' => $string,

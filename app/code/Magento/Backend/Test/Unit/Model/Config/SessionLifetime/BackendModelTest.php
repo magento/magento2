@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model\Config\SessionLifetime;
 use Magento\Backend\Model\Config\SessionLifetime\BackendModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class BackendModelTest extends \PHPUnit_Framework_TestCase
+class BackendModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider adminSessionLifetimeDataProvider
@@ -20,10 +20,11 @@ class BackendModelTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\Model\Config\SessionLifetime\BackendModel::class
         );
         if ($errorMessage !== null) {
-            $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $errorMessage);
+            $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $errorMessage);
         }
         $model->setValue($value);
-        $model->beforeSave();
+        $object = $model->beforeSave();
+        $this->assertEquals($model, $object);
     }
 
     public function adminSessionLifetimeDataProvider()

@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddTrackTest extends \PHPUnit_Framework_TestCase
+class AddTrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -74,45 +74,21 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $this->shipmentLoader = $this->getMockBuilder(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
             ->getMock();
-        $this->context = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
+        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',
                 'getResponse',
                 'getRedirect',
                 'getObjectManager',
                 'getTitle',
                 'getView'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->response = $this->getMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse', 'setBody'],
-            [],
-            '',
-            false
-        );
+            ]);
+        $this->response = $this->createPartialMock(\Magento\Framework\App\ResponseInterface::class, ['setRedirect', 'sendResponse', 'setBody']);
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create', 'get'],
-            [],
-            '',
-            false
-        );
-        $this->view = $this->getMock(
-            \Magento\Framework\App\ViewInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create', 'get']);
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -158,13 +134,7 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $orderId = 10003;
         $tracking = [];
         $shipmentData = ['items' => [], 'send_email' => ''];
-        $shipment = $this->getMock(
-            \Magento\Sales\Model\Order\Shipment::class,
-            ['addTrack', '__wakeup', 'save'],
-            [],
-            '',
-            false
-        );
+        $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['addTrack', '__wakeup', 'save']);
         $this->request->expects($this->any())
             ->method('getParam')
             ->will(
@@ -224,8 +194,8 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $this->view->expects($this->once())
             ->method('loadLayout')
             ->will($this->returnSelf());
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $menuBlock = $this->getMock(\Magento\Framework\View\Element\BlockInterface::class, ['toHtml'], [], '', false);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $menuBlock = $this->createPartialMock(\Magento\Framework\View\Element\BlockInterface::class, ['toHtml']);
         $html = 'html string';
         $this->view->expects($this->once())
             ->method('getLayout')

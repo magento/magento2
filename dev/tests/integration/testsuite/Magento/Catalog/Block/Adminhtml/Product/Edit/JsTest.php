@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 /**
  * @magentoAppArea adminhtml
  */
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php

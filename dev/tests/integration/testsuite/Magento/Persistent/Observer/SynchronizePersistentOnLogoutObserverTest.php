@@ -8,7 +8,7 @@ namespace Magento\Persistent\Observer;
 /**
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
-class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestCase
+class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

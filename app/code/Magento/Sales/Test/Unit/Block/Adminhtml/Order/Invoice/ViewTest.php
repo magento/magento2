@@ -9,7 +9,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Invoice;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param bool $canReviewPayment

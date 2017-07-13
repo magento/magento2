@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Block\Order\Create;
 /**
  * Class TotalsTest
  */
-class TotalsTest extends \PHPUnit_Framework_TestCase
+class TotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

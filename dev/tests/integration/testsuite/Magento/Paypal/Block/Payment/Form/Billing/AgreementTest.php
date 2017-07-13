@@ -7,7 +7,7 @@
  */
 namespace Magento\Paypal\Block\Payment\Form\Billing;
 
-class AgreementTest extends \PHPUnit_Framework_TestCase
+class AgreementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement */
     protected $_block;

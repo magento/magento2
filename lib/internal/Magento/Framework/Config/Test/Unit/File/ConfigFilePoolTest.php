@@ -8,7 +8,7 @@ namespace Magento\Framework\Config\Test\Unit\File;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class ConfigFilePoolTest extends \PHPUnit_Framework_TestCase
+class ConfigFilePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Config\File\ConfigFilePool

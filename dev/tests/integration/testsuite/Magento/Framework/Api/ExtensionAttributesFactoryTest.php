@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Api;
 
-class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Api\ExtensionAttributesFactory */
     private $factory;
@@ -57,7 +57,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithLogicException()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'LogicException',
             "Class 'Magento\\Framework\\Api\\ExtensionAttributesFactoryTest' must implement an interface, "
             . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sitemap\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sitemap\Helper\Data

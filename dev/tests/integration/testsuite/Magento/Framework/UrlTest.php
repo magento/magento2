@@ -7,7 +7,7 @@ namespace Magento\Framework;
 
 use Zend\Stdlib\Parameters;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\UrlInterface

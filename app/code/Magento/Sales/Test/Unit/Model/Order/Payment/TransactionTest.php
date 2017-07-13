@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Sales\Model\Order\Payment\Transaction */
     protected $transaction;

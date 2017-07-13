@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Annotation;
 
-class AppAreaTest extends \PHPUnit_Framework_TestCase
+class AppAreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Annotation\AppArea
@@ -24,8 +24,8 @@ class AppAreaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_testCaseMock = $this->getMock(\PHPUnit_Framework_TestCase::class, [], [], '', false);
-        $this->_applicationMock = $this->getMock(\Magento\TestFramework\Application::class, [], [], '', false);
+        $this->_testCaseMock = $this->createMock(\PHPUnit\Framework\TestCase::class);
+        $this->_applicationMock = $this->createMock(\Magento\TestFramework\Application::class);
         $this->_object = new \Magento\TestFramework\Annotation\AppArea($this->_applicationMock);
     }
 

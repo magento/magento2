@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-class CompareTest extends \PHPUnit_Framework_TestCase
+class CompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Compare

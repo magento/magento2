@@ -19,7 +19,7 @@ use Magento\PageCache\Model\Cache\Type as CacheType;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
+class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BuiltinPlugin

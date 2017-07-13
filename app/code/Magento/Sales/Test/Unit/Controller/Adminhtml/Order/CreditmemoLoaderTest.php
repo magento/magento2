@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
+class CreditmemoLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
@@ -73,13 +73,7 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\CreditmemoRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->creditmemoFactoryMock = $this->getMock(
-            \Magento\Sales\Model\Order\CreditmemoFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->creditmemoFactoryMock = $this->createMock(\Magento\Sales\Model\Order\CreditmemoFactory::class);
         $this->orderFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\OrderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

@@ -10,7 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 
 use Magento\Setup\Module\I18n\Parser as Parser;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit_Framework_MockObject_MockObject
@@ -29,8 +29,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesCollector = $this->getMock(\Magento\Setup\Module\I18n\FilesCollector::class);
-        $this->factory = $this->getMock(\Magento\Setup\Module\I18n\Factory::class);
+        $this->filesCollector = $this->createMock(\Magento\Setup\Module\I18n\FilesCollector::class);
+        $this->factory = $this->createMock(\Magento\Setup\Module\I18n\Factory::class);
 
         $this->parser = new Parser\Parser($this->filesCollector, $this->factory);
     }
@@ -81,14 +81,14 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function addPhraseDataProvider()
     {
-        $phraseMock1 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock2 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock3 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock4 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock5 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock6 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock7 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseMock8 = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
+        $phraseMock1 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock2 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock3 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock4 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock5 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock6 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock7 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock8 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
 
         $phraseMock1->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase111');
         $phraseMock2->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase112');

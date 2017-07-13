@@ -14,7 +14,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AccountTest extends \PHPUnit_Framework_TestCase
+class AccountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

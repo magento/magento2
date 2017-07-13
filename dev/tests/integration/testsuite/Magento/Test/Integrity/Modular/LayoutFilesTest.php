@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity\Modular;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LayoutFilesTest extends \PHPUnit_Framework_TestCase
+class LayoutFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\Argument\Parser

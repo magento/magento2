@@ -8,7 +8,7 @@
 
 namespace Magento\Tax\Pricing;
 
-class AdjustmentTest extends \PHPUnit_Framework_TestCase
+class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param $isShippingPriceExcludeTax

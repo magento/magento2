@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Product\Gallery;
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoDataFixture Magento/Catalog/_files/product_image.php
  */
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\CreateHandler

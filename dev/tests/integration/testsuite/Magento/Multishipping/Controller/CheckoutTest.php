@@ -49,7 +49,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         /** @var \Magento\Customer\Api\AccountManagementInterface $service */
         $service = $this->_objectManager->create(\Magento\Customer\Api\AccountManagementInterface::class);
         $customer = $service->authenticate('customer@example.com', 'password');

@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -38,28 +38,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_indexerMock = $this->getMock(
-            \Magento\Indexer\Model\Indexer::class,
-            ['getId', 'invalidate'],
-            [],
-            '',
-            false
-        );
+        $this->_indexerMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer::class, ['getId', 'invalidate']);
         $this->_indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $this->_stateMock = $this->getMock(
+        $this->_stateMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
-            ['isFlatEnabled'],
-            [],
-            '',
-            false
+            ['isFlatEnabled']
         );
-        $this->indexerRegistryMock = $this->getMock(
+        $this->indexerRegistryMock = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
+            ['get']
         );
         $this->_model = $this->_objectManager->getObject(
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,

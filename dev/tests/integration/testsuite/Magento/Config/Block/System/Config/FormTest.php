@@ -11,7 +11,7 @@ use Magento\Framework\App\Cache\State;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\DOMTestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

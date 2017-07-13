@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoComponentsDir Magento/Framework/View/_files/fallback
  * @magentoDbIsolation enabled
  */
-class RulePoolTest extends \PHPUnit_Framework_TestCase
+class RulePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RulePool
@@ -74,7 +74,7 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPatternDirsException($type, array $overriddenParams, $expectedErrorMessage)
     {
-        $this->setExpectedException('InvalidArgumentException', $expectedErrorMessage);
+        $this->expectException('InvalidArgumentException', $expectedErrorMessage);
         $params = $overriddenParams + $this->defaultParams;
         $this->model->getRule($type)->getPatternDirs($params);
     }

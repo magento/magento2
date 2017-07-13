@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 /**
  * Class InvoiceRefundCreatetionArgumentsTest
  */
-class InvoiceRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
+class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InvoiceRefundCreationArguments
@@ -78,7 +78,7 @@ class InvoiceRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
         $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->setMethods(['getReturnToStockItems'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->validateResultMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()

@@ -25,7 +25,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
      *
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
-    class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
+    class PhpCookieManagerTest extends \PHPUnit\Framework\TestCase
     {
         const COOKIE_NAME = 'cookie_name';
         const SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS = 'sensitive_cookie_name_no_metadata_https';
@@ -127,7 +127,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->setMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->readerMock = $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
+            $this->readerMock = $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
             $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
                 ->getMockForAbstractClass();
             $this->httpHeaderMock = $this->getMockBuilder(HttpHeader::class)

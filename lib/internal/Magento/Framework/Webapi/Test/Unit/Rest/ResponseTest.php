@@ -9,7 +9,7 @@ namespace Magento\Framework\Webapi\Test\Unit\Rest;
 
 use Magento\Framework\Phrase;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response */
     protected $responseRest;
@@ -35,7 +35,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->rendererMock));
         $this->errorProcessorMock = $this->getMockBuilder(\Magento\Framework\Webapi\ErrorProcessor::class)
             ->disableOriginalConstructor()->getMock();
-        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         /** Init SUP. */
         $this->responseRest = new \Magento\Framework\Webapi\Rest\Response(

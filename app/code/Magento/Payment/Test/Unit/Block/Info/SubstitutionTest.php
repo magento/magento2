@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Block\Info;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SubstitutionTest extends \PHPUnit_Framework_TestCase
+class SubstitutionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

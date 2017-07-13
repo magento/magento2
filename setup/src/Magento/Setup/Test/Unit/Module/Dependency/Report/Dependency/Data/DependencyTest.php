@@ -9,7 +9,7 @@ use \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $module

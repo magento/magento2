@@ -6,23 +6,15 @@
 
 namespace Magento\Swatches\Test\Unit\Controller\Adminhtml\Product\Attribute\Plugin;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider dataRequest
      */
     public function testBeforeDispatch($dataRequest, $runTimes)
     {
-        $subject = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $request = $this->getMock(
-            \Magento\Framework\App\RequestInterface::class,
-            [
+        $subject = $this->createMock(\Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save::class);
+        $request = $this->createPartialMock(\Magento\Framework\App\RequestInterface::class, [
                 'getPostValue',
                 'setPostValue',
                 'getModuleName',
@@ -34,11 +26,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'getParams',
                 'getCookie',
                 'isSecure'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $controller = $objectManager->getObject(

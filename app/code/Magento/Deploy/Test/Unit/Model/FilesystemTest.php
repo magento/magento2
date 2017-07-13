@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Config\StoreView
@@ -56,55 +56,13 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->storeViewMock = $this->getMock(
-            \Magento\Store\Model\Config\StoreView::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->shellMock = $this->getMock(
-            \Magento\Framework\ShellInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->userCollectionMock = $this->getMock(
-            \Magento\User\Model\ResourceModel\User\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->outputMock = $this->getMock(
-            \Symfony\Component\Console\Output\OutputInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filesystemMock = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->directoryWriteMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->storeViewMock = $this->createMock(\Magento\Store\Model\Config\StoreView::class);
+        $this->shellMock = $this->createMock(\Magento\Framework\ShellInterface::class);
+        $this->userCollectionMock = $this->createMock(\Magento\User\Model\ResourceModel\User\Collection::class);
+        $this->outputMock = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
@@ -131,13 +89,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->storeViewMock->expects($this->once())
             ->method('retrieveLocales')
             ->willReturn($storeLocales);
-        $userMock = $this->getMock(
-            \Magento\User\Model\User::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $userMock = $this->createMock(\Magento\User\Model\User::class);
         $userMock->expects($this->once())
             ->method('getInterfaceLocale')
             ->willReturn('en_US');

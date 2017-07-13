@@ -10,7 +10,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SerializedTest extends \PHPUnit_Framework_TestCase
+class SerializedTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Config\Model\Config\Backend\Serialized */
     private $serializedConfig;
@@ -21,9 +21,9 @@ class SerializedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
-        $contextMock = $this->getMock(Context::class, [], [], '', false);
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->serializerMock = $this->createMock(Json::class);
+        $contextMock = $this->createMock(Context::class);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $contextMock->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
         $this->serializedConfig = $objectManager->getObject(

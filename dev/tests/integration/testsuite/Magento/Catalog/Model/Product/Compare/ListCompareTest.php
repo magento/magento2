@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Product\Compare;
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
-class ListCompareTest extends \PHPUnit_Framework_TestCase
+class ListCompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Compare\ListCompare

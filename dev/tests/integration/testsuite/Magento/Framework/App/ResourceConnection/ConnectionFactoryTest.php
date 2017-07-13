@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\ResourceConnection;
 
-class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\ConnectionFactory

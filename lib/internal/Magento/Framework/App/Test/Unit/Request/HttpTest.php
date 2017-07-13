@@ -10,7 +10,7 @@ namespace Magento\Framework\App\Test\Unit\Request;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http
@@ -49,16 +49,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_routerListMock = $this->getMock(
+        $this->_routerListMock = $this->createPartialMock(
             \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
-            ['getRouteFrontName', 'getRouteByFrontName', '__wakeup'],
-            [],
-            '',
-            false
+            ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
-        $this->_infoProcessorMock = $this->getMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class);
+        $this->_infoProcessorMock = $this->createMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class);
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
@@ -93,7 +90,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+            $configMock = $this->createMock(\Magento\Framework\App\Config::class);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
@@ -129,7 +126,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRouteNameWithRouter()
     {
-        $router = $this->getMock(\Magento\Framework\App\Route\ConfigInterface::class, [], [], '', false);
+        $router = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
         $this->_routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
         $this->_model = $this->getModel();
         $this->_model->setRouteName('RouterName');

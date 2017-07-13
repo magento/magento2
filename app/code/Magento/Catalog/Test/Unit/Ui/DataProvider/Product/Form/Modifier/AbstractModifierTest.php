@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * Class AbstractDataProviderTest
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModifierInterface

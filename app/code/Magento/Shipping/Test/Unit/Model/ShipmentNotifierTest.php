@@ -6,17 +6,16 @@
 
 namespace Magento\Shipping\Test\Unit\Model;
 
-use \Magento\Shipping\Model\ShipmentNotifier;
-
 use Magento\Framework\Exception\MailException;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use Magento\Shipping\Model\ShipmentNotifier;
 
 /**
  * Class ShipmentNotifierTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
+class ShipmentNotifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionFactory |\PHPUnit_Framework_MockObject_MockObject
@@ -45,28 +44,19 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->historyCollectionFactory = $this->getMock(
+        $this->historyCollectionFactory = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->shipment = $this->getMock(
+        $this->shipment = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['__wakeUp', 'getEmailSent'],
-            [],
-            '',
-            false
+            ['__wakeUp', 'getEmailSent']
         );
-        $this->shipmentSenderMock = $this->getMock(
+        $this->shipmentSenderMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class,
-            ['send'],
-            [],
-            '',
-            false
+            ['send']
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -79,19 +69,13 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotifySuccess()
     {
-        $historyCollection = $this->getMock(
+        $historyCollection = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
-            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified'],
-            [],
-            '',
-            false
+            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
         );
-        $historyItem = $this->getMock(
+        $historyItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Status\History::class,
-            ['setIsCustomerNotified', 'save', '__wakeUp'],
-            [],
-            '',
-            false
+            ['setIsCustomerNotified', 'save', '__wakeUp']
         );
         $historyItem->expects($this->at(0))
             ->method('setIsCustomerNotified')

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-class LabelTest extends \PHPUnit_Framework_TestCase
+class LabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\Label

@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use \Magento\Catalog\Model\Product\Url;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Url
@@ -57,9 +57,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ['setScope', 'getUrl']
         )->getMock();
 
-        $this->sidResolver = $this->getMock(\Magento\Framework\Session\SidResolverInterface::class);
+        $this->sidResolver = $this->createMock(\Magento\Framework\Session\SidResolverInterface::class);
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));

@@ -16,7 +16,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
  *
  * Test for class \Magento\Braintree\Model\Report\TransactionsCollection
  */
-class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
+class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
 /**
  * Full reindex Test
  */
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor

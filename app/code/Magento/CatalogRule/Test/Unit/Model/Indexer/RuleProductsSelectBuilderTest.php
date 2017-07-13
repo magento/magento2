@@ -17,7 +17,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleProductsSelectBuilderTest extends \PHPUnit_Framework_TestCase
+class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder

@@ -10,7 +10,7 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemCarrierTest extends \PHPUnit_Framework_TestCase
+class ItemCarrierTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Wishlist\Model\ItemCarrier */
     protected $model;

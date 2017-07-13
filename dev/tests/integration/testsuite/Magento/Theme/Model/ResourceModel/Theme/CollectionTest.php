@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\ResourceModel\Theme;
 
 use Magento\Framework\View\Design\ThemeInterface;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     public static function setUpBeforeClass()
     {

@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fie
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MultiTest extends \PHPUnit_Framework_TestCase
+class MultiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Multi

@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection.
  * @magentoDbIsolation disabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider filtersDataProviderSearch

@@ -10,7 +10,7 @@ namespace Magento\Framework\ObjectManager\Config\Reader;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\Config\Reader\Dom
@@ -55,13 +55,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
             file_get_contents($fixturePath . 'config_two.xml'),
         ];
 
-        $this->_fileResolverMock = $this->getMock(
-            \Magento\Framework\App\Arguments\FileResolver\Primary::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\App\Arguments\FileResolver\Primary::class);
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
         $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,

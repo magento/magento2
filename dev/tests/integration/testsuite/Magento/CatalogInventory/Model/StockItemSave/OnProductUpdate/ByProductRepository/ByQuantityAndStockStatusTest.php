@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockItemSave\StockItemDataChecker;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ByQuantityAndStockStatusTest extends \PHPUnit_Framework_TestCase
+class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface

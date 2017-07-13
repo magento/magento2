@@ -8,7 +8,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition\Sql;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ExpressionTest extends \PHPUnit_Framework_TestCase
+class ExpressionTest extends \PHPUnit\Framework\TestCase
 {
     public function testExpression()
     {

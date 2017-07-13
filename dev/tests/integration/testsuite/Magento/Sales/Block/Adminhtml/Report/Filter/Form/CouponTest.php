@@ -9,7 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 /**
  * @magentoAppArea adminhtml
  */
-class CouponTest extends \PHPUnit_Framework_TestCase
+class CouponTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Layout

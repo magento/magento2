@@ -23,7 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Product

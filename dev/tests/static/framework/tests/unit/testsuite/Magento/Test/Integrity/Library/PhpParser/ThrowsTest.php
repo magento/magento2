@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\PhpParser\Throws;
 
 /**
  */
-class ThrowsTest extends \PHPUnit_Framework_TestCase
+class ThrowsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Throws

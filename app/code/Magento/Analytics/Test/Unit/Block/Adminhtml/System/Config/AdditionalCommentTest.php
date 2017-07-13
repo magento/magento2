@@ -10,7 +10,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-class AdditionalCommentTest extends \PHPUnit_Framework_TestCase
+class AdditionalCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AdditionalComment

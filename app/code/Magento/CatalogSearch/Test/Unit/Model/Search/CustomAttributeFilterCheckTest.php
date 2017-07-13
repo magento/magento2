@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
-class CustomAttributeFilterCheckTest extends \PHPUnit_Framework_TestCase
+class CustomAttributeFilterCheckTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Config|\PHPUnit_Framework_MockObject_MockObject */
     private $eavConfig;

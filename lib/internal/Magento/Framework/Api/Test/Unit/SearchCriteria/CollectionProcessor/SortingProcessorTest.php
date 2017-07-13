@@ -11,7 +11,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class SortingProcessorTest extends \PHPUnit_Framework_TestCase
+class SortingProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Return model

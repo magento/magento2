@@ -11,7 +11,7 @@ use Magento\Backend\Block\Store\Switcher as StoreSwitcherBlock;
 use Magento\Framework\App\RequestInterface;
 use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
-class SwitcherPluginTest extends \PHPUnit_Framework_TestCase
+class SwitcherPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreSwitcherBlockPlugin

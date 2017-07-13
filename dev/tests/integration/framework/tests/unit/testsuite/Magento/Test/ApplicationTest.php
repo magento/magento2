@@ -8,7 +8,7 @@ namespace Magento\Test;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\State;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\TestFramework\Application::getTempDir
@@ -17,7 +17,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $shell = $this->getMock(\Magento\Framework\Shell::class, [], [], '', false);
+        $shell = $this->createMock(\Magento\Framework\Shell::class);
         $autoloadWrapper = $this->getMockBuilder(\Magento\Framework\Autoload\ClassLoaderWrapper::class)
             ->disableOriginalConstructor()->getMock();
         $tempDir = '/temp/dir';

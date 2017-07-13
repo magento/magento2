@@ -9,7 +9,7 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Wysiwyg;
  * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DirectiveTest extends \PHPUnit_Framework_TestCase
+class DirectiveTest extends \PHPUnit\Framework\TestCase
 {
     const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
 

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav;
 
-class AbstractActionTest extends \PHPUnit_Framework_TestCase
+class AbstractActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
@@ -24,19 +24,13 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eavDecimalFactoryMock = $this->getMock(
+        $this->_eavDecimalFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_eavSourceFactoryMock = $this->getMock(
+        $this->_eavSourceFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,

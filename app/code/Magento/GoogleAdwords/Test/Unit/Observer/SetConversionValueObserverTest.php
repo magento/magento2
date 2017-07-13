@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Observer;
 
-class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
+class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -39,17 +39,11 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperMock = $this->getMock(\Magento\GoogleAdwords\Helper\Data::class, [], [], '', false);
-        $this->_registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', true);
-        $this->_collectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $this->_eventMock = $this->getMock(\Magento\Framework\Event::class, ['getOrderIds'], [], '', false);
+        $this->_helperMock = $this->createMock(\Magento\GoogleAdwords\Helper\Data::class);
+        $this->_registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getOrderIds']);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
@@ -139,7 +133,7 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_eventMock)
         );
 
-        $iteratorMock = $this->getMock(\Iterator::class);
+        $iteratorMock = $this->createMock(\Iterator::class);
         $this->_collectionMock->expects($this->any())->method('getIterator')->will($this->returnValue($iteratorMock));
         $this->_collectionMock->expects(
             $this->once()

@@ -10,7 +10,7 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
+class CustomOptionProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject

@@ -17,12 +17,12 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WriterTest extends \PHPUnit_Framework_TestCase
+class WriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Writer

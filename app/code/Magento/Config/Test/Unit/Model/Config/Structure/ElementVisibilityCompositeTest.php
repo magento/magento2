@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\ElementVisibilityComposite;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
-class ElementVisibilityCompositeTest extends \PHPUnit_Framework_TestCase
+class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElementVisibilityComposite

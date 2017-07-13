@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Form */
     protected $model;

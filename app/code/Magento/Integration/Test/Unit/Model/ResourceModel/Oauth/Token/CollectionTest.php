@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth\Token;
 /**
  * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject

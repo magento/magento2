@@ -18,7 +18,7 @@ use Magento\Wishlist\Ui\DataProvider\Product\Collector\Button;
 /**
  * Collect information needed to render wishlist button on front
  */
-class ButtonTest extends \PHPUnit_Framework_TestCase
+class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Wishlist\Ui\DataProvider\Product\Collector\Button */
     private $button;

@@ -10,7 +10,7 @@ namespace Magento\Customer\Block\Form;
  *
  * @magentoAppArea frontend
  */
-class RegisterTest extends \PHPUnit_Framework_TestCase
+class RegisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

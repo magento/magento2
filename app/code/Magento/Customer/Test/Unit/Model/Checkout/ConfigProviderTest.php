@@ -14,7 +14,7 @@ use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigProvider

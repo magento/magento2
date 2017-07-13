@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Request */
     protected $request;

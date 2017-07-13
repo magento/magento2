@@ -13,7 +13,7 @@ use Magento\Backend\App\Config;
  * @see \Magento\Backend\App\Config
  * @package Magento\Backend\Test\Unit\App
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -27,13 +27,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appConfig = $this->getMock(
-            \Magento\Framework\App\Config::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->appConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['get']);
         $this->model = new \Magento\Backend\App\Config($this->appConfig);
     }
 
@@ -96,6 +90,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function getConfigDataMock($mockedMethod)
     {
-        return $this->getMock(\Magento\Framework\App\Config\Data::class, [$mockedMethod], [], '', false);
+        return $this->createPartialMock(\Magento\Framework\App\Config\Data::class, [$mockedMethod]);
     }
 }

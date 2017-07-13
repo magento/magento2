@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
+class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

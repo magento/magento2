@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 /**
  * Class ColumnsTest
  */
-class ColumnsTest extends \PHPUnit_Framework_TestCase
+class ColumnsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject

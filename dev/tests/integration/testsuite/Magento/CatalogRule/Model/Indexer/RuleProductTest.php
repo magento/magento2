@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class RuleProductTest extends \PHPUnit_Framework_TestCase
+class RuleProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder

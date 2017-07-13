@@ -11,7 +11,7 @@ namespace Magento\Test\Legacy;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class WordsTest extends \PHPUnit_Framework_TestCase
+class WordsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Inspection\WordsFinder

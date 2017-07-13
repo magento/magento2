@@ -10,7 +10,7 @@ namespace Magento\Framework\Controller\Test\Unit\Result;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RedirectFactoryTest extends \PHPUnit_Framework_TestCase
+class RedirectFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;
@@ -21,7 +21,7 @@ class RedirectFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Framework\Controller\Result\RedirectFactory::class,
             ['objectManager' => $this->objectManagerMock]

@@ -12,7 +12,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\Category

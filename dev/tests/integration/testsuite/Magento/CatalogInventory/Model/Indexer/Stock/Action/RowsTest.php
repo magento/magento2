@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 /**
  * Class RowsTest
  */
-class RowsTest extends \PHPUnit_Framework_TestCase
+class RowsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor

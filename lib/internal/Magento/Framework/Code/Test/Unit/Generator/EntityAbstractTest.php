@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Source and result class parameters
@@ -226,7 +226,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $resultFileExists = false
     ) {
         // Configure DefinedClasses mock
-        $definedClassesMock = $this->getMock(\Magento\Framework\Code\Generator\DefinedClasses::class);
+        $definedClassesMock = $this->createMock(\Magento\Framework\Code\Generator\DefinedClasses::class);
         $definedClassesMock->expects($this->once())
             ->method('isClassLoadable')
             ->with($this->sourceClass)

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Url\Test\Unit;
 
-class ScopeResolverTest extends \PHPUnit_Framework_TestCase
+class ScopeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

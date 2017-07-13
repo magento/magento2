@@ -7,7 +7,7 @@ namespace Magento\Framework\Test\Unit\Interception;
 
 use Magento\Framework\Interception;
 
-class InterceptorTest extends \PHPUnit_Framework_TestCase
+class InterceptorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Sample\Interceptor

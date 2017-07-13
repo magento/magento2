@@ -11,7 +11,7 @@ use Magento\SalesRule\Api\Data\RuleExtensionInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ToDataModelTest extends \PHPUnit_Framework_TestCase
+class ToDataModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject

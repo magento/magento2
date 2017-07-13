@@ -14,7 +14,6 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -25,7 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see Importer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Importer
@@ -83,12 +82,10 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
+            ->setMethods(['create', 'getFlagData', 'saveFlag'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)

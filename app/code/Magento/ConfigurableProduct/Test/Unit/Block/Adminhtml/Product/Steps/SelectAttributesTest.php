@@ -13,7 +13,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\UrlInterface;
 
-class SelectAttributesTest extends \PHPUnit_Framework_TestCase
+class SelectAttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectAttributes

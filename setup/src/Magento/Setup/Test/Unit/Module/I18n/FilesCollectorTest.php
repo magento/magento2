@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
-class FilesCollectorTest extends \PHPUnit_Framework_TestCase
+class FilesCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

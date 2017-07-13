@@ -17,7 +17,7 @@ use Magento\Framework\View\Page\Config;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -76,15 +76,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->pageAssets = $this->getMock(\Magento\Framework\View\Asset\GroupedCollection::class, [], [], '', false);
+        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->pageAssets = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);
         $this->scopeConfig =
-            $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
-        $this->favicon = $this->getMock(\Magento\Framework\View\Page\FaviconInterface::class, [], [], '', false);
-        $this->builder = $this->getMock(\Magento\Framework\View\Layout\BuilderInterface::class, [], [], '', false);
-        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
-        $this->remoteAsset = $this->getMock(\Magento\Framework\View\Asset\Remote::class, [], [], '', false);
-        $this->title = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->favicon = $this->createMock(\Magento\Framework\View\Page\FaviconInterface::class);
+        $this->builder = $this->createMock(\Magento\Framework\View\Layout\BuilderInterface::class);
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->remoteAsset = $this->createMock(\Magento\Framework\View\Asset\Remote::class);
+        $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->localeMock =
             $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class, [], '', false);
         $this->localeMock->expects($this->any())
@@ -102,7 +102,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->areaResolverMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->areaResolverMock = $this->createMock(\Magento\Framework\App\State::class);
         $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
         $areaResolverReflection->setAccessible(true);
         $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
@@ -412,7 +412,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testElementAttributeException($elementType, $attribute, $value)
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             $elementType . " isn't allowed"
         );

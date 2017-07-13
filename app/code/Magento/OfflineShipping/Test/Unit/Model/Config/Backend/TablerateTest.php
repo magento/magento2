@@ -5,7 +5,7 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Backend;
 
-class TablerateTest extends \PHPUnit_Framework_TestCase
+class TablerateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Config\Backend\Tablerate

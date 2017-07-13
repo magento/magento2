@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @magentoAppArea adminhtml
  */
-class DownloadableTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Downloadable product test Name

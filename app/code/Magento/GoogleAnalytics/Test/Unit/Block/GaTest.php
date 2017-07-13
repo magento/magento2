@@ -17,12 +17,12 @@ use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GaTest extends PHPUnit_Framework_TestCase
+class GaTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

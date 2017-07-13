@@ -23,7 +23,7 @@ use Magento\Framework\DB\Ddl\Table;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -57,11 +57,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eavConfigMock = $this->getMock(Config::class, [], [], '', false);
-        $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-        $this->scopeResolverMock = $this->getMock(ScopeResolverInterface::class);
-        $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
-        $this->adapterMock = $this->getMock(AdapterInterface::class);
+        $this->eavConfigMock = $this->createMock(Config::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
 
         $this->model = new DataProvider(
@@ -77,26 +77,26 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $storeId = 1;
         $attributeCode = 'price';
 
-        $scopeMock = $this->getMock(Store::class, [], [], '', false);
+        $scopeMock = $this->createMock(Store::class);
         $scopeMock->expects($this->any())->method('getId')->willReturn($storeId);
-        $dimensionMock = $this->getMock(Dimension::class, [], [], '', false);
+        $dimensionMock = $this->createMock(Dimension::class);
         $dimensionMock->expects($this->any())->method('getValue')->willReturn($storeId);
         $this->scopeResolverMock->expects($this->any())->method('getScope')->with($storeId)->willReturn($scopeMock);
 
-        $bucketMock = $this->getMock(BucketInterface::class);
+        $bucketMock = $this->createMock(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
-        $attributeMock = $this->getMock(Attribute::class, [], [], '', false);
+        $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $this->eavConfigMock->expects($this->once())
             ->method('getAttribute')->with(Product::ENTITY, $attributeCode)
             ->willReturn($attributeMock);
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('columns')->willReturnSelf();
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
-        $tableMock = $this->getMock(Table::class);
+        $tableMock = $this->createMock(Table::class);
 
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
     }
@@ -105,21 +105,22 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $attributeCode = 'my_decimal';
-        $scopeMock = $this->getMock(Store::class, [], [], '', false);
+
+        $scopeMock = $this->createMock(Store::class);
         $scopeMock->expects($this->any())->method('getId')->willReturn($storeId);
-        $dimensionMock = $this->getMock(Dimension::class, [], [], '', false);
+        $dimensionMock = $this->createMock(Dimension::class);
         $dimensionMock->expects($this->any())->method('getValue')->willReturn($storeId);
         $this->scopeResolverMock->expects($this->any())->method('getScope')->with($storeId)->willReturn($scopeMock);
 
-        $bucketMock = $this->getMock(BucketInterface::class);
+        $bucketMock = $this->createMock(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
-        $attributeMock = $this->getMock(Attribute::class, [], [], '', false);
+        $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $this->eavConfigMock->expects($this->once())
             ->method('getAttribute')->with(Product::ENTITY, $attributeCode)
             ->willReturn($attributeMock);
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('distinct')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
@@ -127,7 +128,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
         $selectMock->expects($this->any())->method('group')->willReturnSelf();
         $this->adapterMock->expects($this->any())->method('select')->willReturn($selectMock);
-        $tableMock = $this->getMock(Table::class);
+        $tableMock = $this->createMock(Table::class);
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
     }
 }

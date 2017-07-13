@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 /**
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\Price

@@ -13,7 +13,7 @@ namespace Magento\Test\Integrity;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Cached lists of files

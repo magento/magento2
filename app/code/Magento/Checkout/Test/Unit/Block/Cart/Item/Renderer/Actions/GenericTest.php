@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Quote\Model\Quote\Item;
 
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Generic

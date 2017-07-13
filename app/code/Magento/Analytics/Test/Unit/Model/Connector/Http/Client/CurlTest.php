@@ -12,7 +12,7 @@ use Magento\Framework\HTTP\Adapter\CurlFactory;
 /**
  * A unit test for testing of the CURL HTTP client.
  */
-class CurlTest extends \PHPUnit_Framework_TestCase
+class CurlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\Model\Connector\Http\Client\Curl

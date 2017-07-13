@@ -16,7 +16,7 @@ use Magento\Theme\Block\Html\Footer;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Filter

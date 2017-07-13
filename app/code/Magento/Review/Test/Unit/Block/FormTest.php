@@ -7,7 +7,7 @@ namespace Magento\Review\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Review\Block\Form */
     protected $object;
@@ -42,8 +42,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->reviewDataMock = $this->getMockBuilder(\Magento\Review\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -53,7 +53,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->context->expects(
             $this->any()
         )->method(
@@ -65,7 +65,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
 
@@ -104,7 +104,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->with('id', false)
             ->willReturn($productId);
 
-        $productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)

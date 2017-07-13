@@ -18,7 +18,7 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
+class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer|MockObject
@@ -66,9 +66,9 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var Random|MockObject $encryptorRandomGenerator */
-        $encryptorRandomGenerator = $this->getMock(Random::class, [], [], '', false);
+        $encryptorRandomGenerator = $this->createMock(Random::class);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
-        $deploymentConfigMock = $this->getMock(DeploymentConfig::class, [], [], '', false);
+        $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
@@ -89,7 +89,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->paymentExtension->setVaultPaymentToken($this->paymentTokenMock);
 
         // Sales Order Model
-        $this->salesOrderMock = $this->getMock(Order::class, null, [], '', false);
+        $this->salesOrderMock = $this->createMock(Order::class);
 
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
@@ -122,7 +122,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
      * @param string $token
      * @param bool $isActive
      * @param string $method
-     * @dataProvider testPositiveCaseDataProvider
+     * @dataProvider positiveCaseDataProvider
      */
     public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method)
     {
@@ -160,7 +160,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         static::assertEquals($createdAt, $paymentToken->getCreatedAt());
     }
 
-    public function testPositiveCaseDataProvider()
+    public function positiveCaseDataProvider()
     {
         return [
             [

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price

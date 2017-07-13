@@ -10,7 +10,7 @@ use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Reader\Head;
 
-class HeadTest extends \PHPUnit_Framework_TestCase
+class HeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Head

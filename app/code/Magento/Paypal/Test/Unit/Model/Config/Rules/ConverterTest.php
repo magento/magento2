@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
  *
  * Test for class \Magento\Paypal\Model\Config\Rules\Converter
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Config\Rules\Converter

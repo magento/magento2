@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Order;
  * @magentoAppIsolation enabled
  * @package Magento\Sales\Model\Order
  */
-class ShipmentTest extends \PHPUnit_Framework_TestCase
+class ShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Check the correctness and stability of set/get packages of shipment

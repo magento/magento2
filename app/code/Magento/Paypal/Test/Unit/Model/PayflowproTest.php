@@ -26,7 +26,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PayflowproTest extends \PHPUnit_Framework_TestCase
+class PayflowproTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Payflowpro
@@ -163,7 +163,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
             ->will($this->returnValue('BNCODE'));
-        $payment = $this->getMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup'], [], '', false);
+        $payment = $this->createPartialMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup']);
         $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
@@ -457,7 +457,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMock(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -467,17 +467,16 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         static::assertSame($expectedResult, $this->payflowpro->postRequest($request, $config));
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Payment Gateway is unreachable at the moment. Please use another payment option.
+     */
     public function testPostRequestException()
     {
-        $this->setExpectedException(
-            LocalizedException::class,
-            __('Payment Gateway is unreachable at the moment. Please use another payment option.')
-        );
-
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMock(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')

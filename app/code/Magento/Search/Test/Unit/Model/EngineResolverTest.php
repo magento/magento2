@@ -8,7 +8,7 @@ namespace Magento\Search\Test\Unit\Model;
 use Magento\Search\Model\EngineResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class EngineResolverTest extends \PHPUnit_Framework_TestCase
+class EngineResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\EngineResolver

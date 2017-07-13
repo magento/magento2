@@ -13,7 +13,7 @@ use \Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoDbIsolation enabled
  */
-class ScheduleTest extends \PHPUnit_Framework_TestCase
+class ScheduleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScheduleFactory

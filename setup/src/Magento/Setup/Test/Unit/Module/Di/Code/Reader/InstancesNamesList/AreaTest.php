@@ -12,7 +12,7 @@ use \Magento\Setup\Module\Di\Code\Reader\Decorator\Area;
  *
  * @package Magento\Setup\Module\Di\Code\Reader\Decorator
  */
-class AreaTest extends \PHPUnit_Framework_TestCase
+class AreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject

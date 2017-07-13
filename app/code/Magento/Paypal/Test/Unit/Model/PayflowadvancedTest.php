@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowadvanced;
 
-class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
+class PayflowadvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Payflowadvanced

@@ -13,7 +13,7 @@ use Magento\MediaStorage\Model\Config\Source\Storage\Media\Database;
 /**
  * Class DatabaseTest
  */
-class DatabaseTest extends \PHPUnit_Framework_TestCase
+class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database
@@ -27,7 +27,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->deploymentConfig->expects(
             $this->any()
         )->method(

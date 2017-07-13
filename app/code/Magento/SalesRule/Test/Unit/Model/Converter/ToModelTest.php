@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Converter;
 
-class ToModelTest extends \PHPUnit_Framework_TestCase
+class ToModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject

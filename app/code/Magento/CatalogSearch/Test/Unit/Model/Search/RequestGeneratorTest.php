@@ -9,7 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
-class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
+class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;

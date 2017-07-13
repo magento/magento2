@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Backend\Image;
 
-class LogoTest extends \PHPUnit_Framework_TestCase
+class LogoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Backend\Image\Logo

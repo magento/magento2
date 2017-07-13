@@ -14,7 +14,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 /**
  * Class AddressDataBuilderTest
  */
-class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
+class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentDataObjectInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,8 +38,8 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDOMock = $this->getMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->getMock(OrderAdapterInterface::class);
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -175,7 +175,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function getAddressMock($addressData)
     {
-        $addressMock = $this->getMock(AddressAdapterInterface::class);
+        $addressMock = $this->createMock(AddressAdapterInterface::class);
 
         $addressMock->expects(static::exactly(2))
             ->method('getFirstname')

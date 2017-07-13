@@ -10,7 +10,7 @@ use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AggregationResolverTest extends \PHPUnit_Framework_TestCase
+class AggregationResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -29,8 +29,8 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(RequestInterface::class);
-        $this->specificAggregationResolver = $this->getMock(AggregationResolverInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->specificAggregationResolver = $this->createMock(AggregationResolverInterface::class);
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,

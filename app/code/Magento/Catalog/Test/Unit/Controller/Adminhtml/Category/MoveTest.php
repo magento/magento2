@@ -14,7 +14,7 @@ use Magento\Framework\Registry;
  * Class MoveTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MoveTest extends \PHPUnit_Framework_TestCase
+class MoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -66,8 +66,8 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->fillContext();
 
         $this->moveController = new Move(
@@ -87,13 +87,13 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
-        $this->messageManager = $this->getMock(ManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
     }
 
     private function initObjectManager()
     {
-        $this->objectManager = $this->getMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $moveController = new \ReflectionClass($this->moveController);
         $objectManagerProp = $moveController->getProperty('_objectManager');
         $objectManagerProp->setAccessible(true);
@@ -108,7 +108,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
         $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
@@ -182,7 +182,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
         $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
@@ -254,7 +254,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
         $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);

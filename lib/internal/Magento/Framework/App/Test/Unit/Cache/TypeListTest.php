@@ -12,7 +12,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Test class for \Magento\Framework\App\Cache\TypeList
  */
-class TypeListTest extends \PHPUnit_Framework_TestCase
+class TypeListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeList
@@ -62,36 +62,25 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Type Description',
             ],
         ];
-        $this->_config = $this->getMock(
-            \Magento\Framework\Cache\ConfigInterface::class,
-            ['getTypes', 'getType'],
-            [],
-            '',
-            false
-        );
+        $this->_config =
+            $this->createPartialMock(\Magento\Framework\Cache\ConfigInterface::class, ['getTypes', 'getType']);
         $this->_config->expects($this->any())->method('getTypes')->will($this->returnValue($this->_typesArray));
 
-        $cacheState = $this->getMock(
+        $cacheState = $this->createPartialMock(
             \Magento\Framework\App\Cache\StateInterface::class,
-            ['isEnabled', 'setEnabled', 'persist'],
-            [],
-            '',
-            false
+            ['isEnabled', 'setEnabled', 'persist']
         );
         $cacheState->expects($this->any())->method('isEnabled')->will($this->returnValue(self::IS_CACHE_ENABLED));
-        $cacheBlockMock = $this->getMock(self::CACHE_TYPE, [], [], '', false);
-        $factory = $this->getMock(\Magento\Framework\App\Cache\InstanceFactory::class, ['get'], [], '', false);
+        $cacheBlockMock = $this->createMock(self::CACHE_TYPE);
+        $factory = $this->createPartialMock(\Magento\Framework\App\Cache\InstanceFactory::class, ['get']);
         $factory->expects($this->any())->method('get')->with(self::CACHE_TYPE)->will(
             $this->returnValue($cacheBlockMock)
         );
-        $this->_cache = $this->getMock(
+        $this->_cache = $this->createPartialMock(
             \Magento\Framework\App\CacheInterface::class,
-            ['load', 'getFrontend', 'save', 'remove', 'clean'],
-            [],
-            '',
-            false
+            ['load', 'getFrontend', 'save', 'remove', 'clean']
         );
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(

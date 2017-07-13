@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
-class FormatTest extends \PHPUnit_Framework_TestCase
+class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\Format

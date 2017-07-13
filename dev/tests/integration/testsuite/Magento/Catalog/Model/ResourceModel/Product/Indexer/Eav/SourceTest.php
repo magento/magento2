@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class SourceTest
  * @magentoAppIsolation enabled
  */
-class SourceTest extends \PHPUnit_Framework_TestCase
+class SourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source

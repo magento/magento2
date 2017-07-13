@@ -18,7 +18,7 @@ use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MsrpPriceTest extends \PHPUnit_Framework_TestCase
+class MsrpPriceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice */
     protected $model;
@@ -71,7 +71,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->adjustmentCalculator = $this->getMock(CalculatorInterface::class);
+        $this->adjustmentCalculator = $this->createMock(CalculatorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice::class,
@@ -91,8 +91,8 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->getMock(ProductRenderInterface::class);
-        $productPriceInfo = $this->getMock(PriceInfoInterface::class);
+        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productPriceInfo = $this->createMock(PriceInfoInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getPriceInfo')
@@ -106,7 +106,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
-        $amountInterface = $this->getMock(AmountInterface::class);
+        $amountInterface = $this->createMock(AmountInterface::class);
         $amountInterface->expects($this->once())
             ->method('getValue')
             ->willReturn(20);

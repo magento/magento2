@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response;
 
-class RendererFactoryTest extends \PHPUnit_Framework_TestCase
+class RendererFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response\RendererFactory */
     protected $_factory;
@@ -20,7 +20,7 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_requestMock = $this->getMockBuilder(
             \Magento\Framework\Webapi\Rest\Request::class
         )->disableOriginalConstructor()->getMock();
@@ -108,7 +108,7 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \Magento\Framework\DataObject())
         );
 
-        $this->setExpectedException(
+        $this->expectException(
             'LogicException',
             'The renderer must implement "Magento\Framework\Webapi\Rest\Response\RendererInterface".'
         );

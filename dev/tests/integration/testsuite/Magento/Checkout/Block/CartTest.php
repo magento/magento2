@@ -9,7 +9,7 @@
  */
 namespace Magento\Checkout\Block;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetMethods()
     {

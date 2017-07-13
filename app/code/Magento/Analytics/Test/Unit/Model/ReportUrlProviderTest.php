@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
+class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -143,7 +143,7 @@ class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getFlagData')
             ->with(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE)
             ->willReturn('http://store.com');
-        $this->setExpectedException(
+        $this->expectException(
             SubscriptionUpdateException::class,
             'Your Base URL has been changed and your reports are being updated. '
             . 'Advanced Reporting will be available once this change has been processed. Please try again later.'

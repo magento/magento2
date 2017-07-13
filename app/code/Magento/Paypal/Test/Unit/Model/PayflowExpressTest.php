@@ -9,7 +9,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Paypal\Model\Payflow;
 
-class PayflowExpressTest extends \PHPUnit_Framework_TestCase
+class PayflowExpressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\PayflowExpress
@@ -32,7 +32,7 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
         $proFactory = $this->getMockBuilder(
             \Magento\Paypal\Model\ProFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
-        $api = $this->getMock(\Magento\Paypal\Model\Api\Nvp::class, [], [], '', false);
+        $api = $this->createMock(\Magento\Paypal\Model\Api\Nvp::class);
         $paypalPro = $this->getMockBuilder(
             \Magento\Paypal\Model\Pro::class
         )->disableOriginalConstructor()->setMethods([])->getMock();

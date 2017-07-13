@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Utility;
 
-class FunctionDetectorTest extends \PHPUnit_Framework_TestCase
+class FunctionDetectorTest extends \PHPUnit\Framework\TestCase
 {
     public function testDetectFunctions()
     {

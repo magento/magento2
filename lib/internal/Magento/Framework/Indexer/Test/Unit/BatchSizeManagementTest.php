@@ -8,7 +8,7 @@ namespace Magento\Framework\Indexer\Test\Unit;
 use \Magento\Framework\DB\Adapter\AdapterInterface;
 use \Magento\Framework\Indexer\BatchSizeManagement;
 
-class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
+class BatchSizeManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BatchSizeManagement
@@ -27,10 +27,10 @@ class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rowSizeEstimatorMock = $this->getMock(
+        $this->rowSizeEstimatorMock = $this->createMock(
             \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface::class
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->model = new BatchSizeManagement($this->rowSizeEstimatorMock, $this->loggerMock);
     }
 
@@ -43,7 +43,7 @@ class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
         $innodbPollSize = 100;
 
         $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(100);
-        $adapterMock = $this->getMock(AdapterInterface::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $adapterMock->expects($this->at(0))
             ->method('fetchOne')
             ->with('SELECT @@max_heap_table_size;', [])

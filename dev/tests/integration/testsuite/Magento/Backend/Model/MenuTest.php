@@ -10,7 +10,7 @@ namespace Magento\Backend\Model;
  *
  * @magentoAppArea adminhtml
  */
-class MenuTest extends \PHPUnit_Framework_TestCase
+class MenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu

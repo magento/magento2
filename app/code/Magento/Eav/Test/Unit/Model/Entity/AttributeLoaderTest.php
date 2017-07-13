@@ -14,7 +14,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 
-class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
+class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
@@ -43,10 +43,10 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(Config::class, [], [], '', false);
-        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
-        $this->entityMock = $this->getMock(AbstractEntity::class, [], [], '', false);
-        $this->entityTypeMock = $this->getMock(Type::class, [], [], '', false);
+        $this->configMock = $this->createMock(Config::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->entityMock = $this->createMock(AbstractEntity::class);
+        $this->entityTypeMock = $this->createMock(Type::class);
         $this->attributeLoader = new AttributeLoader(
             $this->configMock,
             $this->objectManagerMock
@@ -68,19 +68,13 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
         $this->entityTypeMock->expects($this->any())
             ->method('getId')
             ->willReturn($entityTypeId);
-        $attributeMock = $this->getMock(
-            \Magento\Eav\Model\Attribute::class,
-            [
+        $attributeMock = $this->createPartialMock(\Magento\Eav\Model\Attribute::class, [
                 'setAttributeCode',
                 'setBackendType',
                 'setIsGlobal',
                 'setEntityType',
                 'setEntityTypeId'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->configMock->expects($this->once())
             ->method('getEntityAttributes')
             ->willReturn(['bar' => $attributeMock]);
@@ -92,19 +86,13 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadAllAttributesAttributeCodesPresentInDefaultAttributes()
     {
-        $attributeMock = $this->getMock(
-            \Magento\Eav\Model\Attribute::class,
-            [
+        $attributeMock = $this->createPartialMock(\Magento\Eav\Model\Attribute::class, [
                 'setAttributeCode',
                 'setBackendType',
                 'setIsGlobal',
                 'setEntityType',
                 'setEntityTypeId'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $attributeCodes = ['bar'=>$attributeMock];
         $defaultAttributes = ['bar'];
         $dataObject = new DataObject();

@@ -9,7 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
 
-class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
+class DataObjectProcessorTest extends \PHPUnit\Framework\Testcase
 {
     /**
      * @var DataObjectProcessor
@@ -31,7 +31,7 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')

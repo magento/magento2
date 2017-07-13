@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Test\Unit;
 
-class ShellTest extends \PHPUnit_Framework_TestCase
+class ShellTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit_Framework_MockObject_MockObject

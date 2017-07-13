@@ -5,10 +5,10 @@
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
 
-use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
-use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Validator |\PHPUnit_Framework_MockObject_MockObject
@@ -37,11 +37,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validatorTest->expects($this->any())->method('getMessages')->willReturn($messages);
         $this->validators = [$this->validatorTest];
 
-        $this->validator = $this->getMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class,
-            ['_clearMessages', '_addMessages'],
-            [$this->validators]
-        );
+        $this->validator = $this->getMockBuilder(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class
+        )
+            ->setMethods(['_clearMessages', '_addMessages'])
+            ->setConstructorArgs([$this->validators])
+            ->getMock();
     }
 
     /**

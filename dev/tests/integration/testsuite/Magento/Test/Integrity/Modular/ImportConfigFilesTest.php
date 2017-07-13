@@ -7,7 +7,7 @@ namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ImportConfigFilesTest extends \PHPUnit_Framework_TestCase
+class ImportConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\Config\Reader
@@ -24,9 +24,9 @@ class ImportConfigFilesTest extends \PHPUnit_Framework_TestCase
             $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/import.xml,import.xml}')
         );
 
-        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

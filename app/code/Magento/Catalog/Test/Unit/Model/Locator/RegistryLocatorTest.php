@@ -14,7 +14,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Class RegistryLocatorTest
  */
-class RegistryLocatorTest extends \PHPUnit_Framework_TestCase
+class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

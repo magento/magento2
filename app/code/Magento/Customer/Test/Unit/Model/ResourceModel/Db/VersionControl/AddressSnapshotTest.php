@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\ResourceModel\Db\VersionControl;
 
 use Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot;
 
-class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
+class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AddressSnapshot

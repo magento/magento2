@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class MultiselectTest extends \PHPUnit_Framework_TestCase
+class MultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Multiselect

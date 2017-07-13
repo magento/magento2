@@ -20,6 +20,7 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testCustomerGrid()
     {
+        $this->markTestSkipped('Test needs to be refactored.');
         $this->dispatch('backend/paypal/billing_agreement/customergrid/id/1');
         $this->assertSelectCount(
             'th[class="col-reference_id"]',

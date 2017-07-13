@@ -8,7 +8,7 @@ namespace Magento\Security\Model\Plugin;
 /**
  * @magentoAppIsolation enabled
  */
-class AuthSessionTest extends \PHPUnit_Framework_TestCase
+class AuthSessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth

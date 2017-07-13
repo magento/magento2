@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

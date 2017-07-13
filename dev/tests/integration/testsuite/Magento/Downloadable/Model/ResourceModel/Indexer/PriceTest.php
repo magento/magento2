@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor

@@ -7,7 +7,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
 use \Magento\Framework\Phrase\Renderer\Placeholder;
 
-class PlaceholderTest extends \PHPUnit_Framework_TestCase
+class PlaceholderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Placeholder */
     protected $_renderer;

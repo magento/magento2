@@ -22,7 +22,7 @@ use Magento\Quote\Model\Quote\Address;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderPlaceTest extends \PHPUnit_Framework_TestCase
+class OrderPlaceTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_EMAIL = 'test@test.loc';
 
@@ -133,7 +133,7 @@ class OrderPlaceTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
 
-        $billingAddressMock->expects(self::at(1))
+        $billingAddressMock->expects(self::any())
             ->method('getEmail')
             ->willReturn(self::TEST_EMAIL);
 
@@ -208,7 +208,7 @@ class OrderPlaceTest extends \PHPUnit_Framework_TestCase
     {
         if (!isset($this->billingAddressMock)) {
             $this->billingAddressMock = $this->getMockBuilder(Address::class)
-                ->setMethods(['setShouldIgnoreValidation', 'getEmail'])
+                ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
                 ->disableOriginalConstructor()
                 ->getMock();
         }

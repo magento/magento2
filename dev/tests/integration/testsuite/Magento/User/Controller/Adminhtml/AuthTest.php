@@ -267,7 +267,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
     {
-        $transportMock = $this->getMock(
+        $transportMock = $this->createPartialMock(
             \Magento\Framework\Mail\TransportInterface::class,
             ['sendMessage']
         );

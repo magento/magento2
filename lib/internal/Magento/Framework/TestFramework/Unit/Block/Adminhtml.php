@@ -15,7 +15,7 @@ namespace Magento\Framework\TestFramework\Unit\Block;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Adminhtml extends \PHPUnit_Framework_TestCase
+class Adminhtml extends \PHPUnit\Framework\TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $_designMock;
@@ -161,7 +161,7 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
      * @param mixed                                                         $return
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount|null        $expects
      *
-     * @return \PHPUnit_Framework_MockObject_Builder_InvocationMocker
+     * @return \PHPUnit\Framework_MockObject_Builder_InvocationMocker
      */
     protected function _setStub(
         \PHPUnit_Framework_MockObject_MockObject $object,

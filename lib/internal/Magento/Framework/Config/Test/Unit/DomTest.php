@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -168,7 +168,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
-        $domMock = $this->getMock(\DOMDocument::class, ['schemaValidate'], []);
+        $domMock = $this->createPartialMock(\DOMDocument::class, ['schemaValidate']);
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)
@@ -190,7 +190,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
-        $domMock = $this->getMock(\DOMDocument::class, ['schemaValidate'], []);
+        $domMock = $this->createPartialMock(\DOMDocument::class, ['schemaValidate']);
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)

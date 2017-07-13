@@ -9,7 +9,7 @@ use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
+class MergeDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MergeDataProvider|\PHPUnit_Framework_MockObject_MockObject
@@ -62,11 +62,11 @@ class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function mergeDataProvider()
     {
-        $urlRewriteMock1 = $this->getMock(UrlRewrite::class, [], [], '', false);
+        $urlRewriteMock1 = $this->createMock(UrlRewrite::class);
 
         $requestPathForMock2 = 'magento.tst/products/simpleproduct2';
         $storeIdForMock2 = 'testStore2';
-        $urlRewriteMock2 = $this->getMock(UrlRewrite::class, [], [], '', false);
+        $urlRewriteMock2 = $this->createMock(UrlRewrite::class);
 
         $urlRewriteMock2->expects($this->atLeastOnce())
             ->method('getRequestPath')
@@ -78,7 +78,7 @@ class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $requestPathForMock3 = 'magento.tst/products/simpleproduct3';
         $storeIdForMock3 = 'testStore3';
-        $urlRewriteMock3 = $this->getMock(UrlRewrite::class, [], [], '', false);
+        $urlRewriteMock3 = $this->createMock(UrlRewrite::class);
 
         $urlRewriteMock3->expects($this->atLeastOnce())
             ->method('getRequestPath')

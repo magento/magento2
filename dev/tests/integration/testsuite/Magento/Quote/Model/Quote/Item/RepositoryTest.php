@@ -7,7 +7,7 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php

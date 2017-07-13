@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-class ReindexRuleGroupWebsiteTest extends \PHPUnit_Framework_TestCase
+class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite

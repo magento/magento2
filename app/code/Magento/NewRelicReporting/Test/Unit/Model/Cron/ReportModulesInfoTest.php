@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
 /**
  * Class ReportModulesInfoTest
  */
-class ReportModulesInfoTest extends \PHPUnit_Framework_TestCase
+class ReportModulesInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportModulesInfo

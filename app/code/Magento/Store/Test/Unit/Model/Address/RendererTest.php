@@ -9,7 +9,7 @@ namespace Magento\Store\Test\Unit\Model\Address;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Address\Renderer;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Renderer

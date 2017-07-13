@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LabelsTest extends \PHPUnit_Framework_TestCase
+class LabelsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Model\Shipping\Labels

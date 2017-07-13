@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Address */
     protected $_model;

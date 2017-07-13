@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
-class FulltextTest extends \PHPUnit_Framework_TestCase
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\IndexerInterface

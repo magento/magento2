@@ -10,7 +10,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config

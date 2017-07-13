@@ -16,7 +16,7 @@ use Magento\Store\Model\Store;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsRenderInfoSectionTest extends \PHPUnit_Framework_TestCase
+class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\CustomerData\ProductsRenderInfoSection */
     protected $model;
@@ -82,8 +82,8 @@ class ProductsRenderInfoSectionTest extends \PHPUnit_Framework_TestCase
 
     private function prepareProductIds()
     {
-        $actionFirst = $this->getMock(ProductFrontendActionInterface::class);
-        $actionSecond = $this->getMock(ProductFrontendActionInterface::class);
+        $actionFirst = $this->createMock(ProductFrontendActionInterface::class);
+        $actionSecond = $this->createMock(ProductFrontendActionInterface::class);
         $actions = [$actionFirst, $actionSecond];
         $this->synchronizerMock->expects($this->once())
             ->method('getAllActions')
@@ -98,8 +98,8 @@ class ProductsRenderInfoSectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSectionData()
     {
-        $productRender = $this->getMock(ProductRenderInterface::class);
-        $searchResult = $this->getMock(ProductRenderSearchResultsInterface::class);
+        $productRender = $this->createMock(ProductRenderInterface::class);
+        $searchResult = $this->createMock(ProductRenderSearchResultsInterface::class);
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -113,7 +113,7 @@ class ProductsRenderInfoSectionTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($store);
-        $filterMock = $this->getMock(Filter::class);
+        $filterMock = $this->createMock(Filter::class);
         $this->filterBuilderMock
             ->expects($this->once())
             ->method('setField')
@@ -134,7 +134,7 @@ class ProductsRenderInfoSectionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($filterMock);
-        $searchCritera = $this->getMock(SearchCriteria::class);
+        $searchCritera = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilderMock
             ->expects($this->once())
             ->method('addFilters')

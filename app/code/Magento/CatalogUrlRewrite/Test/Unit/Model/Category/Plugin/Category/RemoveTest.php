@@ -12,7 +12,7 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\Category;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+class RemoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -55,7 +55,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $this->objectMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     public function testAroundDelete()

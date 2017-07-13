@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class ConfigurableTest
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Magento\ConfigurableProduct\Model\Product\VariationHandler|MockObject

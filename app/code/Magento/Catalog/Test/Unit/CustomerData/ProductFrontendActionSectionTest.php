@@ -11,7 +11,7 @@ use Magento\Framework\App\Config;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\CustomerData\ProductFrontendActionSection;
 
-class ProductFrontendActionSectionTest extends \PHPUnit_Framework_TestCase
+class ProductFrontendActionSectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\CustomerData\ProductFrontendActionSection */
     protected $model;

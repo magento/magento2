@@ -28,7 +28,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConditionBuilderTest extends \PHPUnit_Framework_TestCase
+class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param AbstractAttribute $attribute
@@ -137,7 +137,7 @@ class ConditionBuilderTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $attribute->expects($this->once())
+        $attribute->expects($this->never())
             ->method('isScopeWebsite')
             ->will(
                 $this->returnValue(true)
@@ -211,7 +211,7 @@ class ConditionBuilderTest extends \PHPUnit_Framework_TestCase
                 'isScopeWebsite',
             ])
             ->getMock();
-        $attribute->expects($this->once())
+        $attribute->expects($this->never())
             ->method('isScopeWebsite')
             ->will(
                 $this->returnValue(true)
@@ -557,7 +557,7 @@ class ConditionBuilderTest extends \PHPUnit_Framework_TestCase
                 'getAttributeId',
             ])
             ->getMock();
-        $attribute->expects($this->once())
+        $attribute->expects($this->never())
             ->method('isScopeWebsite')
             ->will(
                 $this->returnValue(true)

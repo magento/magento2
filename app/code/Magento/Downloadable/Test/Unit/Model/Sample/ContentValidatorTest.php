@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Downloadable\Model\Sample\ContentValidator;
 
-class ContentValidatorTest extends \PHPUnit_Framework_TestCase
+class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContentValidator
@@ -36,27 +36,15 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileValidatorMock = $this->getMock(
-            \Magento\Downloadable\Model\File\ContentValidator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlValidatorMock = $this->getMock(
-            \Magento\Framework\Url\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->sampleFileMock = $this->getMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
+        $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
+        $this->urlValidatorMock = $this->createMock(\Magento\Framework\Url\Validator::class);
+        $this->sampleFileMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
         $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
     }
 
     public function testIsValid()
     {
-        $sampleFileContentMock = $this->getMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
+        $sampleFileContentMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
         $sampleContentData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -105,7 +93,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSampleContentMock(array $sampleContentData)
     {
-        $contentMock = $this->getMock(\Magento\Downloadable\Api\Data\SampleInterface::class);
+        $contentMock = $this->createMock(\Magento\Downloadable\Api\Data\SampleInterface::class);
         $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue(
             $sampleContentData['title']
         ));

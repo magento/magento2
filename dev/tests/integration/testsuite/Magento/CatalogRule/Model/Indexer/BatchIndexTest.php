@@ -8,7 +8,13 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class BatchIndexTest extends \PHPUnit_Framework_TestCase
+/**
+ * @magentoAppIsolation enabled
+ * @magentoAppArea adminhtml
+ * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php
+ * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ */
+class BatchIndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductRepository

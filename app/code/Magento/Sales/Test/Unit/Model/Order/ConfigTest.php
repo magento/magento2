@@ -11,7 +11,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
 /**
  * Class ConfigTest
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Sales\Model\Order\Config
@@ -25,14 +25,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $orderStatusFactory = $this->getMock(\Magento\Sales\Model\Order\StatusFactory::class, [], [], '', false, false);
-        $this->orderStatusCollectionFactoryMock = $this->getMock(
+        $orderStatusFactory = $this->createMock(\Magento\Sales\Model\Order\StatusFactory::class);
+        $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
         $this->salesConfig = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
@@ -78,14 +74,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         $expectedResult = ['complete', 'pending_payment'];
 
-        $collectionMock = $this->getMock(
-            Collection::class,
-            ['create', 'joinStates'],
-            [],
-            '',
-            false,
-            false
-        );
+        $collectionMock = $this->createPartialMock(Collection::class, ['create', 'joinStates']);
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($collectionMock));
@@ -115,14 +104,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         ];
-        $collectionMock = $this->getMock(
-            Collection::class,
-            ['create', 'joinStates'],
-            [],
-            '',
-            false,
-            false
-        );
+        $collectionMock = $this->createPartialMock(Collection::class, ['create', 'joinStates']);
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($collectionMock));
@@ -145,13 +127,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStatuses($state, $joinLabels, $collectionData, $expectedResult)
     {
-        $collectionMock = $this->getMock(
+        $collectionMock = $this->createPartialMock(
             Collection::class,
-            ['create', 'joinStates', 'addStateFilter', 'orderByLabel'],
-            [],
-            '',
-            false,
-            false
+            ['create', 'joinStates', 'addStateFilter', 'orderByLabel']
         );
         $this->orderStatusCollectionFactoryMock->expects($this->any())
             ->method('create')

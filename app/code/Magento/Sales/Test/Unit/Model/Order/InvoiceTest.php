@@ -17,7 +17,7 @@ use Magento\Sales\Model\ResourceModel\OrderFactory;
  * @package Magento\Sales\Model\Order
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice
@@ -82,10 +82,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay']
         )->getMock();
 
-        $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
+        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
 
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
@@ -93,41 +93,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $arguments = [
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
-            'orderResourceFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\OrderFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'calculatorFactory' => $this->getMock(
-                \Magento\Framework\Math\CalculatorFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-            'invoiceItemCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'invoiceCommentFactory' => $this->getMock(
-                \Magento\Sales\Model\Order\Invoice\CommentFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'commentCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
+            'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
+            'invoiceItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
+            'invoiceCommentFactory' => $this->createMock(\Magento\Sales\Model\Order\Invoice\CommentFactory::class),
+            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
         ];
         $this->model = $this->helperManager->getObject(\Magento\Sales\Model\Order\Invoice::class, $arguments);
         $this->model->setOrder($this->orderMock);

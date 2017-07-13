@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-class AbstractFactoryTest extends \PHPUnit_Framework_TestCase
+class AbstractFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filter\AbstractFactory
@@ -36,7 +36,7 @@ class AbstractFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->_factory = $this->getMockForAbstractClass(
             \Magento\Framework\Filter\AbstractFactory::class,
@@ -102,7 +102,7 @@ class AbstractFactoryTest extends \PHPUnit_Framework_TestCase
         $property = new \ReflectionProperty(\Magento\Framework\Filter\AbstractFactory::class, 'sharedInstances');
         $property->setAccessible(true);
 
-        $filterMock = $this->getMock('FactoryInterface', ['filter']);
+        $filterMock = $this->getMockBuilder('FactoryInterface')->setMethods(['filter'])->getMock();
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(

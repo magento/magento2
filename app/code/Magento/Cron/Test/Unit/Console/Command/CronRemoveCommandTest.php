@@ -12,7 +12,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
-class CronRemoveCommandTest extends \PHPUnit_Framework_TestCase
+class CronRemoveCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CrontabManagerInterface|\PHPUnit_Framework_MockObject_MockObject

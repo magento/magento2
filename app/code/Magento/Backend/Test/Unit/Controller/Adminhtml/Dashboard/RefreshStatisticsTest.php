@@ -9,7 +9,7 @@ namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics
  */
-class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
+class RefreshStatisticsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
@@ -64,31 +64,25 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->resultRedirectFactory = $this->getMock(
+        $this->resultRedirectFactory = $this->createPartialMock(
             \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resultRedirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
+        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
 
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse']
         );
 
-        $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
 
-        $this->order = $this->getMock(\Magento\Sales\Model\ResourceModel\Report\Order::class, [], [], '', false);
+        $this->order = $this->createMock(\Magento\Sales\Model\ResourceModel\Report\Order::class);
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
-        $this->context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);

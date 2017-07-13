@@ -5,7 +5,7 @@
  */
 namespace Magento\Security\Model\ResourceModel;
 
-class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
+class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\AbstractModel

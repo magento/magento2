@@ -5,7 +5,7 @@
  */
 namespace Magento\Cron\Test\Unit\Model\Config;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Testing return jobs from different sources (DB, XML)
@@ -15,7 +15,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $reader = $this->getMockBuilder(
             \Magento\Cron\Model\Config\Reader\Xml::class
         )->disableOriginalConstructor()->getMock();
-        $cache = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
         $dbReader = $this->getMockBuilder(
             \Magento\Cron\Model\Config\Reader\Db::class
         )->disableOriginalConstructor()->getMock();
@@ -37,7 +37,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
 
-        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($jobs);
 

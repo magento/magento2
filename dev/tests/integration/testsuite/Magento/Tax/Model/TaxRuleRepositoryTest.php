@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
+class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

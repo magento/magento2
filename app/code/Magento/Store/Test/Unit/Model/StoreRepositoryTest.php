@@ -19,7 +19,7 @@ use Magento\Framework\App\Config;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
+class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -146,14 +146,14 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $storeMock1 = $this->getMock(StoreInterface::class);
+        $storeMock1 = $this->createMock(StoreInterface::class);
         $storeMock1->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code');
         $storeMock1->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $storeMock2 = $this->getMock(StoreInterface::class);
+        $storeMock2 = $this->createMock(StoreInterface::class);
         $storeMock2->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code_2');

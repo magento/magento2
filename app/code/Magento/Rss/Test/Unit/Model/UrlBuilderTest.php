@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class UrlBuilderTest
  * @package Magento\Rss\Model
  */
-class UrlBuilderTest extends \PHPUnit_Framework_TestCase
+class UrlBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rss\Model\UrlBuilder
@@ -33,8 +33,8 @@ class UrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlInterface = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->scopeConfigInterface = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->urlBuilder = $objectManagerHelper->getObject(

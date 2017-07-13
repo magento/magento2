@@ -29,7 +29,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      */
     public function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Indexer\Model\Config::class, [], [], '', false);
+        $this->configMock = $this->createMock(\Magento\Indexer\Model\Config::class);
         parent::setUp();
     }
 
@@ -61,8 +61,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             'shared_index' => null
         ]));
         $this->configureAdminArea();
-        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $collection = $this->createMock(\Magento\Indexer\Model\Indexer\Collection::class);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
 
@@ -109,25 +109,25 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ));
 
         $this->configureAdminArea();
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerOne->expects($this->once())->method('reindexAll');
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne->expects($this->any())->method('getId')->willReturn('id_indexerOne');
         $indexerOne->expects($this->any())->method('load')->with('id_indexerOne')->willReturn($indexerOne);
 
-        $indexerTwo = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerTwo = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerTwo->expects($this->once())->method('reindexAll');
         $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
         $indexerTwo->expects($this->any())->method('getId')->willReturn('id_indexerTwo');
         $indexerTwo->expects($this->any())->method('load')->with('id_indexerTwo')->willReturn($indexerTwo);
 
-        $indexer3 = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexer3 = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexer3->expects($this->never())->method('reindexAll');
         $indexer3->expects($this->once())->method('getTitle')->willReturn('Title_indexer3');
         $indexer3->expects($this->any())->method('getId')->willReturn('id_indexer3');
         $indexer3->expects($this->any())->method('load')->with('id_indexer3')->willReturn($indexer3);
 
-        $stateMock = $this->getMock(\Magento\Indexer\Model\Indexer\State::class, [], [], '', false);
+        $stateMock = $this->createMock(\Magento\Indexer\Model\Indexer\State::class);
         $stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
         $stateMock->expects($this->exactly(2))->method('save');
 
@@ -151,7 +151,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithLocalizedException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $localizedException = new LocalizedException(new Phrase('Some Exception Message'));
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
         $this->collectionFactory->expects($this->never())->method('create');
@@ -166,7 +166,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($exception));
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
@@ -181,13 +181,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp The following requested cache types are not supported:.*
+     * @expectedExceptionMessageRegExp /The following requested index types are not supported: 'id_indexerOne'/
      */
     public function testExecuteWithExceptionInLoad()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $collection = $this->createMock(\Magento\Indexer\Model\Indexer\Collection::class);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerOne->expects($this->once())->method('getId')->willReturn('id_indexer1');
         $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
 

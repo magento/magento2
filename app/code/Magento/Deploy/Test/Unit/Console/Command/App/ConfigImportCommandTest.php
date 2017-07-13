@@ -11,7 +11,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Processor|\PHPUnit_Framework_MockObject_MockObject

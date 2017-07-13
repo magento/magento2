@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * A unit test for testing of the 'join' assembler.
  */
-class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
+class JoinAssemblerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\ReportXml\DB\Assembler\JoinAssembler
