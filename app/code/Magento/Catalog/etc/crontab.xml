@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,6 +15,12 @@
         </job>
         <job name="catalog_product_outdated_price_values_cleanup" instance="Magento\Catalog\Cron\DeleteOutdatedPriceValues" method="execute">
             <schedule>* * * * *</schedule>
+        </job>
+        <job name="catalog_product_frontend_actions_flush" instance="Magento\Catalog\Cron\DeleteOutdatedPriceValues" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="catalog_product_attribute_value_synchronize" instance="Magento\Catalog\Cron\SynchronizeWebsiteAttributes" method="execute">
+            <schedule>*/5 * * * *</schedule>
         </job>
     </group>
 </config>

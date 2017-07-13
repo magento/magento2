@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ var config = {
             uiClass:        'Magento_Ui/js/lib/core/class',
             uiEvents:       'Magento_Ui/js/lib/core/events',
             uiRegistry:     'Magento_Ui/js/lib/registry/registry',
+            consoleLogger:  'Magento_Ui/js/lib/logger/console-logger',
             uiLayout:       'Magento_Ui/js/core/renderer/layout',
             buttonAdapter:  'Magento_Ui/js/form/button-adapter'
         }

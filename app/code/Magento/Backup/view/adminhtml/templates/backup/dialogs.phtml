@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,8 @@
 ?>
 <!-- TODO: refactor form styles and js -->
 <script type="text/x-magento-template" id="rollback-warning-template">
-<p><?php /* @escapeNotVerified */ echo __('You will lose any data created since the backup was made, including admin users, customers and orders.')?></p>
-<p><?php /* @escapeNotVerified */ echo __('Are you sure you want to continue?')?></p>
+<p><?= /* @escapeNotVerified */ __('You will lose any data created since the backup was made, including admin users, customers and orders.') ?></p>
+<p><?= /* @escapeNotVerified */ __('Are you sure you want to continue?') ?></p>
 </script>
 <script type="text/x-magento-template" id="backup-options-template">
     <div class="backup-messages" style="display: none;">
@@ -18,39 +18,39 @@
     </div>
     <div class="messages">
         <div class="message message-warning">
-            <?php /* @escapeNotVerified */ echo __('This may take a few moments.')?>
-            <?php /* @escapeNotVerified */ echo __('Be sure your store is in maintenance mode during backup.')?></div>
+            <?= /* @escapeNotVerified */ __('This may take a few moments.') ?>
+            <?= /* @escapeNotVerified */ __('Be sure your store is in maintenance mode during backup.') ?></div>
     </div>
     <form action="" method="post" id="backup-form" class="form-inline">
         <fieldset class="admin__fieldset form-list question">
             <div class="admin__field field _required">
-                <label for="backup_name" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Backup Name')?></span></label>
+                <label for="backup_name" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Backup Name') ?></span></label>
                 <div class="admin__field-control">
                     <input type="text" name="backup_name" id="backup_name"
                            class="admin__control-text required-entry validate-alphanum-with-spaces validate-length maximum-length-50"
                            maxlength="50" />
                     <div class="admin__field-note">
-                        <?php /* @escapeNotVerified */ echo __('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.'); ?>
+                        <?= /* @escapeNotVerified */ __('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.') ?>
                     </div>
                 </div>
             </div>
 
             <div class="admin__field field maintenance-checkbox-container">
-                <label for="backup_maintenance_mode" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Maintenance mode')?></span></label>
+                <label for="backup_maintenance_mode" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Maintenance mode') ?></span></label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
                         <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
-                        <label class="admin__field-label" for="backup_maintenance_mode"><?php /* @escapeNotVerified */ echo __('Please put your store into maintenance mode during backup.')?></label>
+                        <label class="admin__field-label" for="backup_maintenance_mode"><?= /* @escapeNotVerified */ __('Please put your store into maintenance mode during backup.') ?></label>
                     </div>
                 </div>
             </div>
 
             <div class="admin__field field maintenance-checkbox-container" id="exclude-media-checkbox-container" style="display: none;">
-                <label for="exclude_media" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Exclude')?></span></label>
+                <label for="exclude_media" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Exclude') ?></span></label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
                         <input class="admin__control-checkbox" type="checkbox" name="exclude_media" value="1" id="exclude_media"/>
-                        <label class="admin__field-label" for="exclude_media"><?php /* @escapeNotVerified */ echo __('Exclude media folder from backup') ?></label>
+                        <label class="admin__field-label" for="exclude_media"><?= /* @escapeNotVerified */ __('Exclude media folder from backup') ?></label>
                     </div>
                 </div>
             </div>
@@ -64,67 +64,67 @@
     </div>
     <div class="messages">
         <div class="message message-warning">
-            <?php /* @escapeNotVerified */ echo __('Please enter the password to confirm rollback.')?><br>
-            <?php /* @escapeNotVerified */ echo __('This action cannot be undone.')?>
-            <p><?php /* @escapeNotVerified */ echo __('Are you sure you want to continue?')?></p>
+            <?= /* @escapeNotVerified */ __('Please enter the password to confirm rollback.') ?><br>
+            <?= /* @escapeNotVerified */ __('This action cannot be undone.') ?>
+            <p><?= /* @escapeNotVerified */ __('Are you sure you want to continue?') ?></p>
         </div>
     </div>
     <form action="" method="post" id="rollback-form" class="form-inline">
         <fieldset class="admin__fieldset password-box-container">
             <div class="admin__field field _required">
-                <label for="password" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('User Password')?></span></label>
-                <div class="admin__field-control"><input type="password" name="password" id="password" class="admin__control-text required-entry" autocomplete="off"></div>
+                <label for="password" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('User Password') ?></span></label>
+                <div class="admin__field-control"><input type="password" name="password" id="password" class="admin__control-text required-entry" autocomplete="new-password"></div>
             </div>
 
             <div class="admin__field field maintenance-checkbox-container">
-                <label for="rollback_maintenance_mode" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Maintenance mode')?></span></label>
+                <label for="rollback_maintenance_mode" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Maintenance mode') ?></span></label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
                         <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="rollback_maintenance_mode"/>  
-                        <label class="admin__field-label" for="rollback_maintenance_mode"><?php /* @escapeNotVerified */ echo __('Please put your store into maintenance mode during rollback processing.')?></label>  
+                        <label class="admin__field-label" for="rollback_maintenance_mode"><?= /* @escapeNotVerified */ __('Please put your store into maintenance mode during rollback processing.') ?></label>  
                     </div>  
                 </div>
             </div>
 
             <div class="admin__field field maintenance-checkbox-container" id="use-ftp-checkbox-row" style="display: none;">
                 <label for="use_ftp" class="admin__field-label">
-                    <span><?php /* @escapeNotVerified */ echo __('FTP')?></span>
+                    <span><?= /* @escapeNotVerified */ __('FTP') ?></span>
                 </label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
                         <input class="admin__control-checkbox" type="checkbox" name="use_ftp" value="1" id="use_ftp" onclick="backup.toggleFtpCredentialsForm(event)"/>
-                        <label class="admin__field-label" for="use_ftp"><?php /* @escapeNotVerified */ echo __('Use FTP Connection')?></label>
+                        <label class="admin__field-label" for="use_ftp"><?= /* @escapeNotVerified */ __('Use FTP Connection') ?></label>
                     </div>
                 </div>
             </div>
         </fieldset>
         <div class="entry-edit" id="ftp-credentials-container" style="display: none;">
             <fieldset class="admin__fieldset">
-                <legend class="admin__legend legend"><span><?php /* @escapeNotVerified */ echo __('FTP credentials')?></span></legend><br />
+                <legend class="admin__legend legend"><span><?= /* @escapeNotVerified */ __('FTP credentials') ?></span></legend><br />
                 <div class="admin__field field _required">
-                    <label class="admin__field-label" for="ftp_host"><span><?php /* @escapeNotVerified */ echo __('FTP Host') ?></span></label>
+                    <label class="admin__field-label" for="ftp_host"><span><?= /* @escapeNotVerified */ __('FTP Host') ?></span></label>
                     <div class="admin__field-control">
                         <input type="text" class="admin__control-text" name="ftp_host" id="ftp_host">
                     </div>
                 </div>
 
                 <div class="admin__field field _required">
-                    <label class="admin__field-label" for="ftp_user"><span><?php /* @escapeNotVerified */ echo __('FTP Login') ?></span></label>
+                    <label class="admin__field-label" for="ftp_user"><span><?= /* @escapeNotVerified */ __('FTP Login') ?></span></label>
                     <div class="admin__field-control">
                         <input type="text" class="admin__control-text" name="ftp_user" id="ftp_user">
                     </div>
                 </div>
                 <div class="admin__field field _required">
                     <label class="admin__field-label" for="ftp_pass">
-                        <span><?php /* @escapeNotVerified */ echo __('FTP Password') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('FTP Password') ?></span>
                     </label>
                     <div class="admin__field-control">
-                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass" autocomplete="off">
+                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass" autocomplete="new-password">
                     </div>
                 </div>
                 <div class="admin__field field">
                     <label class="admin__field-label" for="ftp_path">
-                        <span><?php /* @escapeNotVerified */ echo __('Magento root directory') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Magento root directory') ?></span>
                     </label>
                     <div class="admin__field-control">
                         <input type="text" class="admin__control-text" name="ftp_path" id="ftp_path">
@@ -147,8 +147,8 @@ require([
 
 //<![CDATA[
     backup = new AdminBackup();
-    backup.rollbackUrl = '<?php echo $block->escapeUrl($rollbackUrl); ?>';
-    backup.backupUrl = '<?php echo $block->escapeUrl($backupUrl); ?>';
+    backup.rollbackUrl = '<?= $block->escapeUrl($rollbackUrl) ?>';
+    backup.backupUrl = '<?= $block->escapeUrl($backupUrl) ?>';
 //]]>
 
 });

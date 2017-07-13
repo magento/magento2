@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,30 +29,30 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
         <tr>
-            <td class="col-product"><div class="option-label"><?php /* @escapeNotVerified */ echo $attributes['option_label'] ?></div></td>
+            <td class="col-product"><div class="option-label"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></div></td>
             <td class="col-qty last">&nbsp;</td>
         </tr>
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?php echo(++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
+    <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getParentItem()): ?>
         <td class="col-product">
-            <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
+            <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
-                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
+                <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
+                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
             </div>
         </td>
         <?php else: ?>
-        <td class="col-product"><div class="option-value"><?php echo $block->getValueHtml($_item)?></div></td>
+        <td class="col-product"><div class="option-value"><?= $block->getValueHtml($_item) ?></div></td>
         <?php endif; ?>
         <td class="col-qty last">
             <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())): ?>
                 <?php if (isset($shipItems[$_item->getId()])): ?>
-                    <?php /* @escapeNotVerified */ echo $shipItems[$_item->getId()]->getQty()*1 ?>
+                    <?= /* @escapeNotVerified */ $shipItems[$_item->getId()]->getQty()*1 ?>
                 <?php elseif ($_item->getIsVirtual()): ?>
-                    <?php /* @escapeNotVerified */ echo __('N/A') ?>
+                    <?= /* @escapeNotVerified */ __('N/A') ?>
                 <?php else: ?>
                     0
                 <?php endif; ?>
@@ -68,20 +68,20 @@
             <?php if ($block->getOrderOptions($_item->getOrderItem())): ?>
                 <dl class="item-options">
                 <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option): ?>
-                    <dt><?php /* @escapeNotVerified */ echo $option['label'] ?></dt>
+                    <dt><?= /* @escapeNotVerified */ $option['label'] ?></dt>
                     <dd>
                     <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
-                        <?php /* @escapeNotVerified */ echo $option['value'];?>
+                        <?= /* @escapeNotVerified */ $option['value'] ?>
                     <?php else: ?>
-                        <?php echo $block->truncateString($option['value'], 55, '', $_remainder);?>
+                        <?= $block->truncateString($option['value'], 55, '', $_remainder) ?>
                         <?php if ($_remainder):?>
-                            ... <span id="<?php /* @escapeNotVerified */ echo $_id = 'id' . uniqid()?>"><?php /* @escapeNotVerified */ echo $_remainder ?></span>
+                            ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
                             <script>
 require(['prototype'], function(){
 
-                            $('<?php /* @escapeNotVerified */ echo $_id ?>').hide();
-                            $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseover', function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').show();});
-                            $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseout',  function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').hide();});
+                            $('<?= /* @escapeNotVerified */ $_id ?>').hide();
+                            $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
+                            $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
 
 });
 </script>
@@ -91,7 +91,7 @@ require(['prototype'], function(){
                 <?php endforeach; ?>
                 </dl>
             <?php endif; ?>
-            <?php echo $block->escapeHtml($_item->getDescription()) ?>
+            <?= $block->escapeHtml($_item->getDescription()) ?>
         </td>
         <td class="last">&nbsp;</td>
     </tr>

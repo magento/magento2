@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -395,13 +395,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             case 'to_percent':
                 if ($discount < 0 || $discount > 100) {
                     $result[] = __('Percentage discount should be between 0 and 100.');
-                };
+                }
                 break;
             case 'by_fixed':
             case 'to_fixed':
                 if ($discount < 0) {
                     $result[] = __('Discount value should be 0 or greater.');
-                };
+                }
                 break;
             default:
                 $result[] = __('Unknown action.');
@@ -521,12 +521,22 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         if ($this->isObjectNew()) {
             $this->getMatchingProductIds();
             if (!empty($this->_productIds) && is_array($this->_productIds)) {
-                $this->_ruleProductProcessor->reindexList($this->_productIds);
+                $this->_getResource()->addCommitCallback([$this, 'reindex']);
             }
         } else {
             $this->_ruleProductProcessor->getIndexer()->invalidate();
         }
         return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after rule save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        $this->_ruleProductProcessor->reindexList($this->_productIds);
     }
 
     /**

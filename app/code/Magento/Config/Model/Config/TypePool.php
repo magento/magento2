@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config;
+
+use Magento\Config\Model\Config\Export\ExcludeList;
 
 /**
  * Checker for config type.
  *
  * Used when you need to know if the configuration path belongs to a certain type.
  * Participates in the mechanism for creating the configuration dump file.
- * There are several types:
- * - sensitive - the fields that have this type will not be written in the dump configuration;
- * - environment - the fields that have this type will not be written to the dump configuration.
+ * @api
  */
 class TypePool
 {
@@ -48,17 +48,36 @@ class TypePool
     private $filteredPaths;
 
     /**
+     * Checks if the configuration path is contained in exclude list.
+     *
+     * @var ExcludeList
+     * @deprecated We use it only to support backward compatibility. If some configurations
+     *             were set to this list before, we need to read them.
+     *             It will be supported for next 2 minor releases or until a major release.
+     *             TypePool should be used to mark configurations with types.
+     * @see TypePool
+     */
+    private $excludeList;
+
+    /**
      * @param array $sensitive List of sensitive configuration fields paths
      * @param array $environment List of environment configuration fields paths
+     * @param ExcludeList $excludeList Checks if the configuration path is contained in exclude list
      */
-    public function __construct(array $sensitive = [], array $environment = [])
+    public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList = null)
     {
         $this->sensitive = $sensitive;
         $this->environment = $environment;
+        $this->excludeList = $excludeList;
     }
 
     /**
      * Verifies that the configuration field path belongs to the specified type.
+     *
+     * For sensitive type, if configuration path was not found in the sensitive type pool
+     * checks if this configuration path present in ExcludeList. It used only to support backward compatibility.
+     * If some configurations were set to ExcludeList before, we need to read them.
+     * It will be supported for next 2 minor releases or until a major release.
      *
      * @param string $path Configuration field path. For example, 'contact/email/recipient_email'
      * @param string $type Type of configuration fields
@@ -70,7 +89,16 @@ class TypePool
             $this->filteredPaths[$type] = $this->getPathsByType($type);
         }
 
-        return in_array($path, $this->filteredPaths[$type]);
+        $isPresent = in_array($path, $this->filteredPaths[$type]);
+
+        if ($type == self::TYPE_SENSITIVE
+            && !$isPresent
+            && $this->excludeList instanceof ExcludeList
+        ) {
+            $isPresent = $this->excludeList->isPresent($path);
+        }
+
+        return $isPresent;
     }
 
     /**
@@ -81,14 +109,12 @@ class TypePool
      * For example, if you pass a sensitive or TypePool::TYPE_SENSITIVE type, we get an array:
      * ```php
      * array(
-     *      'some/path/sensetive/path1'
-     *      'some/path/sensetive/path2'
-     *      'some/path/sensetive/path3'
-     *      'some/path/sensetive/path4'
+     *      'some/path/sensitive/path1',
+     *      'some/path/sensitive/path2'
      * );
      * ```
      *
-     * @param string $type Type configuration fields paths. Allowed values of types:
+     * @param string $type Type of configuration fields. Allowed values of types:
      * - sensitive or TypePool::TYPE_SENSITIVE;
      * - environment or TypePool::TYPE_ENVIRONMENT.
      * @return array

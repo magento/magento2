@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -44,7 +44,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIsNotActive" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation4_ChangeCategoryNameOnStoreView" summary="Update Category with custom Store View.">
-            <data name="issue" xsi:type="string">Not implemented yet: MAGETWO-48516</data>
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
 	        <data name="category/data/use_default_name" xsi:type="string">No</data>
             <data name="category/data/name" xsi:type="string">Category %isolation%</data>

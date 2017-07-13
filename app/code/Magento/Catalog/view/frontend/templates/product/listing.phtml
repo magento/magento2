@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,7 +48,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                     </a>
                     <div class="product details">
                     <?php
-    
+
                         $info = [];
                         $info['name'] = '<strong class="product name">'
                                         . ' <a href="' . $_product->getProductUrl() . '" title="'
@@ -57,7 +57,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                         . '</a></strong>';
                         $info['price'] = $block->getProductPrice($_product);
                         $info['review'] = $block->getReviewsSummaryHtml($_product, $templateType);
-    
+
                         if ($_product->isSaleable()) {
                             $info['button'] = '<button type="button" title="' . __('Add to Cart') . '" class="action tocart"'
                                             . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $block->getAddToCartUrl($_product) . '"} }\'>'
@@ -66,14 +66,14 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                             $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
                                                                             '<div class="stock unavailable"><span>' . __('Out of stock') . '</span></div>';
                         }
-    
+
                         $info['links'] = '<div class="product links" data-role="add-to-links">'
                                         . '<a href="#" data-post=\'' . $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_product) . '\' class="action towishlist" data-action="add-to-wishlist">'
                                         . '<span>' . __('Add to Wish List') . '</span></a>'
                                         . '<a href="' . $block->getAddToCompareUrl($_product) . '" class="action tocompare">'
                                         . '<span>' . __('Add to Compare') . '</span></a></div>';
                         $info['actions'] = '<div class="product action">' . $info['button'] . $info['links'] . '</div>';
-    
+
                         if ($showDescription) {
                             $info['description'] =  '<div class="product description">'
                                                     . $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')
@@ -82,13 +82,13 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         } else {
                             $info['description'] = '';
                         }
-    
+
                         $details = $block->getInfoOrder() ?: ['name','price','review','description','actions'];
                         foreach ($details as $detail) {
                             /* @escapeNotVerified */ echo $info[$detail];
                         }
                         ?>
-    
+
                     </div>
                 </div>
             </li>

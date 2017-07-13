@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model;
@@ -253,6 +253,58 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getWeeeAmountExclTax method
+     *
+     * @param string $productTypeId
+     * @param string $prodcuctPriceType
+     * @dataProvider getWeeeAmountExclTaxDataProvider
+     */
+    public function testGetWeeeAmountExclTax($productTypeId, $prodcuctPriceType)
+    {
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTypeId', 'getPriceType'])
+            ->getMock();
+        $product->expects($this->any())->method('getTypeId')->willReturn($productTypeId);
+        $product->expects($this->any())->method('getPriceType')->willReturn($prodcuctPriceType);
+        $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAmountExclTax'])
+            ->getMock();
+        $weeeDataHelper->expects($this->at(0))->method('getAmountExclTax')->willReturn(10);
+        $weeeDataHelper->expects($this->at(1))->method('getAmountExclTax')->willReturn(30);
+        $tax = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductWeeeAttributes'])
+            ->getMock();
+        $tax->expects($this->once())->method('getProductWeeeAttributes')
+            ->willReturn([$weeeDataHelper, $weeeDataHelper]);
+        $this->assertEquals(40, $tax->getWeeeAmountExclTax($product));
+    }
+
+    /**
+     * Test getWeeeAmountExclTax method for dynamic bundle product
+     */
+    public function testGetWeeeAmountExclTaxForDynamicBundleProduct()
+    {
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTypeId', 'getPriceType'])
+            ->getMock();
+        $product->expects($this->once())->method('getTypeId')->willReturn('bundle');
+        $product->expects($this->once())->method('getPriceType')->willReturn(0);
+        $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $tax = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductWeeeAttributes'])
+            ->getMock();
+        $tax->expects($this->once())->method('getProductWeeeAttributes')->willReturn([$weeeDataHelper]);
+        $this->assertEquals(0, $tax->getWeeeAmountExclTax($product));
+    }
+
+    /**
      * @return array
      */
     public function getProductWeeeAttributesDataProvider()
@@ -275,6 +327,24 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'attribute_code' => 'fpt_code',
                 ],
                 'expectedFptLabel' => 'fpt_label_frontend'
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getWeeeAmountExclTaxDataProvider()
+    {
+        return [
+            [
+                'bundle', 1
+            ],
+            [
+                'simple', 0
+            ],
+            [
+                'simple', 1
             ]
         ];
     }

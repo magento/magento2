@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ define([
                 }
             });
 
-            if (!Boolean(this.validationErrors.length)) {
+            if (!this.validationErrors.length) {
                 if (address['country_id'] == checkoutConfig.originCountryCode) { //eslint-disable-line eqeqeq
                     return !utils.isEmpty(address.postcode);
                 }

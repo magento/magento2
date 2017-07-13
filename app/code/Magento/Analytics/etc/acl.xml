@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,8 +20,9 @@
                     </resource>
                 </resource>
                 <resource id="Magento_Reports::report">
-                    <resource id="Magento_Analytics::bi_essentials" title="BI Essential" translate="title" sortOrder="20">
-                        <resource id="Magento_Analytics::report_basic_tier" title="Basic Tier" translate="title" sortOrder="40" />
+                    <resource id="Magento_Analytics::business_intelligence" title="Business Intelligence" translate="title" sortOrder="90">
+                        <resource id="Magento_Analytics::advanced_reporting" title="Advanced Reporting" translate="title" sortOrder="10" />
+                        <resource id="Magento_Analytics::bi_essentials" title="BI Essentials" translate="title" sortOrder="20" />
                     </resource>
                 </resource>
             </resource>

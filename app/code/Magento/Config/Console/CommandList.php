@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console;
@@ -13,6 +13,8 @@ use Magento\Framework\ObjectManagerInterface;
  * Contains a list of commands to be loaded on application bootstrap.
  *
  * {@inheritdoc}
+ *
+ * @api
  */
 class CommandList implements CommandListInterface
 {

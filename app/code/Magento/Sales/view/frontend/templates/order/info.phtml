@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,26 +11,26 @@
 <?php $_order = $block->getOrder() ?>
 <div class="block block-order-details-view">
     <div class="block-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Order Information') ?></strong>
+        <strong><?= /* @escapeNotVerified */ __('Order Information') ?></strong>
     </div>
     <div class="block-content">
     <?php if (!$_order->getIsVirtual()): ?>
         <div class="box box-order-shipping-address">
-            <strong class="box-title"><span><?php /* @escapeNotVerified */ echo __('Shipping Address') ?></span></strong>
+            <strong class="box-title"><span><?= /* @escapeNotVerified */ __('Shipping Address') ?></span></strong>
             <div class="box-content">
-                <address><?php /* @escapeNotVerified */ echo $block->getFormattedAddress($_order->getShippingAddress()); ?></address>
+                <address><?= /* @escapeNotVerified */ $block->getFormattedAddress($_order->getShippingAddress()) ?></address>
             </div>
         </div>
 
         <div class="box box-order-shipping-method">
             <strong class="box-title">
-                <span><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Shipping Method') ?></span>
             </strong>
             <div class="box-content">
             <?php if ($_order->getShippingDescription()): ?>
-                <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                <?= $block->escapeHtml($_order->getShippingDescription()) ?>
             <?php else: ?>
-                <?php /* @escapeNotVerified */ echo __('No shipping information available'); ?>
+                <?= /* @escapeNotVerified */ __('No shipping information available') ?>
             <?php endif; ?>
             </div>
         </div>
@@ -38,18 +38,18 @@
 
         <div class="box box-order-billing-address">
             <strong class="box-title">
-                <span><?php /* @escapeNotVerified */ echo __('Billing Address') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Billing Address') ?></span>
             </strong>
             <div class="box-content">
-                <address><?php /* @escapeNotVerified */ echo $block->getFormattedAddress($_order->getBillingAddress()); ?></address>
+                <address><?= /* @escapeNotVerified */ $block->getFormattedAddress($_order->getBillingAddress()) ?></address>
             </div>
         </div>
         <div class="box box-order-billing-method">
             <strong class="box-title">
-                <span><?php /* @escapeNotVerified */ echo __('Payment Method') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Payment Method') ?></span>
             </strong>
             <div class="box-content">
-                <?php echo $block->getPaymentInfoHtml() ?>
+                <?= $block->getPaymentInfoHtml() ?>
             </div>
         </div>
     </div>

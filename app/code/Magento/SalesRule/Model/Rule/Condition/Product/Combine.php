@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
+/**
+ * @api
+ */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**

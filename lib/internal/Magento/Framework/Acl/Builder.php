@@ -1,14 +1,17 @@
 <?php
 /**
- * Access Control List Builder. Retrieves required role/rule/resource loaders
- * and uses them to populate provided ACL object. Acl object is put to cache after creation.
- * On consequent requests, ACL object is deserialized from cache.
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl;
 
+/**
+ * Access Control List Builder. Retrieves required role/rule/resource loaders
+ * and uses them to populate provided ACL object. Acl object is put to cache after creation.
+ * On consequent requests, ACL object is deserialized from cache.
+ *
+ * @api
+ */
 class Builder
 {
     /**

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Framework\Cache\Backend\Decorator;
 
 /**
  * Abstract decorator class for \Zend_Cache_Backend class and its descendants
  */
-namespace Magento\Framework\Cache\Backend\Decorator;
-
 abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**

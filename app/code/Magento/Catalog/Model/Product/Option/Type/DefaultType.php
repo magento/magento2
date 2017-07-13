@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,10 +9,12 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
  * Catalog product option default type
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -366,7 +368,7 @@ class DefaultType extends \Magento\Framework\DataObject
                     $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = [
                         'option_id' => $_option->getId(),
                     ];
-                    if ($_option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
+                    if ($_option->getGroupByType() == ProductCustomOptionInterface::OPTION_GROUP_SELECT) {
                         $optionValues = [];
                         foreach ($_option->getValues() as $_value) {
                             /* @var $value \Magento\Catalog\Model\Product\Option\Value */

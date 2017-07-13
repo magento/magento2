@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing;
@@ -121,5 +121,19 @@ class OptionTier extends AbstractOptions
     public function hasGroupPriceOptions()
     {
         return $this->_rootElement->find('tbody tr')->isPresent();
+    }
+
+    /**
+     * Waiting until advanced price form becomes hidden
+     *
+     * @return void
+     */
+    public function waitTierPriceFormLocks()
+    {
+        $this->_rootElement->waitUntil(
+            function () {
+                return $this->isVisible() ? null : true;
+            }
+        );
     }
 }

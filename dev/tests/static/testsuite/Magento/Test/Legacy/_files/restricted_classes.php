@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -127,7 +127,22 @@ return [
                 'type' => 'library',
                 'name' => 'magento/framework',
                 'path' => 'Flag.php'
-            ]
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Widget',
+                'path' => 'Setup/LayoutUpdateConverter.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Cms',
+                'path' => 'Setup/ContentConverter.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Unserialize/Test/Unit/UnserializeTest.php'
+            ],
         ]
     ],
     'ArrayObject' => [

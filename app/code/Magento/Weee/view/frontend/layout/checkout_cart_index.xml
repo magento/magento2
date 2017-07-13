@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,7 @@
                                 <item name="weee" xsi:type="array">
                                     <item name="component" xsi:type="string">Magento_Weee/js/view/cart/totals/weee</item>
                                     <item name="config" xsi:type="array">
-                                        <item name="title" xsi:type="string">FPT</item>
+                                        <item name="title" xsi:type="string" translate="true">FPT</item>
                                     </item>
                                 </item>
                             </item>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model;
@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getName()
  * @method string getTime()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Backup extends \Magento\Framework\DataObject implements \Magento\Framework\Backup\Db\BackupInterface
 {

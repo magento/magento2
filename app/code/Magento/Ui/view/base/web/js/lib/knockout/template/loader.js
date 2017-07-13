@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -92,8 +92,9 @@ define([
 
             require([path], function (template) {
                 template = removeLicense(template);
-
                 loading.resolve(template);
+            }, function (err) {
+                loading.reject(err);
             });
 
             return loading.promise();

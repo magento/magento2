@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,10 @@
 ?>
 <?php if ($block->isProductVisibleInSiteVisibility()): ?>
     <a class="action action-edit"
-       href="<?php /* @escapeNotVerified */ echo $block->getConfigureUrl() ?>"
-       title="<?php echo $block->escapeHtml(__('Edit item parameters')); ?>">
+       href="<?= /* @escapeNotVerified */ $block->getConfigureUrl() ?>"
+       title="<?= $block->escapeHtml(__('Edit item parameters')) ?>">
         <span>
-            <?php /* @escapeNotVerified */ echo __('Edit') ?>
+            <?= /* @escapeNotVerified */ __('Edit') ?>
         </span>
    </a>
 <?php endif ?>

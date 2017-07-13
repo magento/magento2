@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model;
 
-use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
 use Magento\NewRelicReporting\Model\Cron\ReportCounts;
+use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
 use Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron;
 
 class Cron

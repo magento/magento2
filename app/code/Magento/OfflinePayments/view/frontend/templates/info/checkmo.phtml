@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,19 +10,19 @@
  */
 ?>
 <dl class="payment-method checkmemo">
-    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
     <?php if ($block->getInfo()->getAdditionalInformation()): ?>
         <?php if ($block->getPayableTo()): ?>
             <dd class="content">
-                <strong><?php echo $block->escapeHtml(__('Make Check payable to')) ?></strong>
-                <?php echo $block->escapeHtml($block->getPayableTo()) ?>
+                <strong><?= $block->escapeHtml(__('Make Check payable to')) ?></strong>
+                <?= $block->escapeHtml($block->getPayableTo()) ?>
             </dd>
         <?php endif; ?>
         <?php if ($block->getMailingAddress()): ?>
             <dd class="content">
-                <strong><?php echo $block->escapeHtml(__('Send Check to')) ?></strong>
+                <strong><?= $block->escapeHtml(__('Send Check to')) ?></strong>
                 <address class="checkmo mailing address">
-                    <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+                    <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

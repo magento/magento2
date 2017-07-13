@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\LayeredNavigation\Model\Attribute\Source;
 
+/**
+ * @api
+ */
 class FilterableOptions implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**

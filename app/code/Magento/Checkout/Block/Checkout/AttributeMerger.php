@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
 
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Customer\Model\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 class AttributeMerger
 {
@@ -315,21 +315,35 @@ class AttributeMerger
      */
     protected function getDefaultValue($attributeCode)
     {
+        if ($attributeCode === 'country_id') {
+            return $this->directoryHelper->getDefaultCountry();
+        }
+
+        $customer = $this->getCustomer();
+        if ($customer === null) {
+            return null;
+        }
+
+        $attributeValue = null;
         switch ($attributeCode) {
+            case 'prefix':
+                $attributeValue = $customer->getPrefix();
+                break;
             case 'firstname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getFirstname();
-                }
+                $attributeValue = $customer->getFirstname();
+                break;
+            case 'middlename':
+                $attributeValue = $customer->getMiddlename();
                 break;
             case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
+                $attributeValue = $customer->getLastname();
                 break;
-            case 'country_id':
-                return $this->directoryHelper->getDefaultCountry();
+            case 'suffix':
+                $attributeValue = $customer->getSuffix();
+                break;
         }
-        return null;
+
+        return $attributeValue;
     }
 
     /**

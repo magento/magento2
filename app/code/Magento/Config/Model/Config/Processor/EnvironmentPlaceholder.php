@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Processor;
@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Allows to extract configurations from environment variables.
+ * @api
  */
 class EnvironmentPlaceholder implements PreProcessorInterface
 {

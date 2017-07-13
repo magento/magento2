@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model;
@@ -410,5 +410,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->rule->setId(100);
         $expectedResult = 'form_namerule_conditions_fieldset_100';
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
+    }
+
+    public function testReindex()
+    {
+        $this->_ruleProductProcessor->expects($this->once())->method('reindexList');
+        $this->rule->reindex();
     }
 }

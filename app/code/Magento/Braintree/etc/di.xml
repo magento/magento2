@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -186,6 +186,12 @@
         </arguments>
     </type>
     <!-- END command managers section for Vault -->
+
+    <type name="Magento\Braintree\Gateway\Request\ChannelDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
 
     <!-- Braintree commands  -->
     <virtualType name="BraintreeAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -544,18 +550,6 @@
         </arguments>
     </type>
     <!-- END Settlement Report Section -->
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="payment/braintree/merchant_id" xsi:type="string">1</item>
-                <item name="payment/braintree/public_key" xsi:type="string">1</item>
-                <item name="payment/braintree/private_key" xsi:type="string">1</item>
-                <item name="payment/braintree/merchant_account_id" xsi:type="string">1</item>
-                <item name="payment/braintree/kount_id" xsi:type="string">1</item>
-                <item name="payment/braintree_paypal/merchant_name_override" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

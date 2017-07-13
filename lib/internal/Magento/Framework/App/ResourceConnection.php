@@ -1,8 +1,6 @@
 <?php
 /**
- * Resources and connections registry and factory
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -12,6 +10,11 @@ use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigIn
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
+/**
+ * Application provides ability to configure multiple connections to persistent storage.
+ * This class provides access to all these connections.
+ * @api
+ */
 class ResourceConnection
 {
     const AUTO_UPDATE_ONCE = 0;

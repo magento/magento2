@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Attribute;
@@ -10,7 +10,7 @@ use Magento\Store\Model\Website;
 /**
  * EAV additional attribute resource collection (Using Forms)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {

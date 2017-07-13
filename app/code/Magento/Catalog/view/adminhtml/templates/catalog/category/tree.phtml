@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,8 +10,8 @@
 <div class="categories-side-col">
     <div class="sidebar-actions">
         <?php if ($block->getRoot()): ?>
-            <?php echo $block->getAddRootButtonHtml() ?><br/>
-            <?php echo $block->getAddSubButtonHtml() ?>
+            <?= $block->getAddRootButtonHtml() ?><br/>
+            <?= $block->getAddSubButtonHtml() ?>
         <?php endif; ?>
     </div>
     <div class="tree-actions">
@@ -19,9 +19,9 @@
             <?php //echo $block->getCollapseButtonHtml() ?>
             <?php //echo $block->getExpandButtonHtml() ?>
             <a href="#"
-               onclick="tree.collapseTree(); return false;"><?php /* @escapeNotVerified */ echo __('Collapse All'); ?></a>
+               onclick="tree.collapseTree(); return false;"><?= /* @escapeNotVerified */ __('Collapse All') ?></a>
             <span class="separator">|</span> <a href="#"
-                                                onclick="tree.expandTree(); return false;"><?php /* @escapeNotVerified */ echo __('Expand All'); ?></a>
+                                                onclick="tree.expandTree(); return false;"><?= /* @escapeNotVerified */ __('Expand All') ?></a>
         <?php endif; ?>
     </div>
     <?php if ($block->getRoot()): ?>
@@ -32,7 +32,7 @@
 
     <div data-id="information-dialog-tree" class="messages" style="display: none;">
         <div class="message message-notice">
-            <div><?php /* @escapeNotVerified */ echo __('This operation can take a long time'); ?></div>
+            <div><?= /* @escapeNotVerified */ __('This operation can take a long time') ?></div>
         </div>
     </div>
     <script>
@@ -170,7 +170,7 @@
 
                     if (!this.collapsed) {
                         this.collapsed = true;
-                        this.loader.dataUrl = '<?php /* @escapeNotVerified */ echo $block->getLoadTreeUrl(false) ?>';
+                        this.loader.dataUrl = '<?= /* @escapeNotVerified */ $block->getLoadTreeUrl(false) ?>';
                         this.request(this.loader.dataUrl, false);
                     }
                 },
@@ -179,7 +179,7 @@
                     this.expandAll();
                     if (this.collapsed) {
                         this.collapsed = false;
-                        this.loader.dataUrl = '<?php /* @escapeNotVerified */ echo $block->getLoadTreeUrl(true) ?>';
+                        this.loader.dataUrl = '<?= /* @escapeNotVerified */ $block->getLoadTreeUrl(true) ?>';
                         this.request(this.loader.dataUrl, false);
                     }
                 },
@@ -214,7 +214,7 @@
                 if (tree && switcherParams) {
                     var url;
                     if (switcherParams.useConfirm) {
-                        if (!confirm("<?php /* @escapeNotVerified */ echo __('Please confirm site switching. All data that hasn\'t been saved will be lost.') ?>")) {
+                        if (!confirm("<?= /* @escapeNotVerified */ __('Please confirm site switching. All data that hasn\'t been saved will be lost.') ?>")) {
                             return false;
                         }
                     }
@@ -257,7 +257,7 @@
                             }
                         });
                     } else {
-                        var baseUrl = '<?php /* @escapeNotVerified */ echo $block->getEditUrl() ?>';
+                        var baseUrl = '<?= /* @escapeNotVerified */ $block->getEditUrl() ?>';
                         var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
                         url = parseSidUrl(baseUrl, urlExt);
                         setLocation(url);
@@ -304,7 +304,7 @@
 
             jQuery(function () {
                 categoryLoader = new Ext.tree.TreeLoader({
-                    dataUrl: '<?php /* @escapeNotVerified */ echo $block->getLoadTreeUrl() ?>'
+                    dataUrl: '<?= /* @escapeNotVerified */ $block->getLoadTreeUrl() ?>'
                 });
 
                 categoryLoader.processResponse = function (response, parent, callback) {
@@ -386,26 +386,26 @@
                     enableDD: true,
                     containerScroll: true,
                     selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
-                    rootVisible: '<?php /* @escapeNotVerified */ echo $block->getRoot()->getIsVisible() ?>',
-                    useAjax: <?php /* @escapeNotVerified */ echo $block->getUseAjax() ?>,
-                    switchTreeUrl: '<?php /* @escapeNotVerified */ echo $block->getSwitchTreeUrl() ?>',
-                    editUrl: '<?php /* @escapeNotVerified */ echo $block->getEditUrl() ?>',
-                    currentNodeId: <?php /* @escapeNotVerified */ echo (int)$block->getCategoryId() ?>,
-                    baseUrl: '<?php /* @escapeNotVerified */ echo $block->getEditUrl() ?>'
+                    rootVisible: '<?= /* @escapeNotVerified */ $block->getRoot()->getIsVisible() ?>',
+                    useAjax: <?= /* @escapeNotVerified */ $block->getUseAjax() ?>,
+                    switchTreeUrl: '<?= /* @escapeNotVerified */ $block->getSwitchTreeUrl() ?>',
+                    editUrl: '<?= /* @escapeNotVerified */ $block->getEditUrl() ?>',
+                    currentNodeId: <?= /* @escapeNotVerified */ (int)$block->getCategoryId() ?>,
+                    baseUrl: '<?= /* @escapeNotVerified */ $block->getEditUrl() ?>'
                 };
 
                 defaultLoadTreeParams = {
                     parameters: {
-                        text: <?php /* @escapeNotVerified */ echo json_encode(htmlentities($block->getRoot()->getName())) ?>,
+                        text: <?= /* @escapeNotVerified */ json_encode(htmlentities($block->getRoot()->getName())) ?>,
                         draggable: false,
                         allowDrop: <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-                        id: <?php echo (int)$block->getRoot()->getId() ?>,
-                        expanded: <?php echo (int)$block->getIsWasExpanded() ?>,
-                        store_id: <?php echo (int)$block->getStore()->getId() ?>,
-                        category_id: <?php echo (int)$block->getCategoryId() ?>,
-                        parent: <?php echo (int)$block->getRequest()->getParam('parent') ?>
+                        id: <?= (int)$block->getRoot()->getId() ?>,
+                        expanded: <?= (int)$block->getIsWasExpanded() ?>,
+                        store_id: <?= (int)$block->getStore()->getId() ?>,
+                        category_id: <?= (int)$block->getCategoryId() ?>,
+                        parent: <?= (int)$block->getRequest()->getParam('parent') ?>
                     },
-                    data: <?php  /* @escapeNotVerified */ echo $block->getTreeJson() ?>
+                    data: <?= /* @escapeNotVerified */ $block->getTreeJson() ?>
                 };
 
                 reRenderTree();
@@ -483,7 +483,7 @@
                         click: function () {
                             (function ($) {
                                 $.ajax({
-                                    url: '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>',
+                                    url: '<?= /* @escapeNotVerified */ $block->getMoveUrl() ?>',
                                     method: 'POST',
                                     data: registry.get('pd'),
                                     showLoader: true

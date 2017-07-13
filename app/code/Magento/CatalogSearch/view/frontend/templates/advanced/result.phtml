@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,15 +15,15 @@
 <?php if ($results = $block->getResultCount()): ?>
     <div class="search found">
         <?php if ($results == 1) : ?>
-            <?php /* @escapeNotVerified */ echo __('<strong>%1 item</strong> were found using the following search criteria', $results); ?>
+            <?= /* @escapeNotVerified */ __('<strong>%1 item</strong> were found using the following search criteria', $results) ?>
         <?php else: ?>
-            <?php /* @escapeNotVerified */ echo __('<strong>%1 items</strong> were found using the following search criteria', $results); ?>
+            <?= /* @escapeNotVerified */ __('<strong>%1 items</strong> were found using the following search criteria', $results) ?>
         <?php endif; ?>
     </div>
 <?php else: ?>
     <div role="alert" class="message error">
         <div>
-            <?php /* @escapeNotVerified */ echo __('We can\'t find any items matching these search criteria.');?> <a href="<?php /* @escapeNotVerified */ echo $block->getFormUrl(); ?>"><?php /* @escapeNotVerified */ echo __('Modify your search.'); ?></a>
+            <?= /* @escapeNotVerified */ __('We can\'t find any items matching these search criteria.') ?> <a href="<?= /* @escapeNotVerified */ $block->getFormUrl() ?>"><?= /* @escapeNotVerified */ __('Modify your search.') ?></a>
         </div>
     </div>
 <?php endif; ?>
@@ -34,7 +34,7 @@
         <?php if (@$searchCriterias[$side]): ?>
             <ul class="items">
                 <?php foreach ($searchCriterias[$side] as $criteria): ?>
-                    <li class="item"><strong><?php echo $block->escapeHtml(__($criteria['name'])); ?>:</strong> <?php echo $block->escapeHtml($criteria['value']); ?></li>
+                    <li class="item"><strong><?= $block->escapeHtml(__($criteria['name'])) ?>:</strong> <?= $block->escapeHtml($criteria['value']) ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
@@ -43,12 +43,12 @@
 <?php if ($block->getResultCount()): ?>
     <div class="message notice">
         <div>
-            <?php /* @escapeNotVerified */ echo __("Don't see what you're looking for?"); ?>
-            <a href="<?php /* @escapeNotVerified */ echo $block->getFormUrl(); ?>"><?php /* @escapeNotVerified */ echo __('Modify your search.'); ?></a>
+            <?= /* @escapeNotVerified */ __("Don't see what you're looking for?") ?>
+            <a href="<?= /* @escapeNotVerified */ $block->getFormUrl() ?>"><?= /* @escapeNotVerified */ __('Modify your search.') ?></a>
         </div>
     </div>
 <?php endif; ?>
 <?php if ($block->getResultCount()): ?>
-    <div class="search results"><?php echo $block->getProductListHtml() ?></div>
+    <div class="search results"><?= $block->getProductListHtml() ?></div>
 <?php endif; ?>
 <?php $block->getSearchCriterias(); ?>

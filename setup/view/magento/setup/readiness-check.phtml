@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -35,7 +35,7 @@
 
 <h2 class="page-sub-title">{{$state.current.header}}</h2>
 <div ng-show="$state.is('root.readiness-check-' + $state.current.type)"
-     ng-init="actionFrom='<?php echo $this->actionFrom ?>'" class="accent-box">
+     ng-init="actionFrom='<?= $this->actionFrom ?>'" class="accent-box">
     <p>Let's check your environment for the correct PHP version, PHP extensions, file permissions and compatibility.</p>
     <button
         class="btn btn-large btn-prime"

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
 
-use \Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
+use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

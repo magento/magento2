@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Placeholder;
@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class is used to work with placeholders for environment variables names based on config paths
+ * @api
  */
 class Environment implements PlaceholderInterface
 {

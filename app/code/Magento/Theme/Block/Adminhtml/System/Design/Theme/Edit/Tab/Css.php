@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
@@ -10,6 +10,7 @@ use Magento\Theme\Helper\Storage;
 /**
  * Theme form, Css editor tab
  *
+ * @api
  * @method \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css setFiles(array $files)
  * @method array getFiles()
  *

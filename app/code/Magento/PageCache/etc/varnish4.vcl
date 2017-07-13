@@ -96,11 +96,15 @@ sub vcl_recv {
     set req.url = regsuball(req.url,"\?gclid=[^&]+&","?"); # strips when QS = "?gclid=AAA&foo=bar"
     set req.url = regsuball(req.url,"&gclid=[^&]+",""); # strips when QS = "?foo=bar&gclid=AAA" or QS = "?foo=bar&gclid=AAA&bar=baz"
 
-    # static files are always cacheable. remove SSL flag and cookie
-        if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|html|css|js|jpg|jpeg|png|gif|tiff|bmp|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
-        unset req.http.Https;
-        unset req.http./* {{ ssl_offloaded_header }} */;
-        unset req.http.Cookie;
+    # Static files caching
+    if (req.url ~ "^/(pub/)?(media|static)/.*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|html|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$") {
+        # Static files should not be cached by default
+        return (pass);
+
+        # But if you use a few locales and don't use CDN you can enable caching static files by commenting previous line (#return (pass);) and uncommenting next 3 lines
+        #unset req.http.Https;
+        #unset req.http./* {{ ssl_offloaded_header }} */;
+        #unset req.http.Cookie;
     }
 
     return (hash);
@@ -156,7 +160,7 @@ sub vcl_backend_response {
     # images, css and js are cacheable by default so we have to remove cookie also
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
-        if (bereq.url !~ "\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|gz|tgz|bz2|tbz|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)(\?|$)") {
+        if (bereq.url !~ "\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|html|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?|$)") {
             set beresp.http.Pragma = "no-cache";
             set beresp.http.Expires = "-1";
             set beresp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";

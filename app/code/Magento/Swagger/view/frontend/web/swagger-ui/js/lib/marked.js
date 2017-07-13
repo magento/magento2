@@ -3,7 +3,7 @@
  * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
  * https://github.com/chjj/marked
  *
- * Modified by Magento, Modifications Copyright © 2016 Magento.
+ * Modified by Magento, Modifications Copyright © Magento.
  */
 
 ;(function() {

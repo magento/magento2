@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@
 <?php if (($_product->isSaleable() || $_skipSaleableCheck) && count($_attributes)):?>
 <fieldset id="catalog_product_composite_configure_fields_configurable" class="fieldset admin__fieldset">
     <legend class="legend admin__legend">
-        <span><?php /* @escapeNotVerified */ echo __('Associated Products') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Associated Products') ?></span>
     </legend>
     <div class="product-options">
         <div class="field admin__field _required required">
@@ -28,10 +28,10 @@
                     if ($_attribute->getDecoratedIsLast()):
                         ?> last<?php
                     endif; ?>">
-                    <select name="super_attribute[<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>]"
-                            id="attribute<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>"
+                    <select name="super_attribute[<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>]"
+                            id="attribute<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>"
                             class="admin__control-select required-entry super-attribute-select">
-                        <option><?php /* @escapeNotVerified */ echo __('Choose an Option...') ?></option>
+                        <option><?= /* @escapeNotVerified */ __('Choose an Option...') ?></option>
                     </select>
                 </div>
             <?php endforeach; ?>
@@ -44,7 +44,7 @@ require([
     "Magento_Catalog/catalog/product/composite/configure"
 ], function(){
 
-    var config = <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>;
+    var config = <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>;
     if (window.productConfigure) {
         config.containerId = window.productConfigure.blockFormFields.id;
         if (window.productConfigure.restorePhase) {

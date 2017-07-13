@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element;
@@ -9,6 +9,8 @@ use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class AbstractElement
+ *
+ * @api
  */
 abstract class AbstractElement extends AbstractComponent implements ElementInterface
 {

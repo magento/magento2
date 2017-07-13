@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -153,6 +153,10 @@ class UpgradeData implements UpgradeDataInterface
                 'attribute_id',
                 'validate_rules'
             );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.12', '<')) {
+            $this->upgradeVersionTwoZeroTwelve($customerSetup);
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
@@ -634,6 +638,15 @@ class UpgradeData implements UpgradeDataInterface
                 'system' => true,
             ]
         );
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroTwelve(CustomerSetup $customerSetup)
+    {
+        $customerSetup->updateAttribute('customer_address', 'vat_id', 'frontend_label', 'VAT Number');
     }
 
     /**

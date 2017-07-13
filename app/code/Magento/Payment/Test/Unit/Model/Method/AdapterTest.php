@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Method;
@@ -103,6 +103,45 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             null,
             $this->logger
         );
+    }
+
+    public function testFetchTransactionInfo()
+    {
+        $transactionId = 10555;
+        $transactionInfo = ['test_key' => 'test_value'];
+
+        $valueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $command = $this->getMockForAbstractClass(CommandInterface::class);
+
+        /** @var  InfoInterface|MockObject $paymentInfo */
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+
+        $this->valueHandlerPool->method('get')
+            ->with('can_fetch_transaction_information')
+            ->willReturn($valueHandler);
+        $valueHandler->expects($this->atLeastOnce())
+            ->method('handle')
+            ->with(['field' => 'can_fetch_transaction_information'])
+            ->willReturn(true);
+
+        $this->paymentDataObjectFactory->method('create')
+            ->with($paymentInfo)
+            ->willReturn($paymentDO);
+
+        $this->commandPool->method('get')
+            ->with('fetch_transaction_information')
+            ->willReturn($command);
+        $command->expects($this->atLeastOnce())
+            ->method('execute')
+            ->with(['transactionId' => $transactionId, 'payment' => $paymentDO])
+            ->willReturn($transactionInfo);
+
+        $this->assertEquals(
+            $transactionInfo,
+            $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
+        );
+
     }
 
     /**
@@ -317,19 +356,5 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         $adapter->authorize($paymentInfo, 10);
-    }
-
-    public function testValidationExceptionLogged()
-    {
-        $exception = new \Exception('We can test exception logging!');
-
-        $this->validatorPool->expects(static::once())
-            ->method('get')
-            ->with('global')
-            ->willThrowException($exception);
-        $this->logger->expects(static::once())
-            ->method('critical')
-            ->with($exception);
-        $this->adapter->validate();
     }
 }

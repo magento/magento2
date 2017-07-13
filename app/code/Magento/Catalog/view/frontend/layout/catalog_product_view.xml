@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -182,5 +182,11 @@
         <referenceBlock name="product.info.addtocart.additional">
             <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons.additional"/>
         </referenceBlock>
+        <referenceContainer name="content">
+            <block
+                    class="Magento\Catalog\Block\Ui\ProductViewCounter"
+                    name="product_viewed_counter"
+                    template="Magento_Catalog::product/view/counter.phtml"/>
+        </referenceContainer>
     </body>
 </page>

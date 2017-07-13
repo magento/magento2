@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,11 +134,11 @@ class FilterContextTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(false);
-        $this->termDropdownStrategy->expects($this->once())
+        $this->termDropdownStrategy->expects($this->never())
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(true);
-        $this->assertTrue($this->filterContext->apply($filter, $this->select));
+        $this->assertFalse($this->filterContext->apply($filter, $this->select));
     }
 
     public function testApplyOnTermFilterByMultiSelect()
@@ -153,11 +153,11 @@ class FilterContextTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(false);
-        $this->termDropdownStrategy->expects($this->once())
+        $this->termDropdownStrategy->expects($this->never())
             ->method('apply')
             ->with($filter, $this->select)
             ->willReturn(true);
-        $this->assertTrue($this->filterContext->apply($filter, $this->select));
+        $this->assertFalse($this->filterContext->apply($filter, $this->select));
     }
 
     public function testApplyOnTermFilterByStaticAttribute()

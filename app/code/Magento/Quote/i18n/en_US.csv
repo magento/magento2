@@ -55,3 +55,4 @@ error123,error123
 error345,error345
 Carts,Carts
 "Manage carts","Manage carts"
+"Some addresses cannot be used due to country-specific configurations.","Some addresses cannot be used due to country-specific configurations."

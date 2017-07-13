@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Inline;
@@ -89,7 +89,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->resourceFactoryMock = $this->getMockBuilder(
             \Magento\Translation\Model\ResourceModel\StringUtilsFactory::class
         )
-            ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(\Magento\Translation\Model\ResourceModel\StringUtils::class)
             ->disableOriginalConstructor()

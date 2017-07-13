@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -139,9 +139,12 @@
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="
-                        click: placeOrderClick,
-                        attr: {title: $t('Place Order')}
-                ">
+                            click: placeOrderClick,
+                            attr: {title: $t('Place Order')},
+                            css: {disabled: !isPlaceOrderActionAllowed()},
+                            enable: isActive()
+                        "
+                        disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>

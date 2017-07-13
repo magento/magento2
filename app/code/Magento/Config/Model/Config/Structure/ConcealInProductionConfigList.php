@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure;
@@ -10,6 +10,7 @@ use Magento\Framework\App\State;
 /**
  * Defines status of visibility of form elements on Stores > Settings > Configuration page
  * in Admin Panel in Production mode.
+ * @api
  */
 class ConcealInProductionConfigList implements ElementVisibilityInterface
 {

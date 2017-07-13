@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,29 +16,29 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 ?>
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
-    <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax')); ?>">
+    <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <span class="minicart-tax-total">
     <?php else: ?>
         <span class="minicart-price">
     <?php endif; ?>
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getUnitDisplayPriceInclTax()); ?>
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getUnitDisplayPriceInclTax()) ?>
         </span>
 
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($item)): ?>
             <span class="minicart-tax-info">
             <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($item) as $tax): ?>
-                <span class="weee" data-label="<?php /* @escapeNotVerified */ echo $tax['title']; ?>">
-                    <?php /* @escapeNotVerified */ echo $block->formatPrice($tax['amount_incl_tax'], true, true); ?>
+                <span class="weee" data-label="<?= /* @escapeNotVerified */ $tax['title'] ?>">
+                    <?= /* @escapeNotVerified */ $block->formatPrice($tax['amount_incl_tax'], true, true) ?>
                 </span>
             <?php endforeach; ?>
             </span>
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="minicart-tax-total">
-                    <span class="weee" data-label="<?php echo $block->escapeHtml(__('Total Incl. Tax')); ?>">
-                        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getFinalUnitDisplayPriceInclTax()); ?>
+                    <span class="weee" data-label="<?= $block->escapeHtml(__('Total Incl. Tax')) ?>">
+                        <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalUnitDisplayPriceInclTax()) ?>
                     </span>
                 </span>
             <?php endif; ?>
@@ -48,29 +48,29 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 <?php endif; ?>
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
-    <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
+    <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <span class="minicart-tax-total">
     <?php else: ?>
         <span class="minicart-price">
     <?php endif; ?>
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getUnitDisplayPriceExclTax()); ?>
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getUnitDisplayPriceExclTax()) ?>
         </span>
 
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($item)): ?>
             <span class="minicart-tax-info">
             <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($item) as $tax): ?>
-                <span class="weee" data-label="<?php /* @escapeNotVerified */ echo $tax['title']; ?>">
-                    <?php /* @escapeNotVerified */ echo $block->formatPrice($tax['amount'], true, true); ?>
+                <span class="weee" data-label="<?= /* @escapeNotVerified */ $tax['title'] ?>">
+                    <?= /* @escapeNotVerified */ $block->formatPrice($tax['amount'], true, true) ?>
                 </span>
             <?php endforeach; ?>
             </span>
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="minicart-tax-total">
-                    <span class="weee" data-label="<?php echo $block->escapeHtml(__('Total')); ?>">
-                        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()); ?>
+                    <span class="weee" data-label="<?= $block->escapeHtml(__('Total')) ?>">
+                        <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()) ?>
                     </span>
                 </span>
             <?php endif; ?>

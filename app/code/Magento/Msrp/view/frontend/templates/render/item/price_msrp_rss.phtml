@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,6 @@
 ?>
 <div class="price-box msrp">
     <?php if ($this->helper('Magento\Msrp\Helper\Data')->canApplyMsrp($block->getProduct())): ?>
-        <a href="<?php /* @escapeNotVerified */ echo $block->getProduct()->getProductUrl() ?>"><?php /* @escapeNotVerified */ echo __('Click for price'); ?></a>
+        <a href="<?= /* @escapeNotVerified */ $block->getProduct()->getProductUrl() ?>"><?= /* @escapeNotVerified */ __('Click for price') ?></a>
     <?php endif; ?>
 </div>

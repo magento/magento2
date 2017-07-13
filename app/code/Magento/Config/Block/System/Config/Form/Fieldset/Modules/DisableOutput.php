@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
@@ -11,6 +11,7 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
  *
  * @method \Magento\Config\Block\System\Config\Form getForm()
  * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+ * @api
  */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {

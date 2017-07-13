@@ -1,16 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use Magento\Framework\Search\Request\Config as SearchRequestConfig;
-use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\IndexSwitcher;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -128,6 +125,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $ids = [1, 2, 3];
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(2))
+            ->method('getRelationsByChild')
+            ->willReturn($ids);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
@@ -184,6 +184,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $ids = [1, 2, 3];
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(2))
+            ->method('getRelationsByChild')
+            ->willReturn($ids);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
@@ -199,6 +202,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(2))
+            ->method('getRelationsByChild')
+            ->willReturn([$id]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');

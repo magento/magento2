@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Customer;
@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Customer;
 /**
  * Backend customers by orders report content block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Container

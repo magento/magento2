@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,12 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Assert product MAP related data on product view page.
+ * Assert product MSRP related data on product view page.
  */
 class AssertMsrpOnProductView extends AbstractConstraint
 {
     /**
-     * Assert product MAP related data on product view page.
+     * Assert product MSRP related data on product view page.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
@@ -43,26 +43,11 @@ class AssertMsrpOnProductView extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $product->getMsrp(),
             $priceBlock->getOldPrice(),
-            'Displayed on Product view page MAP is incorrect'
+            'Displayed on Product view page MSRP is incorrect'
         );
         \PHPUnit_Framework_Assert::assertFalse(
             $priceBlock->isRegularPriceVisible(),
             'Regular price on Product view page is visible and not expected.'
-        );
-
-        $viewBlock->openMapBlock();
-        $mapBlock = $viewBlock->getMapBlock();
-        \PHPUnit_Framework_Assert::assertContains(
-            $product->getMsrp(),
-            $mapBlock->getOldPrice(),
-            'Displayed on Product view page MAP is incorrect.'
-        );
-        $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
-        $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
-        \PHPUnit_Framework_Assert::assertEquals(
-            $price,
-            $mapBlock->getActualPrice(),
-            'Displayed on Product view page price is incorrect.'
         );
     }
 
@@ -73,6 +58,6 @@ class AssertMsrpOnProductView extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MAP data on product view page is correct.";
+        return "Displayed Product MSRP data on product view page is correct.";
     }
 }

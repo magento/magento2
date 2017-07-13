@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
@@ -12,8 +12,8 @@ use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\WebsiteRepository;
 use Magento\Store\Model\StoreRepository;
+use Magento\Store\Model\WebsiteRepository;
 
 /**
  * The processor for deleting different entities.
@@ -111,6 +111,10 @@ class Delete implements ProcessorInterface
             ];
 
             foreach ($entities as $scope) {
+                if (!isset($data[$scope])) {
+                    continue;
+                }
+
                 $items = $this->dataDifferenceCalculator->getItemsToDelete($scope, $data[$scope]);
 
                 if (!$items) {
@@ -126,6 +130,7 @@ class Delete implements ProcessorInterface
                         break;
                     case ScopeInterface::SCOPE_GROUPS:
                         $this->deleteGroups($items);
+                        break;
                 }
             }
         } catch (\Exception $e) {
@@ -178,13 +183,9 @@ class Delete implements ProcessorInterface
      */
     private function deleteGroups(array $items)
     {
-        $items = array_keys($items);
-        /** @var Group[] $groups */
-        $groups = $this->groupCollection
-            ->addFilter('code', ['in' => $items])
-            ->getItems();
-
-        foreach ($groups as $group) {
+        $this->groupCollection->addFieldToFilter('code', ['in' => array_keys($items)]);
+        /** @var Group $group */
+        foreach ($this->groupCollection as $group) {
             $group->getResource()->delete($group);
         }
     }

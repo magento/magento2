@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,8 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -113,7 +113,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         ->setSkeletonId($setId)
                         ->setName($name)
                         ->getAttributeSet();
-
                 } catch (AlreadyExistsException $alreadyExists) {
                     $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $name));
                     $this->_session->setAttributeData($data);
@@ -295,7 +294,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
         }
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
-
     }
 
     /**

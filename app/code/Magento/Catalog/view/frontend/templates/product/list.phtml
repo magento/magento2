@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\App\Action\Action;
@@ -73,8 +73,8 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         <?= $block->getProductDetailsHtml($_product) ?>
 
                         <div class="product-item-inner">
-                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
-                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
+                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $position : '' ?>>
+                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $position : '' ?>>
                                     <?php if ($_product->isSaleable()): ?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                         <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $postParams['action'] ?>" method="post">
@@ -95,7 +95,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $position : ''; ?>>
+                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $position : '' ?>>
                                     <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
                                         <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                     <?php endif; ?>

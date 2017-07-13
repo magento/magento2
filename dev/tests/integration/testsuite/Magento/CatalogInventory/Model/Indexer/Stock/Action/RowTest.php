@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
@@ -54,6 +54,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ProductRepository::class
         );
+
         $product = $productRepository->get('simple');
 
         $this->_processor->getIndexer()->setScheduled(false);

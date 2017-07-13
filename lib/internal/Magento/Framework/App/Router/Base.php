@@ -2,7 +2,7 @@
 /**
  * Base router
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
@@ -325,7 +325,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     public function getActionClassName($module, $actionPath)
     {
-        $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix  : 'Controller';
+        $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix : 'Controller';
         return $this->nameBuilder->buildClassName([$module, $prefix, $actionPath]);
     }
 
