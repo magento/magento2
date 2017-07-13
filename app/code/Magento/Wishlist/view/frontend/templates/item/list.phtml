@@ -16,7 +16,7 @@ $columns = $block->getColumns();
     <?php if (count($block->getItems())): ?>
     <ol class="product-items">
         <?php foreach ($block->getItems() as $item): ?>
-            <li data-row="product-item" class="product-item" id="item_<?php echo $block->escapeHtmlAttr($item->getId()) ?>">
+            <li data-row="product-item" class="product-item" id="item_<?= $block->escapeHtmlAttr($item->getId()) ?>">
                 <div class="product-item-info">
                     <?php foreach ($columns as $column): ?>
                         <?php $column->setItem($item); echo $column->toHtml($item);?>
@@ -27,11 +27,11 @@ $columns = $block->getColumns();
     </ol>
     <?php else: ?>
         <div class="message info empty">
-            <span><?php echo $block->escapeHtml(__('This Wish List has no Items'));?></span>
+            <span><?= $block->escapeHtml(__('This Wish List has no Items')) ?></span>
         </div>
     <?php endif; ?>
 </div>
 
 <?php foreach ($columns as $column): ?>
-    <?php echo $column->getAdditionalHtml();?>
+    <?= $column->getAdditionalHtml() ?>
 <?php endforeach; ?>
