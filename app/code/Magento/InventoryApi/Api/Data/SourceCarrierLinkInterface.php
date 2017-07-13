@@ -22,7 +22,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
     /**#@-*/
 
     /**
-     * Get carrier code.
+     * Get carrier code
      *
      * @return string
      */

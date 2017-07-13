@@ -15,9 +15,17 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface SourceItemSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * Get sources items list
+     * Get source items list
      *
      * @return \Magento\InventoryApi\Api\Data\SourceItemInterface[]
      */
     public function getItems();
+
+    /**
+     * Set source items list
+     *
+     * @param \Magento\InventoryApi\Api\Data\SourceItemInterface[] $items
+     * @return void
+     */
+    public function setItems(array $items);
 }

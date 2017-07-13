@@ -8,6 +8,8 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
+ * Represents relation between some physical storage and stock aggregation
+ *
  * @api
  */
 interface SourceStockLinkInterface extends ExtensibleDataInterface
@@ -21,14 +23,14 @@ interface SourceStockLinkInterface extends ExtensibleDataInterface
     /**#@-*/
 
     /**
-     * Get link id.
+     * Get link id
      *
      * @return string
      */
     public function getLinkId();
 
     /**
-     * Set link id.
+     * Set link id
      *
      * @param string $linkId
      * @return void
@@ -36,31 +38,31 @@ interface SourceStockLinkInterface extends ExtensibleDataInterface
     public function setLinkId($linkId);
 
     /**
-     * Get source id.
+     * Get source id
      *
-     * @return int|null
+     * @return int
      */
     public function getSourceId();
 
     /**
-     * Set source id.
+     * Set source id
      *
-     * @param int|null $sourceId
+     * @param int $sourceId
      * @return void
      */
     public function setSourceId($sourceId);
 
     /**
-     * Get stock id.
+     * Get stock id
      *
-     * @return int|null
+     * @return int
      */
     public function getStockId();
 
     /**
-     * Set stock id.
+     * Set stock id
      *
-     * @param int|null $stockId
+     * @param int $stockId
      * @return void
      */
     public function setStockId($stockId);

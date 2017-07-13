@@ -450,14 +450,15 @@ class InstallSchema implements InstallSchemaInterface
         );
     }
 
-    private function createStockTable($setup) {
-        /**
-         * Create table 'inventory_stock'
-         */
-        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_STOCK);
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return Table
+     */
+    private function createStockTable(SchemaSetupInterface $setup) {
+        $stockTable = $setup->getTable(InstallSchema::TABLE_NAME_STOCK);
 
         return $setup->getConnection()->newTable(
-            $sourceTable
+            $stockTable
         )->setComment(
             'Inventory Stock Table'
         )->addColumn(
@@ -482,14 +483,16 @@ class InstallSchema implements InstallSchemaInterface
         );
     }
 
-    private function createSourceStockLinkTable($setup) {
-        /**
-         * Create table 'inventory_source_stock_link'
-         */
-        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_STOCK_LINK);
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return Table
+     */
+    private function createSourceStockLinkTable(SchemaSetupInterface $setup) {
+        $sourceStockLinkTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_STOCK_LINK);
+        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE);
 
         return $setup->getConnection()->newTable(
-            $sourceTable
+            $sourceStockLinkTable
         )->setComment(
             'Inventory Source Stock Link Table'
         )->addColumn(
@@ -509,16 +512,29 @@ class InstallSchema implements InstallSchemaInterface
             null,
             [
                 InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_UNSIGNED => true,
             ],
-            'Stock Id'
+            'Stock ID'
         )->addColumn(
             SourceStockLinkInterface::SOURCE_ID,
             Table::TYPE_INTEGER,
             null,
             [
                 InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_UNSIGNED => true,
             ],
-            'Source Id'
+            'Source ID'
+        )->addForeignKey(
+            $setup->getFkName(
+                $sourceStockLinkTable,
+                SourceStockLinkInterface::SOURCE_ID,
+                $sourceTable,
+                SourceInterface::SOURCE_ID
+            ),
+            SourceStockLinkInterface::SOURCE_ID,
+            $sourceTable,
+            SourceInterface::SOURCE_ID,
+            AdapterInterface::FK_ACTION_CASCADE
         );
     }
 }

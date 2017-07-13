@@ -15,7 +15,7 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
- * Class stockDataProvider
+ * Class StockDataProvider
  * @api
  */
 class StockDataProvider extends DataProvider

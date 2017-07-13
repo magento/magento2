@@ -6,13 +6,14 @@
 namespace Magento\InventoryApi\Api;
 
 /**
+ * This is Facade for basic operations with Stock
+ *
  * @api
  */
 interface StockRepositoryInterface
 {
     /**
-     * Save Stock data. If you want to create plugin on get method, also you need to create separate plugin
-     * on getList method, because entity loading way is different for these methods
+     * Save Stock data
      *
      * @param \Magento\InventoryApi\Api\Data\StockInterface $stock
      * @return int
@@ -21,7 +22,8 @@ interface StockRepositoryInterface
     public function save(\Magento\InventoryApi\Api\Data\StockInterface $stock);
 
     /**
-     * Get Stock data by given stockId.
+     * Get Stock data by given stockId. If you want to create plugin on get method, also you need to create separate
+     * plugin on getList method, because entity loading way is different for these methods
      *
      * @param int $stockId
      * @return \Magento\InventoryApi\Api\Data\StockInterface
@@ -30,7 +32,7 @@ interface StockRepositoryInterface
     public function get($stockId);
 
     /**
-     * Delte the Stock data by given stockId.
+     * Delte the Stock data by given stockId
      *
      * @param int $stockId
      * @return void
@@ -39,7 +41,7 @@ interface StockRepositoryInterface
     public function delete($stockId);
 
     /**
-     * Load Stock data collection by given search criteria.
+     * Load Stock data collection by given search criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
