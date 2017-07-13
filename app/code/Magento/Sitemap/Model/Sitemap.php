@@ -201,7 +201,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sitemap\Model\ResourceModel\Sitemap');
+        $this->_init(\Magento\Sitemap\Model\ResourceModel\Sitemap::class);
     }
 
     /**
@@ -586,7 +586,12 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getStoreBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
     {
-        return rtrim($this->_storeManager->getStore($this->getStoreId())->getBaseUrl($type), '/') . '/';
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->_storeManager->getStore($this->getStoreId());
+
+        $isSecure = $store->isUrlSecure();
+
+        return rtrim($store->getBaseUrl($type, $isSecure), '/') . '/';
     }
 
     /**
