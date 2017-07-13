@@ -37,18 +37,18 @@ class Page implements ItemsInterface
      *
      * @param \Magento\Backend\Helper\Data $adminHtmlData
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminHtmlData,
         \Magento\Cms\Api\PageRepositoryInterface $pageRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->adminHtmlData = $adminHtmlData;
         $this->pageRepository = $pageRepository;
-        $this->criteriaBuilder = $searchCriteriaBuilder;
+        $this->criteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
     }
 
