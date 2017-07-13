@@ -13,7 +13,7 @@
 <tr>
     <td class="item-info has-extra">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
         <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>

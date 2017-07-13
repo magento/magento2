@@ -11,7 +11,8 @@
         "magento/module-catalog-url-rewrite": "100.2.*",
         "magento/module-media-storage": "100.2.*",
         "magento/framework": "100.2.*",
-        "magento/module-config": "100.2.*"
+        "magento/module-config": "100.2.*",
+        "magento/module-robots": "100.2.*"
     },
     "suggest": {
         "magento/module-config": "100.2.*"
