@@ -372,7 +372,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $oldSku = $this->_entityModel->getOldSku();
         $productIds = [];
         foreach ($bunch as $rowData) {
-            $sku = $rowData[ImportProduct::COL_SKU];
+            $sku = strtolower($rowData[ImportProduct::COL_SKU]);
             $productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
             $productIds[] = $productData[$this->getProductEntityLinkField()];
         }
@@ -499,7 +499,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             if (!empty($fieldAndValuePairs['sku'])) {
                 $position = 0;
-                $additionalRow['_super_products_sku'] = $fieldAndValuePairs['sku'];
+                $additionalRow['_super_products_sku'] = strtolower($fieldAndValuePairs['sku']);
                 unset($fieldAndValuePairs['sku']);
                 $additionalRow['display'] = isset($fieldAndValuePairs['display']) ? $fieldAndValuePairs['display'] : 1;
                 unset($fieldAndValuePairs['display']);
@@ -768,11 +768,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
                 // remember SCOPE_DEFAULT row data
                 $scope = $this->_entityModel->getRowScope($rowData);
-                if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) &&
-                    !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
-                    $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]])
-                                        ? $newSku[$rowData[ImportProduct::COL_SKU]]
-                                        : $oldSku[$rowData[ImportProduct::COL_SKU]];
+                if ((ImportProduct::SCOPE_DEFAULT == $scope) &&
+                    !empty($rowData[ImportProduct::COL_SKU])) {
+                    $sku = strtolower($rowData[ImportProduct::COL_SKU]);
+                    $this->_productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
 
                     if ($this->_type != $this->_productData['type_id']) {
                         $this->_productData = null;
@@ -802,7 +801,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $newSku = $this->_entityModel->getNewSku();
         foreach ($bunch as $rowNum => $rowData) {
-            $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+            $productData = $newSku[strtolower($rowData[ImportProduct::COL_SKU])];
             if (($this->_type == $productData['type_id']) &&
                 ($rowData == $this->_entityModel->isRowAllowedToImport($rowData, $rowNum))
             ) {

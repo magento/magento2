@@ -1790,4 +1790,82 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $this->assertEquals('attribute_set_test', $attributeSetName);
         }
     }
+
+    /**
+     * Test importing products with changed SKU letter case.
+     */
+    public function testImportWithDifferentSkuCase()
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        /** @var \Magento\Framework\Api\SearchCriteria $searchCriteria */
+        $searchCriteria = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Api\SearchCriteria::class);
+
+        $importedPrices = [
+            'simple1' => 25,
+            'simple2' => 34,
+            'simple3' => 58,
+        ];
+        $updatedPrices = [
+            'simple1' => 999,
+            'simple2' => 999,
+            'simple3' => 999,
+        ];
+
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource($source)->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        foreach ($importedPrices as $sku => $expectedPrice) {
+            $this->assertEquals($expectedPrice, $productRepository->get($sku)->getPrice());
+        }
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_changed_sku_case.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource($source)->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        foreach ($updatedPrices as $sku => $expectedPrice) {
+            $this->assertEquals(
+                $expectedPrice,
+                $productRepository->get($sku, false, null, true)->getPrice(),
+                'Check that all products were updated'
+            );
+        }
+    }
 }
