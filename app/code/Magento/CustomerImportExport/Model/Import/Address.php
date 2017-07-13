@@ -535,6 +535,15 @@ class Address extends AbstractCustomer
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                } elseif ('multiselect' == $attributeParams['type']) {
+                    $separator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
+                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
+                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                    $value = str_replace(
+                        $separator,
+                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                        $rowData[$attributeAlias]
+                    );
                 } else {
                     $value = $rowData[$attributeAlias];
                 }
