@@ -6,7 +6,7 @@
 namespace Magento\Inventory\Model\OptionSource;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
  * Provide option values for UI
@@ -22,11 +22,11 @@ class SourceItemStatus implements OptionSourceInterface
     {
         return [
             [
-                'value' => SourceInterface::SOURCE_ITEM_STATUS_IN_STOCK,
+                'value' => SourceItemInterface::STATUS_IN_STOCK,
                 'label' => __('In Stock'),
             ],
             [
-                'value' => SourceInterface::SOURCE_ITEM_STATUS_OUT_OF_STOCK,
+                'value' => SourceItemInterface::STATUS_OUT_OF_STOCK,
                 'label' => __('Out of Stock'),
             ],
         ];

@@ -24,6 +24,13 @@ interface SourceItemInterface extends ExtensibleDataInterface
     const STATUS = 'status';
     /**#@-*/
 
+    /**#@+
+     * Source items status values
+     */
+    const STATUS_OUT_OF_STOCK = 0;
+    const STATUS_IN_STOCK = 1;
+    /**#@-*/
+
     /**
      * Get source item id
      *
@@ -77,14 +84,14 @@ interface SourceItemInterface extends ExtensibleDataInterface
     public function setQuantity($quantity);
 
     /**
-     * Get source item status (One of \Magento\Inventory\Model\OptionSource\SourceItemStatus::SOURCE_ITEM_STATUS_*)
+     * Get source item status (One of self::STATUS_*)
      *
      * @return int
      */
     public function getStatus();
 
     /**
-     * Set source item status (One of \Magento\Inventory\Model\OptionSource\SourceItemStatus::SOURCE_ITEM_STATUS_*)
+     * Set source item status (One of self::STATUS_*)
      *
      * @param int $status
      * @return int
