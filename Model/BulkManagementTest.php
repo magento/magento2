@@ -20,10 +20,10 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BulkManagementTest extends \PHPUnit_Framework_TestCase
+class BulkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject_MockObject
      */
     private $publisherMock;
 
@@ -40,7 +40,7 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherMock = $this->getMock(BulkPublisherInterface::class);
+        $this->publisherMock = $this->createMock(BulkPublisherInterface::class);
 
         $this->model = $this->objectManager->create(
             BulkManagement::class,

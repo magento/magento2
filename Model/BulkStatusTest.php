@@ -8,7 +8,7 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
-class BulkStatusTest extends \PHPUnit_Framework_TestCase
+class BulkStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\BulkStatus

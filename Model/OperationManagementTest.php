@@ -10,7 +10,7 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\EntityManager\EntityManager;
 
-class OperationManagementTest extends \PHPUnit_Framework_TestCase
+class OperationManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\OperationManagement

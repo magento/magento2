@@ -9,7 +9,7 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
 
-class BulkNotificationManagementTest extends \PHPUnit_Framework_TestCase
+class BulkNotificationManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BulkNotificationManagement

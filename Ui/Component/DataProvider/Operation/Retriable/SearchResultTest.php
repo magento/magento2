@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class SearchResultTest
  */
-class SearchResultTest extends \PHPUnit_Framework_TestCase
+class SearchResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/AsynchronousOperations/_files/bulk.php
