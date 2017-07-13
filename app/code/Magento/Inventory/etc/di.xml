@@ -13,6 +13,9 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
     <!-- SourceCarrierLinkManagementInterface is extension point for carrier links storage replacing (spi) -->
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
+    <preference for="Magento\InventoryApi\Api\StockRepositoryInterface" type="Magento\Inventory\Model\StockRepository" />
+    <preference for="Magento\InventoryApi\Api\Data\StockInterface" type="Magento\Inventory\Model\Stock" />
+    <preference for="Magento\InventoryApi\Api\Data\StockSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemSaveInterface" type="Magento\Inventory\Model\SourceItemSave"/>

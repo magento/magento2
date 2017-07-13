@@ -13,19 +13,6 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 class Stock extends AbstractDb
 {
     /**
-     * Source constructor
-     *
-     * @param Context $context
-     * @param null $connectionName
-     */
-    public function __construct(
-        Context $context,
-        $connectionName = null
-    ) {
-        parent::__construct($context, $connectionName);
-    }
-
-    /**
      * @inheritdoc
      */
     protected function _construct()

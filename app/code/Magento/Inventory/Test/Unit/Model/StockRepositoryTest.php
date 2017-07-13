@@ -5,17 +5,17 @@
  */
 namespace Magento\Inventory\Test\Unit\Model;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
-use Magento\Inventory\Model\Stock;
-use Magento\Inventory\Model\ResourceModel\Stock as StockResource;
-use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory as StockCollectionFactory;
-use Magento\Inventory\Model\ResourceModel\Stock\Collection as StockCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Inventory\Model\ResourceModel\Stock as StockResource;
+use Magento\Inventory\Model\ResourceModel\Stock\Collection as StockCollection;
+use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory as StockCollectionFactory;
+use Magento\Inventory\Model\Stock;
+use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
+use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
+use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,11 +69,11 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceStock = $this->getMockBuilder(SourceResource::class)->disableOriginalConstructor()->getMock();
+        $this->resourceStock = $this->getMockBuilder(StockResource::class)->disableOriginalConstructor()->getMock();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockFactory = $this->getMockBuilder(SourceInterfaceFactory::class)
+        $this->stockFactory = $this->getMockBuilder(StockInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -81,11 +81,11 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['process'])
             ->getMock();
-        $this->stockCollectionFactory = $this->getMockBuilder(SourceCollectionFactory::class)
+        $this->stockCollectionFactory = $this->getMockBuilder(StockCollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->stockSearchResultsFactory = $this->getMockBuilder(SourceSearchResultsInterfaceFactory::class)
+        $this->stockSearchResultsFactory = $this->getMockBuilder(StockSearchResultsInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -100,11 +100,11 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             \Magento\Inventory\Model\StockRepository::class,
             [
-                'resourceSource' => $this->resourceStock,
-                'sourceFactory' => $this->stockFactory,
+                'resourceStock' => $this->resourceStock,
+                'stockFactory' => $this->stockFactory,
                 'collectionProcessor' => $this->collectionProcessor,
-                'sourceCollectionFactory' => $this->stockCollectionFactory,
-                'sourceSearchResultsFactory' => $this->stockSearchResultsFactory,
+                'stockCollectionFactory' => $this->stockCollectionFactory,
+                'stockSearchResultsFactory' => $this->stockSearchResultsFactory,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
                 'logger' => $this->loggerMock,
             ]
@@ -117,7 +117,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->stock
             ->expects($this->once())
-            ->method('getSourceId')
+            ->method('getStockId')
             ->willReturn($stockId);
         $this->resourceStock
             ->expects($this->once())
@@ -153,7 +153,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->stock
             ->expects($this->once())
-            ->method('getSourceId')
+            ->method('getStockId')
             ->willReturn($stockId);
         $this->stockFactory
             ->expects($this->once())
@@ -176,7 +176,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->stock
             ->expects($this->once())
-            ->method('getSourceId')
+            ->method('getStockId')
             ->willReturn(null);
         $this->stockFactory
             ->expects($this->once())
@@ -235,7 +235,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('setSearchCriteria')
             ->with($searchCriteria);
-        $this->sourceSearchResultsFactory
+        $this->stockSearchResultsFactory
             ->expects($this->once())
             ->method('create')
             ->willReturn($searchResults);
@@ -305,5 +305,55 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('process');
 
         self::assertSame($searchResults, $this->model->getList());
+    }
+
+    public function testDelete()
+    {
+        $stockId = 345;
+        $this->stock
+            ->expects($this->once())
+            ->method('getStockId')
+            ->willReturn($stockId);
+        $this->stockFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->stock);
+        $this->resourceStock
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->stock, $stockId, StockInterface::STOCK_ID);
+
+        $this->resourceStock
+            ->expects($this->once())
+            ->method('delete')
+            ->with($this->stock);
+
+        $this->model->delete($stockId);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testDeleteErrorExpectsException()
+    {
+        $stockId = 0;
+
+        $this->stock
+            ->expects($this->once())
+            ->method('getStockId')
+            ->willReturn(null);
+        $this->stockFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->stock);
+        $this->resourceStock->expects($this->once())
+            ->method('load')
+            ->with(
+                $this->stock,
+                $stockId,
+                StockInterface::STOCK_ID
+            );
+
+        $this->model->delete($stockId);
     }
 }

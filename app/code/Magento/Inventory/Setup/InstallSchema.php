@@ -77,6 +77,7 @@ class InstallSchema implements InstallSchemaInterface
 
         $setup->getConnection()->createTable($this->createSourceCarrierLinkTable($setup));
         $setup->getConnection()->createTable($this->createSourceItemTable($setup));
+
         $setup->getConnection()->createTable($this->createStockTable($setup));
         $setup->getConnection()->createTable($this->createSourceStockLinkTable($setup));
 

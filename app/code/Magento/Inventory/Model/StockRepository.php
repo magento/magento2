@@ -8,6 +8,7 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\Stock as ResourceStock;
@@ -18,6 +19,9 @@ use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * The Repository Model for stock
+ */
 class StockRepository implements StockRepositoryInterface
 {
     /**
@@ -110,6 +114,22 @@ class StockRepository implements StockRepositoryInterface
             throw NoSuchEntityException::singleField(StockInterface::STOCK_ID, $stockId);
         }
         return $stock;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete($stockId)
+    {
+        $stockItem = $this->get($stockId);
+
+        try {
+            $this->resourceStock->delete($stockItem);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            throw new CouldNotDeleteException(__('Could not delete source item'), $e);
+        }
+
     }
 
     /**
