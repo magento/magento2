@@ -21,7 +21,7 @@ class Order implements ItemsInterface
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminHtmlData = null;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
@@ -30,14 +30,14 @@ class Order implements ItemsInterface
 
     /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData
+        \Magento\Backend\Helper\Data $adminHtmlData
     ) {
         $this->_collectionFactory = $collectionFactory;
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminHtmlData;
     }
 
     /**
@@ -78,7 +78,7 @@ class Order implements ItemsInterface
                 'type' => __('Order'),
                 'name' => __('Order #%1', $order->getIncrementId()),
                 'description' => $order->getFirstname() . ' ' . $order->getLastname(),
-                'url' => $this->_adminhtmlData->getUrl('sales/order/view', ['order_id' => $order->getId()]),
+                'url' => $this->_adminHtmlData->getUrl('sales/order/view', ['order_id' => $order->getId()]),
             ];
         }
         return $result;

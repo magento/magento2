@@ -42,7 +42,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     /**
      * @var SearchCriteriaFactory
      */
-    private $searchCriteriaFactory;
+    private $criteriaFactory;
 
     /**
      * Initialize dependencies
@@ -50,7 +50,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param ItemFactory $itemFactory
-     * @param SearchCriteriaFactory $searchCriteriaFactory
+     * @param SearchCriteriaFactory $criteriaFactory
      * @param array $searchModules
      * @param array $previewModules
      */
@@ -58,12 +58,12 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         ItemFactory $itemFactory,
-        SearchCriteriaFactory $searchCriteriaFactory,
+        SearchCriteriaFactory $criteriaFactory,
         array $searchModules = [],
         array $previewModules = []
     ) {
         $this->itemFactory = $itemFactory;
-        $this->searchCriteriaFactory = $searchCriteriaFactory;
+        $this->criteriaFactory = $criteriaFactory;
         $this->_searchModules = $searchModules;
         $this->previewModules = $previewModules;
         parent::__construct($context);
@@ -144,7 +144,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
         $limit = $this->getRequest()->getParam('limit', 10);
         $query = $this->getRequest()->getParam('query', '');
         /** @var SearchCriteria $searchCriteria */
-        $searchCriteria = $this->searchCriteriaFactory->create();
+        $searchCriteria = $this->criteriaFactory->create();
         $searchCriteria->setLimit($limit);
         $searchCriteria->setStart($start);
         $searchCriteria->setQuery($query);

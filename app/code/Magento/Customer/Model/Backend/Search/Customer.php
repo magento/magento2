@@ -15,7 +15,7 @@ class Customer implements ItemsInterface
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminHtmlData = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
@@ -25,7 +25,7 @@ class Customer implements ItemsInterface
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    protected $criteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
@@ -40,22 +40,22 @@ class Customer implements ItemsInterface
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Customer\Helper\View $customerViewHelper
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
+        \Magento\Backend\Helper\Data $adminHtmlData,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Customer\Helper\View $customerViewHelper
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminHtmlData;
         $this->customerRepository = $customerRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->criteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->_customerViewHelper = $customerViewHelper;
     }
@@ -70,8 +70,8 @@ class Customer implements ItemsInterface
             return $result;
         }
 
-        $this->searchCriteriaBuilder->setCurrentPage($searchCriteria->getStart());
-        $this->searchCriteriaBuilder->setPageSize($searchCriteria->getLimit());
+        $this->criteriaBuilder->setCurrentPage($searchCriteria->getStart());
+        $this->criteriaBuilder->setPageSize($searchCriteria->getLimit());
         $searchFields = ['firstname', 'lastname', 'company', 'email'];
         $filters = [];
         foreach ($searchFields as $field) {
@@ -81,8 +81,8 @@ class Customer implements ItemsInterface
                 ->setValue($searchCriteria->getQuery() . '%')
                 ->create();
         }
-        $this->searchCriteriaBuilder->addFilters($filters);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $this->criteriaBuilder->addFilters($filters);
+        $searchCriteria = $this->criteriaBuilder->create();
         $searchResults = $this->customerRepository->getList($searchCriteria);
 
         foreach ($searchResults->getItems() as $customer) {
@@ -100,7 +100,7 @@ class Customer implements ItemsInterface
                 'type' => __('Customer'),
                 'name' => $this->_customerViewHelper->getCustomerName($customer),
                 'description' => $company,
-                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', ['id' => $customer->getId()]),
+                'url' => $this->_adminHtmlData->getUrl('customer/index/edit', ['id' => $customer->getId()]),
             ];
         }
         return $result;

@@ -15,40 +15,40 @@ class Page implements ItemsInterface
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    private $adminHtmlData = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $pageRepository;
+    private $pageRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $criteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
      */
-    protected $filterBuilder;
+    private $filterBuilder;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
+        \Magento\Backend\Helper\Data $adminHtmlData,
         \Magento\Cms\Api\PageRepositoryInterface $pageRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->adminHtmlData = $adminHtmlData;
         $this->pageRepository = $pageRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->criteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
     }
 
@@ -62,8 +62,8 @@ class Page implements ItemsInterface
             return $result;
         }
 
-        $this->searchCriteriaBuilder->setCurrentPage($searchCriteria->getStart());
-        $this->searchCriteriaBuilder->setPageSize($searchCriteria->getLimit());
+        $this->criteriaBuilder->setCurrentPage($searchCriteria->getStart());
+        $this->criteriaBuilder->setPageSize($searchCriteria->getLimit());
         $searchFields = ['title', 'identifier', 'content'];
         $filters = [];
         foreach ($searchFields as $field) {
@@ -73,8 +73,8 @@ class Page implements ItemsInterface
                 ->setValue($searchCriteria->getQuery() . '%')
                 ->create();
         }
-        $this->searchCriteriaBuilder->addFilters($filters);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $this->criteriaBuilder->addFilters($filters);
+        $searchCriteria = $this->criteriaBuilder->create();
         $searchResults = $this->pageRepository->getList($searchCriteria);
 
         foreach ($searchResults->getItems() as $page) {
@@ -83,7 +83,7 @@ class Page implements ItemsInterface
                 'type' => __('CMS Page'),
                 'name' => $page->getTitle(),
                 'description' => $page->getIdentifier(),
-                'url' => $this->_adminhtmlData->getUrl('cms/page/edit', ['page_id' => $page->getId()]),
+                'url' => $this->adminHtmlData->getUrl('cms/page/edit', ['page_id' => $page->getId()]),
             ];
         }
         return $result;

@@ -35,7 +35,7 @@ class Catalog implements ItemsInterface
      *
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_adminhtmlData = null;
+    protected $_adminHtmlData = null;
 
     /**
      * @param \Magento\Backend\Helper\Data $adminhtmlData
@@ -47,7 +47,7 @@ class Catalog implements ItemsInterface
         \Magento\Framework\Stdlib\StringUtils $string,
         QueryFactory $queryFactory
     ) {
-        $this->_adminhtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminhtmlData;
         $this->string = $string;
         $this->queryFactory = $queryFactory;
     }
@@ -79,7 +79,7 @@ class Catalog implements ItemsInterface
                 'type' => __('Product'),
                 'name' => $product->getName(),
                 'description' => $this->string->substr($description, 0, 30),
-                'url' => $this->_adminhtmlData->getUrl('catalog/product/edit', ['id' => $product->getId()]),
+                'url' => $this->_adminHtmlData->getUrl('catalog/product/edit', ['id' => $product->getId()]),
             ];
         }
         return $result;
