@@ -12,13 +12,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {

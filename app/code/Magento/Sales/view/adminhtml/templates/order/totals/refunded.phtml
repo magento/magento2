@@ -9,7 +9,7 @@
 ?>
 <?php if ($block->getCanDisplayTotalRefunded()): ?>
 <tr>
-    <td class="label"><strong><?php /* @escapeNotVerified */ echo __('Total Refunded') ?></strong></td>
-    <td class="emph"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('total_refunded', true) ?></td>
+    <td class="label"><strong><?= /* @escapeNotVerified */ __('Total Refunded') ?></strong></td>
+    <td class="emph"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('total_refunded', true) ?></td>
 </tr>
 <?php endif; ?>

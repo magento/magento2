@@ -7,6 +7,25 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Catalog\Block\FrontendStorageManager" name="frontend-storage-manager" before="-"
+                   template="Magento_Catalog::frontend_storage_manager.phtml">
+                <arguments>
+                    <argument name="configuration" xsi:type="array">
+                        <item name="recently_viewed_product" xsi:type="array">
+                            <item name="requestConfig" xsi:type="array">
+                                <item name="syncUrl" xsi:type="url" path="catalog/product/frontend_action_synchronize"/>
+                            </item>
+                        </item>
+                        <item name="recently_compared_product" xsi:type="array">
+                            <item name="requestConfig" xsi:type="array">
+                                <item name="syncUrl" xsi:type="url" path="catalog/product/frontend_action_synchronize"/>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
         <referenceBlock name="top.links">
             <block class="Magento\Framework\View\Element\Template" name="catalog.compare.link" before="-"
                    template="Magento_Catalog::product/compare/link.phtml">
