@@ -39,9 +39,8 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
             <?= /* @escapeNotVerified */ '<!-- ' . $image . '-->' ?>
             <div class="products-<?= /* @escapeNotVerified */ $mode ?> <?= /* @escapeNotVerified */ $mode ?>">
                 <ol class="product-items <?= /* @escapeNotVerified */ $type ?>">
-                    <?php $iterator = 1; ?>
                     <?php foreach ($items as $_item): ?>
-                        <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                    <li class="product-item">
                         <div class="product-item-info">
                             <a href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>" class="product-item-photo">
                                 <?= $block->getImage($_item, $image)->toHtml() ?>
@@ -117,7 +116,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
+                     </li>
                     <?php endforeach ?>
                 </ol>
             </div>
