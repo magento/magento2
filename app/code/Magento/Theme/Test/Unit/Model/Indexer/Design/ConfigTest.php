@@ -78,21 +78,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'fieldsets' => ['test_fieldset' =>
                     [
-                        'fields' =>
-                            [
-                                'first_field' => [
-                                    'name' => 'firstField',
-                                    'origin' => null,
-                                    'type' => 'filterable',
-                                    'handler' => null,
-                                ],
-                                'second_field' => [
-                                    'name' => 'secondField',
-                                    'origin' => null,
-                                    'type' => 'searchable',
-                                    'handler' => null,
-                                ],
+                        'fields' => [
+                            'first_field' => [
+                                'name' => 'firstField',
+                                'origin' => null,
+                                'type' => 'filterable',
+                                'handler' => null,
                             ],
+                            'second_field' => [
+                                'name' => 'secondField',
+                                'origin' => null,
+                                'type' => 'searchable',
+                                'handler' => null,
+                            ],
+                        ],
                         'provider' => $indexerFieldset,
                     ]
                 ],
