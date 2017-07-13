@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\MessageEncoder;
 /**
  * Test class for Magento\Framework\MessageQueue\MessageEncoder
  */
-class MessageEncoderTest extends \PHPUnit_Framework_TestCase
+class MessageEncoderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var MessageEncoder */
     protected $encoder;

@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Bulk;
 /**
  * Unit test for ExchangeRepository.
  */
-class ExchangeRepositoryTest extends \PHPUnit_Framework_TestCase
+class ExchangeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface|\PHPUnit_Framework_MockObject_MockObject

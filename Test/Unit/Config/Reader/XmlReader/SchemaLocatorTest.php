@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\XmlReader;
 /**
  * @codingStandardsIgnoreFile
  */
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator

@@ -14,7 +14,7 @@ use Magento\Framework\MessageQueue\MessageValidator;
  * @covers Magento\Framework\MessageQueue\MessageValidator
  * @SuppressWarnings(PHPMD)
  */
-class MessageValidatorTest extends \PHPUnit_Framework_TestCase
+class MessageValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var MessageValidator */
     protected $model;
@@ -144,7 +144,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn($requestType);
         if ($expectedResult) {
-            $this->setExpectedException('InvalidArgumentException', $expectedResult);
+            $this->expectException('InvalidArgumentException', $expectedResult);
         }
         $this->model->validate('topic', $message);
     }

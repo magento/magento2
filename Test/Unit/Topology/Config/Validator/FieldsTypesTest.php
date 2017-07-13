@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\Topology\Config\Validator\FieldsTypes;
 /**
  * @codingStandardsIgnoreFile
  */
-class FieldsTypesTest extends \PHPUnit_Framework_TestCase
+class FieldsTypesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FieldsTypes
@@ -55,7 +55,7 @@ class FieldsTypesTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
-        $this->setExpectedException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException', $expectedExceptionMessage);
         $this->model->validate($configData);
     }
 

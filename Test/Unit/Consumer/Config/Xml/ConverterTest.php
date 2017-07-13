@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Xml;
 use Magento\Framework\Communication\Config\ConfigParser;
 use Magento\Framework\MessageQueue\Consumer\Config\Xml\Converter;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter
@@ -30,15 +30,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->defaultConfigProviderMock = $this->getMock(
-            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->configParserMock = $this->getMock(ConfigParser::class, [], [], '', false, false);
+        $this->defaultConfigProviderMock =
+            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
+        $this->configParserMock = $this->createMock(ConfigParser::class);
         $this->converter = new Converter($this->configParserMock, $this->defaultConfigProviderMock);
     }
 

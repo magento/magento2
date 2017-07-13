@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Bulk;
 /**
  * Unit test for Publisher.
  */
-class PublisherTest extends \PHPUnit_Framework_TestCase
+class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\Bulk\ExchangeRepository|\PHPUnit_Framework_MockObject_MockObject

@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Topology;
 /**
  * @codingStandardsIgnoreFile
  */
-class MergedXsdTest extends \PHPUnit_Framework_TestCase
+class MergedXsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ class MergedXsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class, [], [], '', false);
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(true);

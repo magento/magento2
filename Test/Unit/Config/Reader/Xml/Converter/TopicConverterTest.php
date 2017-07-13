@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\Xml\Converter;
 /**
  * Class TopicConverterTest to test <topic> root node type definition of MQ
  */
-class TopicConverterTest extends \PHPUnit_Framework_TestCase
+class TopicConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\TopicConfig
@@ -35,23 +35,9 @@ class TopicConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->methodMapMock = $this->getMock(
-            \Magento\Framework\Reflection\MethodsMap::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->validatorMock = $this->getMock(
-            \Magento\Framework\MessageQueue\Config\Validator::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->communicationConfigMock = $this->getMock(\Magento\Framework\Communication\ConfigInterface::class);
+        $this->methodMapMock = $this->createMock(\Magento\Framework\Reflection\MethodsMap::class);
+        $this->validatorMock = $this->createMock(\Magento\Framework\MessageQueue\Config\Validator::class);
+        $this->communicationConfigMock = $this->createMock(\Magento\Framework\Communication\ConfigInterface::class);
         $wildcardPatternMap = include(__DIR__ . '/../../../../_files/wildcard_pattern_map.php');
         $topicsMap = include(__DIR__ . '/../../../../_files/topic_definitions_map.php');
         $this->validatorMock->expects($this->any())

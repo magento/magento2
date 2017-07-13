@@ -11,7 +11,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BatchConsumerTest extends \PHPUnit_Framework_TestCase
+class BatchConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject

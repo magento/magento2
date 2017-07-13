@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Validator;
 
 use \Magento\Framework\MessageQueue\Publisher\Config\Validator\EnabledConnection;
 
-class EnabledConnectionTest extends \PHPUnit_Framework_TestCase
+class EnabledConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EnabledConnection
@@ -49,7 +49,7 @@ class EnabledConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateMultipleEnabledConnections()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\LogicException',
             'More than 1 enabled connections configured for publisher pub01. ' .
             'More than 1 enabled connections configured for publisher pub02.'

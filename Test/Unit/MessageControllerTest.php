@@ -10,7 +10,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
  * Unit test for MessageController class.
  *
  */
-class MessageControllerTest extends \PHPUnit_Framework_TestCase
+class MessageControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -50,7 +50,7 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
     {
         $properties = [];
         $consumerName = '';
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NotFoundException::class,
             "Property 'message_id' not found in properties."
         );

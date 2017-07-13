@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\Validator\RequiredFields as R
 /**
  * @codingStandardsIgnoreFile
  */
-class RequiredFieldsTest extends \PHPUnit_Framework_TestCase
+class RequiredFieldsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RequiredFieldsValidator
@@ -63,7 +63,7 @@ class RequiredFieldsTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
-        $this->setExpectedException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException', $expectedExceptionMessage);
         $this->validator->validate($configData);
     }
 
