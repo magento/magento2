@@ -38,16 +38,16 @@ class Catalog implements ItemsInterface
     protected $_adminHtmlData = null;
 
     /**
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param \Magento\Backend\Helper\Data $adminHtmlData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param QueryFactory $queryFactory
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
+        \Magento\Backend\Helper\Data $adminHtmlData,
         \Magento\Framework\Stdlib\StringUtils $string,
         QueryFactory $queryFactory
     ) {
-        $this->_adminHtmlData = $adminhtmlData;
+        $this->_adminHtmlData = $adminHtmlData;
         $this->string = $string;
         $this->queryFactory = $queryFactory;
     }
