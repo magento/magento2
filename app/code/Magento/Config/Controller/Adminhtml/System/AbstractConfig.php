@@ -34,7 +34,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
-     * @param $sectionChecker - deprecated
+     * @param mixed $sectionChecker - deprecated
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
