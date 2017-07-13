@@ -492,7 +492,6 @@ class Address extends AbstractCustomer
     {
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
-
         // entity table data
         $entityRowNew = [];
         $entityRowUpdate = [];
@@ -500,7 +499,6 @@ class Address extends AbstractCustomer
         $attributes = [];
         // customer default addresses
         $defaults = [];
-
         $newAddress = true;
         // get address id
         if (isset(
@@ -520,7 +518,6 @@ class Address extends AbstractCustomer
             'parent_id' => $customerId,
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
-
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
                 if (!strlen($rowData[$attributeAlias])) {
@@ -554,7 +551,6 @@ class Address extends AbstractCustomer
                 }
             }
         }
-
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
@@ -562,7 +558,6 @@ class Address extends AbstractCustomer
                 $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
-
         // let's try to find region ID
         $entityRow['region_id'] = null;
         if (!empty($rowData[self::COLUMN_REGION])) {
@@ -575,7 +570,6 @@ class Address extends AbstractCustomer
                 $entityRow['region_id'] = $regionId;
             }
         }
-
         if ($newAddress) {
             $entityRowNew = $entityRow;
             $entityRowNew['created_at'] =
