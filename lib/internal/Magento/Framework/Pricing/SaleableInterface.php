@@ -37,7 +37,7 @@ interface SaleableInterface
     /**
      * Returns quantity of saleable item
      *
-     * @return float
+     * @return float|string
      */
     public function getQty();
 }
