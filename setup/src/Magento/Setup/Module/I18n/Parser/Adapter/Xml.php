@@ -28,20 +28,7 @@ class Xml extends AbstractAdapter
             if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true') {
                 $this->_addPhrase((string)$element);
             } else {
-                $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
-                foreach (explode($nodesDelimiter, $attributes['translate']) as $value) {
-                    $phrase = (string)$element->{$value};
-                    if ($phrase) {
-                        $this->_addPhrase($phrase);
-                    }
-                    $elementAttributes = $element->attributes();
-                    if (isset($elementAttributes[$value])) {
-                        $phrase = (string)$elementAttributes[$value];
-                        if ($phrase) {
-                            $this->_addPhrase($phrase);
-                        }
-                    }
-                }
+                $this->parseTranslatableNodes($attributes, $element);
             }
         }
     }
@@ -65,5 +52,30 @@ class Xml extends AbstractAdapter
         }
 
         return [];
+    }
+
+    /**
+     * Parse nodes pointed out in attribute "translate".
+     *
+     * @param $attributes
+     * @param $element
+     * @return void
+     */
+    protected function parseTranslatableNodes($attributes, $element)
+    {
+        $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
+        foreach (explode($nodesDelimiter, $attributes['translate']) as $value) {
+            $phrase = (string)$element->{$value};
+            if ($phrase) {
+                $this->_addPhrase($phrase);
+            }
+            $elementAttributes = $element->attributes();
+            if (isset($elementAttributes[$value])) {
+                $phrase = (string)$elementAttributes[$value];
+                if ($phrase) {
+                    $this->_addPhrase($phrase);
+                }
+            }
+        }
     }
 }
