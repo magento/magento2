@@ -9,7 +9,9 @@ use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Class RegionSource
+ * Provide option values for UI
+ *
+ * @api
  */
 class RegionSource implements OptionSourceInterface
 {

@@ -6,11 +6,19 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryApi\Api\SourceRepositoryInterface" type="Magento\Inventory\Model\SourceRepository" />
+    <!-- Source -->
+    <preference for="Magento\InventoryApi\Api\SourceRepositoryInterface" type="Magento\Inventory\Model\SourceRepository"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source" />
-    <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink" />
-    <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement" />
+    <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <!-- SourceCarrierLinkManagementInterface is extension point for carrier links storage replacing (spi) -->
+    <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
+    <!-- Source Item -->
+    <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
+    <preference for="Magento\InventoryApi\Api\SourceItemSaveInterface" type="Magento\Inventory\Model\SourceItemSave"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <!-- Stock -->
     <preference for="Magento\InventoryApi\Api\StockRepositoryInterface" type="Magento\Inventory\Model\StockRepository" />
     <preference for="Magento\InventoryApi\Api\Data\StockInterface" type="Magento\Inventory\Model\Stock" />
     <preference for="Magento\InventoryApi\Api\Data\StockSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />

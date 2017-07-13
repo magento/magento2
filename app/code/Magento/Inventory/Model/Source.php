@@ -9,9 +9,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class Source
- *
- * @codeCoverageIgnore
+ * @inheritdoc
  */
 class Source extends AbstractExtensibleModel implements SourceInterface
 {
@@ -308,7 +306,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     public function setUseDefaultCarrierConfig($useDefaultCarrierConfig)
     {
-        return $this->setData(self::USE_DEFAULT_CARRIER_CONFIG, $useDefaultCarrierConfig);
+        $this->setData(self::USE_DEFAULT_CARRIER_CONFIG, $useDefaultCarrierConfig);
     }
 
     /**
@@ -346,6 +344,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
     ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
