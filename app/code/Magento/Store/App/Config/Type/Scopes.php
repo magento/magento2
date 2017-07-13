@@ -65,8 +65,7 @@ class Scopes implements ConfigTypeInterface
 
         $patchChunks = explode('/', $path);
 
-        if (
-            isset($patchChunks[1])
+        if (isset($patchChunks[1])
             && is_numeric($patchChunks[1])
             && in_array($patchChunks[0], [ScopeInterface::SCOPE_WEBSITES, ScopeInterface::SCOPE_STORES], true)
         ) {
