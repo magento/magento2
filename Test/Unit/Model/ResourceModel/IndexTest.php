@@ -15,7 +15,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Index
@@ -49,15 +49,15 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
-        $this->resourceContextMock = $this->getMock(Context::class, [], [], '', false);
-        $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->resourceContextMock = $this->createMock(Context::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->resourceContextMock->expects($this->any())
             ->method('getResources')
             ->willReturn($this->resourceConnectionMock);
-        $this->adapterMock = $this->getMock(AdapterInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
-        $this->metadataPoolMock = $this->getMock(MetadataPool::class, [], [], '', false);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         $this->model = new Index(
             $this->resourceContextMock,
@@ -69,11 +69,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     public function testGetPriceIndexDataUsesFrontendPriceIndexerTable()
     {
         $storeId = 1;
-        $storeMock = $this->getMock(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);

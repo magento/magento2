@@ -8,7 +8,7 @@ namespace Magento\AdvancedSearch\Test\Unit\Model\Client;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ClientResolverTest extends \PHPUnit_Framework_TestCase
+class ClientResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AdvancedSearch\Model\Client\ClientResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +38,7 @@ class ClientResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->model= $this->helper->getObject(
             \Magento\AdvancedSearch\Model\Client\ClientResolver::class,
@@ -59,11 +59,11 @@ class ClientResolverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('engineName'));
 
-        $factoryMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface::class);
+        $factoryMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface::class);
 
-        $clientMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
+        $clientMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
 
-        $clientOptionsMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class);
+        $clientOptionsMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->withConsecutive(
