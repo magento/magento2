@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class HandlerTest extends \PHPUnit_Framework_TestCase
+class HandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Handler
@@ -121,7 +121,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isDebugModeEnabled'])
+            ->setMethods(['isDebugModeEnabled', 'getByCaseId'])
             ->getMock();
         $config->expects(self::any())
             ->method('getByCaseId')

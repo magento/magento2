@@ -17,7 +17,7 @@ use Magento\Signifyd\Observer\PlaceOrder;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
-class PlaceOrderTest extends \PHPUnit_Framework_TestCase
+class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|MockObject
@@ -160,7 +160,8 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
         $this->logger->method('error')
             ->with(self::equalTo($exceptionMessage));
 
-        $this->placeOrder->execute($this->observer);
+        $result = $this->placeOrder->execute($this->observer);
+        $this->assertNull($result);
     }
 
     /**

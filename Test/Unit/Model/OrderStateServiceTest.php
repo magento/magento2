@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\OrderStateService;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class OrderStateServiceTest extends \PHPUnit_Framework_TestCase
+class OrderStateServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int

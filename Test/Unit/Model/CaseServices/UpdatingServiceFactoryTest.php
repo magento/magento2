@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Contains tests for case updating service factory.
  */
-class UpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdatingServiceFactory

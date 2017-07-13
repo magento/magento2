@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * Class CaseInfoTest
  */
-class CaseInfoTest extends \PHPUnit_Framework_TestCase
+class CaseInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseInterface|MockObject

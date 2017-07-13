@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Contains test cases for Signifyd guarantee canceling service.
  */
-class CancelingServiceTest extends \PHPUnit_Framework_TestCase
+class CancelingServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int
