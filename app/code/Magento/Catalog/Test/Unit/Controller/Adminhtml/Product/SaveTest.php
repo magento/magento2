@@ -17,25 +17,28 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
     protected $action;
 
     /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resultPage;
+    private $resultPage;
 
     /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resultForward;
+    private $resultForward;
 
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $productBuilder;
+    private $productBuilder;
 
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
-    protected $product;
+    private $product;
 
     /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resultRedirectFactory;
+    private $resultRedirectFactory;
 
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resultRedirect;
+    private $resultRedirect;
 
     /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
-    protected $initializationHelper;
+    private $initializationHelper;
+
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $messageManagerMock;
 
     /**
      * @return void
@@ -54,6 +57,10 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
         $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+
+        $this->messageManagerMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Message\ManagerInterface::class
+        );
 
         $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
@@ -120,21 +127,24 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
             \Magento\Catalog\Controller\Adminhtml\Product\Save::class,
             [
                 'context' => $this->initContext($additionalParams),
+                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'productBuilder' => $this->productBuilder,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
                 'initializationHelper' => $this->initializationHelper,
                 'storeManager' => $storeManagerInterfaceMock,
+                'messageManager' => $this->messageManagerMock
             ]
         );
     }
 
     /**
      * @param string $exceptionType
+     * @param string $methodExpected
      * @return void
      * @dataProvider exceptionTypeDataProvider
      */
-    public function testExecuteSetsProductDataToSessionAndRedirectsToNewActionOnError($exceptionType)
+    public function testExecuteSetsProductDataToSessionAndRedirectsToNewActionOnError($exceptionType, $methodExpected)
     {
         $productData = ['product' => ['name' => 'test-name']];
 
@@ -145,6 +155,9 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
 
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');
 
+        $this->messageManagerMock->expects($this->once())
+            ->method($methodExpected);
+
         $this->action->execute();
     }
 
@@ -153,6 +166,9 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
      */
     public function exceptionTypeDataProvider()
     {
-        return [[\Magento\Framework\Exception\LocalizedException::class], ['Exception']];
+        return [
+            [\Magento\Framework\Exception\LocalizedException::class, 'addExceptionMessage'],
+            ['Exception', 'addErrorMessage']
+        ];
     }
 }

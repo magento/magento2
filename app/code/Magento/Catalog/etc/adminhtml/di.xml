@@ -51,6 +51,7 @@
         <arguments>
             <argument name="multipleAttributeList" xsi:type="array">
                 <item name="select" xsi:type="string">option</item>
+                <item name="multiselect" xsi:type="string">option</item>
             </argument>
         </arguments>
     </type>

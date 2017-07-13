@@ -6,9 +6,9 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
-use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
-use Magento\Config\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
@@ -36,7 +36,7 @@ class UpdateCommand implements CommandInterface
     private $httpClient;
 
     /**
-     * @var Config
+     * @var ScopeConfigInterface
      */
     private $config;
 
@@ -58,7 +58,7 @@ class UpdateCommand implements CommandInterface
     /**
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
-     * @param Config $config
+     * @param ScopeConfigInterface $config
      * @param LoggerInterface $logger
      * @param FlagManager $flagManager
      * @param ResponseResolver $responseResolver
@@ -66,7 +66,7 @@ class UpdateCommand implements CommandInterface
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
-        Config $config,
+        ScopeConfigInterface $config,
         LoggerInterface $logger,
         FlagManager $flagManager,
         ResponseResolver $responseResolver
@@ -90,12 +90,11 @@ class UpdateCommand implements CommandInterface
         if ($this->analyticsToken->isTokenExist()) {
             $response = $this->httpClient->request(
                 ZendClient::PUT,
-                $this->config->getConfigDataValue($this->updateUrlPath),
+                $this->config->getValue($this->updateUrlPath),
                 [
-                    "url" => $this->flagManager->getFlagData(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE),
-                    "new-url" => $this->config->getConfigDataValue(
-                        Store::XML_PATH_SECURE_BASE_URL
-                    ),
+                    "url" => $this->flagManager
+                        ->getFlagData(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE),
+                    "new-url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
                     "access-token" => $this->analyticsToken->getToken(),
                 ]
             );
@@ -110,6 +109,6 @@ class UpdateCommand implements CommandInterface
             }
         }
 
-        return $result;
+        return (bool)$result;
     }
 }

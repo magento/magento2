@@ -6,6 +6,7 @@
 
 namespace Magento\Wishlist\Test\Unit\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use \Magento\Wishlist\Model\Item;
 
 /**
@@ -298,7 +299,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductWithException()
     {
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, __('Cannot specify product.'));
+        $this->setExpectedException(LocalizedException::class, __('Cannot specify product.'));
         $this->model->getProduct();
     }
 

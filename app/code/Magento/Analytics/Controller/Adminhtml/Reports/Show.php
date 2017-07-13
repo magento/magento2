@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Controller\Adminhtml\Reports;
 
+use Magento\Analytics\Model\Exception\State\SubscriptionUpdateException;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -55,6 +56,9 @@ class Show extends Action
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
             $resultRedirect->setUrl($this->reportUrlProvider->getUrl());
+        } catch (SubscriptionUpdateException $e) {
+            $this->getMessageManager()->addNoticeMessage($e->getMessage());
+            $resultRedirect->setPath('adminhtml');
         } catch (LocalizedException $e) {
             $this->getMessageManager()->addExceptionMessage($e, $e->getMessage());
             $resultRedirect->setPath('adminhtml');
