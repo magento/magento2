@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DateField

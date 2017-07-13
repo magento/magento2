@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\ResourceModel;
 use Magento\Elasticsearch\Model\ResourceModel\Engine;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class EngineTest extends \PHPUnit_Framework_TestCase
+class EngineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Engine

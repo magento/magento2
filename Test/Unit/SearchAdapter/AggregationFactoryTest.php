@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class AggregationFactoryTest
  */
-class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
+class AggregationFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -32,10 +32,14 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManager->expects($this->any())
+            ->method('create')
+            ->willReturn($this->createMock(\Magento\Framework\Search\Response\Aggregation::class));
         $this->model = $objectManagerHelper->getObject(
             \Magento\Elasticsearch\SearchAdapter\AggregationFactory::class,
             [
@@ -51,7 +55,7 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $this->model->create(
+        $object = $this->model->create(
             [
                 'price_bucket' => [
                     'name' => 1,
@@ -59,5 +63,6 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
                 'category_bucket' => [],
             ]
         );
+        $this->assertNotNull($object);
     }
 }

@@ -18,7 +18,7 @@ use Magento\Search\Model\QueryInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SuggestionsTest extends \PHPUnit_Framework_TestCase
+class SuggestionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Suggestions

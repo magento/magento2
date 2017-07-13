@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
+class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IndexNameResolver

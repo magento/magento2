@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class FieldTypeTest extends \PHPUnit_Framework_TestCase
+class FieldTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Elasticsearch\Model\Adapter\FieldType
@@ -39,16 +39,13 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
 
-        $this->eavAttributeResource = $this->getMock(
+        $this->eavAttributeResource = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
                 '__wakeup',
                 'getBackendType',
                 'getFrontendInput'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
         $this->type = $objectManager->getObject(

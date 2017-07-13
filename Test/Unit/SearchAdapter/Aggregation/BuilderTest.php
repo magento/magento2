@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProviderFactory|\PHPUnit_Framework_MockObject_MockObject

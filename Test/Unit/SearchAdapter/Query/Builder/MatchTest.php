@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class MatchTest extends \PHPUnit_Framework_TestCase
+class MatchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests that method constructs a correct select query.

@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -26,7 +26,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->moduleReaderMock = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
+        $this->moduleReaderMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->moduleReaderMock->expects(
             $this->any()
         )->method(

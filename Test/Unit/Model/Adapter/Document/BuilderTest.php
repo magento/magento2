@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Document\Builder
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Builder

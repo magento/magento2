@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Elasticsearch\Model\ResourceModel\Index
@@ -438,7 +438,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
 
-        $attributeOption = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Option::class, [], [], '', false);
+        $attributeOption = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Option::class);
         $attributeOption->expects($this->any())->method('getValue')->willReturn('240-LV04');
         $attributeOption->expects($this->any())->method('getLabel')->willReturn('label');
 

@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AggregationTest extends \PHPUnit_Framework_TestCase
+class AggregationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Aggregation
@@ -90,7 +90,8 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->willReturn('price_bucket');
 
-        $this->model->build($this->requestInterface, $query);
+        $result = $this->model->build($this->requestInterface, $query);
+        $this->assertNotNull($result);
     }
 
     /**
@@ -124,7 +125,8 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->willReturn('price_bucket');
 
-        $this->model->build($this->requestInterface, $query);
+        $result = $this->model->build($this->requestInterface, $query);
+        $this->assertNotNull($result);
     }
 
     /**
@@ -158,6 +160,7 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->willReturn('price_bucket');
 
-        $this->model->build($this->requestInterface, $query);
+        $result = $this->model->build($this->requestInterface, $query);
+        $this->assertNotNull($result);
     }
 }

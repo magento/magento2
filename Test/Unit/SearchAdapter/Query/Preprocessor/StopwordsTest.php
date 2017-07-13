@@ -18,7 +18,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StopwordsTest extends \PHPUnit_Framework_TestCase
+class StopwordsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StopwordsPreprocessor
@@ -83,7 +83,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(

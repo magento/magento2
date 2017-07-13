@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperFactory;
 use Magento\Framework\ObjectManagerInterface;
 
-class DataMapperFactoryTest extends \PHPUnit_Framework_TestCase
+class DataMapperFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataMapperFactory
@@ -87,7 +87,7 @@ class DataMapperFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->getMock(BatchDataMapperInterface::class));
+            ->willReturn($this->createMock(BatchDataMapperInterface::class));
         $this->assertInstanceOf(BatchDataMapperInterface::class, $this->model->create('product'));
     }
 }

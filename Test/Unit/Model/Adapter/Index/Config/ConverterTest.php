@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Index\Config\Converter
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter

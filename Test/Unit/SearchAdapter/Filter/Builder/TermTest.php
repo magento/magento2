@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term
  */
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Term
@@ -74,6 +74,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
             ->method('getFieldName')
             ->willReturn('field');
 
-        $this->model->buildFilter($this->filterInterface);
+        $result = $this->model->buildFilter($this->filterInterface);
+        $this->assertNotNull($result);
     }
 }

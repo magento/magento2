@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class ConnectionManagerTest
  */
-class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
+class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionManager

@@ -21,7 +21,7 @@ use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ElasticsearchTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElasticsearchAdapter
