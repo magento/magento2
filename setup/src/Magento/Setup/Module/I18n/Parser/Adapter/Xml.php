@@ -61,7 +61,7 @@ class Xml extends AbstractAdapter
      * @param \SimpleXMLElement $element
      * @return void
      */
-    protected function parseTranslatableNodes(\SimpleXMLElement $attributes, \SimpleXMLElement $element)
+    private function parseTranslatableNodes(\SimpleXMLElement $attributes, \SimpleXMLElement $element)
     {
         $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
         foreach (explode($nodesDelimiter, $attributes['translate']) as $value) {
