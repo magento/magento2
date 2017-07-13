@@ -396,8 +396,8 @@
                 <item name="urlPath" xsi:type="string">customer/index/massAssignGroup</item>
                 <item name="paramName" xsi:type="string">group</item>
                 <item name="confirm" xsi:type="array">
-                    <item name="title" xsi:type="string">Assign a Customer Group</item>
-                    <item name="message" xsi:type="string">Are you sure to assign selected customers to new group?</item>
+                    <item name="title" xsi:type="string" translatable="true">Assign a Customer Group</item>
+                    <item name="message" xsi:type="string" translatable="true">Are you sure to assign selected customers to new group?</item>
                 </item>
             </argument>
         </arguments>

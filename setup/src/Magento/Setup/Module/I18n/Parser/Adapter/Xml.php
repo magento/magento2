@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Module\I18n\Parser\Adapter;
 
 /**
  * Xml parser adapter
  *
- * Parse "translate" node and collect phrases:
- * - from itself, it @translate == true
+ * Parse "translate" and 'translatable' node and collect phrases:
+ * - from itself, it @translate or @translatable == true
  * - from given attributes, split by ",", " "
  */
 class Xml extends AbstractAdapter
@@ -24,7 +25,7 @@ class Xml extends AbstractAdapter
                 continue;
             }
             $attributes = $element->attributes();
-            if ((string)$attributes['translate'] == 'true') {
+            if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true') {
                 $this->_addPhrase((string)$element);
             } else {
                 $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
@@ -57,10 +58,12 @@ class Xml extends AbstractAdapter
         $xml = simplexml_load_file($file);
         libxml_use_internal_errors(false);
         if ($xml) {
-            $nodes = $xml->xpath('//*[@translate]');
+            $nodes = $xml->xpath('//*[@translate|@translatable]');
             unset($xml);
+
             return is_array($nodes) ? $nodes : [];
         }
+
         return [];
     }
 }
