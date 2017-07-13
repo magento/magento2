@@ -58,7 +58,7 @@ define([
 
         it('on iframe from other host returns empty Array', function () {
             iframe.contents().find('body').html(comment);
-            iframe.attr('src', '//' + host + '.otherHost/');
+            iframe.attr('src', '//' + host + '.otherHost/?origin_url=' + host);
 
             expect(iframe.comments().length).toEqual(0);
         });
