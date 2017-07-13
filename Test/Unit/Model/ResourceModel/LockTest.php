@@ -15,7 +15,7 @@ use Magento\MessageQueue\Model\ResourceModel\Lock as LockResourceModel;
 /**
  * Unit tests for lock resource model
  */
-class LockTest extends \PHPUnit_Framework_TestCase
+class LockTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManager */
     private $objectManager;

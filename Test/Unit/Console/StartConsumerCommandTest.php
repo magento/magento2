@@ -11,7 +11,7 @@ use Magento\MessageQueue\Console\StartConsumerCommand;
 /**
  * Unit tests for StartConsumerCommand.
  */
-class StartConsumerCommandTest extends \PHPUnit_Framework_TestCase
+class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
