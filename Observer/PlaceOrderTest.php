@@ -14,10 +14,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
-class PlaceOrderTest extends \PHPUnit_Framework_TestCase
+class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseCreationServiceInterface|MockObject

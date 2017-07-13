@@ -15,9 +15,9 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 
-class CancelOrderTest extends \PHPUnit_Framework_TestCase
+class CancelOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int

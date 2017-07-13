@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Contains tests for case entity updating service.
  */
-class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

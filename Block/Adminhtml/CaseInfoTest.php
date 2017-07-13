@@ -12,7 +12,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CaseInfoTest extends \PHPUnit_Framework_TestCase
+class CaseInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

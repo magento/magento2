@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Contains test methods for case management service
  */
-class CaseManagementTest extends \PHPUnit_Framework_TestCase
+class CaseManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseManagement

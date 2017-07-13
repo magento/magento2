@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FingerprintTest extends \PHPUnit_Framework_TestCase
+class FingerprintTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

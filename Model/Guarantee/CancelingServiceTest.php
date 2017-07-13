@@ -13,13 +13,13 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
  * Contains test cases for canceling Signifyd guarantee flow.
  */
-class CancelingServiceTest extends \PHPUnit_Framework_TestCase
+class CancelingServiceTest extends \PHPUnit\Framework\TestCase
 {
     private static $caseId = 123;
 

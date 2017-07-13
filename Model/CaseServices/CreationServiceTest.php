@@ -18,7 +18,7 @@ use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 use Magento\Signifyd\Model\SignifydGateway\Client\RequestBuilder;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreationServiceTest extends \PHPUnit_Framework_TestCase
+class CreationServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

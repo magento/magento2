@@ -90,7 +90,7 @@ class HandlerTest extends AbstractController
     /**
      * Returns mocked WebhookRequest
      *
-     * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return WebhookRequest|\PHPUnit\Framework\MockObject_MockObject
      */
     private function getWebhookRequest()
     {
@@ -113,7 +113,7 @@ class HandlerTest extends AbstractController
     /**
      * Returns mocked test WebhookRequest
      *
-     * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return WebhookRequest|\PHPUnit\Framework\MockObject_MockObject
      */
     private function getTestWebhookRequest()
     {

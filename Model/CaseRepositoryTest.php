@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Testing case repository
  */
-class CaseRepositoryTest extends \PHPUnit_Framework_TestCase
+class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

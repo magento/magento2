@@ -20,7 +20,7 @@ use Magento\Framework\App\ProductMetadataInterface;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
+class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
