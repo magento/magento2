@@ -24,7 +24,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
  */
-class ReindexAllTest extends \PHPUnit_Framework_TestCase
+class ReindexAllTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionManager

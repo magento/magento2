@@ -19,7 +19,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Elasticsearch/_files/configurable_products.php
  */
-class ElasticsearchTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionManager

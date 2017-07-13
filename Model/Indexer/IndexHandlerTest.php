@@ -21,7 +21,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
-class IndexHandlerTest extends \PHPUnit_Framework_TestCase
+class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionManager
