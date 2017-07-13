@@ -10,6 +10,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * NewAction Controller
+ */
 class NewAction extends Action
 {
     /**

@@ -9,6 +9,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Index Controller
+ */
 class Index extends Action
 {
     /**

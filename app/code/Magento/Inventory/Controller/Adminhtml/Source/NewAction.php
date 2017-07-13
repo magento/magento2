@@ -11,7 +11,7 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class NewAction
+ * NewAction Controller
  */
 class NewAction extends Action
 {

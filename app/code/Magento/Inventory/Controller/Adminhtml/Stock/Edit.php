@@ -14,6 +14,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
+/**
+ * Edit Controller
+ */
 class Edit extends Action
 {
     /**

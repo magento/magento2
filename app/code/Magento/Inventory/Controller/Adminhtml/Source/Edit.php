@@ -15,7 +15,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class Edit
+ * Edit Controller
  */
 class Edit extends Action
 {

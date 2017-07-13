@@ -16,7 +16,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class InlineEdit
+ * InlineEdit Controller
  */
 class InlineEdit extends Action
 {

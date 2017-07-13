@@ -18,7 +18,7 @@ use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Class Save
+ * Save Controller
  */
 class Save extends Action
 {

@@ -10,7 +10,7 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class Index
+ * Index Controller
  */
 class Index extends Action
 {
@@ -20,7 +20,7 @@ class Index extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::source';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

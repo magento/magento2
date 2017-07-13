@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\Shipping\Model\Config;
 
 /**
- * Class CarrierRequestDataHydrator
+ * Populate Source by carrier codes links
  */
 class CarrierRequestDataHydrator
 {

@@ -11,24 +11,20 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
+/**
+ * Save Controller
+ */
 class Save extends Action
 {
     /**
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Inventory::stock';
-
-    /**
-     * Registry stock_id key
-     */
-    const REGISTRY_STOCK_ID_KEY = 'stock_id';
 
     /**
      * @var StockInterfaceFactory
@@ -46,29 +42,21 @@ class Save extends Action
     private $dataObjectHelper;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @param Context $context
      * @param StockInterfaceFactory $stockFactory
      * @param StockRepositoryInterface $stockRepository
      * @param DataObjectHelper $dataObjectHelper
-     * @param Registry $registry
      */
     public function __construct(
         Context $context,
         StockInterfaceFactory $stockFactory,
         StockRepositoryInterface $stockRepository,
-        DataObjectHelper $dataObjectHelper,
-        Registry $registry
+        DataObjectHelper $dataObjectHelper
     ) {
         parent::__construct($context);
         $this->stockFactory = $stockFactory;
         $this->stockRepository = $stockRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->registry = $registry;
     }
 
     /**
@@ -77,14 +65,13 @@ class Save extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $requestData = $this->getRequest()->getParam('general');
-        if ($this->getRequest()->isPost() && $requestData) {
+        $requestData = $this->getRequest()->getParams();
+        if ($this->getRequest()->isPost() && !empty($requestData['general'])) {
             try {
-                $stockId = $requestData[StockInterface::STOCK_ID]??null;
+                $stockId = !empty($requestData['general'][StockInterface::SOURCE_ID])
+                    ? $requestData['general'][StockInterface::SOURCE_ID] : null;
 
                 $stockId = $this->processSave($stockId, $requestData);
-                // Keep data for plugins on Save controller. Now we can not call separate services from one form.
-                $this->registry->register(self::REGISTRY_STOCK_ID_KEY, $stockId);
 
                 $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
                 $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
@@ -93,9 +80,6 @@ class Save extends Action
                 $this->messageManager->addErrorMessage(__('The Stock does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
             } catch (CouldNotSaveException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
-                $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
-            } catch (InputException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             } catch (Exception $e) {
@@ -124,7 +108,7 @@ class Save extends Action
             /** @var StockInterface $stock */
             $stock = $this->stockFactory->create();
         }
-        $this->dataObjectHelper->populateWithArray($stock, $requestData, StockInterface::class);
+        $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
 
         $stockId = $this->stockRepository->save($stock);
         return $stockId;
