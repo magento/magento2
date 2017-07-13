@@ -13,14 +13,14 @@ use Magento\Framework\View\LayoutInterface;
 /**
  * @magentoAppArea frontend
  */
-class SuggestionsTest extends \PHPUnit_Framework_TestCase
+class SuggestionsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\AdvancedSearch\Block\Suggestions */
     protected $block;
 
     protected function setUp()
     {
-        $suggestedQueries = $this->getMock(SuggestedQueriesInterface::CLASS);
+        $suggestedQueries = $this->createMock(SuggestedQueriesInterface::CLASS);
         $suggestedQueries->expects($this->any())->method('getItems')->willReturn([
             new QueryResult('test item', 1),
             new QueryResult("<script>alert('Test');</script>", 1)
