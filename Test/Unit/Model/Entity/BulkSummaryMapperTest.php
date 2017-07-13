@@ -11,7 +11,7 @@ use Magento\AsynchronousOperations\Model\Entity\BulkSummaryMapper;
 /**
  * Class BulkSummaryMapperTest
  */
-class BulkSummaryMapperTest extends \PHPUnit_Framework_TestCase
+class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\Entity\BulkSummaryMapper
@@ -45,23 +45,11 @@ class BulkSummaryMapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->resourceConnectionMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entityMetadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->resourceConnectionMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->model = new BulkSummaryMapper(
             $this->metadataPoolMock,
             $this->resourceConnectionMock

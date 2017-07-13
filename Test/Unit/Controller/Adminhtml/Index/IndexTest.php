@@ -8,7 +8,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Controller\Adminhtml\Index;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -33,15 +33,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->resultFactoryMock = $this->getMock(
-            \Magento\Framework\View\Result\PageFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->resultFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
 
         $this->model = $objectManager->getObject(
             \Magento\AsynchronousOperations\Controller\Adminhtml\Index\Index::class,
@@ -58,19 +52,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     {
         $itemId = 'Magento_Logging::system_magento_logging_events';
         $prependText = 'Bulk Actions Log';
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
-        $menuModelMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
-        $pageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
-        $pageConfigMock = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
-        $titleMock = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $menuModelMock = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $pageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($pageMock);
 
-        $blockMock = $this->getMock(
+        $blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\BlockInterface::class,
-            ['setActive', 'getMenuModel', 'toHtml'],
-            [],
-            '',
-            false
+            ['setActive', 'getMenuModel', 'toHtml']
         );
 
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);

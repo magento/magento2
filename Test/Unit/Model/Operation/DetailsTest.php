@@ -8,7 +8,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model\Operation;
 
 use Magento\Framework\Bulk\OperationInterface;
 
-class DetailsTest extends \PHPUnit_Framework_TestCase
+class DetailsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

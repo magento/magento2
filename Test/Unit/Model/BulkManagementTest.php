@@ -11,7 +11,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BulkManagementTest extends \PHPUnit_Framework_TestCase
+class BulkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\EntityManager\EntityManager|\PHPUnit_Framework_MockObject_MockObject

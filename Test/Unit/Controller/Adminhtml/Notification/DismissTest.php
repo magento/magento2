@@ -12,7 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\AsynchronousOperations\Controller\Adminhtml\Notification\Dismiss;
 use Magento\Framework\Controller\Result\Json;
 
-class DismissTest extends \PHPUnit_Framework_TestCase
+class DismissTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Dismiss
@@ -42,17 +42,11 @@ class DismissTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->notificationManagementMock = $this->getMock(BulkNotificationManagement::class, [], [], '', false);
-        $this->requestMock = $this->getMock(RequestInterface::class);
-        $this->resultFactoryMock = $this->getMock(
-            ResultFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->notificationManagementMock = $this->createMock(BulkNotificationManagement::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
 
-        $this->jsonResultMock = $this->getMock(Json::class, [], [], '', false);
+        $this->jsonResultMock = $this->createMock(Json::class);
 
         $this->model = $objectManager->getObject(
             Dismiss::class,

@@ -9,7 +9,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\Operation;
 use Magento\AsynchronousOperations\Ui\Component\Operation\DataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -50,35 +50,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->bulkCollectionFactoryMock = $this->getMock(
+        $this->bulkCollectionFactoryMock = $this->createPartialMock(
             \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->bulkCollectionMock = $this->getMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection::class,
-            [],
-            [],
-            '',
-            false
+        $this->bulkCollectionMock = $this->createMock(
+            \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection::class
         );
-        $this->operationDetailsMock = $this->getMock(
-            \Magento\AsynchronousOperations\Model\Operation\Details::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->bulkMock = $this->getMock(
-            \Magento\AsynchronousOperations\Model\BulkSummary::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->operationDetailsMock = $this->createMock(\Magento\AsynchronousOperations\Model\Operation\Details::class);
+        $this->bulkMock = $this->createMock(\Magento\AsynchronousOperations\Model\BulkSummary::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
         $this->bulkCollectionFactoryMock
             ->expects($this->once())

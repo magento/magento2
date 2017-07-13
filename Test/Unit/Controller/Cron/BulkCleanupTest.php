@@ -5,7 +5,7 @@
  */
 namespace Magento\AsynchronousOperations\Test\Unit\Controller\Cron;
 
-class BulkCleanupTest extends \PHPUnit_Framework_TestCase
+class BulkCleanupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -39,29 +39,11 @@ class BulkCleanupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false);
-        $this->scopeConfigMock = $this->getMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->resourceConnectionMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->timeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, [], [], '', false);
+        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->resourceConnectionMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->timeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $this->model = new \Magento\AsynchronousOperations\Cron\BulkCleanup(
             $this->metadataPoolMock,
             $this->resourceConnectionMock,
@@ -78,14 +60,8 @@ class BulkCleanupTest extends \PHPUnit_Framework_TestCase
         $bulkLifetimeMultiplier = 10;
         $bulkLifetime = 3600 * 24 * $bulkLifetimeMultiplier;
 
-        $adapterMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
-        $entityMetadataMock = $this->getMock(
-            \Magento\Framework\EntityManager\EntityMetadataInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
 
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->with($this->stringContains($entityType))
             ->willReturn($entityMetadataMock);

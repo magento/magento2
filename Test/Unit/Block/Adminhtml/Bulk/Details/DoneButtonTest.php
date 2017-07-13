@@ -7,7 +7,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Block\Adminhtml\Bulk\Details;
 
 use Magento\Framework\Bulk\OperationInterface;
 
-class DoneButtonTest extends \PHPUnit_Framework_TestCase
+class DoneButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\DoneButton
@@ -26,7 +26,7 @@ class DoneButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->bulkStatusMock = $this->getMock(\Magento\Framework\Bulk\BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->createMock(\Magento\Framework\Bulk\BulkStatusInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
         $this->block = new \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\DoneButton(

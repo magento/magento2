@@ -5,7 +5,7 @@
  */
 namespace Magento\AsynchronousOperations\Test\Unit\Block\Adminhtml\Bulk\Details;
 
-class RetryButtonTest extends \PHPUnit_Framework_TestCase
+class RetryButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\RetryButton
