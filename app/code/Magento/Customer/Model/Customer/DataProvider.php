@@ -158,9 +158,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Config $eavConfig,
         FilterPool $filterPool,
         FileProcessorFactory $fileProcessorFactory = null,
-        ContextInterface $context = null,
         array $meta = [],
         array $data = [],
+        ContextInterface $context = null,
         $allowToShowHiddenAttributes = true
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
