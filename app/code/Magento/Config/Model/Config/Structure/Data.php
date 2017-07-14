@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides configuration
+ * @api
  */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {

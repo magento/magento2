@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Customer\Totals\Collection;
 
+/**
+ * @api
+ */
 class Initial extends \Magento\Reports\Model\ResourceModel\Report\Collection
 {
     /**

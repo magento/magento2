@@ -16,6 +16,7 @@ namespace Magento\Backend\Block\Widget\Button;
  * @method bool getDisabled()
  * @method string getStyle()
  * @method array getDataAttribute()
+ * @api
  */
 class SplitButton extends \Magento\Backend\Block\Widget
 {

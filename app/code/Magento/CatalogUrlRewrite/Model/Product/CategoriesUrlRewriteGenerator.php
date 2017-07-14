@@ -31,7 +31,7 @@ class CategoriesUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on categories
+     * Generate product rewrites with categories
      *
      * @param int $storeId
      * @param Product $product
