@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
-use Magento\ConfigurableProductSales\Model\Order\Reorder\OrderedProductAvailabilityChecker as ConfigurableProductChecker;
+use Magento\ConfigurableProductSales\Model\Order\Reorder\OrderedProductAvailabilityChecker as ConfigurableChecker;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
@@ -32,7 +32,7 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit_Framework_TestCase
     private $orderItemInterfaceMock;
 
     /**
-     * @var ConfigurableProductChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableChecker|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configurableCheckerMock;
 
@@ -61,7 +61,7 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit_Framework_TestCase
 
         $this->productTypeConfigurable = 'configurable';
         $this->productTypeSimple = 'simple';
-        $this->configurableCheckerMock = $this->getMockBuilder(ConfigurableProductChecker::class)
+        $this->configurableCheckerMock = $this->getMockBuilder(ConfigurableChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fakeClass = new \stdClass();
