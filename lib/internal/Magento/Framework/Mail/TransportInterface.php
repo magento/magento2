@@ -19,4 +19,11 @@ interface TransportInterface
      * @throws \Magento\Framework\Exception\MailException
      */
     public function sendMessage();
+
+    /**
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage();
 }
