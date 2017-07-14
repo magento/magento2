@@ -14,6 +14,7 @@ class BaseUrlRewriteGenerator
 
     /**
      * @param array $paths
+     * @param integer $entityId
      * @param integer $storeId
      * @return bool|mixed
      */
@@ -27,7 +28,7 @@ class BaseUrlRewriteGenerator
             ]
         );
 
-        foreach($urlRewrites as $urlRewrite) {
+        foreach ($urlRewrites as $urlRewrite) {
             if ($urlRewrite->getEntityId() != $entityId) {
                 $data[] = $urlRewrite->getRequestPath();
             }
