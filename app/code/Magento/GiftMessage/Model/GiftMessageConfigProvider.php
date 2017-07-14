@@ -105,11 +105,11 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
-        if ($itemLevelGiftMessageConfiguration) {
-            $itemMessages = $this->getItemLevelGiftMessages();
-            $configuration['isItemLevelGiftOptionsEnabled'] = true;
-            $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
-        }
+
+        $itemMessages = $this->getItemLevelGiftMessages();
+        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessageConfiguration;
+        $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
+
         $configuration['priceFormat'] = $this->localeFormat->getPriceFormat(
             null,
             $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
@@ -178,8 +178,12 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         foreach ($items as $item) {
             $itemId = $item->getId();
             $message = $this->itemRepository->get($cartId, $itemId);
+            $isAvailable = $item->getProduct()->getGiftMessageAvailable();
             if ($message) {
-                $itemMessages[$itemId] = $message->getData();
+                $itemMessages[$itemId]['message'] = $message->getData();
+            }
+            if ($isAvailable !== null) {
+                $itemMessages[$itemId]['is_available'] = (bool)$isAvailable;
             }
         }
         return count($itemMessages) === 0 ? null : $itemMessages;
