@@ -768,7 +768,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
                 // remember SCOPE_DEFAULT row data
                 $scope = $this->_entityModel->getRowScope($rowData);
-                if ((ImportProduct::SCOPE_DEFAULT == $scope) &&
+                if (ImportProduct::SCOPE_DEFAULT == $scope &&
                     !empty($rowData[ImportProduct::COL_SKU])) {
                     $sku = strtolower($rowData[ImportProduct::COL_SKU]);
                     $this->_productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];

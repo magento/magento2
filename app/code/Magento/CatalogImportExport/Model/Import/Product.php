@@ -2191,38 +2191,42 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $row = [];
                 $sku = $rowData[self::COL_SKU];
-                $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
-                $productIdsToReindex[] = $row['product_id'];
+                if ($this->skuProcessor->getNewSku($sku) !== null) {
+                    $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
+                    $productIdsToReindex[] = $row['product_id'];
 
-                $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
-                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
+                    $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
+                    $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
 
-                $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
-                $existStockData = $stockItemDo->getData();
+                    $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
+                    $existStockData = $stockItemDo->getData();
 
-                $row = array_merge(
-                    $this->defaultStockData,
-                    array_intersect_key($existStockData, $this->defaultStockData),
-                    array_intersect_key($rowData, $this->defaultStockData),
-                    $row
-                );
+                    $row = array_merge(
+                        $this->defaultStockData,
+                        array_intersect_key($existStockData, $this->defaultStockData),
+                        array_intersect_key($rowData, $this->defaultStockData),
+                        $row
+                    );
 
-                if ($this->stockConfiguration->isQty(
-                    $this->skuProcessor->getNewSku($sku)['type_id']
-                )) {
-                    $stockItemDo->setData($row);
-                    $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
-                    if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                        $row['low_stock_date'] = $this->dateTime->gmDate(
-                            'Y-m-d H:i:s',
-                            (new \DateTime())->getTimestamp()
-                        );
+                    if ($this->stockConfiguration->isQty(
+                        $this->skuProcessor->getNewSku($sku)['type_id']
+                    )
+                    ) {
+                        $stockItemDo->setData($row);
+                        $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
+                        if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
+                            $row['low_stock_date'] = $this->dateTime->gmDate(
+                                'Y-m-d H:i:s',
+                                (new \DateTime())->getTimestamp()
+                            );
+                        }
+                        $row['stock_status_changed_auto'] =
+                            (int)!$this->stockStateProvider->verifyStock($stockItemDo);
+                    } else {
+                        $row['qty'] = 0;
                     }
-                    $row['stock_status_changed_auto'] =
-                        (int) !$this->stockStateProvider->verifyStock($stockItemDo);
-                } else {
-                    $row['qty'] = 0;
                 }
+
                 if (!isset($stockData[$sku])) {
                     $stockData[$sku] = $row;
                 }
