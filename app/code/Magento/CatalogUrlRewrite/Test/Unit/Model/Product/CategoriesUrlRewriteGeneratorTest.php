@@ -47,29 +47,7 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->dataObjectHelper = $this->getMock(
-            \Magento\Framework\Api\DataObjectHelper::class, [], [], '',
-            false);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->select = $this->getMock(
-            \Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect'], [], '',
-            false);
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-
-        $this->resource->expects($this->any())
-            ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->will($this->returnValue($this->select));
-
-        $this->urlFinder = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
-            [
-                'urlRewriteFactory' => $this->urlRewriteFactory,
-                'dataObjectHelper' => $this->dataObjectHelper,
-                'resource' => $this->resource,
-            ]
-        );
+        $this->urlFinder = $this->objectManager->get(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
 
         $this->categoriesUrlRewriteGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator::class,
