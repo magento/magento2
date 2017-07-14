@@ -32,8 +32,13 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlFinder;
 
+    /** @var \Magento\Framework\ObjectManagerInterface */
+    protected $objectManager;
+
     protected function setUp()
     {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
