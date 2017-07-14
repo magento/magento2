@@ -21,7 +21,7 @@ class UnavailableProductsProviderTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\OrderFactory $orderFactory */
         $orderFactory = $objectManager->get(OrderInterfaceFactory::class);
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $orderFactory->create()->loadByIncrementId('100000001');
+        $order = $orderFactory->create()->loadByIncrementId('100001001');
         $orderItems = $order->getItems();
         $orderItemSimple = $orderItems[2];
         $orderItemSimple->getSku();
