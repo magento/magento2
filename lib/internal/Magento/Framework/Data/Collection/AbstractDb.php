@@ -215,11 +215,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     public function getSize()
     {
-        if ($this->_totalRecords === null) {
+        $itemCount = count($this->_items);
+
+        if ($this->_totalRecords === null || ($itemCount > 0 && $itemCount !== $this->_totalRecords)) {
             $sql = $this->getSelectCountSql();
-            $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
+            $this->_totalRecords = (int) $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
-        return intval($this->_totalRecords);
+
+        return (int) $this->_totalRecords;
     }
 
     /**
