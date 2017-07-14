@@ -10,11 +10,11 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
-class AnchorUrlRewriteGenerator
+class AnchorUrlRewriteGenerator extends BaseUrlRewriteGenerator
 {
     /** @var ProductUrlPathGenerator */
     protected $urlPathGenerator;
@@ -29,15 +29,18 @@ class AnchorUrlRewriteGenerator
      * @param ProductUrlPathGenerator $urlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param UrlFinderInterface $urlFinder
      */
     public function __construct(
         ProductUrlPathGenerator $urlPathGenerator,
         UrlRewriteFactory $urlRewriteFactory,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        UrlFinderInterface $urlFinder
     ) {
         $this->urlPathGenerator = $urlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->categoryRepository = $categoryRepository;
+        $this->urlFinder = $urlFinder;
     }
 
     /**
@@ -56,24 +59,31 @@ class AnchorUrlRewriteGenerator
             if ($anchorCategoryIds) {
                 foreach ($anchorCategoryIds as $anchorCategoryId) {
                     $anchorCategory = $this->categoryRepository->get($anchorCategoryId);
-                    $urls[] = $this->urlRewriteFactory->create()
-                        ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
-                        ->setEntityId($product->getId())
-                        ->setRequestPath(
-                            $this->urlPathGenerator->getUrlPathWithSuffix(
-                                $product,
-                                $storeId,
-                                $anchorCategory
+
+                    if (!in_array(
+                        $anchorCategory->getParentId(),
+                        [Category::ROOT_CATEGORY_ID, Category::TREE_ROOT_ID]
+                    )) {
+                        $paths = [
+                            $this->urlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $anchorCategory),
+                            $this->urlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
+                        ];
+
+                        $requestPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);
+
+                        $urls[] = $this->urlRewriteFactory->create()
+                            ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
+                            ->setEntityId($product->getId())
+                            ->setRequestPath($requestPath)
+                            ->setTargetPath(
+                                $this->urlPathGenerator->getCanonicalUrlPath(
+                                    $product,
+                                    $anchorCategory
+                                )
                             )
-                        )
-                        ->setTargetPath(
-                            $this->urlPathGenerator->getCanonicalUrlPath(
-                                $product,
-                                $anchorCategory
-                            )
-                        )
-                        ->setStoreId($storeId)
-                        ->setMetadata(['category_id' => $anchorCategory->getId()]);
+                            ->setStoreId($storeId)
+                            ->setMetadata(['category_id' => $anchorCategory->getId()]);
+                    }
                 }
             }
         }

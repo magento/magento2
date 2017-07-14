@@ -96,6 +96,19 @@ class ProductUrlPathGenerator
     }
 
     /**
+     * Retrieve Product Url path with entity id and suffix
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param int $storeId
+     * @param \Magento\Catalog\Model\Category $category
+     * @return string
+     */
+    public function getUrlPathWithIdAndSuffix($product, $storeId, $category = null)
+    {
+        return $this->getUrlPath($product, $category) .'-'. $product->getId() . $this->getProductUrlSuffix($storeId);
+    }
+
+    /**
      * Get canonical product url path
      *
      * @param \Magento\Catalog\Model\Product $product

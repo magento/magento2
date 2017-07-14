@@ -9,10 +9,11 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
-class CategoriesUrlRewriteGenerator
+class CategoriesUrlRewriteGenerator extends BaseUrlRewriteGenerator
 {
     /** @var ProductUrlPathGenerator */
     protected $productUrlPathGenerator;
@@ -23,11 +24,16 @@ class CategoriesUrlRewriteGenerator
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
+     * @param UrlFinderInterface $urlFinder
      */
-    public function __construct(ProductUrlPathGenerator $productUrlPathGenerator, UrlRewriteFactory $urlRewriteFactory)
-    {
+    public function __construct(
+        ProductUrlPathGenerator $productUrlPathGenerator,
+        UrlRewriteFactory $urlRewriteFactory,
+        UrlFinderInterface $urlFinder
+    ) {
         $this->productUrlPathGenerator = $productUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
+        $this->urlFinder = $urlFinder;
     }
 
     /**
@@ -42,10 +48,18 @@ class CategoriesUrlRewriteGenerator
     {
         $urls = [];
         foreach ($productCategories->getList() as $category) {
+
+            $paths = [
+                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category),
+                $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
+            ];
+
+            $requestPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);
+
             $urls[] = $this->urlRewriteFactory->create()
                 ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($product->getId())
-                ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category))
+                ->setRequestPath($requestPath)
                 ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product, $category))
                 ->setStoreId($storeId)
                 ->setMetadata(['category_id' => $category->getId()]);
