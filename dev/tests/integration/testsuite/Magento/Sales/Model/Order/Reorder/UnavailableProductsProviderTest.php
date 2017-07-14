@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Reorder;
 
-use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 
 /**
  * Class UnavailableProductsProviderTest
@@ -18,10 +18,10 @@ class UnavailableProductsProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetForOrder()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Sales\Model\OrderRepository $orderRepository */
-        $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        /** @var \Magento\Sales\Model\OrderFactory $orderFactory */
+        $orderFactory = $objectManager->get(OrderInterfaceFactory::class);
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $orderRepository->get(1);
+        $order = $orderFactory->create()->loadByIncrementId('100000001');
         $orderItems = $order->getItems();
         $orderItemSimple = $orderItems[2];
         $orderItemSimple->getSku();

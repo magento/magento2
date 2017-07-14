@@ -30,24 +30,24 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
     private $reorderHelper;
 
     /**
-     * @param UnavailableProductsProvider $unavailableProductsProvider
-     * @param OrderRepositoryInterface $orderRepository
-     * @param ReorderHelper $reorderHelper
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
+     * @param UnavailableProductsProvider $unavailableProductsProvider
+     * @param OrderRepositoryInterface $orderRepository
+     * @param ReorderHelper $reorderHelper
      */
     public function __construct(
-        UnavailableProductsProvider $unavailableProductsProvider,
-        OrderRepositoryInterface $orderRepository,
-        ReorderHelper $reorderHelper,
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        UnavailableProductsProvider $unavailableProductsProvider,
+        OrderRepositoryInterface $orderRepository,
+        ReorderHelper $reorderHelper
     ) {
         $this->unavailableProductsProvider = $unavailableProductsProvider;
         $this->orderRepository = $orderRepository;

@@ -64,9 +64,9 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit_Framework_TestCase
         $this->configurableCheckerMock = $this->getMockBuilder(ConfigurableProductChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $fakeInstanceMock = $this->getMockBuilder(FakeInstance::class)->getMock();
+        $fakeClass = new \stdClass();
         $this->productAvailabilityChecks[$this->productTypeConfigurable] = $this->configurableCheckerMock;
-        $this->productAvailabilityChecks[$this->productTypeSimple] = $fakeInstanceMock;
+        $this->productAvailabilityChecks[$this->productTypeSimple] = $fakeClass;
 
         $this->checker = $objectManager->getObject(
             OrderedProductAvailabilityChecker::class,

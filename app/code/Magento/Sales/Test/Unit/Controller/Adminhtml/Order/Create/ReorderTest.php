@@ -23,6 +23,8 @@ use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 /**
  * Class ReorderTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ReorderTest extends \PHPUnit_Framework_TestCase
 {
