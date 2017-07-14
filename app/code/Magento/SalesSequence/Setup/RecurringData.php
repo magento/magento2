@@ -14,11 +14,9 @@ use Magento\SalesSequence\Model\Config as SequenceConfig;
 use Magento\SalesSequence\Model\EntityPool;
 
 /**
- * Class InstallData
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @codeCoverageIgnore
+ * Recurring data upgrade for SalesSequence module.
  */
-class InstallData implements InstallDataInterface
+class RecurringData implements InstallDataInterface
 {
     /**
      * Sales setup factory
@@ -54,7 +52,6 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
