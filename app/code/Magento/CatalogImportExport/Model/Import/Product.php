@@ -2480,9 +2480,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productUrlSuffix = $this->getProductUrlSuffix($storeId);
                 $urlPath = $urlKey . $productUrlSuffix;
                 if (empty($this->urlKeys[$storeId][$urlPath])
-                    || ($this->urlKeys[$storeId][$urlPath] == $sku)
+                    || ($this->urlKeys[$storeId][$urlPath] == strtolower($sku))
                 ) {
-                    $this->urlKeys[$storeId][$urlPath] = $sku;
+                    $this->urlKeys[$storeId][$urlPath] = strtolower($sku);
                     $this->rowNumbers[$storeId][$urlPath] = $rowNum;
                 } else {
                     $message = sprintf(

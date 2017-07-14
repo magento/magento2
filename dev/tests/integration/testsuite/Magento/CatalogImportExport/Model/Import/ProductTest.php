@@ -1810,9 +1810,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple3' => 58,
         ];
         $updatedPrices = [
-            'simple1' => 999,
-            'simple2' => 999,
-            'simple3' => 999,
+            'simple1' => 111,
+            'simple2' => 222,
+            'simple3' => 333,
         ];
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -1838,6 +1838,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
+        $this->assertEquals(
+            3,
+            count($productRepository->getList($searchCriteria)->getItems())
+        );
         foreach ($importedPrices as $sku => $expectedPrice) {
             $this->assertEquals($expectedPrice, $productRepository->get($sku)->getPrice());
         }
@@ -1860,6 +1864,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
+        $this->assertEquals(
+            3,
+            count($productRepository->getList($searchCriteria)->getItems()),
+            'Ensures that new products were not created'
+        );
         foreach ($updatedPrices as $sku => $expectedPrice) {
             $this->assertEquals(
                 $expectedPrice,
