@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 class BaseUrlRewriteGenerator
@@ -28,9 +29,11 @@ class BaseUrlRewriteGenerator
             ]
         );
 
-        foreach ($urlRewrites as $urlRewrite) {
-            if ($urlRewrite->getEntityId() != $entityId) {
-                $data[] = $urlRewrite->getRequestPath();
+        if ($urlRewrites) {
+            foreach ($urlRewrites as $urlRewrite) {
+                if ($urlRewrite->getEntityId() != $entityId) {
+                    $data[] = $urlRewrite->getRequestPath();
+                }
             }
         }
 
