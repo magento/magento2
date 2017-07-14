@@ -99,22 +99,22 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class, ['request' => $request]);
 
-        $secureUrl = $model->getUrl('some/index/controller');
-        $this->assertStringStartsWith(
+        $secureUrl = $model->getUrl('some/index/controller', ['_nosid' => 1]);
+        $this->assertEquals(
             'https://sample.com/index.php/some/index/controller/',
             $secureUrl,
             'Default URL in secure area is incorrect'
         );
 
-        $secureUrl = $model->getUrl('some/index/controller', ['_secure' => true]);
-        $this->assertStringStartsWith(
+        $secureUrl = $model->getUrl('some/index/controller', ['_secure' => true, '_nosid' => 1]);
+        $this->assertEquals(
             'https://sample.com/index.php/some/index/controller/',
             $secureUrl,
             'Secure URL in secure area is incorrect'
         );
 
-        $unsecureUrl = $model->getUrl('some/index/controller', ['_secure' => false]);
-        $this->assertStringStartsWith(
+        $unsecureUrl = $model->getUrl('some/index/controller', ['_secure' => false, '_nosid' => 1]);
+        $this->assertEquals(
             'http://sample.com/index.php/some/index/controller/',
             $unsecureUrl,
             'Unsecure URL in secure area is incorrect'
@@ -142,22 +142,22 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class, ['request' => $request]);
 
-        $secureUrl = $model->getUrl('some/index/controller');
-        $this->assertStringStartsWith(
+        $secureUrl = $model->getUrl('some/index/controller', ['_nosid' => 1]);
+        $this->assertEquals(
             'http://sample.com/index.php/some/index/controller/',
             $secureUrl,
             'Default URL in unsecure area is incorrect'
         );
 
-        $secureUrl = $model->getUrl('some/index/controller', ['_secure' => true]);
-        $this->assertStringStartsWith(
+        $secureUrl = $model->getUrl('some/index/controller', ['_secure' => true, '_nosid' => 1]);
+        $this->assertEquals(
             'https://sample.com/index.php/some/index/controller/',
             $secureUrl,
             'Secure URL in unsecure area is incorrect'
         );
 
-        $unsecureUrl = $model->getUrl('some/index/controller', ['_secure' => false]);
-        $this->assertStringStartsWith(
+        $unsecureUrl = $model->getUrl('some/index/controller', ['_secure' => false, '_nosid' => 1]);
+        $this->assertEquals(
             'http://sample.com/index.php/some/index/controller/',
             $unsecureUrl,
             'Unsecure URL in unsecure area is incorrect'
