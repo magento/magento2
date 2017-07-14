@@ -11,7 +11,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Class which hold all translation sources and merge them
- * @deprecated translation config type was removed
  */
 class Translation implements ConfigTypeInterface
 {

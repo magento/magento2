@@ -572,6 +572,20 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Clear configuration cache after creation website
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        if ($this->isObjectNew()) {
+            $this->_storeManager->reinitStores();
+        }
+
+        return parent::afterSave();
+    }
+
+    /**
      * Retrieve website base currency code
      *
      * @return string
