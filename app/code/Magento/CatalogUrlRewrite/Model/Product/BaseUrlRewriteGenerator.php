@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+
 class BaseUrlRewriteGenerator
 {
     /** @var UrlFinderInterface */
