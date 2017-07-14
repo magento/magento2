@@ -222,7 +222,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $this->_totalRecords = (int) $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
 
-        return (int) $this->_totalRecords;
+        return $this->_totalRecords;
     }
 
     /**
