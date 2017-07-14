@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Argument\Interpreter;
 
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -19,11 +20,24 @@ class StringUtils implements InterpreterInterface
     private $booleanUtils;
 
     /**
-     * @param BooleanUtils $booleanUtils
+     * Should string utils translate incoming string status.
+     *
+     * @var bool
      */
-    public function __construct(BooleanUtils $booleanUtils)
-    {
+    private $translatable;
+
+    /**
+     * StringUtils constructor.
+     *
+     * @param BooleanUtils $booleanUtils
+     * @param bool $translatable
+     */
+    public function __construct(
+        BooleanUtils $booleanUtils,
+        $translatable = true
+    ) {
         $this->booleanUtils = $booleanUtils;
+        $this->translatable = $translatable;
     }
 
     /**
@@ -38,13 +52,18 @@ class StringUtils implements InterpreterInterface
             if (!is_string($result)) {
                 throw new \InvalidArgumentException('String value is expected.');
             }
-            $needTranslation = isset($data['translate']) ? $this->booleanUtils->toBoolean($data['translate']) : false;
-            if ($needTranslation) {
-                $result = (string)new \Magento\Framework\Phrase($result);
+            if ($this->translatable) {
+                $needTranslation = isset($data['translate'])
+                    ? $this->booleanUtils->toBoolean($data['translate'])
+                    : false;
+                if ($needTranslation) {
+                    $result = (string)new \Magento\Framework\Phrase($result);
+                }
             }
         } else {
             $result = '';
         }
+
         return $result;
     }
 }
