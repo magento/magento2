@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Model\Order\Reorder;
+namespace Magento\ConfigurableProductSales\Model\Order\Reorder;
 
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
 use Magento\Sales\Model\Order\Item;

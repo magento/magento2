@@ -84,7 +84,7 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $unavailableProducts = $this->unavailableProductsProvider->getForOrder($order);
         if (count($unavailableProducts) > 0) {
             foreach ($unavailableProducts as $sku) {
-                $this->messageManager->addNoticeMessage(
+                $this->messageManager->addErrorMessage(
                     sprintf('Product "%s" not found. This product is no longer available.', $sku)
                 );
             }

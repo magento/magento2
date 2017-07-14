@@ -189,7 +189,7 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
         $this->createRedirect();
         $this->getOrderId($this->orderId);
         $this->getUnavailableProducts([1, 3]);
-        $this->messageManagerMock->expects($this->any())->method('addNoticeMessage');
+        $this->messageManagerMock->expects($this->any())->method('addErrorMessage');
         $this->setPath('sales/order/view', ['order_id' => $this->orderId]);
 
         $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
