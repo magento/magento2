@@ -925,7 +925,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             foreach ($bunch as $rowNum => $rowData) {
                 if ($this->validateRow($rowData, $rowNum) && self::SCOPE_DEFAULT == $this->getRowScope($rowData)) {
-                    $idsToDelete[] = $this->getExistSku($rowData[self::COL_SKU])['entity_id'];
+                    $idsToDelete[] = $this->getExistingSku($rowData[self::COL_SKU])['entity_id'];
                 }
             }
             if ($idsToDelete) {
@@ -1185,16 +1185,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             : [];
                         foreach ($linkSkus as $linkedKey => $linkedSku) {
                             $linkedSku = trim($linkedSku);
-                            if ((!is_null(
-                                        $this->skuProcessor->getNewSku($linkedSku)
-                                    ) || $this->isSkuExist($linkedSku)
-                                ) && strtolower($linkedSku) != strtolower($sku)
+                            if ((!is_null($this->skuProcessor->getNewSku($linkedSku)) || $this->isSkuExist($linkedSku))
+                                && strcasecmp($linkedSku, $sku) !== 0
                             ) {
                                 $newSku = $this->skuProcessor->getNewSku($linkedSku);
                                 if (!empty($newSku)) {
                                     $linkedId = $newSku['entity_id'];
                                 } else {
-                                    $linkedId = $this->getExistSku($linkedSku)['entity_id'];
+                                    $linkedId = $this->getExistingSku($linkedSku)['entity_id'];
                                 }
 
                                 if ($linkedId == null) {
@@ -1454,7 +1452,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         $this->initMediaGalleryResources();
-        $productSKUs = array_map('strtolower', array_column($bunch, self::COL_SKU));
+        $productSKUs = array_map('strval', array_column($bunch, self::COL_SKU));
         $select = $this->_connection->select()->from(
             ['mg' => $this->mediaGalleryTableName],
             ['value' => 'mg.value']
@@ -1536,6 +1534,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
         $productLimit = null;
         $productsQty = null;
+        $entityLinkField = $this->getProductEntityLinkField();
 
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $entityRowsIn = [];
@@ -1605,14 +1604,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $entityRowsUp[] = [
                         'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                         'attribute_set_id' => $attributeSetId,
-                        $this->getProductEntityLinkField() => $this->getExistSku($rowSku)[$this->getProductEntityLinkField()]
+                        $entityLinkField => $this->getExistingSku($rowSku)[$entityLinkField]
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {
                         $entityRowsIn[$rowSku] = [
                             'attribute_set_id' => $this->skuProcessor->getNewSku($rowSku)['attr_set_id'],
                             'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
-                            'sku' => $rowData[self::COL_SKU],
+                            'sku' => $rowSku,
                             'has_options' => isset($rowData['has_options']) ? $rowData['has_options'] : 0,
                             'created_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
@@ -2382,7 +2381,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_validatedRows[$rowNum] = true;
 
         $rowScope = $this->getRowScope($rowData);
-        $sku = strtolower($rowData[self::COL_SKU]);
+        $sku = $rowData[self::COL_SKU];
 
         // BEHAVIOR_DELETE and BEHAVIOR_REPLACE use specific validation logic
         if (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
@@ -2421,15 +2420,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if ($this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior()) {
             // can we get all necessary data from existent DB product?
             // check for supported type of existing product
-            if (isset($this->_productTypeModels[$this->getExistSku($sku)['type_id']])) {
+            if (isset($this->_productTypeModels[$this->getExistingSku($sku)['type_id']])) {
                 $this->skuProcessor->addNewSku(
                     $sku,
                     $this->prepareNewSkuData($sku)
                 );
             } else {
                 $this->addRowError(ValidatorInterface::ERROR_TYPE_UNSUPPORTED, $rowNum);
-                // child rows of legacy products with unsupported types are orphans
-                $sku = false;
             }
         } else {
             // validate new product type and attribute set
@@ -2454,10 +2451,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ]
                 );
             }
-            if ($this->getErrorAggregator()->isRowInvalid($rowNum)) {
-                // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
-                $sku = false;
-            }
         }
 
         if (!$this->getErrorAggregator()->isRowInvalid($rowNum)) {
@@ -2466,16 +2459,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
             /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            // isRowValid can add error to general errors pull if row is invalid
             $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
-            $rowAttributesValid = $productTypeValidator->isRowValid(
+            $productTypeValidator->isRowValid(
                 $rowData,
                 $rowNum,
                 !($this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
             );
-            if (!$rowAttributesValid && self::SCOPE_DEFAULT == $rowScope) {
-                // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
-                $sku = false;
-            }
         }
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
@@ -2533,11 +2523,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function prepareNewSkuData($sku)
     {
         $data = [];
-        foreach ($this->getExistSku($sku) as $key => $value) {
+        foreach ($this->getExistingSku($sku) as $key => $value) {
             $data[$key] = $value;
         }
 
-        $data['attr_set_code'] = $this->_attrSetIdToName[$this->getExistSku($sku)['attr_set_id']];
+        $data['attr_set_code'] = $this->_attrSetIdToName[$this->getExistingSku($sku)['attr_set_id']];
 
         return $data;
     }
@@ -2930,7 +2920,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * @param $sku
+     * Check if product exists for specified SKU
+     *
+     * @param string $sku
      * @return bool
      */
     private function isSkuExist($sku)
@@ -2940,10 +2932,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * @param $sku
-     * @return mixed
+     * Get existing product data for specified SKU
+     *
+     * @param string $sku
+     * @return array
      */
-    private function getExistSku($sku)
+    private function getExistingSku($sku)
     {
         return $this->_oldSku[strtolower($sku)];
     }
