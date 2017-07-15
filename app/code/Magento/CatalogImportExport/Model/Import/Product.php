@@ -1608,7 +1608,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {
-                        $entityRowsIn[$rowSku] = [
+                        $entityRowsIn[strtolower($rowSku)] = [
                             'attribute_set_id' => $this->skuProcessor->getNewSku($rowSku)['attr_set_id'],
                             'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
                             'sku' => $rowSku,
