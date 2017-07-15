@@ -225,9 +225,14 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     $value = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($value as $innerOption) {
+                        // skip ' -- Please Select -- ' option
                         if (strlen($innerOption['value'])) {
-                            // skip ' -- Please Select -- ' option
-                            $options[strtolower($innerOption[$index])] = $innerOption['value'];
+                            if ($attribute->isStatic()) {
+                                $options[strtolower($innerOption[$index])] = $innerOption['value'];
+                            } else {
+                                // Non-static attributes flip keys an values
+                                $options[$innerOption['value']] = $innerOption[$index];
+                            }
                         }
                     }
                 }
