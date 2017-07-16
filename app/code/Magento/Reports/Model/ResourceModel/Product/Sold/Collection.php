@@ -73,14 +73,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
             ['order' => $this->getTable('sales_order')],
             implode(' AND ', $orderJoinCondition),
             []
-        )->joinLeft(
-            ['child_items' => $this->getTable('sales_order_item')],
-            'child_items.parent_item_id=order_items.item_id
-             AND order_items.product_type="bundle"
-             AND order_items.sku NOT LIKE CONCAT(\'%\', child_items.sku, \'%\')',
-            [
-                'child_items_sku' => 'child_items.sku'
-            ]
         )->where(
             'order_items.parent_item_id IS NULL'
         )->having(
