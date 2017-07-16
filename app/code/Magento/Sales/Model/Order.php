@@ -1244,25 +1244,29 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return \Magento\Sales\Api\Data\OrderItemInterface[]
      */
     public function getItemsCollection($filterByTypes = [], $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this);
+        if (!$this->hasData(OrderInterface::ITEMS)) {
+            $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this);
 
-        if ($filterByTypes) {
-            $collection->filterByTypes($filterByTypes);
-        }
-        if ($nonChildrenOnly) {
-            $collection->filterByParent();
-        }
-
-        if ($this->getId()) {
-            foreach ($collection as $item) {
-                $item->setOrder($this);
+            if ($filterByTypes) {
+                $collection->filterByTypes($filterByTypes);
             }
+            if ($nonChildrenOnly) {
+                $collection->filterByParent();
+            }
+            $this->setItems($collection);
+
+            if ($this->getId()) {
+                foreach ($collection as $item) {
+                    $item->setOrder($this);
+                }
+            }
+
         }
-        return $collection;
+        return $this->getItems();
     }
 
     /**
