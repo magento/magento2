@@ -29,11 +29,22 @@ class Json extends AbstractResult
     protected $json;
 
     /**
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    public function __construct(InlineInterface $translateInline)
-    {
+    private $serializer;
+
+    /**
+     * @param InlineInterface $translateInline
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
+     */
+    public function __construct(
+        InlineInterface $translateInline,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
         $this->translateInline = $translateInline;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -43,10 +54,11 @@ class Json extends AbstractResult
      * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
      * @param array $options Additional options used during encoding
      * @return $this
+     * @throws \InvalidArgumentException
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        $this->json = \Zend_Json::encode($data, $cycleCheck, $options);
+        $this->json = $this->serializer->serialize($data);
         return $this;
     }
 
