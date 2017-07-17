@@ -394,7 +394,7 @@
                 <item name="array" xsi:type="object">layoutArrayArgumentReaderInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
-                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\TranslatableStringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="object" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
@@ -410,7 +410,7 @@
                 <item name="array" xsi:type="object">layoutArrayArgumentGeneratorInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
-                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\TranslatableStringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
@@ -455,7 +455,7 @@
     </virtualType>
     <type name="Magento\Framework\View\Layout\Argument\Interpreter\NamedParams">
         <arguments>
-            <argument name="paramInterpreter" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</argument>
+            <argument name="paramInterpreter" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\TranslatableStringUtils</argument>
         </arguments>
     </type>
     <virtualType name="containerRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
