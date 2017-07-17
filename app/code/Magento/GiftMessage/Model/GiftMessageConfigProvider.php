@@ -120,6 +120,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         $configuration['baseUrl'] = $store->isFrontUrlSecure()
                 ? $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)
                 : $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, false);
+
         return $configuration;
     }
 
@@ -161,6 +162,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected function getOrderLevelGiftMessages()
     {
         $cartId = $this->checkoutSession->getQuoteId();
+        
         return $this->cartRepository->get($cartId);
     }
 
