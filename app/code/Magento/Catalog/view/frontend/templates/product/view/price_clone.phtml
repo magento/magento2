@@ -9,7 +9,7 @@
 ?>
 <?php /** @var \Magento\Catalog\Block\Product\AbstractProduct $block */ ?>
 <?php $_product = $block->getProduct() ?>
-<?php echo $block->getProductPriceHtml(
+<?= $block->getProductPriceHtml(
     $_product,
     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
     \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,

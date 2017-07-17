@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 
@@ -27,11 +28,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $batchProvider;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory
-     */
-    private $indexerStateFactory;
-
-    /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
@@ -44,6 +40,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $batchRowsCount;
 
     /**
+     * @var ActiveTableSwitcher
+     */
+    private $activeTableSwitcher;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -53,6 +54,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      * @param int|null $batchRowsCount
+     * @param ActiveTableSwitcher|null $activeTableSwitcher
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -62,8 +64,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         \Magento\Framework\Indexer\BatchSizeManagementInterface $batchSizeManagement = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        $batchRowsCount = null
+        $batchRowsCount = null,
+        ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         parent::__construct(
             $resource,
@@ -81,10 +83,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->metadataPool = $metadataPool ?: $objectManager->get(
             \Magento\Framework\EntityManager\MetadataPool::class
         );
-        $this->indexerStateFactory = $stateFactory ?: $objectManager->get(
-            \Magento\Indexer\Model\Indexer\StateFactory::class
-        );
         $this->batchRowsCount = $batchRowsCount;
+        $this->activeTableSwitcher = $activeTableSwitcher ?: $objectManager->get(ActiveTableSwitcher::class);
     }
 
     /**
@@ -95,7 +95,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     public function execute()
     {
         $this->reindex();
-
+        $this->activeTableSwitcher->switchTable($this->connection, [$this->getMainTable()]);
         return $this;
     }
 
@@ -143,13 +143,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function publishData()
     {
         $select = $this->connection->select()->from($this->getMainTmpTable());
-
         $columns = array_keys($this->connection->describeTable($this->getMainTable()));
+        $tableName = $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable());
 
         $this->connection->query(
             $this->connection->insertFromSelect(
                 $select,
-                $this->getMainTable(),
+                $tableName,
                 $columns,
                 \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
             )
@@ -235,25 +235,5 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->publishData();
             $this->removeUnnecessaryData();
         }
-    }
-
-    /**
-     * This overridden method returns ALTERNATIVE table name to work with.
-     *
-     * When the table used on frontend is 'catalog_category_product_index' this indexer should work
-     * with 'catalog_category_product_index_replica' and vice versa.
-     *
-     * @return string table name which is NOT used on frontend
-     */
-    protected function getMainTable()
-    {
-        $table = $this->getTable(self::MAIN_INDEX_TABLE);
-        $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
-            \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
-        );
-        $destinationTableSuffix = ($indexerState->getTableSuffix() === '')
-            ? \Magento\Framework\Indexer\StateInterface::ADDITIONAL_TABLE_SUFFIX
-            : '';
-        return $table . $destinationTableSuffix;
     }
 }

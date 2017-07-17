@@ -30,7 +30,7 @@ class CanonicalUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on store view
+     * Generate product rewrites without categories
      *
      * @param int $storeId
      * @param Product $product
