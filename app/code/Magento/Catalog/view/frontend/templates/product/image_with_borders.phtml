@@ -7,13 +7,13 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <span class="product-image-container"
-      style="width:<?php /* @escapeNotVerified */ echo $block->getWidth()?>px;">
+      style="width:<?= /* @escapeNotVerified */ $block->getWidth() ?>px;">
     <span class="product-image-wrapper"
-          style="padding-bottom: <?php /* @escapeNotVerified */ echo ($block->getRatio() * 100); ?>%;">
+          style="padding-bottom: <?= /* @escapeNotVerified */ ($block->getRatio() * 100) ?>%;">
         <img class="product-image-photo"
-             <?php /* @escapeNotVerified */ echo $block->getCustomAttributes(); ?>
-             src="<?php /* @escapeNotVerified */ echo $block->getImageUrl(); ?>"
-             width="<?php /* @escapeNotVerified */ echo $block->getResizedImageWidth(); ?>"
-             height="<?php /* @escapeNotVerified */ echo $block->getResizedImageHeight(); ?>"
-             alt="<?php /* @escapeNotVerified */ echo $block->stripTags($block->getLabel(), null, true); ?>"/></span>
+             <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
+             src="<?= /* @escapeNotVerified */ $block->getImageUrl() ?>"
+             width="<?= /* @escapeNotVerified */ $block->getResizedImageWidth() ?>"
+             height="<?= /* @escapeNotVerified */ $block->getResizedImageHeight() ?>"
+             alt="<?= /* @escapeNotVerified */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
 </span>

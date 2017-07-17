@@ -159,5 +159,28 @@
             </data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
         </variation>
+        <variation name="CreateCustomerBackendEntityTestVariation11" summary="Create customer if admin interface locale is en_GB.">
+            <data name="issue" xsi:type="string">DEVOPS-474</data>
+            <data name="customerAction" xsi:type="string">save</data>
+            <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+            <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
+            <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+            <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/dob" xsi:type="string">03/29/2004</data>
+            <data name="steps" xsi:type="array">
+                <item name="changeAdminLocale" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="username" xsi:type="string">admin</item>
+                        <item name="interface_locale" xsi:type="string">English (United Kingdom)</item>
+                        <item name="current_password" xsi:type="string">123123q</item>
+                    </item>
+                </item>
+            </data>
+            <data name="locale" xsi:type="string">en_GB</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+        </variation>
     </testCase>
 </config>
