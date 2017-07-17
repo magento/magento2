@@ -12,9 +12,8 @@
     <xs:redefine schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd">
         <xs:complexType name="string">
             <xs:complexContent>
-                <xs:extension base="string">
+                <xs:extension base="argumentType">
                     <xs:attribute name="translatable" use="optional" type="xs:boolean"/>
-                    <xs:attribute name="translate" use="prohibited"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

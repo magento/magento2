@@ -8,6 +8,14 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <!-- Redefine section -->
     <xs:redefine schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd">
+        <xs:complexType name="string">
+            <xs:complexContent>
+                <xs:extension base="argumentType">
+                    <xs:attribute name="translate" use="optional" type="xs:boolean"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+
         <xs:complexType name="argumentType" abstract="true" mixed="true">
             <xs:complexContent>
                 <xs:extension base="argumentType">
