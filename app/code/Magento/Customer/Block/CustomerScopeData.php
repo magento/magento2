@@ -50,4 +50,30 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     {
         return (int)$this->_storeManager->getStore()->getWebsiteId();
     }
+
+    /**
+     * Get the invalidation rules json encoded
+     *
+     * @return string
+     */
+    public function getInvalidationRulesJson()
+    {
+        return $this->jsonEncoder->encode(
+            [
+                '*' => [
+                    'Magento_Customer/js/invalidation-processor' => [
+                        'invalidationRules' => [
+                            'website-rule' => [
+                                'Magento_Customer/js/invalidation-rules/website-rule' => [
+                                    'scopeConfig' => [
+                                        'websiteId' => $this->getWebsiteId(),
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ]
+        );
+    }
 }
