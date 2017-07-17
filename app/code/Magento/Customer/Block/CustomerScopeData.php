@@ -20,23 +20,23 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $jsonEncoder;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Serialize\Serializer\Json $serializer,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->storeManager = $context->getStoreManager();
-        $this->jsonEncoder = $jsonEncoder;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -54,11 +54,12 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     /**
      * Get the invalidation rules json encoded
      *
-     * @return string
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
-    public function getInvalidationRulesJson()
+    public function getSerializedInvalidationRules()
     {
-        return $this->jsonEncoder->encode(
+        return $this->serializer->serialize(
             [
                 '*' => [
                     'Magento_Customer/js/invalidation-processor' => [

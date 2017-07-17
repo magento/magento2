@@ -26,8 +26,8 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
     /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $scopeConfigMock;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $encoderMock;
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -41,7 +41,7 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
-        $this->encoderMock = $this->getMockBuilder(EncoderInterface::class)
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
 
         $this->contextMock->expects($this->exactly(2))
@@ -54,7 +54,7 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new CustomerScopeData(
             $this->contextMock,
-            $this->encoderMock,
+            $this->serializerMock,
             []
         );
     }
