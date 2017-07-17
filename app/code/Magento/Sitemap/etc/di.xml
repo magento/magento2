@@ -6,6 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Sitemap\Model\SitemapItemInterface" type="Magento\Sitemap\Model\SitemapItem" />
+    <preference for="Magento\Sitemap\Model\SitemapItemResolverInterface" type="Magento\Sitemap\Model\CompositeSitemapItemResolver" />
     <type name="Magento\Sitemap\Model\Sitemap">
         <arguments>
             <argument name="resource" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap</argument>
@@ -15,6 +17,15 @@
         <arguments>
             <argument name="sensitive" xsi:type="array">
                 <item name="sitemap/generate/error_email" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\CompositeSitemapItemResolver">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="categoryResolver" xsi:type="object">Magento\Sitemap\Model\CategorySitemapItemResolver</item>
+                <item name="cmsPageResolver" xsi:type="object">Magento\Sitemap\Model\CmsPageSitemapItemResolver</item>
+                <item name="productResolver" xsi:type="object">Magento\Sitemap\Model\ProductSitemapItemResolver</item>
             </argument>
         </arguments>
     </type>

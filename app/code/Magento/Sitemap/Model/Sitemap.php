@@ -11,7 +11,6 @@ namespace Magento\Sitemap\Model;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 use Magento\Robots\Model\Config\Value;
-use Magento\Framework\DataObject;
 
 /**
  * Sitemap model
@@ -158,6 +157,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_cacheTag = true;
 
     /**
+     * Item resolver
+     *
+     * @var SitemapItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -176,6 +182,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param DocumentRoot|null $documentRoot
+     * @param SitemapItemResolverInterface|null $itemResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -194,7 +201,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
+        SitemapItemResolverInterface $itemResolver = null
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
@@ -207,6 +215,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(SitemapItemResolverInterface::class);
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -237,62 +246,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     }
 
     /**
-     * Add a sitemap item to the array of sitemap items
-     *
-     * @param DataObject $sitemapItem
-     * @return $this
-     */
-    public function addSitemapItem(DataObject $sitemapItem)
-    {
-        $this->_sitemapItems[] = $sitemapItem;
-
-        return $this;
-    }
-
-    /**
-     * Collect all sitemap items
-     *
-     * @return void
-     */
-    public function collectSitemapItems()
-    {
-        /** @var $helper \Magento\Sitemap\Helper\Data */
-        $helper = $this->_sitemapData;
-        $storeId = $this->getStoreId();
-
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getCategoryChangefreq($storeId),
-                'priority' => $helper->getCategoryPriority($storeId),
-                'collection' => $this->_categoryFactory->create()->getCollection($storeId),
-            ]
-        ));
-
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getProductChangefreq($storeId),
-                'priority' => $helper->getProductPriority($storeId),
-                'collection' => $this->_productFactory->create()->getCollection($storeId),
-            ]
-        ));
-
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getPageChangefreq($storeId),
-                'priority' => $helper->getPagePriority($storeId),
-                'collection' => $this->_cmsFactory->create()->getCollection($storeId),
-            ]
-        ));
-    }
-
-    /**
      * Initialize sitemap
      *
      * @return void
      */
     protected function _initSitemapItems()
     {
-        $this->collectSitemapItems();
+        $this->_sitemapItems = $this->itemResolver->getItems($this->getStoreId());
 
         $this->_tags = [
             self::TYPE_INDEX => [
@@ -377,30 +337,30 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     {
         $this->_initSitemapItems();
 
-        /** @var $sitemapItem \Magento\Framework\DataObject */
-        foreach ($this->_sitemapItems as $sitemapItem) {
-            $changefreq = $sitemapItem->getChangefreq();
-            $priority = $sitemapItem->getPriority();
-            foreach ($sitemapItem->getCollection() as $item) {
-                $xml = $this->_getSitemapRow(
-                    $item->getUrl(),
-                    $item->getUpdatedAt(),
-                    $changefreq,
-                    $priority,
-                    $item->getImages()
-                );
-                if ($this->_isSplitRequired($xml) && $this->_sitemapIncrement > 0) {
-                    $this->_finalizeSitemap();
-                }
-                if (!$this->_fileSize) {
-                    $this->_createSitemap();
-                }
-                $this->_writeSitemapRow($xml);
-                // Increase counters
-                $this->_lineCount++;
-                $this->_fileSize += strlen($xml);
+        /** @var $item SitemapItemInterface */
+        foreach ($this->_sitemapItems as $item) {
+            $xml = $this->_getSitemapRow(
+                $item->getUrl(),
+                $item->getUpdatedAt(),
+                $item->getChangeFrequency(),
+                $item->getPriority(),
+                $item->getImages()
+            );
+
+            if ($this->_isSplitRequired($xml) && $this->_sitemapIncrement > 0) {
+                $this->_finalizeSitemap();
             }
+
+            if (!$this->_fileSize) {
+                $this->_createSitemap();
+            }
+
+            $this->_writeSitemapRow($xml);
+            // Increase counters
+            $this->_lineCount++;
+            $this->_fileSize += strlen($xml);
         }
+
         $this->_finalizeSitemap();
 
         if ($this->_sitemapIncrement == 1) {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Sitemap\Test\Unit\Model;
 
+use Magento\Sitemap\Model\SitemapItemResolverInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -54,6 +56,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManagerMock;
+
+    /**
+     * @var \Magento\Sitemap\Model\SitemapItemResolverInterface
+     */
+    private $itemResolverMock;
 
     /**
      * Set helper mocks, create resource model mock
@@ -146,6 +153,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_directoryMock)
         );
+
+        $this->itemResolverMock = $this->getMockForAbstractClass(SitemapItemResolverInterface::class);
+        $this->itemResolverMock->expects(self::any())
+            ->method('getItems')
+            ->willReturn([]);
     }
 
     /**
@@ -646,7 +658,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'cmsFactory' => $cmsFactory,
                 'storeManager' => $this->storeManagerMock,
                 'sitemapData' => $this->_helperMockSitemap,
-                'filesystem' => $this->_filesystemMock
+                'filesystem' => $this->_filesystemMock,
+                'itemResolver' => $this->itemResolverMock,
             ]
         );
         $constructArguments['resource'] = null;
