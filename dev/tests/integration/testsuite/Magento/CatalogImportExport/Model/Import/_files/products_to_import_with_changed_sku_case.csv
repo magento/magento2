@@ -1,6 +1,6 @@
-sku,product_type,store_view_code,name,price,attribute_set_code,categories
-simPLE1,simple,,"simple 1",111,Default,"Default Category/Category 1"
-SIMPLE2,simple,,"simple 2",111,Default,"Default Category/Category 1"
-Simple3,simple,,"simple 3",111,Default,"Default Category/Category 1"
-SiMPle3,simple,,"simple 3",333,Default,"Default Category/Category 1"
-SIMplE2,simple,,"simple 2",222,Default,"Default Category/Category 1"
+sku,product_type,store_view_code,name,price,attribute_set_code,categories,url_key
+simPLE1,simple,,"simple 1",111,Default,"Default Category/Category 1","simple1"
+SIMPLE2,simple,,"simple 2",111,Default,"Default Category/Category 1","simpLE22"
+Simple3,simple,,"simple 3",111,Default,"Default Category/Category 1","simpLE33"
+SiMPle3,simple,,"simple 3",333,Default,"Default Category/Category 1","siMPle3"
+SIMplE2,simple,,"simple 2",222,Default,"Default Category/Category 1","siMPle2"

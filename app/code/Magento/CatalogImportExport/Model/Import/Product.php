@@ -1563,9 +1563,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                if (empty($rowData[self::URL_KEY])) {
-                    $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
-                }
+                $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
 
                 $rowSku = $rowData[self::COL_SKU];
 
@@ -2475,7 +2473,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
 
         if ($this->isNeedToValidateUrlKey($rowData)) {
-            $urlKey = $this->getUrlKey($rowData);
+            $urlKey = strtolower($this->getUrlKey($rowData));
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
                 : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
@@ -2484,9 +2482,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productUrlSuffix = $this->getProductUrlSuffix($storeId);
                 $urlPath = $urlKey . $productUrlSuffix;
                 if (empty($this->urlKeys[$storeId][$urlPath])
-                    || ($this->urlKeys[$storeId][$urlPath] == strtolower($sku))
+                    || ($this->urlKeys[$storeId][$urlPath] == $sku)
                 ) {
-                    $this->urlKeys[$storeId][$urlPath] = strtolower($sku);
+                    $this->urlKeys[$storeId][$urlPath] = $sku;
                     $this->rowNumbers[$storeId][$urlPath] = $rowNum;
                 } else {
                     $message = sprintf(
@@ -2812,7 +2810,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            return $rowData[self::URL_KEY];
+            return strtolower($rowData[self::URL_KEY]);
         }
 
         if (!empty($rowData[self::COL_NAME])) {
