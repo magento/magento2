@@ -545,7 +545,7 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
-            ->with(EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId)
+            ->with(EmailNotification::XML_PATH_FORGOT_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId)
             ->willReturn($templateIdentifier);
         $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
