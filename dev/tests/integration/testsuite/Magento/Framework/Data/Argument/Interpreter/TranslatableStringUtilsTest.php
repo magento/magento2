@@ -9,7 +9,7 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
- * @covers TranslatableStringUtils
+ * @covers \Magento\Framework\Data\Argument\Interpreter\TranslatableStringUtils
  */
 class TranslatableStringUtilsTest extends \PHPUnit_Framework_TestCase
 {

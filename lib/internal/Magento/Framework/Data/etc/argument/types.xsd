@@ -33,15 +33,17 @@
     </xs:complexType>
 
     <xs:complexType name="string">
-        <xs:annotation>
-            <xs:documentation>
-                @deprecated
-                DI processing MUST not make translation by its own. Should be declared in children.
-            </xs:documentation>
-        </xs:annotation>
         <xs:complexContent>
             <xs:extension base="argumentType">
                 <xs:attribute name="translate" use="optional" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="translatable">
+        <xs:complexContent>
+            <xs:extension base="string">
+                <xs:attribute name="translatable" use="optional" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
