@@ -183,7 +183,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => ConfigOptionsList::DEFAULT_AMQP_HOST,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => 'host',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => ConfigOptionsList::DEFAULT_AMQP_PORT,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => 'user',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
@@ -193,6 +193,8 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
                 ['queue' =>
                     ['amqp' =>
                         [
+                            'host' => 'host',
+                            'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
                             'user' => 'user',
                             'password' => 'password',
                             'virtualhost' => 'virtual host',
