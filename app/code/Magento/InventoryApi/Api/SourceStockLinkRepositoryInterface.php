@@ -14,14 +14,20 @@ interface SourceStockLinkRepositoryInterface
 {
 
     /**
+     * Get source by given Id.
+     *
+     * @param int $linkId
+     * @return \Magento\InventoryApi\Api\Data\SourceStockLinkInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function get($linkId);
+
+    /**
      * Assign a source a to a stock.
      *
      * @param \Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink
-     * @return bool will returned True if assigned
-     *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\StateException
+     * @return void
      */
     public function save(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink);
 
@@ -29,12 +35,19 @@ interface SourceStockLinkRepositoryInterface
      * Remove the source assignment from the stock.
      *
      * @param \Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink
-     * @return bool will returned True if assigned
-     *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @return void
      */
     public function delete(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink);
+
+    /**
+     * Remove the source assignment from the stock by id.
+     *
+     * @param int $linkId
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @return void
+     */
+    public function deleteById($linkId);
 
 }

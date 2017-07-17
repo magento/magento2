@@ -9,7 +9,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Inventory\Setup\InstallSchema;
 
 /**
- * This class needed for service internal purposes only, to make collection work properly
+ * This class needed for service purposes only, to make collection work properly
  */
 class SourceStockLink extends AbstractDb
 {
