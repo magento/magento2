@@ -95,10 +95,11 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $productMessageAvailable
-     * @param $messageData
-     * @param $expectedItemLevel
+     * @param null|string $productMessageAvailable
+     * @param array $messageData
+     * @param array $expectedItemLevel
      * @dataProvider getConfigDataProvider
+     * @return void
      */
     public function testGetConfig(
         $productMessageAvailable,
@@ -204,25 +205,25 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'productMessageAvailable' => null,
                 'messageData' => $messageData,
                 'expectedItemLevel' => [
-                    'message' => $messageData
-                ]
+                    'message' => $messageData,
+                ],
             ],
             [
                 'productMessageAvailable' => '0',
                 'messageData' => $messageData,
                 'expectedItemLevel' => [
                     'message' => $messageData,
-                    'is_available' => false
-                ]
+                    'is_available' => false,
+                ],
             ],
             [
                 'productMessageAvailable' => '1',
                 'messageData' => $messageData,
                 'expectedItemLevel' => [
                     'message' => $messageData,
-                    'is_available' => true
-                ]
-            ]
+                    'is_available' => true,
+                ],
+            ],
         ];
     }
 }

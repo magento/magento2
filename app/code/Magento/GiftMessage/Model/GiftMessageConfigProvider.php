@@ -100,11 +100,10 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($orderLevelGiftMessageConfiguration) {
-            $orderMessages = $this->getOrderLevelGiftMessages();
-            $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
-            $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
-        }
+
+        $orderMessages = $this->getOrderLevelGiftMessages();
+        $configuration['isOrderLevelGiftOptionsEnabled'] = $orderLevelGiftMessageConfiguration && ((bool)$this->isQuoteVirtual() ? false : true);
+        $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
 
         $itemMessages = $this->getItemLevelGiftMessages();
         $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessageConfiguration;
@@ -186,6 +185,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
                 $itemMessages[$itemId]['is_available'] = (bool)$isAvailable;
             }
         }
+        
         return count($itemMessages) === 0 ? null : $itemMessages;
     }
 }
