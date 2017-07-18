@@ -537,8 +537,8 @@ class EavTest extends AbstractModifierTest
             'default_null_prod_not_new_and_not_required' => $this->defaultNullProdNotNewAndNotRequired(),
             'default_null_prod_new_and_not_required' => $this->defaultNullProdNewAndNotRequired(),
             'default_null_prod_new_and_required' => $this->defaultNullProdNewAndRequired(),
-            'default_null_prod_new_and_required_and_filled_notice' => $this->defaultNullProdNewAndRequiredAndFilledNotice(
-            )
+            'default_null_prod_new_and_required_and_filled_notice' =>
+                $this->defaultNullProdNewAndRequiredAndFilledNotice()
         ];
     }
 
