@@ -37,7 +37,8 @@ class DbStatusValidator
 
     /**
      * @param FrontendCacheInterface $cache
-     * @param DbVersionInfo $dbVersionInfo
+     * @param DbVersionInfo $dbVersionInfo,
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         FrontendCacheInterface $cache,
