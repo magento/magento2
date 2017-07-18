@@ -158,7 +158,7 @@ class Config extends Tab
     public function getAttributeBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute::class,
             ['element' => $this->_rootElement]
         );
     }
@@ -171,7 +171,7 @@ class Config extends Tab
     public function getVariationsBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix::class,
             ['element' => $this->_rootElement->find($this->variationsMatrix)]
         );
     }
@@ -184,7 +184,7 @@ class Config extends Tab
     public function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
         );
     }
@@ -222,5 +222,15 @@ class Config extends Tab
             $element->find($this->actionMenu)->click();
             $element->find($this->deleteVariation)->click();
         }
+    }
+
+    /**
+     * Delete all attributes.
+     *
+     * @return void
+     */
+    public function deleteVariations()
+    {
+        $this->getVariationsBlock()->deleteVariations();
     }
 }

@@ -88,6 +88,35 @@ class Matrix extends Form
     protected $template = './ancestor::body';
 
     /**
+     * Action menu.
+     *
+     * @var string
+     */
+    private $actionMenu = '.action-select';
+
+    /**
+     * Choose a different Product button selector.
+     *
+     * @var string
+     */
+    private $chooseProduct = '[data-bind*="showGrid"]';
+
+    /**
+     * Selector for row on product grid by product id.
+     *
+     * @var string
+     */
+    private $associatedProductGrid =
+        '[data-bind*="configurable_associated_product_listing.configurable_associated_product_listing"]';
+
+    /**
+     * Delete variation button selector.
+     *
+     * @var string
+     */
+    private $deleteVariation = '[data-bind*="removeProduct"]';
+
+    /**
      * Fill variations.
      *
      * @param array $matrix
@@ -101,15 +130,15 @@ class Matrix extends Form
                 sprintf($this->variationRowByNumber, $count),
                 Locator::SELECTOR_XPATH
             );
-            ksort($variation);
-            $mapping = $this->dataMapping($variation);
+            ++$count;
 
-            $this->_fill($mapping, $variationRow);
             if (isset($variation['configurable_attribute'])) {
-                $this->assignProduct($variationRow, $variation['configurable_attribute']);
+                $this->assignProduct($variationRow, $variation['sku']);
+                continue;
             }
 
-            ++$count;
+            $mapping = $this->dataMapping($variation);
+            $this->_fill($mapping, $variationRow);
         }
     }
 
@@ -120,14 +149,13 @@ class Matrix extends Form
      * @param int $productId
      * @return void
      */
-    protected function assignProduct(SimpleElement $variationRow, $productId)
+    protected function assignProduct(SimpleElement $variationRow, $productSku)
     {
-        $variationRow->find($this->configurableAttribute)->click();
+        $variationRow->find($this->actionMenu)->hover();
+        $variationRow->find($this->actionMenu)->click();
+        $variationRow->find($this->chooseProduct)->click();
         $this->getTemplateBlock()->waitLoader();
-        $this->_rootElement->find(
-            sprintf($this->selectAssociatedProduct, $productId),
-            Locator::SELECTOR_XPATH
-        )->click();
+        $this->getAssociatedProductGrid()->searchAndSelect(['sku' => $productSku]);
     }
 
     /**
@@ -179,8 +207,40 @@ class Matrix extends Form
     public function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
+     */
+    public function getAssociatedProductGrid()
+    {
+        return $this->blockFactory->create(
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid::class,
+            ['element' => $this->browser->find($this->associatedProductGrid)]
+        );
+    }
+
+    /**
+     * Delete variations.
+     *
+     * @throws \Exception
+     */
+    public function deleteVariations()
+    {
+        $rowLocator = sprintf($this->variationRowByNumber, 1);
+        $variationText = '';
+        while ($this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH)->isVisible()) {
+            $variation = $this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH);
+            if ($variationText == $variation->getText()) {
+                throw new \Exception("Failed to delete configurable product variation");
+            }
+            $variationText = $variation->getText();
+            $variation->find($this->actionMenu)->hover();
+            $variation->find($this->actionMenu)->click();
+            $variation->find($this->deleteVariation)->click();
+        }
     }
 }
