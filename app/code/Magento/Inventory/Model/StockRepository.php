@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\ResourceModel\Stock as ResourceStock;
+use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
 use Magento\Inventory\Model\ResourceModel\Stock\Collection;
 use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory;
 use Magento\InventoryApi\Api\Data\StockInterface;
@@ -27,9 +27,9 @@ use Psr\Log\LoggerInterface;
 class StockRepository implements StockRepositoryInterface
 {
     /**
-     * @var ResourceStock
+     * @var StockResourceModel
      */
-    private $resourceStock;
+    private $stockResource;
 
     /**
      * @var StockInterfaceFactory
@@ -64,7 +64,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * SourceRepository constructor
      *
-     * @param ResourceStock $resourceStock
+     * @param StockResourceModel $stockResource
      * @param StockInterfaceFactory $stockFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $stockCollectionFactory
@@ -73,7 +73,7 @@ class StockRepository implements StockRepositoryInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceStock $resourceStock,
+        StockResourceModel $stockResource,
         StockInterfaceFactory $stockFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $stockCollectionFactory,
@@ -81,7 +81,7 @@ class StockRepository implements StockRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
-        $this->resourceStock = $resourceStock;
+        $this->stockResource = $stockResource;
         $this->stockFactory = $stockFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->stockCollectionFactory = $stockCollectionFactory;
@@ -96,7 +96,7 @@ class StockRepository implements StockRepositoryInterface
     public function save(StockInterface $stock)
     {
         try {
-            $this->resourceStock->save($stock);
+            $this->stockResource->save($stock);
             return $stock->getStockId();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -110,7 +110,7 @@ class StockRepository implements StockRepositoryInterface
     public function get($stockId)
     {
         $stock = $this->stockFactory->create();
-        $this->resourceStock->load($stock, $stockId, StockInterface::STOCK_ID);
+        $this->stockResource->load($stock, $stockId, StockInterface::STOCK_ID);
 
         if (null === $stock->getStockId()) {
             throw NoSuchEntityException::singleField(StockInterface::STOCK_ID, $stockId);
@@ -121,12 +121,12 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete($stockId)
+    public function deleteById($stockId)
     {
         $stockItem = $this->get($stockId);
 
         try {
-            $this->resourceStock->delete($stockItem);
+            $this->stockResource->delete($stockItem);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete Stock'), $e);

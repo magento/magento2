@@ -10,7 +10,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\SourceItem as SourceItemModel;
 
 /**
- * Resource Collection of Source Items entity
+ * Resource Collection of SourceItem entities
  *
  * @api
  */

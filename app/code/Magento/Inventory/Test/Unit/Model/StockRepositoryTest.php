@@ -307,7 +307,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertSame($searchResults, $this->model->getList());
     }
 
-    public function testDelete()
+    public function testDeleteById()
     {
         $stockId = 345;
         $this->stock
@@ -328,7 +328,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->stock);
 
-        $this->model->delete($stockId);
+        $this->model->deleteById($stockId);
     }
 
     /**
@@ -354,6 +354,6 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
                 StockInterface::STOCK_ID
             );
 
-        $this->model->delete($stockId);
+        $this->model->deleteById($stockId);
     }
 }

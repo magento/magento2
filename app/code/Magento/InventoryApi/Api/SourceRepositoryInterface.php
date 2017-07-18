@@ -5,8 +5,13 @@
  */
 namespace Magento\InventoryApi\Api;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+
 /**
  * This is Facade for basic operations with Source
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -19,7 +24,7 @@ interface SourceRepositoryInterface
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Magento\InventoryApi\Api\Data\SourceInterface $source);
+    public function save(SourceInterface $source);
 
     /**
      * Get Source data by given sourceId. If you want to create plugin on get method, also you need to create separate
@@ -37,7 +42,5 @@ interface SourceRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface
      */
-    public function getList(
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null
-    );
+    public function getList(SearchCriteriaInterface $searchCriteria = null);
 }

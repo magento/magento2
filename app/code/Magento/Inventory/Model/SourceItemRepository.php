@@ -10,7 +10,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -26,9 +26,9 @@ use Psr\Log\LoggerInterface;
 class SourceItemRepository implements SourceItemRepositoryInterface
 {
     /**
-     * @var ResourceSource
+     * @var SourceResourceModel
      */
-    private $resourceSource;
+    private $sourceResource;
 
     /**
      * @var SourceItemInterfaceFactory
@@ -63,7 +63,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     /**
      * SourceRepository constructor
      *
-     * @param ResourceSource $resourceSource
+     * @param SourceResourceModel $sourceResource
      * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $sourceItemCollectionFactory
@@ -72,7 +72,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceSource $resourceSource,
+        SourceResourceModel $sourceResource,
         SourceItemInterfaceFactory $sourceItemFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $sourceItemCollectionFactory,
@@ -80,7 +80,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
-        $this->resourceSource = $resourceSource;
+        $this->sourceResource = $sourceResource;
         $this->sourceItemFactory = $sourceItemFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
@@ -95,7 +95,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     public function get($sourceItemId)
     {
         $sourceItem = $this->sourceItemFactory->create();
-        $this->resourceSource->load($sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
+        $this->sourceResource->load($sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
 
         if (null === $sourceItem->getSourceItemId()) {
             throw NoSuchEntityException::singleField(SourceItemInterface::SOURCE_ITEM_ID, $sourceItemId);
@@ -124,12 +124,10 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete($sourceItemId)
+    public function delete(SourceItemInterface $sourceItem)
     {
-        $sourceItem = $this->get($sourceItemId);
-
         try {
-            $this->resourceSource->delete($sourceItem);
+            $this->sourceResource->delete($sourceItem);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete Source Item'), $e);

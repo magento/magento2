@@ -6,9 +6,12 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface;
 
 /**
  * Represents relation between some physical storage and shipping method
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -64,7 +67,5 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
-    );
+    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes);
 }

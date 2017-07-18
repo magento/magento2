@@ -6,8 +6,13 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\StockExtensionInterface;
 
 /**
+ * Represents product aggregation among some different physical storages (in technical words, it is an index)
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
+ *
  * @api
  */
 interface StockInterface extends ExtensibleDataInterface
@@ -62,7 +67,5 @@ interface StockInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
-    );
+    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes);
 }

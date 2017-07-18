@@ -6,7 +6,6 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
 use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
 use Magento\InventoryApi\Api\SourceItemSaveInterface;
 use Psr\Log\LoggerInterface;

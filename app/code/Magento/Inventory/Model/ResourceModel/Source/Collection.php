@@ -5,6 +5,7 @@
  */
 namespace Magento\Inventory\Model\ResourceModel\Source;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -17,7 +18,7 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Resource Collection of Sources entities
+ * Resource Collection of Source entities
  *
  * @api
  */
@@ -33,7 +34,7 @@ class Collection extends AbstractCollection
      *
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param SourceCarrierLinkManagementInterface $sourceCarrierLinkManagement
      * @param AdapterInterface $connection
@@ -42,7 +43,7 @@ class Collection extends AbstractCollection
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         SourceCarrierLinkManagementInterface $sourceCarrierLinkManagement,
         AdapterInterface $connection = null,

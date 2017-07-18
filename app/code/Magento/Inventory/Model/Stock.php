@@ -75,6 +75,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     public function setExtensionAttributes(StockExtensionInterface $extensionAttributes)
     {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

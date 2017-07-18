@@ -5,8 +5,13 @@
  */
 namespace Magento\InventoryApi\Api;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
+
 /**
  * This is Facade for basic operations with Stock
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -19,7 +24,7 @@ interface StockRepositoryInterface
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Magento\InventoryApi\Api\Data\StockInterface $stock);
+    public function save(StockInterface $stock);
 
     /**
      * Get Stock data by given stockId. If you want to create plugin on get method, also you need to create separate
@@ -38,7 +43,7 @@ interface StockRepositoryInterface
      * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException | \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete($stockId);
+    public function deleteById($stockId);
 
     /**
      * Load Stock data collection by given search criteria
@@ -46,7 +51,5 @@ interface StockRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
      */
-    public function getList(
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null
-    );
+    public function getList(SearchCriteriaInterface $searchCriteria = null);
 }

@@ -7,27 +7,20 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\ResourceModel\SourceStockLink as ResourceSourceStockLink;
+use Magento\Inventory\Model\ResourceModel\SourceStockLink as SourceStockLinkResourceModel;
 use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
-use Magento\InventoryApi\Api\Data\SourceStockLinkInterfaceFactory as SourceStockLinkFactory;
 use Magento\InventoryApi\Api\SourceStockLinkRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Model to assign specific source to particular stock.
+ * @inheritdoc
  */
 class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
 {
     /**
-     * @var SourceStockLinkFactory
+     * @var SourceStockLinkResourceModel
      */
-    private $sourceStockLinkFactory;
-
-    /**
-     * @var ResourceSourceStockLink
-     */
-    private $resourceSourceStockLink;
+    private $sourceStockLinkResource;
 
     /**
      * @var LoggerInterface
@@ -35,27 +28,24 @@ class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
     private $logger;
 
     /**
-     * @param ResourceSourceStockLink $resourceSourceStockLink
+     * @param SourceStockLinkResourceModel $sourceStockLinkResource
      * @param LoggerInterface $logger
-     * @param SourceStockLinkFactory $sourceStockLinkFactory
      */
     public function __construct(
-        ResourceSourceStockLink $resourceSourceStockLink,
-        LoggerInterface $logger,
-        SourceStockLinkFactory $sourceStockLinkFactory
+        SourceStockLinkResourceModel $sourceStockLinkResource,
+        LoggerInterface $logger
     ) {
-        $this->resourceSourceStockLink = $resourceSourceStockLink;
+        $this->sourceStockLinkResource = $sourceStockLinkResource;
         $this->logger = $logger;
-        $this->sourceStockLinkFactory = $sourceStockLinkFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function save(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink)
+    public function save(SourceStockLinkInterface $sourceStockLink)
     {
         try {
-            $this->resourceSourceStockLink->save($sourceStockLink);
+            $this->sourceStockLinkResource->save($sourceStockLink);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source Stock Link'), $e);
@@ -65,10 +55,10 @@ class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink)
+    public function delete(SourceStockLinkInterface $sourceStockLink)
     {
         try {
-            $this->resourceSourceStockLink->delete($sourceStockLink);
+            $this->sourceStockLinkResource->delete($sourceStockLink);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete Source Stock Link'), $e);

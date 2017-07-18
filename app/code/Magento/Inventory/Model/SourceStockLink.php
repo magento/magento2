@@ -6,21 +6,23 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Inventory\Model\ResourceModel\SourceStockLink as SourceStockLinkResourceModel;
+use Magento\InventoryApi\Api\Data\SourceStockLinkExtensionInterface;
 use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
+ *
+ * @codeCoverageIgnore
  */
 class SourceStockLink extends AbstractExtensibleModel implements SourceStockLinkInterface
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\ResourceModel\SourceStockLink::class);
+        $this->_init(SourceStockLinkResourceModel::class);
     }
 
     /**
@@ -85,11 +87,10 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceStockLinkExtensionInterface $extensionAttributes
-    ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(SourceStockLinkExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

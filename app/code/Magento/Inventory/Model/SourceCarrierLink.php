@@ -6,25 +6,27 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as SourceCarrierLinkResourceModel;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
+ *
+ * @codeCoverageIgnore
  */
 class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrierLinkInterface
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\ResourceModel\SourceCarrierLink::class);
+        $this->_init(SourceCarrierLinkResourceModel::class);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getCarrierCode()
     {
@@ -32,7 +34,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setCarrierCode($carrierCode)
     {
@@ -40,7 +42,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -48,7 +50,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setPosition($position)
     {
@@ -56,7 +58,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -69,11 +71,10 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
-    ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

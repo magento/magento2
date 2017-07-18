@@ -6,9 +6,12 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\SourceStockLinkExtensionInterface;
 
 /**
- * Represents relation between some physical storage and stock aggregation
+ * Represents relation between some physical storages and stock aggregation
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -25,14 +28,14 @@ interface SourceStockLinkInterface extends ExtensibleDataInterface
     /**
      * Get link id
      *
-     * @return string
+     * @return int
      */
     public function getLinkId();
 
     /**
      * Set link id
      *
-     * @param string $linkId
+     * @param int $linkId
      * @return void
      */
     public function setLinkId($linkId);
@@ -66,4 +69,19 @@ interface SourceStockLinkInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setStockId($stockId);
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventoryApi\Api\Data\SourceStockLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventoryApi\Api\Data\SourceStockLinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(SourceStockLinkExtensionInterface $extensionAttributes);
 }

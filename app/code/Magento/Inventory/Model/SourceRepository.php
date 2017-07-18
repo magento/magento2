@@ -10,7 +10,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\Source\Collection;
 use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -26,9 +26,9 @@ use Psr\Log\LoggerInterface;
 class SourceRepository implements SourceRepositoryInterface
 {
     /**
-     * @var ResourceSource
+     * @var SourceResourceModel
      */
-    private $resourceSource;
+    private $sourceResource;
 
     /**
      * @var SourceInterfaceFactory
@@ -63,7 +63,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * SourceRepository constructor
      *
-     * @param ResourceSource $resourceSource
+     * @param SourceResourceModel $sourceResource
      * @param SourceInterfaceFactory $sourceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $sourceCollectionFactory
@@ -72,7 +72,7 @@ class SourceRepository implements SourceRepositoryInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceSource $resourceSource,
+        SourceResourceModel $sourceResource,
         SourceInterfaceFactory $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $sourceCollectionFactory,
@@ -80,7 +80,7 @@ class SourceRepository implements SourceRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
-        $this->resourceSource = $resourceSource;
+        $this->sourceResource = $sourceResource;
         $this->sourceFactory = $sourceFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->sourceCollectionFactory = $sourceCollectionFactory;
@@ -95,7 +95,7 @@ class SourceRepository implements SourceRepositoryInterface
     public function save(SourceInterface $source)
     {
         try {
-            $this->resourceSource->save($source);
+            $this->sourceResource->save($source);
             return $source->getSourceId();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -109,7 +109,7 @@ class SourceRepository implements SourceRepositoryInterface
     public function get($sourceId)
     {
         $source = $this->sourceFactory->create();
-        $this->resourceSource->load($source, $sourceId, SourceInterface::SOURCE_ID);
+        $this->sourceResource->load($source, $sourceId, SourceInterface::SOURCE_ID);
 
         if (null === $source->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);

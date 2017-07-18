@@ -9,9 +9,9 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\StateException;
-use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
-use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as ResourceSourceCarrierLink;
-use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as SourceCarrierLinkResourceModel;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\Collection;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory;
 use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -27,9 +27,9 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     private $connection;
 
     /**
-     * @var ResourceSourceCarrierLink
+     * @var SourceCarrierLinkResourceModel
      */
-    private $resourceSourceCarrierLink;
+    private $sourceCarrierLinkResource;
 
     /**
      * @var CollectionProcessorInterface
@@ -37,7 +37,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     private $collectionProcessor;
 
     /**
-     * @var CarrierLinkCollectionFactory
+     * @var CollectionFactory
      */
     private $carrierLinkCollectionFactory;
 
@@ -50,20 +50,20 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
      * SourceCarrierLinkManagement constructor
      *
      * @param ResourceConnection $connection
-     * @param ResourceSourceCarrierLink $resourceSourceCarrierLink
+     * @param SourceCarrierLinkResourceModel $sourceCarrierLinkResource
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param CarrierLinkCollectionFactory $carrierLinkCollectionFactory
+     * @param CollectionFactory $carrierLinkCollectionFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         ResourceConnection $connection,
-        ResourceSourceCarrierLink $resourceSourceCarrierLink,
+        SourceCarrierLinkResourceModel $sourceCarrierLinkResource,
         CollectionProcessorInterface $collectionProcessor,
-        CarrierLinkCollectionFactory $carrierLinkCollectionFactory,
+        CollectionFactory $carrierLinkCollectionFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->connection = $connection;
-        $this->resourceSourceCarrierLink = $resourceSourceCarrierLink;
+        $this->sourceCarrierLinkResource = $sourceCarrierLinkResource;
         $this->collectionProcessor = $collectionProcessor;
         $this->carrierLinkCollectionFactory = $carrierLinkCollectionFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -130,7 +130,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
             ->addFilter(SourceInterface::SOURCE_ID, $source->getSourceId())
             ->create();
 
-        /** @var ResourceSourceCarrierLink\Collection $collection */
+        /** @var Collection $collection */
         $collection = $this->carrierLinkCollectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 

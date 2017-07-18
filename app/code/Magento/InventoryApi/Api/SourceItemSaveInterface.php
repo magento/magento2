@@ -9,6 +9,8 @@ namespace Magento\InventoryApi\Api;
  * Service method for source items multiple save
  * Performance efficient API, used for stock synchronization
  *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
+ *
  * @api
  */
 interface SourceItemSaveInterface

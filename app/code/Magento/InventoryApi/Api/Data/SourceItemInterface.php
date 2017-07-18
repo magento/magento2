@@ -6,9 +6,12 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 
 /**
  * Represents amount of product on physical storage
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -111,7 +114,5 @@ interface SourceItemInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
-    );
+    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes);
 }
