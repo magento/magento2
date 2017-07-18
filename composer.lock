@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "36aef861e85e9529c55d9b2d2910bd44",
+    "content-hash": "ef3db62dd163eb8ffe9085e10041e6e5",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1479,16 +1479,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.22",
+            "version": "v2.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "3ef6ef64abecd566d551d9e7f6393ac6e93b2462"
+                "reference": "46e65f8d98c9ab629bbfcc16a4ff023f61c37fb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/3ef6ef64abecd566d551d9e7f6393ac6e93b2462",
-                "reference": "3ef6ef64abecd566d551d9e7f6393ac6e93b2462",
+                "url": "https://api.github.com/repos/symfony/console/zipball/46e65f8d98c9ab629bbfcc16a4ff023f61c37fb2",
+                "reference": "46e65f8d98c9ab629bbfcc16a4ff023f61c37fb2",
                 "shasum": ""
             },
             "require": {
@@ -1536,7 +1536,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-02T14:36:56+00:00"
+            "time": "2017-07-03T08:04:30+00:00"
         },
         {
             "name": "symfony/debug",
@@ -1597,7 +1597,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.22",
+            "version": "v2.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -1657,16 +1657,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.3.2",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "c709670bf64721202ddbe4162846f250735842c0"
+                "reference": "311fa718389efbd8b627c272b9324a62437018cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c709670bf64721202ddbe4162846f250735842c0",
-                "reference": "c709670bf64721202ddbe4162846f250735842c0",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/311fa718389efbd8b627c272b9324a62437018cc",
+                "reference": "311fa718389efbd8b627c272b9324a62437018cc",
                 "shasum": ""
             },
             "require": {
@@ -1702,11 +1702,11 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-28T14:08:56+00:00"
+            "time": "2017-06-24T09:29:48+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v3.3.2",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -1814,16 +1814,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.22",
+            "version": "v2.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d54232f5682fda2f8bbebff7c81b864646867ab9"
+                "reference": "57e52a0a6a80ea0aec4fc1b785a7920a95cb88a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d54232f5682fda2f8bbebff7c81b864646867ab9",
-                "reference": "d54232f5682fda2f8bbebff7c81b864646867ab9",
+                "url": "https://api.github.com/repos/symfony/process/zipball/57e52a0a6a80ea0aec4fc1b785a7920a95cb88a8",
+                "reference": "57e52a0a6a80ea0aec4fc1b785a7920a95cb88a8",
                 "shasum": ""
             },
             "require": {
@@ -1859,7 +1859,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-08T01:19:21+00:00"
+            "time": "2017-07-03T08:04:30+00:00"
         },
         {
             "name": "tedivm/jshrink",
@@ -2961,6 +2961,68 @@
             "time": "2017-05-17T16:03:26+00:00"
         },
         {
+            "name": "zendframework/zend-mail",
+            "version": "2.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-mail.git",
+                "reference": "248230940ab1453b2a532a8fde76c5a6470d7aad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-mail/zipball/248230940ab1453b2a532a8fde76c5a6470d7aad",
+                "reference": "248230940ab1453b2a532a8fde76c5a6470d7aad",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "php": "^7.0 || ^5.6",
+                "zendframework/zend-loader": "^2.5",
+                "zendframework/zend-mime": "^2.5",
+                "zendframework/zend-stdlib": "^2.7 || ^3.0",
+                "zendframework/zend-validator": "^2.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0.8 || ^5.7.15",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-config": "^2.6",
+                "zendframework/zend-crypt": "^2.6",
+                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
+            },
+            "suggest": {
+                "ext-intl": "Handle IDN in AddressList hostnames",
+                "zendframework/zend-crypt": "Crammd5 support in SMTP Auth",
+                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3 when using SMTP to deliver messages"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev",
+                    "dev-develop": "2.9-dev"
+                },
+                "zf": {
+                    "component": "Zend\\Mail",
+                    "config-provider": "Zend\\Mail\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Mail\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides generalized functionality to compose and send both text and MIME-compliant multipart e-mail messages",
+            "homepage": "https://github.com/zendframework/zend-mail",
+            "keywords": [
+                "mail",
+                "zf2"
+            ],
+            "time": "2017-06-08T20:03:58+00:00"
+        },
+        {
             "name": "zendframework/zend-math",
             "version": "2.7.0",
             "source": {
@@ -3009,6 +3071,55 @@
                 "zf2"
             ],
             "time": "2016-04-07T16:29:53+00:00"
+        },
+        {
+            "name": "zendframework/zend-mime",
+            "version": "2.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-mime.git",
+                "reference": "9e53a97a3c190d45cc5d584daaaf487d509a9285"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-mime/zipball/9e53a97a3c190d45cc5d584daaaf487d509a9285",
+                "reference": "9e53a97a3c190d45cc5d584daaaf487d509a9285",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5 || ^7.0",
+                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7 || ^5.7",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-mail": "^2.6"
+            },
+            "suggest": {
+                "zendframework/zend-mail": "Zend\\Mail component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev",
+                    "dev-develop": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Mime\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "homepage": "https://github.com/zendframework/zend-mime",
+            "keywords": [
+                "mime",
+                "zf2"
+            ],
+            "time": "2017-01-16T16:43:38+00:00"
         },
         {
             "name": "zendframework/zend-modulemanager",
@@ -4945,7 +5056,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.2.9",
+            "version": "v3.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -5337,7 +5448,7 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.3.2",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -5386,7 +5497,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.22",
+            "version": "v2.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -5435,16 +5546,16 @@
         },
         {
             "name": "theseer/fdomdocument",
-            "version": "1.6.5",
+            "version": "1.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/fDOMDocument.git",
-                "reference": "8dcfd392135a5bd938c3c83ea71419501ad9855d"
+                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/8dcfd392135a5bd938c3c83ea71419501ad9855d",
-                "reference": "8dcfd392135a5bd938c3c83ea71419501ad9855d",
+                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/6e8203e40a32a9c770bcb62fe37e68b948da6dca",
+                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca",
                 "shasum": ""
             },
             "require": {
@@ -5471,7 +5582,7 @@
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
-            "time": "2017-04-21T14:50:31+00:00"
+            "time": "2017-06-30T11:53:12+00:00"
         }
     ],
     "aliases": [],

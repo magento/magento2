@@ -72,7 +72,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         Session $customerSession,
         GroupManagementInterface $groupManagement
     ) {
-        $quantity = $quantity ?: 1;
+        $quantity = floatval($quantity) ? $quantity : 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;

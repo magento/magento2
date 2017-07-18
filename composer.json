@@ -17,6 +17,7 @@
         "zendframework/zend-validator": "^2.6.0",
         "zendframework/zend-crypt": "^2.6.0",
         "zendframework/zend-console": "^2.6.0",
+        "zendframework/zend-mail": "^2.8.0",
         "zendframework/zend-modulemanager": "^2.7",
         "zendframework/zend-mvc": "~2.6.3",
         "zendframework/zend-text": "^2.6.0",
