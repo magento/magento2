@@ -648,8 +648,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function deleteOptionsAndSelections($productIds)
     {
+        if (empty($productIds)) {
+            return $this;
+        }
+
         $optionTable = $this->_resource->getTableName('catalog_product_bundle_option');
         $optionValueTable = $this->_resource->getTableName('catalog_product_bundle_option_value');
+        $selectionTable = $this->_resource->getTableName('catalog_product_bundle_selection');
         $valuesIds =  $this->connection->fetchAssoc($this->connection->select()->from(
             ['bov' => $optionValueTable],
             ['value_id']
@@ -662,17 +667,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $productIds
         ));
         $this->connection->delete(
-            $optionTable,
+            $optionValueTable,
             $this->connection->quoteInto('value_id IN (?)', array_keys($valuesIds))
         );
-        $productIdsInWhere = $this->connection->quoteInto('parent_id IN (?)', $productIds);
         $this->connection->delete(
             $optionTable,
-            $this->connection->quoteInto('parent_id IN (?)', $productIdsInWhere)
+            $this->connection->quoteInto('parent_id IN (?)', $productIds)
         );
         $this->connection->delete(
-            $optionTable,
-            $this->connection->quoteInto('parent_product_id IN (?)', $productIdsInWhere)
+            $selectionTable,
+            $this->connection->quoteInto('parent_product_id IN (?)', $productIds)
         );
         return $this;
     }
