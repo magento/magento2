@@ -19,6 +19,6 @@ class SourceItem extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init(InstallSchema::TABLE_NAME_SOURCE_ITEM, SourceItemInterface::SOURCE_ITEM_ID);
+        $this->_init(InstallSchema::TABLE_NAME_SOURCE_ITEM, 'source_item_id');
     }
 }

@@ -108,52 +108,6 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGet()
-    {
-        $sourceItemId = 345;
-
-        $this->sourceItem
-            ->expects($this->once())
-            ->method('getSourceItemId')
-            ->willReturn($sourceItemId);
-        $this->sourceItemFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->sourceItem);
-        $this->resourceSource
-            ->expects($this->once())
-            ->method('load')
-            ->with($this->sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
-
-        self::assertSame($this->sourceItem, $this->sourceItemRepository->get($sourceItemId));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testGetIfEntityIsNotFound()
-    {
-        $sourceItemId = 0;
-
-        $this->sourceItem
-            ->expects($this->once())
-            ->method('getSourceItemId')
-            ->willReturn(null);
-        $this->sourceItemFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->sourceItem);
-        $this->resourceSource->expects($this->once())
-            ->method('load')
-            ->with(
-                $this->sourceItem,
-                $sourceItemId,
-                SourceItemInterface::SOURCE_ITEM_ID
-            );
-
-        $this->sourceItemRepository->get($sourceItemId);
-    }
-
     public function testGetListWithSearchCriteria()
     {
         $items = [
@@ -209,52 +163,11 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $sourceItemId = 345;
-
-        $this->sourceItem
-            ->expects($this->once())
-            ->method('getSourceItemId')
-            ->willReturn($sourceItemId);
-        $this->sourceItemFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->sourceItem);
-        $this->resourceSource
-            ->expects($this->once())
-            ->method('load')
-            ->with($this->sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
-
         $this->resourceSource
             ->expects($this->once())
             ->method('delete')
             ->with($this->sourceItem);
 
-        $this->sourceItemRepository->delete($sourceItemId);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testDeleteIfEntityIsNotFound()
-    {
-        $sourceItemId = 0;
-
-        $this->sourceItem
-            ->expects($this->once())
-            ->method('getSourceItemId')
-            ->willReturn(null);
-        $this->sourceItemFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->sourceItem);
-        $this->resourceSource->expects($this->once())
-            ->method('load')
-            ->with(
-                $this->sourceItem,
-                $sourceItemId,
-                SourceItemInterface::SOURCE_ITEM_ID
-            );
-
-        $this->sourceItemRepository->delete($sourceItemId);
+        $this->sourceItemRepository->delete($this->sourceItem);
     }
 }

@@ -28,14 +28,6 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getSourceItemId()
-    {
-        return $this->getData(SourceItemInterface::SOURCE_ITEM_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSku()
     {
         return $this->getData(SourceItemInterface::SKU);

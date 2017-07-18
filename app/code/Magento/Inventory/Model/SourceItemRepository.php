@@ -6,15 +6,12 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
@@ -29,11 +26,6 @@ class SourceItemRepository implements SourceItemRepositoryInterface
      * @var SourceResourceModel
      */
     private $sourceResource;
-
-    /**
-     * @var SourceItemInterfaceFactory
-     */
-    private $sourceItemFactory;
 
     /**
      * @var CollectionProcessorInterface
@@ -51,11 +43,6 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     private $sourceItemSearchResultsFactory;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -64,44 +51,23 @@ class SourceItemRepository implements SourceItemRepositoryInterface
      * SourceRepository constructor
      *
      * @param SourceResourceModel $sourceResource
-     * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param SourceItemSearchResultsInterfaceFactory $sourceItemSearchResultsFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         SourceResourceModel $sourceResource,
-        SourceItemInterfaceFactory $sourceItemFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $sourceItemCollectionFactory,
         SourceItemSearchResultsInterfaceFactory $sourceItemSearchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
         $this->sourceResource = $sourceResource;
-        $this->sourceItemFactory = $sourceItemFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->sourceItemSearchResultsFactory = $sourceItemSearchResultsFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function get($sourceItemId)
-    {
-        $sourceItem = $this->sourceItemFactory->create();
-        $this->sourceResource->load($sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
-
-        if (null === $sourceItem->getSourceItemId()) {
-            throw NoSuchEntityException::singleField(SourceItemInterface::SOURCE_ITEM_ID, $sourceItemId);
-        }
-
-        return $sourceItem;
     }
 
     /**

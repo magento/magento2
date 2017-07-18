@@ -365,7 +365,7 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Inventory Source item Table'
         )->addColumn(
-            SourceItemInterface::SOURCE_ITEM_ID,
+            'source_item_id',
             Table::TYPE_INTEGER,
             null,
             [

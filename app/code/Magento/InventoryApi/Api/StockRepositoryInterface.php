@@ -37,19 +37,20 @@ interface StockRepositoryInterface
     public function get($stockId);
 
     /**
-     * Delte the Stock data by given stockId
-     *
-     * @param int $stockId
-     * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException | \Magento\Framework\Exception\CouldNotDeleteException
-     */
-    public function deleteById($stockId);
-
-    /**
      * Load Stock data collection by given search criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null);
+
+    /**
+     * Delete the Stock data by given stockId
+     *
+     * @param int $stockId
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
+    public function deleteById($stockId);
 }

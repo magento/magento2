@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Service method for source items multiple save
+ * Service method for source items save multiple
  * Performance efficient API, used for stock synchronization
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
@@ -16,7 +16,7 @@ namespace Magento\InventoryApi\Api;
 interface SourceItemSaveInterface
 {
     /**
-     * Multiple Save Source item data
+     * Save Multiple Source item data
      *
      * @param \Magento\InventoryApi\Api\Data\SourceItemInterface[] $sourceItems
      * @return void

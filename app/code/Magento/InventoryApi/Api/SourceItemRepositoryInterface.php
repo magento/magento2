@@ -5,40 +5,38 @@
  */
 namespace Magento\InventoryApi\Api;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+
 /**
- * This is Facade for basic operations with Source Item
- * The method save is absent, due to different semantic (save multiple)
+ * This is Facade for basic operations with SourceItem
  *
+ * The method save is absent, due to different semantic (save multiple)
  * @see SourceItemSaveInterface
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
+ *
  * @api
  */
 interface SourceItemRepositoryInterface
 {
     /**
-     * Get Source Item data by given sourceItemId. If you want to create plugin on get method, also you need to create
-     * separate plugin on getList method, because entity loading way is different for these methods
-     *
-     * @param int $sourceItemId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Magento\InventoryApi\Api\Data\SourceItemInterface
-     */
-    public function get($sourceItemId);
-
-    /**
      * Load Source Item data collection by given search criteria
+     *
+     * We need to have this method for direct work with Source Items because this object contains additional data like as qty, status
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
-     * Delete Source Item data by given sourceItemId
+     * Delete Source Item data
      *
-     * @param int $sourceItemId
+     * @param SourceItemInterface $sourceItem
+     * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @return void
      */
-    public function delete($sourceItemId);
+    public function delete(SourceItemInterface $sourceItem);
 }

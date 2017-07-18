@@ -72,7 +72,6 @@ class Sources extends AbstractModifier
         $sourceItemsData = [];
         foreach ($collection->getData() as $row) {
             $sourceItemsData[] = [
-                SourceItemInterface::SOURCE_ITEM_ID => $row[SourceItemInterface::SOURCE_ITEM_ID],
                 SourceItemInterface::SOURCE_ID => $row[SourceItemInterface::SOURCE_ID],
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
                 SourceItemInterface::STATUS  => $row[SourceItemInterface::STATUS],

@@ -144,7 +144,7 @@ class SourceItemsProcessor
     private function deleteSourceItems(array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
-            $this->sourceItemRepository->delete($sourceItem->getSourceItemId());
+            $this->sourceItemRepository->delete($sourceItem);
         }
     }
 }
