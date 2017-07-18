@@ -12,16 +12,6 @@ namespace Magento\InventoryApi\Api;
  */
 interface SourceStockLinkRepositoryInterface
 {
-
-    /**
-     * Get source by given Id.
-     *
-     * @param int $linkId
-     * @return \Magento\InventoryApi\Api\Data\SourceStockLinkInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function get($linkId);
-
     /**
      * Save SourceStockLink data
      *
@@ -42,14 +32,4 @@ interface SourceStockLinkRepositoryInterface
      * @throws \Magento\Framework\Exception\StateException
      */
     public function delete(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink);
-
-    /**
-     * Remove the source assignment from the stock by id.
-     *
-     * @param int $linkId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @return void
-     */
-    public function deleteById($linkId);
 }

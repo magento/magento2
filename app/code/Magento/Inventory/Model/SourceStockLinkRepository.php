@@ -19,7 +19,6 @@ use Psr\Log\LoggerInterface;
  */
 class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
 {
-
     /**
      * @var SourceStockLinkFactory
      */
@@ -53,22 +52,6 @@ class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get($linkId)
-    {
-        $sourceStockLink= $this->sourceStockLinkFactory->create();
-        $this->resourceSourceStockLink->load($sourceStockLink, $linkId, SourceStockLinkInterface::LINK_ID);
-
-        /** @var SourceStockLinkInterface $sourceStockLink */
-        if (null === $sourceStockLink->getLinkId()) {
-            throw NoSuchEntityException::singleField(SourceStockLinkInterface::LINK_ID, $linkId);
-        }
-
-        return $sourceStockLink;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function save(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink)
     {
         try {
@@ -90,14 +73,5 @@ class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete Source Stock Link'), $e);
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function deleteById($linkId)
-    {
-        $sourceStockLink = $this->getById($linkId);
-        $this->delete($sourceStockLink);
     }
 }
