@@ -153,7 +153,14 @@ class Attribute extends Form
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Fill attributes
+     * List of selected attributes.
+     *
+     * @var string
+     */
+    private $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
+
+    /**
+     * Fill attributes.
      *
      * @param array $attributes
      * @return void
@@ -170,6 +177,11 @@ class Attribute extends Form
 
         //select attributes
         $this->getAttributesGrid()->resetFilter();
+        $attributesList = $this->browser->find($this->selectedAttributes)->getText();
+        if ($attributesList != '--') {
+            $this->getAttributesGrid()->deselectAttributes();
+        }
+
         if ($this->_rootElement->find('[class$=no-data]')->isVisible()) {
             return;
         }
@@ -189,12 +201,12 @@ class Attribute extends Form
     }
 
     /**
-     * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid
      */
     public function getAttributesGrid()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid::class,
             ['element' => $this->browser->find('#variation-steps-wizard_step1 .admin__data-grid-outer-wrap')]
         );
     }
@@ -208,7 +220,7 @@ class Attribute extends Form
     protected function createNewVariationSet(array $attribute)
     {
         $attributeFixture = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\Fixture\CatalogProductAttribute',
+            \Magento\Catalog\Test\Fixture\CatalogProductAttribute::class,
             ['data' => $attribute]
         );
 
@@ -325,7 +337,7 @@ class Attribute extends Form
     protected function getEditAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm::class,
             ['element' => $this->browser->find($this->newAttribute)]
         );
     }
@@ -340,7 +352,7 @@ class Attribute extends Form
         return $this->_rootElement->find(
             $this->variationSearchBlock,
             Locator::SELECTOR_CSS,
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute'
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute::class
             . '\AttributeSelector'
         );
     }
@@ -448,7 +460,7 @@ class Attribute extends Form
     protected function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
     }

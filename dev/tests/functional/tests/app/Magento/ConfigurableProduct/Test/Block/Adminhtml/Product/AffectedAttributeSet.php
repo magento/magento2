@@ -23,7 +23,7 @@ class AffectedAttributeSet extends ParentForm
      *
      * @var string
      */
-    protected $confirmButton = '[data-role=action]';
+    protected $confirmButton = '[data-action=confirm]';
 
     /**
      * Locator buttons new name attribute set

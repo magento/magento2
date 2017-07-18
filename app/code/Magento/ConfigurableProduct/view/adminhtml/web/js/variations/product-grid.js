@@ -29,7 +29,8 @@ define([
             listens: {
                 '${ $.productsProvider }:data': '_showMessageAssociatedGrid _handleManualGridOpening',
                 '${ $.productsMassAction }:selected': '_handleManualGridSelect',
-                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual _switchProductType'
+                '${ $.configurableVariations }:productMatrix': '_switchProductType',
+                '${ $.configurableVariations }:isShowAddProductButton': '_showButtonAddManual'
             }
         },
 
@@ -64,7 +65,7 @@ define([
                 this.productsModal.notification();
             }.bind(this));
             this.variationsComponent(function (variation) {
-                this._showButtonAddManual(variation.productMatrix());
+                this._showButtonAddManual(variation.attributes());
             }.bind(this));
 
             this._initGrid = _.once(this._initGrid);
@@ -192,12 +193,12 @@ define([
 
         /**
          * Show button add manual
-         * @param {Array} variations
+         * @param {Array} attributes
          * @returns {*}
          * @private
          */
-        _showButtonAddManual: function (variations) {
-            return this.button(variations.length);
+        _showButtonAddManual: function (attributes) {
+            return this.button(attributes.length);
         },
 
         _switchProductType: function (variations) {
