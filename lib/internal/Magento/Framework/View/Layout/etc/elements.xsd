@@ -8,6 +8,13 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <!-- Redefine section -->
     <xs:redefine schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd">
+        <xs:complexType name="string">
+            <xs:complexContent mixed="true">
+                <xs:restriction base="string">
+                    <xs:attribute name="translatable" use="prohibited"/>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
         <xs:complexType name="argumentType" abstract="true" mixed="true">
             <xs:complexContent>
                 <xs:extension base="argumentType">

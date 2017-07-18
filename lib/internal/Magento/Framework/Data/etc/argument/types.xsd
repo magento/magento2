@@ -36,13 +36,6 @@
         <xs:complexContent>
             <xs:extension base="argumentType">
                 <xs:attribute name="translate" use="optional" type="xs:boolean"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="translatable">
-        <xs:complexContent>
-            <xs:extension base="string">
                 <xs:attribute name="translatable" use="optional" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>
