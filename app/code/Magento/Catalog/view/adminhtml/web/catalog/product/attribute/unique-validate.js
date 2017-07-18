@@ -45,7 +45,7 @@ define([
                     });
 
                     if (!isValid) {
-                        msg = _config.message.replace('%1', duplicates.join(', '));
+                        msg = _config.message + ' (' + duplicates.join(', ') + ')';
                     }
 
                     return isValid;
