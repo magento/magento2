@@ -26,17 +26,21 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param $jsonEncoder
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Serialize\Serializer\Json $serializer,
-        array $data = []
+        $jsonEncoder,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->storeManager = $context->getStoreManager();
-        $this->serializer = $serializer;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -52,6 +56,28 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return array
+     */
+    public function getInvalidationRules()
+    {
+        return [
+            '*' => [
+                'Magento_Customer/js/invalidation-processor' => [
+                    'invalidationRules' => [
+                        'website-rule' => [
+                            'Magento_Customer/js/invalidation-rules/website-rule' => [
+                                'scopeConfig' => [
+                                    'websiteId' => $this->getWebsiteId(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
      * Get the invalidation rules json encoded
      *
      * @return bool|string
@@ -59,22 +85,6 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      */
     public function getSerializedInvalidationRules()
     {
-        return $this->serializer->serialize(
-            [
-                '*' => [
-                    'Magento_Customer/js/invalidation-processor' => [
-                        'invalidationRules' => [
-                            'website-rule' => [
-                                'Magento_Customer/js/invalidation-rules/website-rule' => [
-                                    'scopeConfig' => [
-                                        'websiteId' => $this->getWebsiteId(),
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-            ]
-        );
+        return $this->serializer->serialize($this->getInvalidationRules());
     }
 }

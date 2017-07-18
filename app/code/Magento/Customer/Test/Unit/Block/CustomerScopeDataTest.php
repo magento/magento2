@@ -54,8 +54,9 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new CustomerScopeData(
             $this->contextMock,
-            $this->serializerMock,
-            []
+            null,
+            [],
+            $this->serializerMock
         );
     }
 
@@ -77,5 +78,85 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($storeMock);
 
         $this->assertEquals($storeId, $this->model->getWebsiteId());
+    }
+
+    public function testGetInvalidationRules()
+    {
+        $storeId = 1;
+
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->setMethods(['getWebsiteId'])
+            ->getMockForAbstractClass();
+
+        $storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($storeId);
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with(null)
+            ->willReturn($storeMock);
+
+        $this->assertEquals(
+            [
+                '*' => [
+                    'Magento_Customer/js/invalidation-processor' => [
+                        'invalidationRules' => [
+                            'website-rule' => [
+                                'Magento_Customer/js/invalidation-rules/website-rule' => [
+                                    'scopeConfig' => [
+                                        'websiteId' => 1,
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            $this->model->getInvalidationRules()
+        );
+    }
+
+    public function testGetSerializedInvalidationRules()
+    {
+        $storeId = 1;
+        $rules = [
+            '*' => [
+                'Magento_Customer/js/invalidation-processor' => [
+                    'invalidationRules' => [
+                        'website-rule' => [
+                            'Magento_Customer/js/invalidation-rules/website-rule' => [
+                                'scopeConfig' => [
+                                    'websiteId' => 1,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->setMethods(['getWebsiteId'])
+            ->getMockForAbstractClass();
+
+        $storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($storeId);
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with(null)
+            ->willReturn($storeMock);
+
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->with($rules)
+            ->willReturn(json_encode($rules));
+
+        $this->assertEquals(
+            json_encode($rules),
+            $this->model->getSerializedInvalidationRules()
+        );
     }
 }
