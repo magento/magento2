@@ -102,7 +102,8 @@ class ImageEntryConverter implements EntryConverterInterface
     ) {
         if ($content === null) {
             return null;
-        } 
+        }
+
         return [
             'data' => [
                 ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
