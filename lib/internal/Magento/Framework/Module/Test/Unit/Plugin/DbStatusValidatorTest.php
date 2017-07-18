@@ -29,6 +29,11 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $deploymentConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $requestMock;
 
     /**
@@ -46,6 +51,7 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->subjectMock = $this->getMock(\Magento\Framework\App\FrontController::class, [], [], '', false);
+        $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
@@ -55,7 +61,8 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         $this->dbVersionInfoMock = $this->getMock(\Magento\Framework\Module\DbVersionInfo::class, [], [], '', false);
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
-            $this->dbVersionInfoMock
+            $this->dbVersionInfoMock,
+            $this->deploymentConfigMock
         );
     }
 
@@ -75,6 +82,10 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         $this->moduleManager->expects($this->any())
             ->method('isDbDataUpToDate')
             ->will($this->returnValueMap($returnMap));
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidator::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(0);
 
         $this->assertEquals(
             null,
@@ -92,6 +103,10 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('isDbSchemaUpToDate');
         $this->moduleManager->expects($this->never())
             ->method('isDbDataUpToDate');
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidator::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(0);
         $this->assertEquals(
             null,
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
@@ -117,7 +132,33 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getDbVersionErrors')
             ->will($this->returnValue($dbVersionErrors));
 
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidator::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(0);
+
         $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
+    }
+
+    public function testAroundDispatchExceptionIsIgnored()
+    {
+        $this->_cacheMock->expects($this->never())->method('load');
+        $this->_cacheMock->expects($this->never())->method('save');
+        $returnMap = [
+            ['Module_One', 'resource_Module_One', true],
+            ['Module_Two', 'resource_Module_Two', true],
+        ];
+        $this->moduleManager->expects($this->any())
+            ->method('isDbSchemaUpToDate')
+            ->will($this->returnValueMap($returnMap));
+        $this->moduleManager->expects($this->any())
+            ->method('isDbDataUpToDate')
+            ->will($this->returnValueMap($returnMap));
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidator::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(1);
+        $this->assertEquals(null, $this->_model->beforeDispatch($this->subjectMock, $this->requestMock));
     }
 
     /**
@@ -128,50 +169,50 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         return [
             'schema is outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
             'data is outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
             'both schema and data are outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
         ];
