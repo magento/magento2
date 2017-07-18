@@ -8,5 +8,5 @@
 // @deprecated
 ?>
 <?php if (!empty($count)):?>
-    <a href="#customer-reviews" class="nobr"><?php echo $block->escapeHtml(__('%1 Review(s)', $count)) ?></a>
+    <a href="#customer-reviews" class="nobr"><?= $block->escapeHtml(__('%1 Review(s)', $count)) ?></a>
 <?php endif;?>

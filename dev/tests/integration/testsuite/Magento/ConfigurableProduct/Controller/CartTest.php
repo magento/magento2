@@ -64,4 +64,31 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         }
         return null;
     }
+
+    /**
+     * Test for \Magento\Checkout\Controller\Cart\CouponPost::execute() with configurable product with last option
+     * Covers MAGETWO-60352
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product_last_variation.php
+     */
+    public function testExecuteForConfigurableLastOption()
+    {
+        /** @var $session \Magento\Checkout\Model\Session */
+        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
+        $quote = $session->getQuote();
+        $quote->setData('trigger_recollect', 1)->setTotalsCollectedFlag(true);
+        $inputData = [
+            'remove' => 0,
+            'coupon_code' => 'test'
+        ];
+        $this->getRequest()->setPostValue($inputData);
+        $this->dispatch(
+            'checkout/cart/couponPost/'
+        );
+
+        $this->assertSessionMessages(
+            $this->equalTo(['The coupon code "test" is not valid.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
+    }
 }

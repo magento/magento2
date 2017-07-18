@@ -103,6 +103,27 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $this->finalPrice->getValue());
     }
 
+    public function testGetValueWithoutMinProduct()
+    {
+        $typeInstanceMock = $this->getMock(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $typeInstanceMock->expects($this->once())
+            ->method('getAssociatedProducts')
+            ->with($this->equalTo($this->saleableItemMock))
+            ->will($this->returnValue([]));
+
+        $this->saleableItemMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->will($this->returnValue($typeInstanceMock));
+
+        $this->assertEquals(0.00, $this->finalPrice->getValue());
+    }
+
     protected function getProductMock($price)
     {
         $priceTypeMock = $this->getMock(\Magento\Catalog\Pricing\Price\FinalPrice::class, [], [], '', false);

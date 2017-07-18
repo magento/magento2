@@ -91,7 +91,7 @@ abstract class AbstractResource
                     call_user_func($callback);
                 }
             } catch (\Exception $e) {
-                throw $e;
+                $this->logger->critical($e);
             }
         }
         return $this;

@@ -7,12 +7,12 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php echo $block->getChildHtml('grid') ?>
+<?= $block->getChildHtml('grid') ?>
 
 <?php if ($block->getShowButtons()): ?>
 <div class="form-buttons">
-    <?php echo $block->getUnsubscribeButtonHtml(); ?>
-    <?php echo $block->getDeleteButtonHtml(); ?>
+    <?= $block->getUnsubscribeButtonHtml() ?>
+    <?= $block->getDeleteButtonHtml() ?>
 </div>
 <?php endif ?>
 <script>

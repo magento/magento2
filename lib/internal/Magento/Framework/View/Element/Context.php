@@ -6,10 +6,15 @@
 namespace Magento\Framework\View\Element;
 
 /**
- * Abstract block context object
+ * Constructor modification point for Magento\Framework\View\Element\AbstractBlock.
  *
- * Will be used as block constructor modification point after release.
- * Important: Should not be modified by extension developers.
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

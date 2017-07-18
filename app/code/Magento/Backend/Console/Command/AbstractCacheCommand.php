@@ -10,6 +10,9 @@ use Magento\Framework\App\Cache\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * @api
+ */
 abstract class AbstractCacheCommand extends Command
 {
     /**
