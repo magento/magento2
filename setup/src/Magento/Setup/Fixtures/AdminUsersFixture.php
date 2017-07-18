@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\Setup\Fixtures;
 
 /**
  * Generate admin users
+ *
+ * Support the following format:
+ * <!-- Number of admin users -->
+ * <admin_users>{int}</admin_users>
  */
 class AdminUsersFixture extends Fixture
 {

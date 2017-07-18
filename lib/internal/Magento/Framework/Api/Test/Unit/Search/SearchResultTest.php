@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\Search;
@@ -52,14 +52,6 @@ class SearchResultTest extends \PHPUnit_Framework_TestCase
                 'data' => $data
             ]
         );
-    }
-
-    /**
-     * Test getAllIds
-     */
-    public function testGetAllIds()
-    {
-        $this->assertEquals([1, 2], $this->search->getAllIds());
     }
 
     /**

@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Util\Command\File\Export\Data;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\File\Export;
+use Magento\Mtf\Util\Command\File\Export\Data;
 
 /**
  * Assert that exported file contains customer addresses data.

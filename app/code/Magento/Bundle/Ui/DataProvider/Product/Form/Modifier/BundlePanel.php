@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Framework\UrlInterface;
-use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Modal;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
@@ -518,7 +518,7 @@ class BundlePanel extends AbstractModifier
                                 'dataType' => Form\Element\DataType\Text::NAME,
                                 'formElement' => Form\Element\Select::NAME,
                                 'componentType' => Form\Field::NAME,
-                                'component' => 'Magento_Bundle/js/components/bundle-input-type',
+                                'component' => 'Magento_Ui/js/form/element/select',
                                 'parentContainer' => 'product_bundle_container',
                                 'selections' => 'bundle_selections',
                                 'isDefaultIndex' => 'is_default',
@@ -594,8 +594,11 @@ class BundlePanel extends AbstractModifier
                     'config' => [
                         'componentType' => Container::NAME,
                         'isTemplate' => true,
-                        'component' => 'Magento_Ui/js/dynamic-rows/record',
-                        'is_collection' => true
+                        'component' => 'Magento_Bundle/js/components/bundle-record',
+                        'is_collection' => true,
+                        'imports' => [
+                            'onTypeChanged' => '${ $.provider }:${ $.bundleOptionsDataScope }.type'
+                        ]
                     ],
                 ],
             ],

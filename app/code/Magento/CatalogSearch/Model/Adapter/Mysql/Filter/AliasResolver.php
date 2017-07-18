@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator;
 
 /**
  * Purpose of class is to resolve table alias for Search Request filter
+ * @api
  */
 class AliasResolver
 {

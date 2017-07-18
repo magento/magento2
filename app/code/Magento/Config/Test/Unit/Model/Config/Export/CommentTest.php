@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
-use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
@@ -30,11 +29,6 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      * @var TypePool|\PHPUnit_Framework_MockObject_MockObject
      */
     private $typePoolMock;
-
-    /**
-     * @var ExcludeList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $excludeListMock;
 
     /**
      * @var Comment
@@ -67,17 +61,12 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->model = $objectManager->getObject(
             Comment::class,
             [
                 'placeholderFactory' => $placeholderFactoryMock,
                 'source' => $this->configSourceMock,
                 'typePool' => $this->typePoolMock,
-                'excludeList' => $this->excludeListMock
             ]
         );
     }
@@ -101,9 +90,6 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->typePoolMock->expects($expectedMocks['typePoolMock']['isPresent']['expects'])
             ->method('isPresent')
             ->willReturnMap($expectedMocks['typePoolMock']['isPresent']['returnMap']);
-        $this->excludeListMock->expects($expectedMocks['excludeListMock']['isPresent']['expects'])
-            ->method('isPresent')
-            ->willReturnMap($expectedMocks['excludeListMock']['isPresent']['returnMap']);
         $this->placeholderMock->expects($expectedMocks['placeholderMock']['generate']['expects'])
             ->method('generate')
             ->willReturnMap($expectedMocks['placeholderMock']['generate']['returnMap']);
@@ -122,12 +108,6 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                 'notSensitive' => [],
                 'expectedMocks' => [
                     'typePoolMock' => [
-                        'isPresent' => [
-                            'expects' => $this->never(),
-                            'returnMap' => [],
-                        ]
-                    ],
-                    'excludeListMock' => [
                         'isPresent' => [
                             'expects' => $this->never(),
                             'returnMap' => [],
@@ -158,15 +138,6 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                             ]
                         ],
                     ],
-                    'excludeListMock' => [
-                        'isPresent' => [
-                            'expects' => $this->exactly(2),
-                            'returnMap' => [
-                                ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
-                                ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
-                            ]
-                        ],
-                    ],
                     'placeholderMock' => [
                         'generate' => [
                             'expects' => $this->never(),
@@ -177,33 +148,23 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                 'expectedMessage' => ''
             ],
             [
-                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2'],
+                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2', 'some/sensitive_and_env/field'],
                 'notSensitive' => ['some/notSensitive/field1', 'some/notSensitive/field2'],
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => $this->exactly(4),
+                            'expects' => $this->exactly(5),
                             'returnMap' => [
                                 ['some/sensitive/field1', TypePool::TYPE_SENSITIVE, true],
-                                ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, false],
+                                ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, true],
+                                ['some/sensitive_and_env/field', TypePool::TYPE_SENSITIVE, true],
                                 ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
-                                ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
-                            ]
-                        ],
-                    ],
-                    'excludeListMock' => [
-                        'isPresent' => [
-                            'expects' => $this->exactly(3),
-                            'returnMap' => [
-                                ['some/sensitive/field2', true],
-                                ['some/notSensitive/field1', false],
-                                ['some/notSensitive/field2', false],
                             ]
                         ],
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => $this->exactly(2),
+                            'expects' => $this->exactly(3),
                             'returnMap' => [
                                 [
                                     'some/sensitive/field1',
@@ -217,14 +178,24 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                                     null,
                                     'CONFIG__SOME__SENSITIVE__FIELD2'
                                 ],
+                                [
+                                    'some/sensitive_and_env/field',
+                                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                                    null,
+                                    'CONFIG__SOME__SENSITIVE_AND_ENV__FIELD'
+                                ],
                             ],
                         ],
                     ],
                 ],
-                'expectedMessage' => 'The configuration file doesn\'t contain sensitive data for security reasons. '
-                    . 'Sensitive data can be stored in the following environment variables:'
-                    . "\n" . 'CONFIG__SOME__SENSITIVE__FIELD1 for some/sensitive/field1'
-                    . "\n" . 'CONFIG__SOME__SENSITIVE__FIELD2 for some/sensitive/field2'
+                'expectedMessage' => implode(PHP_EOL, [
+                    'Shared configuration was written to config.php and system-specific configuration to env.php.',
+                    'Shared configuration file (config.php) doesn\'t contain sensitive data for security reasons.',
+                    'Sensitive data can be stored in the following environment variables:',
+                    'CONFIG__SOME__SENSITIVE__FIELD1 for some/sensitive/field1',
+                    'CONFIG__SOME__SENSITIVE__FIELD2 for some/sensitive/field2',
+                    'CONFIG__SOME__SENSITIVE_AND_ENV__FIELD for some/sensitive_and_env/field'
+                ])
             ],
         ];
     }

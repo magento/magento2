@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,6 +48,11 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -62,13 +67,16 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
         $this->configMock = $this->getMock(\Magento\Framework\DataObject::class, ['getData'], [], '', false);
 
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+
         $this->model = $this->objectManager->getObject(
             \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
-                'data' => ['config' => $this->configMock]
+                'data' => ['config' => $this->configMock],
+                'serializer' => $this->serializer
             ]
         );
 
@@ -202,8 +210,17 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTranslatedString()
     {
+        $callback = function ($params) {
+            return json_encode($params);
+        };
+
         $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback($callback);
+
         $html = $this->model->getElementHtml();
+
         $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }

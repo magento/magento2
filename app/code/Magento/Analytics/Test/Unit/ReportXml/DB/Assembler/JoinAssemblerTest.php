@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\ReportXml\DB\Assembler;
+
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * A unit test for testing of the 'join' assembler.
@@ -39,6 +41,11 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Analytics\ReportXml\DB\ConditionResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $conditionResolverMock;
+
+    /**
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnection;
 
     /**
      * @return void
@@ -78,6 +85,10 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
         ->disableOriginalConstructor()
         ->getMock();
 
+        $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper =
             new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -86,7 +97,8 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
             [
                 'conditionResolver' => $this->conditionResolverMock,
                 'nameResolver' => $this->nameResolverMock,
-                'columnsResolver' => $this->columnsResolverMock
+                'columnsResolver' => $this->columnsResolverMock,
+                'resourceConnection' => $this->resourceConnection,
             ]
         );
     }
@@ -118,23 +130,14 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $queryConfigMock
-     *
-     * @dataProvider assembleNotEmptyDataProvider
+     * @param array $joinsMock
+     * @param array $tablesMapping
      * @return void
+     * @dataProvider assembleNotEmptyDataProvider
      */
-    public function testAssembleNotEmpty(array $queryConfigMock)
+    public function testAssembleNotEmpty(array $queryConfigMock, array $joinsMock, array $tablesMapping)
     {
         $filtersMock = [];
-
-        $joinsMock = [
-            'billing' => [
-                'link-type' => 'left',
-                'table' => [
-                    'billing' => 'sales_order_address'
-                ],
-                'condition' => '(billing.parent_id = `sales`.`entity_id`)'
-            ]
-        ];
 
         $this->nameResolverMock->expects($this->at(0))
             ->method('getAlias')
@@ -144,10 +147,15 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
             ->method('getAlias')
             ->with($queryConfigMock['source']['link-source'][0])
             ->willReturn($queryConfigMock['source']['link-source'][0]['alias']);
-        $this->nameResolverMock->expects($this->any())
+        $this->nameResolverMock->expects($this->once())
             ->method('getName')
             ->with($queryConfigMock['source']['link-source'][0])
             ->willReturn($queryConfigMock['source']['link-source'][0]['name']);
+
+        $this->resourceConnection
+            ->expects($this->any())
+            ->method('getTableName')
+            ->willReturnOnConsecutiveCalls(...array_values($tablesMapping));
 
         $this->conditionResolverMock->expects($this->at(0))
             ->method('getFilter')
@@ -254,7 +262,17 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ]
+                ],
+                [
+                    'billing' => [
+                        'link-type' => 'left',
+                        'table' => [
+                            'billing' => 'pref_sales_order_address'
+                        ],
+                        'condition' => '(billing.parent_id = `sales`.`entity_id`)'
+                    ]
+                ],
+                ['sales_order_address' => 'pref_sales_order_address']
             ]
         ];
     }

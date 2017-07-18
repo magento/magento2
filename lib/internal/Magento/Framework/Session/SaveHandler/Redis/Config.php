@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\SaveHandler\Redis;
@@ -48,12 +48,12 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * Configuration path for persistent identifier
      */
-    const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/param_persistent_identifier';
+    const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/persistent_identifier';
 
     /**
      * Configuration path for compression threshold
      */
-    const PARAM_COMPRESSION_THRESHOLD   = 'session/redis/param_compression_threshold';
+    const PARAM_COMPRESSION_THRESHOLD   = 'session/redis/compression_threshold';
 
     /**
      * Configuration path for compression library

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -8,6 +8,13 @@ namespace Magento\Payment\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
+/**
+ * Default implementation of credits card configuration provider.
+ * Use this class to register payment method that supports credit cards.
+ * Direct injection as a dependency or extending of this class is not recommended.
+ *
+ * @api
+ */
 class CcGenericConfigProvider implements ConfigProviderInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -34,6 +34,8 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @method \Magento\Newsletter\Model\Queue setQueueFinishAt(string $value)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTypesInterface
 {

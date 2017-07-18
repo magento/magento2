@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ define([
             url: url,
             cache: true,
             dataType: 'html',
-            showLoader: true,
+            showLoader: false,
             loaderContext: $('.product.data.items')
         }).done(function (data) {
             $('#product-review-container').html(data);

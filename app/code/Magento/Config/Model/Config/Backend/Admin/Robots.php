@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,12 @@
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * @deprecated robots.txt file is no longer stored in filesystem. It generates as response on request.
+ */
 class Robots extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -32,6 +36,7 @@ class Robots extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param DocumentRoot $documentRoot
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -41,10 +46,13 @@ class Robots extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
-        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
+        $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
         $this->_file = 'robots.txt';
     }
 

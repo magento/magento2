@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -757,7 +757,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender, $customerId, $newEmail = null)
     {
-
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();

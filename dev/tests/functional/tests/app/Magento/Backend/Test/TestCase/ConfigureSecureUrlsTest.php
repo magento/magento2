@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,20 +93,14 @@ class ConfigureSecureUrlsTest extends Injectable
      *
      * @param FixtureFactory $fixtureFactory
      * @param SystemConfigEdit $configurationAdminPage
-     * @param Cache $cache
-     * @param StaticContent $staticContent
      * @return void
      */
     public function __inject(
         FixtureFactory $fixtureFactory,
-        SystemConfigEdit $configurationAdminPage,
-        Cache $cache,
-        StaticContent $staticContent
+        SystemConfigEdit $configurationAdminPage
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->configurationAdminPage = $configurationAdminPage;
-        $this->cache = $cache;
-        $this->staticContent = $staticContent;
     }
 
     /**
@@ -117,9 +111,6 @@ class ConfigureSecureUrlsTest extends Injectable
      */
     public function test($configData)
     {
-        $this->markTestSkipped(
-            'MAGETWO-63197: ConfigureSecureUrlsTest is failing and next functional tests are also failing after it'
-        );
         $data = [
             'web/secure/base_url' => [
                 'scope' => 'default',
@@ -138,7 +129,14 @@ class ConfigureSecureUrlsTest extends Injectable
         $this->configurationAdminPage->getPageActions()->save();
         $_ENV['app_backend_url'] = str_replace('http', 'https', $_ENV['app_backend_url']);
 
+        $this->configurationAdminPage = $this->objectManager->create(
+            \Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit::class
+        );
+
+        $this->cache = $this->objectManager->create(\Magento\Mtf\Util\Command\Cli\Cache::class);
         $this->cache->flush(['config', 'full_page']);
+
+        $this->staticContent = $this->objectManager->create(\Magento\Mtf\Util\Command\Cli\StaticContent::class);
         $this->staticContent->deploy();
     }
 

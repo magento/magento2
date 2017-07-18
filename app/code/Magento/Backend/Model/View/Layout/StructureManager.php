@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ use Magento\Framework\View\Layout\Data\Structure;
  * Is responsible for managing layout structure items
  * By using this class developer can remove layout entities (block, uiComponent) from scheduled structure
  * Removed entities will not appear at rendered page
+ * @api
  */
 class StructureManager
 {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,161 +9,127 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">search_synonyms_grid.search_synonyms_grid_data_source</item>
-            <item name="deps" xsi:type="string">search_synonyms_grid.search_synonyms_grid_data_source</item>
-        </item>
-        <item name="spinner" xsi:type="string">search_synonyms_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">New Synonym Group</item>
-                <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/new</item>
-            </item>
         </item>
     </argument>
-    <dataSource name="search_synonyms_grid_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">search_synonyms_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">group_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">group_id</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">New Synonym Group</label>
+            </button>
+        </buttons>
+        <spinner>search_synonyms_columns</spinner>
+        <deps>
+            <dep>search_synonyms_grid.search_synonyms_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="search_synonyms_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">group_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="search_synonyms_grid_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>group_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="sticky" xsi:type="boolean">true</item>
-            </item>
-        </argument>
+        <settings>
+            <sticky>true</sticky>
+        </settings>
         <bookmark name="bookmarks"/>
         <columnsControls name="synonyms_columns_controls"/>
         <exportButton name="export_button"/>
         <filterSearch name="fulltext"/>
         <filters name="synonyms_listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="templates" xsi:type="array">
-                        <item name="filters" xsi:type="array">
-                            <item name="select" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
-                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
-                            </item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-            <filterSelect name="store_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Search\Ui\Component\Listing\Column\Store\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">store_id</item>
-                        <item name="label" xsi:type="string" translate="true">Store View</item>
-                        <item name="captionValue" xsi:type="string">--</item>
-                        <item name="sortOrder" xsi:type="number">40</item>
-                    </item>
-                </argument>
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+            <filterSelect name="store_id" provider="${ $.parentName }" sortOrder="40">
+                <settings>
+                    <captionValue>--</captionValue>
+                    <options class="Magento\Search\Ui\Component\Listing\Column\Store\Options"/>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                    <imports>
+                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterSelect>
-            <filterSelect name="website_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Search\Ui\Component\Listing\Column\Website\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">website_id</item>
-                        <item name="label" xsi:type="string" translate="true">Website</item>
-                        <item name="captionValue" xsi:type="string">--</item>
-                        <item name="sortOrder" xsi:type="number">30</item>
-                    </item>
-                </argument>
+            <filterSelect name="website_id" provider="${ $.parentName }" sortOrder="30">
+                <settings>
+                    <captionValue>--</captionValue>
+                    <options class="Magento\Search\Ui\Component\Listing\Column\Website\Options"/>
+                    <label translate="true">Website</label>
+                    <dataScope>website_id</dataScope>
+                    <imports>
+                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterSelect>
         </filters>
         <massaction name="listing_massaction">
             <action name="delete">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">delete</item>
-                        <item name="label" xsi:type="string" translate="true">Delete</item>
-                        <item name="url" xsi:type="url" path="search/synonyms/massDelete"/>
-                        <item name="confirm" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Delete items</item>
-                            <item name="message" xsi:type="string" translate="true">Are you sure you want to delete the selected synonym groups?</item>
-                        </item>
-                    </item>
-                </argument>
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete the selected synonym groups?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="search/synonyms/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
             </action>
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="search_synonyms_columns">
         <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">group_id</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>group_id</indexField>
+            </settings>
         </selectionsColumn>
-        <column name="group_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="label" xsi:type="string" translate="true">ID</item>
-                </item>
-            </argument>
+        <column name="group_id" sortOrder="10">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
         </column>
-        <column name="synonyms">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="label" xsi:type="string" translate="true">Synonyms</item>
-                </item>
-            </argument>
+        <column name="synonyms" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Synonyms</label>
+            </settings>
         </column>
-        <column name="website_id" class="Magento\Search\Ui\Component\Listing\Column\Website">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">30</item>
-                    <item name="label" xsi:type="string" translate="true">Website</item>
-                </item>
-            </argument>
+        <column name="website_id" class="Magento\Search\Ui\Component\Listing\Column\Website" sortOrder="30">
+            <settings>
+                <label translate="true">Website</label>
+            </settings>
         </column>
-        <column name="store_id" class="Magento\Search\Ui\Component\Listing\Column\StoreView">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">40</item>
-                    <item name="label" xsi:type="string" translate="true">Store View</item>
-                </item>
-            </argument>
+        <column name="store_id" class="Magento\Search\Ui\Component\Listing\Column\StoreView" sortOrder="40">
+            <settings>
+                <label translate="true">Store View</label>
+            </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Search\Ui\Component\Listing\Column\SynonymActions">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">group_id</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>group_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+            </settings>
         </actionsColumn>
     </columns>
 </listing>

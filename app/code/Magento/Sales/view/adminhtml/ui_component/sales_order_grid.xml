@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,336 +9,270 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid_data_source</item>
-            <item name="deps" xsi:type="string">sales_order_grid.sales_order_grid_data_source</item>
-        </item>
-        <item name="spinner" xsi:type="string">sales_order_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Create New Order</item>
-                <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">sales/order_create/start</item>
-            </item>
         </item>
     </argument>
-    <dataSource name="sales_order_grid_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">sales_order_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="sales/order_create/start"/>
+                <class>primary</class>
+                <label translate="true">Create New Order</label>
+            </button>
+        </buttons>
+        <spinner>sales_order_columns</spinner>
+        <deps>
+            <dep>sales_order_grid.sales_order_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="sales_order_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_grid_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>main_table.entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="sticky" xsi:type="boolean">true</item>
-            </item>
-        </argument>
+        <settings>
+            <sticky>true</sticky>
+        </settings>
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <exportButton name="export_button"/>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterSelect name="store_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="caption" xsi:type="string" translate="true">All Store Views</item>
-                        <item name="dataScope" xsi:type="string">store_id</item>
-                        <item name="label" xsi:type="string" translate="true">Purchase Point</item>
-                    </item>
-                </argument>
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    <caption translate="true">All Store Views</caption>
+                    <label translate="true">Purchase Point</label>
+                    <dataScope>store_id</dataScope>
+                    <imports>
+                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction">
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="cancel">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">cancel</item>
-                        <item name="label" xsi:type="string" translate="true">Cancel</item>
-                        <item name="url" xsi:type="url" path="sales/order/massCancel"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/massCancel"/>
+                    <type>cancel</type>
+                    <label translate="true">Cancel</label>
+                </settings>
             </action>
             <action name="hold_order">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">hold_order</item>
-                        <item name="label" xsi:type="string" translate="true">Hold</item>
-                        <item name="url" xsi:type="url" path="sales/order/massHold"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/massHold"/>
+                    <type>hold_order</type>
+                    <label translate="true">Hold</label>
+                </settings>
             </action>
             <action name="unhold_order">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">unhold_order</item>
-                        <item name="label" xsi:type="string" translate="true">Unhold</item>
-                        <item name="url" xsi:type="url" path="sales/order/massUnhold"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/massUnhold"/>
+                    <type>unhold_order</type>
+                    <label translate="true">Unhold</label>
+                </settings>
             </action>
             <action name="pdfinvoices_order">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">pdfinvoices_order</item>
-                        <item name="label" xsi:type="string" translate="true">Print Invoices</item>
-                        <item name="url" xsi:type="url" path="sales/order/pdfinvoices"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/pdfinvoices"/>
+                    <type>pdfinvoices_order</type>
+                    <label translate="true">Print Invoices</label>
+                </settings>
             </action>
             <action name="pdfshipments_order">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">pdfshipments_order</item>
-                        <item name="label" xsi:type="string" translate="true">Print Packing Slips</item>
-                        <item name="url" xsi:type="url" path="sales/order/pdfshipments"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/pdfshipments"/>
+                    <type>pdfshipments_order</type>
+                    <label translate="true">Print Packing Slips</label>
+                </settings>
             </action>
             <action name="pdfcreditmemos_order">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">pdfcreditmemos_order</item>
-                        <item name="label" xsi:type="string" translate="true">Print Credit Memos</item>
-                        <item name="url" xsi:type="url" path="sales/order/pdfcreditmemos"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/pdfcreditmemos"/>
+                    <type>pdfcreditmemos_order</type>
+                    <label translate="true">Print Credit Memos</label>
+                </settings>
             </action>
             <action name="pdfdocs_order">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">pdfdocs_order</item>
-                        <item name="label" xsi:type="string" translate="true">Print All</item>
-                        <item name="url" xsi:type="url" path="sales/order/pdfdocs"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="sales/order/pdfdocs"/>
+                    <type>pdfdocs_order</type>
+                    <label translate="true">Print All</label>
+                </settings>
             </action>
             <action name="print_shipping_label">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">print_shipping_label</item>
-                        <item name="label" xsi:type="string" translate="true">Print Shipping Labels</item>
-                        <item name="url" xsi:type="url" path="adminhtml/order_shipment/massPrintShippingLabel"/>
-                    </item>
-                </argument>
+                <settings>
+                    <url path="adminhtml/order_shipment/massPrintShippingLabel"/>
+                    <type>print_shipping_label</type>
+                    <label translate="true">Print Shipping Labels</label>
+                </settings>
             </action>
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="sales_order_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid.sales_order_columns.actions</item>
-                        <item name="target" xsi:type="string">applyAction</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">view</item>
-                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
-                        </item>
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid.sales_order_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">view</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
                     </item>
-                </item>
-            </item>
-        </argument>
+                </param>
+            </childDefaults>
+        </settings>
         <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">entity_id</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
         </selectionsColumn>
         <column name="increment_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">desc</item>
-                    <item name="label" xsi:type="string" translate="true">ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
         </column>
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Purchase Point</item>
-                </item>
-            </argument>
+            <settings>
+                <label translate="true">Purchase Point</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+            </settings>
         </column>
-        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Purchase Date</item>
-                    <item name="dateFormat" xsi:type="string">MMM dd, YYYY, H:mm:ss A</item>
-                </item>
-            </argument>
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Purchase Date</label>
+            </settings>
         </column>
         <column name="billing_name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Bill-to Name</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Bill-to Name</label>
+            </settings>
         </column>
         <column name="shipping_name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Ship-to Name</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Ship-to Name</label>
+            </settings>
         </column>
         <column name="base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="label" xsi:type="string" translate="true">Grand Total (Base)</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Grand Total (Base)</label>
+            </settings>
         </column>
         <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="label" xsi:type="string" translate="true">Grand Total (Purchased)</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Grand Total (Purchased)</label>
+            </settings>
         </column>
-        <column name="status">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Sales\Ui\Component\Listing\Column\Status\Options</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Status</item>
-                </item>
-            </argument>
+        <column name="status" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Sales\Ui\Component\Listing\Column\Status\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
         </column>
         <column name="billing_address" class="Magento\Sales\Ui\Component\Listing\Column\Address">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Billing Address</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Billing Address</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="shipping_address" class="Magento\Sales\Ui\Component\Listing\Column\Address">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Shipping Address</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Shipping Address</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="shipping_information">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Shipping Information</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Shipping Information</label>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="customer_email">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Customer Email</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Email</label>
+                <visible>false</visible>
+            </settings>
         </column>
-        <column name="customer_group">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Customer\Ui\Component\Listing\Column\Group\Options</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Customer Group</item>
-                </item>
-            </argument>
+        <column name="customer_group" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Customer\Ui\Component\Listing\Column\Group\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Customer Group</label>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="subtotal" class="Magento\Sales\Ui\Component\Listing\Column\Price">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Subtotal</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Subtotal</label>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="shipping_and_handling" class="Magento\Sales\Ui\Component\Listing\Column\Price">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Shipping and Handling</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Shipping and Handling</label>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="customer_name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Customer Name</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Name</label>
+                <visible>false</visible>
+            </settings>
         </column>
-        <column name="payment_method">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Payment\Ui\Component\Listing\Column\Method\Options</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Payment Method</item>
-                </item>
-            </argument>
+        <column name="payment_method" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Payment\Ui\Component\Listing\Column\Method\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Payment Method</label>
+                <visible>false</visible>
+            </settings>
         </column>
         <column name="total_refunded" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Total Refunded</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Total Refunded</label>
+                <visible>false</visible>
+            </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="viewUrlPath" xsi:type="string">sales/order/view</item>
                     <item name="urlEntityParamName" xsi:type="string">order_id</item>
                 </item>
             </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
         </actionsColumn>
     </columns>
 </listing>

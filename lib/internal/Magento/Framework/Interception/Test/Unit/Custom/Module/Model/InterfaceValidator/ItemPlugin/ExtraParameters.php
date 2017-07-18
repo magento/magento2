@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin;
 
@@ -19,7 +17,9 @@ class ExtraParameters
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject, $name, $surname
+        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject,
+        $name,
+        $surname
     ) {
         return $name . $surname;
     }

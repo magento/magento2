@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Search;
 
+/**
+ * @api
+ */
 class Proxy implements
     \Magento\Config\Model\Config\Structure\SearchInterface,
     \Magento\Framework\ObjectManager\NoninterceptableInterface

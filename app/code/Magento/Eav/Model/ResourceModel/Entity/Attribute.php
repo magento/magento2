@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
-use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV attribute resource model
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -663,6 +664,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @var array
+     */
+    private $storeLabelsCache = [];
+
+    /**
      * Retrieve store labels by given attribute id
      *
      * @param int $attributeId
@@ -670,16 +676,19 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getStoreLabelsByAttributeId($attributeId)
     {
-        $connection = $this->getConnection();
-        $bind = [':attribute_id' => $attributeId];
-        $select = $connection->select()->from(
-            $this->getTable('eav_attribute_label'),
-            ['store_id', 'value']
-        )->where(
-            'attribute_id = :attribute_id'
-        );
+        if (!isset($this->storeLabelsCache[$attributeId])) {
+            $connection = $this->getConnection();
+            $bind = [':attribute_id' => $attributeId];
+            $select = $connection->select()->from(
+                $this->getTable('eav_attribute_label'),
+                ['store_id', 'value']
+            )->where(
+                'attribute_id = :attribute_id'
+            );
+            $this->storeLabelsCache[$attributeId] = $connection->fetchPairs($select, $bind);
+        }
 
-        return $connection->fetchPairs($select, $bind);
+        return $this->storeLabelsCache[$attributeId];
     }
 
     /**

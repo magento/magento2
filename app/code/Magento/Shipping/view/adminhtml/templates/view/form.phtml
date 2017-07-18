@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,41 +8,41 @@
 
 ?>
 <?php  $_order = $block->getShipment()->getOrder() ?>
-<?php echo $block->getChildHtml('order_info') ?>
+<?= $block->getChildHtml('order_info') ?>
 <section class="admin__page-section order-shipment-billing-shipping">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Payment &amp; Shipping Method') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Method') ?></span>
     </div>
     <div class="admin__page-section-content">
 
         <?php /* Billing Address */ ?>
         <div class="admin__page-section-item order-payment-method">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Payment Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <div><?php echo $block->getChildHtml('order_payment') ?></div>
-                <div class="order-payment-currency"><?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                <div><?= $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-currency"><?= /* @escapeNotVerified */ __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
             </div>
         </div>
 
         <?php /* Shipping Address */ ?>
         <div class="admin__page-section-item order-shipping-address">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Shipping and Tracking Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Shipping and Tracking Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="shipping-description-wrapper">
                     <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
                         <p>
-                            <a href="#" id="linkId" onclick="popWin('<?php /* @escapeNotVerified */ echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($block->getShipment()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php /* @escapeNotVerified */ echo __('Track this shipment') ?>"><?php /* @escapeNotVerified */ echo __('Track this shipment') ?></a>
+                            <a href="#" id="linkId" onclick="popWin('<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($block->getShipment()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?= /* @escapeNotVerified */ __('Track this shipment') ?>"><?= /* @escapeNotVerified */ __('Track this shipment') ?></a>
                         </p>
                     <?php endif; ?>
                     <div class="shipping-description-title">
-                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
                     </div>
 
-                    <?php /* @escapeNotVerified */ echo __('Total Shipping Charges'); ?>:
+                    <?= /* @escapeNotVerified */ __('Total Shipping Charges') ?>:
 
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
                         <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -51,25 +51,25 @@
                     <?php endif; ?>
                     <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
-                    <?php /* @escapeNotVerified */ echo $_excl; ?>
+                    <?= /* @escapeNotVerified */ $_excl ?>
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                        (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
+                        (<?= /* @escapeNotVerified */ __('Incl. Tax') ?> <?= /* @escapeNotVerified */ $_incl ?>)
                     <?php endif; ?>
                 </div>
                 <?php if ($block->canCreateShippingLabel()): ?>
                 <p>
-                    <?php /* @escapeNotVerified */ echo $block->getCreateLabelButton()?>
+                    <?= /* @escapeNotVerified */ $block->getCreateLabelButton() ?>
                     <?php if ($block->getShipment()->getShippingLabel()): ?>
-                        <?php /* @escapeNotVerified */ echo $block->getPrintLabelButton() ?>
+                        <?= /* @escapeNotVerified */ $block->getPrintLabelButton() ?>
                     <?php endif ?>
                     <?php if ($block->getShipment()->getPackages()): ?>
-                        <?php /* @escapeNotVerified */ echo $block->getShowPackagesButton() ?>
+                        <?= /* @escapeNotVerified */ $block->getShowPackagesButton() ?>
                     <?php endif ?>
                 </p>
                 <?php endif ?>
-                <?php echo $block->getChildHtml('shipment_tracking') ?>
+                <?= $block->getChildHtml('shipment_tracking') ?>
 
-                <?php echo $block->getChildHtml('shipment_packaging') ?>
+                <?= $block->getChildHtml('shipment_packaging') ?>
 <script>
     require([
         'prototype'
@@ -96,23 +96,23 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Items Shipped') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Items Shipped') ?></span>
     </div>
-    <?php echo $block->getChildHtml('shipment_items') ?>
+    <?= $block->getChildHtml('shipment_items') ?>
 </section>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Order Total') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
     </div>
     <div class="admin__page-section-content">
-        <?php echo $block->getChildHtml('shipment_packed') ?>
+        <?= $block->getChildHtml('shipment_packed') ?>
 
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Shipment History') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Shipment History') ?></span>
             </div>
-            <div class="admin__page-section-item-content"><?php echo $block->getChildHtml('order_comments') ?></div>
+            <div class="admin__page-section-item-content"><?= $block->getChildHtml('order_comments') ?></div>
         </div>
     </div>
 </section>

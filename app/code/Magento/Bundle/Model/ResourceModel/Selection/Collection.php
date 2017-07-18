@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Selection;
@@ -8,9 +8,15 @@ namespace Magento\Bundle\Model\ResourceModel\Selection;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Selections Resource Collection
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -102,10 +108,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         );
         $this->getSelect()->joinLeft(
             ['price' => $this->getTable('catalog_product_bundle_selection_price')],
-            'selection.selection_id = price.selection_id AND price.website_id = ' . (int)$websiteId,
+            'selection.selection_id = price.selection_id AND price.website_id = ' . (int)$websiteId .
+            ' AND selection.parent_product_id = price.parent_product_id',
             [
                 'selection_price_type' => $priceType,
                 'selection_price_value' => $priceValue,
+                'parent_product_id' => 'price.parent_product_id',
                 'price_scope' => 'price.website_id'
             ]
         );
@@ -197,7 +205,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($product->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
             $this->addPriceData();
             if ($useRegularPrice) {
-                $minimalPriceExpression = 'price';
+                $minimalPriceExpression = self::INDEX_TABLE_ALIAS . '.price';
             } else {
                 $this->getCatalogRuleProcessor()->addPriceData($this, 'selection.product_id');
                 $minimalPriceExpression = 'LEAST(minimal_price, IFNULL(catalog_rule_price, minimal_price))';
@@ -235,7 +243,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         $this->getSelect()->reset(Select::ORDER);
-        $this->getSelect()->order($orderByValue . ($searchMin ? Select::SQL_ASC : Select::SQL_DESC));
+        $this->getSelect()->order(new \Zend_Db_Expr($orderByValue . ($searchMin ? Select::SQL_ASC : Select::SQL_DESC)));
         $this->getSelect()->limit(1);
         return $this;
     }

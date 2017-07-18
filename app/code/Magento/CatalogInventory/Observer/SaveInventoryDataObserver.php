@@ -1,45 +1,48 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockIndexInterface;
-use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\StockItemValidator;
 use Magento\Framework\Event\Observer as EventObserver;
 
+/**
+ * Saves stock data from a product to the Stock Item
+ *
+ * @deprecated Stock data should be processed using the module API
+ * @see StockItemInterface when you want to change the stock data
+ * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+ * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+ */
 class SaveInventoryDataObserver implements ObserverInterface
 {
     /**
-     * @var StockIndexInterface
-     * @deprecated
-     */
-    protected $stockIndex;
-
-    /**
      * @var StockConfigurationInterface
      */
-    protected $stockConfiguration;
+    private $stockConfiguration;
 
     /**
      * @var StockRegistryInterface
      */
-    protected $stockRegistry;
+    private $stockRegistry;
 
     /**
-     * @var StockItemRepositoryInterface
+     * @var StockItemValidator
      */
-    protected $stockItemRepository;
+    private $stockItemValidator;
 
     /**
      * @var array
      */
-    protected $paramListToCheck = [
+    private $paramListToCheck = [
         'use_config_min_qty' => [
             'item' => 'stock_data/min_qty',
             'config' => 'stock_data/use_config_min_qty',
@@ -71,73 +74,86 @@ class SaveInventoryDataObserver implements ObserverInterface
     ];
 
     /**
-     * @param StockIndexInterface $stockIndex
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
-     * @param StockItemRepositoryInterface $stockItemRepository
+     * @param StockItemValidator $stockItemValidator
      */
     public function __construct(
-        StockIndexInterface $stockIndex,
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
-        StockItemRepositoryInterface $stockItemRepository
+        StockItemValidator $stockItemValidator = null
     ) {
-        $this->stockIndex = $stockIndex;
         $this->stockConfiguration = $stockConfiguration;
         $this->stockRegistry = $stockRegistry;
-        $this->stockItemRepository = $stockItemRepository;
+        $this->stockItemValidator = $stockItemValidator ?: ObjectManager::getInstance()->get(StockItemValidator::class);
     }
 
     /**
-     * Saving product inventory data. Product qty calculated dynamically.
+     * Saving product inventory data
+     *
+     * Takes data from the stock_data property of a product and sets it to Stock Item.
+     * Validates and saves Stock Item object.
      *
      * @param EventObserver $observer
-     * @return $this
+     * @return void
      */
     public function execute(EventObserver $observer)
     {
         $product = $observer->getEvent()->getProduct();
-        if ($product->getStockData() === null) {
-            return $this;
-        }
+        $stockItem = $this->getStockItemToBeUpdated($product);
 
-        $this->saveStockItemData($product);
-        return $this;
+        if ($product->getStockData() !== null) {
+            $stockData = $this->getStockData($product);
+            $stockItem->addData($stockData);
+        }
+        $this->stockItemValidator->validate($product, $stockItem);
+        $this->stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);
     }
 
     /**
-     * Prepare stock item data for save
+     * Return the stock item that needs to be updated
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return $this
+     * @param Product $product
+     * @return Item
      */
-    protected function saveStockItemData($product)
+    private function getStockItemToBeUpdated(Product $product)
     {
-        $stockItemData = $product->getStockData();
-        $stockItemData['product_id'] = $product->getId();
+        $extendedAttributes = $product->getExtensionAttributes();
+        $stockItem = $extendedAttributes->getStockItem();
 
-        if (!isset($stockItemData['website_id'])) {
-            $stockItemData['website_id'] = $this->stockConfiguration->getDefaultScopeId();
+        if ($stockItem === null) {
+            $stockItem = $this->stockRegistry->getStockItem($product->getId());
         }
-        $stockItemData['stock_id'] = $this->stockRegistry->getStock($stockItemData['website_id'])->getStockId();
+        return $stockItem;
+    }
+
+    /**
+     * Get stock data
+     *
+     * @param Product $product
+     * @return array
+     */
+    private function getStockData(Product $product)
+    {
+        $stockData = $product->getStockData();
+        $stockData['product_id'] = $product->getId();
+
+        if (!isset($stockData['website_id'])) {
+            $stockData['website_id'] = $this->stockConfiguration->getDefaultScopeId();
+        }
+        $stockData['stock_id'] = $this->stockRegistry->getStock($stockData['website_id'])->getStockId();
 
         foreach ($this->paramListToCheck as $dataKey => $configPath) {
             if (null !== $product->getData($configPath['item']) && null === $product->getData($configPath['config'])) {
-                $stockItemData[$dataKey] = false;
+                $stockData[$dataKey] = false;
             }
         }
 
         $originalQty = $product->getData('stock_data/original_inventory_qty');
         if (strlen($originalQty) > 0) {
-            $stockItemData['qty_correction'] = (isset($stockItemData['qty']) ? $stockItemData['qty'] : 0)
+            $stockData['qty_correction'] = (isset($stockData['qty']) ? $stockData['qty'] : 0)
                 - $originalQty;
         }
-
-        // todo resolve issue with builder and identity field name
-        $stockItem = $this->stockRegistry->getStockItem($stockItemData['product_id'], $stockItemData['website_id']);
-
-        $stockItem->addData($stockItemData);
-        $this->stockItemRepository->save($stockItem);
-        return $this;
+        return $stockData;
     }
 }

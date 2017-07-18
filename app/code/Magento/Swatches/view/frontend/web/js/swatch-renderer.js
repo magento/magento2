@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -272,21 +272,28 @@ define([
         /**
          * Get chosen product
          *
-         * @returns array
+         * @returns int|null
          */
         getProduct: function () {
-            return this._CalcProducts().shift();
+            var products = this._CalcProducts();
+
+            return _.isArray(products) ? products[0] : null;
         },
 
         /**
          * @private
          */
         _init: function () {
+            // creates debounced variant of _LoadProductMedia()
+            // to use it in events handlers instead of _LoadProductMedia()
+            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
                 this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
+                this._setPreSelectedGallery();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
@@ -337,7 +344,6 @@ define([
         _determineProductData: function () {
             // Check if product is in a list of products.
             var productId,
-                product,
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
@@ -345,8 +351,7 @@ define([
 
             if (!productId) {
                 // Check individual product.
-                product = document.getElementsByName('product')[0];
-                productId = product ? product.value : undefined;
+                productId = $('[name=product]').val();
                 isInProductView = productId > 0;
             }
 
@@ -678,7 +683,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -736,7 +741,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -868,13 +873,13 @@ define([
                 }
             );
 
-            if (result.oldPrice.amount !== result.finalPrice.amount) {
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
 
-            if (result.tierPrices.length) {
+            if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,
@@ -924,7 +929,6 @@ define([
         _LoadProductMedia: function () {
             var $widget = this,
                 $this = $widget.element,
-                attributes = {},
                 productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
@@ -940,33 +944,29 @@ define([
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
                     $widget._ProductMediaCallback($this, data, productData.isInProductView);
-                    $widget._DisableProductMediaLoader($this);
+                    setTimeout(function () {
+                        $widget._DisableProductMediaLoader($this);
+                    }, 300);
                 };
 
             if (!$widget.options.mediaCallback) {
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
-
-                attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
-            });
-
             mediaCallData = {
-                'product_id': productData.productId,
-                'attributes': attributes,
-                'additional': $.parseQuery()
+                'product_id': this.getProduct()
             };
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.post(
+                $widget.xhr = $.get(
                     $widget.options.mediaCallback,
                     mediaCallData,
                     mediaSuccessCallback,
@@ -1200,6 +1200,23 @@ define([
             var galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Sets mediaCache for cases when jsonConfig contains preSelectedGallery on layered navigation result pages
+         *
+         * @private
+         */
+        _setPreSelectedGallery: function () {
+            var mediaCallData;
+
+            if (this.options.jsonConfig.preSelectedGallery) {
+                mediaCallData = {
+                    'product_id': this.getProduct()
+                };
+
+                this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
+            }
         }
     });
 

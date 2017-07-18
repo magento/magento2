@@ -1,7 +1,7 @@
 "Sign Out","Sign Out"
 "Sign In","Sign In"
-"You subscribe to our newsletter.","You subscribe to our newsletter."
-"You don\'t subscribe to our newsletter.","You don\'t subscribe to our newsletter."
+"You are subscribed to our newsletter.","You are subscribed to our newsletter."
+"You aren't subscribed to our newsletter.","You aren't subscribed to our newsletter."
 "You have not set a default shipping address.","You have not set a default shipping address."
 "You have not set a default billing address.","You have not set a default billing address."
 "Address Book","Address Book"
@@ -308,7 +308,7 @@ Change,Change
 "Contact Information","Contact Information"
 "Change Password","Change Password"
 Newsletters,Newsletters
-"You subscribe to ""General Subscription"".","You subscribe to ""General Subscription""."
+"You are subscribed to ""General Subscription"".","You are subscribed to ""General Subscription""."
 or,or
 "Default Addresses","Default Addresses"
 "Change Billing Address","Change Billing Address"

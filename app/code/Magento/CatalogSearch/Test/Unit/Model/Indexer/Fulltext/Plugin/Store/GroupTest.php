@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group as StoreGroupIndexerPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
-use Magento\Store\Model\Group as StoreGroup;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group as StoreGroupIndexerPlugin;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Group as StoreGroup;
+use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {

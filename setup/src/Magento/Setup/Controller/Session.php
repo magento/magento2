@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -36,7 +36,7 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new \Zend\View\Model\ViewModel();
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;

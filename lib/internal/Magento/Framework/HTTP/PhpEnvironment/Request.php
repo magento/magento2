@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
@@ -95,14 +95,14 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
-    
+
     /**
      * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
      *
      * @var string
      */
     protected $sslOffloadHeader;
-    
+
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -417,7 +417,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         if ($this->immediateRequestSecure()) {
             return true;
         }
-      
+
         return $this->initialRequestSecure($this->getSslOffloadHeader());
     }
 
@@ -533,7 +533,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
-     * Retrieve GET parameters
+     * Set GET parameters
      *
      * @param string $name
      * @param mixed $value

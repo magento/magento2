@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\PageCache;
@@ -112,7 +112,11 @@ class Kernel
     public function load()
     {
         if ($this->request->isGet() || $this->request->isHead()) {
-            $responseData = $this->serializer->unserialize($this->getCache()->load($this->identifier->getValue()));
+            $responseData = $this->getCache()->load($this->identifier->getValue());
+            if (!$responseData) {
+                return false;
+            }
+            $responseData = $this->serializer->unserialize($responseData);
             if (!$responseData) {
                 return false;
             }

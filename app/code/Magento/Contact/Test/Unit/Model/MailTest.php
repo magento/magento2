@@ -1,13 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Model;
 
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\Mail;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 class MailTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,6 +35,11 @@ class MailTest extends \PHPUnit_Framework_TestCase
     private $inlineTranslationMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
+
+    /**
      * @var Mail
      */
     private $mail;
@@ -50,10 +57,13 @@ class MailTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor(
         )->getMock();
 
+        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
+
         $this->mail = new Mail(
             $this->configMock,
             $this->transportBuilderMock,
-            $this->inlineTranslationMock
+            $this->inlineTranslationMock,
+            $this->storeManagerMock
         );
     }
 
@@ -64,6 +74,11 @@ class MailTest extends \PHPUnit_Framework_TestCase
 
         $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class, [], [], '', false);
 
+        $store = $this->getMock(StoreInterface::class);
+        $store->expects($this->once())->method('getId')->willReturn(555);
+
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
+
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateIdentifier')
             ->will($this->returnSelf());
@@ -71,8 +86,8 @@ class MailTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
             ->with([
-                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                'area' => 'frontend',
+                'store' => 555,
             ])
             ->will($this->returnSelf());
 

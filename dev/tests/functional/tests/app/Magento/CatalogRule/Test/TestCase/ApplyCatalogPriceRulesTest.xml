@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -114,7 +114,6 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductWithCustomOptions" summary="Apply Catalog Rule for Simple Product With Custom Options" ticketId="MAGETWO-23038">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::with_default_custom_option</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::with_percent_and_fixed_custom_option</data>
             <data name="products/2" xsi:type="string">catalogProductSimple::with_custom_options_and_price_56_78</data>
@@ -172,7 +171,6 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>

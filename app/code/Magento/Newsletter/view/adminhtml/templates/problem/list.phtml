@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
-<?php echo $block->getChildHtml('grid') ?>
+<?= $block->getChildHtml('grid') ?>
 
 <?php if ($block->getShowButtons()): ?>
 <div class="form-buttons">
-    <?php echo $block->getUnsubscribeButtonHtml(); ?>
-    <?php echo $block->getDeleteButtonHtml(); ?>
+    <?= $block->getUnsubscribeButtonHtml() ?>
+    <?= $block->getDeleteButtonHtml() ?>
 </div>
 <?php endif ?>
 <script>

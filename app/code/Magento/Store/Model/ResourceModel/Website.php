@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Website Resource Model
+ *
+ * @api
  */
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -32,6 +34,28 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->_uniqueFields = [['field' => 'code', 'title' => __('Website with the same code')]];
         return $this;
+    }
+
+    /**
+     * Read all information about websites.
+     *
+     * Convert information to next format:
+     * [website_code => [website_data (website_id, code, name, etc...)]]
+     *
+     * @return array
+     */
+    public function readAllWebsites()
+    {
+        $websites = [];
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('store_website'));
+
+        foreach($this->getConnection()->fetchAll($select) as $websiteData) {
+            $websites[$websiteData['code']] = $websiteData;
+        }
+
+        return $websites;
     }
 
     /**

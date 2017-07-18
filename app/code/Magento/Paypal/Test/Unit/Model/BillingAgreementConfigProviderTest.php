@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Paypal\Model\BillingAgreementConfigProvider;
-use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Paypal\Model\Billing\AgreementFactory;
+use Magento\Paypal\Model\BillingAgreementConfigProvider;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 
 class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase

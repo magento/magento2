@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,12 @@ $tokens = $block->getPaymentTokens();
 <?php if (count($tokens) !== 0): ?>
     <div class="table-wrapper my-credit-cards">
         <table class="data table table-credit-cards" id="my-orders-table">
-            <caption class="table-caption"><?php /* @noEscape */ echo __('Stored Payment Methods') ?></caption>
+            <caption class="table-caption"><?= /* @noEscape */ __('Stored Payment Methods') ?></caption>
             <thead>
             <tr>
-                <th scope="col" class="col card-number"><?php /* @noEscape */ echo __('Card Number') ?></th>
-                <th scope="col" class="col expire"><?php /* @noEscape */ echo __('Expiration Date') ?></th>
-                <th scope="col" class="col card-type"><?php /* @noEscape */ echo __('Type') ?></th>
+                <th scope="col" class="col card-number"><?= /* @noEscape */ __('Card Number') ?></th>
+                <th scope="col" class="col expire"><?= /* @noEscape */ __('Expiration Date') ?></th>
+                <th scope="col" class="col card-type"><?= /* @noEscape */ __('Type') ?></th>
                 <th scope="col" class="col actions">&nbsp;</th>
             </tr>
             </thead>
@@ -31,5 +31,5 @@ $tokens = $block->getPaymentTokens();
     </div>
 
 <?php elseif (!$block->isExistsCustomerTokens()): ?>
-    <div class="message info empty"><span><?php /* @noEscape */ echo __('You have no stored payment methods.'); ?></span></div>
+    <div class="message info empty"><span><?= /* @noEscape */ __('You have no stored payment methods.') ?></span></div>
 <?php endif ?>

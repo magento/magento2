@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Frame;
@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Import frame result block.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Result extends \Magento\Backend\Block\Template
 {

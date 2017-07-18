@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Indexer\Model\Config;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test
@@ -55,6 +55,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\SimpleProductsAssert::class);
         $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\ConfigurableProductsAssert::class);
         $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\BundleProductsAssert::class);
+        $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\ImagesAssert::class);
 
         foreach ($this->objectManager->get(Config::class)->getIndexers() as $indexerId) {
             $indexer = $this->indexerRegistry->get($indexerId['indexer_id']);

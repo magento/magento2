@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
@@ -11,8 +11,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 /**
  * Export filter block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {

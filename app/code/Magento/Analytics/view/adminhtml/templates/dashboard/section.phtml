@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreFile
@@ -9,25 +9,20 @@
 <section class="dashboard-advanced-reports" data-index="dashboard-advanced-reports">
     <div class="dashboard-advanced-reports-description">
         <header class="dashboard-advanced-reports-title">
-            <?php echo $block->escapeHtml(__('Advanced Reporting')) ?>
+            <?= $block->escapeHtml(__('Advanced Reporting')) ?>
         </header>
         <div class="dashboard-advanced-reports-content">
-            <?php echo $block->escapeHtml(__('Gain new insights and take command of your business\' performance,' .
+            <?= $block->escapeHtml(__('Gain new insights and take command of your business\' performance,' .
                 ' using our dynamic product, order, and customer reports tailored to your customer data.')) ?>
-            <a href="<?php echo $block->escapeUrl($block->getUrl('analytics/reports/show')); ?>"
-               target="_blank"
-               data-index="analytics-service-info-link">
-                <?php echo $block->escapeHtml(__('View details')) ?>
-            </a>
         </div>
     </div>
     <div class="dashboard-advanced-reports-actions">
-        <a href="<?php echo $block->escapeUrl($block->getUrl('analytics/reports/show')); ?>"
+        <a href="<?= $block->escapeUrl($block->getUrl('analytics/reports/show')) ?>"
            target="_blank"
            class="action action-advanced-reports"
            data-index="analytics-service-link"
-           title="<?php echo $block->escapeHtmlAttr(__('Go to Advanced Reporting')) ?>">
-            <span><?php echo $block->escapeHtml(__('Go to Advanced Reporting')) ?></span>
+           title="<?= $block->escapeHtmlAttr(__('Go to Advanced Reporting')) ?>">
+            <span><?= $block->escapeHtml(__('Go to Advanced Reporting')) ?></span>
         </a>
     </div>
 </section>

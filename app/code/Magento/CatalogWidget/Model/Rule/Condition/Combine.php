@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * CatalogWidget Rule Combine Condition data model
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+/**
+ * Combination of product conditions
+ */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**
@@ -54,7 +53,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         foreach ($productAttributes as $code => $label) {
             if (!in_array($code, $this->excludedAttributes)) {
                 $attributes[] = [
-                    'value' => 'Magento\CatalogWidget\Model\Rule\Condition\Product|' . $code,
+                    'value' => Product::class . '|' . $code,
                     'label' => $label,
                 ];
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
@@ -45,7 +45,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $productCollection = $layer->getProductCollection();
         $productCollection->joinField(
             'qty',
-            'cataloginventory_stock_status_idx',
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

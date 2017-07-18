@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Test\Unit\Observer;
@@ -156,7 +156,6 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
     {
         $ids = ['1', '14'];
         $items = [];
-        $isAutoReturnEnabled = true;
 
         $creditMemo = $this->getMock(\Magento\Sales\Model\Order\Creditmemo::class, [], [], '', false);
 
@@ -168,11 +167,6 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $creditMemo->expects($this->once())
             ->method('getItems')
             ->will($this->returnValue($items));
-
-        $this->stockConfiguration->expects($this->any())
-            ->method('isAutoReturnEnabled')
-            ->will($this->returnValue($isAutoReturnEnabled));
-
         $this->event->expects($this->once())
             ->method('getCreditmemo')
             ->will($this->returnValue($creditMemo));
@@ -183,7 +177,7 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->returnProcessorMock->expects($this->once())
             ->method('execute')
-            ->with($creditMemo, $this->orderMock, $ids, $isAutoReturnEnabled);
+            ->with($creditMemo, $this->orderMock, $ids);
 
         $this->observer->execute($this->eventObserver);
     }

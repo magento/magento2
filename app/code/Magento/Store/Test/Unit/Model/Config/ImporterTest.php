@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Store\Model\Config\Importer;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -52,14 +51,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $cacheManagerMock;
 
     /**
-     * @var ResourceConnection|Mock
+     * @var Website|Mock
      */
     private $resourceMock;
-
-    /**
-     * @var AdapterInterface|Mock
-     */
-    private $connectionMock;
 
     /**
      * @inheritdoc
@@ -79,18 +73,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->cacheManagerMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+        $this->resourceMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-        $this->processorFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->processorMock);
 
         $this->model = new Importer(
             $this->dataDifferenceCalculatorMock,
@@ -109,12 +94,33 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ScopeInterface::SCOPE_WEBSITES => ['websites'],
         ];
 
-        $this->connectionMock->expects($this->once())
+        $createProcessorMock = clone $this->processorMock;
+        $deleteProcessorMock = clone $this->processorMock;
+        $updateProcessorMock = clone $this->processorMock;
+
+        $this->processorFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->withConsecutive(
+                [Importer\Processor\ProcessorFactory::TYPE_CREATE],
+                [Importer\Processor\ProcessorFactory::TYPE_DELETE],
+                [Importer\Processor\ProcessorFactory::TYPE_UPDATE]
+            )->willReturnOnConsecutiveCalls(
+                $createProcessorMock,
+                $deleteProcessorMock,
+                $updateProcessorMock
+            );
+        $this->resourceMock->expects($this->once())
             ->method('beginTransaction');
-        $this->processorMock->expects($this->exactly(3))
+        $createProcessorMock->expects($this->once())
             ->method('run')
             ->with($data);
-        $this->connectionMock->expects($this->once())
+        $deleteProcessorMock->expects($this->once())
+            ->method('run')
+            ->with($data);
+        $updateProcessorMock->expects($this->once())
+            ->method('run')
+            ->with($data);
+        $this->resourceMock->expects($this->once())
             ->method('commit');
         $this->storeManagerMock->expects($this->once())
             ->method('reinitStores');
@@ -145,12 +151,15 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportWithException()
     {
-        $this->connectionMock->expects($this->once())
+        $this->processorFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->processorMock);
+        $this->resourceMock->expects($this->once())
             ->method('beginTransaction');
         $this->processorMock->expects($this->any())
             ->method('run')
             ->willThrowException(new \Exception('Some error'));
-        $this->connectionMock->expects($this->never())
+        $this->resourceMock->expects($this->never())
             ->method('commit');
         $this->storeManagerMock->expects($this->once())
             ->method('reinitStores');

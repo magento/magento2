@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,8 +14,15 @@
         <simple_products>4000</simple_products> <!-- Simple products count -->
         <configurable_products> <!-- Configurable product -->
             <config>
-                <attributes>1</attributes>
-                <options>24</options>
+                <attributes>
+                    <attribute>
+                        <options>3</options>
+                        <swatches>image</swatches>
+                    </attribute>
+                    <attribute>
+                        <options>8</options>
+                    </attribute>
+                </attributes>
                 <sku>Configurable Product %s</sku>
                 <products>800</products>
             </config>
@@ -26,6 +33,10 @@
                 <products>79</products>
             </config>
         </configurable_products>
+        <product-images>
+            <images-count>1000</images-count>
+            <images-per-product>3</images-per-product>
+        </product-images>
         <categories>100</categories> <!-- Number of categories to generate -->
         <categories_nesting_level>3</categories_nesting_level> <!-- Nesting level for categories -->
         <customers>2000</customers> <!-- Number of customers to generate -->

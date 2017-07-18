@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -168,7 +168,7 @@ class CategoriesFixture extends Fixture
     private function getCategoryName($parentCategory, $nestingLevel, $index)
     {
         $categoryNameSuffix = $nestingLevel === 1 ? $this->getFirstLevelCategoryIndex() + $index : $index + 1;
-        return ($nestingLevel === 1 ? $this->getCategoryPrefix() . ' '  : $parentCategory->getName() . '.')
+        return ($nestingLevel === 1 ? $this->getCategoryPrefix() . ' ' : $parentCategory->getName() . '.')
             . $categoryNameSuffix;
     }
 

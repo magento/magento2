@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product;
@@ -153,9 +153,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
         $this->product->expects($this->any())->method('canAffectOptions')->with($this->equalTo(true));
 
-        $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityAttributeCodes'], [], '', false);
+        $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityAttributes'], [], '', false);
         $eavConfigMock->expects($this->any())
-            ->method('getEntityAttributeCodes')
+            ->method('getEntityAttributes')
             ->with($this->equalTo($entityTypeMock), $this->equalTo($this->product))
             ->will($this->returnValue([]));
 

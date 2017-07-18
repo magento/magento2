@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,42 +14,42 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
 ?>
 <div class="account-billing-agreements">
     <?php if (count($billingAgreements) > 0): ?>
-        <?php echo $block->getChildHtml('pager'); ?>
+        <?= $block->getChildHtml('pager') ?>
         <div class="table-wrapper billing-agreements">
             <table id="billing-agreements" class="data table table-billing-agreements">
-                <caption class="table-caption"><?php echo $block->escapeHtml(__('Billing Agreements')); ?></caption>
+                <caption class="table-caption"><?= $block->escapeHtml(__('Billing Agreements')) ?></caption>
                 <thead>
                 <tr>
-                    <th scope="col" class="col id"><?php echo $block->escapeHtml(__('Reference ID')); ?></th>
-                    <th scope="col" class="col status"><?php echo $block->escapeHtml(__('Status')); ?></th>
-                    <th scope="col" class="col created"><?php echo $block->escapeHtml(__('Created At')); ?></th>
-                    <th scope="col" class="col updated"><?php echo $block->escapeHtml(__('Updated At')); ?></th>
-                    <th scope="col" class="col payment"><?php echo $block->escapeHtml(__('Payment Method')); ?></th>
+                    <th scope="col" class="col id"><?= $block->escapeHtml(__('Reference ID')) ?></th>
+                    <th scope="col" class="col status"><?= $block->escapeHtml(__('Status')) ?></th>
+                    <th scope="col" class="col created"><?= $block->escapeHtml(__('Created At')) ?></th>
+                    <th scope="col" class="col updated"><?= $block->escapeHtml(__('Updated At')) ?></th>
+                    <th scope="col" class="col payment"><?= $block->escapeHtml(__('Payment Method')) ?></th>
                     <th scope="col" class="col actions">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($billingAgreements as $item): ?>
                         <tr>
-                            <td data-th="<?php echo $block->escapeHtml(__('Reference ID')); ?>" class="col id">
-                                <?php echo $block->escapeHtml($block->getItemValue($item, 'reference_id')); ?>
+                            <td data-th="<?= $block->escapeHtml(__('Reference ID')) ?>" class="col id">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'reference_id')) ?>
                             </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Status')); ?>" class="col status">
-                                <?php echo $block->escapeHtml($block->getItemValue($item, 'status')); ?>
+                            <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="col status">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'status')) ?>
                             </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Created At')); ?>" class="col created">
-                                <?php echo $block->escapeHtml($block->getItemValue($item, 'created_at')); ?>
+                            <td data-th="<?= $block->escapeHtml(__('Created At')) ?>" class="col created">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'created_at')) ?>
                             </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Updated At')); ?>" class="col updated">
-                                <?php echo $block->escapeHtml($block->getItemValue($item, 'updated_at')); ?>
+                            <td data-th="<?= $block->escapeHtml(__('Updated At')) ?>" class="col updated">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'updated_at')) ?>
                             </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Payment Method')); ?>" class="col payment">
-                                <?php echo $block->escapeHtml($block->getItemValue($item, 'payment_method_label')); ?>
+                            <td data-th="<?= $block->escapeHtml(__('Payment Method')) ?>" class="col payment">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'payment_method_label')) ?>
                             </td>
                             <td data-th="" class="col actions">
-                                <a href="<?php echo $block->escapeUrl($block->getItemValue($item, 'edit_url')); ?>"
+                                <a href="<?= $block->escapeUrl($block->getItemValue($item, 'edit_url')) ?>"
                                    class="action view">
-                                    <span><?php echo $block->escapeHtml(__('View')); ?></span>
+                                    <span><?= $block->escapeHtml(__('View')) ?></span>
                                 </a>
                             </td>
                         </tr>
@@ -59,29 +59,29 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
         </div>
     <?php else: ?>
         <div class="message info empty">
-            <span><?php echo $block->escapeHtml(__('There are no billing agreements yet.')); ?></span>
+            <span><?= $block->escapeHtml(__('There are no billing agreements yet.')) ?></span>
         </div>
     <?php endif; ?>
 
     <?php if ($paymentMethods): ?>
-        <form action="<?php echo $block->escapeUrl($block->getCreateUrl()); ?>" method="post"
+        <form action="<?= $block->escapeUrl($block->getCreateUrl()) ?>" method="post"
               class="form form-new-agreement">
             <fieldset class="fieldset">
                 <legend class="legend">
-                    <span><?php echo $block->escapeHtml(__('New Billing Agreement')); ?></span>
+                    <span><?= $block->escapeHtml(__('New Billing Agreement')) ?></span>
                 </legend>
                 <br />
                 <p class="note">
-                    <?php echo $block->escapeHtml(__('You will be redirected to the payment system website.')); ?>
+                    <?= $block->escapeHtml(__('You will be redirected to the payment system website.')) ?>
                 </p>
 
                 <div class="field payment method">
                     <div class="control">
                         <select id="payment_method" name="payment_method">
-                            <option value=""><?php echo $block->escapeHtml(__('-- Please Select --'));?></option>
+                            <option value=""><?= $block->escapeHtml(__('-- Please Select --')) ?></option>
                             <?php foreach ($paymentMethods as $code => $title): ?>
-                                <option value="<?php echo $block->escapeHtml($code); ?>">
-                                    <?php echo $block->escapeHtml($title); ?>
+                                <option value="<?= $block->escapeHtml($code) ?>">
+                                    <?= $block->escapeHtml($title) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -90,12 +90,12 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                 <div class="actions-toolbar">
                     <div class="primary">
                         <button type="submit" class="primary action create">
-                            <span><?php echo $block->escapeHtml(__('Create...')); ?></span>
+                            <span><?= $block->escapeHtml(__('Create...')) ?></span>
                         </button>
                     </div>
                     <div class="secondary">
-                        <a href="<?php echo $block->escapeUrl($block->getBackUrl()); ?>" class="action back">
-                            <span><?php echo $block->escapeHtml(__('Back')); ?></span>
+                        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                            <span><?= $block->escapeHtml(__('Back')) ?></span>
                         </a>
                     </div>
                 </div>
@@ -104,8 +104,8 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
     <?php else: ?>
     <div class="actions-toolbar">
         <div class="secondary">
-            <a href="<?php echo $block->escapeUrl($block->getBackUrl()); ?>" class="action back">
-                <span><?php echo $block->escapeHtml(__('Back')); ?></span>
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                <span><?= $block->escapeHtml(__('Back')) ?></span>
             </a>
         </div>
     </div>

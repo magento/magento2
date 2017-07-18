@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier;
@@ -18,6 +18,7 @@ use Magento\GoogleOptimizer\Helper\Code as CodeHelper;
 /**
  * Class GoogleOptimizer adds Product View Optimization Panel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class GoogleOptimizer extends AbstractModifier
 {

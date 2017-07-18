@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Customers;
@@ -8,8 +8,8 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
 /**
  * Adminhtml dashboard most recent customers grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
  */
 class Newest extends \Magento\Backend\Block\Dashboard\Grid
 {

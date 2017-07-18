@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 
+/**
+ * @api
+ */
 abstract class AbstractScopeConfig extends \Magento\Config\Controller\Adminhtml\System\AbstractConfig
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -133,7 +133,6 @@ class Bundle
 
             $option = $this->optionFactory->create(['data' => $optionData]);
             $option->setSku($product->getSku());
-            $option->setOptionId(null);
 
             $links = [];
             $bundleLinks = $product->getBundleSelectionsData();
@@ -142,28 +141,13 @@ class Bundle
             }
 
             foreach ($bundleLinks[$key] as $linkData) {
-                if ((bool)$linkData['delete']) {
+                if (!empty($linkData['delete'])) {
                     continue;
                 }
-                $link = $this->linkFactory->create(['data' => $linkData]);
-
-                if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
-                    if (array_key_exists('selection_price_value', $linkData)) {
-                        $link->setPrice($linkData['selection_price_value']);
-                    }
-                    if (array_key_exists('selection_price_type', $linkData)) {
-                        $link->setPriceType($linkData['selection_price_type']);
-                    }
+                if (!empty($linkData['selection_id'])) {
+                    $linkData['id'] = $linkData['selection_id'];
                 }
-
-                $linkProduct = $this->productRepository->getById($linkData['product_id']);
-                $link->setSku($linkProduct->getSku());
-                $link->setQty($linkData['selection_qty']);
-
-                if (array_key_exists('selection_can_change_qty', $linkData)) {
-                    $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
-                }
-                $links[] = $link;
+                $links[] = $this->buildLink($product, $linkData);
             }
             $option->setProductLinks($links);
             $options[] = $option;
@@ -203,9 +187,40 @@ class Bundle
             }
             $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
             $customOption->setProductSku($product->getSku());
-            $customOption->setOptionId(null);
             $newOptions[] = $customOption;
         }
         $product->setOptions($newOptions);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $linkData
+     *
+     * @return \Magento\Bundle\Api\Data\LinkInterface
+     */
+    private function buildLink(
+        \Magento\Catalog\Model\Product $product,
+        array $linkData
+    ) {
+        $link = $this->linkFactory->create(['data' => $linkData]);
+
+        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+            if (array_key_exists('selection_price_value', $linkData)) {
+                $link->setPrice($linkData['selection_price_value']);
+            }
+            if (array_key_exists('selection_price_type', $linkData)) {
+                $link->setPriceType($linkData['selection_price_type']);
+            }
+        }
+
+        $linkProduct = $this->productRepository->getById($linkData['product_id']);
+        $link->setSku($linkProduct->getSku());
+        $link->setQty($linkData['selection_qty']);
+
+        if (array_key_exists('selection_can_change_qty', $linkData)) {
+            $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
+        }
+
+        return $link;
     }
 }

@@ -1,41 +1,23 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\View\Design\Theme\ThemeInterface" type="Magento\Theme\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
     <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
     <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
     <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config" />
     <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
-    <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
-    <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Theme\Api\Data\DesignConfigInterface" type="Magento\Theme\Model\Data\Design\Config"/>
     <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface" type="Magento\Theme\Model\Data\Design\Config\Data"/>
     <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
     <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface" type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
-    <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
-        <arguments>
-            <argument name="renderers" xsi:type="array">
-                <item name="escape_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\EscapeRenderer</item>
-                <item name="block_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\BlockRenderer</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
-        <arguments>
-            <argument name="configurationsMap" xsi:type="array">
-                <item name="default_message_identifier" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -71,13 +53,6 @@
     <type name="Magento\Theme\Model\Wysiwyg\Storage">
         <arguments>
             <argument name="helper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
-        </arguments>
-    </type>
-    <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
-    <type name="Magento\Framework\App\View\Deployment\Version\Storage\File">
-        <arguments>
-            <argument name="directoryCode" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW</argument>
-            <argument name="fileName" xsi:type="string">deployed_version.txt</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Url\ScopeInterface">
@@ -244,7 +219,6 @@
                 </item>
                 <item name="custom_instructions" xsi:type="array">
                     <item name="path" xsi:type="string">design/search_engine_robots/custom_instructions</item>
-                    <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Admin\Robots</item>
                     <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
                 </item>
             </argument>
@@ -273,10 +247,30 @@
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="themes" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Theme\Model\Config\Importer</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="importer_class" xsi:type="string">Magento\Theme\Model\Config\Importer</item>
+                    <item name="sort_order" xsi:type="number">20</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\PreProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="designConfigTheme" xsi:type="object">Magento\Theme\Model\Config\Processor\DesignTheme\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Config\Processor\DesignTheme">
+        <arguments>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
+        <plugin name="designConfigTheme" type="Magento\Theme\Model\Design\Config\Plugin\Dump" sortOrder="50"/>
+    </type>
+    <type name="\Magento\Theme\Model\Design\Config\Plugin\Dump">
+        <arguments>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
         </arguments>
     </type>
 </config>

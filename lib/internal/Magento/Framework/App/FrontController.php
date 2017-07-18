@@ -2,7 +2,7 @@
 /**
  * Front controller responsible for dispatching application requests
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -15,17 +15,17 @@ class FrontController implements FrontControllerInterface
     protected $_routerList;
 
     /**
-     * @var \Magento\Framework\App\Response\Http
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @param RouterList $routerList
-     * @param \Magento\Framework\App\Response\Http $response
+     * @param RouterListInterface $routerList
+     * @param \Magento\Framework\App\ResponseInterface $response
      */
     public function __construct(
         RouterListInterface $routerList,
-        \Magento\Framework\App\Response\Http $response
+        \Magento\Framework\App\ResponseInterface $response
     ) {
         $this->_routerList = $routerList;
         $this->response = $response;

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -13,7 +13,8 @@ define([
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Vault/js/view/payment/vault-enabler',
-    'Magento_Checkout/js/action/create-billing-address'
+    'Magento_Checkout/js/action/create-billing-address',
+    'mage/translate'
 ], function (
     $,
     _,
@@ -23,7 +24,8 @@ define([
     fullScreenLoader,
     additionalValidators,
     VaultEnabler,
-    createBillingAddress
+    createBillingAddress,
+    $t
 ) {
     'use strict';
 
@@ -403,7 +405,13 @@ define([
          */
         payWithPayPal: function () {
             if (additionalValidators.validate()) {
-                Braintree.checkout.paypal.initAuthFlow();
+                try {
+                    Braintree.checkout.paypal.initAuthFlow();
+                } catch (e) {
+                    this.messageContainer.addErrorMessage({
+                        message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
+                    });
+                }
             }
         },
 

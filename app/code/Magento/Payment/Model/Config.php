@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -13,6 +13,8 @@ use Magento\Store\Model\ScopeInterface;
  * Payment configuration model
  *
  * Used for retrieving configuration data by payment models
+ *
+ * @api
  */
 class Config
 {

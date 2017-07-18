@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,11 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Test class for \Magento\Quote\Model
@@ -590,7 +590,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($customerMock));
-        $this->customerRepositoryMock->expects($this->once())
+        $this->customerRepositoryMock->expects($this->never())
             ->method('save')
             ->will($this->returnValue($customerMock));
         $customerMock->expects($this->any())
@@ -1188,6 +1188,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->quote->beforeSave();
         $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+        $this->assertNull($this->quote->getUpdatedAt());
     }
 
     /**
