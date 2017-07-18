@@ -68,8 +68,8 @@ class Save extends Action
         $requestData = $this->getRequest()->getParams();
         if ($this->getRequest()->isPost() && !empty($requestData['general'])) {
             try {
-                $stockId = !empty($requestData['general'][StockInterface::SOURCE_ID])
-                    ? $requestData['general'][StockInterface::SOURCE_ID] : null;
+                $stockId = !empty($requestData['general'][StockInterface::STOCK_ID])
+                    ? $requestData['general'][StockInterface::STOCK_ID] : null;
 
                 $stockId = $this->processSave($stockId, $requestData);
 

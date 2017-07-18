@@ -52,7 +52,7 @@ interface StockInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface|null
+     * @return \Magento\InventoryApi\Api\Data\StockExtensionInterface|null
      */
     public function getExtensionAttributes();
 

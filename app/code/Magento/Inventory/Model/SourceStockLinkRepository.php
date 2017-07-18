@@ -46,7 +46,7 @@ class SourceStockLinkRepository implements SourceStockLinkRepositoryInterface
             $this->resourceSourceStockLink->save($sourceStockLink);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not delete Source Stock Link'), $e);
+            throw new CouldNotSaveException(__('Could not save Source Stock Link'), $e);
         }
     }
 

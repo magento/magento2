@@ -6,22 +6,18 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Interface to assign specific source to particular stock.
+ * Interface to assign specific source to particular stock
  *
  * @api
  */
 interface SourceStockLinkRepositoryInterface
 {
-
     /**
-     * Assign a source a to a stock.
+     * Save SourceStockLink data
      *
      * @param \Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink
-     * @return bool will returned True if assigned
-     *
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\StateException
      */
     public function save(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink);
 
@@ -29,12 +25,11 @@ interface SourceStockLinkRepositoryInterface
      * Remove the source assignment from the stock.
      *
      * @param \Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink
-     * @return bool will returned True if assigned
+     * @return void
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
     public function delete(\Magento\InventoryApi\Api\Data\SourceStockLinkInterface $sourceStockLink);
-
 }
