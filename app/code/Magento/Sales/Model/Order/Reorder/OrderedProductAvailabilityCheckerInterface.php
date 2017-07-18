@@ -8,6 +8,8 @@ namespace Magento\Sales\Model\Order\Reorder;
 use Magento\Sales\Model\Order\Item;
 
 /**
+ * @api
+ *
  * Interface OrderedProductAvailabilityCheckerInterface
  */
 interface OrderedProductAvailabilityCheckerInterface
