@@ -14,6 +14,8 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * @see ConfigSetProcessorInterface
  * @see ConfigSetCommand
+ *
+ * @api
  */
 class ConfigSetProcessorFactory
 {

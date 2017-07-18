@@ -29,25 +29,25 @@ require([
          * List of existing behavior sets
          * @type {Array}
          */
-        uniqueBehaviors: <?php /* @escapeNotVerified */ echo $block->getUniqueBehaviors() ?>,
+        uniqueBehaviors: <?= /* @escapeNotVerified */ $block->getUniqueBehaviors() ?>,
 
         /**
          * Behaviour codes for import entities
          * @type {Array}
          */
-        entityBehaviors: <?php /* @escapeNotVerified */ echo $block->getEntityBehaviors() ?>,
+        entityBehaviors: <?= /* @escapeNotVerified */ $block->getEntityBehaviors() ?>,
 
         /**
          * Behaviour notes for import entities
          * @type {Array}
          */
-        entityBehaviorsNotes: <?php /* @escapeNotVerified */ echo $block->getEntityBehaviorsNotes() ?>,
+        entityBehaviorsNotes: <?= /* @escapeNotVerified */ $block->getEntityBehaviorsNotes() ?>,
 
         /**
          * Base url
          * @type {string}
          */
-        sampleFilesBaseUrl: '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
+        sampleFilesBaseUrl: '<?= /* @escapeNotVerified */ $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
 
         /**
          * Reset selected index

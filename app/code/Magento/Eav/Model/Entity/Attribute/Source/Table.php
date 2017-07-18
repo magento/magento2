@@ -8,6 +8,9 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @api
+ */
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
