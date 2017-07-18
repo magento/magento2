@@ -253,4 +253,24 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Config\PreProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="designConfigTheme" xsi:type="object">Magento\Theme\Model\Config\Processor\DesignTheme\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Config\Processor\DesignTheme">
+        <arguments>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
+        <plugin name="designConfigTheme" type="Magento\Theme\Model\Design\Config\Plugin\Dump" sortOrder="50"/>
+    </type>
+    <type name="\Magento\Theme\Model\Design\Config\Plugin\Dump">
+        <arguments>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+        </arguments>
+    </type>
 </config>

@@ -95,6 +95,9 @@
 {{depend fax}}F: {{var fax}}|{{/depend}}|
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
+            <online_customers>
+                <section_data_lifetime>60</section_data_lifetime>
+            </online_customers>
         </customer>
     </default>
 </config>

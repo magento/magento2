@@ -292,17 +292,21 @@ class DiCompileCommand extends Command
                 ], \Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class => [
                     'arguments' => [
                         'modificationsList' => [
-                            'BackslashTrim' =>
-                                ['instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim::class],
-                            'PreferencesResolving' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
-                            'InterceptorSubstitution' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution::class],
-                            'InterceptionPreferencesResolving' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
+                            'BackslashTrim' => [
+                                'instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim::class
+                            ],
+                            'PreferencesResolving' => [
+                                'instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class
+                            ],
+                            'InterceptorSubstitution' => [
+                                'instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution::class
+                            ],
+                            'InterceptionPreferencesResolving' => [
+                                'instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class
+                            ],
                         ]
                     ]
                 ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [

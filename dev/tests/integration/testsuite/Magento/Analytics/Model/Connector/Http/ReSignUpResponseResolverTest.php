@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Model\Connector\Http;
 
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -31,21 +32,37 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
     private $converter;
 
     /**
+     * @var ResponseResolver
+     */
+    private $notifyDataChangedResponseResolver;
+
+    /**
+     * @var FlagManager
+     */
+    private $flagManager;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->otpResponseResolver = Bootstrap::getObjectManager()->get(
+        $objectManager = Bootstrap::getObjectManager();
+        $this->otpResponseResolver = $objectManager->get(
             'OtpResponseResolver'
         );
-        $this->updateResponseResolver = Bootstrap::getObjectManager()->get(
+        $this->updateResponseResolver = $objectManager->get(
             'UpdateResponseResolver'
         );
-        $this->converter = Bootstrap::getObjectManager()->get(ConverterInterface::class);
+        $this->notifyDataChangedResponseResolver = $objectManager->get(
+            'NotifyDataChangedResponseResolver'
+        );
+        $this->converter = $objectManager->get(ConverterInterface::class);
+        $this->flagManager = $objectManager->get(FlagManager::class);
     }
 
     /**
      * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
+     * @magentoDbIsolation enabled
      */
     public function testReSignUpOnOtp()
     {
@@ -57,6 +74,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
+     * @magentoDbIsolation enabled
      */
     public function testReSignOnOtpWasNotCalled()
     {
@@ -68,6 +86,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
+     * @magentoDbIsolation enabled
      */
     public function testReSignUpOnUpdateWasCalled()
     {
@@ -79,12 +98,30 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
+     * @magentoDbIsolation enabled
      */
-    public function testReSignUpOnUpdateWasnotCalled()
+    public function testReSignUpOnUpdateWasNotCalled()
     {
         $body = $this->converter->toBody(['test' => '42']);
         $successResponse = new \Zend_Http_Response(201, [$this->converter->getContentTypeHeader()], $body);
         $this->updateResponseResolver->getResult($successResponse);
+        $this->assertCronWasNotSet();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
+     * @magentoDbIsolation enabled
+     */
+    public function testReSignUpOnNotifyDataChangedWasNotCalledWhenSubscriptionUpdateIsRunning()
+    {
+        $this->flagManager
+            ->saveFlag(
+                SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE,
+                'https://previous.example.com/'
+            );
+        $body = $this->converter->toBody(['test' => '42']);
+        $retryResponse = new \Zend_Http_Response(401, [$this->converter->getContentTypeHeader()], $body);
+        $this->notifyDataChangedResponseResolver->getResult($retryResponse);
         $this->assertCronWasNotSet();
     }
 

@@ -338,7 +338,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeightPounds(floor($weight));
-        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, self::$weightPrecision));
+        $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
+        $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
@@ -385,7 +386,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $r->setWeightPounds(floor($weight));
-        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, self::$weightPrecision));
+        $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
+        $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
         $r->setService($freeMethod);
     }
 
@@ -424,8 +426,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $service = $r->getService();
             }
 
-            if (
-                strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
                 strpos($r->getContainer(), 'FLAT RATE BOX') !== false
             ) {
                 $service = 'Priority';
@@ -1070,13 +1071,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 if (is_object($xml)) {
                     if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
                         $errorTitle = (string)$xml->Description;
-                    } elseif (isset(
-                            $xml->TrackInfo
-                        ) && isset(
-                            $xml->TrackInfo->Error
-                        ) && isset(
-                            $xml->TrackInfo->Error->Description
-                        ) && (string)$xml->TrackInfo->Error->Description != ''
+                    } elseif (isset($xml->TrackInfo)
+                        && isset($xml->TrackInfo->Error)
+                        && isset($xml->TrackInfo->Error->Description)
+                        && (string)$xml->TrackInfo->Error->Description != ''
                     ) {
                         $errorTitle = (string)$xml->TrackInfo->Error->Description;
                     } else {

@@ -158,7 +158,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *List of public labels
+     * List of public labels
      *
      * @return array
      */

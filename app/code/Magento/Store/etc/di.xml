@@ -341,7 +341,7 @@
                 </item>
                 <item name="runtime" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Store\App\Config\Source\RuntimeConfigSource</item>
-                    <item name="sortOrder" xsi:type="string">10</item>
+                    <item name="sortOrder" xsi:type="string">0</item>
                 </item>
             </argument>
         </arguments>
@@ -407,6 +407,13 @@
                 <item name="web/unsecure/base_media_url" xsi:type="string">1</item>
                 <item name="web/unsecure/base_static_url" xsi:type="string">1</item>
                 <item name="web/unsecure/base_url" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="serviceUrl" xsi:type="object">Magento\Store\Model\Argument\Interpreter\ServiceUrl</item>
             </argument>
         </arguments>
     </type>

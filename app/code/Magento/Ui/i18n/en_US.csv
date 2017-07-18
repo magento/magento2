@@ -4,19 +4,24 @@
 "Add New %1","Add New %1"
 "New %1","New %1"
 "Please select item(s).","Please select item(s)."
+"Invalid XML in file %1:\n%2","Invalid XML in file %1:\n%2"
+.,.
 "Unsupported bookmark action.","Unsupported bookmark action."
 "Parameter ""class"" must be present.","Parameter ""class"" must be present."
 "Parameter ""sortOrder"" must be present.","Parameter ""sortOrder"" must be present."
-"Initialization error component, check the spelling of the name or the correctness of the call.","Initialization error component, check the spelling of the name or the correctness of the call."
+"Invalid UI Component element name: '%1'","Invalid UI Component element name: '%1'"
 "Bookmark with id ""%1"" does not exist.","Bookmark with id ""%1"" does not exist."
+"Invalid UI Component element name: ''","Invalid UI Component element name: ''"
 Cancel,Cancel
 Back,Back
 Next,Next
 "Changes have been made to this section that have not been saved.","Changes have been made to this section that have not been saved."
+"This tab contains invalid data. Please resolve this before saving.","This tab contains invalid data. Please resolve this before saving."
 Assign,Assign
 Options,Options
 "records found","records found"
 selected,selected
+of,of
 Filters,Filters
 Add,Add
 "Something went wrong.","Something went wrong."
@@ -37,9 +42,13 @@ Off,Off
 "Default View","Default View"
 "${ $.visible } out of ${ $.total } visible","${ $.visible } out of ${ $.total } visible"
 "You have successfully saved your edits.","You have successfully saved your edits."
-"You haven\'t selected any items!","You haven\'t selected any items!"
+"There are {placeholder} messages requires your attention.","There are {placeholder} messages requires your attention."
+from,from
+to,to
+"You haven't selected any items!","You haven't selected any items!"
 "Search by keyword","Search by keyword"
 Keyword,Keyword
+"Select Date","Select Date"
 "Please enter more or equal than {0} symbols.","Please enter more or equal than {0} symbols."
 "Please enter less or equal than {0} symbols.","Please enter less or equal than {0} symbols."
 "Please enter {0} words or less.","Please enter {0} words or less."
@@ -74,6 +83,8 @@ Keyword,Keyword
 "Please enter a valid email address (Ex: johndoe@domain.com).","Please enter a valid email address (Ex: johndoe@domain.com)."
 "Please enter 6 or more characters. Leading and trailing spaces will be ignored.","Please enter 6 or more characters. Leading and trailing spaces will be ignored."
 "Please enter 7 or more characters, using both numeric and alphabetic.","Please enter 7 or more characters, using both numeric and alphabetic."
+"Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored.","Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored."
+"Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.","Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
 "Please enter a valid URL. Protocol is required (http://, https:// or ftp://).","Please enter a valid URL. Protocol is required (http://, https:// or ftp://)."
 "Please enter a valid URL. For example http://www.example.com or www.example.com.","Please enter a valid URL. For example http://www.example.com or www.example.com."
 "Please enter a valid XML-identifier (Ex: something_1, block5, id-4).","Please enter a valid XML-identifier (Ex: something_1, block5, id-4)."
@@ -85,6 +96,7 @@ Keyword,Keyword
 "Please enter a number greater than 0 in this field.","Please enter a number greater than 0 in this field."
 "Please input a valid CSS-length (Ex: 100px, 77pt, 20em, .5ex or 50%).","Please input a valid CSS-length (Ex: 100px, 77pt, 20em, .5ex or 50%)."
 "Please enter a valid number in this field.","Please enter a valid number in this field."
+"Please enter a valid integer in this field.","Please enter a valid integer in this field."
 "The value is not within the specified range.","The value is not within the specified range."
 "Please use letters only (a-z or A-Z) in this field.","Please use letters only (a-z or A-Z) in this field."
 "Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.","Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter."
@@ -93,19 +105,77 @@ Keyword,Keyword
 "Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"").","Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"")."
 "Please enter a valid zip code.","Please enter a valid zip code."
 "Please select State/Province.","Please select State/Province."
+"Please enter a value less than or equal to {0}.","Please enter a value less than or equal to {0}."
+"Please enter a value greater than or equal to {0}.","Please enter a value greater than or equal to {0}."
+"Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.","Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com."
 "Please enter issue number or start date for switch/solo card type.","Please enter issue number or start date for switch/solo card type."
 "This is a required field.","This is a required field."
 "Please enter positive number in this field.","Please enter positive number in this field."
 "Please enter a valid value, ex: 10,20,30","Please enter a valid value, ex: 10,20,30"
-"We don\'t recognize or support this file extension type.","We don\'t recognize or support this file extension type."
+"We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
 "File you are trying to upload exceeds maximum file size limit.","File you are trying to upload exceeds maximum file size limit."
 "Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.","Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document."
+"The date is not within the specified range.","The date is not within the specified range."
 Attention,Attention
 OK,OK
 Close,Close
 Ok,Ok
+"Label Button 2","Label Button 2"
+"Label Actions One","Label Actions One"
+"Label Actions Two","Label Actions Two"
+"Some Dynamic Actions","Some Dynamic Actions"
 "Log JS Errors to Session Storage","Log JS Errors to Session Storage"
 "Log JS Errors to Session Storage Key","Log JS Errors to Session Storage Key"
+settings/label,settings/label
+settings/confirm/title,settings/confirm/title
+"settings/confirm/message
+                        ","settings/confirm/message
+                        "
+"
+                            settings/callback/provider
+                        ","
+                            settings/callback/provider
+                        "
+"settings/callback/target
+                        ","settings/callback/target
+                        "
+"settings/newViewLabel
+                    ","settings/newViewLabel
+                    "
+settings/title,settings/title
+settings/description,settings/description
+"
+                        settings/addButtonLabel
+                    ","
+                        settings/addButtonLabel
+                    "
+"
+                        formElements/*[name(.)=../../@formElement]/settings/description
+                    ","
+                        formElements/*[name(.)=../../@formElement]/settings/description
+                    "
+"
+                        formElements/*[name(.)=../../@formElement]/settings/caption
+                    ","
+                        formElements/*[name(.)=../../@formElement]/settings/caption
+                    "
+"
+                        formElements/*[name(.)=../../@formElement]/settings/title
+                    ","
+                        formElements/*[name(.)=../../@formElement]/settings/title
+                    "
+settings/placeholder,settings/placeholder
+settings/caption,settings/caption
+settings/subTitle,settings/subTitle
+settings/visible,settings/visible
+settings/showLabel,settings/showLabel
+settings/breakLine,settings/breakLine
+settings/required,settings/required
+settings/size,settings/size
+settings/notice,settings/notice
+settings/tooltip/description,settings/tooltip/description
+settings/addBefore,settings/addBefore
+settings/addAfter,settings/addAfter
 Action,Action
 CSV,CSV
 "Excel XML","Excel XML"
