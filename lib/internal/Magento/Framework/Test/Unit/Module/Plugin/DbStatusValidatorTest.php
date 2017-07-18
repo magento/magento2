@@ -12,6 +12,7 @@ use Magento\Framework\Module\DbVersionInfo;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\DeploymentConfig;
 
 class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,6 +46,11 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $requestMock;
 
+    /**
+     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
     protected function setUp()
     {
         $this->cacheMock = $this->getMockBuilder(FrontendCacheInterface::class)
@@ -57,13 +63,17 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
             DbStatusValidatorPlugin::class,
             [
                 'cache' => $this->cacheMock,
-                'dbVersionInfo' => $this->dbVersionInfoMock
+                'dbVersionInfo' => $this->dbVersionInfoMock,
+                'deploymentConfig' => $this->deploymentConfigMock
             ]
         );
     }
@@ -78,6 +88,10 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getDbVersionErrors');
         $this->cacheMock->expects(static::never())
             ->method('save');
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidatorPlugin::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(0);
 
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
@@ -95,6 +109,10 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with('true', 'db_is_up_to_date', [], null)
             ->willReturn(true);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidatorPlugin::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(0);
 
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
@@ -132,6 +150,34 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('save');
 
         $this->setExpectedException(LocalizedException::class, $message);
+        $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
+    }
+
+    public function testBeforeDispatchExceptionIsIgnored()
+    {
+        $this->cacheMock->expects($this->never())->method('load');
+        $this->cacheMock->expects($this->never())->method('save');
+        $errors = [
+            [
+                DbVersionInfo::KEY_MODULE => 'Magento_Module1',
+                DbVersionInfo::KEY_TYPE => 'schema',
+                DbVersionInfo::KEY_CURRENT => '3.3.3',
+                DbVersionInfo::KEY_REQUIRED => '4.4.4'
+            ],
+            [
+                DbVersionInfo::KEY_MODULE => 'Magento_Module2',
+                DbVersionInfo::KEY_TYPE => 'data',
+                DbVersionInfo::KEY_CURRENT => '2.8.7',
+                DbVersionInfo::KEY_REQUIRED => '5.1.6'
+            ]
+        ];
+        $this->dbVersionInfoMock->expects(static::any())
+            ->method('getDbVersionErrors')
+            ->willReturn($errors);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(DbStatusValidatorPlugin::PARAM_IGNORE_MODULE_VERSION_EXCEPTION)
+            ->willReturn(1);
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 }
