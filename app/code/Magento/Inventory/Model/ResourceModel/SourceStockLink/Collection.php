@@ -12,7 +12,7 @@ use Magento\Inventory\Model\SourceStockLink as SourceStockLinkModel;
 
 /**
  * Resource Collection of SourceStockLink entities
- * It is not an API because SourceStockLink must be loaded via Source entity only
+ * @api
  */
 class Collection extends AbstractCollection
 {

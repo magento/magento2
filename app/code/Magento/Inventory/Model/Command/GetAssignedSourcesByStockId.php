@@ -4,20 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model;
+namespace Magento\Inventory\Model\Command;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Inventory\Model\ResourceModel\SourceStockLink\Collection as StockLinkCollection;
 use Magento\Inventory\Model\ResourceModel\SourceStockLink\CollectionFactory as StockLinkCollectionFactory;
+use Magento\InventoryApi\Api\Command\GetAssignedSourcesByStockIdInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\SourceStockLinkManagementInterface;
+
 
 /**
- * Class to get assign sources by stock.
+ * @inheritdoc
  */
-class SourceStockLinkManagement implements SourceStockLinkManagementInterface
+class GetAssignedSourcesByStockId implements GetAssignedSourcesByStockIdInterface
 {
-
     /**
      * @var CollectionProcessorInterface
      */
@@ -52,13 +53,13 @@ class SourceStockLinkManagement implements SourceStockLinkManagementInterface
     /**
      * @inheritdoc
      */
-    public function getAssignedSources($stockId)
+    public function execute($stockId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockInterface::STOCK_ID, $stockId)
             ->create();
 
-        /** @var  $collection */
+        /** @var StockLinkCollection $collection */
         $collection = $this->stockLinkCollectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         return $collection->getItems();

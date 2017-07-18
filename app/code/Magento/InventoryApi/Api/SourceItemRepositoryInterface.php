@@ -19,8 +19,8 @@ interface SourceItemRepositoryInterface
      * separate plugin on getList method, because entity loading way is different for these methods
      *
      * @param int $sourceItemId
-     * @return \Magento\InventoryApi\Api\Data\SourceItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Magento\InventoryApi\Api\Data\SourceItemInterface
      */
     public function get($sourceItemId);
 
@@ -36,9 +36,9 @@ interface SourceItemRepositoryInterface
      * Delete Source Item data by given sourceItemId
      *
      * @param int $sourceItemId
-     * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @return void
      */
     public function delete($sourceItemId);
 }
