@@ -9,7 +9,8 @@ In the nearest future new Persistence Entity Manager would be released which wil
 persistence layer along with Query API as performance efficient APIs for Read scenarios.
 
 Currently, it's recommended to use Resource Model infrastructure and make a successor of 
-Magento\Framework\Model\ResourceModel\Db\AbstractDb class.
+Magento\Framework\Model\ResourceModel\Db\AbstractDb class or successor of 
+Magento\Eav\Model\Entity\AbstractEntity if EAV attributes support needed.
 
 For filtering operations, it's recommended to use successor of 
 Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection class.
