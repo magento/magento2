@@ -7,6 +7,7 @@ namespace Magento\Framework\Module\Plugin;
 
 use Magento\Framework\Cache\FrontendInterface as FrontendCacheInterface;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -17,6 +18,8 @@ use Magento\Framework\Phrase;
  */
 class DbStatusValidator
 {
+    const PARAM_IGNORE_MODULE_VERSION_EXCEPTION = 'ignore_module_version_exception';
+
     /**
      * @var FrontendCacheInterface
      */
@@ -28,13 +31,22 @@ class DbStatusValidator
     private $dbVersionInfo;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param FrontendCacheInterface $cache
      * @param DbVersionInfo $dbVersionInfo
      */
-    public function __construct(FrontendCacheInterface $cache, DbVersionInfo $dbVersionInfo)
-    {
+    public function __construct(
+        FrontendCacheInterface $cache,
+        DbVersionInfo $dbVersionInfo,
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->cache = $cache;
         $this->dbVersionInfo = $dbVersionInfo;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -49,13 +61,15 @@ class DbStatusValidator
      */
     public function beforeDispatch(FrontController $subject, RequestInterface $request)
     {
-        if (!$this->cache->load('db_is_up_to_date')) {
+        if ($this->deploymentConfig->get(self::PARAM_IGNORE_MODULE_VERSION_EXCEPTION, 0) === 0 &&
+            !$this->cache->load('db_is_up_to_date')
+        ) {
             $errors = $this->dbVersionInfo->getDbVersionErrors();
 
             if ($errors) {
                 $message = 'Please upgrade your database: '
-                    . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
-                    . "The following modules are outdated:\n%1";
+                           . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
+                           . "The following modules are outdated:\n%1";
 
                 throw new LocalizedException(new Phrase($message, [implode("\n", $this->formatErrors($errors))]));
             } else {
@@ -76,8 +90,8 @@ class DbStatusValidator
 
         foreach ($errorsData as $error) {
             $formattedErrors[] = $error[DbVersionInfo::KEY_MODULE] . ' ' . $error[DbVersionInfo::KEY_TYPE]
-                . ': current version - ' . $error[DbVersionInfo::KEY_CURRENT]
-                . ', required version - ' . $error[DbVersionInfo::KEY_REQUIRED];
+                                 . ': current version - ' . $error[DbVersionInfo::KEY_CURRENT]
+                                 . ', required version - ' . $error[DbVersionInfo::KEY_REQUIRED];
         }
 
         return $formattedErrors;
