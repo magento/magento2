@@ -164,8 +164,32 @@ class BatchIterator implements BatchIteratorInterface
             ]
         );
         $row = $this->connection->fetchRow($wrapperSelect);
-        $this->minValue = $row['max'];
-        return intval($row['cnt']);
+
+        /* we need collect all records with ID=$upTo over LIMIT ($this->>batchSize)*/
+        $upTo = $row['max'];
+        $selectTail = $this->initSelectObject();
+        /* reset LIMIT and set upper bound for selection */
+        $selectTail->limit(null);
+        $selectTail->where(
+            $this->connection->quoteIdentifier($this->correlationName)
+            . '.' . $this->connection->quoteIdentifier($this->rangeField)
+            . ' <= ?',
+            $upTo
+        );
+        /* get total rows limited by "<=$upTo"*/
+        $wrapperTail = $this->connection->select();
+        $wrapperTail->from(
+            $selectTail,
+            [new \Zend_Db_Expr('COUNT(*) as cnt')]
+        );
+        $rowTail = $this->connection->fetchRow($wrapperTail);
+
+        /* $rowTail[cnt] should be greater or equal to $row[cnt] */
+        $found = $rowTail['cnt'];
+        $select->limit($found);
+
+        $this->minValue = $upTo;
+        return intval($found);
     }
 
     /**
