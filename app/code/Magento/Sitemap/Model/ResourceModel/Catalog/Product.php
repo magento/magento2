@@ -430,7 +430,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $select;
     }
     
-    /*
+    /**
      * Get product image URL from image filename and path
      *
      * @param string $image
