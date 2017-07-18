@@ -232,7 +232,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
         foreach ($topics as $topicName => $topicConfig) {
-            $key = $topicConfig['exchange'] . '--' . $topicName;
+            $key = $topicConfig['type'] . '-' . $topicConfig['exchange'] . '--' . $topicName;
             $queueNames = array_keys($topicConfig['queues']);
             foreach ($queueNames as $queueName) {
                 $output[$key][] = $queueName;
