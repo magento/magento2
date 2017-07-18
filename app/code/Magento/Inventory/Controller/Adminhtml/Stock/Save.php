@@ -83,7 +83,7 @@ class Save extends Action
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             } catch (Exception $e) {
-                $this->messageManager->addErrorMessage(__('Could not save stock'));
+                $this->messageManager->addErrorMessage(__('Could not save stock.'));
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             }
         } else {

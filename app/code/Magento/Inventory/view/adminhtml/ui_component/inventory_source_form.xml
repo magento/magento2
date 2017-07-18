@@ -260,19 +260,20 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="carrier_codes" formElement="checkboxset" sortOrder="20">
+        <field name="carrier_codes" formElement="multiselect" sortOrder="20">
             <settings>
                 <label translate="true">Shipping methods</label>
                 <imports>
                     <link name="visible">!${$.parentName}.use_default_carrier_config:checked</link>
                 </imports>
+                <notice>Use Ctrl+Click for check several values or uncheck value</notice>
             </settings>
             <formElements>
-                <checkboxset>
+                <multiselect>
                     <settings>
                         <options class="Magento\Inventory\Model\OptionSource\CarrierSource"/>
                     </settings>
-                </checkboxset>
+                </multiselect>
             </formElements>
         </field>
     </fieldset>

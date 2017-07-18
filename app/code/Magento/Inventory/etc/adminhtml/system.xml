@@ -21,7 +21,7 @@
                     <label>Specify Carriers</label>
                     <source_model>Magento\Inventory\Model\OptionSource\CarrierSource</source_model>
                     <can_be_empty>1</can_be_empty>
-                    <comment>Use Ctrl+click for unset value</comment>
+                    <comment>Use Ctrl+Click for check several values or uncheck value</comment>
                     <depends>
                         <field id="use_enabled_carriers">0</field>
                     </depends>

@@ -71,7 +71,7 @@
             <label translate="true">Sources</label>
             <collapsible>true</collapsible>
             <opened>true</opened>
-            <dataScope>data.sources</dataScope>
+            <dataScope>sources</dataScope>
         </settings>
         <container name="assign_sources_container">
             <argument name="data" xsi:type="array">

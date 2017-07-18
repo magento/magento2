@@ -92,7 +92,7 @@ class Save extends Action
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (Exception $e) {
-                $this->messageManager->addErrorMessage(__('Could not save source'));
+                $this->messageManager->addErrorMessage(__('Could not save source.'));
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             }
         } else {
@@ -116,7 +116,7 @@ class Save extends Action
             $source = $this->sourceFactory->create();
         }
         $this->dataObjectHelper->populateWithArray($source, $requestData['general'], SourceInterface::class);
-        $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
+        $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData['general']);
 
         $sourceId = $this->sourceRepository->save($source);
         return $sourceId;
