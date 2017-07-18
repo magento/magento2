@@ -64,7 +64,7 @@ class SetRedirectUrl
         ]);
         if ($urlRewrite) {
             $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl(
-                $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath()))
+                $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath(), ['_scope' => $store]))
             );
         }
         return [$store, $data];
