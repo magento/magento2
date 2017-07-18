@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -24,6 +24,7 @@
 & when (@media-common = true) {
     .checkout-payment-method {
         .step-title {
+            border-bottom: 0;
             margin-bottom: 0;
         }
 
@@ -37,6 +38,12 @@
             &._active {
                 .payment-method-content {
                     display: block;
+                }
+            }
+
+            & + .payment-method {
+                .payment-method-title {
+                    .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
         }
@@ -54,7 +61,6 @@
         }
 
         .payment-method-title {
-            .lib-css(border-top, @checkout-payment-method-title__border);
             .lib-css(padding, @checkout-payment-method-title__padding 0);
             margin: 0;
 
@@ -76,6 +82,14 @@
             .fieldset {
                 &:not(:last-child) {
                     margin: 0 0 @indent__base;
+                }
+            }
+        }
+
+        .payment-group {
+            & + .payment-group {
+                .step-title {
+                    margin: @indent__base 0 0;
                 }
             }
         }

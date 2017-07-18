@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Test\Unit\Controller\Adminhtml\System\Variable;
@@ -121,7 +121,6 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         $this->validateMock->expects($this->any())
             ->method('_initVariable')
             ->willReturn($this->variableMock);
-
     }
 
     /**

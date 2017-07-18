@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
@@ -114,5 +114,26 @@ class NewTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             $this->_block->getProductCollection()
         );
+    }
+
+    /**
+     * @covers \Magento\Catalog\Block\Product\Widget\NewWidget::getCacheKeyInfo
+     */
+    public function testNewWidgetGetCacheKeyInfo()
+    {
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
+        )->createBlock(
+            \Magento\Catalog\Block\Product\Widget\NewWidget::class
+        );
+
+        $requestParams = ['test' => 'data'];
+
+        $block->getRequest()->setParams($requestParams);
+
+        $info = $block->getCacheKeyInfo();
+
+        $this->assertEquals('CATALOG_PRODUCT_NEW', $info[0]);
+        $this->assertEquals(json_encode($requestParams), $info[8]);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
@@ -16,6 +16,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class CollectionTest extends BaseCollectionTest
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
@@ -51,8 +56,7 @@ class CollectionTest extends BaseCollectionTest
      */
     protected function setUp()
     {
-        $helper = new ObjectManagerHelper($this);
-
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $storeManager = $this->getStoreManager();
         $universalFactory = $this->getUniversalFactory();
@@ -67,13 +71,17 @@ class CollectionTest extends BaseCollectionTest
         );
         $this->search = $this->getMock(\Magento\Search\Api\SearchInterface::class, [], [], '', false);
 
-        $this->prepareObjectManager([
-            [\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
-                $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-            ],
-        ]);
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
 
-        $this->advancedCollection = $helper->getObject(
+        $this->advancedCollection = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
             [
                 'eavConfig' => $this->eavConfig,
@@ -83,6 +91,7 @@ class CollectionTest extends BaseCollectionTest
                 'filterBuilder' => $this->filterBuilder,
                 'temporaryStorageFactory' => $this->temporaryStorageFactory,
                 'search' => $this->search,
+                'productLimitationFactory' => $productLimitationFactoryMock,
             ]
         );
     }
@@ -149,21 +158,5 @@ class CollectionTest extends BaseCollectionTest
             ->disableOriginalConstructor()
             ->getMock();
         return $criteriaBuilder;
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

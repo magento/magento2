@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
+
 /**
  * Widget Instance Theme Id Options
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated created new class that correctly loads theme options and whose name follows naming convention
+ * @see \Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes
  */
-namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
-
 class ThemeId implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -18,11 +20,11 @@ class ThemeId implements \Magento\Framework\Option\ArrayInterface
     protected $_resourceModel;
 
     /**
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $widgetResourceModel
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $widgetResourceModel
      */
-    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\Collection $widgetResourceModel)
+    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $widgetResourceModel)
     {
-        $this->_resourceModel = $widgetResourceModel;
+        $this->_resourceModel = $widgetResourceModel->create();
     }
 
     /**

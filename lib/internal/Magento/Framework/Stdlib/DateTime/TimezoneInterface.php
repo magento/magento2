@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Stdlib\DateTime;
 
@@ -62,12 +60,13 @@ interface TimezoneInterface
     /**
      * Create \DateTime object for current locale
      *
-     * @param mixed              $date
+     * @param mixed $date
      * @param string $locale
-     * @param bool               $useTimezone
+     * @param bool $useTimezone
+     * @param bool $includeTime
      * @return \DateTime
      */
-    public function date($date = null, $locale = null, $useTimezone = true);
+    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true);
 
     /**
      * Create \DateTime object with date converted to scope timezone and scope Locale

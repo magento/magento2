@@ -2,10 +2,13 @@
     "name": "magento/module-offline-payments",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-checkout": "100.2.*",
         "magento/module-payment": "100.2.*",
         "magento/framework": "100.2.*"
+    },
+    "suggest": {
+        "magento/module-config": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",

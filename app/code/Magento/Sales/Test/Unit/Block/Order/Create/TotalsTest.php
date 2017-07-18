@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -87,7 +87,6 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     public function testGetTotals($isVirtual)
     {
         $expected = 'expected';
-        $this->quoteMock->expects($this->at(0))->method('setTotalsCollectedFlag')->with(false);
         $this->quoteMock->expects($this->at(1))->method('collectTotals');
         $this->quoteMock->expects($this->once())->method('isVirtual')->willreturn($isVirtual);
         if ($isVirtual) {

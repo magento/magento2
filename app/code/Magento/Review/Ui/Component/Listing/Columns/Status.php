@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Ui\Component\Listing\Columns;
@@ -13,6 +13,8 @@ use Magento\Review\Helper\Data as StatusSource;
 
 /**
  * Class Status
+ *
+ * @api
  */
 class Status extends Column implements OptionSourceInterface
 {

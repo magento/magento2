@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -47,11 +47,6 @@
     </event>
     <event name="model_save_commit_after">
         <observer name="flush_cache_after_model_save" instance="Magento\PageCache\Observer\FlushCacheByTags" />
-    </event>
-    <event name="controller_action_predispatch">
-        <observer name="register_form_key"
-                  instance="Magento\PageCache\Observer\RegisterFormKeyFromCookie"
-                  />
     </event>
     <event name="customer_logout">
         <observer name="FlushFormKeyOnLogout" instance="Magento\PageCache\Observer\FlushFormKeyOnLogout"/>

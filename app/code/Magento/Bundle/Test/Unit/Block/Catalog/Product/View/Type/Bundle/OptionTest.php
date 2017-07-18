@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,6 +59,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetOption()
     {
+        $selectionId = 315;
         $this->product->expects($this->atLeastOnce())
             ->method('hasPreconfiguredValues')
             ->will($this->returnValue(true));
@@ -71,7 +72,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $option = $this->getMock(\Magento\Bundle\Model\Option::class, [], [], '', false);
         $option->expects($this->any())->method('getId')->will($this->returnValue(15));
 
-        $otherOption = $this->getMock(\Magento\Bundle\Model\Option::class, [], [], '', false);
+        $otherOption = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $otherOption->expects($this->any())->method('getId')->will($this->returnValue(16));
 
         $selection = $this->getMock(
@@ -81,7 +84,16 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $selection->expects($this->atLeastOnce())->method('getSelectionId')->will($this->returnValue(315));
+        $otherSelection = $this->getMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getSelectionId', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $otherOption->expects($this->any())->method('getSelectionById')->willReturn($selection);
+        $selection->expects($this->atLeastOnce())->method('getSelectionId')->willReturn($selectionId);
+        $option->expects($this->once())->method('getSelectionById')->with(315)->willReturn($otherSelection);
 
         $this->assertSame($this->block, $this->block->setOption($option));
         $this->assertTrue($this->block->isSelected($selection));

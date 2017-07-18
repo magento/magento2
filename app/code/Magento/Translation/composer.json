@@ -2,12 +2,14 @@
     "name": "magento/module-translation",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-backend": "100.2.*",
         "magento/module-developer": "100.2.*",
         "magento/module-store": "100.2.*",
-        "magento/module-theme": "100.2.*",
         "magento/framework": "100.2.*"
+    },
+    "suggest": {
+        "magento/module-deploy": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",

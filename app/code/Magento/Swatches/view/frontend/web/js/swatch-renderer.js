@@ -1,16 +1,19 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 define([
     'jquery',
     'underscore',
+    'mage/template',
     'mage/smart-keyboard-handler',
+    'mage/translate',
+    'priceUtils',
     'jquery/ui',
     'jquery/jquery.parsequery',
     'mage/validation/validation'
-], function ($, _, keyboardHandler) {
+], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
     'use strict';
 
     /**
@@ -243,33 +246,59 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
-            //
-            onlyMainImg: false,
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace',
 
             // whether swatches are rendered in product list or on product page
-            inProductList: false
+            inProductList: false,
+
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price',
+
+            // tier prise selectors start
+            tierPriceTemplateSelector: '#tier-prices-template',
+            tierPriceBlockSelector: '[data-role="tier-price-block"]',
+            tierPriceTemplate: ''
+            // tier prise selectors end
         },
 
         /**
          * Get chosen product
          *
-         * @returns array
+         * @returns int|null
          */
         getProduct: function () {
-            return this._CalcProducts().shift();
+            var products = this._CalcProducts();
+
+            return _.isArray(products) ? products[0] : null;
         },
 
         /**
          * @private
          */
         _init: function () {
+            // creates debounced variant of _LoadProductMedia()
+            // to use it in events handlers instead of _LoadProductMedia()
+            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                // store unsorted attributes
+                this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
+                this._setPreSelectedGallery();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
 
         /**
@@ -287,17 +316,15 @@ define([
         _create: function () {
             var options = this.options,
                 gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
-                isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ?
+                productData = this._determineProductData(),
+                $main = productData.isInProductView ?
                     this.element.parents('.column.main') :
                     this.element.parents('.product-item-info');
 
-            if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+            if (productData.isInProductView) {
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
@@ -306,6 +333,32 @@ define([
 
             this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
             this.inProductList = this.productForm.length > 0;
+        },
+
+        /**
+         * Determine product id and related data
+         *
+         * @returns {{productId: *, isInProductView: bool}}
+         * @private
+         */
+        _determineProductData: function () {
+            // Check if product is in a list of products.
+            var productId,
+                isInProductView = false;
+
+            productId = this.element.parents('.product-item-details')
+                    .find('.price-box.price-final_price').attr('data-product-id');
+
+            if (!productId) {
+                // Check individual product.
+                productId = $('[name=product]').val();
+                isInProductView = productId > 0;
+            }
+
+            return {
+                productId: productId,
+                isInProductView: isInProductView
+            };
         },
 
         /**
@@ -617,6 +670,7 @@ define([
                 $parent.attr('option-selected', $this.attr('option-id')).find('.selected').removeClass('selected');
                 $label.text($this.attr('option-label'));
                 $input.val($this.attr('option-id'));
+                $input.attr('data-attr-name', this._getAttributeCodeById(attributeId));
                 $this.addClass('selected');
                 $widget._toggleCheckedAttributes($this, $wrapper);
             }
@@ -629,8 +683,21 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
+        },
+
+        /**
+         * Get human readable attribute code (eg. size, color) by it ID from configuration
+         *
+         * @param {Number} attributeId
+         * @returns {*}
+         * @private
+         */
+        _getAttributeCodeById: function (attributeId) {
+            var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+
+            return attribute ? attribute.code : attributeId;
         },
 
         /**
@@ -674,7 +741,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -788,7 +855,8 @@ define([
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
-                result;
+                result,
+                tierPriceHtml;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -804,6 +872,29 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
+
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
+
+            if (typeof result != 'undefined' && result.tierPrices.length) {
+                if (this.options.tierPriceTemplate) {
+                    tierPriceHtml = mageTemplate(
+                        this.options.tierPriceTemplate,
+                        {
+                            'tierPrices': result.tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.jsonConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        }
+                    );
+                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                }
+            } else {
+                $(this.options.tierPriceBlockSelector).hide();
+            }
         },
 
         /**
@@ -838,8 +929,7 @@ define([
         _LoadProductMedia: function () {
             var $widget = this,
                 $this = $widget.element,
-                attributes = {},
-                productId = 0,
+                productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
 
@@ -853,43 +943,30 @@ define([
                     if (!(mediaCacheKey in $widget.options.mediaCache)) {
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
-                    $widget._ProductMediaCallback($this, data);
-                    $widget._DisableProductMediaLoader($this);
+                    $widget._ProductMediaCallback($this, data, productData.isInProductView);
+                    setTimeout(function () {
+                        $widget._DisableProductMediaLoader($this);
+                    }, 300);
                 };
 
             if (!$widget.options.mediaCallback) {
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
-
-                attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
-            });
-
-            if ($('body.catalog-product-view').size() > 0) {
-                //Product Page
-                productId = document.getElementsByName('product')[0].value;
-            } else {
-                //Category View
-                productId = $this.parents('.product.details.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
-            }
-
             mediaCallData = {
-                'product_id': productId,
-                'attributes': attributes,
-                'additional': $.parseQuery()
+                'product_id': this.getProduct()
             };
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.post(
+                $widget.xhr = $.get(
                     $widget.options.mediaCallback,
                     mediaCallData,
                     mediaSuccessCallback,
@@ -943,11 +1020,11 @@ define([
          *
          * @param {Object} $this
          * @param {String} response
+         * @param {Boolean} isInProductView
          * @private
          */
-        _ProductMediaCallback: function ($this, response) {
-            var isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ? $this.parents('.column.main') : $this.parents('.product-item-info'),
+        _ProductMediaCallback: function ($this, response, isInProductView) {
+            var $main = isInProductView ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
 
@@ -962,7 +1039,7 @@ define([
                 };
 
             if (_.size($widget) < 1 || !support(response)) {
-                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isInProductView);
 
                 return;
             }
@@ -987,7 +1064,7 @@ define([
                 });
             }
 
-            this.updateBaseImage(images, $main, isProductViewExist);
+            this.updateBaseImage(images, $main, isInProductView);
         },
 
         /**
@@ -1012,30 +1089,31 @@ define([
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
-         * @param {Boolean} isProductViewExist
+         * @param {Boolean} isInProductView
          */
-        updateBaseImage: function (images, context, isProductViewExist) {
+        updateBaseImage: function (images, context, isInProductView) {
             var justAnImage = images[0],
-                updateImg,
-                imagesToUpdate,
+                initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
-                item;
+                imagesToUpdate,
+                isInitial;
 
-            if (isProductViewExist) {
+            if (isInProductView) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.onlyMainImg) {
-                    updateImg = imagesToUpdate.filter(function (img) {
-                        return img.isMain;
-                    });
-                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
-                    gallery.updateDataByIndex(0, item);
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
 
-                    gallery.seek(1);
-                } else {
-                    gallery.updateData(imagesToUpdate);
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
                 }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -1104,13 +1182,41 @@ define([
                 params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
                 selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
-                    var attribute = this.options.jsonConfig.attributes[attributeId];
+                    var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
 
                     return attribute ? attribute.code : attributeId;
                 }.bind(this)));
             }
 
             return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Sets mediaCache for cases when jsonConfig contains preSelectedGallery on layered navigation result pages
+         *
+         * @private
+         */
+        _setPreSelectedGallery: function () {
+            var mediaCallData;
+
+            if (this.options.jsonConfig.preSelectedGallery) {
+                mediaCallData = {
+                    'product_id': this.getProduct()
+                };
+
+                this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
+            }
         }
     });
 

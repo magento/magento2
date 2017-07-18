@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Controller;
@@ -129,7 +129,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected function getRewrite($requestPath, $storeId)
     {
         return $this->urlFinder->findOneByData([
-            UrlRewrite::REQUEST_PATH => trim($requestPath, '/'),
+            UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
             UrlRewrite::STORE_ID => $storeId,
         ]);
     }

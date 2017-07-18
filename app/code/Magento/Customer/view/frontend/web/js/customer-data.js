@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -9,7 +13,7 @@ define([
     'Magento_Customer/js/section-config',
     'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig, mageStorage) {
+], function ($, _, ko, sectionConfig) {
     'use strict';
 
     var options,
@@ -95,12 +99,13 @@ define([
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
         var sectionDataIds, newSectionDataIds = {};
+
         target.subscribe(function () {
             setTimeout(function () {
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) {
+                    if (name != sectionName) { //eslint-disable-line eqeqeq
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -174,6 +179,7 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
+
                 if (!sectionConfig.isClientSideSection(sectionName)) {
                     storageInvalidation.set(sectionName, true);
                 }
@@ -186,14 +192,27 @@ define([
         /**
          * Customer data initialization
          */
-        init: function() {
+        init: function () {
             var countryData,
-                privateContent = $.cookieStorage.get('private_content_version');
+                privateContentVersion = 'private_content_version',
+                privateContent = $.cookieStorage.get(privateContentVersion),
+                localPrivateContent = $.localStorage.get(privateContentVersion),
+                needVersion = 'need_version';
 
-            if (_.isEmpty(storage.keys())) {
-                if (!_.isEmpty(privateContent)) {
-                    this.reload([], false);
+            if (privateContent &&
+                !$.cookieStorage.isSet(privateContentVersion) &&
+                !$.localStorage.isSet(privateContentVersion)
+            ) {
+                $.cookieStorage.set(privateContentVersion, needVersion);
+                $.localStorage.set(privateContentVersion, needVersion);
+                this.reload([], false);
+            } else if (localPrivateContent !== privateContent) {
+                if (!$.cookieStorage.isSet(privateContentVersion)) {
+                    privateContent = needVersion;
+                    $.cookieStorage.set(privateContentVersion, privateContent);
                 }
+                $.localStorage.set(privateContentVersion, privateContent);
+                this.reload([], false);
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -211,6 +230,7 @@ define([
 
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
+
                 if (_.isEmpty(countryData())) {
                     customerData.reload(['directory-data'], false);
                 }
@@ -233,7 +253,7 @@ define([
                 if (name !== undefined) {
                     storageVal = storage.get(name);
 
-                    if (typeof storageVal === 'undefined' ||
+                    if (typeof storageVal === 'undefined' || //eslint-disable-line max-depth
                         typeof storageVal == 'object' && cookieSections[name] > storageVal['data_id']
                     ) {
                         return true;
@@ -258,11 +278,11 @@ define([
                 return [];
             }
 
-            for (name in cookieSections) {
+            for (name in cookieSections) { //eslint-disable-line guard-for-in
                 storageVal = storage.get(name);
 
                 if (typeof storageVal === 'undefined' ||
-                    typeof storageVal == 'object' && cookieSections[name] !=  storage.get(name)['data_id']
+                    typeof storageVal == 'object' && cookieSections[name] !=  storage.get(name)['data_id'] //eslint-disable-line
                 ) {
                     expiredKeys.push(name);
                 }
@@ -297,6 +317,7 @@ define([
          */
         reload: function (sectionNames, updateSectionId) {
             return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+                $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });
         },
@@ -309,6 +330,7 @@ define([
                 sectionsNamesForInvalidation;
 
             sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
@@ -340,14 +362,14 @@ define([
         var sections,
             redirects;
 
-        if (settings.type.match(/post|put/i)) {
+        if (settings.type.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(settings.url);
 
             if (sections) {
                 customerData.invalidate(sections);
                 redirects = ['redirect', 'backUrl'];
 
-                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
+                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) { //eslint-disable-line
                     return;
                 }
                 customerData.reload(sections, true);
@@ -361,7 +383,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put/i)) {
+        if (event.target.method.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

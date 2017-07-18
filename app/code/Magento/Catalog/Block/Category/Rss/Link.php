@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Category\Rss;
 
 /**
  * Class Link
+ * @api
  * @package Magento\Catalog\Block\Category\Rss
  */
 class Link extends \Magento\Framework\View\Element\Template

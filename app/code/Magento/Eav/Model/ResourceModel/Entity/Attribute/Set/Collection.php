@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
 /**
  * Eav Resource Attribute Set Collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection

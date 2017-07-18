@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Exception;
@@ -9,6 +9,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Exception to be thrown when there is an issue with the Input to a function call.
+ *
+ * @api
  */
 class InputException extends AbstractAggregateException
 {
@@ -47,13 +49,14 @@ class InputException extends AbstractAggregateException
      *
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
+     * @param int $code
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null)
+    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {
         if ($phrase === null) {
             $phrase = new Phrase('One or more input exceptions have occurred.');
         }
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
     }
 
     /**

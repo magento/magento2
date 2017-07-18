@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 <div class="fieldset">
     <div class="legend">
-        <span><?php /* @escapeNotVerified */ echo __('Status'); ?></span>
+        <span><?= /* @escapeNotVerified */ __('Status') ?></span>
     </div><br>
     <div class="messages">
         <div class="message message-success success">
-            <div><?php /* @escapeNotVerified */ echo $block->getStatusMessage(); ?></div>
+            <div><?= /* @escapeNotVerified */ $block->getStatusMessage() ?></div>
         </div>
     </div>
 </div>

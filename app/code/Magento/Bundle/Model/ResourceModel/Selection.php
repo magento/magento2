@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Bundle Selection Resource Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -22,19 +24,33 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
      * Selection constructor.
      *
      * @param Context $context
      * @param MetadataPool $metadataPool
      * @param null|string $connectionName
+     * @param EntityManager|null $entityManager
      */
-    public function __construct(Context $context, MetadataPool $metadataPool, $connectionName = null)
-    {
+    public function __construct(
+        Context $context,
+        MetadataPool $metadataPool,
+        $connectionName = null,
+        EntityManager $entityManager = null
+    ) {
         parent::__construct(
             $context,
             $connectionName
         );
+
         $this->metadataPool = $metadataPool;
+
+        $this->entityManager = $entityManager
+            ?: ObjectManager::getInstance()->get(EntityManager::class);
     }
 
     /**
@@ -126,7 +142,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'e.' . $metadata->getLinkField() . ' = ' .  $this->getMainTable() . '.parent_product_id',
             ['e.entity_id as parent_product_id']
         )->where(
-            'e.entity_id IN(?)',
+            $this->getMainTable() . '.product_id IN(?)',
             $childId
         );
 
@@ -145,7 +161,11 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($item->getDefaultPriceScope()) {
             $connection->delete(
                 $this->getTable('catalog_product_bundle_selection_price'),
-                ['selection_id = ?' => $item->getSelectionId(), 'website_id = ?' => $item->getWebsiteId()]
+                [
+                    'selection_id = ?' => $item->getSelectionId(),
+                    'website_id = ?' => $item->getWebsiteId(),
+                    'parent_product_id = ?' => $item->getParentProductId(),
+                ]
             );
         } else {
             $values = [
@@ -153,6 +173,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'website_id' => $item->getWebsiteId(),
                 'selection_price_type' => $item->getSelectionPriceType(),
                 'selection_price_value' => $item->getSelectionPriceValue(),
+                'parent_product_id' => $item->getParentProductId(),
             ];
             $connection->insertOnDuplicate(
                 $this->getTable('catalog_product_bundle_selection_price'),
@@ -160,5 +181,15 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['selection_price_type', 'selection_price_value']
             );
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->entityManager->save($object);
+
+        return $this;
     }
 }

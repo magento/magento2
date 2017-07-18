@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates datepicker binding and registers in to ko.bindingHandlers object */
@@ -51,7 +51,12 @@ define([
 
             observable() && $(el).datepicker(
                 'setDate',
-                moment(observable(), utils.normalizeDate(config.options.dateFormat)).toDate()
+                moment(
+                    observable(),
+                    utils.convertToMomentFormat(
+                        options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
+                    )
+                ).toDate()
             );
 
             $(el).blur();

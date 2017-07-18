@@ -1,13 +1,47 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Addgroup extends \Magento\Checkout\Controller\Cart
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param CustomerCart $cart
+     * @param Escaper|null $escaper
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        CustomerCart $cart,
+        Escaper $escaper = null
+    ) {
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);
+    }
+
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
@@ -23,6 +57,13 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
             foreach ($itemsCollection as $item) {
                 try {
                     $this->cart->addOrderItem($item, 1);
+                    if (!$this->cart->getQuote()->getHasError()) {
+                        $message = __(
+                            'You added %1 to your shopping cart.',
+                            $this->escaper->escapeHtml($item->getName())
+                        );
+                        $this->messageManager->addSuccessMessage($message);
+                    }
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if ($this->_checkoutSession->getUseNotice(true)) {
                         $this->messageManager->addNotice($e->getMessage());

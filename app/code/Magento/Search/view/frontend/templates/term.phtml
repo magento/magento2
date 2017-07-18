@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,15 +11,15 @@
     <ul class="search-terms">
         <?php foreach ($block->getTerms() as $_term): ?>
             <li class="item">
-                <a href="<?php /* @escapeNotVerified */ echo $block->getSearchUrl($_term) ?>"
-                   style="font-size:<?php /* @escapeNotVerified */ echo $_term->getRatio()*70+75 ?>%;">
-                    <?php echo $block->escapeHtml($_term->getName()) ?>
+                <a href="<?= /* @escapeNotVerified */ $block->getSearchUrl($_term) ?>"
+                   style="font-size:<?= /* @escapeNotVerified */ $_term->getRatio()*70+75 ?>%;">
+                    <?= $block->escapeHtml($_term->getName()) ?>
                 </a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php else: ?>
     <div class="message notice">
-        <div><?php /* @escapeNotVerified */ echo __('There are no search terms available.'); ?></div>
+        <div><?= /* @escapeNotVerified */ __('There are no search terms available.') ?></div>
     </div>
 <?php endif; ?>

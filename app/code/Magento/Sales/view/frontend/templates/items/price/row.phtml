@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,8 @@
 /** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
 $_item = $block->getItem();
 ?>
-<span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
+<span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
-        <?php /* @escapeNotVerified */ echo $block->getOrder()->formatPrice($block->getItem()->getRowTotal()) ?>
+        <?= /* @escapeNotVerified */ $block->getOrder()->formatPrice($block->getItem()->getRowTotal()) ?>
     </span>
 </span>

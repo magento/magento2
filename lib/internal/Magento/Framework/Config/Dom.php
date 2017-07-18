@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Magento configuration XML DOM utility
@@ -19,6 +17,7 @@ use Magento\Framework\Phrase;
  * Class Dom
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Dom
 {
@@ -83,6 +82,11 @@ class Dom
     private static $urnResolver;
 
     /**
+     * @var array
+     */
+    private static $resolvedSchemaPaths = [];
+
+    /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
      *
      * Format of $idAttributes: array('/xpath/to/some/node' => 'id_attribute_name')
@@ -115,7 +119,7 @@ class Dom
     /**
      * Retrieve array of xml errors
      *
-     * @param $errorFormat
+     * @param string $errorFormat
      * @return string[]
      */
     private static function getXmlErrors($errorFormat)
@@ -166,15 +170,10 @@ class Dom
         /* Update matched node attributes and value */
         if ($matchedNode) {
             //different node type
-            if ($this->typeAttributeName && $node->hasAttribute(
-                $this->typeAttributeName
-            ) && $matchedNode->hasAttribute(
-                $this->typeAttributeName
-            ) && $node->getAttribute(
-                $this->typeAttributeName
-            ) !== $matchedNode->getAttribute(
-                $this->typeAttributeName
-            )
+            if ($this->typeAttributeName &&
+                $node->hasAttribute($this->typeAttributeName) &&
+                $matchedNode->hasAttribute($this->typeAttributeName) &&
+                $node->getAttribute($this->typeAttributeName) !== $matchedNode->getAttribute($this->typeAttributeName)
             ) {
                 $parentMatchedNode = $this->_getMatchedNode($parentPath);
                 $newNode = $this->dom->importNode($node, true);
@@ -242,7 +241,7 @@ class Dom
      */
     protected function _getNodePathByParent(\DOMElement $node, $parentPath)
     {
-        $prefix = is_null($this->rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
+        $prefix = $this->rootNamespace === null ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
         $idAttribute = $this->nodeMergingConfig->getIdAttribute($path);
         if (is_array($idAttribute)) {
@@ -305,7 +304,11 @@ class Dom
         if (!self::$urnResolver) {
             self::$urnResolver = new UrnResolver();
         }
-        $schema = self::$urnResolver->getRealPath($schema);
+        if (!isset(self::$resolvedSchemaPaths[$schema])) {
+            self::$resolvedSchemaPaths[$schema] = self::$urnResolver->getRealPath($schema);
+        }
+        $schema = self::$resolvedSchemaPaths[$schema];
+
         libxml_use_internal_errors(true);
         libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
         $errors = [];
@@ -432,7 +435,7 @@ class Dom
      */
     private function _getAttributeName($attribute)
     {
-        if (!is_null($attribute->prefix) && !empty($attribute->prefix)) {
+        if ($attribute->prefix !== null && !empty($attribute->prefix)) {
             $attributeName = $attribute->prefix . ':' . $attribute->name;
         } else {
             $attributeName = $attribute->name;

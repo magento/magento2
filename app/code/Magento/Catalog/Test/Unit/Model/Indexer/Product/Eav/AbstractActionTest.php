@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav;
@@ -38,10 +38,9 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,
-            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock]
+            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock, []]
         );
     }
 
@@ -123,6 +122,8 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
     public function testReindexWithNotNullArgumentExecutesReindexEntities()
     {
         $ids = [1, 2, 3];
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->getMockForAbstractClass();
 
         $eavSource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source::class)
             ->disableOriginalConstructor()
@@ -132,6 +133,14 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $eavSource->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
+        $eavSource->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+
+        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
+        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+
+        $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
+        $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())
             ->method('reindexEntities')
             ->with($ids);

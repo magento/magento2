@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerBackendEntityTest" summary="Update Backend Customer" ticketId="MAGETWO-23881">
         <variation name="UpdateCustomerBackendEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
             <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
@@ -44,6 +45,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation3" summary="Address with alphanumeric zip">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
             <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>

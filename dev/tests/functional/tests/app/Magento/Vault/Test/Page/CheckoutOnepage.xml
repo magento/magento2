@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-    <page name="CheckoutOnepage" mca="checkout" module="Magento_Checkout">
-        <block name="vaultPaymentBlock" class="Magento\Vault\Test\Block\VaultPayment" locator="#checkout-step-payment" strategy="css selector" />
+    <page name="CheckoutOnepage" mca="checkout/index">
+        <block name="vaultPaymentBlock" class="Magento\Vault\Test\Block\Onepage\Payment\Method\Vault" locator="#checkout-step-payment" strategy="css selector" />
+        <block name="paymentBlock">
+            <render name="braintree" class="Magento\Braintree\Test\Block\Form\BraintreeCc" />
+        </block>
     </page>
 </config>

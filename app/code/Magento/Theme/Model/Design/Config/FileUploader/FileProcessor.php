@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config\FileUploader;
@@ -135,7 +135,6 @@ class FileProcessor
      */
     protected function save($fileId, $destination)
     {
-        $result = ['file' => '', 'size' => ''];
         /** @var File $backendModel */
         $backendModel = $this->getBackendModel($fileId);
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
@@ -143,7 +142,9 @@ class FileProcessor
         $uploader->setFilesDispersion(false);
         $uploader->setAllowedExtensions($backendModel->getAllowedExtensions());
         $uploader->addValidateCallback('size', $backendModel, 'validateMaxSize');
-        return array_intersect_key($uploader->save($destination), $result);
+
+        $result = $uploader->save($destination);
+        return $result;
     }
 
     /**

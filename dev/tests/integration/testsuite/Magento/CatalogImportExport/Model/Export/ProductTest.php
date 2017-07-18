@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,6 +68,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     * @magentoDbIsolationEnabled
      */
     public function testExport()
     {
@@ -84,10 +87,28 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('test_option_code_2', $exportData);
         $this->assertContains('max_characters=10', $exportData);
         $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
+        $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
+        $this->assertEquals(1, $occurrencesCount);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
+     * @magentoDbIsolationEnabled
+     */
+    public function testExportSpecialChars()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertContains('simple ""1""', $exportData);
     }
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     * @magentoDbIsolationEnabled
      */
     public function testExportWithProductLinks()
     {
@@ -102,6 +123,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
      *
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
@@ -163,7 +186,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verifies if exception processing works properly
-     *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
     public function testExceptionInGetExportData()
@@ -227,7 +250,34 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains('""Option 2""', $exportData);
         $this->assertContains('""Option 3""', $exportData);
-        $this->assertContains('""Option 4 """"!@#$%^&*"""', $exportData);
-        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;"""', $exportData);
+        $this->assertContains('""Option 4 """"!@#$%^&*""', $exportData);
+        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
+    }
+
+    /**
+     * Verify that "category ids" filter correctly applies to export result
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_categories.php
+     */
+    public function testCategoryIdsFilter()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $this->model->setParameters([
+            \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
+                'category_ids' => '2,13'
+            ]
+        ]);
+
+        $exportData = $this->model->export();
+
+        $this->assertContains('Simple Product', $exportData);
+        $this->assertContains('Simple Product Three', $exportData);
+        $this->assertNotContains('Simple Product Two', $exportData);
+        $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
     }
 }

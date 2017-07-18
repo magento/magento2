@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
-use Magento\Setup\Module\Di\Compiler\Log\Log;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\ObjectManager\Code\Generator\Factory as FactoryGenerator;
+use Magento\Setup\Module\Di\Compiler\Log\Log;
 
 class PhpScanner implements ScannerInterface
 {
@@ -83,7 +83,7 @@ class PhpScanner implements ScannerInterface
         ) {
             /** Process special cases for extension class and extension interface */
             return $sourceClassName . 'Interface';
-        } else if ($entityType == FactoryGenerator::ENTITY_TYPE) {
+        } elseif ($entityType == FactoryGenerator::ENTITY_TYPE) {
             $extensionAttributesSuffix = ucfirst(ExtensionAttributesGenerator::ENTITY_TYPE);
             if (substr($sourceClassName, -strlen($extensionAttributesSuffix)) == $extensionAttributesSuffix) {
                 /** Process special case for extension factories */
@@ -107,7 +107,7 @@ class PhpScanner implements ScannerInterface
      */
     protected function _fetchFactories($reflectionClass, $file)
     {
-        $factorySuffix = '\\'.ucfirst(FactoryGenerator::ENTITY_TYPE);
+        $factorySuffix = '\\' . ucfirst(FactoryGenerator::ENTITY_TYPE);
         $absentFactories = $this->_findMissingClasses(
             $file,
             $reflectionClass,

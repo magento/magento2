@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,22 +14,22 @@
 <?php $_readonly = ''; ?>
 <?php endif; ?>
 <fieldset class="fieldset form-inline">
-<legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Advanced Inventory') ?></span></legend>
+<legend class="legend"><span><?= /* @escapeNotVerified */ __('Advanced Inventory') ?></span></legend>
 <br>
 <div id="table_cataloginventory">
 <div class="field">
     <label class="label" for="inventory_manage_stock">
-        <span><?php /* @escapeNotVerified */ echo __('Manage Stock') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Manage Stock') ?></span>
     </label>
     <div class="control">
-        <select id="inventory_manage_stock" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][manage_stock]" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <option value="1"><?php /* @escapeNotVerified */ echo __('Yes') ?></option>
-            <option value="0"<?php if ($block->getFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('No') ?></option>
+        <select id="inventory_manage_stock" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][manage_stock]" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <option value="1"><?= /* @escapeNotVerified */ __('Yes') ?></option>
+            <option value="0"<?php if ($block->getFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('No') ?></option>
         </select>
-        <input type="hidden" id="inventory_manage_stock_default" value="<?php /* @escapeNotVerified */ echo $block->getDefaultConfigValue('manage_stock'); ?>">
+        <input type="hidden" id="inventory_manage_stock_default" value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('manage_stock') ?>">
         <?php $_checked = ($block->getFieldValue('use_config_manage_stock') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_manage_stock" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_manage_stock]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-        <label for="inventory_use_config_manage_stock"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+        <input type="checkbox" id="inventory_use_config_manage_stock" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_manage_stock]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
+        <label for="inventory_use_config_manage_stock"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
@@ -39,37 +39,37 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <?php if (!$block->getProduct()->isComposite()): ?>
 <div class="field">
     <label class="label" for="inventory_qty">
-        <span><?php /* @escapeNotVerified */ echo __('Qty') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Qty') ?></span>
     </label>
     <div class="control">
         <?php if (!$_readonly): ?>
-        <input type="hidden" id="original_inventory_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][original_inventory_qty]" value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('qty') * 1 ?>">
+        <input type="hidden" id="original_inventory_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][original_inventory_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('qty') * 1 ?>">
         <?php endif;?>
-        <input type="text" class="input-text validate-number" id="inventory_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][qty]" value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('qty') * 1 ?>" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <input type="text" class="input-text validate-number" id="inventory_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <div class="field">
     <label class="label" for="inventory_min_qty">
-        <span><?php /* @escapeNotVerified */ echo __('Out-of-Stock Threshold') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Out-of-Stock Threshold') ?></span>
     </label>
     <div class="control">
-        <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][min_qty]" value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('min_qty') * 1 ?>" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][min_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('min_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
 
         <div class="control-inner-wrap">
             <?php $_checked = ($block->getFieldValue('use_config_min_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-            <input type="checkbox" id="inventory_use_config_min_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_min_qty"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_min_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_min_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
 
         <?php if (!$block->isReadonly()): ?>
@@ -81,22 +81,22 @@ toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_m
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <div class="field">
     <label class="label" for="inventory_min_sale_qty">
-        <span><?php /* @escapeNotVerified */ echo __('Minimum Qty Allowed in Shopping Cart') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Minimum Qty Allowed in Shopping Cart') ?></span>
     </label>
     <div class="control">
         <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
-               name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][min_sale_qty]"
-               value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('min_sale_qty') * 1 ?>" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][min_sale_qty]"
+               value="<?= /* @escapeNotVerified */ $block->getFieldValue('min_sale_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
         <div class="control-inner-wrap">
         <?php $_checked = ($block->getFieldValue('use_config_min_sale_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-            <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_min_sale_qty"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_min_sale_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
@@ -107,20 +107,20 @@ toggleValueElements($('inventory_use_config_min_sale_qty'), $('inventory_use_con
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <div class="field">
     <label class="label" for="inventory_max_sale_qty">
-        <span><?php /* @escapeNotVerified */ echo __('Maximum Qty Allowed in Shopping Cart') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Maximum Qty Allowed in Shopping Cart') ?></span>
     </label>
     <div class="control">
-        <input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][max_sale_qty]" value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('max_sale_qty') * 1 ?>" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][max_sale_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('max_sale_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
         <?php $_checked = ($block->getFieldValue('use_config_max_sale_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
         <div class="control-inner-wrap">
-            <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_max_sale_qty"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_max_sale_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
@@ -131,39 +131,39 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
     <?php if ($block->canUseQtyDecimals()): ?>
     <div class="field">
         <label class="label" for="inventory_is_qty_decimal">
-            <span><?php /* @escapeNotVerified */ echo __('Qty Uses Decimals') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Qty Uses Decimals') ?></span>
         </label>
         <div class="control">
-            <select id="inventory_is_qty_decimal" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][is_qty_decimal]" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-                <option value="0"><?php /* @escapeNotVerified */ echo __('No') ?></option>
-                <option value="1"<?php if ($block->getFieldValue('is_qty_decimal') == 1): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('Yes') ?></option>
+            <select id="inventory_is_qty_decimal" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][is_qty_decimal]" <?= /* @escapeNotVerified */ $_readonly ?>>
+                <option value="0"><?= /* @escapeNotVerified */ __('No') ?></option>
+                <option value="1"<?php if ($block->getFieldValue('is_qty_decimal') == 1): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('Yes') ?></option>
             </select>
         </div>
         <?php if (!$block->isSingleStoreMode()): ?>
-        <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+        <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
         <?php endif; ?>
     </div>
 
         <?php if (!$block->isVirtual()) : ?>
         <div class="field">
             <label class="label" for="inventory_is_decimal_divided">
-                <span><?php /* @escapeNotVerified */ echo __('Allow Multiple Boxes for Shipping') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Allow Multiple Boxes for Shipping') ?></span>
             </label>
             <div class="control">
-                <select id="inventory_is_decimal_divided" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][is_decimal_divided]" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-                    <option value="0"><?php /* @escapeNotVerified */ echo __('No') ?></option>
-                    <option value="1"<?php if ($block->getFieldValue('is_decimal_divided') == 1): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('Yes') ?></option>
+                <select id="inventory_is_decimal_divided" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][is_decimal_divided]" <?= /* @escapeNotVerified */ $_readonly ?>>
+                    <option value="0"><?= /* @escapeNotVerified */ __('No') ?></option>
+                    <option value="1"<?php if ($block->getFieldValue('is_decimal_divided') == 1): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('Yes') ?></option>
                 </select>
             </div>
             <?php if (!$block->isSingleStoreMode()): ?>
-            <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+            <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
             <?php endif; ?>
         </div>
             <?php endif; ?>
@@ -171,20 +171,20 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
 
 <div class="field">
     <label class="label" for="inventory_backorders">
-        <span><?php /* @escapeNotVerified */ echo __('Backorders') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Backorders') ?></span>
     </label>
     <div class="control">
-        <select id="inventory_backorders" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][backorders]" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <select id="inventory_backorders" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][backorders]" <?= /* @escapeNotVerified */ $_readonly ?>>
             <?php foreach ($block->getBackordersOption() as $option): ?>
             <?php $_selected = ($option['value'] == $block->getFieldValue('backorders')) ? 'selected="selected"' : '' ?>
-            <option value="<?php /* @escapeNotVerified */ echo $option['value'] ?>" <?php /* @escapeNotVerified */ echo $_selected ?>><?php /* @escapeNotVerified */ echo $option['label'] ?></option>
+            <option value="<?= /* @escapeNotVerified */ $option['value'] ?>" <?= /* @escapeNotVerified */ $_selected ?>><?= /* @escapeNotVerified */ $option['label'] ?></option>
             <?php endforeach; ?>
         </select>
 
         <div class="control-inner-wrap">
             <?php $_checked = ($block->getFieldValue('use_config_backorders') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-            <input type="checkbox" id="inventory_use_config_backorders" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_backorders"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_backorders" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_backorders"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
@@ -195,21 +195,21 @@ toggleValueElements($('inventory_use_config_backorders'), $('inventory_use_confi
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <div class="field">
     <label class="label" for="inventory_notify_stock_qty">
-        <span><?php /* @escapeNotVerified */ echo __('Notify for Quantity Below') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Notify for Quantity Below') ?></span>
     </label>
     <div class="control">
-        <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][notify_stock_qty]" value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('notify_stock_qty') * 1 ?>" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][notify_stock_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('notify_stock_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
 
         <div class="control-inner-wrap">
             <?php $_checked = ($block->getFieldValue('use_config_notify_stock_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-            <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_notify_stock_qty"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_notify_stock_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
@@ -220,27 +220,27 @@ toggleValueElements($('inventory_use_config_notify_stock_qty'), $('inventory_use
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
     <?php endif; ?>
 <div class="field">
     <label class="label" for="inventory_enable_qty_increments">
-        <span><?php /* @escapeNotVerified */ echo __('Enable Qty Increments') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Enable Qty Increments') ?></span>
     </label>
     <div class="control">
         <?php $qtyIncrementsEnabled = $block->getFieldValue('enable_qty_increments'); ?>
-        <select id="inventory_enable_qty_increments" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][enable_qty_increments]" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <option value="1"<?php if ($qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('Yes') ?></option>
-            <option value="0"<?php if (!$qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('No') ?></option>
+        <select id="inventory_enable_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][enable_qty_increments]" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <option value="1"<?php if ($qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('Yes') ?></option>
+            <option value="0"<?php if (!$qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('No') ?></option>
         </select>
-        <input type="hidden" id="inventory_enable_qty_increments_default" value="<?php /* @escapeNotVerified */ echo $block->getDefaultConfigValue('enable_qty_increments'); ?>">
+        <input type="hidden" id="inventory_enable_qty_increments_default" value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('enable_qty_increments') ?>">
 
         <div class="control-inner-wrap">
             <?php $_checked = ($block->getFieldValue('use_config_enable_qty_inc') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-            <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_enable_qty_increments"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_enable_qty_increments"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
@@ -251,20 +251,20 @@ toggleValueElements($('inventory_use_config_enable_qty_increments'), $('inventor
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <div class="field">
     <label class="label" for="inventory_qty_increments">
-        <span><?php /* @escapeNotVerified */ echo __('Qty Increments') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Qty Increments') ?></span>
     </label>
     <div class="control">
-        <input type="text" class="input-text validate-digits" id="inventory_qty_increments" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][qty_increments]" value="<?php /* @escapeNotVerified */ echo $block->getFieldValue('qty_increments') * 1 ?>" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <input type="text" class="input-text validate-digits" id="inventory_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][qty_increments]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('qty_increments') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
         <div class="control-inner-wrap">
             <?php $_checked = ($block->getFieldValue('use_config_qty_increments') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-            <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?php /* @escapeNotVerified */ echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php /* @escapeNotVerified */ echo $_readonly;?>>
-            <label for="inventory_use_config_qty_increments"><?php /* @escapeNotVerified */ echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
+            <label for="inventory_use_config_qty_increments"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
@@ -275,24 +275,24 @@ toggleValueElements($('inventory_use_config_qty_increments'), $('inventory_use_c
         <?php endif; ?>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 
 <div class="field">
     <label class="label" for="inventory_stock_availability">
-        <span><?php /* @escapeNotVerified */ echo __('Stock Availability') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Stock Availability') ?></span>
     </label>
     <div class="control">
-        <select id="inventory_stock_availability" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][is_in_stock]" <?php /* @escapeNotVerified */ echo $_readonly;?>>
+        <select id="inventory_stock_availability" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][is_in_stock]" <?= /* @escapeNotVerified */ $_readonly ?>>
             <?php foreach ($block->getStockOption() as $option): ?>
             <?php $_selected = ($block->getFieldValue('is_in_stock') !== null && $option['value'] == $block->getFieldValue('is_in_stock')) ? 'selected="selected"' : '' ?>
-            <option value="<?php /* @escapeNotVerified */ echo $option['value'] ?>" <?php /* @escapeNotVerified */ echo $_selected ?>><?php /* @escapeNotVerified */ echo $option['label'] ?></option>
+            <option value="<?= /* @escapeNotVerified */ $option['value'] ?>" <?= /* @escapeNotVerified */ $_selected ?>><?= /* @escapeNotVerified */ $option['label'] ?></option>
             <?php endforeach; ?>
         </select>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>
-    <div class="field-service"><?php /* @escapeNotVerified */ echo __('[GLOBAL]') ?></div>
+    <div class="field-service"><?= /* @escapeNotVerified */ __('[GLOBAL]') ?></div>
     <?php endif; ?>
 </div>
 </div>

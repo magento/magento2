@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Api;
@@ -772,11 +772,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
                 Cart::AMOUNT_TAX      => 'TAXAMT',
                 Cart::AMOUNT_SHIPPING => 'FREIGHTAMT',
                 'amount'              => 'PAYMENTREQUEST_0_ITEMAMT',
-            ];
-            $this->_lineItemExportItemsFormat = [
-                'name'   => 'L_PAYMENTREQUEST_0_NAME%d',
-                'qty'    => 'L_PAYMENTREQUEST_0_QTY%d',
-                'amount' => 'L_PAYMENTREQUEST_0_AMT%d',
             ];
             $request = $requestBefore;
             $result = parent::_exportLineItems($request, $i);

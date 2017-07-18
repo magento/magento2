@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Option;
 
 /**
  * Bundle Options Resource Collection
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -44,7 +45,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->getSelect()->joinLeft(
             ['option_value_default' => $this->getTable('catalog_product_bundle_option_value')],
-            'main_table.option_id = option_value_default.option_id and option_value_default.store_id = 0',
+            implode(
+                ' AND ',
+                [
+                    'main_table.option_id = option_value_default.option_id',
+                    'main_table.parent_id = option_value_default.parent_product_id',
+                    'option_value_default.store_id = 0'
+                ]
+            ),
             []
         )->columns(
             ['default_title' => 'option_value_default.title']
@@ -61,7 +69,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             )->joinLeft(
                 ['option_value' => $this->getTable('catalog_product_bundle_option_value')],
                 $this->getConnection()->quoteInto(
-                    'main_table.option_id = option_value.option_id and option_value.store_id = ?',
+                    implode(
+                        ' AND ',
+                        [
+                            'main_table.option_id = option_value.option_id',
+                            'main_table.parent_id = option_value.parent_product_id',
+                            'option_value.store_id = ?'
+                        ]
+                    ),
                     $storeId
                 ),
                 []

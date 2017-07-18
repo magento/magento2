@@ -1,6 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Creates a simple product to be used for test cases.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,7 +74,8 @@ $product->setTypeId(Type::TYPE_SIMPLE)
             'is_in_stock'               => 1,
         ]
     )->setCanSaveCustomOptions(true)
-    ->setHasOptions(true);
+    ->setHasOptions(true)
+    ->setCustomAttribute('test_configurable', 42);
 
 $oldOptions = [
     [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Shell\Test\Unit;
@@ -17,6 +17,15 @@ class CommandRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             "php -r " . escapeshellarg($testArgument) . " 2>&1 | grep " . escapeshellarg($testArgument2) . " 2>&1",
             $commandRenderer->render('php -r %s | grep %s', [$testArgument, $testArgument2])
+        );
+    }
+
+    public function testRenderWithoutArguments()
+    {
+        $commandRenderer = new CommandRenderer();
+        $this->assertEquals(
+            "php -r %s 2>&1 | grep %s 2>&1",
+            $commandRenderer->render('php -r %s | grep %s', [])
         );
     }
 }

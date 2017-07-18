@@ -1,8 +1,6 @@
 <?php
 /**
- * Initialize application object manager.
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -10,22 +8,20 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\App\ObjectManager\Environment;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Code\GeneratedFiles;
 
 /**
+ * Initialization of object manager is a complex operation.
+ * To abstract away this complexity, this class was introduced.
+ * Objects of this class create fully initialized instance of object manager with "global" configuration loaded.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * Class ObjectManagerFactory
  */
 class ObjectManagerFactory
 {
-    /**
-     * Path to definitions format in deployment configuration
-     */
-    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
-
     /**
      * Initialization parameter for a custom deployment configuration file
      */
@@ -41,7 +37,7 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $_locatorClassName = \Magento\Framework\ObjectManager\ObjectManager::class;
+    protected $_locatorClassName = \Magento\Framework\App\ObjectManager::class;
 
     /**
      * Config class name
@@ -117,18 +113,16 @@ class ObjectManagerFactory
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
-            $this->directoryList->getPath(DirectoryList::DI),
-            $this->directoryList->getPath(DirectoryList::GENERATION),
-            $deploymentConfig->get(self::CONFIG_PATH_DEFINITION_FORMAT, Serialized::MODE_NAME)
+            $this->directoryList->getPath(DirectoryList::GENERATED_CODE)
         );
 
-        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
+        $definitions = $definitionFactory->createClassDefinition();
         $relations = $definitionFactory->createRelations();
 
         /** @var EnvironmentFactory $envFactory */
         $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $envFactory->createEnvironment();
+        $env = $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
@@ -180,7 +174,6 @@ class ObjectManagerFactory
         $objectManager = new $this->_locatorClassName($this->factory, $diConfig, $sharedInstances);
 
         $this->factory->setObjectManager($objectManager);
-        ObjectManager::setInstance($objectManager);
 
         $generatorParams = $diConfig->getArguments(\Magento\Framework\Code\Generator::class);
         /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
@@ -298,6 +291,8 @@ class ObjectManagerFactory
      * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @return \Magento\Framework\Interception\PluginList\PluginList
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createPluginList(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -312,8 +307,7 @@ class ObjectManagerFactory
                 'relations' => $relations,
                 'definitions' => $definitionFactory->createPluginDefinition(),
                 'omConfig' => $diConfig,
-                'classDefinitions' => $definitions instanceof
-                \Magento\Framework\ObjectManager\Definition\Compiled ? $definitions : null
+                'classDefinitions' => null
             ]
         );
     }

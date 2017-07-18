@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\View\Element\AbstractBlock;
@@ -207,13 +204,12 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $moduleName = 'Test';
         $this->block->setData('module_name', $moduleName);
 
-        $this->eventManagerMock->expects($this->any())
+        $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
-            ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('advanced/modules_disable_output/' . $moduleName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
+            ->willReturnMap([
+                ['view_block_abstract_to_html_before', ['block' => $this->block]],
+                ['view_block_abstract_to_html_after', ['block' => $this->block]],
+            ]);
 
         $this->assertSame('', $this->block->toHtml());
     }
@@ -246,10 +242,6 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->eventManagerMock->expects($expectsDispatchEvent)
             ->method('dispatch');
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('advanced/modules_disable_output/' . $moduleName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
         $this->cacheStateMock->expects($this->any())
             ->method('isEnabled')
             ->with(AbstractBlock::CACHE_GROUP)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -335,7 +335,8 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getBuildNotationCode()
     {
-        return sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
+        $notationCode = $this->_scopeConfig->getValue('paypal/notation_code', ScopeInterface::SCOPE_STORES);
+        return $notationCode ?: sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\View;
@@ -113,7 +113,7 @@ interface StateInterface
     /**
      * Set state updated time
      *
-     * @param string|int|\DateTime $updated
+     * @param string|int|\DateTimeInterface $updated
      * @return \Magento\Framework\Mview\View\StateInterface
      */
     public function setUpdated($updated);

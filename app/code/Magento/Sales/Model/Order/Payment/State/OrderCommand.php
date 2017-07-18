@@ -1,50 +1,68 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Payment\State;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\StatusResolver;
 
-/**
- * Class Order
- */
 class OrderCommand implements CommandInterface
 {
     /**
-     * Run command
-     *
+     * @var StatusResolver
+     */
+    private $statusResolver;
+
+    /**
+     * @param StatusResolver|null $statusResolver
+     */
+    public function __construct(StatusResolver $statusResolver = null)
+    {
+        $this->statusResolver = $statusResolver
+            ? : ObjectManager::getInstance()->get(StatusResolver::class);
+    }
+
+    /**
      * @param OrderPaymentInterface $payment
-     * @param string|float|int $amount
+     * @param string|float $amount
      * @param OrderInterface $order
      * @return string
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
         $state = Order::STATE_PROCESSING;
-        $status = false;
-        $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
-        if ($payment->getIsTransactionPending()) {
-            $message = __(
-                'The order amount of %1 is pending approval on the payment gateway.',
-                $formattedAmount
-            );
-            $state = Order::STATE_PAYMENT_REVIEW;
-            if ($payment->getIsFraudDetected()) {
-                $status = Order::STATUS_FRAUD;
-            }
-        } else {
-            $message = __('Ordered amount of %1', $formattedAmount);
-        }
-        $this->setOrderStateAndStatus($order, $status, $state);
+        $status = null;
+        $message = 'Ordered amount of %1';
 
-        return $message;
+        if ($payment->getIsTransactionPending()) {
+            $state = Order::STATE_PAYMENT_REVIEW;
+            $message = 'The order amount of %1 is pending approval on the payment gateway.';
+        }
+
+        if ($payment->getIsFraudDetected()) {
+            $state = Order::STATE_PAYMENT_REVIEW;
+            $status = Order::STATUS_FRAUD;
+            $message = 'The order amount of %1 is pending approval on the payment gateway.';
+        }
+
+        if (!isset($status)) {
+            $status = $this->statusResolver->getOrderStatusByState($order, $state);
+        }
+
+        $order->setState($state);
+        $order->setStatus($status);
+
+        return __($message, $order->getBaseCurrency()->formatTxt($amount));
     }
 
     /**
+     * @deprecated Replaced by a StatusResolver class call.
+     *
      * @param Order $order
      * @param string $status
      * @param string $state

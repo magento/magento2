@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -9,6 +9,8 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Update handler for catalog product gallery.
+ *
+ * @api
  */
 class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 {
@@ -29,7 +31,10 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
                     $recordsToDelete[] = $image['value_id'];
-                    $filesToDelete[] = ltrim($image['file'], '/');
+                    // only delete physical files if they are not used by any other products
+                    if (!$this->resourceModel->countImageUses($image['file']) > 1) {
+                        $filesToDelete[] = ltrim($image['file'], '/');
+                    }
                 }
             }
         }

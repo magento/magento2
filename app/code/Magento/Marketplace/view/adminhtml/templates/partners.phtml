@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,24 +15,24 @@ $partners = $block->getPartners();
         <div class="partner">
             <img
                 class="partner-image"
-                src="<?php echo $block->escapeHtml($partner['img']);?>"
-                alt="<?php echo $block->escapeHtml($partner['title']);?>"/>
-            <h3 class="partner-title"><?php echo $block->escapeHtml($partner['title']);?></h3>
+                src="<?= $block->escapeHtml($partner['img']) ?>"
+                alt="<?= $block->escapeHtml($partner['title']) ?>"/>
+            <h3 class="partner-title"><?= $block->escapeHtml($partner['title']) ?></h3>
             <p class="partner-description">
-                <?php echo $block->escapeHtml($partner['description']);?>
+                <?= $block->escapeHtml($partner['description']) ?>
                 <br />
-                <a href="<?php echo $block->escapeHtml($partner['url_page']);?>" target="_blank">
-                    <?php /* @escapeNotVerified */ echo __('Read More'); ?>
+                <a href="<?= $block->escapeHtml($partner['url_page']) ?>" target="_blank">
+                    <?= /* @escapeNotVerified */ __('Read More') ?>
                 </a>
                 <br />
-                <a href="<?php echo $block->escapeHtml($partner['url_partner_page']);?>" target="_blank">
-                    <?php /* @escapeNotVerified */ echo __('Partner Page'); ?>
+                <a href="<?= $block->escapeHtml($partner['url_partner_page']) ?>" target="_blank">
+                    <?= /* @escapeNotVerified */ __('Partner Page') ?>
                 </a>
             </p>
         </div>
     <?php endforeach; ?>
 <?php else : ?>
     <p>
-        <?php /* @escapeNotVerified */ echo __('No partners were found'); ?>
+        <?= /* @escapeNotVerified */ __('No partners were found') ?>
     </p>
 <?php endif; ?>

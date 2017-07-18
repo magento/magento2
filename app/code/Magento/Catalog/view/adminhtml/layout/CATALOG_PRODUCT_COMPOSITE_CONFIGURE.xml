@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset" name="product.composite.fieldset">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options" template="catalog/product/composite/fieldset/options.phtml">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options" name="product.composite.fieldset.options" template="Magento_Catalog::catalog/product/composite/fieldset/options.phtml">
                 <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" as="default" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/default.phtml"/>
                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Text" as="text" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/text.phtml"/>
                 <block class="Magento\Catalog\Block\Product\View\Options\Type\File" as="file" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/file.phtml"/>
@@ -16,7 +16,7 @@
                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" as="date" template="Magento_Catalog::catalog/product/composite/fieldset/options/type/date.phtml"/>
                 <block class="Magento\Framework\View\Element\Template" name="product.composite.fieldset.options.js" as="options_js" template="Magento_Catalog::catalog/product/composite/fieldset/options/js.phtml"/>
             </block>
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Qty" name="product.composite.fieldset.qty" template="catalog/product/composite/fieldset/qty.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Qty" name="product.composite.fieldset.qty" template="Magento_Catalog::catalog/product/composite/fieldset/qty.phtml"/>
         </block>
         <block class="Magento\Framework\Pricing\Render" name="product.price.render.default">
             <arguments>

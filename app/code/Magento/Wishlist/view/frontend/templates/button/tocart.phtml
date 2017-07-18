@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
-    <button type="button" data-role="all-tocart" title="<?php echo $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
-        <span><?php echo $block->escapeHtml(__('Add All to Cart')) ?></span>
+    <button type="button" data-role="all-tocart" title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
+        <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
     </button>
 <?php endif;?>

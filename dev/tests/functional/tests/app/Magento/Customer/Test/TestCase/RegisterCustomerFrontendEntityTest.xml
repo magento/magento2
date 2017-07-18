@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest" summary="Register New Customer" ticketId="MAGETWO-23546">
         <variation name="RegisterCustomerFrontendEntityTestVariation1" summary="Register new customer">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>

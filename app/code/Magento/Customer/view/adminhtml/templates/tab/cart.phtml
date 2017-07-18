@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@
 <div class="content-header skip-header">
     <table>
         <tr>
-            <td style="width:50%;"><h4><?php echo $block->escapeHtml($block->getCartHeader()); ?></h4></td>
+            <td style="width:50%;"><h4><?= $block->escapeHtml($block->getCartHeader()) ?></h4></td>
         </tr>
     </table>
 </div>
 <?php endif ?>
-<?php echo $block->getGridParentHtml() ?>
+<?= $block->getGridParentHtml() ?>
 <?php if ($block->canDisplayContainer()) : ?>
 <?php
     $listType = $block->getJsObjectName();
@@ -29,19 +29,19 @@ require([
     "Magento_Catalog/catalog/product/composite/configure"
 ], function(alert, confirm){
 
-<?php echo $block->escapeJs($block->getJsObjectName()) ?>cartControl = {
+<?= $block->escapeJs($block->getJsObjectName()) ?>cartControl = {
     reload: function (params) {
         if (!params) {
             params = {};
         }
-        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = params;
-        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reload();
-        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = {};
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = params;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.reload();
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = {};
     },
 
     configureItem: function (itemId) {
-        productConfigure.setOnLoadIFrameCallback('<?php echo $block->escapeJs($listType) ?>', this.cbOnLoadIframe.bind(this));
-        productConfigure.showItemConfiguration('<?php echo $block->escapeJs($listType) ?>', itemId);
+        productConfigure.setOnLoadIFrameCallback('<?= $block->escapeJs($listType) ?>', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('<?= $block->escapeJs($listType) ?>', itemId);
         return false;
     },
 
@@ -57,14 +57,14 @@ require([
 
         if (!itemId) {
             alert({
-                content: '<?php echo $block->escapeJs(__('No item specified.')) ?>'
+                content: '<?= $block->escapeJs(__('No item specified.')) ?>'
             });
 
             return false;
         }
 
         confirm({
-            content: '<?php echo $block->escapeJs(__('Are you sure you want to remove this item?')) ?>',
+            content: '<?= $block->escapeJs(__('Are you sure you want to remove this item?')) ?>',
             actions: {
                 confirm: function(){
                     self.reload({'delete':itemId});
@@ -81,10 +81,10 @@ $params = [
 ];
 ?>
 productConfigure.addListType(
-    '<?php echo $block->escapeJs($listType) ?>',
+    '<?= $block->escapeJs($listType) ?>',
     {
-        urlFetch: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params))) ?>',
-        urlConfirm: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params))) ?>'
+        urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params))) ?>',
+        urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params))) ?>'
     }
 );
 

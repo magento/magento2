@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -50,9 +50,13 @@ define(
                     if (address) {
                         estimatedAddress = address.isEditable() ?
                             addressConverter.quoteAddressToFormAddressData(address) :
-                            addressConverter.quoteAddressToFormAddressData(
-                                addressConverter.addressToEstimationAddress(address)
-                            );
+                            {
+                                // only the following fields must be used by estimation form data provider
+                                'country_id': address.countryId,
+                                region: address.region,
+                                'region_id': address.regionId,
+                                postcode: address.postcode
+                            };
                         checkoutProvider.set(
                             'shippingAddress',
                             $.extend({}, checkoutProvider.get('shippingAddress'), estimatedAddress)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,21 +8,21 @@
 // @deprecated
 ?>
 <div class="entry-edit-head">
-    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $block->escapeHtml(__('Assigned Options')) ?></h4>
+    <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('Assigned Options')) ?></h4>
 </div>
 <fieldset id="options_form">
 <?php if (!$options): ?>
     <?php for ($_i = 1; $_i <= 5; $_i++): ?>
         <span class="field-row">
-            <label for="option_<?php /* @noEscape */ echo $_i ?>"><?php echo $block->escapeHtml(__('Option Title:')) ?></label>
-            <input id="option_<?php /* @noEscape */ echo $_i ?>" name="option[<?php /* @noEscape */ echo $_i ?>][code]" value="<?php /* @noEscape */ echo $_i ?>" class="input-text" type="text" />
+            <label for="option_<?= /* @noEscape */ $_i ?>"><?= $block->escapeHtml(__('Option Title:')) ?></label>
+            <input id="option_<?= /* @noEscape */ $_i ?>" name="option[<?= /* @noEscape */ $_i ?>][code]" value="<?= /* @noEscape */ $_i ?>" class="input-text" type="text" />
         </span>
     <?php endfor; ?>
 <?php elseif ($options->getSize() > 0): ?>
     <?php foreach ($options->getItems() as $_item): ?>
         <span class="field-row">
-            <label for="option_<?php echo $block->escapeHtmlAttr($_item->getId()) ?>"><?php echo $block->escapeHtml(__('Option Title:')) ?></label>
-            <input id="option_<?php echo $block->escapeHtmlAttr($_item->getId()) ?>" name="option[<?php echo $block->escapeHtmlAttr($_item->getId()) ?>][code]" value="<?php echo $block->escapeHtmlAttr($_item->getCode()) ?>" class="input-text" type="text" />
+            <label for="option_<?= $block->escapeHtmlAttr($_item->getId()) ?>"><?= $block->escapeHtml(__('Option Title:')) ?></label>
+            <input id="option_<?= $block->escapeHtmlAttr($_item->getId()) ?>" name="option[<?= $block->escapeHtmlAttr($_item->getId()) ?>][code]" value="<?= $block->escapeHtmlAttr($_item->getCode()) ?>" class="input-text" type="text" />
         </span>
     <?php endforeach; ?>
 <?php endif; ?>

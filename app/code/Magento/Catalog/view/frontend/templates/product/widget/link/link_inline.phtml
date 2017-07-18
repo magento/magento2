@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 ?>
 <span class="widget block block-product-link-inline">
-    <a <?php /* @escapeNotVerified */ echo $block->getLinkAttributes() ?>><span><?php echo $block->escapeHtml($block->getLabel()) ?></span></a>
+    <a <?= /* @escapeNotVerified */ $block->getLinkAttributes() ?>><span><?= $block->escapeHtml($block->getLabel()) ?></span></a>
 </span>

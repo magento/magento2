@@ -1,28 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Catalog product model
  *
+ * @api
  * @method Product setHasError(bool $value)
  * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
- * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
@@ -542,6 +541,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_getData(self::NAME);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -620,6 +620,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_getData(self::TYPE_ID);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1617,6 +1618,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isSalable()
     {
+        if ($this->_catalogProduct->getSkipSaleableCheck()) {
+            return true;
+        }
+        if (($this->getOrigData('status') != $this->getData('status'))
+            || $this->isStockStatusChanged()) {
+            $this->unsetData('salable');
+        }
+
+        if ($this->hasData('salable')) {
+            return $this->getData('salable');
+        }
         $this->_eventManager->dispatch('catalog_product_is_salable_before', ['product' => $this]);
 
         $salable = $this->isAvailable();
@@ -1626,7 +1638,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             'catalog_product_is_salable_after',
             ['product' => $this, 'salable' => $object]
         );
-        return $object->getIsSalable();
+        $this->setData('salable', $object->getIsSalable());
+        return $this->getData('salable');
     }
 
     /**
@@ -1636,7 +1649,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isAvailable()
     {
-        return $this->getTypeInstance()->isSalable($this) || $this->_catalogProduct->getSkipSaleableCheck();
+        return $this->_catalogProduct->getSkipSaleableCheck() || $this->getTypeInstance()->isSalable($this);
     }
 
     /**
@@ -2496,13 +2509,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface|null
+     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface
      */
     public function getExtensionAttributes()
     {
         $extensionAttributes = $this->_getExtensionAttributes();
-        if (!$extensionAttributes) {
-            return $this->extensionAttributesFactory->create(\Magento\Catalog\Api\Data\ProductInterface::class);
+        if (null === $extensionAttributes) {
+            /** @var \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionAttributesFactory->create(ProductInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
         }
         return $extensionAttributes;
     }
@@ -2517,6 +2532,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -2565,7 +2581,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                     ->convertFrom($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
-
         }
         return $this;
     }
@@ -2613,5 +2628,81 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
+    }
+
+    /**
+     * Set the associated products
+     *
+     * @param array $productIds
+     * @return $this
+     */
+    public function setAssociatedProductIds(array $productIds)
+    {
+        $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+        return $this;
+    }
+
+    /**
+     * Get quantity and stock status data
+     *
+     * @return array|null
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function getQuantityAndStockStatus()
+    {
+        return $this->getData('quantity_and_stock_status');
+    }
+
+    /**
+     * Set quantity and stock status data
+     *
+     * @param array $quantityAndStockStatusData
+     * @return $this
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function setQuantityAndStockStatus($quantityAndStockStatusData)
+    {
+        $this->setData('quantity_and_stock_status', $quantityAndStockStatusData);
+        return $this;
+    }
+
+    /**
+     * Get stock data
+     *
+     * @return array|null
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function getStockData()
+    {
+        return $this->getData('stock_data');
+    }
+
+    /**
+     * Set stock data
+     *
+     * @param array $stockData
+     * @return $this
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function setStockData($stockData)
+    {
+        $this->setData('stock_data', $stockData);
+        return $this;
     }
 }

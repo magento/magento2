@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// @codingStandardsIgnoreFile
 /**  @var $block \Magento\Checkout\Block\Cart */
 ?>
 <div class="cart-empty">
-    <?php echo $block->getChildHtml('checkout_cart_empty_widget'); ?>
-    <p><?php /* @escapeNotVerified */ echo __('You have no items in your shopping cart.') ?></p>
+    <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
+    <p><?= /* @escapeNotVerified */ __('You have no items in your shopping cart.') ?></p>
     <p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.',
             $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>
-    <?php echo $block->getChildHtml('shopping.cart.table.after'); ?>
+    <?= $block->getChildHtml('shopping.cart.table.after') ?>
 </div>

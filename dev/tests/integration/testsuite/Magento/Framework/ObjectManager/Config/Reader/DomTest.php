@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config\Reader;
 
+/**
+ * Class DomTest @covers \Magento\Framework\ObjectManager\Config\Reader\Dom
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,8 +63,9 @@ class DomTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
-        $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class
+        $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
+            ['argumentInterpreter' => $this->getArgumentInterpreterWithMockedStringUtils()]
         );
         $this->_validationState = new \Magento\Framework\App\Arguments\ValidationState(
             \Magento\Framework\App\State::MODE_DEFAULT
@@ -79,5 +85,48 @@ class DomTest extends \PHPUnit_Framework_TestCase
             $this->_validationState
         );
         $this->assertEquals($this->_mapper->convert($this->_mergedConfig), $model->read('scope'));
+    }
+
+    /**
+     * Replace Magento\Framework\Data\Argument\Interpreter\StringUtils with mock to check arguments wasn't translated.
+     *
+     * Check argument $data has not key $data['translate'], therefore
+     * Magento\Framework\Data\Argument\Interpreter\StringUtils::evaluate($data) won't translate $data['value'].
+     *
+     * @return \Magento\Framework\Data\Argument\Interpreter\Composite
+     */
+    private function getArgumentInterpreterWithMockedStringUtils()
+    {
+        $booleanUtils = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Stdlib\BooleanUtils::class
+        );
+        $stringUtilsMock = $this->getMockBuilder(\Magento\Framework\Data\Argument\Interpreter\StringUtils::class)
+            ->setConstructorArgs(['booleanUtils' => $booleanUtils])
+            ->setMethods(['evaluate'])
+            ->getMock();
+        $stringUtilsMock->expects($this->any())
+            ->method('evaluate')
+            ->with(self::callback(function ($data) {
+                return !isset($data['translate']);
+            }))
+            ->will(self::returnCallback(function ($data) {
+                return isset($data['value']) ? $data['value'] : '';
+            }));
+        $constInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Constant();
+        $composite = new \Magento\Framework\Data\Argument\Interpreter\Composite(
+            [
+                'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
+                'string' => $stringUtilsMock,
+                'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
+                'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
+                'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
+                'const' => $constInterpreter,
+                'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter),
+            ],
+            \Magento\Framework\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
+        );
+        $composite->addInterpreter('array', new \Magento\Framework\Data\Argument\Interpreter\ArrayType($composite));
+
+        return $composite;
     }
 }

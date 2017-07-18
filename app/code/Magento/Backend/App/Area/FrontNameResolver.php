@@ -2,7 +2,7 @@
 /**
  * Backend area front name resolver. Reads front name from configuration
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App\Area;
@@ -13,6 +13,9 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * @api
+ */
 class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
 {
     const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';

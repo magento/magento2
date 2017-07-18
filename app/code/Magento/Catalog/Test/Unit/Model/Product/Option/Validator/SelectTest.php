@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,40 +54,45 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param bool $expectedResult
      * @param array $value
      * @dataProvider isValidSuccessDataProvider
      */
-    public function testIsValidSuccess($value)
+    public function testIsValidSuccess($expectedResult, array $value)
     {
-        $value = [
-            'price_type' => 'fixed',
-            'price' => '10',
-            'title' => 'Some Title',
-        ];
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
         $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
         $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue([$value]));
-        $this->assertTrue($this->validator->isValid($this->valueMock));
-        $this->assertEmpty($this->validator->getMessages());
+        $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
     }
 
     public function isValidSuccessDataProvider()
     {
-        $value = [
-            'price_type' => 'fixed',
-            'price' => '10',
-            'title' => 'Some Title',
-        ];
-
-        $valueWithoutAllData = [
-            'some_data' => 'data',
-        ];
-
         return [
-            'all_data' => [$value],
-            'not_all_data' => [$valueWithoutAllData]
+            [
+                true,
+                [
+                    'price_type' => 'fixed',
+                    'price' => '10',
+                    'title' => 'Some Title',
+                ]
+            ],
+            [
+                true,
+                [
+                    'title' => 'Some Title',
+                ]
+            ],
+            [
+                false,
+                [
+                    'title' => 'Some Title',
+                    'price_type' => 'fixed',
+                    'price' => -10,
+                ]
+            ],
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,29 +10,29 @@
 ?>
 <div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="select-attributes-step">
     <div class="select-attributes-actions" data-type="skipKO">
-        <?= /* @noEscape */  $block->getAddNewAttributeButton(); ?>
+        <?= /* @noEscape */  $block->getAddNewAttributeButton() ?>
     </div>
-    <h2 class="steps-wizard-title"><?php echo $block->escapeHtml(
+    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
             __('Step 1: Select Attributes')
         ); ?></h2>
-    <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName()?>'">
-        <?php echo $block->escapeHtml(
+    <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
+        <?= $block->escapeHtml(
             __('Selected Attributes:')
         ); ?>
         <span data-bind="text: selectedAttributes() || '--'"></span>
     </div>
 </div>
-<?= $block->getChildHtml(); ?>
+<?= $block->getChildHtml() ?>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @noEscape */  $block->getComponentName()?>": {
+                    "<?= /* @noEscape */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
                         "multiselectName": "<?= /* @noEscape */ $block->getData('config/multiselectName') ?>",
                         "providerName": "<?= /* @noEscape */ $block->getData('config/providerName') ?>",
-                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName()?>"
+                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>"
                     }
                 }
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,6 +59,7 @@ $ruleData = [
     'customer_tax_class_ids' => [$customerTaxClass1->getId(), $customerTaxClass2->getId()],
     'product_tax_class_ids' => [$productTaxClass1->getId(), $productTaxClass2->getId()],
     'tax_rate_ids' => [$rate->getId()],
+    'tax_rates_codes' => [$rate->getId() => $rate->getCode()],
 ];
 
 $taxRule = $objectManager->create(\Magento\Tax\Model\Calculation\Rule::class)->setData($ruleData)->save();

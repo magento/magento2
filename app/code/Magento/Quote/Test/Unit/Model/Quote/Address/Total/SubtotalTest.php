@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
@@ -116,7 +116,14 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())->method('getWebsiteId')->willReturn(10);
         $product->expects($this->any())->method('getStore')->willReturn($store);
         $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
-
+        $extensionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+            ->setMethods(['getStockItem'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $extensionAttribute->expects($this->atLeastOnce())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
+        $product->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
         $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $quoteItem->setProduct($product)->setQuote($quote);
 

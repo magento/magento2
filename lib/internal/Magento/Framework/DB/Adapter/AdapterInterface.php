@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Adapter;
@@ -10,7 +10,7 @@ use Magento\Framework\DB\Ddl\Table;
 /**
  * Magento Database Adapter Interface
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface AdapterInterface
 {
@@ -464,7 +464,7 @@ interface AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   array $columns  the data array column map
+     * @param   string[] $columns  the data array column map
      * @param   array $data
      * @return  int
      */
@@ -667,7 +667,7 @@ interface AdapterInterface
     /**
      * Format Date to internal database date format
      *
-     * @param int|string|\DateTime $date
+     * @param int|string|\DateTimeInterface $date
      * @param boolean $includeTime
      * @return \Zend_Db_Expr
      */
@@ -927,7 +927,6 @@ interface AdapterInterface
      * @return string
      */
     public function getTableName($tableName);
-
 
     /**
      * Build a trigger name based on table name and trigger details

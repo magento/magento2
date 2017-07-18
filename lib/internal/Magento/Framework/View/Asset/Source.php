@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class Source
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected $varDir;
+    protected $tmpDir;
 
     /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Pool
@@ -87,7 +87,7 @@ class Source
         $this->filesystem = $filesystem;
         $this->readFactory = $readFactory;
         $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->varDir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->tmpDir = $filesystem->getDirectoryWrite(DirectoryList::TMP_MATERIALIZATION_DIR);
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
         $this->themeList = $themeList;
@@ -152,9 +152,9 @@ class Source
         $this->preProcessorPool->process($chain);
         $chain->assertValid();
         if ($chain->isChanged()) {
-            $dir = $this->varDir->getAbsolutePath();
-            $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
-            $this->varDir->writeFile($path, $chain->getContent());
+            $dir = $this->tmpDir->getAbsolutePath();
+            $path = $chain->getTargetAssetPath();
+            $this->tmpDir->writeFile($path, $chain->getContent());
         }
         if (empty($path)) {
             $result = false;

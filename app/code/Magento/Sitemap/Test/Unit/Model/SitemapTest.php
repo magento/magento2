@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Test\Unit\Model;
@@ -49,6 +49,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Filesystem\File\Write
      */
     protected $_fileMock;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
 
     /**
      * Set helper mocks, create resource model mock
@@ -473,6 +478,20 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
 
         $model = $this->_getModelMock(true);
 
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->setMethods(['isFrontUrlSecure', 'getBaseUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->atLeastOnce())->method('isFrontUrlSecure')->willReturn(false);
+        $storeMock->expects($this->atLeastOnce())
+            ->method('getBaseUrl')
+            ->with($this->isType('string'), false)
+            ->willReturn('http://store.com/');
+        $this->storeManagerMock->expects($this->atLeastOnce())
+            ->method('getStore')
+            ->with(1)
+            ->willReturn($storeMock);
+
         return $model;
     }
 
@@ -490,7 +509,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             '_getBaseDir',
             '_getFileObject',
             '_afterSave',
-            '_getStoreBaseUrl',
             '_getCurrentDateTime',
             '_getCategoryItemsCollection',
             '_getProductItemsCollection',
@@ -517,6 +535,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+
+        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
         $this->_sitemapProductMock->expects(
             $this->any()
         )->method(
@@ -535,13 +555,16 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                                 [
                                     'collection' => [
                                         new \Magento\Framework\DataObject(
-                                            ['url' => 'image1.png', 'caption' => 'caption & > title < "']
+                                            [
+                                                'url' => $storeBaseMediaUrl.'i/m/image1.png',
+                                                'caption' => 'caption & > title < "'
+                                            ]
                                         ),
                                         new \Magento\Framework\DataObject(
-                                            ['url' => 'image_no_caption.png', 'caption' => null]
+                                            ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
                                         ),
                                     ],
-                                    'thumbnail' => 'thumbnail.jpg',
+                                    'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
                                     'title' => 'Product & > title < "',
                                 ]
                             ),
@@ -562,7 +585,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $model->expects($this->any())->method('_getResource')->will($this->returnValue($this->_resourceMock));
-        $model->expects($this->any())->method('_getStoreBaseUrl')->will($this->returnValue('http://store.com/'));
         $model->expects(
             $this->any()
         )->method(
@@ -611,6 +633,10 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $cmsFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapCmsPageMock));
 
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->setMethods(['getStore'])
+            ->getMockForAbstractClass();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
             \Magento\Sitemap\Model\Sitemap::class,
@@ -618,6 +644,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'categoryFactory' => $categoryFactory,
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
+                'storeManager' => $this->storeManagerMock,
                 'sitemapData' => $this->_helperMockSitemap,
                 'filesystem' => $this->_filesystemMock
             ]

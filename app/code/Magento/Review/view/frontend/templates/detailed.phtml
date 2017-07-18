@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,15 +11,15 @@
 <?php if (!empty($collection) && $collection->getSize()): ?>
     <div class="table-wrapper">
         <table class="data table ratings review summary">
-            <caption class="table-caption"><?php echo $block->escapeHtml(__('Ratings Review Summary')); ?></caption>
+            <caption class="table-caption"><?= $block->escapeHtml(__('Ratings Review Summary')) ?></caption>
             <tbody>
             <?php foreach ($collection as $_rating): ?>
                 <?php if ($_rating->getSummary()): ?>
                     <tr>
-                        <th class="label" scope="row"><?php echo $block->escapeHtml(__($_rating->getRatingCode())) ?></th>
+                        <th class="label" scope="row"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></th>
                         <td class="value">
                             <div class="rating box">
-                                <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getSummary()) ?>%;"></div>
+                                <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getSummary()) ?>%;"></div>
                             </div>
                         </td>
                     </tr>

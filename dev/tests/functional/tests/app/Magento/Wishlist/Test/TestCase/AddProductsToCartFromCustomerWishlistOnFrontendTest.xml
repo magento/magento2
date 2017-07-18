@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Wishlist\Test\TestCase\AddProductsToCartFromCustomerWishlistOnFrontendTest" summary="Add Products from Wishlist to Cart" ticketId="MAGETWO-25268">
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="qty" xsi:type="string">2</data>
+            <data name="toUpdate" xsi:type="boolean">false</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
@@ -20,6 +22,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="products/2" xsi:type="string">catalogProductSimple::default</data>
@@ -41,21 +44,33 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation6">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">configurableProduct::default</data>
             <data name="qty" xsi:type="string">3</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation7">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="products/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="qty" xsi:type="string">2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="products/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="qty" xsi:type="string">2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
+        </variation>
+
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation9">
+            <data name="products/0" xsi:type="string">bundleProduct::default_with_one_simple_product_and_custom_option</data>
+            <data name="qty" xsi:type="string">1</data>
+            <data name="toConfigure" xsi:type="boolean">true</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProceedToCheckoutButton" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
     </testCase>

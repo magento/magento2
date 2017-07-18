@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,9 +34,9 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     private $rendererPool;
 
     /**
-     * @var ConfigurableOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configurableOptionsProvider;
+    private $lowestPriceOptionsProvider;
 
     /**
      * @var FinalPriceBox
@@ -59,15 +60,18 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configurableOptionsProvider = $this->getMockBuilder(ConfigurableOptionsProviderInterface::class)
+        $this->lowestPriceOptionsProvider = $this->getMockBuilder(LowestPriceOptionsProviderInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new FinalPriceBox(
-            $this->context,
-            $this->saleableItem,
-            $this->price,
-            $this->rendererPool,
-            $this->configurableOptionsProvider
+        $this->model = (new ObjectManager($this))->getObject(
+            FinalPriceBox::class,
+            [
+                'context' => $this->context,
+                'saleableItem' => $this->saleableItem,
+                'price' => $this->price,
+                'rendererPool' => $this->rendererPool,
+                'lowestPriceOptionsProvider' => $this->lowestPriceOptionsProvider,
+            ]
         );
     }
 
@@ -115,7 +119,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->willReturn($priceInfoMock);
 
-        $this->configurableOptionsProvider->expects($this->once())
+        $this->lowestPriceOptionsProvider->expects($this->once())
             ->method('getProducts')
             ->with($this->saleableItem)
             ->willReturn([$productMock]);

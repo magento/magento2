@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
@@ -39,6 +39,9 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
      */
     private $objectMock;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -52,6 +55,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $this->objectMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
     }
 
     public function testAroundDelete()
@@ -64,7 +68,8 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             CategoryRemovePlugin::class,
             [
                 'urlPersist' => $this->urlPersistMock,
-                'childrenCategoriesProvider' => $this->childrenCategoriesProviderMock
+                'childrenCategoriesProvider' => $this->childrenCategoriesProviderMock,
+                'serializer' => $this->serializerMock
             ]
         );
         $this->childrenCategoriesProviderMock->expects($this->once())
@@ -76,6 +81,9 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
         $this->urlPersistMock->expects($this->exactly(2))
             ->method('deleteByData');
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with(['category_id' => 1]);
         $this->assertSame(
             $this->subjectMock,
             $plugin->aroundDelete($this->subjectMock, $proceed, $this->objectMock)

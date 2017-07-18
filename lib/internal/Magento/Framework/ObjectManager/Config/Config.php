@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
@@ -73,6 +74,11 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * @var array
      */
     protected $_mergedArguments;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param RelationsInterface $relations
@@ -267,10 +273,12 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
         if ($this->_cache) {
             if (!$this->_currentCacheKey) {
                 $this->_currentCacheKey = md5(
-                    serialize([$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes])
+                    $this->getSerializer()->serialize(
+                        [$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes]
+                    )
                 );
             }
-            $key = md5($this->_currentCacheKey . serialize($configuration));
+            $key = md5($this->_currentCacheKey . $this->getSerializer()->serialize($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
                 list(
@@ -322,5 +330,20 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     public function getPreferences()
     {
         return $this->_preferences;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,27 +65,5 @@ class BundleSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             $this->bundleSelectionFactory
                 ->create($this->bundleMock, $this->selectionMock, 2., ['test' => 'some value'])
         );
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testCreateException()
-    {
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(
-                $this->equalTo(BundleSelectionFactory::SELECTION_CLASS_DEFAULT),
-                $this->equalTo(
-                    [
-                        'test' => 'some value',
-                        'bundleProduct' => $this->bundleMock,
-                        'saleableItem' => $this->selectionMock,
-                        'quantity' => 2.,
-                    ]
-                )
-            )
-            ->will($this->returnValue(new \stdClass()));
-        $this->bundleSelectionFactory->create($this->bundleMock, $this->selectionMock, 2., ['test' => 'some value']);
     }
 }

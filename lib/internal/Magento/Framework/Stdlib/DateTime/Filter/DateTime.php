@@ -1,20 +1,20 @@
 <?php
 /**
- * Date/Time filter. Converts datetime from localized to internal format.
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
-use Magento\Framework\Phrase;
-
+/**
+ * Date/Time filter. Converts datetime from localized to internal format.
+ *
+ * @api
+ */
 class DateTime extends Date
 {
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      *
-     * @deprecated
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {
@@ -41,7 +41,7 @@ class DateTime extends Date
     public function filter($value)
     {
         try {
-            $dateTime = new \DateTime($value);
+            $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
             throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);

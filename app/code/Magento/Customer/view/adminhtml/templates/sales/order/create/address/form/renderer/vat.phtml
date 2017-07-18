@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,18 +16,18 @@ $_validateButton = $block->getValidateButton();
 <?php if (!$_element->getNoDisplay()): ?>
 <div class="admin__field field-vat-number">
     <?php if ($_element->getType() == 'hidden'): ?>
-    <div class="hidden"><?php echo $_element->getElementHtml(); ?></div>
+    <div class="hidden"><?= $_element->getElementHtml() ?></div>
     <?php else: ?>
-    <?php echo $_element->getLabelHtml(); ?>
-    <div class="admin__field-control <?php /* @noEscape */ echo $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value'; ?><?php echo $_class ? $block->escapeHtmlAttr($_class) . '-value' : ''; ?>">
-        <?php echo $_element->getElementHtml(); ?>
+    <?= $_element->getLabelHtml() ?>
+    <div class="admin__field-control <?= /* @noEscape */ $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value' ?><?= $_class ? $block->escapeHtmlAttr($_class) . '-value' : '' ?>">
+        <?= $_element->getElementHtml() ?>
         <?php if ($_note): ?>
-            <div class="admin__field-note<?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $block->escapeHtmlAttr($_element->getId()); ?>">
-                <span><?php echo $block->escapeHtml($_note); ?></span>
+            <div class="admin__field-note<?= $_class ? " {$_class}-note" : '' ?>" id="note_<?= $block->escapeHtmlAttr($_element->getId()) ?>">
+                <span><?= $block->escapeHtml($_note) ?></span>
             </div>
         <?php endif; ?>
         <div class="actions">
-            <?php echo $_validateButton->toHtml(); ?>
+            <?= $_validateButton->toHtml() ?>
         </div>
     </div>
     <?php endif; ?>

@@ -1,11 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
+ * @api
+ *
  * Adminhtml store edit
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -18,16 +23,24 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        SerializerInterface $serializer = null
     ) {
         $this->_coreRegistry = $registry;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -126,5 +139,15 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected function _buildFormClassName()
     {
         return parent::_buildFormClassName() . '\\' . ucwords($this->_coreRegistry->registry('store_type'));
+    }
+
+    /**
+     * Get data for store edit
+     *
+     * @return string
+     */
+    public function getStoreData()
+    {
+        return $this->serializer->serialize($this->_coreRegistry->registry('store_data')->getData());
     }
 }

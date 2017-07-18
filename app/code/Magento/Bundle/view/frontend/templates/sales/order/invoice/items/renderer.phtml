@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,37 +28,37 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="options-label">
-                <td class="col label" colspan="5"><div class="option label"><?php /* @escapeNotVerified */ echo $attributes['option_label'] ?></div></td>
+                <td class="col label" colspan="5"><div class="option label"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></div></td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr id="order-item-row-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" class="<?php if ($_item->getOrderItem()->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getOrderItem()->getParentItem()): ?> data-th="<?php /* @escapeNotVerified */ echo $attributes['option_label'] ?>"<?php endif; ?>>
+    <tr id="order-item-row-<?= /* @escapeNotVerified */ $_item->getId() ?>" class="<?php if ($_item->getOrderItem()->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getOrderItem()->getParentItem()): ?> data-th="<?= /* @escapeNotVerified */ $attributes['option_label'] ?>"<?php endif; ?>>
     <?php if (!$_item->getOrderItem()->getParentItem()): ?>
-        <td class="col name" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>">
-            <strong class="product name product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+        <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+            <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
         </td>
     <?php else: ?>
-        <td class="col value" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>"><?php echo $block->getValueHtml($_item) ?></td>
+        <td class="col value" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
     <?php endif; ?>
-    <td class="col sku" data-th="<?php echo $block->escapeHtml(__('SKU')); ?>"><?php echo $block->escapeHtml($_item->getSku()) ?></td>
-    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
+    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= $block->escapeHtml($_item->getSku()) ?></td>
+    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?php if ($block->canShowPriceInfo($_item)): ?>
-            <?php echo $block->getItemPriceHtml($_item); ?>
+            <?= $block->getItemPriceHtml($_item) ?>
         <?php else: ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty Invoiced')); ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Invoiced')) ?>">
         <?php if ($block->canShowPriceInfo($_item)): ?>
-            <?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>
+            <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
         <?php else: ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal')); ?>">
+    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?php if ($block->canShowPriceInfo($_item)): ?>
-            <?php echo $block->getItemRowTotalHtml($_item); ?>
+            <?= $block->getItemRowTotalHtml($_item) ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
@@ -72,27 +72,27 @@
             <?php if ($_options = $block->getItemOptions()): ?>
                 <dl class="item-options">
                     <?php foreach ($_options as $_option) : ?>
-                        <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                        <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                         <?php if (!$block->getPrintStatus()): ?>
                             <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                             <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                                <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                                <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                     <div class="tooltip content">
                                         <dl class="item options">
-                                            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
-                                            <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
+                                            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                                            <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
                                         </dl>
                                     </div>
                                 <?php endif; ?>
                             </dd>
                         <?php else: ?>
-                            <dd><?php echo $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                            <dd><?= $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </dl>
             <?php endif; ?>
-            <?php echo $block->escapeHtml($_item->getDescription()) ?>
+            <?= $block->escapeHtml($_item->getDescription()) ?>
         </td>
     </tr>
 <?php endif; ?>

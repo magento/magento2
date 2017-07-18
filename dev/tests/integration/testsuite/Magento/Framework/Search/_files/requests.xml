@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -384,6 +384,57 @@
             </filter>
             <filter name="date_filter" xsi:type="rangeFilter" field="date_attribute" from="$date.from$" to="$date.to$"/>
         </filters>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="filter_out_of_stock_child" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="filter_out_of_stock_child" boost="1">
+                <queryReference clause="must" ref="test_configurable"/>
+            </query>
+            <query xsi:type="filteredQuery" name="test_configurable">
+                <filterReference clause="must" ref="test_configurable_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable" value="$test_configurable$"/>
+        </filters>
+        <aggregations/>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_boost" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_boost" boost="1">
+                <queryReference clause="should" ref="search_boost_query"/>
+            </query>
+            <query xsi:type="matchQuery" name="search_boost_query" value="$query$" boost="1">
+                <match field="name"/>
+                <match field="description"/>
+            </query>
+        </queries>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_boost_name" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_boost_name" boost="1">
+                <queryReference clause="should" ref="search_boost_query"/>
+            </query>
+            <query xsi:type="matchQuery" name="search_boost_query" value="$query$" boost="20">
+                <match field="name"/>
+                <match field="description"/>
+            </query>
+        </queries>
         <from>0</from>
         <size>10</size>
     </request>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
@@ -33,7 +33,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $context->expects($this->never())->method('getProcessor')->willReturn($processor);
 
         $this->objectManager = new ObjectManager($this);
         $this->link = $this->objectManager->getObject(

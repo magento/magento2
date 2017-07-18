@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,10 +51,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->processorMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -71,8 +67,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
-        $this->processorMock->expects($this->atLeastOnce())->method('register');
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -111,6 +105,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepare()
     {
+        $this->processorMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
+        $this->processorMock->expects($this->atLeastOnce())->method('register');
         $this->storeManagerMock->expects($this->atLeastOnce())->method('isSingleStoreMode')->willReturn(false);
         $this->model->prepare();
         $config = $this->model->getDataByKey('config');
@@ -119,6 +119,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareWithSingleStore()
     {
+        $this->processorMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
+        $this->processorMock->expects($this->atLeastOnce())->method('register');
         $this->storeManagerMock->expects($this->atLeastOnce())->method('isSingleStoreMode')->willReturn(true);
         $this->model->prepare();
         $config = $this->model->getDataByKey('config');

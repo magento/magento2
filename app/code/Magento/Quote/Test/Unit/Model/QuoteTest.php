@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,11 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Test class for \Magento\Quote\Model
@@ -314,7 +314,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'customerRepository' => $this->customerRepositoryMock,
                     'objectCopyService' => $this->objectCopyServiceMock,
                     'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                    'customerDataFactory' => $this->customerDataFactoryMock
+                    'customerDataFactory' => $this->customerDataFactoryMock,
+                    'data' => [
+                        'reserved_order_id' => 1000001
+                    ]
                 ]
             );
     }
@@ -587,7 +590,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($customerMock));
-        $this->customerRepositoryMock->expects($this->once())
+        $this->customerRepositoryMock->expects($this->never())
             ->method('save')
             ->will($this->returnValue($customerMock));
         $customerMock->expects($this->any())
@@ -851,6 +854,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(['qty' => 1]))
             ->will($this->returnValue($requestMock));
 
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+
         $typeInstanceMock = $this->getMock(
             \Magento\Catalog\Model\Product\Type\Simple::class,
             [
@@ -932,6 +939,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($collectionMock));
+
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
 
         $typeInstanceMock->expects($this->once())
             ->method('prepareForCartAdvanced')
@@ -1177,6 +1188,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->quote->beforeSave();
         $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+        $this->assertNull($this->quote->getUpdatedAt());
     }
 
     /**
@@ -1236,5 +1248,31 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setData('items_collection', $items);
 
         $this->assertEquals($itemResult, $this->quote->getAllItems());
+    }
+
+    /**
+     * Test to verify if existing reserved_order_id in use
+     *
+     * @param bool $isReservedOrderIdExist
+     * @param int $reservedOrderId
+     * @dataProvider reservedOrderIdDataProvider
+     */
+    public function testReserveOrderId($isReservedOrderIdExist, $reservedOrderId)
+    {
+        $this->resourceMock
+            ->expects($this->once())
+            ->method('isOrderIncrementIdUsed')
+            ->with(1000001)->willReturn($isReservedOrderIdExist);
+        $this->resourceMock->expects($this->any())->method('getReservedOrderId')->willReturn($reservedOrderId);
+        $this->quote->reserveOrderId();
+        $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId());
+    }
+
+    public function reservedOrderIdDataProvider()
+    {
+        return [
+            'id_already_in_use' => [true, 100002],
+            'id_not_in_use' => [false, 1000001]
+        ];
     }
 }

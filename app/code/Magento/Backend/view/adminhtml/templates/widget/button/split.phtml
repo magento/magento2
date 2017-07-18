@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,26 +11,26 @@
 /** @var $block \Magento\Backend\Block\Widget\Button\SplitButton */
 ?>
 
-<div <?php echo $block->getAttributesHtml(); ?>>
-    <button <?php echo $block->getButtonAttributesHtml(); ?>>
-        <span><?php echo $block->escapeHtml($block->getLabel()); ?></span>
+<div <?= $block->getAttributesHtml() ?>>
+    <button <?= $block->getButtonAttributesHtml() ?>>
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
     </button>
     <?php if ($block->hasSplit()): ?>
-        <button <?php echo $block->getToggleAttributesHtml() ?>>
+        <button <?= $block->getToggleAttributesHtml() ?>>
             <span>Select</span>
         </button>
 
         <?php if (!$block->getDisabled()): ?>
-            <ul class="dropdown-menu" <?php /* @escapeNotVerified */ echo $block->getUiId("dropdown-menu"); ?>>
+            <ul class="dropdown-menu" <?= /* @escapeNotVerified */ $block->getUiId("dropdown-menu") ?>>
                 <?php foreach ($block->getOptions() as $key => $option): ?>
                 <li>
-                    <span <?php echo $block->getOptionAttributesHtml($key, $option); ?>>
-                        <?php echo $block->escapeHtml($option['label']); ?>
+                    <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
+                        <?= $block->escapeHtml($option['label']) ?>
                     </span>
                     <?php if (isset($option['hint'])): ?>
-                    <div class="tooltip" <?php /* @escapeNotVerified */ echo $block->getUiId('item', $key, 'tooltip'); ?>>
-                        <a href="<?php echo $block->escapeHtml($option['hint']['href']) ?>" class="help">
-                            <?php echo $block->escapeHtml($option['hint']['label']) ?>
+                    <div class="tooltip" <?= /* @escapeNotVerified */ $block->getUiId('item', $key, 'tooltip') ?>>
+                        <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
+                            <?= $block->escapeHtml($option['hint']['label']) ?>
                         </a>
                     </div>
                     <?php endif; ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,69 +9,69 @@
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 ?>
 <script id="bundle-option-template" type="text/x-magento-template">
-    <div id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.index %>" class="option-box">
-        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.index %>-wrapper">
+    <div id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>" class="option-box">
+        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.index %>-content">
+                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>-content">
                     <span><%- data.default_title %></span>
                 </strong>
                 <div class="actions">
-                    <?php echo $block->getOptionDeleteButtonHtml() ?>
+                    <?= $block->getOptionDeleteButtonHtml() ?>
                 </div>
                 <div data-role="draggable-handle" class="draggable-handle"></div>
             </div>
-            <div class="fieldset-wrapper-content in collapse" id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.index %>-content">
+            <div class="fieldset-wrapper-content in collapse" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>-content">
                 <fieldset class="fieldset">
                     <fieldset class="fieldset-alt">
                         <div class="field field-option-title required">
-                            <label class="label" for="id_<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>_<%- data.index %>_title">
-                                <?php /* @escapeNotVerified */ echo __('Option Title') ?>
+                            <label class="label" for="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title">
+                                <?= /* @escapeNotVerified */ __('Option Title') ?>
                             </label>
                             <div class="control">
                                 <?php if ($block->isDefaultStore()): ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.index %>][title]"
-                                       id="id_<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>_<%- data.index %>_title"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][title]"
+                                       id="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title"
                                        value="<%- data.title %>"
                                        data-original-value="<%- data.title %>" />
                                 <?php else: ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.index %>][default_title]"
-                                       id="id_<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>_<%- data.index %>_default_title"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][default_title]"
+                                       id="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_default_title"
                                        value="<%- data.default_title %>"
                                        data-original-value="<%- data.default_title %>" />
                                 <?php endif; ?>
                                 <input type="hidden"
-                                       id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_id_<%- data.index %>"
-                                       name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.index %>][option_id]"
+                                       id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_id_<%- data.index %>"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][option_id]"
                                        value="<%- data.option_id %>" />
                                 <input type="hidden"
-                                       name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.index %>][delete]"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][delete]"
                                        value=""
                                        data-state="deleted" />
                             </div>
                         </div>
                         <?php if (!$block->isDefaultStore()): ?>
                         <div class="field field-option-store-view required">
-                            <label class="label" for="id_<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>_<%- data.index %>_title_store">
-                                <?php /* @escapeNotVerified */ echo __('Store View Title') ?>
+                            <label class="label" for="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title_store">
+                                <?= /* @escapeNotVerified */ __('Store View Title') ?>
                             </label>
                             <div class="control">
                                 <input class="input-text required-entry" type="text"
-                                       name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.index %>][title]"
-                                       id="id_<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>_<%- data.index %>_title_store"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][title]"
+                                       id="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title_store"
                                        value="<%- data.title %>" />
                             </div>
                         </div>
                         <?php endif; ?>
                         <div class="field field-option-input-type required">
-                            <label class="label" for="<?php /* @escapeNotVerified */ echo $block->getFieldId() . '_<%- data.index %>_type' ?>">
-                                <?php /* @escapeNotVerified */ echo __('Input Type') ?>
+                            <label class="label" for="<?= /* @escapeNotVerified */ $block->getFieldId() . '_<%- data.index %>_type' ?>">
+                                <?= /* @escapeNotVerified */ __('Input Type') ?>
                             </label>
                             <div class="control">
-                                <?php echo $block->getTypeSelectHtml() ?>
+                                <?= $block->getTypeSelectHtml() ?>
                             </div>
                         </div>
                         <div class="field field-option-req">
@@ -81,19 +81,19 @@
                                        checked="checked"
                                        id="field-option-req" />
                                 <label for="field-option-req">
-                                    <?php /* @escapeNotVerified */ echo __('Required')?>
+                                    <?= /* @escapeNotVerified */ __('Required') ?>
                                 </label>
-                                <span style="display:none"><?php echo $block->getRequireSelectHtml() ?></span>
+                                <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                             </div>
                         </div>
                         <div class="field field-option-position no-display">
                             <label class="label" for="field-option-position">
-                                <?php /* @escapeNotVerified */ echo __('Position') ?>
+                                <?= /* @escapeNotVerified */ __('Position') ?>
                             </label>
                             <div class="control">
                                 <input class="input-text validate-zero-or-greater"
                                        type="text"
-                                       name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.index %>][position]"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][position]"
                                        value="<%- data.position %>"
                                        id="field-option-position" />
                             </div>
@@ -101,17 +101,17 @@
                     </fieldset>
 
                     <div class="no-products-message">
-                        <?php /* @escapeNotVerified */ echo __('There are no products in this option.')?>
+                        <?= /* @escapeNotVerified */ __('There are no products in this option.') ?>
                     </div>
-                    <?php echo $block->getAddSelectionButtonHtml() ?>
+                    <?= $block->getAddSelectionButtonHtml() ?>
                 </fieldset>
             </div>
         </div>
-        <div id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_search_<%- data.index %>" class="selection-search"></div>
+        <div id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_search_<%- data.index %>" class="selection-search"></div>
     </div>
 </script>
 
-<?php echo $block->getSelectionHtml() ?>
+<?= $block->getSelectionHtml() ?>
 
 <script>
 require([
@@ -141,7 +141,7 @@ function changeInputType(oldObject, oType) {
 
 Bundle.Option = Class.create();
 Bundle.Option.prototype = {
-    idLabel : '<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>',
+    idLabel : '<?= /* @escapeNotVerified */ $block->getFieldId() ?>',
     templateText : '',
     itemsCount : 0,
     initialize : function(template) {
@@ -150,7 +150,7 @@ Bundle.Option.prototype = {
 
     add : function(data) {
         if (!data) {
-            data = <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['default_title' => __('New Option')])?>;
+            data = <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['default_title' => __('New Option')]) ?>;
         } else {
             data.title = data.title.replace(/</g, "&lt;");
             data.title = data.title.replace(/"/g, "&quot;");

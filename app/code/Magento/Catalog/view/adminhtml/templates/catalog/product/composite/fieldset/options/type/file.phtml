@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,11 +20,11 @@
 require(['prototype'], function(){
 
 //<![CDATA[
-    opFile<?php /* @escapeNotVerified */ echo $_rand; ?> = {
+    opFile<?= /* @escapeNotVerified */ $_rand ?> = {
         initializeFile: function(inputBox) {
-            this.inputFile = inputBox.select('input[name="<?php /* @escapeNotVerified */ echo $_fileName; ?>"]')[0];
-            this.inputFileAction = inputBox.select('input[name="<?php /* @escapeNotVerified */ echo $_fieldNameAction; ?>"]')[0];
-            this.fileNameBox = inputBox.up('dd').select('.<?php /* @escapeNotVerified */ echo $_fileNamed ?>')[0];
+            this.inputFile = inputBox.select('input[name="<?= /* @escapeNotVerified */ $_fileName ?>"]')[0];
+            this.inputFileAction = inputBox.select('input[name="<?= /* @escapeNotVerified */ $_fieldNameAction ?>"]')[0];
+            this.fileNameBox = inputBox.up('dd').select('.<?= /* @escapeNotVerified */ $_fileNamed ?>')[0];
         },
 
         toggleFileChange: function(inputBox) {
@@ -63,40 +63,40 @@ require(['prototype'], function(){
 
 <div class="admin__field <?php if ($_option->getIsRequire()) echo ' required _required' ?>">
     <label class="admin__field-label label">
-        <?php echo  $block->escapeHtml($_option->getTitle()) ?>
-        <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
+        <?= $block->escapeHtml($_option->getTitle()) ?>
+        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists): ?>
-            <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?php echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
-            <a href="javascript:void(0)" class="label" onclick="opFile<?php /* @escapeNotVerified */ echo $_rand; ?>.toggleFileChange($(this).next('.input-box'))">
-                <?php /* @escapeNotVerified */ echo __('Change') ?>
+            <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
+            <a href="javascript:void(0)" class="label" onclick="opFile<?= /* @escapeNotVerified */ $_rand ?>.toggleFileChange($(this).next('.input-box'))">
+                <?= /* @escapeNotVerified */ __('Change') ?>
             </a>&nbsp;
             <?php if (!$_option->getIsRequire()): ?>
-                <input type="checkbox" onclick="opFile<?php /* @escapeNotVerified */ echo $_rand; ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_option->getPrice(true)) ?>"/>
-                <span class="label"><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
+                <input type="checkbox" onclick="opFile<?= /* @escapeNotVerified */ $_rand ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>"/>
+                <span class="label"><?= /* @escapeNotVerified */ __('Delete') ?></span>
             <?php endif; ?>
         <?php endif; ?>
-        <div class="input-box" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
+        <div class="input-box" <?= $_fileExists ? 'style="display:none"' : '' ?>>
             <!-- ToDo UI: add appropriate file class when z-index issue in ui dialog will be resolved  -->
-            <input type="file" name="<?php /* @noEscape */ echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?>/>
-            <input type="hidden" name="<?php /* @escapeNotVerified */ echo $_fieldNameAction; ?>" value="<?php /* @escapeNotVerified */ echo $_fieldValueAction; ?>" />
+            <input type="file" name="<?= /* @noEscape */ $_fileName ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
+            <input type="hidden" name="<?= /* @escapeNotVerified */ $_fieldNameAction ?>" value="<?= /* @escapeNotVerified */ $_fieldValueAction ?>" />
 
             <?php if ($_option->getFileExtension()): ?>
                 <div class="admin__field-note">
-                    <span><?php /* @escapeNotVerified */ echo __('Compatible file extensions to upload')?>: <strong><?php /* @escapeNotVerified */ echo $_option->getFileExtension() ?></strong></span>
+                    <span><?= /* @escapeNotVerified */ __('Compatible file extensions to upload') ?>: <strong><?= /* @escapeNotVerified */ $_option->getFileExtension() ?></strong></span>
                 </div>
             <?php endif; ?>
 
             <?php if ($_option->getImageSizeX() > 0): ?>
                 <div class="admin__field-note">
-                    <span><?php /* @escapeNotVerified */ echo __('Maximum image width')?>: <strong><?php /* @escapeNotVerified */ echo $_option->getImageSizeX() ?> <?php /* @escapeNotVerified */ echo __('px.')?></strong></span>
+                    <span><?= /* @escapeNotVerified */ __('Maximum image width') ?>: <strong><?= /* @escapeNotVerified */ $_option->getImageSizeX() ?> <?= /* @escapeNotVerified */ __('px.') ?></strong></span>
                 </div>
             <?php endif; ?>
 
             <?php if ($_option->getImageSizeY() > 0): ?>
                 <div class="admin__field-note">
-                    <span><?php /* @escapeNotVerified */ echo __('Maximum image height')?>: <strong><?php /* @escapeNotVerified */ echo $_option->getImageSizeY() ?> <?php /* @escapeNotVerified */ echo __('px.')?></strong></span>
+                    <span><?= /* @escapeNotVerified */ __('Maximum image height') ?>: <strong><?= /* @escapeNotVerified */ $_option->getImageSizeY() ?> <?= /* @escapeNotVerified */ __('px.') ?></strong></span>
                 </div>
             <?php endif; ?>
         </div>

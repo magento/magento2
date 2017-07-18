@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,6 +23,36 @@
             </field>
             <field name="parameters" xsi:type="array">
                 <item name="dataset" xsi:type="string">cmsPageLink</item>
+            </field>
+        </dataset>
+
+        <dataset name="recently_viewed_products_on_blank_theme">
+            <field name="code" xsi:type="string">Recently Viewed Products</field>
+            <field name="title" xsi:type="string">Title_%isolation%</field>
+            <field name="theme_id" xsi:type="string">Magento Blank</field>
+            <field name="store_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="widget_instance" xsi:type="array">
+                <item name="dataset" xsi:type="string">for_viewed_products</item>
+            </field>
+            <field name="parameters" xsi:type="array">
+                <item name="dataset" xsi:type="string">recentlyViewedProducts</item>
+            </field>
+        </dataset>
+
+        <dataset name="new_products_list_on_luma_theme">
+            <field name="code" xsi:type="string">Catalog New Products List</field>
+            <field name="title" xsi:type="string">Title_%isolation%</field>
+            <field name="theme_id" xsi:type="string">Magento Luma</field>
+            <field name="store_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="widget_instance" xsi:type="array">
+                <item name="dataset" xsi:type="string">for_new_products_all_pages</item>
+            </field>
+            <field name="parameters" xsi:type="array">
+                <item name="dataset" xsi:type="string">catalogNewProductsListNewOnly</item>
             </field>
         </dataset>
     </repository>

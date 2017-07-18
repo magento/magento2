@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
@@ -39,14 +39,14 @@ class DateTime
     /**
      * Format date to internal format
      *
-     * @param string|\DateTime|bool|null $date
+     * @param string|\DateTimeInterface|bool|null $date
      * @param boolean $includeTime
      * @return string|null
      * @api
      */
     public function formatDate($date, $includeTime = true)
     {
-        if ($date instanceof \DateTime) {
+        if ($date instanceof \DateTimeInterface) {
             $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
             return $date->format($format);
         } elseif (empty($date)) {

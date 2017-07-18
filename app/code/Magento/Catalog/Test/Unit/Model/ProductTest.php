@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -194,6 +194,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Data\CollectionFactory
      */
     private $collectionFactoryMock;
+
+    /**
+     * @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributes;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -392,8 +397,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->mediaConfig = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
+        $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['getStockItem'])
+            ->getMock();
+        $this->extensionAttributesFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($this->extensionAttributes);
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product::class,
             [

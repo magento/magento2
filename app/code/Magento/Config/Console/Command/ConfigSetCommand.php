@@ -1,0 +1,151 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Config\Console\Command;
+
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * Command provides possibility to change system configuration.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ConfigSetCommand extends Command
+{
+    /**#@+
+     * Constants for arguments and options.
+     */
+    const ARG_PATH = 'path';
+    const ARG_VALUE = 'value';
+    const OPTION_SCOPE = 'scope';
+    const OPTION_SCOPE_CODE = 'scope-code';
+    const OPTION_LOCK = 'lock';
+    /**#@-*/
+
+    /**
+     * Emulator adminhtml area for CLI command.
+     *
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
+    private $emulatedAreaProcessor;
+
+    /**
+     * The config change detector.
+     *
+     * @var ChangeDetector
+     */
+    private $changeDetector;
+
+    /**
+     * The factory for processor facade.
+     *
+     * @var ProcessorFacadeFactory
+     */
+    private $processorFacadeFactory;
+
+    /**
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
+     * @param ChangeDetector $changeDetector The config change detector
+     * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
+     */
+    public function __construct(
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
+        ChangeDetector $changeDetector,
+        ProcessorFacadeFactory $processorFacadeFactory
+    ) {
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
+        $this->changeDetector = $changeDetector;
+        $this->processorFacadeFactory = $processorFacadeFactory;
+
+        parent::__construct();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function configure()
+    {
+        $this->setName('config:set')
+            ->setDescription('Change system configuration')
+            ->setDefinition([
+                new InputArgument(
+                    static::ARG_PATH,
+                    InputArgument::REQUIRED,
+                    'Configuration path in format section/group/field_name'
+                ),
+                new InputArgument(static::ARG_VALUE, InputArgument::REQUIRED, 'Configuration value'),
+                new InputOption(
+                    static::OPTION_SCOPE,
+                    null,
+                    InputArgument::OPTIONAL,
+                    'Configuration scope (default, website, or store)',
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                ),
+                new InputOption(
+                    static::OPTION_SCOPE_CODE,
+                    null,
+                    InputArgument::OPTIONAL,
+                    'Scope code (required only if scope is not \'default\')'
+                ),
+                new InputOption(
+                    static::OPTION_LOCK,
+                    'l',
+                    InputOption::VALUE_NONE,
+                    'Lock value which prevents modification in the Admin'
+                ),
+            ]);
+
+        parent::configure();
+    }
+
+    /**
+     * Creates and run appropriate processor, depending on input options.
+     *
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
+            $output->writeln(
+                '<error>'
+                . 'This command is unavailable right now. '
+                . 'To continue working with it please run app:config:import or setup:upgrade command before.'
+                . '</error>'
+            );
+
+            return Cli::RETURN_FAILURE;
+        }
+
+        try {
+            $message = $this->emulatedAreaProcessor->process(function () use ($input) {
+                return $this->processorFacadeFactory->create()->process(
+                    $input->getArgument(static::ARG_PATH),
+                    $input->getArgument(static::ARG_VALUE),
+                    $input->getOption(static::OPTION_SCOPE),
+                    $input->getOption(static::OPTION_SCOPE_CODE),
+                    $input->getOption(static::OPTION_LOCK)
+                );
+            });
+
+            $output->writeln('<info>' . $message . '</info>');
+
+            return Cli::RETURN_SUCCESS;
+        } catch (\Exception $exception) {
+            $output->writeln('<error>' . $exception->getMessage() . '</error>');
+
+            return Cli::RETURN_FAILURE;
+        }
+    }
+}

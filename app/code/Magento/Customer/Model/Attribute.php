@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -42,6 +42,13 @@ class Attribute extends \Magento\Eav\Model\Attribute
     protected $indexerRegistry;
 
     /**
+     * @var \Magento\Customer\Model\Metadata\AttributeMetadataCache
+     */
+    private $attributeMetadataCache;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -61,8 +68,8 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
-     *
+     * @param array|null $data
+     * @param \Magento\Customer\Model\Metadata\AttributeMetadataCache|null $attributeMetadataCache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,9 +92,12 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
+        $this->attributeMetadataCache = $attributeMetadataCache ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\Metadata\AttributeMetadataCache::class);
         parent::__construct(
             $context,
             $registry,
@@ -122,9 +132,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
     }
 
     /**
-     * Processing object after save data
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function afterSave()
     {
@@ -133,7 +141,17 @@ class Attribute extends \Magento\Eav\Model\Attribute
         } elseif (!$this->isObjectNew() && $this->dataHasChangedFor(EavAttributeInterface::IS_USED_IN_GRID)) {
             $this->_getResource()->addCommitCallback([$this, 'invalidate']);
         }
+        $this->attributeMetadataCache->clean();
         return parent::afterSave();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        $this->attributeMetadataCache->clean();
+        return parent::afterDelete();
     }
 
     /**

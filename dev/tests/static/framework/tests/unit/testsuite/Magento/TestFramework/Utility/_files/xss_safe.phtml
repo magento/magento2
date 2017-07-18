@@ -1,37 +1,37 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 ?>
 
-<?php /* @escapeNotVerified */ echo $block->getSomeData();?>
-<?php /* @noEscape */ echo $block->getSomeData();?>
-<input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeHtmlAttr('value') ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeJs('value') ?>" />
-<?php echo $block->escapeCss('value') ?>
+<?= /* @escapeNotVerified */ $block->getSomeData() ?>
+<?= /* @noEscape */ $block->getSomeData() ?>
+<input name="form_key" type="hidden" value="<?= $block->escapeUrl($var) ?>" />
+<input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr('value') ?>" />
+<input name="form_key" type="hidden" value="<?= $block->escapeJs('value') ?>" />
+<?= $block->escapeCss('value') ?>
 echo $var;
-<?php echo $block->getHtmlId("some value") ?>
-<?php echo $block->getIdHtml("some value") ?>
-<?= $block->getIdHtml("some value"); ?>
-<?php echo "\$var1"; ?>
-<?php echo '$var'; ?>
-<?php echo "value"; ?>
-<?php echo 'value'; ?>
-<?php echo (int)$var; ?>
-<?php echo (bool)$var; ?>
-<?php echo count($var); ?>
-<?php echo $object->methodHtml(); ?>
+<?= $block->getHtmlId("some value") ?>
+<?= $block->getIdHtml("some value") ?>
+<?= $block->getIdHtml("some value") ?>
+<?= "\$var1" ?>
+<?= '$var' ?>
+<?= "value" ?>
+<?= 'value' ?>
+<?= (int)$var ?>
+<?= (bool)$var ?>
+<?= count($var) ?>
+<?= $object->methodHtml() ?>
 <?php pecho($var);?>
-<?php echo $object->methodHtml() .
+<?= $object->methodHtml() .
     (bool)$var .
     $block->escapeUrl("some value");
 ?>
-<?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\''; ?>
-<?= $block->getExtendedElement($switchAttributeCode)->toHtml(); ?>
+<?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
+<?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
 <?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
 <?php
 /**
@@ -42,7 +42,7 @@ echo $var;
 <?php
 /* This part is commented to remove all <col> tags from the code. */
 /* foreach ($block->getColumns() as $_column): ?>
-    <col <?php echo $_column->getProperty() ?> />
+    <col <?= $_column->getProperty() ?> />
 <?php endforeach; */ ?>
 
-<?php echo $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])); ?>
+<?= $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])) ?>

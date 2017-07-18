@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -8,11 +8,13 @@ namespace Magento\Framework\View\Element;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
- * Base Content Block class
+ * Base class for all blocks.
  *
- * For block generation you must define Data source class, data source class method,
- * parameters array and block template
+ * Avoid inheriting from this class. Will be deprecated.
  *
+ * Marked as public API because it is actively used now.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -647,12 +649,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function toHtml()
     {
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
-        if ($this->_scopeConfig->getValue(
-            'advanced/modules_disable_output/' . $this->getModuleName(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )) {
-            return '';
-        }
+        $this->getModuleName();
 
         $html = $this->_loadCache();
         if ($html === false) {
@@ -804,7 +801,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Retrieve formatting date
      *
-     * @param null|string|\DateTime $date
+     * @param null|string|\DateTimeInterface $date
      * @param int $format
      * @param bool $showTime
      * @param null|string $timezone

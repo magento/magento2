@@ -1,7 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* eslint-disable max-nested-callbacks */
 define([
     'jquery',
     'Magento_PageCache/js/page-cache'
@@ -58,21 +60,18 @@ define([
 
         it('on iframe from other host returns empty Array', function () {
             iframe.contents().find('body').html(comment);
-            iframe.attr('src', '//' + host + '.otherHost/');
+            iframe.attr('src', '//' + host + '.otherHost/?origin_url=' + host);
 
             expect(iframe.comments().length).toEqual(0);
         });
     });
-    
+
     describe('Testing FormKey Widget', function () {
-        var wdContainer,
-            msgCookieName,
-            inputContainer;
+        var wdContainer, inputContainer;
 
         beforeEach(function () {
             wdContainer = $('<div />');
             inputContainer = $('<input />');
-            msgCookieName = 'FAKE_COOKIE';
         });
 
         afterEach(function () {
@@ -117,14 +116,11 @@ define([
     });
 
     describe('Testing PageCache Widget', function () {
-        var wdContainer,
-            versionCookieName,
-            pageBlockContainer;
+        var wdContainer, pageBlockContainer;
 
         beforeEach(function () {
             wdContainer = $('<div />');
             pageBlockContainer = $('<div />');
-            versionCookieName = 'FAKE_COOKIE';
         });
 
         afterEach(function () {
@@ -148,6 +144,7 @@ define([
 
         it('_searchPlaceholders is called only when HTML_COMMENTS', function () {
             var nodes;
+
             spyOn($.mage.cookies, 'get').and.returnValue('FAKE_VERSION_COOKIE');
             spyOn($.mage.pageCache.prototype, '_searchPlaceholders');
 
@@ -166,6 +163,7 @@ define([
         it('_searchPlaceholders returns Array of blocks', function () {
             var nodes,
                 searches;
+
             spyOn($.mage.cookies, 'get').and.returnValue('FAKE_VERSION_COOKIE');
 
             wdContainer

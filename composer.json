@@ -8,47 +8,51 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
-        "zendframework/zend-stdlib": "~2.4.6",
-        "zendframework/zend-code": "~2.4.6",
-        "zendframework/zend-server": "~2.4.6",
-        "zendframework/zend-soap": "~2.4.6",
-        "zendframework/zend-uri": "~2.4.6",
-        "zendframework/zend-validator": "~2.4.6",
-        "zendframework/zend-crypt": "~2.4.6",
-        "zendframework/zend-console": "~2.4.6",
-        "zendframework/zend-modulemanager": "~2.4.6",
-        "zendframework/zend-mvc": "~2.4.6",
-        "zendframework/zend-text": "~2.4.6",
-        "zendframework/zend-i18n": "~2.4.6",
-        "zendframework/zend-eventmanager": "~2.4.6",
-        "zendframework/zend-view": "~2.4.6",
-        "zendframework/zend-servicemanager": "~2.4.6",
-        "zendframework/zend-json": "~2.4.6",
-        "zendframework/zend-config": "~2.4.6",
-        "zendframework/zend-form": "~2.4.6",
-        "zendframework/zend-di": "~2.4.6",
-        "zendframework/zend-serializer": "~2.4.6",
-        "zendframework/zend-log": "~2.4.6",
-        "zendframework/zend-http": "~2.4.6",
-        "magento/zendframework1": "~1.12.16",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "zendframework/zend-stdlib": "^2.7.7",
+        "zendframework/zend-code": "^3.1.0",
+        "zendframework/zend-server": "^2.6.1",
+        "zendframework/zend-soap": "^2.6.0",
+        "zendframework/zend-uri": "^2.5.1",
+        "zendframework/zend-validator": "^2.6.0",
+        "zendframework/zend-crypt": "^2.6.0",
+        "zendframework/zend-console": "^2.6.0",
+        "zendframework/zend-mail": "^2.8.0",
+        "zendframework/zend-modulemanager": "^2.7",
+        "zendframework/zend-mvc": "~2.6.3",
+        "zendframework/zend-text": "^2.6.0",
+        "zendframework/zend-i18n": "^2.7.3",
+        "zendframework/zend-eventmanager": "^2.6.3",
+        "zendframework/zend-view": "^2.8.1",
+        "zendframework/zend-servicemanager": "^2.7.8",
+        "zendframework/zend-json": "^2.6.1",
+        "zendframework/zend-config": "^2.6.0",
+        "zendframework/zend-form": "^2.10.0",
+        "zendframework/zend-di": "^2.6.1",
+        "zendframework/zend-serializer": "^2.7.2",
+        "zendframework/zend-log": "^2.9.1",
+        "zendframework/zend-http": "^2.6.0",
+        "zendframework/zend-db": "^2.8.2",
+        "zendframework/zend-captcha": "^2.7.1",
+        "zendframework/zend-session": "^2.7.3",
+        "magento/zendframework1": "~1.13.0",
         "colinmollenhour/credis": "1.6",
-        "colinmollenhour/php-redis-session-abstract": "1.2",
-        "colinmollenhour/cache-backend-redis": "1.9",
+        "colinmollenhour/php-redis-session-abstract": "~1.2.2",
+        "colinmollenhour/cache-backend-redis": "1.10.2",
         "colinmollenhour/cache-backend-file": "1.4",
-        "composer/composer": "1.0.0-beta1",
-        "monolog/monolog": "1.16.0",
+        "composer/composer": "1.4.1",
+        "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
         "pelago/emogrifier": "0.1.1",
-        "tubalmartin/cssmin": "2.4.8-p4",
+        "tubalmartin/cssmin": "4.1.0",
         "magento/magento-composer-installer": ">=0.1.11",
-        "braintree/braintree_php": "3.7.0",
-        "symfony/console": "~2.3 <2.7",
+        "braintree/braintree_php": "3.22.0",
+        "symfony/console": "~2.3, !=2.7.0",
         "symfony/event-dispatcher": "~2.1",
         "symfony/process": "~2.1",
         "phpseclib/phpseclib": "2.0.*",
-        "tedivm/jshrink": "~1.0.1",
-        "magento/composer": "~1.0.0",
+        "tedivm/jshrink": "~1.1.0",
+        "magento/composer": "~1.2.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
@@ -65,22 +69,24 @@
         "ext-openssl": "*",
         "ext-zip": "*",
         "ext-pdo_mysql": "*",
+        "ext-soap": "*",
         "sjparkinson/static-review": "~4.1",
-        "ramsey/uuid": "3.4"
+        "ramsey/uuid": "3.6.1"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
-        "pdepend/pdepend": "2.2.2",
-        "friendsofphp/php-cs-fixer": "~1.2",
-        "lusitanian/oauth": "~0.3 <=0.7.0",
-        "sebastian/phpcpd": "2.0.0"
+        "pdepend/pdepend": "2.5.0",
+        "friendsofphp/php-cs-fixer": "~2.1.1",
+        "lusitanian/oauth": "~0.8.10",
+        "sebastian/phpcpd": "2.0.4"
     },
     "replace": {
         "magento/module-marketplace": "100.2.0-dev",
         "magento/module-admin-notification": "100.2.0-dev",
         "magento/module-advanced-pricing-import-export": "100.2.0-dev",
+        "magento/module-analytics": "100.2.0-dev",
         "magento/module-authorization": "100.2.0-dev",
         "magento/module-authorizenet": "100.2.0-dev",
         "magento/module-backend": "100.2.0-dev",
@@ -91,6 +97,7 @@
         "magento/module-cache-invalidate": "100.2.0-dev",
         "magento/module-captcha": "100.2.0-dev",
         "magento/module-catalog": "101.1.0-dev",
+        "magento/module-catalog-analytics": "100.2.0-dev",
         "magento/module-catalog-import-export": "100.2.0-dev",
         "magento/module-catalog-inventory": "100.2.0-dev",
         "magento/module-catalog-rule": "100.2.0-dev",
@@ -110,6 +117,7 @@
         "magento/module-cron": "100.2.0-dev",
         "magento/module-currency-symbol": "100.2.0-dev",
         "magento/module-customer": "100.2.0-dev",
+        "magento/module-customer-analytics": "100.2.0-dev",
         "magento/module-customer-import-export": "100.2.0-dev",
         "magento/module-deploy": "100.2.0-dev",
         "magento/module-developer": "100.2.0-dev",
@@ -145,13 +153,17 @@
         "magento/module-product-alert": "100.2.0-dev",
         "magento/module-product-video": "100.2.0-dev",
         "magento/module-quote": "100.2.0-dev",
+        "magento/module-quote-analytics": "100.2.0-dev",
         "magento/module-reports": "100.2.0-dev",
         "magento/module-require-js": "100.2.0-dev",
         "magento/module-review": "100.2.0-dev",
+        "magento/module-review-analytics": "100.2.0-dev",
+        "magento/module-robots": "100.2.0-dev",
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
-        "magento/module-sales-inventory": "100.0.0-dev",
+        "magento/module-sales-analytics": "100.2.0-dev",
+        "magento/module-sales-inventory": "100.2.0-dev",
         "magento/module-sales-rule": "100.2.0-dev",
         "magento/module-sales-sequence": "100.2.0-dev",
         "magento/module-sample-data": "100.2.0-dev",
@@ -181,6 +193,7 @@
         "magento/module-weee": "100.2.0-dev",
         "magento/module-widget": "100.2.0-dev",
         "magento/module-wishlist": "100.2.0-dev",
+        "magento/module-wishlist-analytics": "100.2.0-dev",
         "magento/theme-adminhtml-backend": "100.2.0-dev",
         "magento/theme-frontend-blank": "100.2.0-dev",
         "magento/theme-frontend-luma": "100.2.0-dev",
@@ -217,9 +230,6 @@
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
     },
-    "config": {
-        "use-include-path": true
-    },
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
@@ -227,10 +237,17 @@
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
-            "": "app/code/"
+            "": [
+                "app/code/"
+            ]
         },
         "files": [
             "app/etc/NonComposerComponentRegistration.php"
+        ],
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
         ]
     },
     "autoload-dev": {
@@ -242,6 +259,5 @@
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
         }
     },
-    "minimum-stability": "alpha",
     "prefer-stable": true
 }

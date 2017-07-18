@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class NewsletterTest extends \PHPUnit_Framework_TestCase
+class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var Newsletter
@@ -32,6 +32,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
 
@@ -56,18 +57,18 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      */
-    public function testToHtml()
+    public function testRenderingNewsletterBlock()
     {
-        $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
-        $html = $this->block->toHtml();
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
 
-        $this->assertStringStartsWith("<div class=\"entry-edit\">", $html);
-        $this->assertContains("<span>Newsletter Information</span>", $html);
-        $this->assertContains("type=\"checkbox\"", $html);
-        $this->assertNotContains("checked=\"checked\"", $html);
-        $this->assertContains("<span>Subscribed to Newsletter</span>", $html);
-        $this->assertContains(">No Newsletter Found<", $html);
+        $this->assertContains('<span>Newsletter Information<\/span>', $body);
+        $this->assertContains('<input id=\"_newslettersubscription\"', $body);
+        $this->assertNotContains('checked="checked"', $body);
+        $this->assertContains('<span>Subscribed to Newsletter<\/span>', $body);
+        $this->assertContains('>No Newsletter Found<', $body);
     }
 }

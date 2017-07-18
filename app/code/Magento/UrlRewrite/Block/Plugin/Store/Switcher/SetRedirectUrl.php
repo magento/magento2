@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Plugin\Store\Switcher;
@@ -64,7 +64,7 @@ class SetRedirectUrl
         ]);
         if ($urlRewrite) {
             $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl(
-                $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath()))
+                $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath(), ['_scope' => $store]))
             );
         }
         return [$store, $data];

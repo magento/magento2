@@ -1,13 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
 
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 
+/**
+ * @api
+ */
 class Tab extends \Magento\Backend\Block\Template implements TabInterface
 {
     /**

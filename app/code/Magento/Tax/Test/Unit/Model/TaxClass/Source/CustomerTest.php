@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Source;
@@ -286,7 +286,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'value' => ['value' => 5, 'label' => 'comment <!-- comment -->'],
             ],
             [
-                'value' => ['value' => 6, 'label' => 'php tag <?php echo "2"; ?>'],
+                'value' => ['value' => 6, 'label' => 'php tag <?= "2"; ?>'],
             ],
 
         ];

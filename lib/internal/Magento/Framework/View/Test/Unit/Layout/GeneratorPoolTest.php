@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -137,7 +137,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                  */
                 $this->assertContains($elementName, $schedule['structure']);
                 $scheduledStructure->unsetStructureElement($elementName);
-                $scheduledStructure->setElement($elementName, []);
+                $scheduledStructure->setElement($elementName, ['block', []]);
                 $structure->createStructuralElement($elementName, 'block', 'someClass');
             });
 
@@ -171,7 +171,10 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'expectedScheduledElements' => [
-                    'first.element' => [], 'second.element' => [], 'third.element' => [], 'sort.element' => []
+                    'first.element' => ['block', []],
+                    'second.element' => ['block', []],
+                    'third.element' => ['block', []],
+                    'sort.element' => ['block', []],
                 ],
             ],
         ];

@@ -1,89 +1,113 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Tax\Api\Data\TaxRateSearchResultsInterface;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Model\Calculation\Rule;
 use \Magento\Tax\Model\TaxRuleCollection;
- 
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TaxRuleCollection
      */
     protected $model;
-    
+
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxRuleRepositoryInterface | MockObject
      */
     protected $ruleServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory | MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder | MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder | MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SortOrderBuilder | MockObject
      */
     protected $sortOrderBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria | MockObject
      */
     protected $searchCriteriaMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxRateSearchResultsInterface | MockObject
      */
     protected $searchResultsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Rule | MockObject
      */
     protected $taxRuleMock;
     
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterBuilderMock = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
-        $this->searchCriteriaBuilderMock =
-            $this->getMock(\Magento\Framework\Api\SearchCriteriaBuilder::class, [], [], '', false);
-        $this->sortOrderBuilderMock = $this->getMock(\Magento\Framework\Api\SortOrderBuilder::class, [], [], '', false);
-        $this->ruleServiceMock = $this->getMock(\Magento\Tax\Api\TaxRuleRepositoryInterface::class, [], [], '', false);
-        $this->searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultsMock = $this->getMock(
-            \Magento\Tax\Api\Data\TaxRateSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->entityFactoryMock = $this->getMockBuilder(EntityFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->taxRuleMock = $this->getMock(\Magento\Tax\Model\Calculation\Rule::class, [], [], '', false);
+        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->sortOrderBuilderMock = $this->getMockBuilder(SortOrderBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->ruleServiceMock = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchResultsMock = $this->getMockBuilder(TaxRateSearchResultsInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->taxRuleMock = $this->getMockBuilder(Rule::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getId',
+                'getCode',
+                'getPriority',
+                'getPosition',
+                'getCalculateSubtotal',
+                'getCustomerTaxClassIds',
+                'getProductTaxClassIds',
+                'getTaxRateIds',
+                'getTaxRatesCodes'
+            ])
+            ->getMock();
+
         $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('create')
             ->willReturn($this->searchCriteriaMock);
@@ -114,6 +138,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->taxRuleMock->expects($this->once())->method('getCustomerTaxClassIds')->willReturn('Post Code');
         $this->taxRuleMock->expects($this->once())->method('getProductTaxClassIds')->willReturn([12]);
         $this->taxRuleMock->expects($this->once())->method('getTaxRateIds')->willReturn([66]);
+        $this->taxRuleMock->expects($this->once())->method('getTaxRatesCodes')->willReturn(['some_code']);
 
         $this->model->loadData();
     }

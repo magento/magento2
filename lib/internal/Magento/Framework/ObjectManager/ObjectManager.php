@@ -7,7 +7,7 @@
  *
  * Intentionally contains multiple concerns for best performance
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager;
@@ -53,7 +53,6 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      */
     public function create($type, array $arguments = [])
     {
-        $type = ltrim($type, '\\');
         return $this->_factory->create($this->_config->getPreference($type), $arguments);
     }
 

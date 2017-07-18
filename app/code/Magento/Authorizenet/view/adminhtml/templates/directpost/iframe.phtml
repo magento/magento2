@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,15 +16,15 @@ $helper = $block->getHelper('adminhtml');
     <head>
         <script>
         <?php if (isset($params['redirect'])): ?>
-            window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
+            window.location="<?= $block->escapeUrl($params['redirect']) ?>";
         <?php endif; ?>
         <?php if (isset($params['redirect_parent'])): ?>
-            window.top.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
+            window.top.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
         <?php endif; ?>
         <?php if (isset($params['error_msg'])): ?>
-            window.top.directPostModel.showError(<?php /* @noEscape */ echo json_encode((array)$params['error_msg']); ?>);
+            window.top.directPostModel.showError(<?= /* @noEscape */ json_encode((array)$params['error_msg']) ?>);
             <?php if (isset($params['x_invoice_num'])): ?>
-                window.top.directPostModel.successUrl="<?php echo $block->escapeUrl($helper->getSuccessOrderUrl($params)); ?>";
+                window.top.directPostModel.successUrl="<?= $block->escapeUrl($helper->getSuccessOrderUrl($params)) ?>";
             <?php endif; ?>
         <?php endif; ?>
         </script>

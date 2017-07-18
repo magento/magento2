@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,25 +10,25 @@
 
 ?>
 <div class="block newsletter">
-    <div class="title"><strong>Newsletter</strong></div>
+    <div class="title"><strong><?= $block->escapeHtml(__('Newsletter')) ?></strong></div>
     <div class="content">
         <form class="form subscribe"
             novalidate
-            action="<?php echo $block->escapeUrl($block->getFormActionUrl()) ?>"
+            action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
             method="post"
             data-mage-init='{"validation": {"errorClass": "mage-error"}}'
             id="newsletter-validate-detail">
             <div class="field newsletter">
-                <label class="label" for="newsletter"><span><?php echo $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?></span></label>
+                <label class="label" for="newsletter"><span><?= $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?></span></label>
                 <div class="control">
                     <input name="email" type="email" id="newsletter"
-                                placeholder="<?php echo $block->escapeHtmlAttr(__('Enter your email address')) ?>"
+                                placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>"
                                 data-validate="{required:true, 'validate-email':true}"/>
                 </div>
             </div>
             <div class="actions">
-                <button class="action subscribe primary" title="<?php echo $block->escapeHtmlAttr(__('Subscribe')) ?>" type="submit">
-                    <span><?php echo $block->escapeHtml(__('Subscribe')) ?></span>
+                <button class="action subscribe primary" title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>" type="submit">
+                    <span><?= $block->escapeHtml(__('Subscribe')) ?></span>
                 </button>
             </div>
         </form>

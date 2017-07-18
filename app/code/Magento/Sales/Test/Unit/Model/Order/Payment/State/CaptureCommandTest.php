@@ -1,211 +1,167 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\State;
 
 use Magento\Directory\Model\Currency;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Config;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\State\CaptureCommand;
+use Magento\Sales\Model\Order\StatusResolver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class CaptureCommandTest
+ * @see CaptureCommand
  */
 class CaptureCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Payment|MockObject
+     * @var float
      */
-    private $payment;
+    private $amount = 10.00;
 
     /**
-     * @var Order|MockObject
+     * @var string
      */
-    private $order;
+    private $newOrderStatus = 'custom_status';
 
     /**
-     * @var Currency|MockObject
+     * @see CaptureCommand::execute
+     *
+     * @param bool $isTransactionPending
+     * @param bool $isFraudDetected
+     * @param string $expectedState
+     * @param string $expectedStatus
+     * @param string $expectedMessage
+     *
+     * @dataProvider commandResultDataProvider
      */
-    private $currency;
+    public function testExecute(
+        $isTransactionPending,
+        $isFraudDetected,
+        $expectedState,
+        $expectedStatus,
+        $expectedMessage
+    ) {
+        $actualReturn = (new CaptureCommand($this->getStatusResolver()))->execute(
+            $this->getPayment($isTransactionPending, $isFraudDetected),
+            $this->amount,
+            $this->getOrder()
+        );
+
+        $this->assertOrderStateAndStatus($this->getOrder(), $expectedState, $expectedStatus);
+        self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
+    }
 
     /**
-     * @var Config|MockObject
+     * @return array
      */
-    private $config;
-
-    /**
-     * @var CaptureCommand
-     */
-    private $command;
-
-    /**
-     * @var int
-     */
-    private $amount = 45;
-
-    protected function setUp()
+    public function commandResultDataProvider()
     {
-        $this->currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['formatTxt'])
-            ->getMock();
+        return [
+            [
+                false,
+                false,
+                Order::STATE_PROCESSING,
+                $this->newOrderStatus,
+                'Captured amount of %1 online.'
+            ],
+            [
+                true,
+                false,
+                Order::STATE_PAYMENT_REVIEW,
+                $this->newOrderStatus,
+                'An amount of %1 will be captured after being approved at the payment gateway.'
+            ],
+            [
+                false,
+                true,
+                Order::STATE_PAYMENT_REVIEW,
+                Order::STATUS_FRAUD,
+                'Captured amount of %1 online.' .
+                ' Order is suspended as its capturing amount %1 is suspected to be fraudulent.'
+            ],
+            [
+                true,
+                true,
+                Order::STATE_PAYMENT_REVIEW,
+                Order::STATUS_FRAUD,
+                'An amount of %1 will be captured after being approved at the payment gateway.' .
+                ' Order is suspended as its capturing amount %1 is suspected to be fraudulent.'
+            ],
+        ];
+    }
 
-        $this->config = $this->getMockBuilder(Config::class)
+    /**
+     * @return StatusResolver|MockObject
+     */
+    private function getStatusResolver()
+    {
+        $statusResolver = $this->getMockBuilder(StatusResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStateDefaultStatus'])
             ->getMock();
+        $statusResolver->method('getOrderStatusByState')
+            ->willReturn($this->newOrderStatus);
 
-        $this->payment = $this->getMockBuilder(Payment::class)
+        return $statusResolver;
+    }
+
+    /**
+     * @return Order|MockObject
+     */
+    private function getOrder()
+    {
+        $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
+            ->getMock();
+        $order->method('getBaseCurrency')
+            ->willReturn($this->getCurrency());
+
+        return $order;
+    }
+
+    /**
+     * @param bool $isTransactionPending
+     * @param bool $isFraudDetected
+     * @return OrderPaymentInterface|MockObject
+     */
+    private function getPayment($isTransactionPending, $isFraudDetected)
+    {
+        $payment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->setMethods(['getIsTransactionPending', 'getIsFraudDetected'])
-            ->getMock();
-        $this->order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency', 'getConfig', 'setState', 'setStatus'])
-            ->getMock();
+            ->getMockForAbstractClass();
+        $payment->method('getIsTransactionPending')
+            ->willReturn($isTransactionPending);
+        $payment->method('getIsFraudDetected')
+            ->willReturn($isFraudDetected);
 
-        $this->order->expects(static::once())
-            ->method('getBaseCurrency')
-            ->willReturn($this->currency);
-        $this->currency->expects(static::once())
-            ->method('formatTxt')
-            ->with($this->amount)
+        return $payment;
+    }
+
+    /**
+     * @return Currency|MockObject
+     */
+    private function getCurrency()
+    {
+        $currency = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currency->method('formatTxt')
             ->willReturn($this->amount);
 
-        $this->command = new CaptureCommand();
+        return $currency;
     }
 
     /**
-     * @covers \Magento\Sales\Model\Order\Payment\State\CaptureCommand::execute
+     * @param Order|MockObject $order
+     * @param string $expectedState
+     * @param string $expectedStatus
      */
-    public function testExecute()
+    private function assertOrderStateAndStatus($order, $expectedState, $expectedStatus)
     {
-        $message = __('Captured amount of %1 online.', $this->amount);
-
-        $this->payment->expects(static::once())
-            ->method('getIsTransactionPending')
-            ->willReturn(false);
-        $this->payment->expects(static::once())
-            ->method('getIsFraudDetected')
-            ->willReturn(false);
-
-        $this->order->expects(static::once())
-            ->method('getConfig')
-            ->willReturn($this->config);
-        $this->config->expects(static::once())
-            ->method('getStateDefaultStatus')
-            ->with(Order::STATE_PROCESSING)
-            ->willReturn(Order::STATE_PROCESSING);
-
-        $this->order->expects(static::once())
-            ->method('setState')
-            ->with(Order::STATE_PROCESSING)
-            ->willReturnSelf();
-        $this->order->expects(static::once())
-            ->method('setStatus')
-            ->with(Order::STATE_PROCESSING);
-
-        $actual = $this->command->execute($this->payment, $this->amount, $this->order);
-        static::assertEquals($message, $actual);
-    }
-
-    /**
-     * @covers \Magento\Sales\Model\Order\Payment\State\CaptureCommand::execute
-     */
-    public function testExecutePendingTransaction()
-    {
-        $message = __('An amount of %1 will be captured after being approved at the payment gateway.', $this->amount);
-
-        $this->payment->expects(static::once())
-            ->method('getIsTransactionPending')
-            ->willReturn(true);
-        $this->payment->expects(static::once())
-            ->method('getIsFraudDetected')
-            ->willReturn(false);
-
-        $this->order->expects(static::once())
-            ->method('getConfig')
-            ->willReturn($this->config);
-        $this->config->expects(static::once())
-            ->method('getStateDefaultStatus')
-            ->with(Order::STATE_PAYMENT_REVIEW)
-            ->willReturn(Order::STATE_PAYMENT_REVIEW);
-
-        $this->order->expects(static::once())
-            ->method('setState')
-            ->with(Order::STATE_PAYMENT_REVIEW)
-            ->willReturnSelf();
-        $this->order->expects(static::once())
-            ->method('setStatus')
-            ->with(Order::STATE_PAYMENT_REVIEW);
-
-        $actual = $this->command->execute($this->payment, $this->amount, $this->order);
-        static::assertEquals($message, $actual);
-    }
-
-    /**
-     * @covers \Magento\Sales\Model\Order\Payment\State\CaptureCommand::execute
-     */
-    public function testExecutePendingTransactionFraud()
-    {
-        $expectedMessage = 'An amount of %1 will be captured after being approved at the payment gateway. ';
-        $expectedMessage .= 'Order is suspended as its capturing amount %1 is suspected to be fraudulent.';
-        $message = __($expectedMessage, $this->amount);
-
-        $this->payment->expects(static::once())
-            ->method('getIsTransactionPending')
-            ->willReturn(true);
-        $this->payment->expects(static::once())
-            ->method('getIsFraudDetected')
-            ->willReturn(true);
-
-        $this->order->expects(static::never())
-            ->method('getConfig');
-
-        $this->order->expects(static::once())
-            ->method('setState')
-            ->with(Order::STATE_PAYMENT_REVIEW)
-            ->willReturnSelf();
-        $this->order->expects(static::once())
-            ->method('setStatus')
-            ->with(Order::STATUS_FRAUD);
-
-        $actual = $this->command->execute($this->payment, $this->amount, $this->order);
-        static::assertEquals($message, $actual);
-    }
-
-    /**
-     * @covers \Magento\Sales\Model\Order\Payment\State\CaptureCommand::execute
-     */
-    public function testExecuteFraud()
-    {
-        $expectedMessage = 'Captured amount of %1 online. ';
-        $expectedMessage .= 'Order is suspended as its capturing amount %1 is suspected to be fraudulent.';
-        $message = __($expectedMessage, $this->amount);
-
-        $this->payment->expects(static::once())
-            ->method('getIsTransactionPending')
-            ->willReturn(false);
-        $this->payment->expects(static::once())
-            ->method('getIsFraudDetected')
-            ->willReturn(true);
-
-        $this->order->expects(static::never())
-            ->method('getConfig');
-
-        $this->order->expects(static::once())
-            ->method('setState')
-            ->with(Order::STATE_PAYMENT_REVIEW)
-            ->willReturnSelf();
-        $this->order->expects(static::once())
-            ->method('setStatus')
-            ->with(Order::STATUS_FRAUD);
-
-        $actual = $this->command->execute($this->payment, $this->amount, $this->order);
-        static::assertEquals($message, $actual);
+        $order->method('setState')->with($expectedState);
+        $order->method('setStatus')->with($expectedStatus);
     }
 }

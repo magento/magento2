@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Auth;
@@ -158,12 +158,21 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $name = session_name();
         $cookie = 'cookie';
+        $lifetime = 900;
         $path = '/';
         $domain = 'magento2';
         $secure = true;
         $httpOnly = true;
 
+        $this->config->expects($this->once())
+            ->method('getValue')
+            ->with(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME)
+            ->willReturn($lifetime);
         $cookieMetadata = $this->getMock(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class);
+        $cookieMetadata->expects($this->once())
+            ->method('setDuration')
+            ->with($lifetime)
+            ->will($this->returnSelf());
         $cookieMetadata->expects($this->once())
             ->method('setPath')
             ->with($path)

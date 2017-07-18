@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -290,6 +290,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue((bool)$this->_model->isSaleable());
         $this->assertTrue((bool)$this->_model->isAvailable());
         $this->assertTrue($this->_model->isInStock());
+    }
+
+    /**
+     * @covers \Magento\Catalog\Model\Product::isSalable
+     * @covers \Magento\Catalog\Model\Product::isSaleable
+     * @covers \Magento\Catalog\Model\Product::isAvailable
+     * @covers \Magento\Catalog\Model\Product::isInStock
+     */
+    public function testIsNotSalableWhenStatusDisabled()
+    {
+        $this->_model = $this->productRepository->get('simple');
+
         $this->_model->setStatus(0);
         $this->assertFalse((bool)$this->_model->isSalable());
         $this->assertFalse((bool)$this->_model->isSaleable());

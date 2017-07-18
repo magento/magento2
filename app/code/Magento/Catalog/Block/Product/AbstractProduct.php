@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
 
 /**
  * Class AbstractProduct
+ * @api
+ * @deprecated
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -95,6 +97,11 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $stockRegistry;
 
     /**
+     * @var ImageBuilder
+     */
+    protected $imageBuilder;
+
+    /**
      * @param Context $context
      * @param array $data
      */
@@ -124,7 +131,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getAddToCartUrl($product, $additional = [])
     {
-        if ($product->getTypeInstance()->hasRequiredOptions($product)) {
+        if (!$product->getTypeInstance()->isPossibleBuyFromList($product)) {
             if (!isset($additional['_escape'])) {
                 $additional['_escape'] = true;
             }

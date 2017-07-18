@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
@@ -429,6 +429,44 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
                 'zip_to' => '',
                 'rate' => '',
                 'code' => '',
+                'titles' => $rateTitles,
+            ]
+        );
+        $this->model->save($rateMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage percentage_rate is a required field.
+     */
+    public function testValidateWithNoRate()
+    {
+        $rateTitles = ['Label 1', 'Label 2'];
+
+        $countryCode = 'US';
+        $countryMock = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
+        $countryMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $countryMock->expects($this->any())->method('loadByCode')->with($countryCode)->will($this->returnSelf());
+        $this->countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryMock));
+
+        $regionId = 2;
+        $regionMock = $this->getMock(\Magento\Directory\Model\Region::class, [], [], '', false);
+        $regionMock->expects($this->any())->method('getId')->will($this->returnValue($regionId));
+        $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
+        $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
+
+        $rateMock = $this->getTaxRateMock(
+            [
+                'id' => null,
+                'tax_country_id' => $countryCode,
+                'tax_region_id' => $regionId,
+                'region_name' => null,
+                'tax_postcode' => null,
+                'zip_is_range' => true,
+                'zip_from' => 90000,
+                'zip_to' => 90005,
+                'rate' => '',
+                'code' => 'Tax Rate Code',
                 'titles' => $rateTitles,
             ]
         );
