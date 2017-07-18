@@ -430,7 +430,7 @@ class EavAttribute
             if ($this->isOptionForDelete($attribute, $optionId)) {
                 continue;
             }
-            if (empty($option[0])) {
+            if (!isset($option[0]) || $option[0] === '') {
                 return false;
             }
         }
