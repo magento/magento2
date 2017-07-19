@@ -141,7 +141,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             $transactionInfo,
             $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
         );
-
     }
 
     /**
@@ -356,19 +355,5 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         $adapter->authorize($paymentInfo, 10);
-    }
-
-    public function testValidationExceptionLogged()
-    {
-        $exception = new \Exception('We can test exception logging!');
-
-        $this->validatorPool->expects(static::once())
-            ->method('get')
-            ->with('global')
-            ->willThrowException($exception);
-        $this->logger->expects(static::once())
-            ->method('critical')
-            ->with($exception);
-        $this->adapter->validate();
     }
 }

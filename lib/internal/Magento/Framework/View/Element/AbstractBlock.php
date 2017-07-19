@@ -801,7 +801,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Retrieve formatting date
      *
-     * @param null|string|\DateTime $date
+     * @param null|string|\DateTimeInterface $date
      * @param int $format
      * @param bool $showTime
      * @param null|string $timezone

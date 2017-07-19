@@ -72,9 +72,9 @@ class ConfigurablePrice extends AbstractModifier
                     ]
                 );
             }
-            if (
-                !empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE]['children'][self::$advancedPricingButton])
-            ) {
+            if (!empty(
+                $meta[$groupCode]['children'][self::CODE_GROUP_PRICE]['children'][self::$advancedPricingButton]
+            )) {
                 $productTypeId = $this->locator->getProduct()->getTypeId();
                 $visibilityConfig = ($productTypeId === ConfigurableType::TYPE_CODE)
                     ? ['visible' => 0, 'disabled' => 1]

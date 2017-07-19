@@ -667,7 +667,7 @@ interface AdapterInterface
     /**
      * Format Date to internal database date format
      *
-     * @param int|string|\DateTime $date
+     * @param int|string|\DateTimeInterface $date
      * @param boolean $includeTime
      * @return \Zend_Db_Expr
      */

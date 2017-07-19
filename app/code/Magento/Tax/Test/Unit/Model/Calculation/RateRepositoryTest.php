@@ -363,11 +363,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'entity_already_exists' => [
-                new AlreadyExistsException(__('Entity already exists')), \Magento\Framework\Exception\AlreadyExistsException::class,
+                new AlreadyExistsException(__('Entity already exists')),
+                AlreadyExistsException::class,
                 'Entity already exists'
             ],
             'cannot_save_title' => [
-                new LocalizedException(__('Cannot save titles')), \Magento\Framework\Exception\LocalizedException::class,
+                new LocalizedException(__('Cannot save titles')),
+                LocalizedException::class,
                 'Cannot save titles'
             ]
         ];
