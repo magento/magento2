@@ -93,4 +93,47 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="translationConfigInitialDataProvider" type="Magento\Framework\App\Config\InitialConfigSource">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
+            <argument name="configType" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</argument>
+            <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="translationConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="dynamic" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource\Proxy</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">translationConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Translation\App\Config\Type\Translation">
+        <arguments>
+            <argument name="source" xsi:type="object">translationConfigSourceAggregated</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="i18n" xsi:type="object">Magento\Translation\App\Config\Type\Translation</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="i18n" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource</item>
+                    <item name="namespace" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
