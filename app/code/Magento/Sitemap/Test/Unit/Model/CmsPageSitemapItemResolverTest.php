@@ -51,7 +51,7 @@ class CmsPageSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new CmsPageSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
         self::assertTrue(count($items) == count($pages));
-        foreach($pages as $index => $page) {;
+        foreach ($pages as $index => $page) {
             self::assertSame($page->getUpdatedAt(), $items[$index]->getUpdatedAt());
             self::assertSame('daily', $items[$index]->getChangeFrequency());
             self::assertSame('1.0', $items[$index]->getPriority());

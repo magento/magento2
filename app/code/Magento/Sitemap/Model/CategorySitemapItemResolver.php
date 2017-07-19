@@ -64,7 +64,7 @@ class CategorySitemapItemResolver implements SitemapItemResolverInterface
     public function getItems($storeId)
     {
         $collection = $this->categoryFactory->create()->getCollection($storeId);
-        $items = array_map(function($item) use ($storeId) {
+        $items = array_map(function ($item) use ($storeId) {
             return $this->itemFactory->create([
                 'url' => $item->getUrl(),
                 'updatedAt' => $item->getUpdatedAt(),

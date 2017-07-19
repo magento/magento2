@@ -11,7 +11,8 @@ namespace Magento\Sitemap\Model;
  *
  * @api
  */
-interface SitemapItemInterface {
+interface SitemapItemInterface
+{
 
     /**
      * Get url

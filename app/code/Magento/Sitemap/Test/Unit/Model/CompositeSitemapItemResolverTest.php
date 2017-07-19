@@ -26,7 +26,7 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
     {
         $mockResolvers = [];
 
-        foreach($itemResolverData as $data) {
+        foreach ($itemResolverData as $data) {
             $mockResolver = $this->getMockForAbstractClass(SitemapItemResolverInterface::class);
             $mockResolver->expects(self::once())
                 ->method('getItems')
@@ -48,12 +48,12 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
     {
         $testCases = [];
 
-        for($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; $i++) {
             $itemProviders = [];
             $expectedItems = [];
-            for($i = 1; $i < $maxProviders = random_int(1, 5); $i++) {
+            for ($i = 1; $i < $maxProviders = random_int(1, 5); $i++) {
                 $items = [];
-                for($i = 1; $i < $maxItems = random_int(2, 5); $i++) {
+                for ($i = 1; $i < $maxItems = random_int(2, 5); $i++) {
                     $sitemapItem = $this->getMockForAbstractClass(SitemapItemInterface::class);
                     $items[] = $sitemapItem;
                     $expectedItems[]  = $sitemapItem;
