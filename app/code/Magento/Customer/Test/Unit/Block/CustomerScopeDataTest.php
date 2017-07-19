@@ -10,7 +10,6 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Block\CustomerScopeData;
-use Magento\Framework\Json\EncoderInterface;
 
 class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +28,9 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $encoderMock;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -41,7 +43,10 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
-        $this->encoderMock = $this->getMockBuilder(EncoderInterface::class)
+        $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
+            ->getMock();
+
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
 
         $this->contextMock->expects($this->exactly(2))
@@ -55,7 +60,8 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
         $this->model = new CustomerScopeData(
             $this->contextMock,
             $this->encoderMock,
-            []
+            [],
+            $this->serializerMock
         );
     }
 
@@ -77,5 +83,34 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($storeMock);
 
         $this->assertEquals($storeId, $this->model->getWebsiteId());
+    }
+
+    public function testEncodeConfiguration()
+    {
+        $rules = [
+            '*' => [
+                'Magento_Customer/js/invalidation-processor' => [
+                    'invalidationRules' => [
+                        'website-rule' => [
+                            'Magento_Customer/js/invalidation-rules/website-rule' => [
+                                'scopeConfig' => [
+                                    'websiteId' => 1,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->with($rules)
+            ->willReturn(json_encode($rules));
+
+        $this->assertEquals(
+            json_encode($rules),
+            $this->model->encodeConfiguration($rules)
+        );
     }
 }

@@ -112,6 +112,7 @@
         "magento/module-config": "100.2.0-dev",
         "magento/module-configurable-import-export": "100.2.0-dev",
         "magento/module-configurable-product": "100.2.0-dev",
+        "magento/module-configurable-product-sales": "100.2.0-dev",
         "magento/module-contact": "100.2.0-dev",
         "magento/module-cookie": "100.2.0-dev",
         "magento/module-cron": "100.2.0-dev",
@@ -242,7 +243,7 @@
             ]
         },
         "files": [
-            "app/etc/NonComposerComponentRegistration.php"
+            "app/registration.php"
         ],
         "exclude-from-classmap": [
             "**/dev/**",
