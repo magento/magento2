@@ -3,28 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Argument\Interpreter;
 
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
- * @covers \Magento\Framework\Data\Argument\Interpreter\TranslatableStringUtils
+ * @covers \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils
  */
-class TranslatableStringUtilsTest extends \PHPUnit_Framework_TestCase
+class BaseStringUtilsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Argument\Interpreter\StringUtils
+     * @var \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils
      */
     private $model;
 
     /**
      * @var BooleanUtils|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $booleanUtils;
+    private $booleanUtils;
 
     /**
-     * Prepare subject for test.
+     * Prepare subject for tests.
      */
     protected function setUp()
     {
@@ -36,23 +37,15 @@ class TranslatableStringUtilsTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap([['true', true], ['false', false]])
         );
-
-        $baseStringUtils = new StringUtils($this->booleanUtils);
-        $this->model = new TranslatableStringUtils($this->booleanUtils, $baseStringUtils);
+        $this->model = new BaseStringUtils($this->booleanUtils);
         /** @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject $translateRenderer */
         $translateRenderer = $this->getMockForAbstractClass(RendererInterface::class);
-        $translateRenderer->expects($this->any())->method('render')->will(
-            $this->returnCallback(
-                function ($input) {
-                    return end($input) . ' (translated)';
-                }
-            )
-        );
+        $translateRenderer->expects(self::never())->method('render');
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }
 
     /**
-     * Check TranslatableStringUtils::evaluate can translate incoming $input['value'].
+     * Check BaseStringUtils::evaluate() will not translate incoming $input['value'].
      *
      * @param array $input
      * @param bool $expected
@@ -77,17 +70,16 @@ class TranslatableStringUtilsTest extends \PHPUnit_Framework_TestCase
             'with value' => [['value' => 'some value'], 'some value'],
             'translation required' => [
                 ['value' => 'some value', 'translate' => 'true'],
-                'some value (translated)',
+                'some value',
             ],
-            'translation not required' => [['value' => 'some value', 'translate' => 'false'], 'some value']
+            'translation not required' => [['value' => 'some value', 'translate' => 'false'], 'some value'],
         ];
     }
 
     /**
-     * Check TranslatableStringUtils::evaluate() throws exception in case $input['value'] is not a string.
+     * Check BaseStringUtils::evaluate() trows exception in case $input['value'] not a string.
      *
      * @param array $input
-     *
      * @dataProvider evaluateExceptionDataProvider
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage String value is expected
