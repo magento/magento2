@@ -20,23 +20,28 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $jsonEncoder;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->storeManager = $context->getStoreManager();
-        $this->jsonEncoder = $jsonEncoder;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -49,5 +54,38 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     public function getWebsiteId()
     {
         return (int)$this->_storeManager->getStore()->getWebsiteId();
+    }
+
+    /**
+     * @return array
+     */
+    public function getInvalidationRules()
+    {
+        return [
+            '*' => [
+                'Magento_Customer/js/invalidation-processor' => [
+                    'invalidationRules' => [
+                        'website-rule' => [
+                            'Magento_Customer/js/invalidation-rules/website-rule' => [
+                                'scopeConfig' => [
+                                    'websiteId' => $this->getWebsiteId(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Get the invalidation rules json encoded
+     *
+     * @return bool|string
+     * @throws \InvalidArgumentException
+     */
+    public function getSerializedInvalidationRules()
+    {
+        return $this->serializer->serialize($this->getInvalidationRules());
     }
 }
