@@ -1,13 +1,27 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
 
 /**
- * Backend abstract block
+ * Standard admin block. Adds admin-specific behavior and event.
+ * Should be used when you declare a block in admin layout handle.
  *
+ * Avoid extending this class if possible.
+ *
+ * If you need custom presentation logic in your blocks, use this class as block, and declare
+ * custom view models in block arguments in layout handle file.
+ *
+ * Example:
+ * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ *      <arguments>
+ *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *      </arguments>
+ * </block>
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Template extends \Magento\Framework\View\Element\Template

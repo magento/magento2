@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class ComplexType
 
     /**
      * Get attribute type based on its backend model.
-     * 
+     *
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @param string $serviceClass
      * @param $serviceBackendModelDataInterfaceMap array

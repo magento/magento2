@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -58,6 +58,13 @@ class EmailNotification implements EmailNotificationInterface
         self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
         self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
         self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+    ];
+
+    /**
+     * Map of templates. Use for backward compatibility
+     */
+    const TEMPLATE_MAP = [
+        self::XML_PATH_FORGOT_EMAIL_TEMPLATE => self::XML_PATH_RESET_PASSWORD_TEMPLATE
     ];
 
     /**#@-*/
@@ -241,11 +248,10 @@ class EmailNotification implements EmailNotificationInterface
         $storeId = null,
         $email = null
     ) {
-        $templateId = $this->scopeConfig->getValue($template, 'store', $storeId);
+        $templateId = $this->getTemplateId($template, 'store', $storeId);
         if ($email === null) {
             $email = $customer->getEmail();
         }
-
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)
@@ -377,5 +383,24 @@ class EmailNotification implements EmailNotificationInterface
             ['customer' => $customerEmailData, 'back_url' => $backUrl, 'store' => $store],
             $storeId
         );
+    }
+
+    /**
+     * Get templateId include considering template map
+     *
+     * @param string $template
+     * @param string $scopeType
+     * @param string $storeId
+     * @return string
+     */
+    private function getTemplateId($template, $scopeType, $storeId)
+    {
+        if (array_key_exists($template, self::TEMPLATE_MAP)) {
+            $templateId = $this->scopeConfig->getValue(self::TEMPLATE_MAP[$template], $scopeType, $storeId);
+            if ($templateId) {
+                return $templateId;
+            }
+        }
+        return $this->scopeConfig->getValue($template, $scopeType, $storeId);
     }
 }

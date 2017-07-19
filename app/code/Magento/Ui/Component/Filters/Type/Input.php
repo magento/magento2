@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Filters\Type;
@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Filters\Type;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
 
 /**
- * Class Input
+ * @api
  */
 class Input extends AbstractFilter
 {

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model;
 
-use Magento\Config\App\Config\Type\System;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\FlagManager;
 
 /**
  * Provider of subscription status.
@@ -13,9 +15,29 @@ use Magento\Config\App\Config\Type\System;
 class SubscriptionStatusProvider
 {
     /**
-     * @var System
+     * Represents an enabled subscription state.
      */
-    private $systemConfig;
+    const ENABLED = "Enabled";
+
+    /**
+     * Represents a failed subscription state.
+     */
+    const FAILED = "Failed";
+
+    /**
+     * Represents a pending subscription state.
+     */
+    const PENDING = "Pending";
+
+    /**
+     * Represents a disabled subscription state.
+     */
+    const DISABLED = "Disabled";
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @var AnalyticsToken
@@ -23,38 +45,71 @@ class SubscriptionStatusProvider
     private $analyticsToken;
 
     /**
-     * @param System $systemConfig
+     * @var FlagManager
+     */
+    private $flagManager;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
      * @param AnalyticsToken $analyticsToken
+     * @param FlagManager $flagManager
      */
     public function __construct(
-        System $systemConfig,
-        AnalyticsToken $analyticsToken
+        ScopeConfigInterface $scopeConfig,
+        AnalyticsToken $analyticsToken,
+        FlagManager $flagManager
     ) {
-        $this->systemConfig = $systemConfig;
+        $this->scopeConfig = $scopeConfig;
         $this->analyticsToken = $analyticsToken;
+        $this->flagManager = $flagManager;
     }
 
     /**
-     * Statuses:
+     * Retrieve subscription status to Magento BI Advanced Reporting.
      *
+     * Statuses:
      * Enabled - if subscription is enabled and MA token was received;
      * Pending - if subscription is enabled and MA token was not received;
      * Disabled - if subscription is not enabled.
+     * Failed - if subscription is enabled and token was not received after attempts ended.
      *
      * @return string
      */
     public function getStatus()
     {
-        $status = "Disabled";
+        $isSubscriptionEnabledInConfig = $this->scopeConfig->getValue('analytics/subscription/enabled');
+        if ($isSubscriptionEnabledInConfig) {
+            return $this->getStatusForEnabledSubscription();
+        }
 
-        if ($this->systemConfig->get('default/analytics/subscription/enabled')) {
-            $status = "Enabled";
+        return $this->getStatusForDisabledSubscription();
+    }
 
-            if (!$this->analyticsToken->isTokenExist()) {
-                $status = "Pending";
+    /**
+     * Retrieve status for subscription that enabled in config.
+     *
+     * @return string
+     */
+    public function getStatusForEnabledSubscription()
+    {
+        $status = static::ENABLED;
+        if (!$this->analyticsToken->isTokenExist()) {
+            $status = static::PENDING;
+            if ($this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE) === null) {
+                $status = static::FAILED;
             }
         }
 
         return $status;
+    }
+
+    /**
+     * Retrieve status for subscription that disabled in config.
+     *
+     * @return string
+     */
+    public function getStatusForDisabledSubscription()
+    {
+        return static::DISABLED;
     }
 }

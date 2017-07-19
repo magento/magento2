@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Config\Block\System\Config\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @api
+ */
 class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
@@ -239,8 +242,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      */
     protected function _isCollapseState($element)
     {
-        if (
-            $element->getExpanded() ||
+        if ($element->getExpanded() ||
             ($element->getForm() && $element->getForm()->getElements()->count() === 1)
         ) {
             return true;

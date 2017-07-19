@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -576,7 +576,7 @@ abstract class AbstractType
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
-        $transport = new \StdClass();
+        $transport = new \stdClass();
         $transport->options = [];
         $options = null;
         if ($product->getHasOptions()) {
@@ -723,8 +723,7 @@ abstract class AbstractType
     protected function _removeNotApplicableAttributes($product)
     {
         $entityType = $product->getResource()->getEntityType();
-        foreach ($this->_eavConfig->getEntityAttributeCodes($entityType, $product) as $attributeCode) {
-            $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+        foreach ($this->_eavConfig->getEntityAttributes($entityType, $product) as $attribute) {
             $applyTo = $attribute->getApplyTo();
             if (is_array($applyTo) && count($applyTo) > 0 && !in_array($product->getTypeId(), $applyTo)) {
                 $product->unsetData($attribute->getAttributeCode());

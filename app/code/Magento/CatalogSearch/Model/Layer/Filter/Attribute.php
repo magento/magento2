@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -53,7 +53,7 @@ class Attribute extends AbstractFilter
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         $attributeValue = $request->getParam($this->_requestVar);
-        if (empty($attributeValue)) {
+        if (empty($attributeValue) && !is_numeric($attributeValue)) {
             return $this;
         }
         $attribute = $this->getAttributeModel();
@@ -84,9 +84,10 @@ class Attribute extends AbstractFilter
             ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());
 
-        if (count($optionsFacetedData) === 0
-            && $this->getAttributeIsFilterable($attribute) !== static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
-        ) {
+        $isAttributeFilterable =
+            $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS;
+
+        if (count($optionsFacetedData) === 0 && !$isAttributeFilterable) {
             return $this->itemDataBuilder->build();
         }
 
@@ -95,29 +96,64 @@ class Attribute extends AbstractFilter
         $options = $attribute->getFrontend()
             ->getSelectOptions();
         foreach ($options as $option) {
-            if (empty($option['value'])) {
-                continue;
-            }
-
-            $value = $option['value'];
-
-            $count = isset($optionsFacetedData[$value]['count'])
-                ? (int)$optionsFacetedData[$value]['count']
-                : 0;
-            // Check filter type
-            if (
-                $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
-                && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)
-            ) {
-                continue;
-            }
-            $this->itemDataBuilder->addItemData(
-                $this->tagFilter->filter($option['label']),
-                $value,
-                $count
-            );
+            $this->buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize);
         }
 
         return $this->itemDataBuilder->build();
+    }
+
+    /**
+     * Build option data
+     *
+     * @param array $option
+     * @param boolean $isAttributeFilterable
+     * @param array $optionsFacetedData
+     * @param int $productSize
+     * @return void
+     */
+    private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize)
+    {
+        $value = $this->getOptionValue($option);
+        if ($value === false) {
+            return;
+        }
+        $count = $this->getOptionCount($value, $optionsFacetedData);
+        if ($isAttributeFilterable && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)) {
+            return;
+        }
+
+        $this->itemDataBuilder->addItemData(
+            $this->tagFilter->filter($option['label']),
+            $value,
+            $count
+        );
+    }
+
+    /**
+     * Retrieve option value if it exists
+     *
+     * @param array $option
+     * @return bool|string
+     */
+    private function getOptionValue($option)
+    {
+        if (empty($option['value']) && !is_numeric($option['value'])) {
+            return false;
+        }
+        return $option['value'];
+    }
+
+    /**
+     * Retrieve count of the options
+     *
+     * @param int|string $value
+     * @param array $optionsFacetedData
+     * @return int
+     */
+    private function getOptionCount($value, $optionsFacetedData)
+    {
+        return isset($optionsFacetedData[$value]['count'])
+            ? (int)$optionsFacetedData[$value]['count']
+            : 0;
     }
 }

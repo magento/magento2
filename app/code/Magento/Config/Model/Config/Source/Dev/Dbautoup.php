@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@
 
 namespace Magento\Config\Model\Config\Source\Dev;
 
+/**
+ * @api
+ */
 class Dbautoup implements \Magento\Framework\Option\ArrayInterface
 {
     /**

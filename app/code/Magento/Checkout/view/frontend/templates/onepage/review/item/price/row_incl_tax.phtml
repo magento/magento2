@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,5 +12,5 @@ $_item = $block->getItem();
 ?>
 <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
 <span class="cart-price">
-    <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
+    <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
 </span>

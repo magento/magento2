@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -281,8 +281,9 @@ class CreditmemoFactory
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
-            $bundleSelectionAttributes = $this->serializer
-                ->unserialize($productOptions['bundle_selection_attributes']);
+            $bundleSelectionAttributes = $this->serializer->unserialize(
+                $productOptions['bundle_selection_attributes']
+            );
             if ($bundleSelectionAttributes) {
                 $qty = $bundleSelectionAttributes['qty'] * $parentQty;
             }

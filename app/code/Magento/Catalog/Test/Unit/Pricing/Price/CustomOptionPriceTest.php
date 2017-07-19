@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
@@ -180,7 +180,7 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         $option2Id = 2;
         $option2MaxPrice = 200;
         $option2MinPrice = 20;
-        $option2Type = Option::OPTION_TYPE_CHECKBOX;
+        $option2Type = \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX;
 
         $optionsData = [
             [

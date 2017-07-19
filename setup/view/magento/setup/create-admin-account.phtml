@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -153,7 +153,7 @@ $passwordWizard = sprintf(
                 class="form-el-input"
                 ng-change="passwordStatusChange()"
                 tooltip-placement="right"
-                tooltip-html-unsafe="<?php echo $passwordWizard; ?>"
+                tooltip-html-unsafe="<?= $passwordWizard ?>"
                 tooltip-trigger="focus"
                 tooltip-append-to-body="true"
                 type="password"
@@ -162,10 +162,14 @@ $passwordWizard = sprintf(
                 ng-class="{'invalid': account.adminPassword.$invalid && account.submitted}"
                 required
                 check-Password
+                check-User-Name-Password
                 >
             <div class="error-container">
                 <span ng-show="account.adminPassword.$error.checkPassword">
                     Please enter a mix of at least 7 alpha-numeric characters.
+                </span>
+                <span ng-show="account.adminPassword.$error.checkUserNamePasswordDifferent">
+                    Password cannot be the same as the user name.
                 </span>
                 <span ng-show="account.adminPassword.$error.required">
                     Please enter your new password.

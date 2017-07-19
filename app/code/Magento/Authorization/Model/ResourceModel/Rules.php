@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Authorization\Model\ResourceModel;
+
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -20,15 +19,6 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Framework\Acl\RootResource
      */
     protected $_rootResource;
-
-    /**
-     * Acl object cache
-     *
-     * @var \Magento\Framework\Acl\CacheInterface
-     * @deprecated since 2.2 due to native serialization elimination.
-     * Use data cache \Magento\Framework\Acl\Data\CacheInterface instead.
-     */
-    protected $_aclCache;
 
     /**
      * @var \Magento\Framework\Acl\Builder
@@ -50,7 +40,6 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Framework\Acl\CacheInterface $aclCache
      * @param string $connectionName
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      */
@@ -59,14 +48,12 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\Acl\CacheInterface $aclCache,
         $connectionName = null,
         \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null
     ) {
         $this->_aclBuilder = $aclBuilder;
         parent::__construct($context, $connectionName);
         $this->_rootResource = $rootResource;
-        $this->_aclCache = $aclCache;
         $this->_logger = $logger;
         $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Acl\Data\CacheInterface::class
@@ -112,7 +99,10 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
                 // If all was selected save it only and nothing else.
                 if ($postedResources === [$this->_rootResource->getId()]) {
-                    $insertData = $this->_prepareDataForTable(new \Magento\Framework\DataObject($row), $this->getMainTable());
+                    $insertData = $this->_prepareDataForTable(
+                        new \Magento\Framework\DataObject($row),
+                        $this->getMainTable()
+                    );
 
                     $connection->insert($this->getMainTable(), $insertData);
                 } else {
@@ -124,7 +114,10 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                         $row['permission'] = in_array($resourceId, $postedResources) ? 'allow' : 'deny';
                         $row['resource_id'] = $resourceId;
 
-                        $insertData = $this->_prepareDataForTable(new \Magento\Framework\DataObject($row), $this->getMainTable());
+                        $insertData = $this->_prepareDataForTable(
+                            new \Magento\Framework\DataObject($row),
+                            $this->getMainTable()
+                        );
                         $connection->insert($this->getMainTable(), $insertData);
                     }
                 }

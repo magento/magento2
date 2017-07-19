@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
@@ -8,6 +8,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 /**
  * Attribute add/edit form options tab
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Labels extends \Magento\Backend\Block\Template

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Model;
@@ -8,7 +8,7 @@ namespace Magento\Captcha\Model;
 /**
  * Implementation of \Zend\Captcha\Image
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
 {
@@ -117,8 +117,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isRequired($login = null)
     {
-        if (
-            $this->isUserAuth()
+        if ($this->isUserAuth()
             && !$this->isShownToLoggedInUser()
             || !$this->isEnabled()
             || !in_array(
@@ -425,8 +424,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
             return true;
         }
 
-        if (
-            (string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
+        if ((string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
             && $this->getAllowedAttemptsForSameLogin() == 0
         ) {
             return true;

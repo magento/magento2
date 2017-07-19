@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ require([
 ], function(){
 
 //<![CDATA[
-optionalZipCountries = <?php /* @noEscape */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
+optionalZipCountries = <?= /* @noEscape */ $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
 
 function onAddressCountryChanged (countryElement) {
     var zipElementId = countryElement.id.replace(/country_id/, 'postcode');
@@ -40,6 +40,7 @@ function setPostcodeOptional(zipElement, country) {
             zipElement.removeClassName('required-entry');
         }
         zipElement.up('div.field').removeClassName('required');
+        zipElement.up('div.field').removeClassName('_required');
     } else {
         zipElement.addClassName('required-entry');
         zipElement.up('div.field').addClassName('required');

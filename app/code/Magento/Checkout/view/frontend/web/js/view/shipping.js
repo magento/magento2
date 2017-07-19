@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,7 +57,10 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/shipping'
+            template: 'Magento_Checkout/shipping',
+            shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
+            shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
+            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
         },
         visible: ko.observable(!quote.isVirtual()),
         errorValidationMessage: ko.observable(false),
@@ -111,7 +114,7 @@ define([
                 if (shippingAddressData) {
                     checkoutProvider.set(
                         'shippingAddress',
-                        $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
@@ -150,9 +153,7 @@ define([
                         class: buttons.cancel.class ? buttons.cancel.class : 'action secondary action-hide-popup',
 
                         /** @inheritdoc */
-                        click: function () {
-                            this.closeModal();
-                        }
+                        click: this.onClosePopUp.bind(this)
                     }
                 ];
 
@@ -160,10 +161,29 @@ define([
                 this.popUpForm.options.closed = function () {
                     self.isFormPopUpVisible(false);
                 };
+
+                this.popUpForm.options.modalCloseBtnHandler = this.onClosePopUp.bind(this);
+                this.popUpForm.options.keyEventHandlers = {
+                    escapeKey: this.onClosePopUp.bind(this)
+                };
+
+                /** @inheritdoc */
+                this.popUpForm.options.opened = function () {
+                    // Store temporary address for revert action in case when user click cancel action
+                    self.temporaryAddress = $.extend(true, {}, checkoutData.getShippingAddressFromData());
+                };
                 popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
             }
 
             return popUp;
+        },
+
+        /**
+         * Revert address and close modal.
+         */
+        onClosePopUp: function () {
+            checkoutData.setShippingAddressFromData($.extend(true, {}, this.temporaryAddress));
+            this.getPopUp().closeModal();
         },
 
         /**
@@ -192,7 +212,7 @@ define([
                 newShippingAddress = createShippingAddress(addressData);
                 selectShippingAddress(newShippingAddress);
                 checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
-                checkoutData.setNewCustomerShippingAddress(addressData);
+                checkoutData.setNewCustomerShippingAddress($.extend(true, {}, addressData));
                 this.getPopUp().closeModal();
                 this.isNewAddressAdded(true);
             }

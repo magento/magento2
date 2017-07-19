@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Config\PayPal;
@@ -35,6 +35,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     private $icon = [];
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CcConfig $ccConfig
+     * @param null $methodCode
+     * @param string $pathPattern
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CcConfig $ccConfig,

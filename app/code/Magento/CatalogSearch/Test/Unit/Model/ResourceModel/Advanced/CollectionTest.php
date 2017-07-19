@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection

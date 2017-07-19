@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,15 +11,13 @@
 <div class="breadcrumbs">
     <ul class="items">
         <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
-            <li class="item <?php /* @escapeNotVerified */ echo $crumbName ?>">
+            <li class="item <?= /* @escapeNotVerified */ $crumbName ?>">
             <?php if ($crumbInfo['link']) : ?>
-                <a href="<?php /* @escapeNotVerified */ echo $crumbInfo['link'] ?>" title="<?php echo $block->escapeHtml($crumbInfo['title']) ?>">
-                    <?php echo $block->escapeHtml($crumbInfo['label']) ?>
-                </a>
+                <a href="<?= /* @escapeNotVerified */ $crumbInfo['link'] ?>" title="<?= $block->escapeHtml($crumbInfo['title']) ?>"><?= $block->escapeHtml($crumbInfo['label']) ?></a>
             <?php elseif ($crumbInfo['last']) : ?>
-                <strong><?php echo $block->escapeHtml($crumbInfo['label']) ?></strong>
+                <strong><?= $block->escapeHtml($crumbInfo['label']) ?></strong>
             <?php else: ?>
-                <?php echo $block->escapeHtml($crumbInfo['label']) ?>
+                <?= $block->escapeHtml($crumbInfo['label']) ?>
             <?php endif; ?>
             </li>
         <?php endforeach; ?>

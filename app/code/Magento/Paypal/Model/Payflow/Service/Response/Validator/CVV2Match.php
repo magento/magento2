@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
@@ -30,21 +30,21 @@ class CVV2Match implements ValidatorInterface
      */
     const ERROR_MESSAGE = 'Card security code does not match.';
 
-    /** Values of the response */
+    /**#@+ Values of the response */
     const RESPONSE_YES = 'y';
 
     const RESPONSE_NO = 'n';
 
     const RESPONSE_NOT_SUPPORTED = 'x';
-    /**  */
+    /**#@-*/
 
-    /** Validation settings payments */
+    /**#@+ Validation settings payments */
     const CONFIG_ON = 1;
 
     const CONFIG_OFF = 0;
 
     const CONFIG_NAME = 'avs_security_code';
-    /**  */
+    /**#@-*/
 
     /**
      * Validate data

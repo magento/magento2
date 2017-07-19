@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
@@ -152,7 +152,7 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
                 $this->stringContains('/var/tmp' . $parameterName ?: $this->reportName),
                 'w+'
             )->willReturn($errorStreamMock);
-        $this->reportWriter->write($this->directoryMock, '/var/tmp');
+        $this->assertTrue($this->reportWriter->write($this->directoryMock, '/var/tmp'));
     }
 
     /**
@@ -175,7 +175,7 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $this->reportValidatorMock->expects($this->once())->method('validate')->willReturn($errors);
         $this->directoryMock->expects($this->once())->method('openFile')->with('/var/tmp' . 'errors.csv', 'w+')
             ->willReturn($errorStreamMock);
-        $this->reportWriter->write($this->directoryMock, '/var/tmp');
+        $this->assertTrue($this->reportWriter->write($this->directoryMock, '/var/tmp'));
     }
 
     /**
@@ -186,7 +186,7 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $this->configInterfaceMock->expects($this->once())->method('get')->willReturn([]);
         $this->reportValidatorMock->expects($this->never())->method('validate');
         $this->directoryMock->expects($this->never())->method('openFile');
-        $this->reportWriter->write($this->directoryMock, '/var/tmp');
+        $this->assertTrue($this->reportWriter->write($this->directoryMock, '/var/tmp'));
     }
 
     /**

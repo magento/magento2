@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
@@ -162,7 +162,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         $this->attributeHelper->getStoreWebsiteId($storeId)
                     );
                     if (!$stockItemDo->getProductId()) {
-                        $inventoryData[] = $productId;
+                        $inventoryData['product_id'] = $productId;
                     }
 
                     $stockItemId = $stockItemDo->getId();

@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Swatches\Model\Swatch;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -83,7 +83,7 @@ class EavAttribute
      * @param Attribute $attribute
      * @return void
      */
-    public function beforeSave(Attribute $attribute)
+    public function beforeBeforeSave(Attribute $attribute)
     {
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             $this->setProperOptionsArray($attribute);
@@ -186,7 +186,9 @@ class EavAttribute
     {
         if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
             foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && $optionsArray['delete'][$optionId] == 1) {
+                if (isset($optionsArray['delete']) && isset($optionsArray['delete'][$optionId])
+                    && $optionsArray['delete'][$optionId] == 1
+                ) {
                     unset($optionsArray['value'][$optionId]);
                 }
             }
@@ -332,7 +334,7 @@ class EavAttribute
      */
     protected function isOptionForDelete(Attribute $attribute, $optionId)
     {
-        $isOptionForDelete = $attribute->getData('option/delete/'.$optionId);
+        $isOptionForDelete = $attribute->getData('option/delete/' . $optionId);
         return isset($isOptionForDelete) && $isOptionForDelete;
     }
 
@@ -349,7 +351,7 @@ class EavAttribute
         $collection->addFieldToFilter('option_id', $optionId);
         $collection->addFieldToFilter('store_id', $storeId);
         $collection->setPageSize(1);
-        
+
         $loadedSwatch = $collection->getFirstItem();
         if ($loadedSwatch->getId()) {
             $this->isSwatchExists = true;
@@ -372,7 +374,6 @@ class EavAttribute
         if ($this->isSwatchExists) {
             $swatch->setData('type', $type);
             $swatch->setData('value', $value);
-
         } else {
             $swatch->setData('option_id', $optionId);
             $swatch->setData('store_id', $storeId);
@@ -398,8 +399,7 @@ class EavAttribute
             /** @var \Magento\Swatches\Model\Swatch $swatch */
             $swatch = $this->swatchFactory->create();
             // created and removed on frontend option not exists in dependency array
-            if (
-                substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
+            if (substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
                 isset($this->dependencyArray[$defaultValue])
             ) {
                 $defaultValue = $this->dependencyArray[$defaultValue];
@@ -446,10 +446,23 @@ class EavAttribute
             if ($this->isOptionForDelete($attribute, $optionId)) {
                 continue;
             }
-            if (empty($option[0])) {
+            if (!isset($option[0]) || $option[0] === '') {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * @param Attribute $attribute
+     * @param bool $result
+     * @return bool
+     */
+    public function afterUsesSource(Attribute $attribute, $result)
+    {
+        if ($this->swatchHelper->isSwatchAttribute($attribute)) {
+            return true;
+        }
+        return $result;
     }
 }

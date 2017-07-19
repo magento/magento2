@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 
 /**
- * Tabs block
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Tabs extends \Magento\Backend\Block\Widget

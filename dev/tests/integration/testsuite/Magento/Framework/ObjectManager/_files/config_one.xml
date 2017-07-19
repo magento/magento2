@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -19,7 +19,7 @@
                 <item name="boolZero" xsi:type="boolean">false</item>
                 <item name="intValue" xsi:type="number">100500</item>
                 <item name="nullValue" xsi:type="null"/>
-                <item name="stringPattern" xsi:type="string">az-value</item>
+                <item name="stringPattern" xsi:type="string" translate="true">az-value</item>
             </argument>
             <argument name="constParam" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</argument>
             <argument name="boolFalseParam" xsi:type="boolean">false</argument>
@@ -28,7 +28,7 @@
             <argument name="boolZeroParam" xsi:type="boolean">false</argument>
             <argument name="intValueParam" xsi:type="number">100500</argument>
             <argument name="nullValueParam" xsi:type="null"/>
-            <argument name="stringPatternParam" xsi:type="string">az-value</argument>
+            <argument name="stringPatternParam" xsi:type="string" translate="true">az-value</argument>
         </arguments>
     </type>
 </config>

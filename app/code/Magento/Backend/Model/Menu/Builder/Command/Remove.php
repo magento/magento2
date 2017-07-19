@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Builder\Command;
 
 /**
  * Command to remove menu item
+ * @api
  */
 class Remove extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {

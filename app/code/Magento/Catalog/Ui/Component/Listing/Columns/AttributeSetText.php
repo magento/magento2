@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -9,6 +9,9 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 
+/**
+ * @api
+ */
 class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

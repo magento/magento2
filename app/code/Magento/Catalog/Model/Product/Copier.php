@@ -2,7 +2,7 @@
 /**
  * Catalog product copier. Creates product duplicate
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -54,12 +54,17 @@ class Copier
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
-        $duplicate->setData($product->getData());
+        $productData = $product->getData();
+        $productData = $this->removeStockItem($productData);
+        $duplicate->setData($productData);
         $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
-        $duplicate->setOriginalId($product->getEntityId());
+        $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
         $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
         $duplicate->setCreatedAt(null);
         $duplicate->setUpdatedAt(null);
@@ -81,7 +86,6 @@ class Copier
             }
         } while (!$isDuplicateSaved);
         $this->getOptionRepository()->duplicate($product, $duplicate);
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
             $duplicate->getData($metadata->getLinkField())
@@ -113,5 +117,22 @@ class Copier
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Remove stock item
+     *
+     * @param array $productData
+     * @return array
+     */
+    private function removeStockItem(array $productData)
+    {
+        if (isset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            $extensionAttributes = $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+            if (null !== $extensionAttributes->getStockItem()) {
+                $extensionAttributes->setData('stock_item', null);
+            }
+        }
+        return $productData;
     }
 }

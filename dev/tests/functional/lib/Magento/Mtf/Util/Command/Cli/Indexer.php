@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,11 @@ class Indexer extends Cli
     const PARAM_INDEXER_REINDEX = 'indexer:reindex';
 
     /**
+     * Parameter for set mode command.
+     */
+    const PARAM_SET_MODE = 'indexer:set-mode';
+
+    /**
      * Run reindex.
      *
      * @param array $indexes [optional]
@@ -31,5 +36,22 @@ class Indexer extends Cli
             $params = implode(' ', $indexes);
         }
         parent::execute(Indexer::PARAM_INDEXER_REINDEX . ' ' . $params);
+    }
+
+    /**
+     * Run set mode. Example of indexers array:
+     * [
+     *      [0] => ['indexer' => 'category_flat_data', 'mode' => 'schedule'],
+     *      [1] => ['indexer' => 'catalogrule_product', 'mode' => 'realtime']
+     * ]
+     *
+     * @param array $indexers
+     * @return void
+     */
+    public function setMode(array $indexers)
+    {
+        foreach ($indexers as $indexer) {
+            parent::execute(Indexer::PARAM_SET_MODE . ' ' . $indexer['mode'] . ' ' . $indexer['indexer']);
+        }
     }
 }

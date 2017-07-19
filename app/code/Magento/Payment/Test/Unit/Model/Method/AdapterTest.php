@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Method;
@@ -51,6 +51,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     private $paymentDataObjectFactory;
 
     /**
+     * @var MockObject
+     */
+    private $logger;
+
+    /**
      * @var string
      */
     private $code;
@@ -84,6 +89,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->formBlockType = '\FormBlock';
         $this->infoBlockType = '\InfoBlock';
 
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->getMock();
         $this->adapter = new Adapter(
             $this->eventManager,
             $this->valueHandlerPool,
@@ -92,8 +99,49 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             $this->formBlockType,
             $this->infoBlockType,
             $this->commandPool,
-            $this->validatorPool
+            $this->validatorPool,
+            null,
+            $this->logger
         );
+    }
+
+    public function testFetchTransactionInfo()
+    {
+        $transactionId = 10555;
+        $transactionInfo = ['test_key' => 'test_value'];
+
+        $valueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $command = $this->getMockForAbstractClass(CommandInterface::class);
+
+        /** @var  InfoInterface|MockObject $paymentInfo */
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+
+        $this->valueHandlerPool->method('get')
+            ->with('can_fetch_transaction_information')
+            ->willReturn($valueHandler);
+        $valueHandler->expects($this->atLeastOnce())
+            ->method('handle')
+            ->with(['field' => 'can_fetch_transaction_information'])
+            ->willReturn(true);
+
+        $this->paymentDataObjectFactory->method('create')
+            ->with($paymentInfo)
+            ->willReturn($paymentDO);
+
+        $this->commandPool->method('get')
+            ->with('fetch_transaction_information')
+            ->willReturn($command);
+        $command->expects($this->atLeastOnce())
+            ->method('execute')
+            ->with(['transactionId' => $transactionId, 'payment' => $paymentDO])
+            ->willReturn($transactionInfo);
+
+        $this->assertEquals(
+            $transactionInfo,
+            $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
+        );
+
     }
 
     /**
@@ -221,7 +269,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             '\InfoBlock',
             null,
             null,
-            $commandManager
+            $commandManager,
+            $this->logger
         );
 
         $valueHandler = $this->getMock(ValueHandlerInterface::class);
@@ -274,7 +323,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             'CODE',
             '\FormBlock',
             '\InfoBlock',
-            $commandPool
+            $commandPool,
+            null,
+            null,
+            $this->logger
         );
 
         $valueHandler = $this->getMock(ValueHandlerInterface::class);

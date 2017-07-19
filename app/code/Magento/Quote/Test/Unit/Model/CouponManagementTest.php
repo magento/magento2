@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\CouponManagement;
+use Magento\Quote\Model\CouponManagement;
 
 class CouponManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,6 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getActive')
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
-
 
         $this->assertEquals($couponCode, $this->couponManagement->get($cartId));
     }

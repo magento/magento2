@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\ReportXml\DB;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 
 /**
  * Class ColumnsResolver
@@ -19,13 +22,40 @@ class ColumnsResolver
     private $nameResolver;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private $connection;
+
+    /**
      * ColumnsResolver constructor.
+     *
      * @param NameResolver $nameResolver
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ResourceConnection $resourceConnection
     ) {
         $this->nameResolver = $nameResolver;
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
+     * Returns connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getConnection()
+    {
+        if (!$this->connection) {
+            $this->connection = $this->resourceConnection->getConnection();
+        }
+        return $this->connection;
     }
 
     /**
@@ -51,8 +81,10 @@ class ColumnsResolver
                 if (isset($attributeData['distinct']) && $attributeData['distinct'] == true) {
                     $prefix = ' DISTINCT ';
                 }
-                $expression = new \Zend_Db_Expr(
-                    strtoupper($attributeData['function']) . '(' . $prefix . $tableAlias . '.' . $columnName . ')'
+                $expression = new ColumnValueExpression(
+                    strtoupper($attributeData['function']) . '(' . $prefix
+                    . $this->getConnection()->quoteIdentifier($tableAlias . '.' . $columnName)
+                    . ')'
                 );
             } else {
                 $expression = $tableAlias . '.' . $columnName;
@@ -61,7 +93,6 @@ class ColumnsResolver
             if (isset($attributeData['group'])) {
                 $group[$columnAlias] = $expression;
             }
-
         }
         $selectBuilder->setGroup(array_merge($selectBuilder->getGroup(), $group));
         return $columns;

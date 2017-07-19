@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -16,6 +16,7 @@ use Magento\Cms\Helper\Page as PageHelper;
 /**
  * Cms Page Model
  *
+ * @api
  * @method ResourceCmsPage _getResource()
  * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)

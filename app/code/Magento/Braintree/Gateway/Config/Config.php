@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Config;
@@ -72,9 +72,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getCountrySpecificCardTypeConfig()
     {
-        $countriesCardTypes = $this->serializer->unserialize($this->getValue(self::KEY_COUNTRY_CREDIT_CARD));
-
-        return is_array($countriesCardTypes) ? $countriesCardTypes : [];
+        $countryCardTypes = $this->getValue(self::KEY_COUNTRY_CREDIT_CARD);
+        if (!$countryCardTypes) {
+            return [];
+        }
+        $countryCardTypes = $this->serializer->unserialize($countryCardTypes);
+        return is_array($countryCardTypes) ? $countryCardTypes : [];
     }
 
     /**

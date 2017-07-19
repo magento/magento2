@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -15,13 +15,106 @@ class ConfigurablePriceTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(ConfigurablePriceModifier::class);
+        return $this->objectManager->getObject(ConfigurablePriceModifier::class, ['locator' => $this->locatorMock]);
     }
 
-    public function testModifyMeta()
+    /**
+     * @param array $metaInput
+     * @param array $metaOutput
+     * @dataProvider metaDataProvider
+     */
+    public function testModifyMeta($metaInput, $metaOutput)
     {
-        $meta = ['initial' => 'meta'];
+        $this->productMock->expects($this->any())
+            ->method('getTypeId')
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
 
-        $this->assertArrayHasKey('initial', $this->getModel()->modifyMeta($meta));
+        $metaResult = $this->getModel()->modifyMeta($metaInput);
+        $this->assertEquals($metaResult, $metaOutput);
+    }
+
+    /**
+     * @return array
+     */
+    public function metaDataProvider()
+    {
+        return [
+            [
+                'metaInput' => [
+                    'pruduct-details' => [
+                        'children' => [
+                            'container_price' => [
+                                'children' => [
+                                    'advanced_pricing_button' => [
+                                        'arguments' => []
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'metaOutput' => [
+                    'pruduct-details' => [
+                        'children' => [
+                            'container_price' => [
+                                'children' => [
+                                    'advanced_pricing_button' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'visible' => 0,
+                                                    'disabled' => 1,
+                                                    'componentType' => 'container'
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                    'price' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'component' =>
+                                                        'Magento_ConfigurableProduct/js/components/price-configurable'
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ]
+                ]
+            ], [
+                'metaInput' => [
+                    'pruduct-details' => [
+                        'children' => [
+                            'container_price' => [
+                                'children' => []
+                            ]
+                        ]
+                    ]
+                ],
+                'metaOutput' => [
+                    'pruduct-details' => [
+                        'children' => [
+                            'container_price' => [
+                                'children' => [
+                                    'price' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'component' =>
+                                                        'Magento_ConfigurableProduct/js/components/price-configurable'
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

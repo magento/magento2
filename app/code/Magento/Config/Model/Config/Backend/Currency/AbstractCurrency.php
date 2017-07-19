@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
+/**
+ * @api
+ */
 abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -32,7 +35,8 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
                 )
             );
         }
-        return $this->getData('groups/options/fields/allow/value');
+
+        return (array)$this->getData('groups/options/fields/allow/value');
     }
 
     /**

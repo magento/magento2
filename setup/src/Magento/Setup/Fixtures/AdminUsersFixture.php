@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
 /**
- * Class for generating admin users.
+ * Generate admin users
+ *
+ * Support the following format:
+ * <!-- Number of admin users -->
+ * <admin_users>{int}</admin_users>
  */
 class AdminUsersFixture extends Fixture
 {
@@ -17,26 +21,55 @@ class AdminUsersFixture extends Fixture
     protected $priority = 5;
 
     /**
+     * @var \Magento\User\Model\UserFactory
+     */
+    private $userFactory;
+
+    /**
+     * @var \Magento\Authorization\Model\RoleFactory
+     */
+    private $roleFactory;
+
+    /**
+     * @var \Magento\User\Model\ResourceModel\User\CollectionFactory
+     */
+    private $userCollectionFactory;
+
+    /**
+     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
+     * @param FixtureModel $fixtureModel
+     */
+    public function __construct(
+        \Magento\User\Model\UserFactory $userFactory,
+        \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
+        FixtureModel $fixtureModel
+    ) {
+        parent::__construct($fixtureModel);
+        $this->userFactory = $userFactory;
+        $this->roleFactory = $roleFactory;
+        $this->userCollectionFactory = $userCollectionFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute()
     {
         $adminUsersNumber = $this->fixtureModel->getValue('admin_users', 0);
-        if (!$adminUsersNumber) {
+        $adminUsersStartIndex = $this->userCollectionFactory->create()->getSize();
+
+        if ($adminUsersStartIndex >= $adminUsersNumber) {
             return;
         }
 
-        /** @var \Magento\User\Model\UserFactory $adminUserFactory */
-        $adminUserFactory = $this->fixtureModel->getObjectManager()->create(\Magento\User\Model\UserFactory::class);
+        $defaultAdminUser = $this->userFactory->create()->loadByUsername('admin');
+        $defaultAdminRole = $this->roleFactory->create()->load($defaultAdminUser->getAclRole());
 
-        /** @var \Magento\Authorization\Model\RoleFactory $roleFactory */
-        $roleFactory = $this->fixtureModel->getObjectManager()->create(\Magento\Authorization\Model\RoleFactory::class);
-
-        $defaultAdminUser = $adminUserFactory->create()->loadByUsername('admin');
-        $defaultAdminRole = $roleFactory->create()->load($defaultAdminUser->getAclRole());
-
-        for ($i = 1; $i <= $adminUsersNumber; $i++) {
-            $adminUser = $adminUserFactory->create();
+        for ($i = $adminUsersStartIndex; $i <= $adminUsersNumber; $i++) {
+            $adminUser = $this->userFactory->create();
             $adminUser
                 ->setEmail('admin' . $i . '@example.com')
                 ->setFirstName('Firstname')
@@ -46,7 +79,7 @@ class AdminUsersFixture extends Fixture
                 ->setIsActive(1);
             $adminUser->save();
 
-            $role = $roleFactory->create();
+            $role = $this->roleFactory->create();
             $role
                 ->setUserId($adminUser->getId())
                 ->setRoleName('admin')
@@ -57,7 +90,6 @@ class AdminUsersFixture extends Fixture
                 ->setParentId(1);
             $role->save();
         }
-
     }
 
     /**
@@ -74,7 +106,7 @@ class AdminUsersFixture extends Fixture
     public function introduceParamLabels()
     {
         return [
-            'customers' => 'Admin Users'
+            'admin_users' => 'Admin Users'
         ];
     }
 }

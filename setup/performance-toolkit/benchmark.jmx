@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -452,6 +452,11 @@
           <elementProp name="loops" elementType="Argument">
             <stringProp name="Argument.name">loops</stringProp>
             <stringProp name="Argument.value">${__P(loops,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="lineItemsAmount" elementType="Argument">
+            <stringProp name="Argument.name">lineItemsAmount</stringProp>
+            <stringProp name="Argument.value">${__P(lineItemsAmount,10)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="orders" elementType="Argument">
@@ -1352,7 +1357,7 @@ productList.add(productMap);</stringProp>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract product attribute id" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">configurable_product_attribute_id</stringProp>
-            <stringProp name="RegexExtractor.regex">"spConfig": \{"attributes":\{"(\d+)"</stringProp>
+            <stringProp name="RegexExtractor.regex">"[sp|json]+Config": \{"attributes":\{"(\d+)"</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"/>
             <stringProp name="RegexExtractor.match_number">1</stringProp>

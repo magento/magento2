@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
@@ -9,6 +9,8 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Backend grid item renderer date
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

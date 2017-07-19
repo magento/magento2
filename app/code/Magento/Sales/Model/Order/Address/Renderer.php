@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Address;
 
 /**
  * Class Renderer used for formatting an order address
+ * @api
  */
 class Renderer
 {

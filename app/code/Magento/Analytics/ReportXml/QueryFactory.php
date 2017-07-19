@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class QueryFactory
@@ -108,7 +108,8 @@ class QueryFactory
             [
                 'select' => $select,
                 'selectHydrator' => $this->selectHydrator,
-                'connectionName' => $selectBuilder->getConnectionName()
+                'connectionName' => $selectBuilder->getConnectionName(),
+                'config' => $queryConfig
             ]
         );
     }
@@ -129,7 +130,8 @@ class QueryFactory
                 [
                     'select' => $this->selectHydrator->recreate($queryData['select_parts']),
                     'selectHydrator' => $this->selectHydrator,
-                    'connectionName' => $queryData['connectionName']
+                    'connectionName' => $queryData['connectionName'],
+                    'config' => $queryData['config']
                 ]
             );
         }

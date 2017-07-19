@@ -1,164 +1,93 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
 /**
- * Class AttributeSetFixture
+ * Fixture for Attribute Sets and Attributes based on the configuration
+ *
+ * Support the following format:
+ * <!-- Number of product attribute sets -->
+ * <product_attribute_sets>{int}</product_attribute_sets>
+ *
+ * <!-- Number of attributes per set -->
+ * <product_attribute_sets_attributes>{int}</product_attribute_sets_attributes>
+ *
+ * <!-- Number of values per attribute -->
+ * <product_attribute_sets_attributes_values>{int}</product_attribute_sets_attributes_values>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  */
 class AttributeSetsFixture extends Fixture
 {
+    /** Name of generated attribute set */
+    const PRODUCT_SET_NAME = 'Product Set ';
+
     /**
      * @var int
      */
     protected $priority = 25;
 
     /**
-     * Cache for attribute IDs.
-     *
-     * @var array
+     * @var AttributeSet\AttributeSetFixture
      */
-    private $attributeIdsCache = [];
+    private $attributeSetsFixture;
 
     /**
-     * Quantity of unique attributes to generate. Zero means infinity.
-     *
-     * @var int
+     * @var AttributeSet\Pattern
      */
-    protected $uniqueAttributesQuantity = 0;
+    private $pattern;
+
+    /**
+     * @param FixtureModel $fixtureModel
+     * @param AttributeSet\AttributeSetFixture $attributeSetsFixture
+     * @param AttributeSet\Pattern $pattern
+     */
+    public function __construct(
+        FixtureModel $fixtureModel,
+        AttributeSet\AttributeSetFixture $attributeSetsFixture,
+        \Magento\Setup\Fixtures\AttributeSet\Pattern $pattern
+    ) {
+        parent::__construct($fixtureModel);
+        $this->attributeSetsFixture = $attributeSetsFixture;
+        $this->pattern = $pattern;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function execute()
     {
-        $this->populateUniqueAttributesQuantity();
-        $attributeSets = $this->getAttributeSetsFixtureValue();
-        if ($attributeSets === null) {
-            return;
-        }
-        $this->fixtureModel->resetObjectManager();
-        /** @var \Magento\Catalog\Api\AttributeSetManagementInterface $attributeSetManagement */
-        $attributeSetManagement = $this->fixtureModel->getObjectManager()->create(
-            \Magento\Catalog\Api\AttributeSetManagementInterface::class
-        );
-        /** @var \Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface $attributeGroupRepository */
-        $attributeGroupRepository = $this->fixtureModel->getObjectManager()->create(
-            \Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface::class
-        );
-
-        foreach ($attributeSets['attribute_set'] as $attributeSetData) {
-            //Create Attribute Set
-            /** @var \Magento\Eav\Api\Data\AttributeSetInterfaceFactory $attributeSetFactory */
-            $attributeSetFactory = $this->fixtureModel->getObjectManager()->create(
-                \Magento\Eav\Api\Data\AttributeSetInterfaceFactory::class
-            );
-            $attributeSet = $attributeSetFactory->create();
-            $attributeSet->setAttributeSetName($attributeSetData['name']);
-            $attributeSet->setEntityTypeId(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE);
-
-            $result = $attributeSetManagement->create($attributeSet, 4);
-            $attributeSetId = $result->getAttributeSetId();
-
-            //Create Attribute Group
-            /** @var \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory $attributeGroupFactory */
-            $attributeGroupFactory = $this->fixtureModel->getObjectManager()->create(
-                \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory::class
-            );
-            $attributeGroup = $attributeGroupFactory->create();
-            $attributeGroup->setAttributeGroupName($result->getAttributeSetName() . ' - Group');
-            $attributeGroup->setAttributeSetId($attributeSetId);
-            $attributeGroupRepository->save($attributeGroup);
-            $attributeGroupId = $attributeGroup->getAttributeGroupId();
-
-            /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository */
-            $attributeRepository = $this->fixtureModel->getObjectManager()->create(
-                \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
-            );
-            /** @var \Magento\Catalog\Api\ProductAttributeManagementInterface $attributeManagementManagement */
-            $attributeManagement = $this->fixtureModel->getObjectManager()->create(
-                \Magento\Catalog\Api\ProductAttributeManagementInterface::class
-            );
-
-            $attributesData = array_key_exists(0, $attributeSetData['attributes']['attribute'])
-                ? $attributeSetData['attributes']['attribute'] : [$attributeSetData['attributes']['attribute']];
-            foreach ($attributesData as $attributeData) {
-                if ($this->uniqueAttributesQuantity === 0
-                    || (count($this->attributeIdsCache) < $this->uniqueAttributesQuantity)) {
-                    //Create Attribute
-                    /** @var  \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory $attributeFactory */
-                    $attributeFactory = $this->fixtureModel->getObjectManager()->create(
-                        \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory::class
-                    );
-
-                    $optionsData = array_key_exists(0, $attributeData['options']['option'])
-                        ? $attributeData['options']['option'] : [$attributeData['options']['option']];
-                    $options = [];
-                    foreach ($optionsData as $optionData) {
-                        /** @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionFactory */
-                        $optionFactory = $this->fixtureModel->getObjectManager()->create(
-                            \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class
-                        );
-                        $option = $optionFactory->create(['data' => $optionData]);
-                        $options[] = $option;
-                    }
-
-                    $attribute = $attributeFactory->create(['data' => $attributeData]);
-                    $attribute->setOptions($options);
-
-                    $result = $attributeRepository->save($attribute);
-                    $attributeId = $result->getAttributeId();
-                    $this->fillAttributeIdsCache($attributeId);
-                } else {
-                    $attributeId = $this->getAttributeIdFromCache();
-                }
-                //Associate Attribute to Attribute Set
-                $sortOrder = 3;
-
-                $attributeManagement->assign($attributeSetId, $attributeGroupId, $attributeId, $sortOrder);
+        $attributeSets = $this->fixtureModel->getValue('attribute_sets', null);
+        if ($attributeSets !== null) {
+            foreach ($attributeSets['attribute_set'] as $attributeSetData) {
+                $this->attributeSetsFixture->createAttributeSet($attributeSetData);
             }
         }
-    }
 
-    /**
-     * Get attribute ID from cache.
-     *
-     * @return int
-     */
-    private function getAttributeIdFromCache()
-    {
-        $attributeId = next($this->attributeIdsCache);
-        if ($attributeId === false) {
-            $attributeId = reset($this->attributeIdsCache);
+        $attributeSetsCount = $this->fixtureModel->getValue('product_attribute_sets', null);
+        if ($attributeSetsCount !== null) {
+            for ($index = 1; $index <= $attributeSetsCount; $index++) {
+                $this->attributeSetsFixture->createAttributeSet(
+                    $this->pattern->generateAttributeSet(
+                        self::PRODUCT_SET_NAME . $index,
+                        $this->fixtureModel->getValue('product_attribute_sets_attributes', 3),
+                        $this->fixtureModel->getValue('product_attribute_sets_attributes_values', 3),
+                        function ($attributeIndex, $attribute) use ($index) {
+                            return array_replace_recursive(
+                                $attribute,
+                                [
+                                    'attribute_code' => "attribute_set{$index}_" . $attributeIndex,
+                                ]
+                            );
+                        }
+                    )
+                );
+            }
         }
-
-        return $attributeId;
-    }
-
-    /**
-     * Fill attribute IDs cache.
-     *
-     * @param int $attributeId
-     * @return void
-     */
-    private function fillAttributeIdsCache($attributeId)
-    {
-        if ($this->uniqueAttributesQuantity !== 0) {
-            $this->attributeIdsCache[] = $attributeId;
-        }
-    }
-
-    /**
-     * Populate quantity of unique attributes to generate.
-     *
-     * @return void
-     */
-    protected function populateUniqueAttributesQuantity()
-    {
-        $this->uniqueAttributesQuantity = $this->fixtureModel->getValue('unique_attributes_quantity', 0);
     }
 
     /**
@@ -175,17 +104,8 @@ class AttributeSetsFixture extends Fixture
     public function introduceParamLabels()
     {
         return [
-            'attribute_sets' => 'Attribute Sets'
+            'attribute_sets' => 'Attribute Sets (Default)',
+            'product_attribute_sets' => 'Attribute Sets (Extra)'
         ];
-    }
-
-    /**
-     * Get attribute sets fixture value.
-     *
-     * @return array|null
-     */
-    protected function getAttributeSetsFixtureValue()
-    {
-        return $this->fixtureModel->getValue('attribute_sets', null);
     }
 }

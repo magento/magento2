@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -23,7 +23,7 @@
                 <item name="import_field_separator" xsi:type="string">,</item>
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
-                    <item name="products" xsi:type="array">
+                    <item name="entities" xsi:type="array">
                         <item name="0" xsi:type="string">catalogProductSimple::default</item>
                     </item>
                     <item name="template" xsi:type="array">

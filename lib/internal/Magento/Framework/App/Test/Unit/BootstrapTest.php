@@ -1,18 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\Bootstrap;
-use \Magento\Framework\App\State;
-use \Magento\Framework\App\MaintenanceMode;
-
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\State;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,6 +61,11 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      */
     protected $bootstrapMock;
 
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $remoteAddress;
+
     protected function setUp()
     {
         $this->objectManagerFactory = $this->getMock(
@@ -81,8 +83,27 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, ['isOn'], [], '', false);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->maintenanceMode = $this->getMock(
+            \Magento\Framework\App\MaintenanceMode::class,
+            ['isOn'],
+            [],
+            '',
+            false
+        );
+        $this->remoteAddress = $this->getMock(
+            \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $filesystem = $this->getMock(
+            \Magento\Framework\Filesystem::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
@@ -91,9 +112,10 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $mapObjectManager = [
             [\Magento\Framework\App\Filesystem\DirectoryList::class, $this->dirs],
             [\Magento\Framework\App\MaintenanceMode::class, $this->maintenanceMode],
+            [\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class, $this->remoteAddress],
             [\Magento\Framework\Filesystem::class, $filesystem],
             [\Magento\Framework\App\DeploymentConfig::class, $this->deploymentConfig],
-            ['Psr\Log\LoggerInterface', $this->logger],
+            [\Psr\Log\LoggerInterface::class, $this->logger],
         ];
 
         $this->objectManager->expects($this->any())->method('get')
@@ -260,6 +282,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $bootstrap = self::createBootstrap([Bootstrap::PARAM_REQUIRE_MAINTENANCE => $isExpected]);
         $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn($isOn);
+        $this->remoteAddress->expects($this->once())->method('getRemoteAddress')->willReturn(false);
         $this->application->expects($this->never())->method('launch');
         $this->application->expects($this->once())->method('catchException')->willReturn(true);
         $bootstrap->run($this->application);

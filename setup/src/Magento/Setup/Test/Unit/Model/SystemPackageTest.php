@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -214,24 +214,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
                         'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
                     ],
 
-                ],
-                [
-
-                    SystemPackage::EDITION_B2B,
-                    false,
-                    [
-                        'name' => SystemPackage::EDITION_B2B,
-                        'description' => 'eCommerce Platform for Growth (B2B Edition)',
-                        'keywords' => '',
-                        'versions' => '1.2.0, 1.1.0, 1.1.0-RC1, * 1.0.0',
-                        'type' => 'metapackage',
-                        'license' => 'OSL-3.0, AFL-3.0',
-                        'source' => '[]',
-                        'names' => SystemPackage::EDITION_B2B,
-                        InfoCommand::AVAILABLE_VERSIONS => [],
-                        'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
-                    ],
-                ],
+                ]
             ]);
         $this->assertEquals($this->expectedPackages, $this->systemPackage->getPackageVersions());
     }
@@ -341,39 +324,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $eeCurrentVersion
-     * @param array $expectedResult
-     *
-     * @dataProvider getAllowedB2bVersionsDataProvider
-     */
-    public function testGetAllowedB2bVersions($eeCurrentVersion, $expectedResult)
-    {
-        $this->composerAppFactory->expects($this->once())
-            ->method('createInfoCommand')
-            ->willReturn($this->infoCommand);
-        $this->systemPackage = new SystemPackage($this->composerAppFactory, $this->composerInformation);
-        $this->infoCommand->expects($this->once())
-            ->method('run')
-            ->with(SystemPackage::EDITION_B2B)
-            ->willReturn([InfoCommand::AVAILABLE_VERSIONS => ['1.0.0', '1.0.1', '1.0.2']]);
-        $require = $this->getMock(\Composer\Package\Link::class, [], [], '', false);
-        $constraintMock = $this->getMock(\Composer\Semver\Constraint\Constraint::class, [], [], '', false);
-        $constraintMock->expects($this->any())->method('getPrettyString')
-            ->willReturn('1.0.1');
-        $require->expects($this->any())
-            ->method('getConstraint')
-            ->willReturn($constraintMock);
-
-        $this->composerInformation->expects($this->any())
-            ->method('getPackageRequirements')
-            ->willReturn([SystemPackage::EDITION_ENTERPRISE => $require]);
-        $this->assertEquals(
-            $expectedResult,
-            $this->systemPackage->getAllowedB2BVersions($eeCurrentVersion)
-        );
-    }
-
-    /**
      * @return array
      */
     public function getAllowedEnterpriseVersionsDataProvider()
@@ -400,42 +350,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
                                 'id' => '1.0.0',
                                 'name' => 'Version 1.0.0 EE',
-                                'current' => false,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllowedB2bVersionsDataProvider()
-    {
-        return [
-            ['2.0.0', []],
-            [
-                '1.0.0',
-                [
-                    [
-                        'package' => SystemPackage::EDITION_B2B,
-                        'versions' => [
-                            [
-                                'id' => '1.0.2',
-                                'name' => 'Version 1.0.2 B2B (latest)',
-                                'current' => false,
-                            ],
-                            [
-                                'id' => '1.0.1',
-                                'name' => 'Version 1.0.1 B2B',
-                                'current' => false,
-                            ],
-                            [
-
-                                'id' => '1.0.0',
-                                'name' => 'Version 1.0.0 B2B',
                                 'current' => false,
                             ],
                         ],

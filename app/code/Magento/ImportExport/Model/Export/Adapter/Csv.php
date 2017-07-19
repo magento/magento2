@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Export\Adapter;
@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Model\Export\Adapter;
 /**
  * Export adapter csv.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
 {

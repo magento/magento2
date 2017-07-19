@@ -1,32 +1,30 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Request;
-use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Front controller for WebAPI REST area.
- *
- * TODO: Consider warnings suppression removal
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -199,6 +197,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * Handle REST request
+     *
+     * Based on request decide is it schema request or API request and process accordingly.
+     * Throws Exception in case if cannot be processed properly.
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface

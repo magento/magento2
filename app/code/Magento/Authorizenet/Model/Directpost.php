@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Authorizenet\Model\TransactionService;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
@@ -281,15 +280,14 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         switch ($result->getXResponseCode()) {
             case self::RESPONSE_CODE_APPROVED:
             case self::RESPONSE_CODE_HELD:
-                if (
-                    in_array(
-                        $result->getXResponseReasonCode(),
-                        [
+                if (in_array(
+                    $result->getXResponseReasonCode(),
+                    [
                             self::RESPONSE_REASON_CODE_APPROVED,
                             self::RESPONSE_REASON_CODE_PENDING_REVIEW,
                             self::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED
                         ]
-                    )
+                )
                 ) {
                     if (!$payment->getParentTransactionId()
                         || $result->getXTransId() != $payment->getParentTransactionId()
@@ -534,8 +532,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         $response = $this->getResponse();
         //md5 check
-        if (
-            !$this->getConfigData('trans_md5')
+        if (!$this->getConfigData('trans_md5')
             || !$this->getConfigData('login')
             || !$response->isValidHash($this->getConfigData('trans_md5'), $this->getConfigData('login'))
         ) {
@@ -747,7 +744,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 return $this;
             }
 
-            $payment->setIsFraudDetected(true);
+            $fdsFilterAction = (string)$fraudDetailsResponse->getFdsFilterAction();
+            if ($this->fdsFilterActionIsReportOnly($fdsFilterAction) === false) {
+                $payment->setIsFraudDetected(true);
+            }
+
             $payment->setAdditionalInformation('fraud_details', $fraudData);
         } catch (\Exception $e) {
             //this request is optional
@@ -802,8 +803,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $response = $this->getResponse();
-            if (
-                $voidPayment && $response->getXTransId() && strtoupper($response->getXType())
+            if ($voidPayment && $response->getXTransId() && strtoupper($response->getXType())
                 == self::REQUEST_TYPE_AUTH_ONLY
             ) {
                 $order->getPayment()->setTransactionId(null)->setParentTransactionId($response->getXTransId())->void();
@@ -992,5 +992,17 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 ->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->psrLogger;
+    }
+
+    /**
+     * Checks if filter action is Report Only. Transactions that trigger this filter are processed as normal,
+     * but are also reported in the Merchant Interface as triggering this filter.
+     *
+     * @param string $fdsFilterAction
+     * @return bool
+     */
+    private function fdsFilterActionIsReportOnly($fdsFilterAction)
+    {
+        return $fdsFilterAction === (string)$this->dataHelper->getFdsFilterActionLabel('report');
     }
 }

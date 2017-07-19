@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute;
@@ -9,6 +9,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides EAV attributes configuration
+ *
+ * @api
  */
 class Config extends \Magento\Framework\Config\Data
 {

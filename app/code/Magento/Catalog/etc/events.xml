@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -56,5 +56,8 @@
     </event>
     <event name="catalog_product_save_before">
         <observer name="set_special_price_start_date" instance="Magento\Catalog\Observer\SetSpecialPriceStartDate" />
+    </event>
+    <event name="store_save_after">
+        <observer name="synchronize_website_attributes" instance="Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange" />
     </event>
 </config>

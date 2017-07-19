@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Source\Website;
@@ -11,6 +11,7 @@ use Magento\Store\Model\System\Store;
  * Admin OptionHash will include the default store (Admin) with the OptionHash.
  *
  * This class is needed until the layout file supports supplying arguments to an option model.
+ * @api
  */
 class AdminOptionHash extends OptionHash
 {

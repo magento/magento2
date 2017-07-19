@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,9 +72,8 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
         $user = $observer->getEvent()->getObject();
         if ($user->getId()) {
             $passwordHash = $user->getPassword();
-            $passwordLifetime = $this->observerConfig->getAdminPasswordLifetime();
-            if ($passwordLifetime && $passwordHash && !$user->getForceNewPassword()) {
-                $this->userResource->trackPassword($user, $passwordHash, $passwordLifetime);
+            if ($passwordHash && !$user->getForceNewPassword()) {
+                $this->userResource->trackPassword($user, $passwordHash);
                 $this->messageManager->getMessages()->deleteMessageByIdentifier('magento_user_password_expired');
                 $this->authSession->unsPciAdminUserIsPasswordExpired();
             }

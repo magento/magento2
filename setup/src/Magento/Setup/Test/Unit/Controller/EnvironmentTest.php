@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Controller;
@@ -230,6 +230,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
     }
+
     public function testCronScriptActionUpdaterFailed()
     {
         $this->cronScriptReadinessCheck->expects($this->once())->method('checkSetup')->willReturn(['success' => true]);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 ?>
 
 <?php $_divId = 'tree-div_' . time() ?>
-<div id="<?php /* @escapeNotVerified */ echo $_divId ?>" class="tree"></div>
+<div id="<?= /* @escapeNotVerified */ $_divId ?>" class="tree"></div>
 <script id="ie-deferred-loader" defer="defer" src="//:"></script>
 <script>
     require([
@@ -73,7 +73,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 jQuery(function()
 {
     var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '<?php /* @escapeNotVerified */ echo $block->getLoadTreeUrl() ?>'
+       dataUrl: '<?= /* @escapeNotVerified */ $block->getLoadTreeUrl() ?>'
     });
 
     categoryLoader.createNode = function(config) {
@@ -152,37 +152,37 @@ jQuery(function()
         varienWindowOnload();
     });
 
-    tree = new Ext.tree.TreePanel.Enhanced('<?php /* @escapeNotVerified */ echo $_divId ?>', {
+    tree = new Ext.tree.TreePanel.Enhanced('<?= /* @escapeNotVerified */ $_divId ?>', {
         animate:          false,
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
         selModel:         new Ext.tree.CheckNodeMultiSelectionModel(),
-        rootVisible:      '<?php /* @escapeNotVerified */ echo $block->getRoot()->getIsVisible() ?>',
-        useAjax:          <?php /* @escapeNotVerified */ echo $block->getUseAjax() ?>,
-        currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
+        rootVisible:      '<?= /* @escapeNotVerified */ $block->getRoot()->getIsVisible() ?>',
+        useAjax:          <?= /* @escapeNotVerified */ $block->getUseAjax() ?>,
+        currentNodeId:    <?= (int) $block->getCategoryId() ?>,
         addNodeTo:        false,
         rootUIProvider:   Ext.tree.CheckboxNodeUI
     });
 
     tree.on('check', function(node, checked) {
-        <?php /* @escapeNotVerified */ echo $block->getJsFormObject() ?>.updateElement.value = this.getChecked().join(', ');
+        <?= /* @escapeNotVerified */ $block->getJsFormObject() ?>.updateElement.value = this.getChecked().join(', ');
         varienElementMethods.setHasChanges(node.getUI().checkbox);
     }, tree);
 
     // set the root node
     var parameters = {
-        text:        '<?php /* @escapeNotVerified */ echo htmlentities($block->getRoot()->getName()) ?>',
+        text:        '<?= /* @escapeNotVerified */ htmlentities($block->getRoot()->getName()) ?>',
         draggable:   false,
-        checked:'<?php /* @escapeNotVerified */ echo $block->getRoot()->getChecked() ?>',
+        checked:'<?= /* @escapeNotVerified */ $block->getRoot()->getChecked() ?>',
         uiProvider: Ext.tree.CheckboxNodeUI,
         allowDrop:   <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-        id:          <?php echo (int) $block->getRoot()->getId() ?>,
-        expanded:    <?php echo (int) $block->getIsWasExpanded() ?>,
-        category_id: <?php echo (int) $block->getCategoryId() ?>
+        id:          <?= (int) $block->getRoot()->getId() ?>,
+        expanded:    <?= (int) $block->getIsWasExpanded() ?>,
+        category_id: <?= (int) $block->getCategoryId() ?>
     };
 
-    tree.loadTree({parameters:parameters, data:<?php /* @escapeNotVerified */ echo $block->getTreeJson() ?>},true);
+    tree.loadTree({parameters:parameters, data:<?= /* @escapeNotVerified */ $block->getTreeJson() ?>},true);
 
 });
 //]]>

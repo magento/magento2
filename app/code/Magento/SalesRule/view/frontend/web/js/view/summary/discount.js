@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,6 +31,17 @@ define([
             }
 
             return this.totals()['coupon_code'];
+        },
+
+        /**
+         * @return {*}
+         */
+        getCouponLabel: function () {
+            if (!this.totals()) {
+                return null;
+            }
+
+            return this.totals()['coupon_label'];
         },
 
         /**

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -116,11 +116,6 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
                 'addressRepository' => $this->addressRepository
             ]
         );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->service,
-            'minimumAmountErrorMessage',
-            $this->amountErrorMessageMock
-        );
     }
 
     /**
@@ -190,8 +185,6 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setCollectShippingRates')
             ->with(true)
             ->willReturnSelf();
-        $quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
-        $quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())->method('save')->willReturnSelf();
         $this->quoteAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
@@ -277,70 +270,6 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setCollectShippingRates')
             ->with(true)
             ->willReturnSelf();
-        $quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
-        $quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(true);
-
-        $this->service->assign('cart867', $this->quoteAddressMock);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Incorrect amount
-     */
-    public function testSetAddressWithViolationOfMinimumAmount()
-    {
-        $customerAddressId = 150;
-
-        $quoteMock = $this->getMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress'],
-            [],
-            '',
-            false
-        );
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with('cart867')
-            ->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $quoteMock->expects($this->once())
-            ->method('setShippingAddress')
-            ->with($this->quoteAddressMock)
-            ->willReturnSelf();
-
-        $customerAddressMock = $this->getMock(\Magento\Customer\Api\Data\AddressInterface::class);
-
-        $this->addressRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerAddressId)
-            ->willReturn($customerAddressMock);
-
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($this->quoteAddressMock)
-            ->willReturn(true);
-
-        $this->quoteAddressMock->expects($this->once())->method('getSaveInAddressBook')->willReturn(1);
-        $this->quoteAddressMock->expects($this->once())->method('getSameAsBilling')->willReturn(1);
-        $this->quoteAddressMock->expects($this->once())->method('getCustomerAddressId')->willReturn($customerAddressId);
-
-        $quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($this->quoteAddressMock);
-        $this->quoteAddressMock->expects($this->once())
-            ->method('importCustomerAddressData')
-            ->with($customerAddressMock)
-            ->willReturnSelf();
-
-        $this->quoteAddressMock->expects($this->once())->method('setSameAsBilling')->with(1)->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())->method('setSaveInAddressBook')->with(1)->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())
-            ->method('setCollectShippingRates')
-            ->with(true)
-            ->willReturnSelf();
-
-        $this->amountErrorMessageMock->expects($this->once())
-            ->method('getMessage')
-            ->willReturn(__('Incorrect amount'));
-        $quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
-        $quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(false);
 
         $this->service->assign('cart867', $this->quoteAddressMock);
     }

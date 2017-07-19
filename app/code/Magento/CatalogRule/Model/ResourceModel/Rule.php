@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -153,7 +153,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * Get catalog rules product price for specific date, website and
      * customer group
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      * @param int $wId
      * @param int $gId
      * @param int $pId
@@ -173,13 +173,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * Retrieve product prices by catalog rule for specific date, website and customer group
      * Collect data with  product Id => price pairs
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      * @param int $websiteId
      * @param int $customerGroupId
      * @param array $productIds
      * @return array
      */
-    public function getRulePrices(\DateTime $date, $websiteId, $customerGroupId, $productIds)
+    public function getRulePrices(\DateTimeInterface $date, $websiteId, $customerGroupId, $productIds)
     {
         $connection = $this->getConnection();
         $select = $connection->select()

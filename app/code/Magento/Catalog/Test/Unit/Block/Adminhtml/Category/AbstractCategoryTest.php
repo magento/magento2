@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,7 +105,6 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 23;
         $saveUrl = 'save URL';
         $params = ['_current' => false, '_query' => false, 'store' => $storeId];
-
 
         $this->requestMock->expects($this->once())->method('getParam')->with('store')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
@@ -38,6 +38,7 @@ class BooleanUtils
         $this->trueValues = $trueValues;
         $this->falseValues = $falseValues;
     }
+
     // @codingStandardsIgnoreEnd
 
     /**
@@ -63,5 +64,22 @@ class BooleanUtils
         throw new \InvalidArgumentException(
             'Boolean value is expected, supported values: ' . var_export($allowedValues, true)
         );
+    }
+
+    /**
+     * Try to convert $value to boolean else return non processed $value
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    public function convert($value)
+    {
+        if (in_array($value, $this->trueValues, true)) {
+            return true;
+        } elseif (in_array($value, $this->falseValues, true)) {
+            return false;
+        } else {
+            return $value;
+        }
     }
 }

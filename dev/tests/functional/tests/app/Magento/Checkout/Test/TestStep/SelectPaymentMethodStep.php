@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
@@ -44,20 +43,30 @@ class SelectPaymentMethodStep implements TestStepInterface
     private $fillCreditCardOn3rdParty;
 
     /**
+     * Payment form name to render.
+     *
+     * @var string
+     */
+    private $paymentForm;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $payment
      * @param CreditCard|null $creditCard
+     * @param string $paymentForm
      * @param bool $fillCreditCardOn3rdParty
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         array $payment,
         CreditCard $creditCard = null,
+        $paymentForm = 'default',
         $fillCreditCardOn3rdParty = false
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->payment = $payment;
         $this->creditCard = $creditCard;
+        $this->paymentForm = $paymentForm;
         $this->fillCreditCardOn3rdParty = $fillCreditCardOn3rdParty;
     }
 
@@ -72,6 +81,7 @@ class SelectPaymentMethodStep implements TestStepInterface
             $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod(
                 $this->payment,
                 $this->creditCard,
+                $this->paymentForm,
                 $this->fillCreditCardOn3rdParty
             );
         }

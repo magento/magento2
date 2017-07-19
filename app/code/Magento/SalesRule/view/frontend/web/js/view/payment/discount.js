@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,11 +15,12 @@ define([
 
     var totals = quote.getTotals(),
         couponCode = ko.observable(null),
-        isApplied = ko.observable(couponCode() != null);
+        isApplied;
 
     if (totals()) {
         couponCode(totals()['coupon_code']);
     }
+    isApplied = ko.observable(couponCode() != null);
 
     return Component.extend({
         defaults: {

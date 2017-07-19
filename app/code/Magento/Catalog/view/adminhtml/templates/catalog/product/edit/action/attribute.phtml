@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,14 +8,14 @@
 
 ?>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
+    <?= $block->getBlockHtml('formkey') ?>
 </form>
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#attributes-edit-form').mage('form')
-        .mage('validation', {validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>'});
+        .mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
 
 });
 </script>

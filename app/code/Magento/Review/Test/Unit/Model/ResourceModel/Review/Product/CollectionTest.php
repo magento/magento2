@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
@@ -34,6 +34,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('MAGETWO-59234: Code under the test depends on a virtual type which cannot be mocked.');
+
         $attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, null, [], '', false);
         $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
         $eavConfig->expects($this->any())->method('getAttribute')->will($this->returnValue($attribute));
@@ -84,7 +86,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $productLimitationMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

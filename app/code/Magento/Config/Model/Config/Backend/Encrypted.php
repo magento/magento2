@@ -2,7 +2,7 @@
 /**
  * Encrypted config field backend model
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@
 
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Encrypted extends \Magento\Framework\App\Config\Value implements
     \Magento\Framework\App\Config\Data\ProcessorInterface
 {

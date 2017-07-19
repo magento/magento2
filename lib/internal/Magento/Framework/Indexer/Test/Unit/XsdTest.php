@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit;
@@ -17,6 +17,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Config\Dom\UrnResolver
      */
     protected $urnResolver;
+
     /**
      * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */

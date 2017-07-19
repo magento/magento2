@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\TestAsset;
@@ -18,5 +18,10 @@ class BasicInjection
     public function __construct(\Magento\Framework\ObjectManager\TestAsset\Basic $object)
     {
         $this->_object = $object;
+    }
+
+    public function getBasicDependency()
+    {
+        return $this->_object;
     }
 }

@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Console\Cli;
-use Magento\Framework\ObjectManagerInterface;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Filesystem;
+use Magento\Framework\App\DeploymentConfig\FileReader;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +39,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $configFilePool;
 
     /**
-     * @var Reader
+     * @var FileReader
      */
     private $reader;
 
@@ -58,24 +58,31 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $config;
 
+    /**
+     * @var array
+     */
+    private $envConfig;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->reader = $this->objectManager->get(Reader::class);
+        $this->reader = $this->objectManager->get(FileReader::class);
         $this->writer = $this->objectManager->get(Writer::class);
 
         $this->config = $this->loadConfig();
+        $this->envConfig = $this->loadEnvConfig();
         $this->env = $_ENV;
 
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->getFileName(),
-            file_get_contents(__DIR__ . '/../../_files/_config.local.php')
-        );
-
-        $config = include(__DIR__ . '/../../_files/_config.php');
+        $config = include __DIR__ . '/../../_files/config.php';
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $config]);
+
+        $config = include __DIR__ . '/../../_files/env.php';
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $config]);
 
         $_ENV['CONFIG__DEFAULT__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.default.test';
         $_ENV['CONFIG__WEBSITES__BASE__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.website_base.test';
@@ -138,6 +145,8 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                     'web/test/test_value_2' => ['value2.local_config.default.test'],
                     'web/test2/test_value_3' => ['value3.config.default.test'],
                     'web/test2/test_value_4' => ['value4.env.default.test'],
+                    'carriers/fedex/account' => ['******'],
+                    'paypal/fetch_reports/ftp_password' => ['******'],
                     'web/test' => [
                         'web/test/test_value_1 - value1.db.default.test',
                         'web/test/test_value_2 - value2.local_config.default.test',
@@ -157,6 +166,8 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                         'web/test/test_value_2 - value2.local_config.default.test',
                         'web/test2/test_value_3 - value3.config.default.test',
                         'web/test2/test_value_4 - value4.env.default.test',
+                        'carriers/fedex/account - ******',
+                        'paypal/fetch_reports/ftp_password - ******',
                     ],
                 ]
             ],
@@ -276,37 +287,35 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string
+     * @return array
      */
-    private function getFileName()
+    private function loadConfig()
     {
-        $filePool = $this->configFilePool->getInitialFilePools();
-
-        return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
+        return $this->reader->load(ConfigFilePool::APP_CONFIG);
     }
 
     /**
      * @return array
      */
-    private function loadConfig()
+    private function loadEnvConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_CONFIG,
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     public function tearDown()
     {
         $_ENV = $this->env;
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->delete(
-            $this->getFileName()
-        );
+
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             "<?php\n return array();\n"
         );
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            "<?php\n return array();\n"
+        );
+
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
     }
 }

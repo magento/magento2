@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import;
@@ -11,10 +11,18 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * Import entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
+
+    /**
+     * HTTP scheme
+     * used to compare against the filename and select the proper DriverPool adapter
+     * @var string
+     */
+    private $httpScheme = 'http://';
+
     /**
      * Temp directory.
      *
@@ -145,7 +153,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
-            $read = $this->_readFactory->create($url, DriverPool::HTTP);
+
+            if ($matches[0] === $this->httpScheme) {
+                $read = $this->_readFactory->create($url, DriverPool::HTTP);
+            } else {
+                $read = $this->_readFactory->create($url, DriverPool::HTTPS);
+            }
+
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),

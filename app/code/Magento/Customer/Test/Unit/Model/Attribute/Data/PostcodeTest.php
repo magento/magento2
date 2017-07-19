@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,7 +64,7 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
     public function testValidateValue($value, $expected, $countryId, $isOptional)
     {
         $storeLabel = 'Zip/Postal Code';
-        $this->attributeMock->expects($this->once())
+        $this->attributeMock->expects($this->any())
             ->method('getStoreLabel')
             ->willReturn($storeLabel);
 
