@@ -1,11 +1,10 @@
 <?php
 /**
- * Register components (via a list of glob patterns)
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+//Register components (via a list of glob patterns)
 namespace Magento\NonComposerComponentRegistration;
 
 use RuntimeException;
@@ -19,7 +18,7 @@ use RuntimeException;
 function main()
 {
     $globPatterns = require __DIR__ . '/etc/registration_globlist.php';
-    $baseDir = __DIR__ . '/';
+    $baseDir = dirname(__DIR__) . '/';
 
     foreach ($globPatterns as $globPattern) {
         // Sorting is disabled intentionally for performance improvement
@@ -27,17 +26,8 @@ function main()
         if ($files === false) {
             throw new RuntimeException("glob(): error with '$baseDir$globPattern'");
         }
-        array_map(__NAMESPACE__ . '\file', $files);
+        array_map(function ($file) { require_once $file; }, $files);
     }
-}
-
-/**
- * Isolated include with it's own variable scope
- *
- * @return void
- */
-function file() {
-    include func_get_arg(0);
 }
 
 main();

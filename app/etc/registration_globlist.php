@@ -1,13 +1,18 @@
 <?php
 /**
- * Glob patterns relative to this files parent directory, used by
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Glob patterns relative to the project root directory, used by
  * registration.php to generate a list of includes.
  */
 return [
-    'code/*/*/cli_commands.php',
-    'code/*/*/registration.php',
-    'design/*/*/*/registration.php',
-    'i18n/*/*/registration.php',
-    '../lib/internal/*/*/registration.php',
-    '../lib/internal/*/*/*/registration.php',
+    'app/code/*/*/cli_commands.php',
+    'app/code/*/*/registration.php',
+    'app/design/*/*/*/registration.php',
+    'app/i18n/*/*/registration.php',
+    'lib/internal/*/*/registration.php',
+    'lib/internal/*/*/*/registration.php',
 ];
