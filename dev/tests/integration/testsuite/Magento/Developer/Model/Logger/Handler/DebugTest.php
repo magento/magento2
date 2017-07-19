@@ -6,6 +6,7 @@
 namespace Magento\Developer\Model\Logger\Handler;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -16,6 +17,23 @@ use Magento\Deploy\Model\Mode;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Preconditions
+ *  - Developer mode enabled
+ *  - Log file isn't exists
+ *  - 'Log to file' setting are enabled
+ *
+ * Test steps
+ *  - Enable production mode without compilation
+ *  - Try to log message into log file
+ *  - Assert that log file isn't exists
+ *  - Assert that 'Log to file' setting are disabled
+ *
+ *  - Enable 'Log to file' setting
+ *  - Try to log message into debug file
+ *  - Assert that log file is exists
+ *  - Assert that log file contain logged message
+ */
 class DebugTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,6 +66,11 @@ class DebugTest extends \PHPUnit_Framework_TestCase
      */
     private $etcDirectory;
 
+    /**
+     * @var Config
+     */
+    private $appConfig;
+
     public function setUp()
     {
         /** @var Filesystem $filesystem */
@@ -68,9 +91,11 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->configSetCommand = Bootstrap::getObjectManager()->create(ConfigSetCommand::class);
+        $this->appConfig = Bootstrap::getObjectManager()->create(Config::class);
 
         // Preconditions
         $this->mode->enableDeveloperMode();
+        $this->enableDebugging();
         if (file_exists($this->getDebuggerLogPath())) {
             unlink($this->getDebuggerLogPath());
         }
@@ -82,15 +107,8 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->etcDirectory->renameFile('env.base.php', 'env.php');
     }
 
-    public function testDebugInProductionMode()
+    private function enableDebugging()
     {
-        $message = 'test message';
-
-        $this->mode->enableProductionModeMinimal();
-
-        $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
-
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
@@ -115,6 +133,18 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->method('writeln')
             ->with('<info>Value was saved and locked.</info>');
         $this->assertFalse((bool)$this->configSetCommand->run($this->inputMock, $this->outputMock));
+    }
+
+    public function testDebugInProductionMode()
+    {
+        $message = 'test message';
+
+        $this->mode->enableProductionModeMinimal();
+        $this->logger->debug($message);
+        $this->assertFileNotExists($this->getDebuggerLogPath());
+        $this->assertFalse((bool)$this->appConfig->getValue('dev/debug/debug_logging'));
+
+        $this->enableDebugging();
         $this->logger->debug($message);
 
         $this->assertFileExists($this->getDebuggerLogPath());
