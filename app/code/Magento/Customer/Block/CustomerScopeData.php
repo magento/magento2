@@ -25,12 +25,12 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     private $serializer;
 
     /**
-     * CustomerScopeData constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
