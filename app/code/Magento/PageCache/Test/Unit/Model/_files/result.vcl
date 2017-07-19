@@ -17,3 +17,8 @@
 
     grace:
     120
+
+    normalize parameters:
+    # strip normalized parameters from query string
+    set req.url = regsuball(req.url, "((\?)|&)(gclid|gclsrc|utm_content|utm_term|utm_campaign|utm_medium|utm_source|_ga)=[^&]*", "");
+    set req.url = regsub(req.url, "(\?&|\?|&)$", "");

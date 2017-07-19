@@ -13,3 +13,6 @@
 
     grace:
     /* {{ grace_period }} */
+
+    normalize parameters:
+    /* {{ normalize_params }} */

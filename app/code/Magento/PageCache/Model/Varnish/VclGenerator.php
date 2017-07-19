@@ -32,6 +32,11 @@ class VclGenerator implements VclGeneratorInterface
     private $gracePeriod;
 
     /**
+     * @var string|null
+     */
+    private $normalizeParams;
+
+    /**
      * @var VclTemplateLocatorInterface
      */
     private $vclTemplateLocator;
@@ -54,6 +59,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param int $backendPort
      * @param array $accessList
      * @param int $gracePeriod
+     * @param string $normalizeParams
      * @param string $sslOffloadedHeader
      * @param array $designExceptions
      */
@@ -63,6 +69,7 @@ class VclGenerator implements VclGeneratorInterface
         $backendPort,
         $accessList,
         $gracePeriod,
+        $normalizeParams,
         $sslOffloadedHeader,
         $designExceptions = []
     ) {
@@ -70,6 +77,7 @@ class VclGenerator implements VclGeneratorInterface
         $this->backendPort = $backendPort;
         $this->accessList = $accessList;
         $this->gracePeriod = $gracePeriod;
+        $this->normalizeParams = $normalizeParams;
         $this->vclTemplateLocator = $vclTemplateLocator;
         $this->sslOffloadedHeader = $sslOffloadedHeader;
         $this->designExceptions = $designExceptions;
@@ -105,7 +113,31 @@ class VclGenerator implements VclGeneratorInterface
             // Apache and Nginx drop all headers with underlines by default.
             '/* {{ ssl_offloaded_header }} */' => str_replace('_', '-', $this->getSslOffloadedHeader()),
             '/* {{ grace_period }} */' => $this->getGracePeriod(),
+            '/* {{ normalize_params }} */' => $this->getNormalizeParams(),
         ];
+    }
+
+    /**
+     * turn a comma separated list of string parameters that Varnish should strip off incoming requests
+     * into a varnish regular expression command
+     *
+     * @return string
+     */
+    private function getNormalizeParams()
+    {
+        if (empty(trim($this->normalizeParams))) {
+            return false;
+        }
+
+        # convert comma separated list of normalised params into a pipe separated list ready for the regular expression
+        $normalizeParams = preg_replace("/(\r|\n)*|\|$/", "", str_replace(",", "|", $this->normalizeParams));
+
+        # add parameters into regular expression
+        $tpl  = "# strip normalized parameters from query string\n";
+        $tpl .= "    set req.url = regsuball(req.url, \"((\?)|&)(%s)=[^&]*\", \"\2\");\n";
+        $tpl .= "    set req.url = regsub(req.url, \"(\?&|\?|&)$\", \"\");\n";
+
+        return sprintf($tpl, $normalizeParams);
     }
 
     /**

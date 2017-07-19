@@ -52,6 +52,11 @@ class GenerateVclCommand extends Command
     const GRACE_PERIOD_OPTION = 'grace-period';
 
     /**
+     * Normalize parameters
+     */
+    const NORMALIZE_PARAMS_OPTION = 'normalize-params';
+
+    /**
      * Output file option name
      */
     const OUTPUT_FILE_OPTION = 'output-file';
@@ -74,6 +79,7 @@ class GenerateVclCommand extends Command
         self::BACKEND_PORT_OPTION => 'backendPort',
         self::BACKEND_HOST_OPTION => 'backendHost',
         self::GRACE_PERIOD_OPTION => 'gracePeriod',
+        self::NORMALIZE_PARAMS_OPTION => 'normalizeParams',
     ];
 
     /**
@@ -200,6 +206,14 @@ class GenerateVclCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Grace period in seconds',
                 300
+            ),
+            new InputOption(
+                self::NORMALIZE_PARAMS_OPTION,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'A comma separated list of query string parameters which should be stripped from the varnish request url
+                when determining a match for the page.',
+                'gclid,gclsrc,utm_content,utm_term,utm_campaign,utm_medium,utm_source,_ga'
             ),
             new InputOption(
                 self::OUTPUT_FILE_OPTION,

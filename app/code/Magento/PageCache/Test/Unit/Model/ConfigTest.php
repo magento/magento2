@@ -120,6 +120,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         null,
                         120
                     ],
+                    [
+                        \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_NORMALIZE_PARAMS,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'gclid,gclsrc,utm_content,utm_term,utm_campaign,utm_medium,utm_source,_ga'
+                    ],
                 ]
             )
         );
@@ -146,7 +152,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'accessList' =>  explode(',', '127.0.0.1, 192.168.0.1,127.0.0.2'),
             'designExceptions' => [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
             'sslOffloadedHeader' => 'X_Forwarded_Proto: https',
-            'gracePeriod' => 120
+            'gracePeriod' => 120,
+            'normalizeParams' => 'gclid,gclsrc,utm_content,utm_term,utm_campaign,utm_medium,utm_source,_ga'
         ];
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
@@ -157,6 +164,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 '8080',
                 explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
                 120,
+                'gclid,gclsrc,utm_content,utm_term,utm_campaign,utm_medium,utm_source,_ga',
                 'X_Forwarded_Proto: https',
                 [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
             )));
