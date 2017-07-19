@@ -65,7 +65,6 @@ class CmsPageSitemapItemResolver implements SitemapItemResolverInterface
     public function getItems($storeId)
     {
         $collection = $this->cmsPageFactory->create()->getCollection($storeId);
-        var_dump($collection);
         $items = array_map(function($item) use ($storeId) {
             return $this->itemFactory->create([
                 'url' => $item->getUrl(),
@@ -75,8 +74,6 @@ class CmsPageSitemapItemResolver implements SitemapItemResolverInterface
                 'changeFrequency' => $this->getPageChangeFrequency($storeId),
             ]);
         }, $collection);
-
-        var_dump($items);
 
         return $items;
     }
