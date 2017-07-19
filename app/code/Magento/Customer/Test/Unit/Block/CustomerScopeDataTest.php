@@ -85,46 +85,8 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($storeId, $this->model->getWebsiteId());
     }
 
-    public function testGetInvalidationRules()
+    public function testEncodeConfiguration()
     {
-        $storeId = 1;
-
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getWebsiteId'])
-            ->getMockForAbstractClass();
-
-        $storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($storeId);
-
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->with(null)
-            ->willReturn($storeMock);
-
-        $this->assertEquals(
-            [
-                '*' => [
-                    'Magento_Customer/js/invalidation-processor' => [
-                        'invalidationRules' => [
-                            'website-rule' => [
-                                'Magento_Customer/js/invalidation-rules/website-rule' => [
-                                    'scopeConfig' => [
-                                        'websiteId' => 1,
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-            ],
-            $this->model->getInvalidationRules()
-        );
-    }
-
-    public function testGetSerializedInvalidationRules()
-    {
-        $storeId = 1;
         $rules = [
             '*' => [
                 'Magento_Customer/js/invalidation-processor' => [
@@ -141,19 +103,6 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getWebsiteId'])
-            ->getMockForAbstractClass();
-
-        $storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($storeId);
-
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->with(null)
-            ->willReturn($storeMock);
-
         $this->serializerMock->expects($this->any())
             ->method('serialize')
             ->with($rules)
@@ -161,7 +110,7 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             json_encode($rules),
-            $this->model->getSerializedInvalidationRules()
+            $this->model->encodeConfiguration($rules)
         );
     }
 }

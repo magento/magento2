@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Block;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Class CustomerScopeData provide scope (website, store or store_group) information on front
  * Can be used, for example, on store front, in order to determine
@@ -20,7 +23,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -28,7 +31,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -36,12 +39,11 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->storeManager = $context->getStoreManager();
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -57,35 +59,14 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return array
-     */
-    public function getInvalidationRules()
-    {
-        return [
-            '*' => [
-                'Magento_Customer/js/invalidation-processor' => [
-                    'invalidationRules' => [
-                        'website-rule' => [
-                            'Magento_Customer/js/invalidation-rules/website-rule' => [
-                                'scopeConfig' => [
-                                    'websiteId' => $this->getWebsiteId(),
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-        ];
-    }
-
-    /**
-     * Get the invalidation rules json encoded
+     * Encode invalidation rules.
      *
+     * @param array $configuration
      * @return bool|string
      * @throws \InvalidArgumentException
      */
-    public function getSerializedInvalidationRules()
+    public function encodeConfiguration(array $configuration)
     {
-        return $this->serializer->serialize($this->getInvalidationRules());
+        return $this->serializer->serialize($configuration);
     }
 }
