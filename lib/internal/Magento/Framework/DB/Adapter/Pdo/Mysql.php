@@ -3368,8 +3368,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function insertFromSelect(Select $select, $table, array $fields = [], $mode = false)
     {
-        $query = 'INSERT';
-        if ($mode == self::INSERT_IGNORE) {
+        $query = $mode === self::REPLACE ? 'REPLACE' : 'INSERT';
+
+        if ($mode === self::INSERT_IGNORE) {
             $query .= ' IGNORE';
         }
         $query = sprintf('%s INTO %s', $query, $this->quoteIdentifier($table));
@@ -3380,26 +3381,36 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         $query = sprintf('%s %s', $query, $select->assemble());
 
-        if ($mode == self::INSERT_ON_DUPLICATE) {
-            if (!$fields) {
-                $describe = $this->describeTable($table);
-                foreach ($describe as $column) {
-                    if ($column['PRIMARY'] === false) {
-                        $fields[] = $column['COLUMN_NAME'];
-                    }
-                }
-            }
-            $update = [];
-            foreach ($fields as $field) {
-                $update[] = sprintf('%1$s = VALUES(%1$s)', $this->quoteIdentifier($field));
-            }
-
-            if ($update) {
-                $query = sprintf('%s ON DUPLICATE KEY UPDATE %s', $query, join(', ', $update));
-            }
+        if ($mode === self::INSERT_ON_DUPLICATE) {
+            $query .= $this->renderOnDuplicate($table, $fields);
         }
 
         return $query;
+    }
+
+    /**
+     * Render On Duplicate query part
+     *
+     * @param string $table
+     * @param array $fields
+     * @return string
+     */
+    private function renderOnDuplicate($table, array $fields)
+    {
+        if (!$fields) {
+            $describe = $this->describeTable($table);
+            foreach ($describe as $column) {
+                if ($column['PRIMARY'] === false) {
+                    $fields[] = $column['COLUMN_NAME'];
+                }
+            }
+        }
+        $update = [];
+        foreach ($fields as $field) {
+            $update[] = sprintf('%1$s = VALUES(%1$s)', $this->quoteIdentifier($field));
+        }
+
+        return count($update) ? ' ON DUPLICATE KEY UPDATE ' . join(', ', $update) : '';
     }
 
     /**
