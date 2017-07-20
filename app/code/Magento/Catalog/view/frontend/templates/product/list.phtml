@@ -42,11 +42,10 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     $pos = $block->getPositioned();
     ?>
     <div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?> products-<?= /* @escapeNotVerified */ $viewMode ?>">
-        <?php $iterator = 1; ?>
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
-                <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+            <li class="item product product-item">
                 <div class="product-item-info" data-container="product-grid">
                     <?php
                     $productImage = $block->getImage($_product, $image);
@@ -112,7 +111,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         </div>
                     </div>
                 </div>
-                <?= ($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+            </li>
             <?php endforeach; ?>
         </ol>
     </div>
