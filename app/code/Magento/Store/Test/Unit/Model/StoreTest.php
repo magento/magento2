@@ -51,6 +51,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMock(
             \Magento\Framework\App\Request\Http::class, [
             'getRequestString',
+            'getOriginalPathInfo',
             'getModuleName',
             'setModuleName',
             'getActionName',
@@ -386,7 +387,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
 
-        $this->requestMock->expects($this->atLeastOnce())->method('getRequestString')->will($this->returnValue(''));
+        $this->requestMock->expects($this->atLeastOnce())->method('getOriginalPathInfo')->will($this->returnValue(''));
         $this->requestMock->expects($this->atLeastOnce())->method('getQueryValue')->will($this->returnValue([
             'SID' => 'sid'
         ]));
