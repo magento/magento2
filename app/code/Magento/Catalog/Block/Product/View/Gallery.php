@@ -19,7 +19,6 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
@@ -38,9 +37,9 @@ class Gallery extends AbstractView
     protected $jsonEncoder;
 
     /**
-     * @var DataObject
+     * @var array
      */
-    protected $galleryImagesConfig;
+    private $galleryImagesConfig;
 
     /**
      * @var ImagesConfigFactoryInterface
@@ -48,12 +47,12 @@ class Gallery extends AbstractView
     private $galleryImagesConfigFactory;
 
     /**
-     * @param Context                      $context
-     * @param ArrayUtils                   $arrayUtils
-     * @param EncoderInterface             $jsonEncoder
+     * @param Context $context
+     * @param ArrayUtils $arrayUtils
+     * @param EncoderInterface $jsonEncoder
+     * @param array $data
      * @param ImagesConfigFactoryInterface $imagesConfigFactory
-     * @param array                        $galleryImagesConfig
-     * @param array                        $data
+     * @param array $galleryImagesConfig
      */
     public function __construct(
         Context $context,
@@ -64,8 +63,9 @@ class Gallery extends AbstractView
         array $galleryImagesConfig = []
     ) {
         parent::__construct($context, $arrayUtils, $data);
-        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
-        $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()->get(ImagesConfigFactoryInterface::class);
+        $this->jsonEncoder = $jsonEncoder;
+        $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()
+            ->get(ImagesConfigFactoryInterface::class);
         $this->galleryImagesConfig = $galleryImagesConfig;
     }
 
@@ -211,7 +211,8 @@ class Gallery extends AbstractView
     private function getGalleryImagesConfig()
     {
         if (false === $this->hasData('gallery_images_config')) {
-            $this->setData('gallery_images_config', $this->galleryImagesConfigFactory->create($this->galleryImagesConfig));
+            $galleryImageConfig = $this->galleryImagesConfigFactory->create($this->galleryImagesConfig);
+            $this->setData('gallery_images_config', $galleryImageConfig);
         }
 
         return $this->getData('gallery_images_config');
