@@ -59,6 +59,8 @@
                 }
             };
 
+            var treeRoot = '#tree-div';
+
             /**
              * Fix ext compatibility with prototype 1.6
              */
@@ -491,7 +493,7 @@
                                     if (data.error) {
                                         reRenderTree();
                                     } else {
-                                        $(obj.tree.container.dom).trigger('categoryMove.tree');
+                                        $(treeRoot).trigger('categoryMove.tree');
                                     }
                                     $('.page-main-actions').next('.messages').remove();
                                     $('.page-main-actions').next('#messages').remove();
