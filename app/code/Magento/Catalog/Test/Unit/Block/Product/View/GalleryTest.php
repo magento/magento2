@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,6 +68,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             $this->context,
             $this->arrayUtils,
             $this->jsonEncoderMock,
+            [],
             $this->imagesConfigFactoryMock
         );
     }
@@ -179,7 +183,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     private function getImagesConfigFactory()
     {
-        $this->galleryImagesConfigMock = $this->getMockBuilder('\Magento\Framework\Data\Collection')
+        $this->galleryImagesConfigMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -187,7 +191,8 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($this->getGalleryImagesConfigItems()));
 
-        $galleryImagesConfigFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface')
+        $galleryImagesConfigFactoryMock = $this
+            ->getMockBuilder(\Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

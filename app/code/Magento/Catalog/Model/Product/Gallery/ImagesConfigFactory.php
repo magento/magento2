@@ -30,7 +30,7 @@ class ImagesConfigFactory implements ImagesConfigFactoryInterface
     {
         /** @var \Magento\Framework\Data\Collection $collection */
         $collection = $this->dataCollectionFactory->create($data);
-        array_map(function($imageConfig) use ($collection) {
+        array_map(function ($imageConfig) use ($collection) {
             $collection->addItem(new DataObject($imageConfig));
         }, $imagesConfig);
 

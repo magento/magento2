@@ -78,18 +78,19 @@ class Gallery extends AbstractView
     {
         $product = $this->getProduct();
         $images = $product->getMediaGalleryImages();
-        if ($images instanceof \Magento\Framework\Data\Collection) {
-            foreach ($images as $image) {
-                foreach($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
-                    /** @var Product $product */
-                    $image->setData(
-                        $imageConfig->getData('data_object_key'),
-                        $this->_imageHelper->init($product,
-                            $imageConfig['image_id'])
-                            ->setImageFile($image->getData('file'))
-                            ->getUrl()
-                    );
-                }
+        if (!$images instanceof \Magento\Framework\Data\Collection) {
+            return $images;
+        }
+
+        foreach ($images as $image) {
+            $galleryImagesConfig = $this->getGalleryImagesConfig()->getItems();
+            foreach ($galleryImagesConfig as $imageConfig) {
+                $image->setData(
+                    $imageConfig->getData('data_object_key'),
+                    $this->_imageHelper->init($product, $imageConfig['image_id'])
+                        ->setImageFile($image->getData('file'))
+                        ->getUrl()
+                );
             }
         }
 
@@ -131,7 +132,7 @@ class Gallery extends AbstractView
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
             ]);
-            foreach($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
+            foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                 $imageItem->setData(
                     $imageConfig->getData('json_object_key'),
                     $image->getData($imageConfig->getData('data_object_key'))
