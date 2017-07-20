@@ -30,7 +30,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
      */
     public function getCarrierCode()
     {
-        return $this->getData(SourceCarrierLinkInterface::CARRIER_CODE);
+        return $this->getData(self::CARRIER_CODE);
     }
 
     /**
@@ -38,7 +38,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
      */
     public function setCarrierCode($carrierCode)
     {
-        $this->setData(SourceCarrierLinkInterface::CARRIER_CODE, $carrierCode);
+        $this->setData(self::CARRIER_CODE, $carrierCode);
     }
 
     /**
@@ -46,7 +46,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
      */
     public function getPosition()
     {
-        return $this->getData(SourceCarrierLinkInterface::POSITION);
+        return $this->getData(self::POSITION);
     }
 
     /**
@@ -54,7 +54,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
      */
     public function setPosition($position)
     {
-        $this->setData(SourceCarrierLinkInterface::POSITION, $position);
+        $this->setData(self::POSITION, $position);
     }
 
     /**

@@ -30,7 +30,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     public function getStockId()
     {
-        return $this->getData(StockInterface::STOCK_ID);
+        return $this->getData(self::STOCK_ID);
     }
 
     /**
@@ -38,7 +38,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     public function setStockId($stockId)
     {
-        $this->setData(StockInterface::STOCK_ID, $stockId);
+        $this->setData(self::STOCK_ID, $stockId);
     }
 
     /**
@@ -46,7 +46,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     public function getName()
     {
-        return $this->getData(StockInterface::NAME);
+        return $this->getData(self::NAME);
     }
 
     /**
@@ -54,7 +54,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     public function setName($name)
     {
-        $this->setData(StockInterface::NAME, $name);
+        $this->setData(self::NAME, $name);
     }
 
     /**

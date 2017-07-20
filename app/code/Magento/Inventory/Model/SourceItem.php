@@ -30,7 +30,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function getSku()
     {
-        return $this->getData(SourceItemInterface::SKU);
+        return $this->getData(self::SKU);
     }
 
     /**
@@ -38,7 +38,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function setSku($sku)
     {
-        $this->setData(SourceItemInterface::SKU, $sku);
+        $this->setData(self::SKU, $sku);
     }
 
     /**
@@ -46,7 +46,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function getSourceId()
     {
-        return $this->getData(SourceItemInterface::SOURCE_ID);
+        return $this->getData(self::SOURCE_ID);
     }
 
     /**
@@ -54,7 +54,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function setSourceId($sourceId)
     {
-        $this->setData(SourceItemInterface::SOURCE_ID, $sourceId);
+        $this->setData(self::SOURCE_ID, $sourceId);
     }
 
     /**
@@ -62,7 +62,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function getQuantity()
     {
-        return $this->getData(SourceItemInterface::QUANTITY);
+        return $this->getData(self::QUANTITY);
     }
 
     /**
@@ -70,7 +70,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function setQuantity($quantity)
     {
-        $this->setData(SourceItemInterface::QUANTITY, $quantity);
+        $this->setData(self::QUANTITY, $quantity);
     }
 
     /**
@@ -78,7 +78,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function getStatus()
     {
-        return $this->getData(SourceItemInterface::STATUS);
+        return $this->getData(self::STATUS);
     }
 
     /**
@@ -86,7 +86,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function setStatus($status)
     {
-        $this->setData(SourceItemInterface::STATUS, $status);
+        $this->setData(self::STATUS, $status);
     }
 
     /**

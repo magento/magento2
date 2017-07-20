@@ -5,18 +5,24 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\SourceStockLink as SourceStockLinkResourceModel;
-use Magento\InventoryApi\Api\Data\SourceStockLinkExtensionInterface;
-use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
 
 /**
- * {@inheritdoc}
+ * Doesn't have API interface because this object is need only for internal module using
  *
  * @codeCoverageIgnore
  */
-class SourceStockLink extends AbstractExtensibleModel implements SourceStockLinkInterface
+class SourceStockLink extends AbstractModel
 {
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case
+     */
+    const LINK_ID = 'link_id';
+    const SOURCE_ID = 'source_id';
+    const STOCK_ID = 'stock_id';
+    /**#@-*/
+
     /**
      * @inheritdoc
      */
@@ -30,7 +36,7 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
      */
     public function getLinkId()
     {
-        return $this->getData(SourceStockLinkInterface::LINK_ID);
+        return $this->getData(self::LINK_ID);
     }
 
     /**
@@ -38,7 +44,7 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
      */
     public function setLinkId($linkId)
     {
-        $this->setData(SourceStockLinkInterface::LINK_ID, $linkId);
+        $this->setData(self::LINK_ID, $linkId);
     }
 
     /**
@@ -46,7 +52,7 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
      */
     public function getSourceId()
     {
-        return $this->getData(SourceStockLinkInterface::SOURCE_ID);
+        return $this->getData(self::SOURCE_ID);
     }
 
     /**
@@ -54,7 +60,7 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
      */
     public function setSourceId($sourceId)
     {
-        $this->setData(SourceStockLinkInterface::SOURCE_ID, $sourceId);
+        $this->setData(self::SOURCE_ID, $sourceId);
     }
 
     /**
@@ -62,7 +68,7 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
      */
     public function getStockId()
     {
-        return $this->getData(SourceStockLinkInterface::STOCK_ID);
+        return $this->getData(self::STOCK_ID);
     }
 
     /**
@@ -70,27 +76,6 @@ class SourceStockLink extends AbstractExtensibleModel implements SourceStockLink
      */
     public function setStockId($stockId)
     {
-        $this->setData(SourceStockLinkInterface::STOCK_ID, $stockId);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExtensionAttributes()
-    {
-        $extensionAttributes = $this->_getExtensionAttributes();
-        if (null === $extensionAttributes) {
-            $extensionAttributes = $this->extensionAttributesFactory->create(SourceStockLinkInterface::class);
-            $this->setExtensionAttributes($extensionAttributes);
-        }
-        return $extensionAttributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(SourceStockLinkExtensionInterface $extensionAttributes)
-    {
-        $this->_setExtensionAttributes($extensionAttributes);
+        $this->setData(self::STOCK_ID, $stockId);
     }
 }
