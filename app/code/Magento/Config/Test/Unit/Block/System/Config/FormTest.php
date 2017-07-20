@@ -676,7 +676,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 true,
                 'Config Value',
                 null,
-                0,
+                1,
                 true,
                 false,
                 true
