@@ -11,6 +11,7 @@ namespace Magento\BundleImportExport\Model\Import\Product\Type;
 use \Magento\Framework\App\ObjectManager;
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
 use \Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\CatalogImportExport\Model\Import\Product;
 
 /**
  * Class Bundle
@@ -173,7 +174,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $rowData['bundle_values']
         );
         $selections = explode(
-            \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+            Product::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowData['bundle_values']
         );
         foreach ($selections as $selection) {
@@ -343,7 +344,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $newSku = $this->_entityModel->getNewSku();
             while ($bunch = $this->_entityModel->getNextBunch()) {
                 foreach ($bunch as $rowNum => $rowData) {
-                    $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
                     $productIds[] = $productData[$this->getProductEntityLinkField()];
                 }
                 $this->deleteOptionsAndSelections($productIds);
@@ -355,7 +356,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                         continue;
                     }
-                    $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
