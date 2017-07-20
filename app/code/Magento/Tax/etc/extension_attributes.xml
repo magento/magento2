@@ -17,4 +17,7 @@
     <extension_attributes for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface">
         <attribute code="rates" type="Magento\Tax\Api\Data\AppliedTaxRateInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface">
+        <attribute code="tax_adjustments" type="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" />
+    </extension_attributes>
 </config>

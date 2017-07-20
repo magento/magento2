@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Data\Form;
 
+/**
+ * @api
+ */
 class FormKey
 {
     /**

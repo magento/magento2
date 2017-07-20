@@ -10,6 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Backend model for the admin/security/session_lifetime configuration field. Validates session lifetime.
+ * @api
  */
 class BackendModel extends Value
 {

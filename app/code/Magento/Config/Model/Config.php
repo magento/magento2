@@ -11,6 +11,7 @@ namespace Magento\Config\Model;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Config extends \Magento\Framework\DataObject
 {
