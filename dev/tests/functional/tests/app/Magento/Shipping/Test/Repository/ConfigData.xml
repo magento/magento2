@@ -5,7 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="shipping_origin_US_CA">
             <field name="shipping/origin/country_id" xsi:type="array">
@@ -109,6 +110,32 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">Weinbergstrasse 4</item>
+            </field>
+        </dataset>
+        <dataset name="shipping_origin_GB">
+            <field name="shipping/origin/country_id" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">United Kingdom</item>
+                <item name="value" xsi:type="string">GB</item>
+            </field>
+            <field name="shipping/origin/postcode" xsi:type="array">
+                <item name="scope" xsi:type="string">shipping</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">SW1W 8JA</item>
+            </field>
+            <field name="shipping/origin/city" xsi:type="array">
+                <item name="scope" xsi:type="string">shipping</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">London</item>
+            </field>
+            <field name="shipping/origin/street_line1" xsi:type="array">
+                <item name="scope" xsi:type="string">shipping</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">Bourne St</item>
             </field>
         </dataset>
     </repository>
