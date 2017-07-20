@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Image extends File
 {
     /**

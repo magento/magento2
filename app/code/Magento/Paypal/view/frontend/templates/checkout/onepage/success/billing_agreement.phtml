@@ -10,8 +10,8 @@
  */
 ?>
 <p data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {"invalidateOnLoad" : true}}'>
-    <?php echo $block->escapeHtml(__('Your billing agreement # is: ')); ?>
-    <a href="<?php echo $block->escapeUrl($block->getAgreementUrl()); ?>">
-        <?php echo $block->escapeHtml($block->getAgreementRefId()); ?>
+    <?= $block->escapeHtml(__('Your billing agreement # is: ')) ?>
+    <a href="<?= $block->escapeUrl($block->getAgreementUrl()) ?>">
+        <?= $block->escapeHtml($block->getAgreementRefId()) ?>
     </a>.
 </p>
