@@ -128,7 +128,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
         }
         $uniqueValues = array_unique($adminValues);
-        return ($uniqueValues === $adminValues);
+        return array_diff_assoc($adminValues, $uniqueValues);
     }
 
     /**
@@ -155,12 +155,18 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     private function checkUniqueOption(DataObject $response, array $options = null)
     {
         if (is_array($options)
-            && isset($options['value'])
-            && isset($options['delete'])
-            && !$this->isUniqueAdminValues($options['value'], $options['delete'])
+            && !empty($options['value'])
+            && !empty($options['delete'])
         ) {
-            $this->setMessageToResponse($response, [__("The value of Admin must be unique.")]);
-            $response->setError(true);
+            $duplicates = $this->isUniqueAdminValues($options['value'], $options['delete']);
+            if ($duplicates) {
+                $this->setMessageToResponse(
+                    $response,
+                    [__('The value of Admin must be unique. (%1)', implode(', ', $duplicates))]
+                );
+
+                $response->setError(true);
+            }
         }
         return $this;
     }

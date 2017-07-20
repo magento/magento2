@@ -9,6 +9,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel;
 
+/**
+ * @api
+ */
 interface HelperInterface
 {
     /**

@@ -9,6 +9,8 @@ namespace Magento\Newsletter\Model\ResourceModel\Queue;
  * Newsletter queue collection.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

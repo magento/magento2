@@ -7,6 +7,7 @@ namespace Magento\Checkout\Model\Cart;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ImageProvider
 {

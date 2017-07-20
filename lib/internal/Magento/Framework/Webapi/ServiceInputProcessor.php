@@ -23,6 +23,7 @@ use Zend\Code\Reflection\ClassReflection;
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
@@ -145,6 +146,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
+        // convert to string directly to avoid situations when $className is object
+        // which implements __toString method like \ReflectionObject
+        $className = (string) $className;
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -260,7 +264,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
         } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } elseif (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );

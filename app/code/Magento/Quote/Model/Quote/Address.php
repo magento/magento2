@@ -14,6 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Sales Quote address model
  *
+ * @api
  * @method int getQuoteId()
  * @method Address setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -87,6 +88,8 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
  * @method int[] getAppliedRuleIds()
  * @method Address setBaseShippingInclTax(float $value)
+ *
+ * @property $_objectCopyService \Magento\Framework\DataObject\Copy
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

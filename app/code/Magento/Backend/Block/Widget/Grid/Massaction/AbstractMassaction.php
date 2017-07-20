@@ -11,8 +11,10 @@ use Magento\Framework\DataObject;
 /**
  * Grid widget massaction block
  *
+ * @api
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
+ * @deprecated in favour of UI component implementation
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
@@ -273,11 +275,16 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if (!$this->getUseSelectAll()) {
             return '';
         }
-
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
-
+        
+        if ($this->getMassactionIdField()) {
+            $massActionIdField = $this->getMassactionIdField();
+        } else {
+            $massActionIdField = $this->getParentBlock()->getMassactionIdField();
+        }
+        
+        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
             return join(",", $gridIds);
         }

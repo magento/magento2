@@ -69,7 +69,6 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
             $this->classReaderMock,
             $this->validatorMock,
             new \Magento\Framework\Code\Validator\ConstructorIntegrity(),
-            new \Magento\Framework\Code\Validator\ContextAggregation(),
             $this->logMock
         );
     }

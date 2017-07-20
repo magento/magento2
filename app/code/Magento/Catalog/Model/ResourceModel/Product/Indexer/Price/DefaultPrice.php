@@ -11,6 +11,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  * Default Product Type Price Indexer Resource model
  * For correctly work need define product type id
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -50,11 +52,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $hasEntity = null;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory
-     */
-    private $indexerStateFactory;
-
-    /**
      * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -71,13 +68,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
-        $connectionName = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
+        $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
@@ -706,22 +700,5 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         }
 
         return $this->hasEntity;
-    }
-
-    /**
-     * Returns main table name based on the suffix stored in the 'indexer_state' table
-     *
-     * {@inheritdoc}
-     */
-    public function getMainTable()
-    {
-        $table = parent::getMainTable();
-        $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
-            \Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID
-        );
-        $destinationTableSuffix = ($indexerState->getTableSuffix() === '')
-            ? \Magento\Framework\Indexer\StateInterface::ADDITIONAL_TABLE_SUFFIX
-            : '';
-        return $table . $destinationTableSuffix;
     }
 }

@@ -14,6 +14,8 @@ use Magento\Ui\Component\Container;
 
 /**
  * Class Attributes
+ *
+ * @api
  */
 class Attributes extends AbstractModifier
 {

@@ -12,15 +12,15 @@
 <?php $_optionId = $_option->getId(); ?>
 <div class="admin__field field<?php if ($_option->getIsRequire()) echo ' required _required' ?>">
   <label class="label admin__field-label">
-      <?php echo  $block->escapeHtml($_option->getTitle()) ?>
-      <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
+      <?= $block->escapeHtml($_option->getTitle()) ?>
+      <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
   </label>
   <div class="admin__field-control control">
 
-  <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
-      || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE): ?>
+  <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+      || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
 
-      <?php echo $block->getDateHtml() ?>
+      <?= $block->getDateHtml() ?>
 
       <?php if (!$block->useCalendar()): ?>
       <script>
@@ -30,20 +30,20 @@ require([
 ], function(){
 
       window.dateOption = productConfigure.opConfig.dateOption;
-      Event.observe('options_<?php /* @escapeNotVerified */ echo $_optionId ?>_month', 'change', dateOption.reloadMonth.bind(dateOption));
-      Event.observe('options_<?php /* @escapeNotVerified */ echo $_optionId ?>_year', 'change', dateOption.reloadMonth.bind(dateOption));      
+      Event.observe('options_<?= /* @escapeNotVerified */ $_optionId ?>_month', 'change', dateOption.reloadMonth.bind(dateOption));
+      Event.observe('options_<?= /* @escapeNotVerified */ $_optionId ?>_year', 'change', dateOption.reloadMonth.bind(dateOption));      
 });
 </script>
       <?php endif; ?>
 
   <?php endif; ?>
 
-  <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
-      || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME): ?>
-      <span class="time-picker"><?php echo $block->getTimeHtml() ?></span>
+  <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+      || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+      <span class="time-picker"><?= $block->getTimeHtml() ?></span>
   <?php endif; ?>
 
-    <input type="hidden" name="validate_datetime_<?php /* @escapeNotVerified */ echo $_optionId ?>" class="validate-datetime-<?php /* @escapeNotVerified */ echo $_optionId ?>" value="" />
+    <input type="hidden" name="validate_datetime_<?= /* @escapeNotVerified */ $_optionId ?>" class="validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>" value="" />
     <script>
 require([
   "jquery",
@@ -52,16 +52,16 @@ require([
 
     //<![CDATA[
 <?php if ($_option->getIsRequire()): ?>
-        jQuery.validator.addMethod('validate-datetime-<?php /* @escapeNotVerified */ echo $_optionId ?>', function(v) {
-            var dateTimeParts = jQuery('.datetime-picker[id^="options_<?php /* @escapeNotVerified */ echo $_optionId ?>"]');
+        jQuery.validator.addMethod('validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>', function(v) {
+            var dateTimeParts = jQuery('.datetime-picker[id^="options_<?= /* @escapeNotVerified */ $_optionId ?>"]');
             for (var i=0; i < dateTimeParts.length; i++) {
                 if (dateTimeParts[i].value == "") return false;
             }
             return true;
-        }, '<?php echo $block->escapeJs(__('This is a required option.')) ?>');
+        }, '<?= $block->escapeJs(__('This is a required option.')) ?>');
 <?php else: ?>
-        jQuery.validator.addMethod('validate-datetime-<?php /* @escapeNotVerified */ echo $_optionId ?>', function(v) {
-            var dateTimeParts = jQuery('.datetime-picker[id^="options_<?php /* @escapeNotVerified */ echo $_optionId ?>"]');
+        jQuery.validator.addMethod('validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>', function(v) {
+            var dateTimeParts = jQuery('.datetime-picker[id^="options_<?= /* @escapeNotVerified */ $_optionId ?>"]');
             var hasWithValue = false, hasWithNoValue = false;
             var pattern = /day_part$/i;
             for (var i=0; i < dateTimeParts.length; i++) {
@@ -74,7 +74,7 @@ require([
                 }
             }
             return hasWithValue ^ hasWithNoValue;
-        }, '<?php echo $block->escapeJs(__('The field isn\'t complete.')) ?>');
+        }, '<?= $block->escapeJs(__('The field isn\'t complete.')) ?>');
 <?php endif; ?>
     //]]>
     

@@ -28,6 +28,8 @@ use Magento\Ui\DataProvider\EavValidationRules;
 /**
  * Class DataProvider
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
@@ -188,7 +190,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         if ($category) {
             $meta = $this->addUseDefaultValueCheckbox($category, $meta);
-            $meta = $this->resolveParentInheritance($category, $meta);
         }
 
         return $meta;
@@ -232,28 +233,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ]
             );
         }
-
-        return $meta;
-    }
-
-    /**
-     * Removes not necessary inheritance fields
-     *
-     * @param Category $category
-     * @param array $meta
-     * @return array
-     */
-    private function resolveParentInheritance(Category $category, array $meta)
-    {
-        if (!$category->getParentId() || !$this->getArrayManager()->findPath('custom_use_parent_settings', $meta)) {
-            return $meta;
-        }
-
-        $meta = $this->getArrayManager()->merge(
-            [$this->getArrayManager()->findPath('custom_use_parent_settings', $meta), 'arguments/data/config'],
-            $meta,
-            ['visible' => false]
-        );
 
         return $meta;
     }

@@ -7,6 +7,8 @@ namespace Magento\Security\Model;
 
 /**
  * Password security config Interface
+ *
+ * @api
  */
 interface ConfigInterface
 {

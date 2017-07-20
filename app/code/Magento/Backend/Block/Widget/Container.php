@@ -10,6 +10,9 @@ namespace Magento\Backend\Block\Widget;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class Container extends \Magento\Backend\Block\Template implements ContainerInterface
 {
     /**#@+

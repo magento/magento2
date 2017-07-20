@@ -22,6 +22,9 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayUtils;
 
+/**
+ * @api
+ */
 class Gallery extends AbstractView
 {
     /**
@@ -138,9 +141,9 @@ class Gallery extends AbstractView
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->getImage($this->getProduct(), 'product_thumbnail_image')->getImageUrl(),
-                'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
-                'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,

@@ -7,6 +7,9 @@
  */
 namespace Magento\Backend\Block\Cache\Grid\Column;
 
+/**
+ * @api
+ */
 class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**

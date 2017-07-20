@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Model\Export\Adapter;
 /**
  * Export adapter csv.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
 {

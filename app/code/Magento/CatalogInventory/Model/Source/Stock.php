@@ -9,6 +9,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 /**
  * CatalogInventory Stock source model
+ * @api
  */
 class Stock extends AbstractSource
 {

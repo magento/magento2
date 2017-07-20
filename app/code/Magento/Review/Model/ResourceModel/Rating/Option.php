@@ -8,7 +8,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 /**
  * Rating option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

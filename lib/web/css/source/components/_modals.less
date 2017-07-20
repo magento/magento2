@@ -248,7 +248,7 @@
 //  _____________________________________________
 
 //  Mobile transform to modal-slide
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .modal-popup {
         &.modal-slide {
             .lib-modal-slide();

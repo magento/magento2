@@ -18,6 +18,7 @@ use Magento\Catalog\Model\Product;
  * Catalog Inventory Stock Model for adminhtml area
  * @method \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Item extends \Magento\CatalogInventory\Model\Stock\Item implements IdentityInterface
 {

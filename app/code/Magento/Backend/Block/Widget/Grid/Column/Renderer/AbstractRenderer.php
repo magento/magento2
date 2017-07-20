@@ -10,7 +10,9 @@ use Magento\Framework\DataObject;
 
 /**
  * Backend grid item abstract renderer
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {

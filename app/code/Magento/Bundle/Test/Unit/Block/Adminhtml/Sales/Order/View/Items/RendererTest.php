@@ -170,7 +170,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [[], null],
-            [['bundle_selection_attributes' => 'a:1:{i:0;i:1;}'], [0 => 1]],
+            [['bundle_selection_attributes' => 'serialized string'], [0 => 1]],
         ];
     }
 

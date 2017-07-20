@@ -10,5 +10,8 @@
         <job name="outdated_authentication_failures_cleanup" instance="Magento\Integration\Cron\CleanExpiredAuthenticationFailures" method="execute">
             <schedule>* * * * *</schedule>
         </job>
+        <job name="expired_tokens_cleanup" instance="Magento\Integration\Cron\CleanExpiredTokens" method="execute">
+            <schedule>0 * * * *</schedule>
+        </job>
     </group>
 </config>

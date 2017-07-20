@@ -35,6 +35,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($productSku, $this->model->getProductSku());
     }
 
+    public function testHasValues()
+    {
+        $this->model->setType('drop_down');
+        $this->assertTrue($this->model->hasValues());
+
+        $this->model->setType('field');
+        $this->assertFalse($this->model->hasValues());
+    }
+
     public function testGetRegularPrice()
     {
         $priceInfoMock = $this->getMockForAbstractClass(

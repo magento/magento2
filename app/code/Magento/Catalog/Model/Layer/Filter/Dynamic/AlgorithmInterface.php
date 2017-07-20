@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 
+/**
+ * @api
+ */
 interface AlgorithmInterface
 {
     /**

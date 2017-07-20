@@ -1,7 +1,8 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     './levels-pool'
 ], function (logLevels) {
@@ -28,7 +29,7 @@ define([
          * @protected
          * @type {Number}
          */
-        this.displayLevel_ = levels.WARN;
+        this.displayLevel_ = levels.ERROR;
 
         /**
          * An array of display criteria.

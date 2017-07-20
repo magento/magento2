@@ -11,6 +11,8 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Class for handling API section within integration.
+ *
+ * @api
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -188,7 +190,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         $configResource = array_filter(
             $resources,
             function ($node) {
-                return $node['id'] == 'Magento_Backend::admin';
+                return isset($node['id'])
+                    && $node['id'] == 'Magento_Backend::admin';
             }
         );
         $configResource = reset($configResource);

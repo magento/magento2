@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
- * Class Debug
+ * Enable/disable debug logging based on the store config setting
  */
 class Debug extends \Magento\Framework\Logger\Handler\Debug
 {

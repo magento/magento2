@@ -5,6 +5,9 @@
  */
 namespace Magento\Checkout;
 
+/**
+ * @api
+ */
 class Exception extends \Magento\Framework\Exception\LocalizedException
 {
 }

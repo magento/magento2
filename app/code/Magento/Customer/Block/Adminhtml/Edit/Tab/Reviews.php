@@ -3,16 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Adminhtml customer orders grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 /**
- * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
  */
 class Reviews extends \Magento\Review\Block\Adminhtml\Grid
 {

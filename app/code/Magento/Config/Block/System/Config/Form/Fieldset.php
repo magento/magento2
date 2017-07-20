@@ -11,6 +11,9 @@ namespace Magento\Config\Block\System\Config\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @api
+ */
 class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {

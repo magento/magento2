@@ -9,6 +9,9 @@ use Magento\Framework\App;
 use Magento\Framework\Event;
 use Magento\Framework\View;
 
+/**
+ * @api
+ */
 class Builder extends \Magento\Framework\View\Layout\Builder
 {
     /**

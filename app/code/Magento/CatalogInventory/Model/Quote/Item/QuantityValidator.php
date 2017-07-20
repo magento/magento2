@@ -18,7 +18,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class QuantityValidator
+ * @api
  */
 class QuantityValidator
 {
@@ -134,7 +134,7 @@ class QuantityValidator
         }
 
         if ($stockStatus) {
-            if ($stockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
+            if ($stockStatus->getStockStatus() === Stock::STOCK_OUT_OF_STOCK
                     || $parentStockStatus && $parentStockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
             ) {
                 $quoteItem->addErrorInfo(
@@ -230,30 +230,31 @@ class QuantityValidator
         }
 
         $quote = $item->getQuote();
-        $quoteItems = $quote->getItemsCollection();
-        $canRemoveErrorFromQuote = true;
+        if ($quote->getHasError()) {
+            $quoteItems = $quote->getItemsCollection();
+            $canRemoveErrorFromQuote = true;
+            foreach ($quoteItems as $quoteItem) {
+                if ($quoteItem->getItemId() == $item->getItemId()) {
+                    continue;
+                }
 
-        foreach ($quoteItems as $quoteItem) {
-            if ($quoteItem->getItemId() == $item->getItemId()) {
-                continue;
-            }
+                $errorInfos = $quoteItem->getErrorInfos();
+                foreach ($errorInfos as $errorInfo) {
+                    if ($errorInfo['code'] == $code) {
+                        $canRemoveErrorFromQuote = false;
+                        break;
+                    }
+                }
 
-            $errorInfos = $quoteItem->getErrorInfos();
-            foreach ($errorInfos as $errorInfo) {
-                if ($errorInfo['code'] == $code) {
-                    $canRemoveErrorFromQuote = false;
+                if (!$canRemoveErrorFromQuote) {
                     break;
                 }
             }
 
-            if (!$canRemoveErrorFromQuote) {
-                break;
+            if ($canRemoveErrorFromQuote) {
+                $params = ['origin' => 'cataloginventory', 'code' => $code];
+                $quote->removeErrorInfosByParams(null, $params);
             }
-        }
-
-        if ($quote->getHasError() && $canRemoveErrorFromQuote) {
-            $params = ['origin' => 'cataloginventory', 'code' => $code];
-            $quote->removeErrorInfosByParams(null, $params);
         }
     }
 }

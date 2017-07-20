@@ -14,6 +14,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Abstract sales entity provides to its children knowledge about eventPrefix and eventObject
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class EntityAbstract extends AbstractDb

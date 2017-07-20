@@ -87,3 +87,4 @@ Options,Options
 "Review Order","Review Order"
 "Select Shipping Method","Select Shipping Method"
 "We received your order!","We received your order!"
+"Some addresses cannot be used due to country-specific configurations.","Some addresses cannot be used due to country-specific configurations."

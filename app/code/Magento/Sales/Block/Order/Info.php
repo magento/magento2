@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
 /**
  * Invoice view  comments form
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Info extends \Magento\Framework\View\Element\Template

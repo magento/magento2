@@ -67,7 +67,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 Block::ATTRIBUTE_TEMPLATE => 'test.phtml',
                 Block::ATTRIBUTE_TTL => 3,
                 Block::ATTRIBUTE_DISPLAY => '',
-                Block::ATTRIBUTE_ACL => ''
+                Block::ATTRIBUTE_ACL => '',
+                'visibilityConditions' => [],
             ],
             $resultElementData['attributes']
         );

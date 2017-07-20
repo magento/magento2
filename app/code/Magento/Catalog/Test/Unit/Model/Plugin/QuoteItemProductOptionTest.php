@@ -12,7 +12,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Model\Product\Option as ProductOption;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

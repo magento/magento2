@@ -77,24 +77,60 @@ case $TEST_SUITE in
         cd ../../..
         ;;
     js)
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-        nvm install $NODE_JS_VERSION
-        nvm use $NODE_JS_VERSION
-        node --version
-
         cp package.json.sample package.json
         cp Gruntfile.js.sample Gruntfile.js
-        npm install -g yarn
-        yarn global add grunt-cli
         yarn
 
+        if [[ $GRUNT_COMMAND != "static" ]]; then
+            echo "Installing Magento"
+            mysql -uroot -e 'CREATE DATABASE magento2;'
+            php bin/magento setup:install -q \
+                --admin-user="admin" \
+                --admin-password="123123q" \
+                --admin-email="admin@example.com" \
+                --admin-firstname="John" \
+                --admin-lastname="Doe"
+
+            echo "Deploying Static Content"
+            php bin/magento setup:static-content:deploy -f -q -j=2 \
+                --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
+        fi
+        ;;
+    functional)
         echo "Installing Magento"
         mysql -uroot -e 'CREATE DATABASE magento2;'
-        php bin/magento setup:install -q --admin-user="admin" --admin-password="123123q" --admin-email="admin@example.com" --admin-firstname="John" --admin-lastname="Doe"
+        php bin/magento setup:install -q \
+            --language="en_US" \
+            --timezone="UTC" \
+            --currency="USD" \
+            --base-url="http://${MAGENTO_HOST_NAME}/" \
+            --admin-firstname="John" \
+            --admin-lastname="Doe" \
+            --backend-frontname="backend" \
+            --admin-email="admin@example.com" \
+            --admin-user="admin" \
+            --use-rewrites=1 \
+            --admin-use-security-key=0 \
+            --admin-password="123123q"
 
-        echo "Deploying Static Content"
-        php bin/magento setup:static-content:deploy -f -q -j=2 --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
+        echo "Enabling production mode"
+        php bin/magento deploy:mode:set production
+
+        echo "Prepare functional tests for running"
+        cd dev/tests/functional
+
+        composer install && composer require se/selenium-server-standalone:2.53.1
+        export DISPLAY=:1.0
+        sh ./vendor/se/selenium-server-standalone/bin/selenium-server-standalone -port 4444 -host 127.0.0.1 \
+            -Dwebdriver.firefox.bin=$(which firefox) -trustAllSSLCertificate &> ~/selenium.log &
+
+        cp ./phpunit.xml.dist ./phpunit.xml
+        sed -e "s?127.0.0.1?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
+        sed -e "s?basic?travis_acceptance_${ACCEPTANCE_INDEX}?g" --in-place ./phpunit.xml
+        cp ./.htaccess.sample ./.htaccess
+        cd ./utils
+        php -f mtf troubleshooting:check-all
+
+        cd ../../..
         ;;
 esac

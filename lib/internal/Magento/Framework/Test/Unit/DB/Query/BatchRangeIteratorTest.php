@@ -94,7 +94,7 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCurrent()
     {
-        $this->selectMock->expects($this->once())->method('limit')->with($this->currentBatch, $this->batchSize);
+        $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize, $this->currentBatch);
         $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());

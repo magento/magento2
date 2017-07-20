@@ -7,7 +7,7 @@
 namespace Magento\Widget\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 
 /**
  * Class ConditionsTest
@@ -59,11 +59,11 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
             ->with($serializedValue)
             ->willReturn($value);
         $this->normalizer->expects($this->once())
-            ->method('replaceReservedCharaters')
+            ->method('replaceReservedCharacters')
             ->with($serializedValue)
             ->willReturn($normalizedValue);
         $this->normalizer->expects($this->once())
-            ->method('restoreReservedCharaters')
+            ->method('restoreReservedCharacters')
             ->with($normalizedValue)
             ->willReturn($serializedValue);
         $encoded = $this->conditions->encode($value);

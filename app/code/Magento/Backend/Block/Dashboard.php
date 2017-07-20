@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class Dashboard extends \Magento\Backend\Block\Template
 {
     /**

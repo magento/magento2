@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Design;
 
+/**
+ * @api
+ */
 class Robots implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -8,15 +8,19 @@
 
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 
 /**
  * Bundle Type Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -147,6 +151,16 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_stockState;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var SelectionCollectionFilterApplier
+     */
+    private $selectionCollectionFilterApplier;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -169,6 +183,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param MetadataPool|null $metadataPool
+     * @param SelectionCollectionFilterApplier|null $selectionCollectionFilterApplier
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -194,7 +210,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         PriceCurrencyInterface $priceCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        Json $serializer = null
+        Json $serializer = null,
+        MetadataPool $metadataPool = null,
+        SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -208,6 +226,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
+
+        $this->metadataPool = $metadataPool
+            ?: ObjectManager::getInstance()->get(MetadataPool::class);
+
+        $this->selectionCollectionFilterApplier = $selectionCollectionFilterApplier
+            ?: ObjectManager::getInstance()->get(SelectionCollectionFilterApplier::class);
 
         parent::__construct(
             $catalogProductOption,
@@ -456,6 +480,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getSelectionsCollection($optionIds, $product)
     {
         $storeId = $product->getStoreId();
+
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $selectionsCollection = $this->_bundleCollection->create()
             ->addAttributeToSelect($this->_config->getProductAttributes())
             ->addAttributeToSelect('tax_class_id') //used for calculation item taxes in Bundle with Dynamic Price
@@ -465,6 +494,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->setStoreId($storeId)
             ->addFilterByRequiredOptions()
             ->setOptionIdsFilter($optionIds);
+
+        $this->selectionCollectionFilterApplier->apply(
+            $selectionsCollection,
+            'parent_product_id',
+            $product->getData($metadata->getLinkField())
+        );
 
         if (!$this->_catalogData->isPriceGlobal() && $storeId) {
             $websiteId = $this->_storeManager->getStore($storeId)
@@ -543,6 +578,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $product->getData('all_items_salable');
         }
 
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $isSalable = false;
         foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
@@ -553,6 +592,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $selectionsCollection->setFlag('product_children', true);
             $selectionsCollection->addFilterByRequiredOptions();
             $selectionsCollection->setOptionIdsFilter([$option->getId()]);
+
+            $this->selectionCollectionFilterApplier->apply(
+                $selectionsCollection,
+                'parent_product_id',
+                $product->getData($metadata->getLinkField())
+            );
 
             foreach ($selectionsCollection as $selection) {
                 if ($selection->isSalable()) {
@@ -800,6 +845,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         sort($selectionIds);
 
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $usedSelections = $product->getData($this->_keyUsedSelections);
         $usedSelectionsIds = $product->getData($this->_keyUsedSelectionsIds);
 
@@ -814,6 +863,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setPositionOrder()
                 ->addFilterByRequiredOptions()
                 ->setSelectionIdsFilter($selectionIds);
+
+            $this->selectionCollectionFilterApplier->apply(
+                $usedSelections,
+                'parent_product_id',
+                $product->getData($metadata->getLinkField())
+            );
 
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
                 $websiteId = $this->_storeManager->getStore($storeId)
