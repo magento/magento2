@@ -112,7 +112,7 @@ class Reader
                     continue;
                 }
                 $allFilesData[$configFile] = $fileData;
-                if (!empty($fileData)) {
+                if (is_array($fileData) && count($fileData) > 0) {
                     $result = array_replace_recursive($result, $fileData);
                 }
             }
