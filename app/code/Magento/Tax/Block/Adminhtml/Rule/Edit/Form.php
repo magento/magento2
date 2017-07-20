@@ -185,6 +185,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             true
         );
 
+        $selectConfig = $this->getTaxRatesSelectConfig($formValues);
         $fieldset->addField(
             'tax_rate',
             'editablemultiselect',
@@ -196,7 +197,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'value' => isset($formValues['tax_rate']) ? $formValues['tax_rate'] : [],
                 'required' => true,
                 'element_js_class' => 'TaxRateEditableMultiselect',
-                'select_config' => ['is_entity_editable' => true]
+                'select_config' => $selectConfig
             ]
         );
 
@@ -258,6 +259,22 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Retrieve configuration options for tax rates editable multiselect
+     *
+     * @param array $formValues
+     * @return array
+     */
+    public function getTaxRatesSelectConfig($formValues)
+    {
+        $config = [
+            'is_entity_editable' => true,
+            'selected_values' => isset($formValues['tax_rate']) ? $formValues['tax_rate'] : []
+        ];
+
+        return $config;
+    }
+
+    /**
      * Retrieve configuration options for tax class editable multiselect
      *
      * @param string $classType
@@ -308,6 +325,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getTaxRateLoadUrl()
     {
         return $this->getUrl('tax/rate/ajaxLoad/');
+    }
+
+    /**
+     * Retrieve next Tax Rates page URL
+     *
+     * @return string
+     */
+    public function getTaxRatesPageUrl()
+    {
+        return $this->getUrl('tax/rule/ajaxLoadRates/');
     }
 
     /**

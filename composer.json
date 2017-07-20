@@ -17,6 +17,7 @@
         "zendframework/zend-validator": "^2.6.0",
         "zendframework/zend-crypt": "^2.6.0",
         "zendframework/zend-console": "^2.6.0",
+        "zendframework/zend-mail": "^2.8.0",
         "zendframework/zend-modulemanager": "^2.7",
         "zendframework/zend-mvc": "~2.6.3",
         "zendframework/zend-text": "^2.6.0",
@@ -111,6 +112,7 @@
         "magento/module-config": "100.2.0-dev",
         "magento/module-configurable-import-export": "100.2.0-dev",
         "magento/module-configurable-product": "100.2.0-dev",
+        "magento/module-configurable-product-sales": "100.2.0-dev",
         "magento/module-contact": "100.2.0-dev",
         "magento/module-cookie": "100.2.0-dev",
         "magento/module-cron": "100.2.0-dev",
@@ -157,6 +159,7 @@
         "magento/module-require-js": "100.2.0-dev",
         "magento/module-review": "100.2.0-dev",
         "magento/module-review-analytics": "100.2.0-dev",
+        "magento/module-robots": "100.2.0-dev",
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
@@ -240,7 +243,7 @@
             ]
         },
         "files": [
-            "app/etc/NonComposerComponentRegistration.php"
+            "app/registration.php"
         ],
         "exclude-from-classmap": [
             "**/dev/**",
@@ -257,6 +260,5 @@
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
         }
     },
-    "minimum-stability": "alpha",
     "prefer-stable": true
 }
