@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * Class CategoryBasedProductRewriteGeneratorTest
@@ -41,6 +42,9 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
         $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $categoryCollectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -54,13 +58,20 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
         $productMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);
+        $productMock->expects($this->once())
+            ->method('getCategoryCollection')
+            ->willReturn($categoryCollectionMock);
+        $categoryCollectionMock->expects($this->atLeastOnce())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
+
         $this->productScopeRewriteGeneratorMock->expects($this->once())
             ->method('isGlobalScope')
             ->with($storeId)
             ->willReturn(true);
         $this->productScopeRewriteGeneratorMock->expects($this->once())
             ->method('generateForGlobalScope')
-            ->with([$categoryMock], $productMock, $categoryId)
+            ->with($categoryCollectionMock, $productMock, $categoryId)
             ->willReturn($urls);
 
         $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
@@ -71,6 +82,9 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
         $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $categoryCollectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,13 +98,20 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
         $productMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);
+        $productMock->expects($this->once())
+            ->method('getCategoryCollection')
+            ->willReturn($categoryCollectionMock);
+        $categoryCollectionMock->expects($this->atLeastOnce())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
+
         $this->productScopeRewriteGeneratorMock->expects($this->once())
             ->method('isGlobalScope')
             ->with($storeId)
             ->willReturn(false);
         $this->productScopeRewriteGeneratorMock->expects($this->once())
             ->method('generateForSpecificStoreView')
-            ->with($storeId, [$categoryMock], $productMock, $categoryId)
+            ->with($storeId, $categoryCollectionMock, $productMock, $categoryId)
             ->willReturn($urls);
 
         $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
