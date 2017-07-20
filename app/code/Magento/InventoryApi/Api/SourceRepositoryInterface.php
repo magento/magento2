@@ -10,6 +10,8 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
  * This is Facade for basic operations with Source
+ * There is no delete method. It is related to that Source can't be deleted due to we don't want miss data
+ * related to Sources (like as order information). But Source can be disabled
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
