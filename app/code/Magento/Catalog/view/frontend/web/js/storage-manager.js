@@ -66,7 +66,12 @@ define([
                 'product_data_storage': {
                     namespace: 'product_data_storage',
                     className: 'DataStorage',
-                    allowToSendRequest: 0
+                    allowToSendRequest: 0,
+                    updateRequestConfig: {
+                        url: '',
+                        method: 'GET',
+                        dataType: 'json'
+                    }
                 }
             },
             requestConfig: {
