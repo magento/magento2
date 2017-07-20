@@ -53,7 +53,7 @@
                 <visible>false</visible>
             </settings>
         </selectionsColumn>
-        <column name="entity_id" component="Magento_Ui/js/grid/columns/link" sortOrder="10">
+        <column name="id" component="Magento_Ui/js/grid/columns/link" sortOrder="10">
             <settings>
                 <label translate="true">ID</label>
                 <sortable>false</sortable>
