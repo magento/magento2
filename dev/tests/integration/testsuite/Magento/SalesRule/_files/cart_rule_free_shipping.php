@@ -16,16 +16,14 @@ $row =
         'customer_group_ids' => [\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID],
         'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON,
         'conditions' => [
-            1 =>
-                [
-                    'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
-                    'attribute' => null,
-                    'operator' => null,
-                    'value' => '1',
-                    'is_value_processed' => null,
-                    'aggregator' => 'all',
-                ]
-
+            1 => [
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+            ],
         ],
         'actions' => [
             1 => [
@@ -42,9 +40,9 @@ $row =
                         'operator' => '==',
                         'value' => '7',
                         'is_value_processed' => false,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ],
         'is_advanced' => 1,
         'simple_action' => 'by_percent',
@@ -58,17 +56,16 @@ $row =
         'use_auto_generation' => 0,
         'uses_per_coupon' => 0,
         'simple_free_shipping' => 1,
-
         'website_ids' => [
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            $objectManager->get(
                 \Magento\Store\Model\StoreManagerInterface::class
             )->getWebsite()->getId()
-        ]
+        ],
     ];
 $salesRule->loadPost($row);
 $salesRule->save();
+
 /** @var Magento\Framework\Registry $registry */
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
-
 $registry->unregister('cart_rule_free_shipping');
 $registry->register('cart_rule_free_shipping', $salesRule);
