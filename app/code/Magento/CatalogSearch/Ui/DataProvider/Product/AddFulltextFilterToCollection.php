@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\CatalogSearch\Ui\DataProvider\Product;
 
 use Magento\Framework\Data\Collection;
@@ -11,16 +14,14 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {
-    /*
+    /**
      * Search Collection
      *
      * @var SearchCollection
      */
     private $searchCollection;
 
-    /*
-     * Construct
-     *
+    /**
      * @param SearchCollection $searchCollection
      */
     public function __construct(SearchCollection $searchCollection)
@@ -31,7 +32,7 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
     /**
      * {@inheritdoc}
      *
-     * @SuppressWarnings("UnusedFormalParam")
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
