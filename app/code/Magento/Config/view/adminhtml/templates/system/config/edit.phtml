@@ -17,6 +17,11 @@
  *  getConfigSearchParamsJson() - string
  */
 ?>
+<style>
+    .highlighted {
+        background-color: rgb(255, 255, 153)!important;
+    }
+</style>
 <form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">
@@ -31,7 +36,8 @@ require([
     "mage/mage",
     "prototype",
     "mage/adminhtml/form",
-    "domReady!"
+    "domReady!",
+    "jquery/ui"
 ], function(jQuery, registry){
 
     var adminSystemConfig = {
@@ -59,6 +65,10 @@ require([
             if ((typeof group !== 'undefined') && (typeof field !== 'undefined')) {
                 var fieldElement = jQuery('#' + section + '_' + group + '_' + field);
                 fieldElement.focus();
+                fieldElement.addClass('highlighted');
+                setTimeout(function() {
+                    fieldElement.removeClass('highlighted', 2000, "easeInBack");
+                }, 3000);
             }
         },
         getUp: function (element, tag) {

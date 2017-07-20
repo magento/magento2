@@ -88,7 +88,7 @@ class Builder
 
         $this->results[] = [
             'id'          => md5($structureElement->getPath()),
-            'type'        => __('Config'),
+            'type'        => null,
             'name'        => $structureElement->getLabel(),
             'description' => $elementPathLabel,
             'url'         => $this->urlBuilder->getUrl('*/system_config/edit', $urlParams),

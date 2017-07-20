@@ -69,10 +69,10 @@ class Config extends \Magento\Framework\DataObject
             if (!($structureElement instanceof ElementInterface)) {
                 continue;
             }
-            $elementPathLabel = $pathLabel . '/' . $structureElement->getLabel();
             if (stripos((string)$structureElement->getLabel(), $needle) !== false) {
-                $this->resultBuilder->add($structureElement, $elementPathLabel);
+                $this->resultBuilder->add($structureElement, $pathLabel);
             }
+            $elementPathLabel = $pathLabel . '/' . $structureElement->getLabel();
             if ($structureElement instanceof AbstractComposite && $structureElement->hasChildren()) {
                 $this->findInStructure($structureElement->getChildren(), $needle, $elementPathLabel);
             }

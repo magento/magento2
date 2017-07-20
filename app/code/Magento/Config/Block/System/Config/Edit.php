@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Block\System\Config;
 
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,17 +51,17 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
      * @param array $data
+     * @param Json|null $jsonSerializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
-        \Magento\Framework\Serialize\Serializer\Json $jsonSerializer,
-        array $data = []
+        array $data = [],
+        Json $jsonSerializer = null
     ) {
         $this->_configStructure = $configStructure;
-        $this->jsonSerializer = $jsonSerializer;
+        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
     }
 
