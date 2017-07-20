@@ -10,7 +10,7 @@ use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 
 /**
  * Represents amount of product on physical storage
- * Entity id getter is missed because entity identifiers are sku and source id
+ * Entity id getter is missed because entity identifies by compound identifier (sku and source_id)
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *

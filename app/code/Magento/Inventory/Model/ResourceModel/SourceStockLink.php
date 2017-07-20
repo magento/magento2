@@ -9,14 +9,12 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Inventory\Setup\InstallSchema;
 
 /**
- * This class needed for service purposes only, to make collection work properly
+ * Implementation of basic operations for SourceCarrierLink entity for specific db layer
  */
 class SourceStockLink extends AbstractDb
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
