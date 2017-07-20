@@ -6,6 +6,7 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
 use Magento\InventoryApi\Api\SourceItemSaveInterface;
 use Psr\Log\LoggerInterface;
@@ -26,8 +27,6 @@ class SourceItemSave implements SourceItemSaveInterface
     private $logger;
 
     /**
-     * SourceItemSaveMultiple constructor
-     *
      * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
      */
@@ -44,6 +43,9 @@ class SourceItemSave implements SourceItemSaveInterface
      */
     public function execute(array $sourceItems)
     {
+        if (empty($sourceItems)) {
+            throw new InputException(__('Input data is empty'));
+        }
         try {
             $this->saveMultiple->execute($sourceItems);
         } catch (\Exception $e) {

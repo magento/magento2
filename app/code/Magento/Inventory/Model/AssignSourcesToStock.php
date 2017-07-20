@@ -5,14 +5,11 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Inventory\Setup\InstallSchema;
-use Magento\InventoryApi\Api\Command\AssignSourcesToStockInterface;
-use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Inventory\Model\ResourceModel\SourceStockLink\SaveMultiple;
+use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Psr\Log\LoggerInterface;
-
 
 /**
  * @inheritdoc
@@ -20,9 +17,9 @@ use Psr\Log\LoggerInterface;
 class AssignSourcesToStock implements AssignSourcesToStockInterface
 {
     /**
-     * @var ResourceConnection
+     * @var SaveMultiple
      */
-    private $connection;
+    private $saveMultiple;
 
     /**
      * @var LoggerInterface
@@ -30,59 +27,30 @@ class AssignSourcesToStock implements AssignSourcesToStockInterface
     private $logger;
 
     /**
-     * @param ResourceConnection $connection
+     * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $connection,
+        SaveMultiple $saveMultiple,
         LoggerInterface $logger
     ) {
-        $this->connection = $connection;
+        $this->saveMultiple = $saveMultiple;
         $this->logger = $logger;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceIds, $stockId)
+    public function execute($stockId, array $sourceIds)
     {
-        if (empty($sourceIds)) {
-            return;
+        if (0 === (int)$stockId || empty($sourceItems)) {
+            throw new InputException(__('Input data is invalid'));
         }
-
         try {
-            $this->executeQuery($sourceIds, $stockId);
+            $this->saveMultiple->execute($sourceIds, $stockId);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Source Item'), $e);
+            throw new CouldNotSaveException(__('Could not assign Sources to Stock'), $e);
         }
-    }
-
-    /**
-     * Assign the source ids a stock.
-     *
-     * @param int[] $sourceIds
-     * @param int $stockId
-     *
-     * @throws \Exception
-     * @return void
-     */
-    private function executeQuery(array $sourceIds, $stockId)
-    {
-        /** @var AdapterInterface $connection */
-        $connection = $this->connection->getConnection();
-        $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_STOCK_LINK);
-
-        $columns = [
-            SourceStockLinkInterface::SOURCE_ID,
-            SourceStockLinkInterface::STOCK_ID
-        ];
-
-        $data = [];
-        foreach ($sourceIds as $sourceId) {
-            $data[] = [$sourceId, $stockId];
-        }
-
-        $connection->insertArray($tableName, $columns, $data);
     }
 }

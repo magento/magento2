@@ -20,6 +20,7 @@ interface SourceItemSaveInterface
      *
      * @param \Magento\InventoryApi\Api\Data\SourceItemInterface[] $sourceItems
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(array $sourceItems);

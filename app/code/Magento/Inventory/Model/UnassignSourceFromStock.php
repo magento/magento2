@@ -8,6 +8,7 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\InputException;
 use Magento\Inventory\Model\ResourceModel\SourceStockLink as SourceStockLinkResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceStockLink\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceStockLink\CollectionFactory;
@@ -70,8 +71,12 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
      */
     public function execute($stockId, $sourceId)
     {
+        if (0 === (int)$stockId || 0 === (int)$sourceId) {
+            throw new InputException(__('Input data is invalid'));
+        }
+
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceStockLink::STOCK_ID, $stockId)
+            ->addFilter(SourceStockLink::STOCK_ID, (int)$stockId)
             ->addFilter(SourceStockLink::SOURCE_ID, $sourceId)
             ->create();
 

@@ -10,7 +10,7 @@ use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Implementation of Source Item save multiple operation for specific db layer
+ * Implementation of SourceItem save multiple operation for specific db layer
  * Save Multiple used here for performance efficient purposes over single save operation
  */
 class SaveMultiple
@@ -39,9 +39,6 @@ class SaveMultiple
      */
     public function execute(array $sourceItems)
     {
-        if (empty($sourceItems)) {
-            return;
-        }
         $connection = $this->connection->getConnection();
         $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM);
 

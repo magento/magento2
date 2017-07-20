@@ -18,6 +18,8 @@ interface UnassignSourceFromStockInterface
      * @param int $stockId
      * @param int $sourceId
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function execute($stockId, $sourceId);
 }
