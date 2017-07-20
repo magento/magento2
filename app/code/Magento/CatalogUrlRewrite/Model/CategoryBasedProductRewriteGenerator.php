@@ -37,6 +37,7 @@ class CategoryBasedProductRewriteGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function generate(Product $product, Category $category, $rootCategoryId = null)
     {
