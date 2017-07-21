@@ -32,7 +32,9 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         /** @var $filter \Magento\Newsletter\Model\Template\Filter */
         $filter = $objectManager->get(\Magento\Newsletter\Model\Template\Filter::class);
 
-        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transport->expects($this->exactly(2))->method('sendMessage')->will($this->returnSelf());
 
         $builder = $this->createPartialMock(
@@ -66,7 +68,9 @@ class QueueTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transport->expects($this->any())
             ->method('sendMessage')
             ->willThrowException(new \Magento\Framework\Exception\MailException(__($errorMsg)));
