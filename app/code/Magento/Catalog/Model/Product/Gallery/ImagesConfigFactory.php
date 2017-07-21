@@ -13,7 +13,7 @@ class ImagesConfigFactory implements ImagesConfigFactoryInterface
     /**
      * @var CollectionFactory
      */
-    protected $dataCollectionFactory;
+    private $dataCollectionFactory;
 
     /**
      * @param CollectionFactory $dataCollectionFactory
