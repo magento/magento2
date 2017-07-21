@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,6 +40,16 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonEncoderMock;
 
+    /**
+     * @var \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imagesConfigFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $galleryImagesConfigMock;
+
     protected function setUp()
     {
         $this->mockContext();
@@ -49,10 +62,14 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->imagesConfigFactoryMock = $this->getImagesConfigFactory();
+
         $this->model = new \Magento\Catalog\Block\Product\View\Gallery(
             $this->context,
             $this->arrayUtils,
-            $this->jsonEncoderMock
+            $this->jsonEncoderMock,
+            [],
+            $this->imagesConfigFactoryMock
         );
     }
 
@@ -107,6 +124,10 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->with('product')
             ->willReturn($productMock);
 
+        $this->galleryImagesConfigMock->expects($this->exactly(1))
+            ->method('getItems')
+            ->willReturn($this->getGalleryImagesConfigItems());
+
         $this->imageHelper->expects($this->exactly(3))
             ->method('init')
             ->willReturnMap([
@@ -153,5 +174,58 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \ArrayIterator($items));
 
         return $collectionMock;
+    }
+
+    /**
+     * getImagesConfigFactory
+     *
+     * @return \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface
+     */
+    private function getImagesConfigFactory()
+    {
+        $this->galleryImagesConfigMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->galleryImagesConfigMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($this->getGalleryImagesConfigItems()));
+
+        $galleryImagesConfigFactoryMock = $this
+            ->getMockBuilder(\Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $galleryImagesConfigFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->galleryImagesConfigMock);
+
+        return $galleryImagesConfigFactoryMock;
+    }
+
+    /**
+     * getGalleryImagesConfigItems
+     *
+     * @return array
+     */
+    private function getGalleryImagesConfigItems()
+    {
+        return  [
+            new \Magento\Framework\DataObject([
+                'image_id' => 'product_page_image_small',
+                'data_object_key' => 'small_image_url',
+                'json_object_key' => 'thumb'
+            ]),
+            new \Magento\Framework\DataObject([
+                'image_id' => 'product_page_image_medium',
+                'data_object_key' => 'medium_image_url',
+                'json_object_key' => 'img'
+            ]),
+            new \Magento\Framework\DataObject([
+                'image_id' => 'product_page_image_large',
+                'data_object_key' => 'large_image_url',
+                'json_object_key' => 'full'
+            ])
+        ];
     }
 }
