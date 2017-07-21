@@ -183,12 +183,12 @@ class SessionManager implements SessionManagerInterface
             // Need to apply the config options so they can be ready by session_start
             $this->initIniOptions();
             $this->registerSaveHandler();
-
+            $sid = $this->sidResolver->getSid($this);
             // potential custom logic for session id (ex. switching between hosts)
-            $this->setSessionId($this->sidResolver->getSid($this));
+            $this->setSessionId($sid);
             session_start();
             $this->validator->validate($this);
-            $this->renewCookie();
+            $this->renewCookie($sid);
 
             register_shutdown_function([$this, 'writeClose']);
 
@@ -202,14 +202,17 @@ class SessionManager implements SessionManagerInterface
     /**
      * Renew session cookie to prolong session
      *
+     * @param null|string $cookieValue
      * @return $this
      */
-    private function renewCookie()
+    private function renewCookie($cookieValue)
     {
         if (!$this->getCookieLifetime()) {
             return $this;
         }
-        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        //When we renew cookie, we should aware, that any other session client do not
+        //change cookie too
+        $cookieValue = $cookieValue ?: $this->cookieManager->getCookie($this->getName());
         if ($cookieValue) {
             $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $metadata->setPath($this->sessionConfig->getCookiePath());
