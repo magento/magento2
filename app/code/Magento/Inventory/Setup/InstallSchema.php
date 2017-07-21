@@ -10,11 +10,11 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
 
 /**
  * @codeCoverageIgnore
@@ -38,9 +38,9 @@ class InstallSchema implements InstallSchemaInterface
     const TABLE_NAME_STOCK = 'inventory_stock';
 
     /**
-     * Constant for table name of \Magento\Inventory\Model\SourceStockLink
+     * Constant for table name of \Magento\Inventory\Model\StockSourceLink
      */
-    const TABLE_NAME_SOURCE_STOCK_LINK = 'inventory_source_stock_link';
+    const TABLE_NAME_STOCK_SOURCE_LINK = 'inventory_source_stock_link';
 
     /**
      * Constant for decimal precision for latitude and longitude
@@ -79,7 +79,7 @@ class InstallSchema implements InstallSchemaInterface
         $setup->getConnection()->createTable($this->createSourceItemTable($setup));
 
         $setup->getConnection()->createTable($this->createStockTable($setup));
-        $setup->getConnection()->createTable($this->createSourceStockLinkTable($setup));
+        $setup->getConnection()->createTable($this->createStockSourceLinkTable($setup));
 
         $setup->endSetup();
     }
@@ -487,16 +487,17 @@ class InstallSchema implements InstallSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createSourceStockLinkTable(SchemaSetupInterface $setup) {
-        $sourceStockLinkTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_STOCK_LINK);
+    private function createStockSourceLinkTable(SchemaSetupInterface $setup) {
+        $stockSourceLinkTable = $setup->getTable(InstallSchema::TABLE_NAME_STOCK_SOURCE_LINK);
         $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE);
 
         return $setup->getConnection()->newTable(
-            $sourceStockLinkTable
+            $stockSourceLinkTable
         )->setComment(
             'Inventory Source Stock Link Table'
         )->addColumn(
-            SourceStockLinkInterface::LINK_ID,
+            // TODO:
+            'link_id',
             Table::TYPE_INTEGER,
             null,
             [
@@ -507,7 +508,7 @@ class InstallSchema implements InstallSchemaInterface
             ],
             'Link ID'
         )->addColumn(
-            SourceStockLinkInterface::STOCK_ID,
+            StockSourceLink::STOCK_ID,
             Table::TYPE_INTEGER,
             null,
             [
@@ -516,7 +517,7 @@ class InstallSchema implements InstallSchemaInterface
             ],
             'Stock ID'
         )->addColumn(
-            SourceStockLinkInterface::SOURCE_ID,
+            StockSourceLink::SOURCE_ID,
             Table::TYPE_INTEGER,
             null,
             [
@@ -524,17 +525,20 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_UNSIGNED => true,
             ],
             'Source ID'
-        )->addForeignKey(
-            $setup->getFkName(
-                $sourceStockLinkTable,
-                SourceStockLinkInterface::SOURCE_ID,
-                $sourceTable,
-                SourceInterface::SOURCE_ID
-            ),
-            SourceStockLinkInterface::SOURCE_ID,
-            $sourceTable,
-            SourceInterface::SOURCE_ID,
-            AdapterInterface::FK_ACTION_CASCADE
-        );
+        )
+        // TODO: uniqe key: stock, source, foreign key
+//        ->addForeignKey(
+//            $setup->getFkName(
+//                $stockSourceLinkTable,
+//                StockSourceLink::SOURCE_ID,
+//                $sourceTable,
+//                SourceInterface::SOURCE_ID
+//            ),
+//            StockSourceLink::SOURCE_ID,
+//            $sourceTable,
+//            SourceInterface::SOURCE_ID,
+//            AdapterInterface::FK_ACTION_CASCADE
+//        )
+            ;
     }
 }
