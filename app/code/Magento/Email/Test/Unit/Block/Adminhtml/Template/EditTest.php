@@ -66,7 +66,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead']
         );
 
-        $viewFilesystem = $this->getMockBuilder('Magento\Framework\View\Filesystem')
+        $viewFilesystem = $this->getMockBuilder(\Magento\Framework\View\Filesystem::class)
             ->setMethods(['getTemplateFileName'])
             ->disableOriginalConstructor()
             ->getMock();
