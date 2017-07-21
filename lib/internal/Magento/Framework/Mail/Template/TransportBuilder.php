@@ -10,7 +10,7 @@ namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -70,6 +70,13 @@ class TransportBuilder
     protected $objectManager;
 
     /**
+     * Message Factory
+     *
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
+     */
+    protected $messageInterfaceFactory;
+
+    /**
      * Message
      *
      * @var \Magento\Framework\Mail\Message
@@ -90,20 +97,21 @@ class TransportBuilder
 
     /**
      * @param FactoryInterface $templateFactory
-     * @param MessageInterface $message
+     * @param MessageInterfaceFactory $messageInterfaceFactory
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
      */
     public function __construct(
         FactoryInterface $templateFactory,
-        MessageInterface $message,
+        MessageInterfaceFactory $messageInterfaceFactory,
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory
     ) {
         $this->templateFactory = $templateFactory;
-        $this->message = $message;
+        $this->messageInterfaceFactory = $messageInterfaceFactory;
+        $this->message = $messageInterfaceFactory->create();
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
@@ -242,7 +250,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create(\Magento\Framework\Mail\Message::class);
+        $this->message = $this->messageInterfaceFactory->create();
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
