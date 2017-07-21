@@ -202,17 +202,17 @@ class SessionManager implements SessionManagerInterface
     /**
      * Renew session cookie to prolong session
      *
-     * @param null|string $cookieValue
+     * @param null|string $sid If we have session id we need to use it instead of old cookie value
      * @return $this
      */
-    private function renewCookie($cookieValue)
+    private function renewCookie($sid)
     {
         if (!$this->getCookieLifetime()) {
             return $this;
         }
         //When we renew cookie, we should aware, that any other session client do not
         //change cookie too
-        $cookieValue = $cookieValue ?: $this->cookieManager->getCookie($this->getName());
+        $cookieValue = $sid ?: $this->cookieManager->getCookie($this->getName());
         if ($cookieValue) {
             $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $metadata->setPath($this->sessionConfig->getCookiePath());
