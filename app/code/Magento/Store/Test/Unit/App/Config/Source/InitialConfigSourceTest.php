@@ -8,7 +8,6 @@ namespace Magento\Store\Test\Unit\App\Config\Source;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
 use Magento\Store\App\Config\Source\InitialConfigSource;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
@@ -26,11 +25,6 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
      * @var DeploymentConfig|Mock
      */
     private $deploymentConfigMock;
-
-    /**
-     * @var DataObjectFactory|Mock
-     */
-    private $dataObjectFactory;
 
     /**
      * @var DataObject|Mock
@@ -53,10 +47,6 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectFactory = $this->getMockBuilder(DataObjectFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,7 +54,6 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->source = new InitialConfigSource(
             $this->readerMock,
             $this->deploymentConfigMock,
-            $this->dataObjectFactory,
             'configType'
         );
     }
@@ -73,25 +62,16 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param array $data
      * @param string|array $expected
-     * @param string $expectedPath
      * @dataProvider getDataProvider
      */
-    public function testGet($path, $data, $expected, $expectedPath)
+    public function testGet($path, $data, $expected)
     {
         $this->readerMock->expects($this->once())
             ->method('load')
             ->willReturn($data);
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(true);
-        $this->dataObjectFactory->expects($this->once())
-            ->method('create')
-            ->with(['data' => $data])
-            ->willReturn($this->dataObjectMock);
-        $this->dataObjectMock->expects($this->once())
-            ->method('getData')
-            ->with($expectedPath)
-            ->willReturn($expected);
+            ->willReturn(false);
 
         $this->assertEquals($expected, $this->source->get($path));
     }
@@ -102,10 +82,11 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
     public function getDataProvider()
     {
         return [
-            'simple path' => ['path', ['configType' => 'value'], 'value', 'configType/path'],
-            'empty path' => ['', [], [], 'configType'],
-            'null path' => [null, [], [], 'configType'],
-            'leading path' => ['/path', [], [], 'configType/path']
+            'simple path' => ['path', ['configType' => 'value'], 'value'],
+            'big path' => ['path1/path2', ['configType' => 'value'], 'value'],
+            'empty path' => ['', [], []],
+            'null path' => [null, [], []],
+            'leading path' => ['/path', [], []]
         ];
     }
 
@@ -117,7 +98,7 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
             ->method('load');
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(false);
+            ->willReturn(true);
 
         $this->assertEquals([], $this->source->get($path));
     }

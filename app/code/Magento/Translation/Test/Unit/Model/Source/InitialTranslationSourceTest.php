@@ -18,8 +18,6 @@ use Magento\Translation\Model\Source\InitialTranslationSource;
  * @covers \Magento\Translation\Model\Source\InitialTranslationSource
  * @package Magento\Translation\Test\Unit\Model\Source
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
- * @deprecated translation config source was removed.
  */
 class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
 {

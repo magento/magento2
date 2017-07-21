@@ -124,6 +124,20 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param \Magento\Framework\Search\Response\QueryResponse $queryResponse
+     * @param array $expectedIds
+     */
+    private function assertOrderedProductIds($queryResponse, $expectedIds)
+    {
+        $actualIds = [];
+        foreach ($queryResponse as $document) {
+            /** @var \Magento\Framework\Api\Search\Document $document */
+            $actualIds[] = $document->getId();
+        }
+        $this->assertEquals($expectedIds, $actualIds);
+    }
+
+    /**
      * @magentoConfigFixture current_store catalog/search/engine mysql
      */
     public function testMatchQuery()
@@ -134,6 +148,24 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $queryResponse = $this->executeQuery();
 
         $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/products_multi_option.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testMatchOrderedQuery()
+    {
+        $expectedIds = [8, 7, 6, 5, 2];
+
+        //Verify that MySql randomized result of equal-weighted results
+        //consistently ordered by entity_id after multiple calls
+        $this->requestBuilder->bind('fulltext_search_query', 'shorts');
+        $this->requestBuilder->setRequestName('one_match');
+        $queryResponse = $this->executeQuery();
+
+        $this->assertEquals(5, $queryResponse->count());
+        $this->assertOrderedProductIds($queryResponse, $expectedIds);
     }
 
     /**
