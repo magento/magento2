@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,11 +64,9 @@ class ReportProvider
      * Returns report data by name and criteria
      *
      * @param string $name
-     * @param SearchCriteria|null $criteria
      * @return \IteratorIterator
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getReport($name, SearchCriteria $criteria = null)
+    public function getReport($name)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());

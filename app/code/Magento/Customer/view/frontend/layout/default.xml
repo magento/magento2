@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,10 +20,10 @@
                 </arguments>
             </block>
             <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link"
-                   template="account/link/authorization.phtml"/>
+                   template="Magento_Customer::account/link/authorization.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Account\AuthenticationPopup" name="authentication-popup" as="authentication-popup" template="account/authentication-popup.phtml">
+            <block class="Magento\Customer\Block\Account\AuthenticationPopup" name="authentication-popup" as="authentication-popup" template="Magento_Customer::account/authentication-popup.phtml">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
@@ -45,6 +45,8 @@
             <block name="customer.customer.data"
                    class="Magento\Customer\Block\CustomerData"
                    template="Magento_Customer::js/customer-data.phtml"/>
+            <block name="customer.data.invalidation.rules" class="Magento\Customer\Block\CustomerScopeData"
+                   template="Magento_Customer::js/customer-data/invalidation-rules.phtml"/>
         </referenceContainer>
     </body>
 </page>

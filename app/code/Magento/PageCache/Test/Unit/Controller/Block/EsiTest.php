@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EsiTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -69,7 +72,12 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
             \Magento\PageCache\Controller\Block\Esi::class,
-            ['context' => $contextMock, 'translateInline' => $this->translateInline]
+            [
+                'context' => $contextMock,
+                'translateInline' => $this->translateInline,
+                'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+            ]
         );
     }
 
@@ -83,7 +91,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $block = 'block';
         $handles = ['handle1', 'handle2'];
         $html = 'some-html';
-        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', json_encode($handles)]];
+        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
 
         $blockInstance1 = $this->getMock(
             $blockClass,

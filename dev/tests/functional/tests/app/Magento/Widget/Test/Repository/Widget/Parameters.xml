@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -47,10 +47,37 @@
 
         <dataset name="recentlyComparedProducts">
             <field name="page_size" xsi:type="string">4</field>
+            <field name="show_attributes" xsi:type="array">
+                <item name="name" xsi:type="string">Name</item>
+                <item name="image" xsi:type="string">Image</item>
+                <item name="price" xsi:type="string">Price</item>
+            </field>
+            <field name="show_buttons" xsi:type="array">
+                <item name="add_to_cart" xsi:type="string">Add to Cart</item>
+                <item name="add_to_compare" xsi:type="string">Add to Compare</item>
+                <item name="add_to_wishlist" xsi:type="string">Add to Wishlist</item>
+            </field>
         </dataset>
 
         <dataset name="recentlyViewedProducts">
             <field name="page_size" xsi:type="string">4</field>
+            <field name="show_attributes" xsi:type="array">
+                <item name="name" xsi:type="string">Name</item>
+                <item name="image" xsi:type="string">Image</item>
+                <item name="price" xsi:type="string">Price</item>
+                <item name="learn_more" xsi:type="string">Learn More Link</item>
+            </field>
+            <field name="show_buttons" xsi:type="array">
+                <item name="add_to_cart" xsi:type="string">Add to Cart</item>
+                <item name="add_to_compare" xsi:type="string">Add to Compare</item>
+                <item name="add_to_wishlist" xsi:type="string">Add to Wishlist</item>
+            </field>
+        </dataset>
+
+        <dataset name="catalogNewProductsListNewOnly">
+            <field name="display_type" xsi:type="string">New products</field>
+            <field name="show_pager" xsi:type="string">No</field>
+            <field name="products_count" xsi:type="string">1</field>
         </dataset>
     </repository>
 </config>

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
 
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -448,5 +448,28 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->addProduct($product);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetItemById()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote->load('test01', 'reserved_order_id');
+
+        $quoteItem = $objectManager->create(\Magento\Quote\Model\Quote\Item::class);
+
+        $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+
+        $quoteItem->setProduct($product);
+        $quote->addItem($quoteItem);
+        $quote->save();
+
+        $this->assertInstanceOf(\Magento\Quote\Model\Quote\Item::class, $quote->getItemById($quoteItem->getId()));
+        $this->assertEquals($quoteItem->getId(), $quote->getItemById($quoteItem->getId())->getId());
     }
 }

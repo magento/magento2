@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Compare;
@@ -9,6 +9,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Catalog Compare Item Model
+ *
+ * @api
  *
  * @method \Magento\Catalog\Model\ResourceModel\Product\Compare\Item getResource()
  * @method \Magento\Catalog\Model\Product\Compare\Item setVisitorId(int $value)

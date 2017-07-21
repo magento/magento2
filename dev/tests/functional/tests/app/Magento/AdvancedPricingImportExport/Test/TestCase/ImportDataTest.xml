@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -18,7 +18,7 @@
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
                     <item name="entities" xsi:type="array">
-                        <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                        <item name="0" xsi:type="string">catalogProductSimple::johndoe_with_addresses</item>
                     </item>
                     <item name="template" xsi:type="array">
                         <item name="filename" xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_1</item>

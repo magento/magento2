@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig\FileReader;
-use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Console\Cli;
-use Magento\Framework\ObjectManagerInterface;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Filesystem;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,10 +78,10 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
         $this->envConfig = $this->loadEnvConfig();
         $this->env = $_ENV;
 
-        $config = include(__DIR__ . '/../../_files/config.php');
+        $config = include __DIR__ . '/../../_files/config.php';
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $config]);
 
-        $config = include(__DIR__ . '/../../_files/env.php');
+        $config = include __DIR__ . '/../../_files/env.php';
         $this->writer->saveConfig([ConfigFilePool::APP_ENV => $config]);
 
         $_ENV['CONFIG__DEFAULT__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.default.test';
@@ -146,6 +146,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                     'web/test2/test_value_3' => ['value3.config.default.test'],
                     'web/test2/test_value_4' => ['value4.env.default.test'],
                     'carriers/fedex/account' => ['******'],
+                    'paypal/fetch_reports/ftp_password' => ['******'],
                     'web/test' => [
                         'web/test/test_value_1 - value1.db.default.test',
                         'web/test/test_value_2 - value2.local_config.default.test',
@@ -166,6 +167,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                         'web/test2/test_value_3 - value3.config.default.test',
                         'web/test2/test_value_4 - value4.env.default.test',
                         'carriers/fedex/account - ******',
+                        'paypal/fetch_reports/ftp_password - ******',
                     ],
                 ]
             ],

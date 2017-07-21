@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 
 class ModuleStatus
 {

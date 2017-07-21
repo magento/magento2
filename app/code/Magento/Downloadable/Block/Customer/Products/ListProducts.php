@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 /**
  * Block to display downloadable links bought by customer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class ListProducts extends \Magento\Framework\View\Element\Template
 {

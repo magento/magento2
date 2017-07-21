@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
@@ -133,7 +133,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'visible_on_front',
                 'checkbox',
-                ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1]
+                ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1, 'checked' => true]
             );
 
         $this->block->toHtml();

@@ -2,18 +2,19 @@
 /**
  * Scan source code for incorrect or undeclared modules dependencies
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
 namespace Magento\Test\Integrity;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
+use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
@@ -222,7 +223,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 self::$_mapLayoutBlocks,
                 self::$_mapLayoutHandles
             ),
-            new DiRule(new VirtualTypeMapper())
+            new DiRule(new VirtualTypeMapper()),
+            new ReportsConfigRule($dbRuleTables),
         ];
     }
 

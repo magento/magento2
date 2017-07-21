@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,18 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
+/**
+ * @api
+ */
 interface EngineInterface
 {
+    const FIELD_PREFIX = 'attr_';
+
+    /**
+     * Scope identifier
+     */
+    const SCOPE_IDENTIFIER = 'scope';
+
     /**
      * Configuration path by which current indexer handler stored
      */

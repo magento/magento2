@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
@@ -69,7 +69,6 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
             $this->classReaderMock,
             $this->validatorMock,
             new \Magento\Framework\Code\Validator\ConstructorIntegrity(),
-            new \Magento\Framework\Code\Validator\ContextAggregation(),
             $this->logMock
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 /** @var \Magento\UrlRewrite\Block\Edit $block */
 ?>
-<?php echo $block->getChildHtml() ?>
+<?= $block->getChildHtml() ?>
 <?php if ($block->getChildBlock('form')): ?>
 <script>
 require([
@@ -17,7 +17,7 @@ require([
     'mage/backend/validation'
 ], function($){
     $('#edit_form').form()
-        .validation({validationUrl: '<?php echo $block->escapeUrl($block->getValidationUrl()) ?>'});
+        .validation({validationUrl: '<?= $block->escapeUrl($block->getValidationUrl()) ?>'});
 });
 </script>
 <?php endif; ?>

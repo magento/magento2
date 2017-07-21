@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 
 use Magento\Analytics\ReportXml\DB\ConditionResolver;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Sql\Expression;
 
@@ -62,7 +62,7 @@ class ConditionResolverTest extends \PHPUnit_Framework_TestCase
         $valueCondition = ["type" => "value", "_value" => "2", "attribute" => "first_name", "operator" => "eq"];
         $identifierCondition = [
             "type" => "identifier",
-            "_value" => "3",
+            "_value" => "other_field",
             "attribute" => "last_name",
             "operator" => "eq"];
         $filter = [["glue" => "AND", "condition" => [$valueCondition]]];
@@ -90,14 +90,19 @@ class ConditionResolverTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())
             ->method('quote')
             ->willReturn("'John'");
-
-        $this->connectionMock->expects($this->once())
+        $this->connectionMock->expects($this->exactly(4))
             ->method('quoteIdentifier')
-            ->willReturn("'Smith'");
-        $result = "(n.id != 1 OR ((n.first_name = 'John'))) AND (n.last_name = 'Smith')";
+            ->willReturnMap([
+                ['n.id', false, '`n`.`id`'],
+                ['n.first_name', false, '`n`.`first_name`'],
+                ['n.last_name', false, '`n`.`last_name`'],
+                ['other_field', false, '`other_field`'],
+            ]);
+
+        $result = "(`n`.`id` != 1 OR ((`n`.`first_name` = 'John'))) OR (`n`.`last_name` = `other_field`)";
         $this->assertEquals(
-            $this->conditionResolver->getFilter($this->selectBuilderMock, $filterConfig, $aliasName),
-            $result
+            $result,
+            $this->conditionResolver->getFilter($this->selectBuilderMock, $filterConfig, $aliasName)
         );
     }
 }

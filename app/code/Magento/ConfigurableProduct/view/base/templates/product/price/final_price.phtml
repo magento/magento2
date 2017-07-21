@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
-<?php if ($block->hasSpecialPrice()): ?>
+<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
     <span class="special-price">
         <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
             'display_label'     => __('Special Price'),
@@ -49,12 +49,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 
 <?php if ($block->showMinimalPrice()): ?>
     <?php if ($block->getUseLinkForAsLowAs()):?>
-        <a href="<?php /* @escapeNotVerified */ echo $block->getSaleableItem()->getProductUrl(); ?>" class="minimal-price-link">
-            <?php /* @escapeNotVerified */ echo $block->renderAmountMinimal(); ?>
+        <a href="<?= /* @escapeNotVerified */ $block->getSaleableItem()->getProductUrl() ?>" class="minimal-price-link">
+            <?= /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
         </a>
     <?php else:?>
         <span class="minimal-price-link">
-            <?php /* @escapeNotVerified */ echo $block->renderAmountMinimal(); ?>
+            <?= /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
         </span>
     <?php endif?>
 <?php endif; ?>

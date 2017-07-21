@@ -1,17 +1,22 @@
 <?php
 /**
  * Mail Transport
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail;
 
-class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framework\Mail\TransportInterface
+class Transport implements \Magento\Framework\Mail\TransportInterface
 {
+    /**
+     * @var \Zend\Mail\Transport\Sendmail
+     */
+    private $zendTransport;
+
     /**
      * @var \Magento\Framework\Mail\MessageInterface
      */
-    protected $_message;
+    private $message;
 
     /**
      * @param MessageInterface $message
@@ -20,11 +25,8 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
      */
     public function __construct(\Magento\Framework\Mail\MessageInterface $message, $parameters = null)
     {
-        if (!$message instanceof \Zend_Mail) {
-            throw new \InvalidArgumentException('The message should be an instance of \Zend_Mail');
-        }
-        parent::__construct($parameters);
-        $this->_message = $message;
+        $this->zendTransport = new \Zend\Mail\Transport\Sendmail($parameters);
+        $this->message = $message;
     }
 
     /**
@@ -36,7 +38,9 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
     public function sendMessage()
     {
         try {
-            parent::send($this->_message);
+            $this->zendTransport->send(
+                \Zend\Mail\Message::fromString($this->message->getRawMessage())
+            );
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);
         }

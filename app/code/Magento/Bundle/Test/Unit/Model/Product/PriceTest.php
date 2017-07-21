@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
- * Test for Model ProductPrice.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
@@ -114,7 +113,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                     return json_decode($value, true);
                 }
             );
-
+        $tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\Bundle\Model\Product\Price::class,
@@ -129,7 +131,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'tierPriceFactory' => $tpFactory,
                 'config' => $scopeConfig,
                 'catalogData' => $this->catalogHelperMock,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'tierPriceExtensionFactory' => $tierPriceExtensionFactoryMock
             ]
         );
     }

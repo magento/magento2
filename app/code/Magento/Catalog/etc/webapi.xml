@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -39,7 +39,6 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-
     <route url="/V1/products/attributes/types" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeTypesListInterface" method="getItems"/>
         <resources>
@@ -481,6 +480,12 @@
         <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="deleteById" />
         <resources>
             <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products-render-info" method="GET">
+        <service class="Magento\Catalog\Api\ProductRenderListInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
         </resources>
     </route>
 </routes>

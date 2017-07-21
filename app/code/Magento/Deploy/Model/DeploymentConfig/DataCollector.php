@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
@@ -34,7 +34,7 @@ use Magento\Framework\App\DeploymentConfig;
  * The data of this section will be collected then will be used in importing process from the shared configuration
  * files to appropriate application sources.
  *
- * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer::import()
+ * @see \Magento\Deploy\Console\Command\App\ConfigImport\Processor::execute()
  */
 class DataCollector
 {

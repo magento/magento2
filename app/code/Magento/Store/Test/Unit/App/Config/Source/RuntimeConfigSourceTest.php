@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\App\Config\Source;
@@ -104,25 +104,22 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->data = [
-            'group' => [
-                'code' => 'myGroup',
-                'data' => [
+            'groups' => [
+                '1' => [
                     'name' => 'My Group',
-                    'group_id' => $this->data['group']['code']
-                ]
+                    'group_id' => 1
+                ],
             ],
-            'website' => [
-                'code' => 'myWebsite',
-                'data' => [
-                    'name' => 'My Website',
-                    'website_code' => $this->data['website']['code']
-                ]
-            ],
-            'store' => [
-                'code' => 'myStore',
-                'data' => [
+            'stores' => [
+                'myStore' => [
                     'name' => 'My Store',
-                    'store_code' => $this->data['store']['code']
+                    'code' => 'myStore'
+                ]
+            ],
+            'websites' => [
+                'myWebsite' => [
+                    'name' => 'My Website',
+                    'code' => 'myWebsite'
                 ]
             ],
         ];
@@ -209,26 +206,16 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
     {
         switch ($this->getScope($path)) {
             case 'websites':
-                $result = $this->data['website']['data'];
+                $result = ['websites' => $this->data['websites']];
                 break;
             case 'groups':
-                $result = $this->data['group']['data'];
+                $result = ['groups' => $this->data['groups']];
                 break;
             case 'stores':
-                $result = $this->data['store']['data'];
+                $result = ['stores' => $this->data['stores']];
                 break;
             default:
-                $result = [
-                    'websites' => [
-                        $this->data['website']['code'] => $this->data['website']['data']
-                    ],
-                    'groups' => [
-                        $this->data['group']['code'] => $this->data['group']['data']
-                    ],
-                    'stores' => [
-                        $this->data['store']['code'] => $this->data['store']['data']
-                    ],
-                ];
+                $result = $this->data;
                 break;
         }
         return $result;
@@ -244,7 +231,7 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
                     ->willReturn($this->store);
                 $this->store->expects($this->once())
                     ->method('load')
-                    ->with($this->data['store']['code'], 'code')
+                    ->with('myStore', 'code')
                     ->willReturnSelf();
             } else {
                 $this->storeCollectionFactory->expects($this->once())
@@ -259,11 +246,11 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
                     ->willReturn(new \ArrayIterator([$this->store]));
                 $this->store->expects($this->once())
                     ->method('getCode')
-                    ->willReturn($this->data['store']['code']);
+                    ->willReturn('myStore');
             }
             $this->store->expects($this->once())
                 ->method('getData')
-                ->willReturn($this->data['store']['data']);
+                ->willReturn($this->data['stores']['myStore']);
         }
     }
 
@@ -277,7 +264,7 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
                     ->willReturn($this->group);
                 $this->group->expects($this->once())
                     ->method('load')
-                    ->with($this->data['group']['code'])
+                    ->with($this->data['groups']['1']['group_id'])
                     ->willReturnSelf();
             } else {
                 $this->groupCollectionFactory->expects($this->once())
@@ -292,11 +279,11 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
                     ->willReturn(new \ArrayIterator([$this->group]));
                 $this->group->expects($this->once())
                     ->method('getId')
-                    ->willReturn($this->data['group']['code']);
+                    ->willReturn($this->data['groups']['1']['group_id']);
             }
             $this->group->expects($this->once())
                 ->method('getData')
-                ->willReturn($this->data['group']['data']);
+                ->willReturn($this->data['groups']['1']);
         }
     }
 
@@ -310,7 +297,7 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
                     ->willReturn($this->website);
                 $this->website->expects($this->once())
                     ->method('load')
-                    ->with($this->data['website']['code'])
+                    ->with($this->data['websites']['myWebsite']['code'])
                     ->willReturnSelf();
             } else {
                 $this->websiteCollectionFactory->expects($this->once())
@@ -325,11 +312,11 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
                     ->willReturn(new \ArrayIterator([$this->website]));
                 $this->website->expects($this->once())
                     ->method('getCode')
-                    ->willReturn($this->data['website']['code']);
+                    ->willReturn('myWebsite');
             }
             $this->website->expects($this->once())
                 ->method('getData')
-                ->willReturn($this->data['website']['data']);
+                ->willReturn($this->data['websites']['myWebsite']);
         }
     }
 
@@ -350,7 +337,7 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['websites/myWebsite'],
-            ['groups/myGroup'],
+            ['groups/1'],
             ['stores/myStore'],
             ['default']
         ];

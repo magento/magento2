@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
@@ -27,7 +27,9 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('HH:mm:ss MM-dd-yyyy')
         );
+
         $model = new DateTime($localeMock);
+        $localeMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
 
         $this->assertEquals($expectedDate, $model->filter($inputData));
     }
@@ -64,6 +66,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
         );
         $model = new DateTime($localeMock);
 
+        $localeMock->expects($this->any())->method('date')->willReturn(new \DateTime($inputData));
         $model->filter($inputData);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -332,6 +332,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('webkitallowfullscreen', '')
                     .attr('mozallowfullscreen', '')
                     .attr('allowfullscreen', '')
+                    .attr('referrerPolicy', 'origin')
             );
             this._player = window.$f(this.element.children(':first')[0]);
 

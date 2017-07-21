@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model;
@@ -9,6 +9,7 @@ namespace Magento\Reports\Model;
  * Report Flag Model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Flag extends \Magento\Framework\Flag
 {

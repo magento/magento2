@@ -1,6 +1,10 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'moment',
@@ -174,8 +178,8 @@ define([
 
             this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
 
-            if (this.dateFormat) {
-                this.inputDateFormat = this.dateFormat;
+            if (this.options.dateFormat) {
+                this.outputDateFormat = this.options.dateFormat;
             }
 
             this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);

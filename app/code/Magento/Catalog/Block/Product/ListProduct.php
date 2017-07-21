@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,11 +12,12 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Product list
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ListProduct extends AbstractProduct implements IdentityInterface
@@ -286,8 +287,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
-                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED =>
-                    $this->urlHelper->getEncodedUrl($url),
+                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
             ]
         ];
     }
@@ -318,11 +318,15 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
+     * Specifies that price rendering should be done for the list of products
+     * i.e. rendering happens in the scope of product list, but not single product
+     *
      * @return \Magento\Framework\Pricing\Render
      */
     protected function getPriceRender()
     {
-        return $this->getLayout()->getBlock('product.price.render.default');
+        return $this->getLayout()->getBlock('product.price.render.default')
+            ->setData('is_product_list', true);
     }
 
     /**

@@ -1,15 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\ObjectManagerInterface;
@@ -173,7 +170,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $this->selectMock
             ->expects($this->atLeastOnce())
             ->method('getPart')
-            ->will($this->returnValue(['main_table' => '']));
+            ->will($this->returnValue(['main_table' => []]));
 
         $this->selectMock->expects($this->atLeastOnce())->method('setPart');
 
@@ -215,7 +212,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getPart')
             ->will($this->returnValue($getPartRet));
 
-        $this->selectMock->expects($this->once())->method('setPart')->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
+        $this->selectMock
+            ->expects($this->once())
+            ->method('setPart')
+            ->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
+
         $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
@@ -408,36 +409,5 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($this->uut->save() instanceof Uut);
-    }
-}
-
-/**
- * Pattern type: Public Morozov
- */
-class Uut extends AbstractCollection
-{
-    public function wereFieldsToSelectChanged()
-    {
-        return $this->_fieldsToSelectChanged;
-    }
-
-    public function getFieldsToSelect()
-    {
-        return $this->_fieldsToSelect;
-    }
-
-    public function setFieldsToSelect(array $fields)
-    {
-        $this->_fieldsToSelect = $fields;
-    }
-
-    public function setResource($resource)
-    {
-        $this->_resource = $resource;
-    }
-
-    public function getJoinedTables()
-    {
-        return $this->_joinedTables;
     }
 }

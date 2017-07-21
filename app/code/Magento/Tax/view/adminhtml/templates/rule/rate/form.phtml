@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* @var $block \Magento\Tax\Block\Adminhtml\Rate\Form */
@@ -10,8 +10,8 @@
     <div class="grid-loader"></div>
 </div>
 
-<div class="form-inline" id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout() ?>" style="display:none">
-    <?php echo $block->getFormHtml();?>
-    <?php echo $block->getChildHtml('form_after');?>
+<div class="form-inline" id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none">
+    <?= $block->getFormHtml() ?>
+    <?= $block->getChildHtml('form_after') ?>
 </div>
 

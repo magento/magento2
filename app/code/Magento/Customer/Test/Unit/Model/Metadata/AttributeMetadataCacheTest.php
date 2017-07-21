@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Cache\StateInterface;
+use Magento\Config\App\Config\Type\System;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Customer\Model\Metadata\AttributeMetadataCache;
+use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Config\App\Config\Type\System;
-use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
-use Magento\Customer\Model\Metadata\AttributeMetadataCache;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
 {

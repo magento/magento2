@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,13 +47,12 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
     {
         // Preconditions
         $this->caches = $caches;
-        $this->adjustCacheSettings();
-
         // Steps
         $this->widgetInstanceIndex->open();
         $this->widgetInstanceIndex->getPageActionsBlock()->addNew();
         $this->widgetInstanceNew->getWidgetForm()->fill($widget);
         $this->widgetInstanceEdit->getPageActionsBlock()->save();
+        $this->adjustCacheSettings();
     }
 
     /**

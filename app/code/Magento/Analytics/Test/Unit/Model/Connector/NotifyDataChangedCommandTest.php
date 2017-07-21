@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\JsonConverter;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -39,11 +41,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $loggerMock;
 
-    /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $responseMock;
-
     protected function setUp()
     {
         $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
@@ -61,15 +58,16 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->responseMock =  $this->getMockBuilder(\Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $successHandler = $this->getMockBuilder(\Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface::class)
+            ->getMockForAbstractClass();
+        $successHandler->method('handleResponse')
+            ->willReturn(true);
 
         $this->notifyDataChangedCommand = new NotifyDataChangedCommand(
             $this->analyticsTokenMock,
             $this->httpClientMock,
             $this->configMock,
+            new ResponseResolver(new JsonConverter(), [201 => $successHandler]),
             $this->loggerMock
         );
     }
@@ -78,7 +76,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
     {
         $configVal = "Config val";
         $token = "Secret token!";
-        $requestJson = sprintf('{"access-token":"%s","url":"%s"}', $token, $configVal);
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);
@@ -93,9 +90,8 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ZendClient::POST,
                 $configVal,
-                $requestJson,
-                ['Content-Type: application/json']
-            )->willReturn($this->responseMock);
+                ['access-token' => $token, 'url' => $configVal]
+            )->willReturn(new \Zend_Http_Response(201, []));
         $this->assertTrue($this->notifyDataChangedCommand->execute());
     }
 
@@ -104,6 +100,8 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(false);
+        $this->httpClientMock->expects($this->never())
+            ->method('request');
         $this->assertFalse($this->notifyDataChangedCommand->execute());
     }
 }

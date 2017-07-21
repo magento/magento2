@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,13 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -47,6 +50,13 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @var StockConfigurationInterface
      */
     protected $stockConfiguration;
+
+    /**
+     * Param for switching logic which depends on action type (full reindex or partial)
+     *
+     * @var string
+     */
+    private $actionType;
 
     /**
      * Class constructor
@@ -106,7 +116,35 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     public function reindexEntity($entityIds)
     {
+        if ($this->getActionType() === Full::ACTION_TYPE) {
+            $this->tableStrategy->setUseIdxTable(false);
+            $this->_prepareIndexTable($entityIds);
+            return $this;
+        }
+
         $this->_updateIndex($entityIds);
+        return $this;
+    }
+
+    /**
+     * Returns action run type
+     *
+     * @return string
+     */
+    public function getActionType()
+    {
+        return $this->actionType;
+    }
+
+    /**
+     * Set action run type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setActionType($type)
+    {
+        $this->actionType = $type;
         return $this;
     }
 
@@ -184,6 +222,9 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
@@ -195,6 +236,12 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->joinInner(
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
+            []
+        )->joinInner(
+            ['mcpei' => $this->getTable('catalog_product_entity_int')],
+            'e.' . $linkField . ' = mcpei.' . $linkField
+            . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId()
+            . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->columns(
             ['qty' => $qtyExpr]
@@ -221,7 +268,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected function _prepareIndexTable($entityIds = null)
     {
         $connection = $this->getConnection();
-        $select = $this->_getStockStatusSelect($entityIds);
+        $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
@@ -258,9 +305,26 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 $data = [];
             }
         }
+
+        $this->deleteOldRecords($entityIds);
         $this->_updateIndexTable($data);
 
         return $this;
+    }
+
+    /**
+     * Delete records by their ids from index table
+     * Used to clean table before re-indexation
+     *
+     * @param array $ids
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function deleteOldRecords(array $ids)
+    {
+        if (count($ids) !== 0) {
+            $this->getConnection()->delete($this->getMainTable(), ['product_id in (?)' => $ids]);
+        }
     }
 
     /**

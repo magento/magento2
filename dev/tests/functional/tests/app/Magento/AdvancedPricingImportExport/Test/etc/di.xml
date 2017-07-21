@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -13,9 +13,15 @@
         </arguments>
     </type>
 
-    <type name="Magento\Mtf\Util\Command\File\ExportInterface">
+    <virtualType name="Magento\Mtf\Util\Command\File\AdvancedPricingExport" type="Magento\Mtf\Util\Command\File\Export">
         <arguments>
             <argument name="type" xsi:type="string">advancedPricing</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertExportAdvancedPricing">
+        <arguments>
+            <argument name="export" xsi:type="object">Magento\Mtf\Util\Command\File\AdvancedPricingExport</argument>
         </arguments>
     </type>
 

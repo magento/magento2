@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
@@ -8,6 +8,10 @@ namespace Magento\Framework\View\Asset;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 
+/**
+ * Helper class for static files minification related processes.
+ * @api
+ */
 class Minification
 {
     /**
@@ -143,7 +147,7 @@ class Minification
                 if (trim($exclude) != '') {
                     $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType][] = trim($exclude);
                 }
-            };
+            }
         }
         return $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType];
     }

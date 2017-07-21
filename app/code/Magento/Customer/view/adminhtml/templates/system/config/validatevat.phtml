@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,14 +16,14 @@ require(['prototype'], function(){
         var validationMessage = $('validation_result');
 
         params = {
-            country: $('<?php echo $block->escapeJs($block->getMerchantCountryField()); ?>').value,
-            vat: $('<?php echo $block->escapeJs($block->getMerchantVatNumberField()); ?>').value
+            country: $('<?= $block->escapeJs($block->getMerchantCountryField()) ?>').value,
+            vat: $('<?= $block->escapeJs($block->getMerchantVatNumberField()) ?>').value
         };
 
-        new Ajax.Request('<?php echo $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
+        new Ajax.Request('<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
             parameters: params,
             onSuccess: function(response) {
-                var result = '<?php echo $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.'))) ?>';
+                var result = '<?= $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.'))) ?>';
                 try {
                     if (response.responseText.isJSON()) {
                         response = response.responseText.evalJSON();
@@ -49,7 +49,7 @@ require(['prototype'], function(){
 </script>
 <div class="actions actions-validate-vat">
     <div id="validation_result" class="message-validation hidden"></div>
-    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?php echo $block->escapeHtmlAttr($block->getHtmlId()) ?>">
-        <span><?php echo $block->escapeHtml($block->getButtonLabel()) ?></span>
+    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
+        <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
 </div>

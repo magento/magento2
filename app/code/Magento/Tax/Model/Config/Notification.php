@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Config;
@@ -13,6 +13,11 @@ use Magento\Tax\Model\Config;
  */
 class Notification extends \Magento\Framework\App\Config\Value
 {
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'tax_config_notification';
+
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
      */

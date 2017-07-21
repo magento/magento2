@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,14 +13,14 @@
     <?php $_links = $block->getLinks(); ?>
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <legend class="legend links-title"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></legend><br>
+    <legend class="legend links-title"><span><?= /* @escapeNotVerified */ $block->getLinksTitle() ?></span></legend><br>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
-        <label class="label"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></label>
+        <label class="label"><span><?= /* @escapeNotVerified */ $block->getLinksTitle() ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
                  "linkElement":"input:checkbox[value]",
                  "allElements":"#links_all",
-                 "config":<?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>}
+                 "config":<?= /* @escapeNotVerified */ $block->getJsonConfig() ?>}
              }'
              data-container-for="downloadable-links">
             <?php foreach ($_links as $_link): ?>
@@ -30,19 +30,19 @@
                         <input type="checkbox"
                                <?php if ($_isRequired): ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
                                name="links[]"
-                               id="links_<?php /* @escapeNotVerified */ echo $_link->getId() ?>"
-                               value="<?php /* @escapeNotVerified */ echo $_link->getId(); ?>" <?php /* @escapeNotVerified */ echo $block->getLinkCheckedValue($_link); ?> />
+                               id="links_<?= /* @escapeNotVerified */ $_link->getId() ?>"
+                               value="<?= /* @escapeNotVerified */ $_link->getId() ?>" <?= /* @escapeNotVerified */ $block->getLinkCheckedValue($_link) ?> />
                     <?php endif; ?>
-                    <label class="label" for="links_<?php /* @escapeNotVerified */ echo $_link->getId() ?>">
-                        <span><?php echo $block->escapeHtml($_link->getTitle()); ?></span>
+                    <label class="label" for="links_<?= /* @escapeNotVerified */ $_link->getId() ?>">
+                        <span><?= $block->escapeHtml($_link->getTitle()) ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
                             <a class="sample link"
-                               href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
-                                <?php /* @escapeNotVerified */ echo __('sample') ?>
+                               href="<?= /* @escapeNotVerified */ $block->getLinkSampleUrl($_link) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
+                                <?= /* @escapeNotVerified */ __('sample') ?>
                             </a>
                         <?php endif; ?>
                         <?php if ($_linksPurchasedSeparately): ?>
-                            <?php /* @escapeNotVerified */ echo $block->getLinkPrice($_link); ?>
+                            <?= /* @escapeNotVerified */ $block->getLinkPrice($_link) ?>
                         <?php endif; ?>
                     </label>
                 </div>
@@ -50,10 +50,10 @@
             <?php if ($_linksPurchasedSeparately && $_linksLength > 1): ?>
                 <div class="field choice downloads-all">
                     <input type="checkbox"
-                           data-notchecked="<?php /* @escapeNotVerified */ echo __('Select all')?>"
-                           data-checked="<?php /* @escapeNotVerified */ echo __('Unselect all')?>"
+                           data-notchecked="<?= /* @escapeNotVerified */ __('Select all') ?>"
+                           data-checked="<?= /* @escapeNotVerified */ __('Unselect all') ?>"
                            id="links_all" />
-                    <label class="label" for="links_all"><span><?php /* @escapeNotVerified */ echo __('Select all')?></span></label>
+                    <label class="label" for="links_all"><span><?= /* @escapeNotVerified */ __('Select all') ?></span></label>
                 </div>
             <?php endif; ?>
         </div>

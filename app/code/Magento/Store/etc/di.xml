@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -276,11 +276,6 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Router\Base">
-        <arguments>
-            <argument name="routerId" xsi:type="string">standard</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="defaultTimezonePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
@@ -351,11 +346,10 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="scopesConfigInitialDataProvider" type="Magento\Framework\App\Config\InitialConfigSource">
+    <virtualType name="scopesConfigInitialDataProvider" type="Magento\Store\App\Config\Source\InitialConfigSource">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
             <argument name="configType" xsi:type="const">Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE</argument>
-            <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
@@ -373,6 +367,53 @@
             <argument name="commands" xsi:type="array">
                 <item name="commandStoreList" xsi:type="object">Magento\Store\Console\Command\StoreListCommand</item>
                 <item name="commandWebsiteList" xsi:type="object">Magento\Store\Console\Command\WebsiteListCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
+        <arguments>
+            <argument name="importers" xsi:type="array">
+                <item name="scopes" xsi:type="array">
+                    <item name="importer_class" xsi:type="string">Magento\Store\Model\Config\Importer</item>
+                    <item name="validator_class" xsi:type="string">Magento\Store\Model\Config\Validator</item>
+                    <item name="sort_order" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Config\Importer\Processor\ProcessorFactory">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="create" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Create</item>
+                <item name="update" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Update</item>
+                <item name="delete" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Delete</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Config\Importer\DataDifferenceCalculator">
+        <arguments>
+            <argument name="runtimeConfigSource" xsi:type="object">Magento\Store\App\Config\Source\RuntimeConfigSource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="environment" xsi:type="array">
+                <item name="web/default/front" xsi:type="string">1</item>
+                <item name="web/secure/base_link_url" xsi:type="string">1</item>
+                <item name="web/secure/base_media_url" xsi:type="string">1</item>
+                <item name="web/secure/base_static_url" xsi:type="string">1</item>
+                <item name="web/secure/base_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_link_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_media_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_static_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_url" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="serviceUrl" xsi:type="object">Magento\Store\Model\Argument\Interpreter\ServiceUrl</item>
             </argument>
         </arguments>
     </type>

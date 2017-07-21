@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
-use Magento\Setup\Model\Cron\JobFactory;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Magento\Backend\Console\Command\CacheEnableCommand;
 use Magento\Setup\Console\Command\MaintenanceDisableCommand;
 use Magento\Setup\Console\Command\MaintenanceEnableCommand;
+use Magento\Setup\Model\Cron\JobFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

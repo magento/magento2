@@ -1,27 +1,27 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\UrlRewrite\Model\OptionProvider;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Framework\App\ObjectManager;
-use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class AfterImportDataObserver
@@ -103,6 +103,20 @@ class AfterImportDataObserver implements ObserverInterface
     private $mergeDataProviderPrototype;
 
     /**
+     * Factory for creating category collection.
+     *
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
+     * Array of invoked categories during url rewrites generation.
+     *
+     * @var array
+     */
+    private $categoriesCache = [];
+
+    /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
@@ -112,7 +126,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
-     * @throws \InvalidArgumentException
+     * @param CategoryCollectionFactory|null $categoryCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -124,7 +138,8 @@ class AfterImportDataObserver implements ObserverInterface
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
         UrlFinderInterface $urlFinder,
-        MergeDataProviderFactory $mergeDataProviderFactory = null
+        MergeDataProviderFactory $mergeDataProviderFactory = null,
+        CategoryCollectionFactory $categoryCollectionFactory = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -138,6 +153,8 @@ class AfterImportDataObserver implements ObserverInterface
             $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
+        $this->categoryCollectionFactory = $categoryCollectionFactory ?:
+            ObjectManager::getInstance()->get(CategoryCollectionFactory::class);
     }
 
     /**
@@ -318,7 +335,7 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
-     * Generate list based on categories
+     * Generate list based on categories.
      *
      * @return UrlRewrite[]
      */
@@ -328,7 +345,7 @@ class AfterImportDataObserver implements ObserverInterface
         foreach ($this->products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
                 foreach ($this->categoryCache[$productId] as $categoryId) {
-                    $category = $this->import->getCategoryProcessor()->getCategoryById($categoryId);
+                    $category = $this->getCategoryById($categoryId, $storeId);
                     if ($category->getParentId() == Category::TREE_ROOT_ID) {
                         continue;
                     }
@@ -480,5 +497,28 @@ class AfterImportDataObserver implements ObserverInterface
         }
         $this->acceptableCategories[$storeId][$category->getId()] = $acceptable;
         return $acceptable;
+    }
+
+    /**
+     * Get category by id considering store scope.
+     *
+     * @param int $categoryId
+     * @param int $storeId
+     * @return Category|\Magento\Framework\DataObject
+     */
+    private function getCategoryById($categoryId, $storeId)
+    {
+        if (!isset($this->categoriesCache[$categoryId][$storeId])) {
+            /** @var CategoryCollection $categoryCollection */
+            $categoryCollection = $this->categoryCollectionFactory->create();
+            $categoryCollection->addIdFilter([$categoryId])
+                ->setStoreId($storeId)
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('url_key')
+                ->addAttributeToSelect('url_path');
+            $this->categoriesCache[$categoryId][$storeId] = $categoryCollection->getFirstItem();
+        }
+
+        return $this->categoriesCache[$categoryId][$storeId];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Serialize\Test\Unit\Serializer;
@@ -73,6 +73,35 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             ['123', 123],
             ['10.56', 10.56],
             ['{}', []],
+        ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to serialize value.
+     */
+    public function testSerializeException()
+    {
+        $this->json->serialize(STDOUT);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to unserialize value.
+     * @dataProvider unserializeExceptionDataProvider
+     */
+    public function testUnserializeException($value)
+    {
+        $this->json->unserialize($value);
+    }
+
+    public function unserializeExceptionDataProvider()
+    {
+        return [
+            [''],
+            [false],
+            [null],
+            ['{']
         ];
     }
 }

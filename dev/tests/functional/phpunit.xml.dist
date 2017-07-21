@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,11 +26,25 @@
             </arguments>
         </listener>
         <listener class="Magento\Mtf\System\Event\StateListener" />
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output directory -->
+                <boolean>false</boolean> <!-- Whether to delete previous results on rerun -->
+                <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="0">
+                        <string>ZephyrId</string>
+                    </element>
+                    <element key="1">
+                        <string>Group</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 
     <php>
-        <env name="app_frontend_url" value="http://localhost/" />
-        <env name="app_backend_url" value="http://localhost/backend/" />
+        <env name="app_frontend_url" value="http://127.0.0.1/" />
+        <env name="app_backend_url" value="http://127.0.0.1/backend/" />
         <env name="testsuite_rule" value="basic" />
         <env name="testsuite_rule_path" value="Magento/Mtf/TestSuite/InjectableTests" />
         <env name="log_directory" value="var/log" />

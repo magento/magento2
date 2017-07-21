@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,13 +9,13 @@
 /** @var \Magento\Customer\Block\Widget\Dob $block */
 
 /*
-<?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
+<?= $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
    ->setDate($block->getCustomer()->getDob())
    ->toHtml() ?>
 
 For checkout/onepage/billing.phtml:
 
-<?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
+<?= $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
    ->setDate($block->getCustomer()->getDob())
    ->setFieldIdFormat('billing:%s')
    ->setFieldNameFormat('billing[%s]')
@@ -28,12 +28,12 @@ automatically using block input parameters.
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
-<div class="<?php echo $block->escapeHtmlAttr($fieldCssClass); ?>">
-    <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?php echo $block->escapeHtml($block->getLabel()) ?></span></label>
+<div class="<?= $block->escapeHtmlAttr($fieldCssClass) ?>">
+    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?= $block->escapeHtml($block->getLabel()) ?></span></label>
     <div class="control customer-dob">
-        <?php echo $block->getFieldHtml(); ?>
+        <?= $block->getFieldHtml() ?>
         <?php if ($_message = $block->getAdditionalDescription()) : ?>
-            <div class="note"><?php echo $block->escapeHtml($_message); ?></div>
+            <div class="note"><?= $block->escapeHtml($_message) ?></div>
         <?php endif; ?>
     </div>
 </div>

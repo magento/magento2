@@ -1,9 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
+
+use Magento\Catalog\Block\Product\Context;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,10 +52,10 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
     protected $typeInstanceMock;
 
     /**
-     * @var \Magento\Framework\Url\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlHelperMock;
-    
+
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -69,6 +75,16 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $toolbarMock;
+
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $context;
+
+    /**
+     * @var Render|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $renderer;
 
     protected function setUp()
     {
@@ -141,12 +157,21 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->urlHelperMock = $this->getMockBuilder(\Magento\Framework\Url\Helper\Data::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->urlHelperMock = $this->getMockBuilder(Data::class)->disableOriginalConstructor()->getMock();
+        $this->context = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        $this->renderer = $this->getMockBuilder(Render::class)->disableOriginalConstructor()->getMock();
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class, [], '', false);
+
+        $this->context->expects($this->any())->method('getRegistry')->willReturn($this->registryMock);
+        $this->context->expects($this->any())->method('getCartHelper')->willReturn($this->cartHelperMock);
+        $this->context->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+
         $this->block = $objectManager->getObject(
             \Magento\Catalog\Block\Product\ListProduct::class,
             [
                 'registry' => $this->registryMock,
+                'context' => $this->context,
                 'layerResolver' => $layerResolver,
                 'cartHelper' => $this->cartHelperMock,
                 'postDataHelper' => $this->postDataHelperMock,
@@ -154,7 +179,6 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->block->setToolbarBlockName('mock');
-        $this->block->setLayout($this->layoutMock);
     }
 
     protected function tearDown()
@@ -203,7 +227,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
         $this->prodCollectionMock->expects($this->any())
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator([$this->productMock])));
- 
+
         $this->layerMock->expects($this->any())
             ->method('getCurrentCategory')
             ->will($this->returnValue($currentCategory));
@@ -256,5 +280,19 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($uenc));
         $result = $this->block->getAddToCartPostParams($this->productMock);
         $this->assertEquals($expectedPostData, $result);
+    }
+
+    public function testSetIsProductListFlagOnGetProductPrice()
+    {
+        $this->renderer->expects($this->once())
+            ->method('setData')
+            ->with('is_product_list', true)
+            ->willReturnSelf();
+        $this->layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with('product.price.render.default')
+            ->willReturn($this->renderer);
+
+        $this->block->getProductPrice($this->productMock);
     }
 }

@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\App\Config\Source;
 
 use Magento\Config\Model\Config\Export\ExcludeList;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class DumpConfigSourceAggregated aggregates configurations from all available sources
@@ -15,9 +17,21 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
     /**
-     * @var ExcludeList
+     * Rule name for include configuration data.
      */
-    private $excludeList;
+    const RULE_TYPE_INCLUDE = 'include';
+
+    /**
+     * Rule name for exclude configuration data.
+     */
+    const RULE_TYPE_EXCLUDE = 'exclude';
+
+    /**
+     * Checker for config type.
+     *
+     * @var TypePool
+     */
+    private $typePool;
 
     /**
      * @var ConfigSourceInterface[]
@@ -35,13 +49,49 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $data;
 
     /**
-     * @param ExcludeList $excludeList
-     * @param array $sources
+     * Array of rules for filtration the configuration data.
+     *
+     * For example:
+     * ```php
+     * [
+     *     'default' => 'include',
+     *     'sensitive' => 'exclude',
+     *     'environment' => 'exclude',
+     * ]
+     * ```
+     * It means that all aggregated configuration data will be included in result but configurations
+     * that relates to 'sensitive' or 'environment' will be excluded.
+     *
+     *
+     * ```php
+     * [
+     *     'default' => 'exclude',
+     *     'sensitive' => 'include',
+     *     'environment' => 'include',
+     * ]
+     * ```
+     * It means that result will contains only 'sensitive' and 'environment' configurations.
+     *
+     * @var array
      */
-    public function __construct(ExcludeList $excludeList, array $sources = [])
-    {
-        $this->excludeList = $excludeList;
+    private $rules;
+
+    /**
+     * @param ExcludeList $excludeList Is not used anymore as it was deprecated, use TypePool instead.
+     * @param array $sources
+     * @param TypePool|null $typePool
+     * @param array $rules Rules for filtration the configuration data.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __construct(
+        ExcludeList $excludeList,
+        array $sources = [],
+        TypePool $typePool = null,
+        array $rules = []
+    ) {
         $this->sources = $sources;
+        $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
+        $this->rules = $rules;
     }
 
     /**
@@ -86,17 +136,45 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             $newPath = $path ? $path . '/' . $subKey : $subKey;
             $filteredPath = $this->filterPath($newPath);
 
-            if ($filteredPath
-                && !is_array($data[$subKey])
-                && $this->excludeList->isPresent($filteredPath)
-            ) {
-                $this->excludedFields[$newPath] = $filteredPath;
-
-                unset($data[$subKey]);
-            } elseif (is_array($subData)) {
+            if (is_array($subData)) {
                 $this->filterChain($newPath, $subData);
+            } elseif ($this->isExcludedPath($filteredPath)) {
+                $this->excludedFields[$newPath] = $filteredPath;
+                unset($data[$subKey]);
+            }
+
+            if (empty($subData) && isset($data[$subKey]) && is_array($data[$subKey])) {
+                unset($data[$subKey]);
             }
         }
+    }
+
+    /**
+     * Checks if the configuration field needs to be excluded.
+     *
+     * @param string $path Configuration field path. For example 'contact/email/recipient_email'
+     * @return boolean Return true if path should be excluded
+     */
+    private function isExcludedPath($path)
+    {
+        if (empty($path)) {
+            return false;
+        }
+
+        $defaultRule = isset($this->rules['default']) ?
+            $this->rules['default'] : self::RULE_TYPE_INCLUDE;
+
+        foreach ($this->rules as $type => $rule) {
+            if ($type === 'default') {
+                continue;
+            }
+
+            if ($this->typePool->isPresent($path, $type)) {
+                return $rule === self::RULE_TYPE_EXCLUDE;
+            }
+        }
+
+        return $defaultRule === self::RULE_TYPE_EXCLUDE;
     }
 
     /**

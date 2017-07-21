@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav;
@@ -28,6 +28,7 @@ abstract class AbstractAction
     protected $_eavDecimalFactory;
 
     /**
+     * AbstractAction constructor.
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
      */
@@ -84,6 +85,7 @@ abstract class AbstractAction
      * Reindex entities
      *
      * @param null|array|int $ids
+     * @throws \Exception
      * @return void
      */
     public function reindex($ids = null)
@@ -92,8 +94,56 @@ abstract class AbstractAction
             if ($ids === null) {
                 $indexer->reindexAll();
             } else {
+                if (!is_array($ids)) {
+                    $ids = [$ids];
+                }
+                $ids = $this->processRelations($indexer, $ids);
                 $indexer->reindexEntities($ids);
+                $destinationTable = $indexer->getMainTable();
+                $this->syncData($indexer, $destinationTable, $ids);
             }
         }
+    }
+
+    /**
+     * Synchronize data between index storage and original storage
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav $indexer
+     * @param string $destinationTable
+     * @param array $ids
+     * @throws \Exception
+     * @return void
+     */
+    protected function syncData($indexer, $destinationTable, $ids)
+    {
+        $connection = $indexer->getConnection();
+        $connection->beginTransaction();
+        try {
+            // remove old index
+            $where = $connection->quoteInto('entity_id IN(?)', $ids);
+            $connection->delete($destinationTable, $where);
+            // insert new index
+            $indexer->insertFromTable($indexer->getIdxTable(), $destinationTable);
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Retrieve product relations by children and parent
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav $indexer
+     * @param array $ids
+     *
+     * @param bool $onlyParents
+     * @return array $ids
+     */
+    protected function processRelations($indexer, $ids, $onlyParents = false)
+    {
+        $parentIds = $indexer->getRelationsByChild($ids);
+        $childIds = $onlyParents ? [] : $indexer->getRelationsByParent($ids);
+        return array_unique(array_merge($ids, $childIds, $parentIds));
     }
 }

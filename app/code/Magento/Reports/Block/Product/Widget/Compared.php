@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Product\Widget;
 
 /**
  * Reports Recently Compared Products Widget
+ * @deprecated Since new frontend base widgets are provided
+ * @see \Magento\Catalog\Block\Widget\RecentlyCompared
  */
 class Compared extends \Magento\Reports\Block\Product\Compared implements \Magento\Widget\Block\BlockInterface
 {

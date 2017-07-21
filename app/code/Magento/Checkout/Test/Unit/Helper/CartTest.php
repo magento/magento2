@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -131,6 +131,37 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $summaryQty = 1;
         $this->cartMock->expects($this->any())->method('getSummaryQty')->will($this->returnValue($summaryQty));
         $this->assertEquals($summaryQty, $this->helper->getSummaryCount());
+    }
+
+    public function testAddUrlWithUencPlaceholder()
+    {
+        $productEntityId = 1;
+        $storeId = 1;
+        $isRequestSecure = false;
+        $productMock = $this->getMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'], [], '', false);
+        $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
+        $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
+        $productMock->expects($this->any())->method('getUrlDataObject')
+            ->will($this->returnValue(new DataObject(['store_id' => $storeId])));
+
+        $this->requestMock->expects($this->any())->method('getRouteName')->will($this->returnValue('checkout'));
+        $this->requestMock->expects($this->any())->method('getControllerName')->will($this->returnValue('cart'));
+        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
+
+        $params = [
+            Action::PARAM_NAME_URL_ENCODED => strtr("%uenc%", '+/=', '-_,'),
+            'product' => $productEntityId,
+            'custom_param' => 'value',
+            '_scope' => $storeId,
+            '_scope_to_url' => true,
+            'in_cart' => 1,
+            '_secure' => $isRequestSecure
+        ];
+
+        $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart/add', $params);
+        $this->helper->getAddUrl($productMock, ['custom_param' => 'value', 'useUencPlaceholder' => 1]);
     }
 
     public function testGetIsVirtualQuote()

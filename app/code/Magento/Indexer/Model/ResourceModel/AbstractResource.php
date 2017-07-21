@@ -1,19 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Abstract resource model. Can be used as base for indexer resources
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Indexer\Model\ResourceModel;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 
+/**
+ * Abstract resource model. Can be used as base for indexer resources
+ *
+ * @api
+ */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

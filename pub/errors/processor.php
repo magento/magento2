@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
 
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Error processor
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Processor
@@ -129,13 +130,22 @@ class Processor
     protected $_response;
 
     /**
-     * @param \Magento\Framework\App\Response\Http $response
+     * JSON serializer
+     *
+     * @var Json
      */
-    public function __construct(\Magento\Framework\App\Response\Http $response)
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\App\Response\Http $response
+     * @param Json $serializer
+     */
+    public function __construct(\Magento\Framework\App\Response\Http $response, Json $serializer = null)
     {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
@@ -360,7 +370,7 @@ class Processor
      * Load xml file
      *
      * @param string $xmlFile
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     protected function _loadXml($xmlFile)
     {
@@ -448,8 +458,7 @@ class Processor
      * Create report
      *
      * @param array $reportData
-     * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @return string
      */
     public function saveReport($reportData)
     {
@@ -462,19 +471,14 @@ class Processor
             @mkdir($this->_reportDir, 0777, true);
         }
 
-        @file_put_contents($this->_reportFile, serialize($reportData));
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData));
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
         }
         $this->_setReportUrl();
 
-        if (headers_sent()) {
-            echo '<script type="text/javascript">';
-            echo "window.location.href = '{$this->reportUrl}';";
-            echo '</script>';
-            exit;
-        }
+        return $this->reportUrl;
     }
 
     /**
@@ -493,7 +497,7 @@ class Processor
             header("Location: " . $this->getBaseUrl());
             die();
         }
-        $this->_setReportData(unserialize(file_get_contents($this->_reportFile)));
+        $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
     }
 
     /**

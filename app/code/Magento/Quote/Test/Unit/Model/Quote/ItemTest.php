@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,11 +55,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $stockItemMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockRegistry;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -131,14 +126,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
-            ->getMock();
-        $this->stockRegistry->expects($this->any())
-            ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
-
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['unserialize'])
             ->getMockForAbstractClass();
@@ -151,7 +138,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
                 'quoteItemCompare' => $this->compareHelper,
-                'stockRegistry' => $this->stockRegistry,
                 'serializer' => $this->serializer
             ]
         );
@@ -383,9 +369,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with('sales_quote_item_set_product', ['product' => $productMock, 'quote_item' => $this->model]);
 
         $isQtyDecimal = true;
-        $this->stockItemMock->expects($this->any())
-            ->method('getStockId')
-            ->will($this->returnValue(99));
         $this->stockItemMock->expects($this->once())
             ->method('getIsQtyDecimal')
             ->will($this->returnValue($isQtyDecimal));
@@ -424,6 +407,18 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isQtyDecimal, $this->model->getIsQtyDecimal());
     }
 
+    /**
+     * Generate product mock.
+     *
+     * @param int $productId
+     * @param string $productType
+     * @param string $productSku
+     * @param string $productName
+     * @param string $productWeight
+     * @param int $productTaxClassId
+     * @param float $productCost
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function generateProductMock(
         $productId,
         $productType,
@@ -449,6 +444,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'getTypeInstance',
                     'getStickWithinParent',
                     'getCustomOptions',
+                    'getExtensionAttributes',
                     'toArray',
                     '__wakeup',
                     'getStore',
@@ -485,7 +481,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
-
+        $extensionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+            ->setMethods(['getStockItem'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $extensionAttribute->expects($this->atLeastOnce())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
+        $productMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
         return $productMock;
     }
 
@@ -784,6 +787,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             self::PRODUCT_COST
         );
 
+        $this->model->setProduct($productMock);
         $this->model->setProduct($productMock2);
         $this->model->setOptions([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Button;
@@ -16,6 +16,7 @@ namespace Magento\Backend\Block\Widget\Button;
  * @method bool getDisabled()
  * @method string getStyle()
  * @method array getDataAttribute()
+ * @api
  */
 class SplitButton extends \Magento\Backend\Block\Widget
 {

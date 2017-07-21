@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Cron;
 
+use Magento\Analytics\Cron\Update;
 use Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Analytics\Model\FlagManager;
-use Magento\Analytics\Cron\Update;
+use Magento\Framework\FlagManager;
 
 /**
  * Class Update

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
@@ -26,14 +26,6 @@ class TierPrice extends AbstractPrice implements RowValidatorInterface
     ) {
         $this->storeResolver = $storeResolver;
         parent::__construct($groupRepository, $searchCriteriaBuilder);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init($context)
-    {
-        return parent::init($context);
     }
 
     /**

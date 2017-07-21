@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,8 @@ namespace Magento\Checkout\Block\Cart;
  * The pager will be displayed if items quantity in the shopping cart > than number from
  * Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager and
  * custom_items weren't set to cart block
+ *
+ * @api
  */
 class Grid extends \Magento\Checkout\Block\Cart
 {
