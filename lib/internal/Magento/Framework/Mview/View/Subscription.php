@@ -10,6 +10,7 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\Mview\View\StateInterface;
 
 class Subscription implements SubscriptionInterface
 {
@@ -58,7 +59,7 @@ class Subscription implements SubscriptionInterface
      *
      * @var array
      */
-    protected $ignoredUpdateColumns = ['updated_at'];
+    private $ignoredUpdateColumns = [];
 
     /**
      * @var Resource
@@ -72,6 +73,7 @@ class Subscription implements SubscriptionInterface
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param string $tableName
      * @param string $columnName
+     * @param array $ignoredUpdateColumns
      */
     public function __construct(
         ResourceConnection $resource,
@@ -79,7 +81,8 @@ class Subscription implements SubscriptionInterface
         \Magento\Framework\Mview\View\CollectionInterface $viewCollection,
         \Magento\Framework\Mview\ViewInterface $view,
         $tableName,
-        $columnName
+        $columnName,
+        $ignoredUpdateColumns = []
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -88,6 +91,7 @@ class Subscription implements SubscriptionInterface
         $this->tableName = $tableName;
         $this->columnName = $columnName;
         $this->resource = $resource;
+        $this->ignoredUpdateColumns = $ignoredUpdateColumns;
     }
 
     /**
@@ -162,7 +166,7 @@ class Subscription implements SubscriptionInterface
     protected function getLinkedViews()
     {
         if (!$this->linkedViews) {
-            $viewList = $this->viewCollection->getViewsByStateMode(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
+            $viewList = $this->viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
 
             foreach ($viewList as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
