@@ -118,7 +118,6 @@
                     <item name="map" xsi:type="array">
                         <item name="source_id" xsi:type="string">source_id</item>
                         <item name="name" xsi:type="string">name</item>
-                        <item name="qty" xsi:type="string">qty</item>
                     </item>
                     <item name="identificationProperty" xsi:type="string">source_id</item>
                     <item name="identificationDRProperty" xsi:type="string">source_id</item>
@@ -161,31 +160,6 @@
                             <item name="dataScope" xsi:type="string">name</item>
                             <item name="componentType" xsi:type="string">field</item>
                             <item name="label" xsi:type="string" translate="true">Name</item>
-                        </item>
-                    </argument>
-                </field>
-                <field name="status">
-                    <argument name="data" xsi:type="array">
-                        <item name="options" xsi:type="object">Magento\Inventory\Model\OptionSource\SourceItemStatus</item>
-                        <item name="config" xsi:type="array">
-                            <item name="formElement" xsi:type="string">select</item>
-                            <item name="dataType" xsi:type="string">text</item>
-                            <item name="dataScope" xsi:type="string">status</item>
-                            <item name="componentType" xsi:type="string">field</item>
-                            <item name="label" xsi:type="string" translate="true">Status</item>
-                            <item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/text</item>
-                        </item>
-                    </argument>
-                </field>
-                <field name="quantity">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="formElement" xsi:type="string">input</item>
-                            <item name="dataType" xsi:type="string">text</item>
-                            <item name="dataScope" xsi:type="string">quantity</item>
-                            <item name="componentType" xsi:type="string">field</item>
-                            <item name="label" xsi:type="string" translate="true">Qty</item>
-                            <item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/text</item>
                         </item>
                     </argument>
                 </field>

@@ -9,9 +9,9 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
-use Magento\Inventory\Model\ResourceModel\SourceStockLink as SourceStockLinkResourceModel;
-use Magento\Inventory\Model\ResourceModel\SourceStockLink\Collection;
-use Magento\Inventory\Model\ResourceModel\SourceStockLink\CollectionFactory;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory;
 use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
 use Psr\Log\LoggerInterface;
 
@@ -36,9 +36,9 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var SourceStockLinkResourceModel
+     * @var StockSourceLinkResourceModel
      */
-    private $sourceStockLinkResource;
+    private $stockSourceLinkResource;
 
     /**
      * @var LoggerInterface
@@ -49,20 +49,20 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $stockLinkCollectionFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param SourceStockLinkResourceModel $sourceStockLinkResource
+     * @param StockSourceLinkResourceModel $stockSourceLinkResource
      * @param LoggerInterface $logger
      */
     public function __construct(
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $stockLinkCollectionFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        SourceStockLinkResourceModel $sourceStockLinkResource,
+        StockSourceLinkResourceModel $stockSourceLinkResource,
         LoggerInterface $logger
     ) {
         $this->collectionProcessor = $collectionProcessor;
         $this->stockLinkCollectionFactory = $stockLinkCollectionFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->sourceStockLinkResource = $sourceStockLinkResource;
+        $this->stockSourceLinkResource = $stockSourceLinkResource;
         $this->logger = $logger;
     }
 
@@ -76,8 +76,8 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
         }
 
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceStockLink::STOCK_ID, (int)$stockId)
-            ->addFilter(SourceStockLink::SOURCE_ID, $sourceId)
+            ->addFilter(StockSourceLink::STOCK_ID, (int)$stockId)
+            ->addFilter(StockSourceLink::SOURCE_ID, $sourceId)
             ->create();
 
         /** @var Collection $collection */
@@ -92,8 +92,8 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
         }
 
         try {
-            $sourceStockLink = reset($items);
-            $this->sourceStockLinkResource->delete($sourceStockLink);
+            $stockSourceLink = reset($items);
+            $this->stockSourceLinkResource->delete($stockSourceLink);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete Source Stock Link'), $e);

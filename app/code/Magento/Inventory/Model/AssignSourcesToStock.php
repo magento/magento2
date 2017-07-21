@@ -7,7 +7,7 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Inventory\Model\ResourceModel\SourceStockLink\SaveMultiple;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
 use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Psr\Log\LoggerInterface;
 
@@ -43,11 +43,11 @@ class AssignSourcesToStock implements AssignSourcesToStockInterface
      */
     public function execute($stockId, array $sourceIds)
     {
-        if (0 === (int)$stockId || empty($sourceItems)) {
+        if (0 === (int)$stockId || empty($sourceIds)) {
             throw new InputException(__('Input data is invalid'));
         }
         try {
-            $this->saveMultiple->execute($sourceIds, $stockId);
+            $this->saveMultiple->execute($stockId, $sourceIds);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not assign Sources to Stock'), $e);

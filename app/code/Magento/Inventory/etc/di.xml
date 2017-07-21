@@ -11,11 +11,6 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source" />
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-    <preference for="Magento\InventoryApi\Api\Data\SourceStockLinkInterface" type="Magento\Inventory\Model\SourceStockLink"/>
-    <preference for="Magento\InventoryApi\Api\SourceStockLinkRepositoryInterface" type="Magento\Inventory\Model\SourceStockLinkRepository"/>
-    <preference for="Magento\InventoryApi\Api\Command\AssignSourcesToStockInterface" type="Magento\Inventory\Model\Command\AssignSourcesToStock"/>
-    <preference for="Magento\InventoryApi\Api\Command\GetAssignedSourcesByStockIdInterface" type="Magento\Inventory\Model\Command\GetAssignedSourcesByStockId"/>
-
     <!-- SourceCarrierLinkManagementInterface is extension point for carrier links storage replacing (spi) -->
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <!-- Source Item -->
@@ -27,4 +22,8 @@
     <preference for="Magento\InventoryApi\Api\StockRepositoryInterface" type="Magento\Inventory\Model\StockRepository" />
     <preference for="Magento\InventoryApi\Api\Data\StockInterface" type="Magento\Inventory\Model\Stock" />
     <preference for="Magento\InventoryApi\Api\Data\StockSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <!-- StockSourceLink -->
+    <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\AssignSourcesToStock"/>
+    <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\GetAssignedSourcesForStock"/>
+    <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\UnassignSourceFromStock"/>
 </config>

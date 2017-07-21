@@ -19,6 +19,8 @@ interface GetAssignedSourcesForStockInterface
      *
      * @param int $stockId
      * @return \Magento\InventoryApi\Api\Data\SourceInterface[]
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute($stockId);
 }

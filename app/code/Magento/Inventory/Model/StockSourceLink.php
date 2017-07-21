@@ -6,14 +6,14 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Inventory\Model\ResourceModel\SourceStockLink as SourceStockLinkResourceModel;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 
 /**
  * Doesn't have API interface because this object is need only for internal module using
  *
  * @codeCoverageIgnore
  */
-class SourceStockLink extends AbstractModel
+class StockSourceLink extends AbstractModel
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -28,7 +28,7 @@ class SourceStockLink extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(SourceStockLinkResourceModel::class);
+        $this->_init(StockSourceLinkResourceModel::class);
     }
 
     /**

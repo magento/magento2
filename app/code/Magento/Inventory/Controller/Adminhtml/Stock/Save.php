@@ -42,21 +42,29 @@ class Save extends Action
     private $dataObjectHelper;
 
     /**
+     * @var StockSourceLinkProcessor
+     */
+    private $stockSourceLinkProcessor;
+
+    /**
      * @param Context $context
      * @param StockInterfaceFactory $stockFactory
      * @param StockRepositoryInterface $stockRepository
      * @param DataObjectHelper $dataObjectHelper
+     * @param StockSourceLinkProcessor $stockSourceLinkProcessor
      */
     public function __construct(
         Context $context,
         StockInterfaceFactory $stockFactory,
         StockRepositoryInterface $stockRepository,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        StockSourceLinkProcessor $stockSourceLinkProcessor
     ) {
         parent::__construct($context);
         $this->stockFactory = $stockFactory;
         $this->stockRepository = $stockRepository;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->stockSourceLinkProcessor = $stockSourceLinkProcessor;
     }
 
     /**
@@ -109,8 +117,13 @@ class Save extends Action
             $stock = $this->stockFactory->create();
         }
         $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
-
         $stockId = $this->stockRepository->save($stock);
+
+        $assignedSources =
+            isset($requestData['sources']['assigned_sources']) && is_array($requestData['sources']['assigned_sources'])
+            ? $requestData['sources']['assigned_sources']
+            : [];
+        $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
         return $stockId;
     }
 

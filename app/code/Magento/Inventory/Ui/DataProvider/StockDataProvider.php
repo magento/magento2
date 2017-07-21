@@ -5,6 +5,8 @@
  */
 namespace Magento\Inventory\Ui\DataProvider;
 
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
 use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
@@ -31,6 +33,11 @@ class StockDataProvider extends DataProvider
     private $searchResultFactory;
 
     /**
+     * @var GetAssignedSourcesForStockInterface
+     */
+    private $getAssignedSourcesForStock;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -40,6 +47,7 @@ class StockDataProvider extends DataProvider
      * @param FilterBuilder $filterBuilder
      * @param StockRepositoryInterface $stockRepository
      * @param SearchResultFactory $searchResultFactory
+     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -54,6 +62,7 @@ class StockDataProvider extends DataProvider
         FilterBuilder $filterBuilder,
         StockRepositoryInterface $stockRepository,
         SearchResultFactory $searchResultFactory,
+        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
         array $meta = [],
         array $data = []
     ) {
@@ -70,6 +79,7 @@ class StockDataProvider extends DataProvider
         );
         $this->stockRepository = $stockRepository;
         $this->searchResultFactory = $searchResultFactory;
+        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
     }
 
     /**
@@ -86,6 +96,9 @@ class StockDataProvider extends DataProvider
                 $stockGeneralData = $data['items'][0];
                 $dataForSingle[$stockId] = [
                     'general' => $stockGeneralData,
+                    'sources' => [
+                        'assigned_sources' => $this->getAssignedSourcesData($stockId),
+                    ],
                 ];
                 $data = $dataForSingle;
             } else {
@@ -110,5 +123,23 @@ class StockDataProvider extends DataProvider
             StockInterface::STOCK_ID
         );
         return $searchResult;
+    }
+
+    /**
+     * @param int $stockId
+     * @return array
+     */
+    private function getAssignedSourcesData($stockId)
+    {
+        $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
+
+        $assignedSourcesData = [];
+        foreach ($assignedSources as $assignedSource) {
+            $assignedSourcesData[] = [
+                SourceInterface::SOURCE_ID => $assignedSource->getSourceId(),
+                SourceInterface::NAME => $assignedSource->getName(),
+            ];
+        }
+        return $assignedSourcesData;
     }
 }
