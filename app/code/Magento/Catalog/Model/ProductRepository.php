@@ -248,6 +248,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->load($productId);
             $this->cacheProduct($cacheKey, $product);
         }
+        if (!isset($this->instances[$sku])) {
+            $sku = trim($sku);
+        }
         return $this->instances[$sku][$cacheKey];
     }
 
@@ -291,7 +294,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         }
         $serializeData = $this->serializer->serialize($serializeData);
-        return md5($serializeData);
+        return sha1($serializeData);
     }
 
     /**

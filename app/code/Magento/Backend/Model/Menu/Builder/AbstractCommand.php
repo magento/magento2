@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Menu\Builder;
 
 /**
  * Menu builder command
+ * @api
  */
 abstract class AbstractCommand
 {

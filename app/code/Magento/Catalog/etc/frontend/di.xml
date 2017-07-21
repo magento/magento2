@@ -60,4 +60,44 @@
     <type name="Magento\Framework\Pricing\Render\PriceBox">
         <plugin name="catalog_price_box_key" type="Magento\Catalog\Block\Category\Plugin\PriceBoxTags" />
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPool">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="recently_viewed_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyViewedProductsSection</item>
+                <item name="recently_compared_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyComparedProductsSection</item>
+                <item name="product_data_storage" xsi:type="string">Magento\Catalog\CustomerData\ProductsRenderInfoSection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\CustomerData\RecentlyViewedProductsSection" type="Magento\Catalog\CustomerData\ProductFrontendActionSection">
+        <arguments>
+            <argument name="typeId" xsi:type="string">recently_viewed_product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\CustomerData\RecentlyComparedProductsSection" type="Magento\Catalog\CustomerData\ProductFrontendActionSection">
+        <arguments>
+            <argument name="typeId" xsi:type="string">recently_compared_product</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <arguments>
+            <argument name="galleryImagesConfig" xsi:type="array">
+                <item name="small_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_small</item>
+                    <item name="data_object_key" xsi:type="string">small_image_url</item>
+                    <item name="json_object_key" xsi:type="string">thumb</item>
+                </item>
+                <item name="medium_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_medium</item>
+                    <item name="data_object_key" xsi:type="string">medium_image_url</item>
+                    <item name="json_object_key" xsi:type="string">img</item>
+                </item>
+                <item name="large_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_large</item>
+                    <item name="data_object_key" xsi:type="string">large_image_url</item>
+                    <item name="json_object_key" xsi:type="string">full</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::THEME,
-    'frontent/Test/theme',
-    __DIR__
-);
+use \Magento\Framework\Component\ComponentRegistrar;
+
+ComponentRegistrar::register(ComponentRegistrar::THEME, 'frontent/Test/theme', __DIR__);

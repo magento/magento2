@@ -1,9 +1,10 @@
 {
     "require": {
-        "magento/mtf": "1.0.0-rc55",
+        "magento/mtf": "1.0.0-rc56",
         "php": "7.0.2|~7.0.6|~7.1.0",
         "phpunit/phpunit": "~4.8.0|~5.5.0",
-        "phpunit/phpunit-selenium": ">=1.2"
+        "phpunit/phpunit-selenium": ">=1.2",
+        "allure-framework/allure-phpunit": "~1.2.0"
     },
     "suggest": {
         "netwing/selenium-server-standalone": "dev-master",

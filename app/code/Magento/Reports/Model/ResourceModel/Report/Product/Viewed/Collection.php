@@ -6,6 +6,9 @@
 
 namespace Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Bestsellers\Collection
 {
     /**
