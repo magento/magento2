@@ -5,6 +5,7 @@
  */
 namespace Magento\Sitemap\Test\Unit\Model;
 
+use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemResolverInterface;
 
 /**
@@ -155,9 +156,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->itemResolverMock = $this->getMockForAbstractClass(SitemapItemResolverInterface::class);
-        $this->itemResolverMock->expects(self::any())
-            ->method('getItems')
-            ->willReturn([]);
     }
 
     /**
@@ -586,6 +584,31 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->_sitemapCmsPageMock->expects($this->any())->method('getCollection')->will($this->returnValue([]));
+
+        $this->itemResolverMock->expects(self::any())
+            ->method('getItems')
+            ->willReturn([
+                new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
+                new SitemapItem('/category/sub-category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
+                new SitemapItem('product.html', '0.5', 'monthly', '2012-12-21 00:00:00'),
+                new SitemapItem('product2.html', '0.5', 'monthly', '2012-12-21 00:00:00', new \Magento\Framework\DataObject(
+                    [
+                        'collection' => [
+                            new \Magento\Framework\DataObject(
+                                [
+                                    'url' => $storeBaseMediaUrl.'i/m/image1.png',
+                                    'caption' => 'caption & > title < "'
+                                ]
+                            ),
+                            new \Magento\Framework\DataObject(
+                                ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
+                            ),
+                        ],
+                        'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
+                        'title' => 'Product & > title < "',
+                    ]
+                ))
+            ]);
 
         /** @var $model \Magento\Sitemap\Model\Sitemap */
         $model = $this->getMockBuilder(

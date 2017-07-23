@@ -24,8 +24,8 @@ class CmsPageSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             CmsPageSitemapItemResolver::XML_PATH_PAGE_PRIORITY => '1.0',
         ]);
 
-        $cmsPageCollectionMock = $this->getCmsPageCollectionMock([]);
-        $cmsPageFactoryMock = $this->getCmsPageFactoryMock($cmsPageCollectionMock);
+        $cmsPageMock = $this->getCmsPageCollectionMock([]);
+        $cmsPageFactoryMock = $this->getCmsPageFactoryMock($cmsPageMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
         $resolver = new CmsPageSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);

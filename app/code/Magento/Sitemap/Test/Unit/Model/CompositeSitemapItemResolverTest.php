@@ -52,9 +52,11 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         for ($i = 1; $i < 5; $i++) {
             $itemProviders = [];
             $expectedItems = [];
-            for ($i = 1; $i < $maxProviders = random_int(1, 5); $i++) {
+            $maxProviders = random_int(1, 5);
+            for ($i = 1; $i < $maxProviders; $i++) {
                 $items = [];
-                for ($i = 1; $i < $maxItems = random_int(2, 5); $i++) {
+                $maxItems = random_int(2, 5);
+                for ($i = 1; $i < $maxItems; $i++) {
                     $sitemapItem = $this->getMockForAbstractClass(SitemapItemInterface::class);
                     $items[] = $sitemapItem;
                     $expectedItems[]  = $sitemapItem;
