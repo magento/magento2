@@ -529,61 +529,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             $methods[] = 'beforeSave';
         }
 
-        $this->_sitemapCategoryMock->expects(
-            $this->any()
-        )->method(
-            'getCollection'
-        )->will(
-            $this->returnValue(
-                [
-                    new \Magento\Framework\DataObject(
-                        ['url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00']
-                    ),
-                    new \Magento\Framework\DataObject(
-                        ['url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00']
-                    ),
-                ]
-            )
-        );
-
         $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
-        $this->_sitemapProductMock->expects(
-            $this->any()
-        )->method(
-            'getCollection'
-        )->will(
-            $this->returnValue(
-                [
-                    new \Magento\Framework\DataObject(
-                        ['url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00']
-                    ),
-                    new \Magento\Framework\DataObject(
-                        [
-                            'url' => 'product2.html',
-                            'updated_at' => '2012-12-21 00:00:00',
-                            'images' => new \Magento\Framework\DataObject(
-                                [
-                                    'collection' => [
-                                        new \Magento\Framework\DataObject(
-                                            [
-                                                'url' => $storeBaseMediaUrl.'i/m/image1.png',
-                                                'caption' => 'caption & > title < "'
-                                            ]
-                                        ),
-                                        new \Magento\Framework\DataObject(
-                                            ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
-                                        ),
-                                    ],
-                                    'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
-                                    'title' => 'Product & > title < "',
-                                ]
-                            ),
-                        ]
-                    ),
-                ]
-            )
-        );
-        $this->_sitemapCmsPageMock->expects($this->any())->method('getCollection')->will($this->returnValue([]));
 
         $this->itemResolverMock->expects(self::any())
             ->method('getItems')
@@ -591,8 +537,12 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
                 new SitemapItem('/category/sub-category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
                 new SitemapItem('product.html', '0.5', 'monthly', '2012-12-21 00:00:00'),
-                new SitemapItem('product2.html', '0.5', 'monthly', '2012-12-21 00:00:00', new \Magento\Framework\DataObject(
-                    [
+                new SitemapItem(
+                    'product2.html',
+                    '0.5',
+                    'monthly',
+                    '2012-12-21 00:00:00',
+                    new \Magento\Framework\DataObject([
                         'collection' => [
                             new \Magento\Framework\DataObject(
                                 [
@@ -606,8 +556,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                         ],
                         'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
                         'title' => 'Product & > title < "',
-                    ]
-                ))
+                    ])
+                )
             ]);
 
         /** @var $model \Magento\Sitemap\Model\Sitemap */
@@ -643,30 +593,15 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     {
         $categoryFactory = $this->getMockBuilder(
             \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory::class
-        )->setMethods(
-            ['create']
         )->disableOriginalConstructor()->getMock();
-        $categoryFactory->expects(
-            $this->any()
-        )->method(
-            'create'
-        )->will(
-            $this->returnValue($this->_sitemapCategoryMock)
-        );
 
         $productFactory = $this->getMockBuilder(
             \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory::class
-        )->setMethods(
-            ['create']
         )->disableOriginalConstructor()->getMock();
-        $productFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapProductMock));
 
         $cmsFactory = $this->getMockBuilder(
             \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory::class
-        )->setMethods(
-            ['create']
         )->disableOriginalConstructor()->getMock();
-        $cmsFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapCmsPageMock));
 
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore'])
