@@ -50,7 +50,7 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new CategorySitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
         self::assertTrue(count($items) == count($categories));
-        foreach($categories as $index => $category) {
+        foreach ($categories as $index => $category) {
             self::assertSame($category->getUpdatedAt(), $items[$index]->getUpdatedAt());
             self::assertSame('daily', $items[$index]->getChangeFrequency());
             self::assertSame('1.0', $items[$index]->getPriority());

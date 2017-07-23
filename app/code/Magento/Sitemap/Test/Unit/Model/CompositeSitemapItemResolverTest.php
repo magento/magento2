@@ -12,7 +12,8 @@ use Magento\Sitemap\Model\SitemapItemResolverInterface;
 
 class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNoResolvers() {
+    public function testNoResolvers()
+    {
         $resolver = new CompositeSitemapItemResolver();
         self::assertSame([], $resolver->getItems(1));
     }

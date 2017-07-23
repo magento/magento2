@@ -34,24 +34,24 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider productProvider
-     * @param array $categories
+     * @param array $products
      */
-    public function testGetItems(array $categories)
+    public function testGetItems(array $products)
     {
         $storeConfigMock = $this->getStoreConfigMock([
             ProductSitemapItemResolver::XML_PATH_PRODUCT_CHANGEFREQ => 'daily',
             ProductSitemapItemResolver::XML_PATH_PRODUCT_PRIORITY => '1.0',
         ]);
 
-        $ProductMock = $this->getProductCollectionMock($categories);
+        $ProductMock = $this->getProductCollectionMock($products);
 
         $cmsPageFactoryMock = $this->getProductFactoryMock($ProductMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
         $resolver = new ProductSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
-        self::assertTrue(count($items) == count($categories));
-        foreach($categories as $index => $product) {
+        self::assertTrue(count($items) == count($products));
+        foreach ($products as $index => $product) {
             self::assertSame($product->getUpdatedAt(), $items[$index]->getUpdatedAt());
             self::assertSame('daily', $items[$index]->getChangeFrequency());
             self::assertSame('1.0', $items[$index]->getPriority());
