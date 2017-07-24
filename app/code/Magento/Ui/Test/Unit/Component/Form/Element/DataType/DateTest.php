@@ -117,7 +117,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
         $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
-
     }
 
     /**
