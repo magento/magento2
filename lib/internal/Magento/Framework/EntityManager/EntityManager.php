@@ -22,6 +22,8 @@ use Magento\Framework\EntityManager\Operation\UpdateInterface;
  *
  * For filtering operations, it's recommended to use successor of
  * Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EntityManager
 {

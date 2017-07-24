@@ -29,8 +29,8 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->_booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
-        $this->_booleanUtils->expects(
+        $this->booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
+        $this->booleanUtils->expects(
             $this->any()
         )->method(
             'toBoolean'
