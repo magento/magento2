@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product\Visibility;
 /**
  * Class ProductUrlRewriteGenerator
  * @package Magento\CatalogUrlRewrite\Model
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryProductUrlPathGenerator
 {
@@ -30,7 +29,7 @@ class CategoryProductUrlPathGenerator
     }
 
     /**
-     * Generate product url rewrites based on category
+     * Generate product url rewrites based on all product categories
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param int|null $rootCategoryId
