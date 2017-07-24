@@ -130,7 +130,7 @@ class UrlRewriteHandler
      * @param int|null $rootCategoryId
      * @return array
      */
-    public function getCategoryProductsUrlRewrites(
+    private function getCategoryProductsUrlRewrites(
         \Magento\Catalog\Model\Category $category,
         $storeId,
         $saveRewriteHistory,
@@ -158,7 +158,7 @@ class UrlRewriteHandler
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
             $mergeDataProvider->merge(
-                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId)
+                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $rootCategoryId)
             );
         }
 
@@ -166,16 +166,16 @@ class UrlRewriteHandler
     }
 
     /**
-     * Retrieve generator, which use single category for different products
+     * Retrieve generator, which use all product categories for different products
      *
      * @deprecated
-     * @return \Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator|mixed
+     * @return \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator|mixed
      */
     private function getCategoryBasedProductRewriteGenerator()
     {
         if (!$this->categoryBasedProductRewriteGenerator) {
             $this->categoryBasedProductRewriteGenerator = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator::class);
+                ->get(\Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator::class);
         }
 
         return $this->categoryBasedProductRewriteGenerator;
