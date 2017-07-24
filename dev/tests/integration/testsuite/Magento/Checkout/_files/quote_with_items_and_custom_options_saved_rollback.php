@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile::class);
 
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
