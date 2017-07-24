@@ -39,9 +39,6 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerationWithGlobalScope()
     {
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $categoryCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -79,9 +76,6 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerationWithSpecificStore()
     {
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $categoryCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
