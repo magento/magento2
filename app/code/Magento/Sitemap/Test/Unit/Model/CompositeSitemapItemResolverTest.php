@@ -15,7 +15,7 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
     public function testNoResolvers()
     {
         $resolver = new CompositeSitemapItemResolver();
-        self::assertSame([], $resolver->getItems(1));
+        $this->assertSame([], $resolver->getItems(1));
     }
 
     /**
@@ -39,7 +39,7 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new CompositeSitemapItemResolver($mockResolvers);
         $items = $resolver->getItems(1);
 
-        self::assertSame($expectedItems, $items);
+        $this->assertSame($expectedItems, $items);
     }
 
     /**

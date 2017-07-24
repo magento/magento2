@@ -28,7 +28,7 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         $itemFactoryMock = $this->getItemFactoryMock();
 
         $resolver = new CategorySitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
-        self::assertSame([], $resolver->getItems(1));
+        $this->assertSame([], $resolver->getItems(1));
     }
 
     /**
@@ -49,13 +49,13 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new CategorySitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
-        self::assertTrue(count($items) == count($categories));
+        $this->assertTrue(count($items) == count($categories));
         foreach ($categories as $index => $category) {
-            self::assertSame($category->getUpdatedAt(), $items[$index]->getUpdatedAt());
-            self::assertSame('daily', $items[$index]->getChangeFrequency());
-            self::assertSame('1.0', $items[$index]->getPriority());
-            self::assertSame($category->getImages(), $items[$index]->getImages());
-            self::assertSame($category->getUrl(), $items[$index]->getUrl());
+            $this->assertSame($category->getUpdatedAt(), $items[$index]->getUpdatedAt());
+            $this->assertSame('daily', $items[$index]->getChangeFrequency());
+            $this->assertSame('1.0', $items[$index]->getPriority());
+            $this->assertSame($category->getImages(), $items[$index]->getImages());
+            $this->assertSame($category->getUrl(), $items[$index]->getUrl());
         }
     }
 

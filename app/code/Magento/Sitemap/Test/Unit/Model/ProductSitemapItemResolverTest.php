@@ -24,8 +24,8 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             ProductSitemapItemResolver::XML_PATH_PRODUCT_PRIORITY => '1.0',
         ]);
 
-        $ProductMock = $this->getProductCollectionMock([]);
-        $cmsPageFactoryMock = $this->getProductFactoryMock($ProductMock);
+        $productMock = $this->getProductCollectionMock([]);
+        $cmsPageFactoryMock = $this->getProductFactoryMock($productMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
         $resolver = new ProductSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
@@ -43,9 +43,9 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             ProductSitemapItemResolver::XML_PATH_PRODUCT_PRIORITY => '1.0',
         ]);
 
-        $ProductMock = $this->getProductCollectionMock($products);
+        $productMock = $this->getProductCollectionMock($products);
 
-        $cmsPageFactoryMock = $this->getProductFactoryMock($ProductMock);
+        $cmsPageFactoryMock = $this->getProductFactoryMock($productMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
         $resolver = new ProductSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
