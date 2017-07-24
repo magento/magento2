@@ -70,25 +70,30 @@
                 <?= $block->getChildHtml('shipment_tracking') ?>
 
                 <?= $block->getChildHtml('shipment_packaging') ?>
-<script>
-    require([
-        'prototype'
-    ], function () {
+                <script>
+                    require([
+                        'jquery',
+                        'prototype'
+                    ], function (jQuery) {
+                        var setCallbacks = function () {
+                            window.packaging.setConfirmPackagingCallback(function () {
+                                window.packaging.sendCreateLabelRequest();
+                            });
+                            window.packaging.setLabelCreatedCallback(function () {
+                                setLocation("<?php /* @escapeNotVerified */ echo $block->getUrl(
+                                    'adminhtml/order_shipment/view',
+                                    ['shipment_id' => $block->getShipment()->getId()]
+                                ); ?>");
+                            });
+                        };
 
-        setTimeout(function () {
-            packaging.setConfirmPackagingCallback(function () {
-                packaging.sendCreateLabelRequest();
-            });
-            packaging.setLabelCreatedCallback(function (response) {
-                setLocation("<?php /* @escapeNotVerified */ echo $block->getUrl(
-'adminhtml/order_shipment/view',
-['shipment_id' => $block->getShipment()->getId()]
-); ?>");
-            });
-        }, 500);
-
-    });
-</script>
+                        if (jQuery(document).data('packagingInited')) {
+                            setCallbacks();
+                        } else {
+                            jQuery(document).on('packaging:inited', setCallbacks);
+                        }
+                    });
+                </script>
             </div>
         </div>
     </div>
