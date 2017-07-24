@@ -6,14 +6,17 @@
 namespace Magento\Framework\Serialize;
 
 /**
- * Used to convert \Magento\Framework\DataObject to Json
- *
- * @deprecated @see \Magento\Framework\Serialize\Serializer\Json::serialize
+ * This class was introducted only for usage in the \Magento\Framework\DataObject::toJson method.
+ * It should not be used in other cases and instead \Magento\Framework\Serialize\Serializer\Json::serialize
+ * should be used.
  */
 class JsonConverter
 {
     /**
-     * @param $data
+     * This method should only be used by \Magento\Framework\DataObject::toJson
+     * All other cases should use \Magento\Framework\Serialize\Serializer\Json::serialize directly
+     *
+     * @param string|int|float|bool|array|null $data
      * @return bool|string
      * @throws \InvalidArgumentException
      */
