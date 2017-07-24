@@ -105,17 +105,18 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $resourceMethods = [
+            '_construct',
+            'beginTransaction',
+            'rollBack',
+            'save',
+            'addCommitCallback',
+            'commit',
+            '__wakeup',
+        ];
+
         $this->resourceMock = $this->getMockBuilder(SitemapResource::class)
-            ->setMethods(
-                [
-                    '_construct',
-                    'beginTransaction',
-                    'rollBack',
-                    'save',
-                    'addCommitCallback',
-                    'commit',
-                    '__wakeup',
-                ])
+            ->setMethods($resourceMethods)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -145,7 +146,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->directoryMock);
 
         $this->configReaderMock = $this->getMockForAbstractClass(SitemapConfigReaderInterface::class);
-
         $this->itemResolverMock = $this->getMockForAbstractClass(ItemResolverInterface::class);
     }
 
@@ -416,13 +416,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->method('write')
             ->willReturnCallback($streamWriteCallback);
 
+        $checkFileCallback = function ($file) use (&$currentFile) {
+            $currentFile = $file;
+        };
+
         // Check that all expected file descriptors were created
         $this->directoryMock->expects($this->exactly(count($expectedFile)))
             ->method('openFile')
-            ->willReturnCallback(function ($file) use (&$currentFile) {
-                $currentFile = $file;
-            }
-            );
+            ->willReturnCallback($checkFileCallback);
 
         // Check that all file descriptors were closed
         $this->fileMock->expects($this->exactly(count($expectedFile)))

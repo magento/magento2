@@ -79,7 +79,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                                             ]
                                         ),
                                         new DataObject(
-                                            ['url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png', 'caption' => null]
+                                            [
+                                                'url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png',
+                                                'caption' => null
+                                            ]
                                         ),
                                     ],
                                     'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',
