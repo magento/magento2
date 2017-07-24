@@ -11,6 +11,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
@@ -88,6 +89,9 @@ class Save extends Action
                 $this->messageManager->addErrorMessage(__('The Stock does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
             } catch (CouldNotSaveException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
+            } catch (InputException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             } catch (Exception $e) {

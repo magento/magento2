@@ -438,7 +438,8 @@ class InstallSchema implements InstallSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createStockTable(SchemaSetupInterface $setup) {
+    private function createStockTable(SchemaSetupInterface $setup)
+    {
         $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);
 
         return $setup->getConnection()->newTable(

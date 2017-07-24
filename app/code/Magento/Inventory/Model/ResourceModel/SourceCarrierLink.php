@@ -16,7 +16,7 @@ class SourceCarrierLink extends AbstractDb
     /**#@+
      * Constants related to specific db layer
      */
-    const TABLE_NAME_SOURCE_CARRIER_LINK = 'inventory_source_stock_link';
+    const TABLE_NAME_SOURCE_CARRIER_LINK = 'inventory_source_carrier_link';
     const ID_FIELD_NAME = 'link_id';
     /**#@-*/
 
