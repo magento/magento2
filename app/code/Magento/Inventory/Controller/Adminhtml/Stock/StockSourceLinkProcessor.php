@@ -76,11 +76,11 @@ class StockSourceLinkProcessor
         $this->validateStockSourceData($stockSourceLinksData);
 
         $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
-        $sourceIdsForSave = array_column($stockSourceLinksData, StockSourceLink::SOURCE_ID);
+        $sourceIdsForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_ID));
         $sourceIdsForDelete = [];
 
         foreach ($assignedSources as $assignedSource) {
-            if (in_array($assignedSource->getSourceId(), $sourceIdsForSave)) {
+            if (array_key_exists($assignedSource->getSourceId(), $sourceIdsForSave)) {
                 unset($sourceIdsForSave[$assignedSource->getSourceId()]);
             } else {
                 $sourceIdsForDelete[] = $assignedSource->getSourceId();
@@ -88,7 +88,7 @@ class StockSourceLinkProcessor
         }
 
         if (!empty($sourceIdsForSave)) {
-            $this->assignSourcesToStock->execute($stockId, $sourceIdsForSave);
+            $this->assignSourcesToStock->execute($stockId, array_keys($sourceIdsForSave));
         }
         foreach ($sourceIdsForDelete as $sourceIdForDelete) {
             $this->unassignSourceFromStock->execute($stockId, $sourceIdForDelete);
