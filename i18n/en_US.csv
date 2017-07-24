@@ -11,6 +11,8 @@ button_label,button_label
 "Enable Search Suggestions","Enable Search Suggestions"
 "Search Suggestions Count","Search Suggestions Count"
 "Show Results Count for Each Suggestion","Show Results Count for Each Suggestion"
+"Related search terms","Related search terms"
+"Did you mean","Did you mean"
 ID,ID
 "Search Query","Search Query"
 Store,Store
