@@ -10,6 +10,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\StateException;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as SourceCarrierLinkResourceModel;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory;
 use Magento\Inventory\Setup\InstallSchema;
@@ -94,7 +95,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     {
         $connection = $this->connection->getConnection();
         $connection->delete(
-            $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK),
+            $connection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
             $connection->quoteInto('source_id = ?', $source->getSourceId())
         );
     }
@@ -116,7 +117,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
 
         $connection = $this->connection->getConnection();
         $connection->insertMultiple(
-            $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK),
+            $connection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
             $carrierLinkData
         );
     }

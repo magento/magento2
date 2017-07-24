@@ -6,7 +6,7 @@
 namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Setup\InstallSchema;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -40,7 +40,7 @@ class SaveMultiple
     public function execute(array $sourceItems)
     {
         $connection = $this->connection->getConnection();
-        $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM);
+        $tableName = $connection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $columnsSql = $this->buildColumnsSqlPart([
             SourceItemInterface::SOURCE_ID,

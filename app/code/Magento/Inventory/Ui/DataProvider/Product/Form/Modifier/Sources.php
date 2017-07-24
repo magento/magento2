@@ -7,9 +7,9 @@ namespace Magento\Inventory\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
-use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
@@ -64,7 +64,7 @@ class Sources extends AbstractModifier
         $collection = $this->sourceItemCollectionFactory->create();
         $collection->addFilter(SourceItemInterface::SKU, $product->getSku());
         $collection->join(
-            ['s' => InstallSchema::TABLE_NAME_SOURCE],
+            ['s' => SourceResourceModel::TABLE_NAME_SOURCE],
             sprintf('s.%s = main_table.%s', SourceInterface::SOURCE_ID, SourceItemInterface::SOURCE_ID),
             ['source_name' => SourceInterface::NAME]
         );

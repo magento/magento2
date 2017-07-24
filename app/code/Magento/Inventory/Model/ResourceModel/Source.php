@@ -10,7 +10,6 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Inventory\Model\SourceCarrierLinkManagementInterface;
-use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
@@ -18,6 +17,12 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
  */
 class Source extends AbstractDb
 {
+    /**#@+
+     * Constants related to specific db layer
+     */
+    const TABLE_NAME_SOURCE = 'inventory_source';
+    /**#@-*/
+
     /**
      * @var SourceCarrierLinkManagementInterface
      */
@@ -44,7 +49,7 @@ class Source extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init(InstallSchema::TABLE_NAME_SOURCE, SourceInterface::SOURCE_ID);
+        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::SOURCE_ID);
     }
 
     /**

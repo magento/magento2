@@ -18,7 +18,6 @@ class StockSourceLink extends AbstractModel
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const LINK_ID = 'link_id';
     const SOURCE_ID = 'source_id';
     const STOCK_ID = 'stock_id';
     /**#@-*/
@@ -29,22 +28,6 @@ class StockSourceLink extends AbstractModel
     protected function _construct()
     {
         $this->_init(StockSourceLinkResourceModel::class);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getLinkId()
-    {
-        return $this->getData(self::LINK_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setLinkId($linkId)
-    {
-        $this->setData(self::LINK_ID, $linkId);
     }
 
     /**

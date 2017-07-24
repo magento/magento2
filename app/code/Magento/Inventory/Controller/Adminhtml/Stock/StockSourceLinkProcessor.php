@@ -73,6 +73,8 @@ class StockSourceLinkProcessor
      */
     public function process($stockId, array $stockSourceLinksData)
     {
+        $this->validateStockSourceData($stockSourceLinksData);
+
         $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
         $sourceIdsForSave = array_column($stockSourceLinksData, StockSourceLink::SOURCE_ID);
         $sourceIdsForDelete = [];
@@ -94,15 +96,16 @@ class StockSourceLinkProcessor
     }
 
     /**
-     * TODO:
-     * @param array $stockSourceLinkData
+     * @param array $stockSourceLinksData
      * @return void
      * @throws InputException
      */
-    private function validateStockSourceData(array $stockSourceLinkData)
+    private function validateStockSourceData(array $stockSourceLinksData)
     {
-        if (!isset($stockSourceLinkData[StockSourceLink::SOURCE_ID])) {
-            throw new InputException(__('Wrong Stock to Source relation parameters given.'));
+        foreach ($stockSourceLinksData as $stockSourceLinkData) {
+            if (!isset($stockSourceLinkData[StockSourceLink::SOURCE_ID])) {
+                throw new InputException(__('Wrong Stock to Source relation parameters given.'));
+            }
         }
     }
 }

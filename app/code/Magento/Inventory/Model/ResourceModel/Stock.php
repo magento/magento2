@@ -6,7 +6,6 @@
 namespace Magento\Inventory\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
@@ -14,11 +13,17 @@ use Magento\InventoryApi\Api\Data\StockInterface;
  */
 class Stock extends AbstractDb
 {
+    /**#@+
+     * Constants related to specific db layer
+     */
+    const TABLE_NAME_STOCK = 'inventory_stock';
+    /**#@-*/
+
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(InstallSchema::TABLE_NAME_STOCK, StockInterface::STOCK_ID);
+        $this->_init(self::TABLE_NAME_STOCK, StockInterface::STOCK_ID);
     }
 }

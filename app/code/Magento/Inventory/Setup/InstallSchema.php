@@ -10,6 +10,11 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
+use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -21,27 +26,6 @@ use Magento\InventoryApi\Api\Data\StockInterface;
  */
 class InstallSchema implements InstallSchemaInterface
 {
-    /**
-     * Constant for table names of the model \Magento\Inventory\Model\Source
-     */
-    const TABLE_NAME_SOURCE = 'inventory_source';
-    const TABLE_NAME_SOURCE_ITEM = 'inventory_source_item';
-
-    /**
-     * Constant for table name of \Magento\Inventory\Model\SourceCarrierLink
-     */
-    const TABLE_NAME_SOURCE_CARRIER_LINK = 'inventory_source_carrier_link';
-
-    /**
-     * Constant for table names of the model \Magento\Inventory\Model\Stock
-     */
-    const TABLE_NAME_STOCK = 'inventory_stock';
-
-    /**
-     * Constant for table name of \Magento\Inventory\Model\StockSourceLink
-     */
-    const TABLE_NAME_STOCK_SOURCE_LINK = 'inventory_source_stock_link';
-
     /**
      * Constant for decimal precision for latitude and longitude
      */
@@ -90,7 +74,7 @@ class InstallSchema implements InstallSchemaInterface
      */
     private function createSourceTable(SchemaSetupInterface $setup)
     {
-        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE);
+        $sourceTable = $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE);
 
         return $setup->getConnection()->newTable(
             $sourceTable
@@ -101,10 +85,10 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_IDENTITY => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_PRIMARY => true,
+                self::OPTION_IDENTITY => true,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_PRIMARY => true,
             ],
             'Source ID'
         )->addColumn(
@@ -112,7 +96,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_NULLABLE => false,
             ],
             'Source Name'
         )->addColumn(
@@ -120,9 +104,9 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_SMALLINT,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_DEFAULT => 1,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_DEFAULT => 1,
             ],
             'Defines Is Source Enabled'
         )->addColumn(
@@ -130,7 +114,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             1000,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Description'
         )->addColumn(
@@ -138,10 +122,10 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_DECIMAL,
             null,
             [
-                InstallSchema::OPTION_PRECISION => InstallSchema::LATLON_PRECISION_LAT,
-                InstallSchema::OPTION_SCALE => InstallSchema::LATLON_SCALE,
-                InstallSchema::OPTION_UNSIGNED => false,
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_PRECISION => self::LATLON_PRECISION_LAT,
+                self::OPTION_SCALE => self::LATLON_SCALE,
+                self::OPTION_UNSIGNED => false,
+                self::OPTION_NULLABLE => true,
             ],
             'Latitude'
         )->addColumn(
@@ -149,10 +133,10 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_DECIMAL,
             null,
             [
-                InstallSchema::OPTION_PRECISION => InstallSchema::LATLON_PRECISION_LON,
-                InstallSchema::OPTION_SCALE => InstallSchema::LATLON_SCALE,
-                InstallSchema::OPTION_UNSIGNED => false,
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_PRECISION => self::LATLON_PRECISION_LON,
+                self::OPTION_SCALE => self::LATLON_SCALE,
+                self::OPTION_UNSIGNED => false,
+                self::OPTION_NULLABLE => true,
             ],
             'Longitude'
         )->addColumn(
@@ -160,8 +144,8 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_SMALLINT,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => true,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => true,
+                self::OPTION_UNSIGNED => true,
             ],
             'Priority'
         );
@@ -178,7 +162,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             2,
             [
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_NULLABLE => false,
             ],
             'Country Id'
         )->addColumn(
@@ -186,8 +170,8 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => true,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => true,
+                self::OPTION_UNSIGNED => true,
             ],
             'Region Id'
         )->addColumn(
@@ -195,7 +179,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Region'
         )->addColumn(
@@ -203,7 +187,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'City'
         )->addColumn(
@@ -211,7 +195,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Street'
         )->addColumn(
@@ -219,7 +203,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_NULLABLE => false,
             ],
             'Postcode'
         );
@@ -237,7 +221,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Contact Name'
         )->addColumn(
@@ -245,7 +229,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Email'
         )->addColumn(
@@ -253,7 +237,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Phone'
         )->addColumn(
@@ -261,7 +245,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => true,
+                self::OPTION_NULLABLE => true,
             ],
             'Fax'
         );
@@ -294,22 +278,22 @@ class InstallSchema implements InstallSchemaInterface
      */
     private function createSourceCarrierLinkTable(SchemaSetupInterface $setup)
     {
-        $sourceCarrierLinkTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK);
-        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE);
+        $sourceCarrierLinkTable = $setup->getTable(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK);
+        $sourceTable = $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE);
 
         return $setup->getConnection()->newTable(
             $sourceCarrierLinkTable
         )->setComment(
             'Inventory Source Carrier Link Table'
         )->addColumn(
-            'source_carrier_link_id',
+            SourceCarrierLink::ID_FIELD_NAME,
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_IDENTITY => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_PRIMARY => true,
+                self::OPTION_IDENTITY => true,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_PRIMARY => true,
             ],
             'Source Carrier Link ID'
         )->addColumn(
@@ -317,8 +301,8 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_UNSIGNED => true,
             ],
             'Source ID'
         )->addColumn(
@@ -326,7 +310,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_NULLABLE => false,
             ],
             'Carrier Code'
         )->addColumn(
@@ -334,8 +318,8 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_SMALLINT,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => true,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => true,
+                self::OPTION_UNSIGNED => true,
             ],
             'Position'
         )->addForeignKey(
@@ -358,21 +342,21 @@ class InstallSchema implements InstallSchemaInterface
      */
     private function createSourceItemTable(SchemaSetupInterface $setup)
     {
-        $sourceItemTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_ITEM);
+        $sourceItemTable = $setup->getTable(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         return $setup->getConnection()->newTable(
             $sourceItemTable
         )->setComment(
             'Inventory Source item Table'
         )->addColumn(
-            'source_item_id',
+            SourceItemResourceModel::ID_FIELD_NAME,
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_IDENTITY => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_PRIMARY => true,
+                self::OPTION_IDENTITY => true,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_PRIMARY => true,
             ],
             'Source Item ID'
         )->addColumn(
@@ -380,8 +364,8 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
             ],
             'Source ID'
         )->addColumn(
@@ -389,7 +373,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             64,
             [
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_NULLABLE => false,
             ],
             'Sku'
         )->addColumn(
@@ -397,9 +381,9 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_DECIMAL,
             null,
             [
-                InstallSchema::OPTION_UNSIGNED => false,
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_DEFAULT => 0,
+                self::OPTION_UNSIGNED => false,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_DEFAULT => 0,
             ],
             'Quantity'
         )->addColumn(
@@ -407,19 +391,19 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_SMALLINT,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => true,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => true,
+                self::OPTION_UNSIGNED => true,
             ],
             'Status'
         )->addForeignKey(
             $setup->getFkName(
                 $sourceItemTable,
                 SourceItemInterface::SOURCE_ID,
-                InstallSchema::TABLE_NAME_SOURCE,
+                SourceResourceModel::TABLE_NAME_SOURCE,
                 SourceInterface::SOURCE_ID
             ),
             SourceItemInterface::SOURCE_ID,
-            InstallSchema::TABLE_NAME_SOURCE,
+            SourceResourceModel::TABLE_NAME_SOURCE,
             SourceInterface::SOURCE_ID,
             AdapterInterface::FK_ACTION_CASCADE
         )->addForeignKey(
@@ -455,7 +439,7 @@ class InstallSchema implements InstallSchemaInterface
      * @return Table
      */
     private function createStockTable(SchemaSetupInterface $setup) {
-        $stockTable = $setup->getTable(InstallSchema::TABLE_NAME_STOCK);
+        $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);
 
         return $setup->getConnection()->newTable(
             $stockTable
@@ -466,10 +450,10 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_IDENTITY => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_PRIMARY => true,
+                self::OPTION_IDENTITY => true,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_PRIMARY => true,
             ],
             'Stock ID'
         )->addColumn(
@@ -477,7 +461,7 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             255,
             [
-                InstallSchema::OPTION_NULLABLE => false,
+                self::OPTION_NULLABLE => false,
             ],
             'Stock Name'
         );
@@ -488,23 +472,23 @@ class InstallSchema implements InstallSchemaInterface
      * @return Table
      */
     private function createStockSourceLinkTable(SchemaSetupInterface $setup) {
-        $stockSourceLinkTable = $setup->getTable(InstallSchema::TABLE_NAME_STOCK_SOURCE_LINK);
-        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE);
+        $stockSourceLinkTable = $setup->getTable(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
+        $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);
+        $sourceTable = $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE);
 
         return $setup->getConnection()->newTable(
             $stockSourceLinkTable
         )->setComment(
             'Inventory Source Stock Link Table'
         )->addColumn(
-            // TODO:
             'link_id',
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_IDENTITY => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_PRIMARY => true,
+                self::OPTION_IDENTITY => true,
+                self::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_PRIMARY => true,
             ],
             'Link ID'
         )->addColumn(
@@ -512,8 +496,8 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_UNSIGNED => true,
             ],
             'Stock ID'
         )->addColumn(
@@ -521,24 +505,46 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_INTEGER,
             null,
             [
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_UNSIGNED => true,
+                self::OPTION_NULLABLE => false,
+                self::OPTION_UNSIGNED => true,
             ],
             'Source ID'
-        )
-        // TODO: uniqe key: stock, source, foreign key
-//        ->addForeignKey(
-//            $setup->getFkName(
-//                $stockSourceLinkTable,
-//                StockSourceLink::SOURCE_ID,
-//                $sourceTable,
-//                SourceInterface::SOURCE_ID
-//            ),
-//            StockSourceLink::SOURCE_ID,
-//            $sourceTable,
-//            SourceInterface::SOURCE_ID,
-//            AdapterInterface::FK_ACTION_CASCADE
-//        )
-            ;
+        )->addForeignKey(
+            $setup->getFkName(
+                $stockSourceLinkTable,
+                StockSourceLink::STOCK_ID,
+                $stockTable,
+                StockInterface::STOCK_ID
+            ),
+            StockSourceLink::STOCK_ID,
+            $stockTable,
+            StockInterface::STOCK_ID,
+            AdapterInterface::FK_ACTION_CASCADE
+        )->addForeignKey(
+            $setup->getFkName(
+                $stockSourceLinkTable,
+                StockSourceLink::SOURCE_ID,
+                $sourceTable,
+                SourceInterface::SOURCE_ID
+            ),
+            StockSourceLink::SOURCE_ID,
+            $sourceTable,
+            SourceInterface::SOURCE_ID,
+            AdapterInterface::FK_ACTION_CASCADE
+        )->addIndex(
+            $setup->getIdxName(
+                $stockSourceLinkTable,
+                [
+                    StockSourceLink::STOCK_ID,
+                    StockSourceLink::SOURCE_ID,
+                ],
+                AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            [
+                StockSourceLink::STOCK_ID,
+                StockSourceLink::SOURCE_ID,
+            ],
+            ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+        );
     }
 }
