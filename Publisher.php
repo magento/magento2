@@ -118,7 +118,6 @@ class Publisher implements PublisherInterface
         return $configured;
     }
 
-
     /**
      * Get publisher config.
      *
@@ -138,6 +137,7 @@ class Publisher implements PublisherInterface
      * Get Amqp config instance.
      *
      * @return AmqpConfig
+     *
      * @deprecated
      */
     private function getAmqpConfig()
