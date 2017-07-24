@@ -61,6 +61,7 @@ namespace Magento\Framework\Session {
 
         protected function setUp()
         {
+            $this->markTestSkipped('Test needs to be refactored.');
             $this->sessionName = 'frontEndSession';
 
             ini_set('session.use_only_cookies', '0');
