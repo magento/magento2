@@ -57,14 +57,14 @@ interface DesignConfigDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return DesignConfigDataExtensionInterface|null
+     * @return \Magento\Theme\Api\Data\DesignConfigDataExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param DesignConfigDataExtensionInterface $extensionAttributes
+     * @param \Magento\Theme\Api\Data\DesignConfigDataExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes);
