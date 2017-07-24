@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\EnvelopeFactory;
-use Magento\Framework\MessageQueue\ExchangeRepository;
-use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\Amqp\Config as AmqpConfig;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
@@ -40,6 +38,13 @@ class Publisher implements PublisherInterface
      * @var PublisherConfig
      */
     private $publisherConfig;
+
+    /**
+     * Help check whether Amqp is configured.
+     *
+     * @var AmqpConfig
+     */
+    private $amqpConfig;
 
     /**
      * Initialize dependencies.
@@ -83,10 +88,36 @@ class Publisher implements PublisherInterface
             ]
         );
         $connectionName = $this->getPublisherConfig()->getPublisher($topicName)->getConnection()->getName();
+        $connectionName = ($connectionName === 'amqp' && !$this->amqpConfigured()) ? 'db' : $connectionName;
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $exchange->enqueue($topicName, $envelope);
         return null;
     }
+
+    /**
+     * Check Amqp is configured.
+     *
+     * @return bool
+     */
+    private function amqpConfigured()
+    {
+        $configured = true;
+        $configFields = [
+            AmqpConfig::HOST,
+            AmqpConfig::PORT,
+            AmqpConfig::USERNAME,
+            AmqpConfig::PASSWORD,
+        ];
+        foreach ($configFields as $field) {
+            if ($this->getAmqpConfig()->getValue($field) === '') {
+                $configured = false;
+                break;
+            }
+        }
+
+        return $configured;
+    }
+
 
     /**
      * Get publisher config.
@@ -101,5 +132,20 @@ class Publisher implements PublisherInterface
             $this->publisherConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(PublisherConfig::class);
         }
         return $this->publisherConfig;
+    }
+
+    /**
+     * Get Amqp config instance.
+     *
+     * @return AmqpConfig
+     * @deprecated
+     */
+    private function getAmqpConfig()
+    {
+        if ($this->amqpConfig === null) {
+            $this->amqpConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(AmqpConfig::class);
+        }
+
+        return $this->amqpConfig;
     }
 }
