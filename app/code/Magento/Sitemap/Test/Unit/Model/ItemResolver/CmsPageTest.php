@@ -6,29 +6,26 @@
 
 namespace Magento\Sitemap\Test\Unit\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Sitemap\Model\CmsPageSitemapItemResolver;
-use Magento\Sitemap\Model\ResourceModel\Cms\Page;
-use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sitemap\Model\ItemResolver\CmsPage as CmsPageItemResolver;
+use Magento\Sitemap\Model\ItemResolver\ConfigReaderInterface;
+use Magento\Sitemap\Model\ResourceModel\Cms\Page as CmsPageResource;
+use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 
-class CmsPageSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
+class CmsPageTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetItemsEmpty()
     {
-        $storeConfigMock = $this->getStoreConfigMock([
-            CmsPageSitemapItemResolver::XML_PATH_PAGE_CHANGEFREQ => 'daily',
-            CmsPageSitemapItemResolver::XML_PATH_PAGE_PRIORITY => '1.0',
-        ]);
-
+        $configReaderMock = $this->getConfigReaderMock();
         $cmsPageMock = $this->getCmsPageCollectionMock([]);
         $cmsPageFactoryMock = $this->getCmsPageFactoryMock($cmsPageMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
-        $resolver = new CmsPageSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
+        $resolver = new CmsPageItemResolver($configReaderMock, $cmsPageFactoryMock, $itemFactoryMock);
+
         $this->assertSame([], $resolver->getItems(1));
     }
 
@@ -38,18 +35,14 @@ class CmsPageSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems(array $pages = [])
     {
-        $storeConfigMock = $this->getStoreConfigMock([
-            CmsPageSitemapItemResolver::XML_PATH_PAGE_CHANGEFREQ => 'daily',
-            CmsPageSitemapItemResolver::XML_PATH_PAGE_PRIORITY => '1.0',
-        ]);
-
+        $configReaderMock = $this->getConfigReaderMock();
         $cmsPageMock = $this->getCmsPageCollectionMock($pages);
-
         $cmsPageFactoryMock = $this->getCmsPageFactoryMock($cmsPageMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
-        $resolver = new CmsPageSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
+        $resolver = new CmsPageItemResolver($configReaderMock, $cmsPageFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
+
         $this->assertTrue(count($items) == count($pages));
         foreach ($pages as $index => $page) {
             $this->assertSame($page->getUpdatedAt(), $items[$index]->getUpdatedAt());
@@ -118,18 +111,19 @@ class CmsPageSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $pathMap
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStoreConfigMock(array $pathMap = [])
+    private function getConfigReaderMock()
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $scopeConfigMock->method('getValue')
-            ->willReturnCallback(function ($path) use ($pathMap) {
-                return isset($pathMap[$path]) ? $pathMap[$path] : null;
-            });
+        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock->expects($this->any())
+            ->method('getPriority')
+            ->willReturn('1.0');
+        $configReaderMock->expects($this->any())
+            ->method('getChangeFrequency')
+            ->willReturn('daily');
 
-        return $scopeConfigMock;
+        return $configReaderMock;
     }
 
     /**
@@ -138,7 +132,7 @@ class CmsPageSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function getCmsPageCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->getMockBuilder(Page::class)
+        $sitemapCmsPageMock = $this->getMockBuilder(CmsPageResource::class)
             ->setMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();

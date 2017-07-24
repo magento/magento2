@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Test\Unit\Model;
+namespace Magento\Sitemap\Test\Unit\Model\ItemResolver;
 
-use Magento\Sitemap\Model\CompositeSitemapItemResolver;
+use Magento\Sitemap\Model\ItemResolver\Composite as CompositeItemResolver;
+use Magento\Sitemap\Model\ItemResolver\ItemResolverInterface;
 use Magento\Sitemap\Model\SitemapItemInterface;
-use Magento\Sitemap\Model\SitemapItemResolverInterface;
 
-class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit_Framework_TestCase
 {
     public function testNoResolvers()
     {
-        $resolver = new CompositeSitemapItemResolver();
+        $resolver = new CompositeItemResolver();
         $this->assertSame([], $resolver->getItems(1));
     }
 
@@ -28,7 +28,7 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         $mockResolvers = [];
 
         foreach ($itemResolverData as $data) {
-            $mockResolver = $this->getMockForAbstractClass(SitemapItemResolverInterface::class);
+            $mockResolver = $this->getMockForAbstractClass(ItemResolverInterface::class);
             $mockResolver->expects(self::once())
                 ->method('getItems')
                 ->willReturn($data);
@@ -36,7 +36,7 @@ class CompositeSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             $mockResolvers[] = $mockResolver;
         }
 
-        $resolver = new CompositeSitemapItemResolver($mockResolvers);
+        $resolver = new CompositeItemResolver($mockResolvers);
         $items = $resolver->getItems(1);
 
         $this->assertSame($expectedItems, $items);

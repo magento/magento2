@@ -4,30 +4,28 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Test\Unit\Model;
+namespace Magento\Sitemap\Test\Unit\Model\ItemResolver;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sitemap\Model\CategorySitemapItemResolver;
-use Magento\Sitemap\Model\ResourceModel\Catalog\Category;
+use Magento\Sitemap\Model\ItemResolver\Category as CategoryItemResolver;
+use Magento\Sitemap\Model\ItemResolver\ConfigReaderInterface;
+use Magento\Sitemap\Model\ResourceModel\Catalog\Category as CategoryResource;
+use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
-use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 
-class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetItemsEmpty()
     {
-        $storeConfigMock = $this->getStoreConfigMock([
-            CategorySitemapItemResolver::XML_PATH_CATEGORY_CHANGEFREQ => 'daily',
-            CategorySitemapItemResolver::XML_PATH_CATEGORY_PRIORITY => '1.0',
-        ]);
-
+        $configReaderMock = $this->getConfigReaderMock();
         $categoryMock = $this->getCategoryCollectionMock([]);
-        $cmsPageFactoryMock = $this->getCategoryFactoryMock($categoryMock);
+        $categoryFactoryMock = $this->getCategoryFactoryMock($categoryMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
-        $resolver = new CategorySitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
+        $resolver = new CategoryItemResolver($configReaderMock, $categoryFactoryMock, $itemFactoryMock);
+
         $this->assertSame([], $resolver->getItems(1));
     }
 
@@ -37,18 +35,14 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems(array $categories)
     {
-        $storeConfigMock = $this->getStoreConfigMock([
-            CategorySitemapItemResolver::XML_PATH_CATEGORY_CHANGEFREQ => 'daily',
-            CategorySitemapItemResolver::XML_PATH_CATEGORY_PRIORITY => '1.0',
-        ]);
-
+        $configReaderMock = $this->getConfigReaderMock();
         $categoryMock = $this->getCategoryCollectionMock($categories);
-
-        $cmsPageFactoryMock = $this->getCategoryFactoryMock($categoryMock);
+        $categoryFactoryMock = $this->getCategoryFactoryMock($categoryMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
-        $resolver = new CategorySitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
+        $resolver = new CategoryItemResolver($configReaderMock, $categoryFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
+
         $this->assertTrue(count($items) == count($categories));
         foreach ($categories as $index => $category) {
             $this->assertSame($category->getUpdatedAt(), $items[$index]->getUpdatedAt());
@@ -67,10 +61,10 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    new \Magento\Framework\DataObject(
+                    new DataObject(
                         ['url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
-                    new \Magento\Framework\DataObject(
+                    new DataObject(
                         ['url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
                 ]
@@ -89,7 +83,7 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cmsPageFactoryMock->expects(self::any())
+        $cmsPageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($returnValue);
 
@@ -106,7 +100,7 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $itemFactoryMock->expects(self::any())
+        $itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(function ($data) {
                 $helper = new ObjectManager($this);
@@ -118,18 +112,19 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $pathMap
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStoreConfigMock(array $pathMap = [])
+    private function getConfigReaderMock()
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $scopeConfigMock->method('getValue')
-            ->willReturnCallback(function ($path) use ($pathMap) {
-                return isset($pathMap[$path]) ? $pathMap[$path] : null;
-            });
+        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock->expects($this->any())
+            ->method('getPriority')
+            ->willReturn('1.0');
+        $configReaderMock->expects($this->any())
+            ->method('getChangeFrequency')
+            ->willReturn('daily');
 
-        return $scopeConfigMock;
+        return $configReaderMock;
     }
 
     /**
@@ -138,12 +133,12 @@ class CategorySitemapItemResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function getCategoryCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->getMockBuilder(Category::class)
+        $sitemapCmsPageMock = $this->getMockBuilder(CategoryResource::class)
             ->setMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sitemapCmsPageMock->expects(self::any())
+        $sitemapCmsPageMock->expects($this->any())
             ->method('getCollection')
             ->willReturn($returnValue);
 

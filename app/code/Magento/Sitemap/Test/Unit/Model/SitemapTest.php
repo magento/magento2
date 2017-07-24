@@ -11,6 +11,8 @@ use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sitemap\Helper\Data;
+use Magento\Sitemap\Model\ItemResolver\ConfigReaderInterface;
+use Magento\Sitemap\Model\ItemResolver\ItemResolverInterface;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Category;
 use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Product;
@@ -19,8 +21,8 @@ use Magento\Sitemap\Model\ResourceModel\Cms\Page;
 use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
 use Magento\Sitemap\Model\Sitemap;
+use Magento\Sitemap\Model\SitemapConfigReaderInterface;
 use Magento\Sitemap\Model\SitemapItem;
-use Magento\Sitemap\Model\SitemapItemResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -32,42 +34,42 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Data
      */
-    protected $_helperMockSitemap;
+    private $helperMockSitemap;
 
     /**
      * @var SitemapResource
      */
-    protected $_resourceMock;
+    private $resourceMock;
 
     /**
      * @var Category
      */
-    protected $_sitemapCategoryMock;
+    private $sitemapCategoryMock;
 
     /**
      * @var Product
      */
-    protected $_sitemapProductMock;
+    private $sitemapProductMock;
 
     /**
      * @var Page
      */
-    protected $_sitemapCmsPageMock;
+    private $sitemapCmsPageMock;
 
     /**
      * @var Filesystem
      */
-    protected $_filesystemMock;
+    private $filesystemMock;
 
     /**
      * @var DirectoryWrite
      */
-    protected $_directoryMock;
+    private $directoryMock;
 
     /**
      * @var Write
      */
-    protected $_fileMock;
+    private $fileMock;
 
     /**
      * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -75,42 +77,35 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Sitemap\Model\SitemapItemResolverInterface
+     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $itemResolverMock;
+
+    /**
+     * @var ConfigReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configReaderMock;
 
     /**
      * Set helper mocks, create resource model mock
      */
     protected function setUp()
     {
-        $this->_sitemapCategoryMock = $this->getMockBuilder(Category::class)
+        $this->sitemapCategoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_sitemapProductMock = $this->getMockBuilder(Product::class)
+        $this->sitemapProductMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_sitemapCmsPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->_helperMockSitemap = $this->getMockBuilder(Data::class)
-            ->setMethods(
-                [
-                    'getCategoryChangefreq',
-                    'getProductChangefreq',
-                    'getPageChangefreq',
-                    'getCategoryPriority',
-                    'getProductPriority',
-                    'getPagePriority',
-                    'getMaximumLinesNumber',
-                    'getMaximumFileSize',
-                    'getEnableSubmissionRobots',
-                ])
+        $this->sitemapCmsPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_resourceMock = $this->getMockBuilder(SitemapResource::class)
+        $this->helperMockSitemap = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resourceMock = $this->getMockBuilder(SitemapResource::class)
             ->setMethods(
                 [
                     '_construct',
@@ -124,32 +119,34 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_resourceMock->expects($this->any())
+        $this->resourceMock->expects($this->any())
             ->method('addCommitCallback')
             ->willReturnSelf();
 
-        $this->_fileMock = $this->getMockBuilder(Write::class)
+        $this->fileMock = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_directoryMock = $this->getMockBuilder(DirectoryWrite::class)
+        $this->directoryMock = $this->getMockBuilder(DirectoryWrite::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_directoryMock->expects($this->any())
+        $this->directoryMock->expects($this->any())
             ->method('openFile')
-            ->willReturn($this->_fileMock);
+            ->willReturn($this->fileMock);
 
-        $this->_filesystemMock = $this->getMockBuilder(Filesystem::class)
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->setMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_filesystemMock->expects($this->any())
+        $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->willReturn($this->_directoryMock);
+            ->willReturn($this->directoryMock);
 
-        $this->itemResolverMock = $this->getMockForAbstractClass(SitemapItemResolverInterface::class);
+        $this->configReaderMock = $this->getMockForAbstractClass(SitemapConfigReaderInterface::class);
+
+        $this->itemResolverMock = $this->getMockForAbstractClass(ItemResolverInterface::class);
     }
 
     /**
@@ -160,7 +157,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotAllowedPath()
     {
-        $model = $this->_getModelMock();
+        $model = $this->getModelMock();
         $model->setSitemapPath('../');
         $model->beforeSave();
     }
@@ -173,11 +170,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testPathNotExists()
     {
-        $this->_directoryMock->expects($this->once())
+        $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(false);
 
-        $model = $this->_getModelMock();
+        $model = $this->getModelMock();
         $model->beforeSave();
     }
 
@@ -189,15 +186,15 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testPathNotWritable()
     {
-        $this->_directoryMock->expects($this->once())
+        $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(true);
 
-        $this->_directoryMock->expects($this->once())
+        $this->directoryMock->expects($this->once())
             ->method('isWritable')
             ->willReturn(false);
 
-        $model = $this->_getModelMock();
+        $model = $this->getModelMock();
         $model->beforeSave();
     }
 
@@ -212,15 +209,15 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     //@codingStandardsIgnoreEnd
     public function testFilenameInvalidChars()
     {
-        $this->_directoryMock->expects($this->once())
+        $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(true);
 
-        $this->_directoryMock->expects($this->once())
+        $this->directoryMock->expects($this->once())
             ->method('isWritable')
             ->willReturn(true);
 
-        $model = $this->_getModelMock();
+        $model = $this->getModelMock();
         $model->setSitemapFilename('*sitemap?.xml');
         $model->beforeSave();
     }
@@ -266,7 +263,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     public function testGenerateXml($maxLines, $maxFileSize, $expectedFile, $expectedWrites)
     {
         $actualData = [];
-        $model = $this->_prepareSitemapModelMock(
+        $model = $this->prepareSitemapModelMock(
             $actualData,
             $maxLines,
             $maxFileSize,
@@ -373,7 +370,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     public function testAddSitemapToRobotsTxt($maxLines, $maxFileSize, $expectedFile, $expectedWrites, $robotsInfo)
     {
         $actualData = [];
-        $model = $this->_prepareSitemapModelMock(
+        $model = $this->prepareSitemapModelMock(
             $actualData,
             $maxLines,
             $maxFileSize,
@@ -396,7 +393,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @return Sitemap|PHPUnit_Framework_MockObject_MockObject
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _prepareSitemapModelMock(
+    protected function prepareSitemapModelMock(
         &$actualData,
         $maxLines,
         $maxFileSize,
@@ -415,30 +412,29 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         };
 
         // Check that all expected lines were written
-        $this->_fileMock->expects($this->exactly($expectedWrites))
+        $this->fileMock->expects($this->exactly($expectedWrites))
             ->method('write')
             ->willReturnCallback($streamWriteCallback);
 
         // Check that all expected file descriptors were created
-        $this->_directoryMock->expects($this->exactly(count($expectedFile)))
+        $this->directoryMock->expects($this->exactly(count($expectedFile)))
             ->method('openFile')
             ->willReturnCallback(function ($file) use (&$currentFile) {
-                    $currentFile = $file;
-                }
+                $currentFile = $file;
+            }
             );
 
         // Check that all file descriptors were closed
-        $this->_fileMock->expects($this->exactly(count($expectedFile)))
+        $this->fileMock->expects($this->exactly(count($expectedFile)))
             ->method('close');
 
         if (count($expectedFile) == 1) {
-            $this->_directoryMock->expects($this->once())
+            $this->directoryMock->expects($this->once())
                 ->method('renameFile')
                 ->willReturnCallback(function ($from, $to) {
-                        \PHPUnit_Framework_Assert::assertEquals('/sitemap-1-1.xml', $from);
-                        \PHPUnit_Framework_Assert::assertEquals('/sitemap.xml', $to);
-                    }
-                );
+                    \PHPUnit_Framework_Assert::assertEquals('/sitemap-1-1.xml', $from);
+                    \PHPUnit_Framework_Assert::assertEquals('/sitemap.xml', $to);
+                });
         }
 
         // Check robots txt
@@ -450,11 +446,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         if (isset($robotsInfo['robotsFinish'])) {
             $robotsFinish = $robotsInfo['robotsFinish'];
         }
-        $this->_directoryMock->expects($this->any())
+        $this->directoryMock->expects($this->any())
             ->method('readFile')
             ->willReturn($robotsStart);
 
-        $this->_directoryMock->expects($this->any())
+        $this->directoryMock->expects($this->any())
             ->method('write')
             ->with(
                 $this->equalTo('robots.txt'),
@@ -466,19 +462,19 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         if (isset($robotsInfo['pushToRobots'])) {
             $pushToRobots = (int)$robotsInfo['pushToRobots'];
         }
-        $this->_helperMockSitemap->expects($this->any())
+        $this->configReaderMock->expects($this->any())
             ->method('getMaximumLinesNumber')
             ->willReturn($maxLines);
 
-        $this->_helperMockSitemap->expects($this->any())
+        $this->configReaderMock->expects($this->any())
             ->method('getMaximumFileSize')
             ->willReturn($maxFileSize);
 
-        $this->_helperMockSitemap->expects($this->any())
+        $this->configReaderMock->expects($this->any())
             ->method('getEnableSubmissionRobots')
             ->willReturn($pushToRobots);
 
-        $model = $this->_getModelMock(true);
+        $model = $this->getModelMock(true);
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->setMethods(['isFrontUrlSecure', 'getBaseUrl'])
@@ -508,7 +504,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @param bool $mockBeforeSave
      * @return Sitemap|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getModelMock($mockBeforeSave = false)
+    protected function getModelMock($mockBeforeSave = false)
     {
         $methods = [
             '_construct',
@@ -543,15 +539,15 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                         'collection' => [
                             new DataObject(
                                 [
-                                    'url' => $storeBaseMediaUrl.'i/m/image1.png',
+                                    'url' => $storeBaseMediaUrl . 'i/m/image1.png',
                                     'caption' => 'caption & > title < "'
                                 ]
                             ),
                             new DataObject(
-                                ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
+                                ['url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png', 'caption' => null]
                             ),
                         ],
-                        'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
+                        'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',
                         'title' => 'Product & > title < "',
                     ])
                 )
@@ -560,12 +556,12 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         /** @var $model Sitemap */
         $model = $this->getMockBuilder(Sitemap::class)
             ->setMethods($methods)
-            ->setConstructorArgs($this->_getModelConstructorArgs())
+            ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
         $model->expects($this->any())
             ->method('_getResource')
-            ->willReturn($this->_resourceMock);
+            ->willReturn($this->resourceMock);
 
         $model->expects($this->any())
             ->method('_getCurrentDateTime')
@@ -585,7 +581,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    protected function _getModelConstructorArgs()
+    private function getModelConstructorArgs()
     {
         $categoryFactory = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
@@ -611,9 +607,10 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
                 'storeManager' => $this->storeManagerMock,
-                'sitemapData' => $this->_helperMockSitemap,
-                'filesystem' => $this->_filesystemMock,
+                'sitemapData' => $this->helperMockSitemap,
+                'filesystem' => $this->filesystemMock,
                 'itemResolver' => $this->itemResolverMock,
+                'configReader' => $this->configReaderMock,
             ]
         );
         $constructArguments['resource'] = null;
@@ -643,7 +640,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                     '_construct',
                 ]
             )
-            ->setConstructorArgs($this->_getModelConstructorArgs())
+            ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
         $model->expects($this->any())

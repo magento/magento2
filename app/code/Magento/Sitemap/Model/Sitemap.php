@@ -10,13 +10,17 @@ namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
+use Magento\Sitemap\Model\ItemResolver\ItemResolverInterface;
+use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
 
 /**
  * Sitemap model
  *
- * @method \Magento\Sitemap\Model\ResourceModel\Sitemap _getResource()
- * @method \Magento\Sitemap\Model\ResourceModel\Sitemap getResource()
+ * @method SitemapResource _getResource()
+ * @method SitemapResource getResource()
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
@@ -159,9 +163,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * Item resolver
      *
-     * @var SitemapItemResolverInterface
+     * @var ItemResolverInterface
      */
     private $itemResolver;
+
+    /**
+     * Sitemap config reader
+     *
+     * @var SitemapConfigReaderInterface
+     */
+    private $configReader;
 
     /**
      * Initialize dependencies.
@@ -182,7 +193,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param DocumentRoot|null $documentRoot
-     * @param SitemapItemResolverInterface|null $itemResolver
+     * @param ItemResolverInterface|null $itemResolver
+     * @param SitemapConfigReaderInterface|null $configReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -202,7 +214,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
-        SitemapItemResolverInterface $itemResolver = null
+        ItemResolverInterface $itemResolver = null,
+        SitemapConfigReaderInterface $configReader = null
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
@@ -215,7 +228,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
-        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(SitemapItemResolverInterface::class);
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
+        $this->configReader = $configReader ?: ObjectManager::getInstance()->get(SitemapConfigReaderInterface::class);
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -227,21 +241,21 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Sitemap\Model\ResourceModel\Sitemap::class);
+        $this->_init(SitemapResource::class);
     }
 
     /**
      * Get file handler
      *
      * @return \Magento\Framework\Filesystem\File\WriteInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getStream()
     {
         if ($this->_stream) {
             return $this->_stream;
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('File handler unreachable'));
+            throw new LocalizedException(__('File handler unreachable'));
         }
     }
 
@@ -278,7 +292,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Check sitemap file location and permissions
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeSave()
     {
@@ -288,13 +302,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
          * Check path is allow
          */
         if ($path && preg_match('#\.\.[\\\/]#', $path)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct path.'));
+            throw new LocalizedException(__('Please define a correct path.'));
         }
         /**
          * Check exists and writable path
          */
         if (!$this->_directory->isExist($path)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'Please create the specified folder "%1" before saving the sitemap.',
                     $this->_escaper->escapeHtml($this->getSitemapPath())
@@ -303,7 +317,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         }
 
         if (!$this->_directory->isWritable($path)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Please make sure that "%1" is writable by the web-server.', $this->getSitemapPath())
             );
         }
@@ -311,7 +325,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
          * Check allow filename
          */
         if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'
                 )
@@ -418,14 +432,12 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _isSplitRequired($row)
     {
-        /** @var $helper \Magento\Sitemap\Helper\Data */
-        $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
-        if ($this->_lineCount + 1 > $helper->getMaximumLinesNumber($storeId)) {
+        if ($this->_lineCount + 1 > $this->configReader->getMaximumLinesNumber($storeId)) {
             return true;
         }
 
-        if ($this->_fileSize + strlen($row) > $helper->getMaximumFileSize($storeId)) {
+        if ($this->_fileSize + strlen($row) > $this->configReader->getMaximumFileSize($storeId)) {
             return true;
         }
 
@@ -505,7 +517,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param null|string $fileName
      * @param string $type
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _createSitemap($fileName = null, $type = self::TYPE_URL)
     {
@@ -578,7 +590,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param string $type
      * @return string
      */
-    protected function _getStoreBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
+    protected function _getStoreBaseUrl($type = UrlInterface::URL_TYPE_LINK)
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->_storeManager->getStore($this->getStoreId());
@@ -593,7 +605,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param string $type
      * @return string
      */
-    protected function _getUrl($url, $type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
+    protected function _getUrl($url, $type = UrlInterface::URL_TYPE_LINK)
     {
         return $this->_getStoreBaseUrl($type) . ltrim($url, '/');
     }
@@ -608,7 +620,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getMediaUrl($url)
     {
-        return $this->_getUrl($url, \Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+        return $this->_getUrl($url, UrlInterface::URL_TYPE_MEDIA);
     }
 
     /**
@@ -651,7 +663,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
         } else {
             //case when documentRoot contains symlink to basedir
-            $url = $this->_getStoreBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+            $url = $this->_getStoreBaseUrl(UrlInterface::URL_TYPE_WEB);
             $storeDomain = rtrim($url, '/');
         }
 
@@ -679,10 +691,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _isEnabledSubmissionRobots()
     {
-        /** @var $helper \Magento\Sitemap\Helper\Data */
-        $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
-        return (bool)$helper->getEnableSubmissionRobots($storeId);
+        return (bool)$this->configReader->getEnableSubmissionRobots($storeId);
     }
 
     /**

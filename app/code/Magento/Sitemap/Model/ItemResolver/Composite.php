@@ -4,22 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Model;
+namespace Magento\Sitemap\Model\ItemResolver;
 
-
-class CompositeSitemapItemResolver implements SitemapItemResolverInterface
+class Composite implements ItemResolverInterface
 {
     /**
      * Item resolvers
      *
-     * @var SitemapItemResolverInterface[]
+     * @var ItemResolverInterface[]
      */
     private $itemResolvers;
 
     /**
-     * CompositeSitemapItemResolver constructor.
+     * Composite constructor.
      *
-     * @param SitemapItemResolverInterface[] $itemResolvers
+     * @param ItemResolverInterface[] $itemResolvers
      */
     public function __construct($itemResolvers = [])
     {

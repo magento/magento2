@@ -6,29 +6,26 @@
 
 namespace Magento\Sitemap\Test\Unit\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sitemap\Model\ProductSitemapItemResolver;
-use Magento\Sitemap\Model\ResourceModel\Catalog\Product;
+use Magento\Sitemap\Model\ItemResolver\ConfigReaderInterface;
+use Magento\Sitemap\Model\ItemResolver\Product as ProductItemResolver;
+use Magento\Sitemap\Model\ResourceModel\Catalog\Product as ProductResource;
+use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
-use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
 
-class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetItemsEmpty()
     {
-        $storeConfigMock = $this->getStoreConfigMock([
-            ProductSitemapItemResolver::XML_PATH_PRODUCT_CHANGEFREQ => 'daily',
-            ProductSitemapItemResolver::XML_PATH_PRODUCT_PRIORITY => '1.0',
-        ]);
-
+        $configReaderMock = $this->getConfigReaderMock();
         $productMock = $this->getProductCollectionMock([]);
-        $cmsPageFactoryMock = $this->getProductFactoryMock($productMock);
+        $productFactoryMock = $this->getProductFactoryMock($productMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
-        $resolver = new ProductSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
+        $resolver = new ProductItemResolver($configReaderMock, $productFactoryMock, $itemFactoryMock);
+
         self::assertSame([], $resolver->getItems(1));
     }
 
@@ -38,18 +35,14 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems(array $products)
     {
-        $storeConfigMock = $this->getStoreConfigMock([
-            ProductSitemapItemResolver::XML_PATH_PRODUCT_CHANGEFREQ => 'daily',
-            ProductSitemapItemResolver::XML_PATH_PRODUCT_PRIORITY => '1.0',
-        ]);
-
+        $configReaderMock = $this->getConfigReaderMock();
         $productMock = $this->getProductCollectionMock($products);
-
-        $cmsPageFactoryMock = $this->getProductFactoryMock($productMock);
+        $productFactoryMock = $this->getProductFactoryMock($productMock);
         $itemFactoryMock = $this->getItemFactoryMock();
 
-        $resolver = new ProductSitemapItemResolver($storeConfigMock, $cmsPageFactoryMock, $itemFactoryMock);
+        $resolver = new ProductItemResolver($configReaderMock, $productFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
+
         self::assertTrue(count($items) == count($products));
         foreach ($products as $index => $product) {
             self::assertSame($product->getUpdatedAt(), $items[$index]->getUpdatedAt());
@@ -81,15 +74,15 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
                                     'collection' => [
                                         new DataObject(
                                             [
-                                                'url' => $storeBaseMediaUrl.'i/m/image1.png',
+                                                'url' => $storeBaseMediaUrl . 'i/m/image1.png',
                                                 'caption' => 'caption & > title < "'
                                             ]
                                         ),
                                         new DataObject(
-                                            ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
+                                            ['url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png', 'caption' => null]
                                         ),
                                     ],
-                                    'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
+                                    'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',
                                     'title' => 'Product & > title < "',
                                 ]
                             ),
@@ -111,7 +104,7 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cmsPageFactoryMock->expects(self::any())
+        $cmsPageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($returnValue);
 
@@ -128,7 +121,7 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $itemFactoryMock->expects(self::any())
+        $itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(function ($data) {
                 $helper = new ObjectManager($this);
@@ -140,18 +133,19 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $pathMap
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStoreConfigMock(array $pathMap = [])
+    private function getConfigReaderMock()
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $scopeConfigMock->method('getValue')
-            ->willReturnCallback(function ($path) use ($pathMap) {
-                return isset($pathMap[$path]) ? $pathMap[$path] : null;
-            });
+        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock->expects($this->any())
+            ->method('getPriority')
+            ->willReturn('1.0');
+        $configReaderMock->expects($this->any())
+            ->method('getChangeFrequency')
+            ->willReturn('daily');
 
-        return $scopeConfigMock;
+        return $configReaderMock;
     }
 
     /**
@@ -160,12 +154,12 @@ class ProductSitemapItemResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function getProductCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->getMockBuilder(Product::class)
+        $sitemapCmsPageMock = $this->getMockBuilder(ProductResource::class)
             ->setMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sitemapCmsPageMock->expects(self::any())
+        $sitemapCmsPageMock->expects($this->any())
             ->method('getCollection')
             ->willReturn($returnValue);
 
