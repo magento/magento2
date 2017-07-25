@@ -55,6 +55,7 @@ class Json extends AbstractResult
      * @param array $options Additional options used during encoding
      * @return $this
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
