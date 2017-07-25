@@ -59,7 +59,11 @@ class Json extends AbstractResult
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        $this->json = $this->serializer->serialize($data);
+        if (is_object($data) && method_exists($data, 'toJson')) {
+            $this->json = $data->toJson();
+        } else {
+            $this->json = $this->serializer->serialize($data);
+        }
         return $this;
     }
 
