@@ -22,25 +22,25 @@ if ($block->getIsInCatalogProduct()) {
     $isInCatalogProduct = $block->getIsInCatalogProduct();
 }
 ?>
-<div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
-     class="paypal checkout <?php /* @noEscape */ echo $labelPosition; ?> paypal-logo
-        <?php /* @noEscape */ echo $shortcutHtmlId; ?>"
+<div data-label="<?= $block->escapeHtml(__('or')) ?>"
+     class="paypal checkout <?= /* @noEscape */ $labelPosition ?> paypal-logo
+        <?= /* @noEscape */ $shortcutHtmlId ?>"
      data-mage-init='{
      "paypalCheckout": {
-                "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false;?>",
-                "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
+                "isCatalogProduct": "<?= /* @noEscape */ !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false ?>",
+                "shortcutContainerClass": "<?= /* @noEscape */ "." . $shortcutHtmlId ?>"
             }
      }'
     >
     <input type="image" data-action="checkout-form-submit"
-           data-checkout-url="<?php echo $block->escapeUrl($block->getCheckoutUrl()); ?>"
-           src="<?php echo $block->escapeUrl($block->getImageUrl()); ?>"
-           alt="<?php echo $block->escapeHtml(__('Checkout with PayPal')); ?>"
-           title="<?php echo $block->escapeHtml(__('Checkout with PayPal')); ?>"/>
+           data-checkout-url="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"
+           src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
+           alt="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"
+           title="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"/>
     <?php if ($block->getAdditionalLinkImage()): ?>
         <?php $linkImage = $block->getAdditionalLinkImage(); ?>
-        <a href="<?php echo $block->escapeUrl($linkImage['href']);?>">
-            <img src="<?php echo $block->escapeHtml($linkImage['src']);?>" />
+        <a href="<?= $block->escapeUrl($linkImage['href']) ?>">
+            <img src="<?= $block->escapeHtml($linkImage['src']) ?>" />
         </a>
     <?php endif; ?>
 </div>

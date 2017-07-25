@@ -7,6 +7,7 @@ namespace Magento\Backend\Block\Media;
 
 /**
  * Adminhtml media library uploader
+ * @api
  */
 class Uploader extends \Magento\Backend\Block\Widget
 {

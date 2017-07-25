@@ -11,8 +11,8 @@
         "magento/module-eav": "100.2.*",
         "magento/module-backend": "100.2.*",
         "magento/module-theme": "100.2.*",
+        "magento/module-ui": "100.2.*",
         "magento/module-catalog-inventory": "100.2.*",
-        "magento/module-indexer": "100.2.*",
         "magento/framework": "100.2.*"
     },
     "type": "magento2-module",

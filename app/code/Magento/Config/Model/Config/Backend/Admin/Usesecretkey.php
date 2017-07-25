@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
+/**
+ * @api
+ */
 class Usesecretkey extends \Magento\Framework\App\Config\Value
 {
     /**

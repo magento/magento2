@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Source;
 
 /**
  * Source model for element with enable and disable variants.
+ * @api
  */
 class Enabledisable implements \Magento\Framework\Option\ArrayInterface
 {
