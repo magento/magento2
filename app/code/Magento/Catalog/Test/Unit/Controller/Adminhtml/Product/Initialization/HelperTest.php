@@ -6,12 +6,11 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -19,8 +18,10 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 use Magento\Catalog\Model\ProductLink\Link as ProductLink;
 
 /**
@@ -98,31 +99,31 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $customOptionFactoryMock;
 
     /**
-     * @var Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCustomOptionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customOptionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Link\Resolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkResolverMock;
-
-    /**
-     * @var ProductLinks|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productLinksMock;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkTypeProviderMock;
 
+    /**
+     * @var ProductLinks|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productLinksMock;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->productLinkFactoryMock = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
-            ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
             ->disableOriginalConstructor()
@@ -145,6 +146,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->setMethods([
+                'setData',
                 'addData',
                 'getId',
                 'setWebsiteIds',
@@ -153,6 +155,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'getAttributes',
                 'unlockAttribute',
                 'getOptionsReadOnly',
+                'setOptions',
                 'setCanSaveCustomOptions',
                 '__sleep',
                 '__wakeup',
@@ -165,10 +168,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->customOptionMock = $this->getMockBuilder(Option::class)
+        $this->customOptionMock = $this->getMockBuilder(ProductCustomOptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productLinksMock = $this->getMockBuilder(ProductLinks::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -206,12 +208,19 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     private function assembleProductMock($links = [])
     {
-        $optionsData = $this->getOptionsData();
+        $this->customOptionMock->expects($this->once())
+            ->method('setProductSku');
+        $this->customOptionMock->expects($this->once())
+            ->method('setOptionId');
+
+        $optionsData = [
+            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1'],
+            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1'],
+        ];
         $productData = [
             'stock_data' => ['stock_data'],
             'options' => $optionsData,
         ];
-
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -226,6 +235,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $attributeDateBackEnd = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\Datetime::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $attributeNonDate->expects($this->any())
             ->method('getBackend')
             ->willReturn($attributeNonDateBackEnd);
@@ -238,6 +248,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $attributeDateBackEnd->expects($this->any())
             ->method('getType')
             ->willReturn('datetime');
+
         $attributesArray = [
             $attributeNonDate,
             $attributeDate
@@ -279,6 +290,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('addData')
             ->with($productData);
+        $this->productMock->expects($this->once())
         $this->productMock->expects($this->any())
             ->method('getSku')
             ->willReturn('sku');
@@ -286,48 +298,26 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getOptionsReadOnly')
             ->willReturn(false);
 
-        $customOptionMockClone1 = clone $this->customOptionMock;
-        $customOptionMockClone2 = clone $this->customOptionMock;
-
         $this->customOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturnMap([
-                [
-                    ['data' => $optionsData['option2']],
-                    $customOptionMockClone1->setData($optionsData['option2'])
-                ], [
-                    ['data' => $optionsData['option3']],
-                    $customOptionMockClone2->setData($optionsData['option3'])
-                ]
-            ]);
+            ->with(['data' => $optionsData['option2']])
+            ->willReturn($this->customOptionMock);
+        $this->productMock->expects($this->once())
+            ->method('setOptions')
+            ->with([$this->customOptionMock]);
     }
 
     /**
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testInitialize()
     {
         $this->assembleProductMock();
-
-        $this->productMock->expects($this->any())
-            ->method('getProductLinks')
-            ->willReturn([]);
-
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($this->assembleLinkTypes(['related', 'upsell', 'crosssell']));
 
         $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
-        $optionsData = $this->getOptionsData();
-
-        $productOptions = $this->productMock->getOptions();
-        $this->assertTrue(2 == count($productOptions));
-        list($option2, $option3) = $productOptions;
-        $this->assertTrue($option2->getOptionId() == $optionsData['option2']['option_id']);
-        $this->assertTrue('sku' == $option2->getData('product_sku'));
-        $this->assertTrue($option3->getOptionId() == $optionsData['option3']['option_id']);
-        $this->assertTrue('sku' == $option2->getData('product_sku'));
     }
 
     /**
@@ -368,167 +358,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for testMergeProductOptions.
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function mergeProductOptionsDataProvider()
-    {
-        return [
-            'options are not array, empty array is returned' => [
-                null,
-                [],
-                [],
-            ],
-            'replacement is not array, original options are returned' => [
-                ['val'],
-                null,
-                ['val'],
-            ],
-            'ids do not match, no replacement occurs' => [
-                [
-                    [
-                        'option_id' => '3',
-                        'key1' => 'val1',
-                        'default_key1' => 'val2',
-                        'values' => [
-                            [
-                                'option_type_id' => '2',
-                                'key1' => 'val1',
-                                'default_key1' => 'val2'
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    4 => [
-                        'key1' => '1',
-                        'values' => [3 => ['key1' => 1]]
-                    ]
-                ],
-                [
-                    [
-                        'option_id' => '3',
-                        'key1' => 'val1',
-                        'default_key1' => 'val2',
-                        'values' => [
-                            [
-                                'option_type_id' => '2',
-                                'key1' => 'val1',
-                                'default_key1' => 'val2'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            'key2 is replaced, key1 is not (checkbox is not checked)' => [
-                [
-                    [
-                        'option_id' => '5',
-                        'key1' => 'val1',
-                        'title' => 'val2',
-                        'default_key1' => 'val3',
-                        'default_title' => 'val4',
-                        'values' => [
-                            [
-                                'option_type_id' => '2',
-                                'key1' => 'val1',
-                                'key2' => 'val2',
-                                'default_key1' => 'val11',
-                                'default_key2' => 'val22'
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    5 => [
-                        'key1' => '0',
-                        'title' => '1',
-                        'values' => [2 => ['key1' => 1]]
-                    ]
-                ],
-                [
-                    [
-                        'option_id' => '5',
-                        'key1' => 'val1',
-                        'title' => 'val4',
-                        'default_key1' => 'val3',
-                        'default_title' => 'val4',
-                        'is_delete_store_title' => 1,
-                        'values' => [
-                            [
-                                'option_type_id' => '2',
-                                'key1' => 'val11',
-                                'key2' => 'val2',
-                                'default_key1' => 'val11',
-                                'default_key2' => 'val22'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            'key1 is replaced, key2 has no default value' => [
-                [
-                    [
-                        'option_id' => '7',
-                        'key1' => 'val1',
-                        'key2' => 'val2',
-                        'default_key1' => 'val3',
-                        'values' => [
-                            [
-                                'option_type_id' => '2',
-                                'key1' => 'val1',
-                                'title' => 'val2',
-                                'default_key1' => 'val11',
-                                'default_title' => 'val22'
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    7 => [
-                        'key1' => '1',
-                        'key2' => '1',
-                        'values' => [2 => ['key1' => 0, 'title' => 1]]
-                    ]
-                ],
-                [
-                    [
-                        'option_id' => '7',
-                        'key1' => 'val3',
-                        'key2' => 'val2',
-                        'default_key1' => 'val3',
-                        'values' => [
-                            [
-                                'option_type_id' => '2',
-                                'key1' => 'val1',
-                                'title' => 'val22',
-                                'default_key1' => 'val11',
-                                'default_title' => 'val22',
-                                'is_delete_store_title' => 1
-                            ]
-                        ]
-                    ]
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @param array $productOptions
-     * @param array $defaultOptions
-     * @param array $expectedResults
-     * @dataProvider mergeProductOptionsDataProvider
-     */
-    public function testMergeProductOptions($productOptions, $defaultOptions, $expectedResults)
-    {
-        $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
-        $this->assertEquals($expectedResults, $result);
-    }
-
-    /**
-     * Data provider for testInitializeWithLinks.
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -664,6 +493,96 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider for testMergeProductOptions
+     *
+     * @return array
+     */
+    public function mergeProductOptionsDataProvider()
+    {
+        return [
+            'options are not array, empty array is returned' => [
+                null,
+                [],
+                [],
+            ],
+            'replacement is not array, original options are returned' => [
+                ['val'],
+                null,
+                ['val'],
+            ],
+            'ids do not match, no replacement occurs' => [
+                [
+                    [
+                        'option_id' => '3',
+                        'key1' => 'val1',
+                        'default_key1' => 'val2'
+                    ]
+                ],
+                [4 => ['key1' => '1']],
+                [
+                    [
+                        'option_id' => '3',
+                        'key1' => 'val1',
+                        'default_key1' => 'val2'
+                    ]
+                ]
+            ],
+            'key2 is replaced, key1 is not (checkbox is not checked)' => [
+                [
+                    [
+                        'option_id' => '5',
+                        'key1' => 'val1',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3',
+                        'default_key2' => 'val4'
+                    ]
+                ],
+                [5 => ['key1' => '0', 'key2' => '1']],
+                [
+                    [
+                        'option_id' => '5',
+                        'key1' => 'val1',
+                        'key2' => 'val4',
+                        'default_key1' => 'val3',
+                        'default_key2' => 'val4'
+                    ]
+                ]
+            ],
+            'key1 is replaced, key2 has no default value' => [
+                [
+                    [
+                        'option_id' => '7',
+                        'key1' => 'val1',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3'
+                    ]
+                ],
+                [7 => ['key1' => '1', 'key2' => '1']],
+                [
+                    [
+                        'option_id' => '7',
+                        'key1' => 'val3',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3'
+                    ]
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param array $productOptions
+     * @param array $defaultOptions
+     * @param array $expectedResults
+     * @dataProvider mergeProductOptionsDataProvider
+     */
+    public function testMergeProductOptions($productOptions, $defaultOptions, $expectedResults)
+    {
+        $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
+        $this->assertEquals($expectedResults, $result);
+    }
+
+    /**
      * @param array $types
      * @return array
      */
@@ -712,19 +631,5 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
             ->will($this->returnValueMap($repositoryReturnMap));
-    }
-
-    /**
-     * @return array
-     */
-    private function getOptionsData()
-    {
-        $optionsData = [
-            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
-            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14'],
-        ];
-
-        return $optionsData;
     }
 }

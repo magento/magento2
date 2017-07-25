@@ -88,7 +88,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $options = $this->prepareOptions(
             [
                 [
-                    'option_id' => null,
+                    'id' => 1,
+                    'option_id' => 0,
                     'previous_group' => 'text',
                     'title' => 'Test Field',
                     'type' => 'field',

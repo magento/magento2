@@ -74,11 +74,6 @@ class Helper
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      */
     private $dateTimeFilter;
-    
-    /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
-     */
-    private $linkTypeProvider;
 
     /**
      * Helper constructor.
@@ -88,7 +83,6 @@ class Helper
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -96,8 +90,7 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -105,8 +98,6 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
     }
 
     /**
@@ -208,18 +199,14 @@ class Helper
             $customOptions = [];
             foreach ($options as $customOptionData) {
                 if (empty($customOptionData['is_delete'])) {
-                    if (empty($customOptionData['option_id'])) {
-                        $customOptionData['option_id'] = null;
-                    }
-
                     if (isset($customOptionData['values'])) {
                         $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
                             return empty($valueData['is_delete']);
                         });
                     }
-
                     $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
+                    $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
                 }
             }
@@ -260,17 +247,11 @@ class Helper
 
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = $product->getProductLinks();
-        $linkTypes = [];
-        
-        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkTypeObject */
-        foreach ($this->linkTypeProvider->getItems() as $linkTypeObject) {
-            $linkTypes[$linkTypeObject->getName()] = $product->getData($linkTypeObject->getName() . '_readonly');
-        }
-        
-        // skip linkTypes that were already processed on initializeLinks plugins
-        foreach ($productLinks as $productLink) {
-            unset($linkTypes[$productLink->getLinkType()]);
-        }
+        $linkTypes = [
+            'related' => $product->getRelatedReadonly(),
+            'upsell' => $product->getUpsellReadonly(),
+            'crosssell' => $product->getCrosssellReadonly()
+        ];
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
@@ -334,59 +315,21 @@ class Helper
             return $productOptions;
         }
 
-        foreach ($productOptions as $optionIndex => $option) {
+        foreach ($productOptions as $index => $option) {
             $optionId = $option['option_id'];
-            $option = $this->overwriteValue(
-                $optionId,
-                $option,
-                $overwriteOptions
-            );
 
-            if (isset($option['values']) && isset($overwriteOptions[$optionId]['values'])) {
-                foreach ($option['values'] as $valueIndex => $value) {
-                    if (isset($value['option_type_id'])) {
-                        $valueId = $value['option_type_id'];
-                        $value = $this->overwriteValue(
-                            $valueId,
-                            $value,
-                            $overwriteOptions[$optionId]['values']
-                        );
-
-                        $option['values'][$valueIndex] = $value;
-                    }
-                }
+            if (!isset($overwriteOptions[$optionId])) {
+                continue;
             }
 
-            $productOptions[$optionIndex] = $option;
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
+                }
+            }
         }
 
         return $productOptions;
-    }
-
-    /**
-     * Overwrite values of fields to default, if there are option id and field
-     * name in array overwriteOptions.
-     *
-     * @param int   $optionId
-     * @param array $option
-     * @param array $overwriteOptions
-     *
-     * @return array
-     */
-    private function overwriteValue($optionId, $option, $overwriteOptions)
-    {
-        if (isset($overwriteOptions[$optionId])) {
-            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
-                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
-                    $option[$fieldName] = $option['default_' . $fieldName];
-                    if ('title' == $fieldName) {
-                        $option['is_delete_store_title'] = 1;
-                    }
-                }
-            }
-        }
-
-        return $option;
     }
 
     /**
@@ -396,9 +339,8 @@ class Helper
     {
         if (null === $this->customOptionFactory) {
             $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
         }
-
         return $this->customOptionFactory;
     }
 
@@ -409,9 +351,8 @@ class Helper
     {
         if (null === $this->productLinkFactory) {
             $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
+                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
         }
-
         return $this->productLinkFactory;
     }
 
@@ -422,9 +363,8 @@ class Helper
     {
         if (null === $this->productRepository) {
             $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+                ->get('Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
         }
-
         return $this->productRepository;
     }
 
@@ -437,7 +377,6 @@ class Helper
         if (!is_object($this->linkResolver)) {
             $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
         }
-
         return $this->linkResolver;
     }
 
@@ -452,7 +391,6 @@ class Helper
             $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
         }
-
         return $this->dateTimeFilter;
     }
 }
