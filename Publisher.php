@@ -88,7 +88,7 @@ class Publisher implements PublisherInterface
             ]
         );
         $connectionName = $this->getPublisherConfig()->getPublisher($topicName)->getConnection()->getName();
-        $connectionName = ($connectionName === 'amqp' && !$this->amqpConfigured()) ? 'db' : $connectionName;
+        $connectionName = ($connectionName === 'amqp' && !$this->isAmqpConfigured()) ? 'db' : $connectionName;
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $exchange->enqueue($topicName, $envelope);
         return null;
@@ -99,23 +99,9 @@ class Publisher implements PublisherInterface
      *
      * @return bool
      */
-    private function amqpConfigured()
+    private function isAmqpConfigured()
     {
-        $configured = true;
-        $configFields = [
-            AmqpConfig::HOST,
-            AmqpConfig::PORT,
-            AmqpConfig::USERNAME,
-            AmqpConfig::PASSWORD,
-        ];
-        foreach ($configFields as $field) {
-            if ($this->getAmqpConfig()->getValue($field) === '') {
-                $configured = false;
-                break;
-            }
-        }
-
-        return $configured;
+        return $this->getAmqpConfig()->getValue(AmqpConfig::HOST) ? true : false;
     }
 
     /**
