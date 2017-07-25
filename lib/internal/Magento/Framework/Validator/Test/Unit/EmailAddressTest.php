@@ -9,7 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 
 use Magento\Framework\Validator\EmailAddress;
 
-class EmailAddressTest extends \PHPUnit_Framework_TestCase
+class EmailAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that the validator ignores TLD validation by default
