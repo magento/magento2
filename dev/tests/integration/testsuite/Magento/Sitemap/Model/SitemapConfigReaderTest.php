@@ -26,10 +26,8 @@ class SitemapConfigReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEnableSubmissionRobots()
     {
-        $defaultSubmission = $this->model->getEnableSubmissionRobots(Store::DEFAULT_STORE_ID);
-        $this->assertEquals(0, $defaultSubmission);
-        $distroEnableSubmission = $this->model->getEnableSubmissionRobots(Store::DISTRO_STORE_ID);
-        $this->assertEquals(1, $distroEnableSubmission);
+        $this->assertEquals(0, $this->model->getEnableSubmissionRobots(Store::DEFAULT_STORE_ID));
+        $this->assertEquals(1, $this->model->getEnableSubmissionRobots(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -37,10 +35,8 @@ class SitemapConfigReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMaximumLinesNumber()
     {
-        $defaultLinesNumber = $this->model->getMaximumLinesNumber(Store::DEFAULT_STORE_ID);
-        $this->assertEquals(50000, $defaultLinesNumber);
-        $distroLinesNumber = $this->model->getMaximumLinesNumber(Store::DISTRO_STORE_ID);
-        $this->assertEquals(10, $distroLinesNumber);
+        $this->assertEquals(50000, $this->model->getMaximumLinesNumber(Store::DEFAULT_STORE_ID));
+        $this->assertEquals(10, $this->model->getMaximumLinesNumber(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -48,10 +44,8 @@ class SitemapConfigReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMaximumFileSize()
     {
-        $defaultFileSize = $this->model->getMaximumFileSize(Store::DEFAULT_STORE_ID);
-        $this->assertEquals(10485760, $defaultFileSize);
-        $distroFileSize = $this->model->getMaximumFileSize(Store::DISTRO_STORE_ID);
-        $this->assertEquals(1024, $distroFileSize);
+        $this->assertEquals(10485760, $this->model->getMaximumFileSize(Store::DEFAULT_STORE_ID));
+        $this->assertEquals(1024, $this->model->getMaximumFileSize(Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -59,9 +53,7 @@ class SitemapConfigReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductImageIncludePolicy()
     {
-        $defaultPolicy = $this->model->getProductImageIncludePolicy(Store::DEFAULT_STORE_ID);
-        $this->assertEquals('all', $defaultPolicy);
-        $distroPolicy = $this->model->getProductImageIncludePolicy(Store::DISTRO_STORE_ID);
-        $this->assertEquals('base', $distroPolicy);
+        $this->assertEquals('all', $this->model->getProductImageIncludePolicy(Store::DEFAULT_STORE_ID));
+        $this->assertEquals('base', $this->model->getProductImageIncludePolicy(Store::DISTRO_STORE_ID));
     }
 }
