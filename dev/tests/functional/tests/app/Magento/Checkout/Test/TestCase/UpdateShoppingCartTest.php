@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,6 @@ class UpdateShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const STABLE = 'no';
     const SEVERITY = 'S0';
     /* end tags */
 

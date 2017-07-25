@@ -1,19 +1,80 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Setup\Model\DataGenerator;
-use Magento\Setup\Model\Complex\Pattern;
-use Magento\Setup\Model\Complex\Generator;
+use Magento\Setup\Model\FixtureGenerator\ConfigurableProductGenerator;
+use Magento\Setup\Model\FixtureGenerator\ProductGenerator;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ConfigurableProductsFixture
+ * Generate configurable products based on profile configuration
+ * Generated configurable options are not displayed individually in catalog
+ * Support one of two formats:
+ * 1. Distributed per Default and pre-defined attribute sets (@see setup/performance-toolkit/config/attributeSets.xml)
+ * <configurable_products>{products amount}</configurable_products>
+ *
+ * 2.1 Generate products based on existing attribute set:
+ * <configurable_products>
+ *     <config>
+ *          <attributeSet>{Existing attribute set name}</attributeSet>
+ *          <sku>{Configurable sku pattern with %s}</sku>
+ *          <products>{Amount of configurable products}</products>
+ *          <category>[{Category Name}]</category> By default category name from CategoriesFixture will be used
+ *          <swatches>color|image</swatches> Type of Swatch attribute
+ *     </config>
+ * </configurable_products>
+ *
+ * 2.2 Generate products based on dynamically created attribute set with specified amount of attributes and options
+ * <configurable_products>
+ *     <config>
+ *          <attributes>{Amount of attributes in configurable product}</attributes>
+ *          <options>{Amount of options per attribute}</options>
+ *          <sku>{Configurable sku pattern with %s}</sku>
+ *          <products>{Amount of configurable products}</products>
+ *          <category>[{Category Name}]</category> By default category name from CategoriesFixture will be used
+ *          <swatches>color|image</swatches> Type of Swatch attribute
+ *     </config>
+ * </configurable_products>
+ *
+ * 2.3 Generate products based on dynamically created attribute set with specified configuration per each attribute
+ * <configurable_products> <!-- Configurable product -->
+ *      <config>
+ *          <attributes>
+ *              <!-- Configuration for a first attribute -->
+ *              <attribute>
+ *                  <options>{Amount of options per attribute}</options>
+ *                  <swatches>color|image</swatches> Type of Swatch attribute
+ *              </attribute>
+ *              <!-- Configuration for a second attribute -->
+ *              <attribute>
+ *                  <options>{Amount of options per attribute}</options>
+ *              </attribute>
+ *          </attributes>
+ *          <sku>{Configurable sku pattern with %s}</sku>
+ *          <products>{Amount of configurable products}</products>
+ *      </config>
+ * </configurable_products>
+ *
+ * Products will be uniformly distributed per categories and websites
+ * If node "assign_entities_to_all_websites" from profile is set to "1" then products will be assigned to all websites
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ConfigurableProductsFixture extends SimpleProductsFixture
+class ConfigurableProductsFixture extends Fixture
 {
     /**
      * @var int
@@ -23,413 +84,122 @@ class ConfigurableProductsFixture extends SimpleProductsFixture
     /**
      * @var array
      */
-    protected $searchConfig;
+    private $searchConfig;
 
     /**
-     * Variations count.
-     *
+     * @var DataGenerator
+     */
+    private $dataGenerator;
+
+    /**
+     * @var AttributeSet\AttributeSetFixture
+     */
+    private $attributeSetsFixture;
+
+    /**
+     * @var AttributeSet\Pattern
+     */
+    private $attributePattern;
+
+    /**
+     * @var ProductGenerator
+     */
+    private $productGenerator;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $attributeCollectionFactory;
+
+    /**
+     * @var ConfigurableProductGenerator
+     */
+    private $configurableProductGenerator;
+
+    /**
+     * @var ProductCollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
      * @var int
      */
-    protected $variationsCount;
-
-    //@codingStandardsIgnoreStart
-    /**
-     * Get CSV template headers
-     * @SuppressWarnings(PHPMD)
-     * @return array
-     */
-    protected function getHeaders()
-    {
-        return [
-            'sku',
-            'store_view_code',
-            'attribute_set_code',
-            'additional_attributes',
-            'product_type',
-            'categories',
-            'product_websites',
-            'color',
-            'configurable_variation',
-            'cost',
-            'country_of_manufacture',
-            'created_at',
-            'custom_design',
-            'custom_design_from',
-            'custom_design_to',
-            'custom_layout_update',
-            'description',
-            'enable_googlecheckout',
-            'gallery',
-            'gift_message_available',
-            'gift_wrapping_available',
-            'gift_wrapping_price',
-            'has_options',
-            'image',
-            'image_label',
-            'is_returnable',
-            'manufacturer',
-            'meta_description',
-            'meta_keyword',
-            'meta_title',
-            'minimal_price',
-            'msrp',
-            'msrp_display_actual_price_type',
-            'name',
-            'news_from_date',
-            'news_to_date',
-            'options_container',
-            'page_layout',
-            'price',
-            'quantity_and_stock_status',
-            'related_tgtr_position_behavior',
-            'related_tgtr_position_limit',
-            'required_options',
-            'short_description',
-            'small_image',
-            'small_image_label',
-            'special_from_date',
-            'special_price',
-            'special_to_date',
-            'product_online',
-            'tax_class_name',
-            'thumbnail',
-            'thumbnail_label',
-            'updated_at',
-            'upsell_tgtr_position_behavior',
-            'upsell_tgtr_position_limit',
-            'url_key',
-            'url_path',
-            'variations',
-            'variations_1382710717',
-            'variations_1382710773',
-            'variations_1382710861',
-            'visibility',
-            'weight',
-            'qty',
-            'min_qty',
-            'use_config_min_qty',
-            'is_qty_decimal',
-            'backorders',
-            'use_config_backorders',
-            'min_sale_qty',
-            'use_config_min_sale_qty',
-            'max_sale_qty',
-            'use_config_max_sale_qty',
-            'is_in_stock',
-            'notify_stock_qty',
-            'use_config_notify_stock_qty',
-            'manage_stock',
-            'use_config_manage_stock',
-            'use_config_qty_increments',
-            'qty_increments',
-            'use_config_enable_qty_inc',
-            'enable_qty_increments',
-            'is_decimal_divided',
-            '_related_sku',
-            '_related_position',
-            '_crosssell_sku',
-            '_crosssell_position',
-            '_upsell_sku',
-            '_upsell_position',
-            '_associated_sku',
-            '_associated_default_qty',
-            '_associated_position',
-            '_tier_price_website',
-            '_tier_price_customer_group',
-            '_tier_price_qty',
-            '_tier_price_price',
-            '_media_attribute_id',
-            '_media_image',
-            '_media_label',
-            '_media_position',
-            '_media_is_disabled',
-            '_super_products_sku',
-            '_super_attribute_code',
-            '_super_attribute_option',
-            'configurable_variations',
-        ];
-    }
+    private $productStartIndex;
 
     /**
-     * @param Closure|mixed $productCategoryClosure
-     * @param Closure|mixed $productWebsiteClosure
-     * @param Closure|mixed $shortDescriptionClosure
-     * @param Closure|mixed $descriptionClosure
-     * @param Closure|mixed $priceClosure
-     * @param Closure|mixed $attributeSetClosure
-     * @param Closure|mixed $additionalAttributesClosure
-     * @param string $variationClosure
-     * @param string $suffix
-     * @return array
-     * @SuppressWarnings(PHPMD)
+     * @var ProductsAmountProvider
      */
-    private function generateConfigurableProduct(
-        $productCategoryClosure,
-        $productWebsiteClosure,
-        $shortDescriptionClosure,
-        $descriptionClosure,
-        $priceClosure,
-        $attributeSetClosure,
-        $additionalAttributesClosure,
-        $variationClosure,
-        $suffix
-    )
-    {
-        return [
-            'sku' => $this->getConfigurableProductSkuPattern() . $suffix,
-            'store_view_code' => '',
-            'attribute_set_code' => $attributeSetClosure,
-            'additional_attributes' => $additionalAttributesClosure,
-            'product_type' => 'configurable',
-            'categories' => $productCategoryClosure,
-            'product_websites' => $productWebsiteClosure,
-            'color' => '',
-            'configurable_variation' => '',
-            'cost' => '',
-            'country_of_manufacture' => '',
-            'created_at' => '2013-10-25 15:12:39',
-            'custom_design' => '',
-            'custom_design_from' => '',
-            'custom_design_to' => '',
-            'custom_layout_update' => '',
-            'description' => $descriptionClosure,
-            'enable_googlecheckout' => '1',
-            'gallery' => '',
-            'gift_message_available' => '',
-            'gift_wrapping_available' => '',
-            'gift_wrapping_price' => '',
-            'has_options' => '1',
-            'image' => '',
-            'image_label' => '',
-            'is_returnable' => 'no',
-            'manufacturer' => '',
-            'meta_description' => 'Configurable Product %s <p>Configurable product description %s</p>',
-            'meta_keyword' => 'Configurable Product %s',
-            'meta_title' => 'Configurable Product %s',
-            'minimal_price' => '',
-            'msrp' => '',
-            'msrp_display_actual_price_type' => 'Use config',
-            'name' => 'Configurable Product %s' . $suffix,
-            'news_from_date' => '',
-            'news_to_date' => '',
-            'options_container' => 'Block after Info Column',
-            'page_layout' => '',
-            'price' => $priceClosure,
-            'quantity_and_stock_status' => 'In Stock',
-            'related_tgtr_position_behavior' => '',
-            'related_tgtr_position_limit' => '',
-            'required_options' => '1',
-            'short_description' => $shortDescriptionClosure,
-            'small_image' => '',
-            'small_image_label' => '',
-            'special_from_date' => '',
-            'special_price' => '',
-            'special_to_date' => '',
-            'product_online' => '1',
-            'tax_class_name' => 'Taxable Goods',
-            'thumbnail' => '',
-            'thumbnail_label' => '',
-            'updated_at' => '2013-10-25 15:12:39',
-            'upsell_tgtr_position_behavior' => '',
-            'upsell_tgtr_position_limit' => '',
-            'url_key' => $this->getUrlKeyPrefix() . "{$suffix}",
-            'url_path' => $this->getUrlKeyPrefix() . "{$suffix}",
-            'visibility' => 'Catalog, Search',
-            'weight' => '',
-            'qty' => 333,
-            'min_qty' => '0.0000',
-            'use_config_min_qty' => '1',
-            'is_qty_decimal' => '0',
-            'backorders' => '0',
-            'use_config_backorders' => '1',
-            'min_sale_qty' => '1.0000',
-            'use_config_min_sale_qty' => '1',
-            'max_sale_qty' => '0.0000',
-            'use_config_max_sale_qty' => '1',
-            'is_in_stock' => '1',
-            'notify_stock_qty' => '',
-            'use_config_notify_stock_qty' => '1',
-            'manage_stock' => '1',
-            'use_config_manage_stock' => '1',
-            'use_config_qty_increments' => '1',
-            'qty_increments' => '0.0000',
-            'use_config_enable_qty_inc' => '1',
-            'enable_qty_increments' => '0',
-            'is_decimal_divided' => '0',
-            '_related_sku' => '',
-            '_related_position' => '',
-            '_crosssell_sku' => '',
-            '_crosssell_position' => '',
-            '_upsell_sku' => '',
-            '_upsell_position' => '',
-            '_associated_sku' => '',
-            '_associated_default_qty' => '',
-            '_associated_position' => '',
-            '_tier_price_website' => '',
-            '_tier_price_customer_group' => '',
-            '_tier_price_qty' => '',
-            '_tier_price_price' => '',
-            '_media_attribute_id' => '',
-            '_media_image' => '',
-            '_media_label' => '',
-            '_media_position' => '',
-            '_media_is_disabled' => '',
-            'configurable_variations' => $variationClosure,
-        ];
-    }
+    private $productsAmountProvider;
 
     /**
-     * Get CSV template rows
-     *
-     * @param Closure|mixed $productCategoryClosure
-     * @param Closure|mixed $productWebsiteClosure
-     * @param Closure|mixed $shortDescriptionClosure
-     * @param Closure|mixed $descriptionClosure
-     * @param Closure|mixed $priceClosure
-     * @param Closure|mixed $attributeSetClosure
-     * @param Closure|mixed $additionalAttributesClosure
-     * @param Closure|mixed $variationClosure
-     * @param int $optionsNumber
-     * @param string $suffix
-     *
-     * @SuppressWarnings(PHPMD)
-     *
-     * @return array
+     * @var CategoryResolver
      */
-    protected function getRows(
-        $productCategoryClosure,
-        $productWebsiteClosure,
-        $shortDescriptionClosure,
-        $descriptionClosure,
-        $priceClosure,
-        $attributeSetClosure,
-        $additionalAttributesClosure,
-        $variationClosure,
-        $optionsNumber,
-        $suffix = ''
-    )
-    {
-        $data = [];
-        for ($i = 1; $i <= $optionsNumber; $i++) {
-            $productData = [
-                'sku' => $this->getConfigurableOptionSkuPattern() . "{$i}{$suffix}",
-                'store_view_code' => '',
-                'attribute_set_code' => $attributeSetClosure,
-                'additional_attributes' => $additionalAttributesClosure,
-                'product_type' => 'simple',
-                'categories' => $productCategoryClosure,
-                'product_websites' => $productWebsiteClosure,
-                'color' => '',
-                'configurable_variation' => "option {$i}",
-                'cost' => '',
-                'country_of_manufacture' => '',
-                'created_at' => '2013-10-25 15:12:32',
-                'custom_design' => '',
-                'custom_design_from' => '',
-                'custom_design_to' => '',
-                'custom_layout_update' => '',
-                'description' => $descriptionClosure,
-                'enable_googlecheckout' => '1',
-                'gallery' => '',
-                'gift_message_available' => '',
-                'gift_wrapping_available' => '',
-                'gift_wrapping_price' => '',
-                'has_options' => '0',
-                'image' => '',
-                'image_label' => '',
-                'is_returnable' => 'no',
-                'manufacturer' => '',
-                'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
-                'meta_keyword' => 'Configurable Product 1',
-                'meta_title' => 'Configurable Product %s',
-                'minimal_price' => '',
-                'msrp' => '',
-                'msrp_display_actual_price_type' => 'Use config',
-                'name' => "Configurable Product {$suffix}- %s-option {$i}",
-                'news_from_date' => '',
-                'news_to_date' => '',
-                'options_container' => 'Block after Info Column',
-                'page_layout' => '',
-                'price' => $priceClosure,
-                'quantity_and_stock_status' => 'In Stock',
-                'related_tgtr_position_behavior' => '',
-                'related_tgtr_position_limit' => '',
-                'required_options' => '0',
-                'short_description' => $shortDescriptionClosure,
-                'small_image' => '',
-                'small_image_label' => '',
-                'special_from_date' => '',
-                'special_price' => '',
-                'special_to_date' => '',
-                'product_online' => '1',
-                'tax_class_name' => 'Taxable Goods',
-                'thumbnail' => '',
-                'thumbnail_label' => '',
-                'updated_at' => '2013-10-25 15:12:32',
-                'upsell_tgtr_position_behavior' => '',
-                'upsell_tgtr_position_limit' => '',
-                'url_key' => $this->getOptionUrlKeyPrefix() . "-{$suffix}-%s-option-{$i}",
-                'url_path' => $this->getOptionUrlKeyPrefix() . "-{$suffix}-%s-option-{$i}",
-                'variations' => '',
-                'variations_1382710717' => '',
-                'variations_1382710773' => '',
-                'variations_1382710861' => '',
-                'visibility' => 'Not Visible Individually',
-                'weight' => '1',
-                'qty' => '111.0000',
-                'min_qty' => '0.0000',
-                'use_config_min_qty' => '1',
-                'is_qty_decimal' => '0',
-                'backorders' => '0',
-                'use_config_backorders' => '1',
-                'min_sale_qty' => '1.0000',
-                'use_config_min_sale_qty' => '1',
-                'max_sale_qty' => '0.0000',
-                'use_config_max_sale_qty' => '1',
-                'is_in_stock' => '1',
-                'notify_stock_qty' => '',
-                'use_config_notify_stock_qty' => '1',
-                'manage_stock' => '1',
-                'use_config_manage_stock' => '1',
-                'use_config_qty_increments' => '1',
-                'qty_increments' => '0.0000',
-                'use_config_enable_qty_inc' => '1',
-                'enable_qty_increments' => '0',
-                'is_decimal_divided' => '0',
-                '_related_sku' => '',
-                '_related_position' => '',
-                '_crosssell_sku' => '',
-                '_crosssell_position' => '',
-                '_upsell_sku' => '',
-                '_upsell_position' => '',
-                '_associated_sku' => '',
-                '_associated_default_qty' => '',
-                '_associated_position' => '',
-                '_tier_price_website' => '',
-                '_tier_price_customer_group' => '',
-                '_tier_price_qty' => '',
-                '_tier_price_price' => '',
-                '_media_attribute_id' => '',
-                '_media_image' => '',
-                '_media_label' => '',
-                '_media_position' => '',
-                '_media_is_disabled' => '',
-            ];
-            $data[] = $productData;
-        }
+    private $categoryResolver;
 
-        $data[] = $this->generateConfigurableProduct(
-            $productCategoryClosure,
-            $productWebsiteClosure,
-            $shortDescriptionClosure,
-            $descriptionClosure,
-            $priceClosure,
-            $attributeSetClosure,
-            $additionalAttributesClosure,
-            $variationClosure,
-            $suffix
-        );
-        return $data;
+    /**
+     * @var WebsiteCategoryProvider
+     */
+    private $websiteCategoryProvider;
+
+    /**
+     * @var PriceProvider
+     */
+    private $priceProvider;
+
+    /**
+     * @var \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator
+     */
+    private $swatchesGenerator;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param FixtureModel $fixtureModel
+     * @param AttributeSet\AttributeSetFixture $attributeSetsFixture
+     * @param AttributeSet\Pattern $attributePattern
+     * @param ProductGenerator $productGenerator
+     * @param CollectionFactory $attributeCollectionFactory
+     * @param ConfigurableProductGenerator $configurableProductGenerator
+     * @param ProductCollectionFactory $collectionFactory
+     * @param ProductsAmountProvider $productsAmountProvider
+     * @param CategoryResolver $categoryResolver
+     * @param WebsiteCategoryProvider $websiteCategoryProvider
+     * @param PriceProvider $priceProvider
+     * @param AttributeSet\SwatchesGenerator $swatchesGenerator
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        FixtureModel $fixtureModel,
+        \Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture $attributeSetsFixture,
+        \Magento\Setup\Fixtures\AttributeSet\Pattern $attributePattern,
+        ProductGenerator $productGenerator,
+        CollectionFactory $attributeCollectionFactory,
+        ConfigurableProductGenerator $configurableProductGenerator,
+        ProductCollectionFactory $collectionFactory,
+        ProductsAmountProvider $productsAmountProvider,
+        CategoryResolver $categoryResolver,
+        WebsiteCategoryProvider $websiteCategoryProvider,
+        PriceProvider $priceProvider,
+        \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
+    ) {
+        parent::__construct($fixtureModel);
+        $this->attributeSetsFixture = $attributeSetsFixture;
+        $this->attributePattern = $attributePattern;
+        $this->productGenerator = $productGenerator;
+        $this->attributeCollectionFactory = $attributeCollectionFactory;
+        $this->configurableProductGenerator = $configurableProductGenerator;
+        $this->productCollectionFactory = $collectionFactory;
+        $this->productsAmountProvider = $productsAmountProvider;
+        $this->categoryResolver = $categoryResolver;
+        $this->websiteCategoryProvider = $websiteCategoryProvider;
+        $this->priceProvider = $priceProvider;
+        $this->swatchesGenerator = $swatchesGenerator;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -438,8 +208,7 @@ class ConfigurableProductsFixture extends SimpleProductsFixture
      */
     public function execute()
     {
-        $configurableProductsCount = $this->getConfigurableProductsValue();
-        if (!$configurableProductsCount) {
+        if (!$this->fixtureModel->getValue('configurable_products', [])) {
             return;
         }
         $simpleProductsCount = $this->fixtureModel->getValue('simple_products', 0);
@@ -447,150 +216,187 @@ class ConfigurableProductsFixture extends SimpleProductsFixture
         $maxAmountOfWordsShortDescription = $this->getSearchConfigValue('max_amount_of_words_short_description');
         $minAmountOfWordsDescription = $this->getSearchConfigValue('min_amount_of_words_description');
         $minAmountOfWordsShortDescription = $this->getSearchConfigValue('min_amount_of_words_short_description');
-        $configurableProductsWithAttributes = [];
 
-        if ($this->getAdditionalConfigurableProductsVariations() === null) {
-            $configurableProductsWithAttributes[$configurableProductsCount]
-                = $this->getConfigurableProductsVariationsValue();
-        } else {
-            if (strpos($this->getAdditionalConfigurableProductsVariations(), ',')) {
-                $variations = explode(',', $this->getAdditionalConfigurableProductsVariations());
-            } else {
-                $variations = [$this->getAdditionalConfigurableProductsVariations()];
+        foreach ($this->getConfigurableProductConfig() as $configurableConfig) {
+            $configurableSku = $configurableConfig['sku'];
+            $productAmount = $this->productsAmountProvider->getAmount(
+                $configurableConfig['products'],
+                $configurableSku
+            );
+            if (!$productAmount) {
+                continue;
             }
-
-            foreach ($variations as $variation) {
-                $value = explode(':', $variation);
-                $configurableProductsWithAttributes[$value[0]] = $value[1];
-            }
-        }
-
-        foreach ($configurableProductsWithAttributes as $productsCount => $variationsCount) {
-            $this->variationsCount = $variationsCount;
-            $configurableProductsCount = $productsCount;
-            $attributes = $this->getAttributes();
             $searchTerms = $this->getSearchTerms();
-            $this->fixtureModel->resetObjectManager();
-            $result = $this->getCategoriesAndWebsites();
-            $result = array_values($result);
-            $dataGenerator = new DataGenerator(realpath(__DIR__ . '/' . 'dictionary.csv'));
-
-            $productWebsiteClosure = function ($index) use ($result) {
-                return $result[$index % count($result)][0];
-            };
-            $productCategoryClosure = function ($index) use ($result) {
-                return $result[$index % count($result)][2] . '/' . $result[$index % count($result)][1];
-            };
-            $shortDescriptionClosure = function ($index)
-            use (
+            $shortDescriptionClosure = $this->getDescriptionClosure(
                 $searchTerms,
                 $simpleProductsCount,
-                $configurableProductsCount,
-                $dataGenerator,
+                $productAmount,
                 $maxAmountOfWordsShortDescription,
-                $minAmountOfWordsShortDescription
-            ) {
-                $count = $searchTerms === null
-                    ? 0
-                    : round(
-                        $searchTerms[$index % count($searchTerms)]['count'] * (
-                            $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
-                        )
-                    );
-                mt_srand($index);
-                return $dataGenerator->generate(
-                    $minAmountOfWordsShortDescription,
-                    $maxAmountOfWordsShortDescription,
-                    'shortDescription-' . $index
-                ) . ($index <= ($count * count($searchTerms)) ? ' '
-                    . $searchTerms[$index % count($searchTerms)]['term'] : '');
-            };
-            $descriptionClosure = function ($index)
-            use (
+                $minAmountOfWordsShortDescription,
+                'shortDescription'
+            );
+            $descriptionClosure = $this->getDescriptionClosure(
                 $searchTerms,
                 $simpleProductsCount,
-                $configurableProductsCount,
-                $dataGenerator,
+                $productAmount,
                 $maxAmountOfWordsDescription,
-                $minAmountOfWordsDescription
-            ) {
-                $count = $searchTerms === null
-                    ? 0
-                    : round(
-                        $searchTerms[$index % count($searchTerms)]['count'] * (
-                            $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
-                        )
-                    );
-                mt_srand($index);
-                return $dataGenerator->generate(
-                    $minAmountOfWordsDescription,
-                    $maxAmountOfWordsDescription,
-                    'description-' . $index
-                ) . ($index <= ($count * count($searchTerms))
-                    ? ' ' . $searchTerms[$index % count($searchTerms)]['term'] : '');
-            };
-            $priceClosure = function ($index) {
-                mt_srand($index);
-                switch (mt_rand(0, 3)) {
-                    case 0:
-                        return 9.99;
-                    case 1:
-                        return 5;
-                    case 2:
-                        return 1;
-                    case 3:
-                        return mt_rand(1, 10000) / 10;
-                }
-            };
-            $attributeSetClosure = $this->getAttributeSetClosure($attributes, $result);
-            $variationClosure = $this->getVariationsClosure($attributes, $result, $variationsCount);
-            $additionalAttributesClosure = $this->getAdditionalAttributesClosure($attributes, $result);
-            /**
-             * Create configurable products
-             */
-            $pattern = new Pattern();
-            $pattern->setHeaders($this->getHeaders());
-            $pattern->setRowsSet(
-                $this->getRows(
-                    $productCategoryClosure,
-                    $productWebsiteClosure,
-                    $shortDescriptionClosure,
-                    $descriptionClosure,
-                    $priceClosure,
-                    $attributeSetClosure,
-                    $additionalAttributesClosure,
-                    $variationClosure,
-                    $variationsCount
-                )
+                $minAmountOfWordsDescription,
+                'description'
             );
+            $variationCount = $configurableConfig['variationCount'];
+            $attributeSet = $configurableConfig['attributeSet'];
+            $variationSkuClosure = function ($productId, $entityNumber) use ($configurableSku, $variationCount) {
+                $variationIndex = $this->getConfigurableVariationIndex($entityNumber, $variationCount);
+                $productId = $this->getConfigurableProductIndex($entityNumber, $variationCount);
 
-            /** @var \Magento\ImportExport\Model\Import $import */
-            $import = $this->fixtureModel->getObjectManager()->create(
-                \Magento\ImportExport\Model\Import::class,
-                [
-                    'data' => [
-                        'entity' => 'catalog_product',
-                        'behavior' => 'append',
-                        'validation_strategy' => 'validation-stop-on-errors',
-                    ],
-                ]
-            );
+                return sprintf($this->getConfigurableOptionSkuPattern($configurableSku), $productId, $variationIndex);
+            };
+            $fixture = [
+                'name' => $variationSkuClosure,
+                'sku' => $variationSkuClosure,
+                'price' => function ($index, $entityNumber) {
+                    return $this->priceProvider->getPrice($entityNumber);
+                },
+                'website_ids' => function ($index, $entityNumber) use ($variationCount) {
+                    $configurableIndex = $this->getConfigurableProductIndex($entityNumber, $variationCount);
 
-            $source = $this->fixtureModel->getObjectManager()->create(
-                Generator::class,
-                ['rowPattern' => $pattern, 'count' => $configurableProductsCount]
-            );
-            // it is not obvious, but the validateSource() will actually save import queue data to DB
-            if (!$import->validateSource($source)) {
-                throw new \Exception($import->getFormatedLogTrace());
-            }
-            // this converts import queue into actual entities
-            if (!$import->importSource()) {
-                throw new \Exception($import->getFormatedLogTrace());
-            }
+                    return $this->websiteCategoryProvider->getWebsiteIds($configurableIndex);
+                },
+                'attribute_set_id' => $attributeSet['id'],
+                'additional_attributes' => $this->getAdditionalAttributesClosure(
+                    $attributeSet['attributes'],
+                    $variationCount
+                ),
+                'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+            ];
+            $this->productGenerator->generate($productAmount * $variationCount, $fixture);
+
+            $skuClosure = function ($productId, $entityNumber) use ($configurableSku) {
+                return sprintf($configurableSku, $entityNumber + $this->getNewProductStartIndex());
+            };
+            $fixture = [
+                '_variation_sku_pattern' => $this->getFirstVariationSkuPattern($configurableConfig),
+                '_attributes_count' => count($attributeSet['attributes']),
+                '_variation_count' => $variationCount,
+                '_attributes' => $attributeSet['attributes'],
+                'type_id' => Configurable::TYPE_CODE,
+                'name' => $skuClosure,
+                'sku' => $skuClosure,
+                'description' => $descriptionClosure,
+                'short_description' => $shortDescriptionClosure,
+                'attribute_set_id' => $attributeSet['id'],
+                'website_ids' => $this->getConfigurableWebsiteIdsClosure(),
+                'category_ids' => $configurableConfig['category'],
+                'meta_keyword' => $skuClosure,
+                'meta_title' => $skuClosure,
+            ];
+
+            $this->configurableProductGenerator->generate($productAmount, $fixture);
         }
     }
-    // @codingStandardsIgnoreEnd
+
+    /**
+     * @return \Closure
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function getConfigurableWebsiteIdsClosure()
+    {
+        return function ($index, $entityNumber) {
+            return $this->websiteCategoryProvider->getWebsiteIds($entityNumber + $this->getNewProductStartIndex());
+        };
+    }
+
+    /**
+     * Get product distribution per attribute sets for default attribute sets
+     *
+     * @param array $defaultAttributeSets
+     * @param int $configurableProductsCount
+     * @return array
+     */
+    private function getDefaultAttributeSetsConfig(array $defaultAttributeSets, $configurableProductsCount)
+    {
+        $attributeSetClosure = function ($index) use ($defaultAttributeSets) {
+            $attributeSetAmount = count(array_keys($defaultAttributeSets));
+            mt_srand($index);
+
+            return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
+                ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
+                : 'Default';
+        };
+        $productsPerSet = [];
+        for ($i = 1; $i <= $configurableProductsCount; $i++) {
+            $attributeSet = $attributeSetClosure($i);
+            if (!isset($productsPerSet[$attributeSet])) {
+                $productsPerSet[$attributeSet] = 0;
+            }
+            $productsPerSet[$attributeSet]++;
+        }
+        $configurableConfig = [];
+        foreach ($defaultAttributeSets as $attributeSetName => $attributeSet) {
+            $skuSuffix = $attributeSetName === 'Default' ? '' : ' - ' . $attributeSetName;
+            $configurableConfig[] = [
+                'attributeSet' => $attributeSetName,
+                'products' => $productsPerSet[$attributeSetName],
+                'sku' => 'Configurable Product %s' . $skuSuffix,
+            ];
+        }
+
+        return $configurableConfig;
+    }
+
+    /**
+     * Get sku pattern in format "{configurable-sku}{configurable-index}-option 1" for get associated product ids
+     *
+     * @param array $configurableConfig
+     * @see \Magento\Setup\Model\FixtureGenerator\ConfigurableProductTemplateGenerator
+     * @return string
+     */
+    private function getFirstVariationSkuPattern($configurableConfig)
+    {
+        $productIndex = $this->getConfigurableProductIndex(0, $configurableConfig['variationCount']);
+
+        return sprintf($this->getConfigurableOptionSkuPattern($configurableConfig['sku']), $productIndex, 1);
+    }
+
+    /**
+     * Get start product index which used in product name, sku, url generation
+     *
+     * @return int
+     */
+    private function getNewProductStartIndex()
+    {
+        if (null === $this->productStartIndex) {
+            $this->productStartIndex = $this->productCollectionFactory->create()
+                ->addFieldToFilter('type_id', Configurable::TYPE_CODE)
+                ->getSize() + 1;
+        }
+
+        return $this->productStartIndex;
+    }
+
+    /**
+     * Get configurable product index number
+     *
+     * @param int $entityNumber
+     * @param int $variationCount
+     * @return float
+     */
+    private function getConfigurableProductIndex($entityNumber, $variationCount)
+    {
+        return floor($entityNumber / $variationCount) + $this->getNewProductStartIndex();
+    }
+
+    /**
+     * Get configurable variation index number
+     *
+     * @param int $entityNumber
+     * @param int $variationCount
+     * @return float
+     */
+    private function getConfigurableVariationIndex($entityNumber, $variationCount)
+    {
+        return $entityNumber % $variationCount + 1;
+    }
 
     /**
      * {@inheritdoc}
@@ -605,68 +411,317 @@ class ConfigurableProductsFixture extends SimpleProductsFixture
      */
     public function introduceParamLabels()
     {
-        return [
-            'configurable_products' => 'Configurable products',
-        ];
+        return [];
     }
 
     /**
-     * @override
+     * {@inheritdoc}
+     * @throws ValidatorException
+     */
+    public function printInfo(OutputInterface $output)
+    {
+        if (!$this->fixtureModel->getValue('configurable_products', [])) {
+            return;
+        }
+
+        $configurableProductConfig = $this->prepareConfigurableConfig(
+            $this->getDefaultAttributeSetsWithAttributes()
+        );
+        $generalAmount = array_sum(array_column($configurableProductConfig, 'products'));
+
+        $output->writeln(sprintf('<info> |- Configurable products: %s</info>', $generalAmount));
+    }
+
+    /**
+     * Gen default attribute sets with attributes
+     * @see config/attributeSets.xml
+     *
      * @return array
      */
-    protected function getCategoriesAndWebsites()
+    private function getDefaultAttributeSetsWithAttributes()
     {
-        /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->get(\Magento\Store\Model\StoreManager::class);
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+        $attributeSets = $this->fixtureModel->getValue('attribute_sets', null);
+        $attributeSetData = [];
 
-        $result = [];
-        //Get all websites
-        $websites = $storeManager->getWebsites();
-        foreach ($websites as $website) {
-            $websiteCode = $website->getCode();
-            //Get all groups
-            $websiteGroups = $website->getGroups();
-            foreach ($websiteGroups as $websiteGroup) {
-                $websiteGroupRootCategory = $websiteGroup->getRootCategoryId();
-                $category->load($websiteGroupRootCategory);
-                $categoryResource = $category->getResource();
-                $rootCategoryName = $category->getName();
-                //Get all categories
-                $resultsCategories = $categoryResource->getAllChildren($category);
-                foreach ($resultsCategories as $resultsCategory) {
-                    $category->load($resultsCategory);
-                    $structure = explode('/', $category->getPath());
-                    $pathSize = count($structure);
-                    if ($pathSize > 1) {
-                        $path = [];
-                        for ($i = 1; $i < $pathSize; $i++) {
-                            $path[] = $category->load($structure[$i])->getName();
-                        }
-                        array_shift($path);
-                        $resultsCategoryName = implode('/', $path);
-                    } else {
-                        $resultsCategoryName = $category->getName();
+        if ($attributeSets !== null && array_key_exists('attribute_set', $attributeSets)) {
+            foreach ($attributeSets['attribute_set'] as $attributeSet) {
+                $attributesData = array_key_exists(0, $attributeSet['attributes']['attribute'])
+                    ? $attributeSet['attributes']['attribute'] : [$attributeSet['attributes']['attribute']];
+                $attributes = [];
+                foreach ($attributesData as $attributeData) {
+                    $values = [];
+                    $optionsData = array_key_exists(0, $attributeData['options']['option'])
+                        ? $attributeData['options']['option'] : [$attributeData['options']['option']];
+                    foreach ($optionsData as $optionData) {
+                        $values[] = $optionData['label'];
                     }
-                    //Deleted root categories
-                    if (trim($resultsCategoryName) != '') {
-                        $result[$resultsCategory] = [$websiteCode, $resultsCategoryName, $rootCategoryName];
+
+                    $attributes[] = ['name' => $attributeData['attribute_code'], 'values' => $values];
+                }
+                $attributeSetData[$attributeSet['name']] = [
+                    'name' => $attributeSet['name'],
+                    'attributes' => $attributes
+                ];
+            }
+        }
+
+        $attributeOptions = range(1, $this->getConfigurableProductsVariationsValue());
+        array_walk(
+            $attributeOptions,
+            function (&$item, $key) {
+                $item = 'option ' . ($key + 1);
+            }
+        );
+        $attributeSetData['Default'] = [
+            'name' => 'Default',
+            'attributes' => [
+                [
+                    'name' => 'configurable_variation',
+                    'values' => $attributeOptions
+                ]
+            ]
+        ];
+
+        return $attributeSetData;
+    }
+
+    /**
+     * Get configurable product configuration for generate products per attribute set
+     *
+     * @return array
+     * @throws ValidatorException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getConfigurableProductConfig()
+    {
+        $defaultAttributeSets = $this->getDefaultAttributeSetsWithAttributes();
+        $configurableProductConfig = $this->prepareConfigurableConfig($defaultAttributeSets);
+
+        $configurableProductConfig = array_map(function ($config) {
+            return array_merge(
+                [
+                    'attributeSet' => null,
+                    'attributes' => null,
+                    'options' => null,
+                    'sku' => null,
+                    'category' => null,
+                    'swatches' => null,
+                ],
+                $config
+            );
+        }, $configurableProductConfig);
+
+        $skuPull = [];
+        foreach ($configurableProductConfig as $i => &$config) {
+            $attributeSet = $config['attributeSet'];
+            $attributes = $config['attributes'];
+            $options = (int)$config['options'];
+            if ($attributeSet && isset($defaultAttributeSets[$attributeSet])) {
+                // process default attribute sets
+                $attributeSet = $defaultAttributeSets[$attributeSet];
+                $attributes = count($attributeSet['attributes']);
+                $options = count($attributeSet['attributes'][0]['values']);
+            } elseif (is_array($attributes)) {
+                $attributeSet = $this->getCustomAttributeSet($attributes);
+                $options = array_column($attributes, 'options');
+                $attributes = count($attributes);
+            } elseif ($attributes && $options) {
+                $attributes  = (int)$attributes;
+                // convert attributes and options to array for process custom attribute set creation
+                $attributesData = array_map(function ($options) use ($config) {
+                    return ['options' => $options, 'swatches' => $config['swatches']];
+                }, array_fill(0, $attributes, $options));
+
+                $attributeSet = $this->getCustomAttributeSet($attributesData);
+            }
+
+            // do not process if any required option is missed
+            if (count(array_filter([$attributeSet, $attributes, $options])) !== 3) {
+                unset($configurableProductConfig[$i]);
+                continue;
+            }
+
+            $config['sku'] = $this->getConfigurableSkuPattern($config, $attributeSet['name']);
+            $config['category'] = $this->getConfigurableCategory($config);
+            $config['attributeSet'] = $this->convertAttributesToDBFormat($attributeSet);
+            $config['attributes'] = $attributes;
+            $config['options'] = $options;
+            $config['variationCount'] = is_array($options) ? array_product($options) : pow($options, $attributes);
+            $skuPull[] = $config['sku'];
+        }
+
+        if (count($skuPull) !== count(array_unique($skuPull))) {
+            throw new ValidatorException(
+                __('Sku pattern for configurable product must be unique per attribute set')
+            );
+        }
+
+        return $configurableProductConfig;
+    }
+
+    /**
+     * Prepare configuration. If amount of configurable products set in profile then return predefined attribute sets
+     * else return configuration from profile
+     *
+     * @param array $defaultAttributeSets
+     * @return array
+     * @throws ValidatorException
+     */
+    private function prepareConfigurableConfig($defaultAttributeSets)
+    {
+        $configurableConfigs = $this->fixtureModel->getValue('configurable_products', []);
+        $configurableConfigs = is_array($configurableConfigs) ? $configurableConfigs : (int)$configurableConfigs;
+        if (is_int($configurableConfigs)) {
+            $configurableConfigs = $this->getDefaultAttributeSetsConfig($defaultAttributeSets, $configurableConfigs);
+        } elseif (isset($configurableConfigs['config'])) {
+            if (!isset($configurableConfigs['config'][0])) {
+                // in case when one variation is passed
+                $configurableConfigs = [$configurableConfigs['config']];
+            } else {
+                $configurableConfigs = $configurableConfigs['config'];
+            }
+
+            foreach ($configurableConfigs as &$config) {
+                if (isset($config['attributes']) && is_array($config['attributes'])) {
+                    if (!isset($config['attributes']['attribute'][0])) {
+                        $config['attributes'] = [$config['attributes']['attribute']];
+                    } else {
+                        $config['attributes'] = $config['attributes']['attribute'];
                     }
                 }
             }
+        } else {
+            throw new ValidatorException(__('Configurable product config is invalid'));
         }
-        return $result;
+
+        return $configurableConfigs;
     }
 
     /**
-     * Get configurable products value.
-     *
-     * @return int
+     * @param array $config
+     * @return \Closure
      */
-    protected function getConfigurableProductsValue()
+    private function getConfigurableCategory($config)
     {
-        return $this->fixtureModel->getValue('configurable_products', 0);
+        if (isset($config['category'])) {
+            return function ($index, $entityNumber) use ($config) {
+                $websiteClosure = $this->getConfigurableWebsiteIdsClosure();
+                $websites = $websiteClosure($index, $entityNumber);
+
+                return $this->categoryResolver->getCategory(
+                    array_shift($websites),
+                    $config['category']
+                );
+            };
+        } else {
+            return function ($index, $entityNumber) {
+                return $this->websiteCategoryProvider->getCategoryId($entityNumber);
+            };
+        }
+    }
+
+    /**
+     * @param array $config
+     * @param string $attributeSetName
+     * @return string
+     */
+    private function getConfigurableSkuPattern($config, $attributeSetName)
+    {
+        $sku = isset($config['sku']) ? $config['sku'] : null;
+        if (!$sku) {
+            $sku = 'Configurable Product ' . $attributeSetName . ' %s';
+        }
+        if (false === strpos($sku, '%s')) {
+            $sku .= ' %s';
+        }
+
+        return $sku;
+    }
+
+    /**
+     * Provide attribute set based on attributes configuration
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function getCustomAttributeSet(array $attributes)
+    {
+        $attributeSetHash = crc32($this->serializer->serialize($attributes));
+        $attributeSetName = sprintf('Dynamic Attribute Set %s', $attributeSetHash);
+
+        $pattern = $this->attributePattern->generateAttributeSet(
+            $attributeSetName,
+            count($attributes),
+            array_column($attributes, 'options'),
+            function ($index, $attribute) use ($attributeSetName, $attributes, $attributeSetHash) {
+                $swatch = [];
+                $attributeCode = substr(
+                    sprintf('ca_%s_%s', $index, $attributeSetHash),
+                    0,
+                    Attribute::ATTRIBUTE_CODE_MAX_LENGTH
+                );
+                $data = [
+                    'attribute_code' => $attributeCode,
+                    'frontend_label' => 'Dynamic Attribute ' . $attributeCode,
+                ];
+
+                if (isset($attributes[$index - 1]['swatches'])) {
+                    $data['is_visible_in_advanced_search'] = 1;
+                    $data['is_searchable'] = 1;
+                    $data['is_filterable'] = 1;
+                    $data['is_filterable_in_search'] = 1;
+                    $data['used_in_product_listing'] = 1;
+
+                    $swatch = $this->swatchesGenerator->generateSwatchData(
+                        (int) $attributes[$index-1]['options'],
+                        $attributeSetName . $index,
+                        $attributes[$index-1]['swatches']
+                    );
+                }
+
+                return array_replace_recursive(
+                    $attribute,
+                    $data,
+                    $swatch
+                );
+            }
+        );
+
+        return $this->attributeSetsFixture->createAttributeSet($pattern);
+    }
+
+    /**
+     * @return array
+     */
+    private function getSearchConfig()
+    {
+        if (!$this->searchConfig) {
+            $this->searchConfig = $this->fixtureModel->getValue('search_config', null);
+        }
+        return $this->searchConfig;
+    }
+
+    /**
+     * @param string $name
+     * @return int|mixed
+     */
+    private function getSearchConfigValue($name)
+    {
+        return $this->getSearchConfig() === null
+            ? 0 : ($this->getSearchConfig()[$name] === null ? 0 : $this->getSearchConfig()[$name]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getSearchTerms()
+    {
+        $searchTerms = $this->fixtureModel->getValue('search_terms', null);
+        if ($searchTerms !== null) {
+            $searchTerms = array_key_exists(0, $searchTerms['search_term'])
+                ? $searchTerms['search_term'] : [$searchTerms['search_term']];
+        }
+        return $searchTerms;
     }
 
     /**
@@ -674,150 +729,176 @@ class ConfigurableProductsFixture extends SimpleProductsFixture
      *
      * @return int
      */
-    protected function getConfigurableProductsVariationsValue()
+    private function getConfigurableProductsVariationsValue()
     {
         return $this->fixtureModel->getValue('configurable_products_variation', 3);
-    }
-
-    /**
-     * Get attribute set closure
-     *
-     * @param array $attributes
-     * @param array $result
-     * @return \Closure
-     */
-    protected function getAttributeSetClosure(array $attributes, array $result)
-    {
-        return function ($index) use ($attributes, $result) {
-            mt_srand($index);
-            $attributeSet =  (count(array_keys($attributes)) > (($index - 1) % count($result))
-                ? array_keys($attributes)[mt_rand(0, count(array_keys($attributes)) - 1)] : 'Default');
-            return $attributeSet;
-        };
     }
 
     /**
      * Get additional attributes closure.
      *
      * @param array $attributes
-     * @param array $result
-     * @return \Closure
-     */
-    protected function getAdditionalAttributesClosure(array $attributes, array $result)
-    {
-        return function ($index, $variationIndex) use ($attributes, $result) {
-            $attributeValues = '';
-            mt_srand($index);
-            $attributeSetCode = (count(array_keys($attributes)) > (($index - 1) % count($result))
-                ? array_keys($attributes)[mt_rand(0, count(array_keys($attributes)) - 1)] : 'Default');
-            if ($attributeSetCode !== 'Default') {
-                foreach ($attributes[$attributeSetCode] as $attribute) {
-                    $attributeValues = $attributeValues . $attribute['name'] . "=" .
-                        $attribute['values'][$variationIndex %  count($attribute['values'])] . ",";
-                }
-            }
-            return trim($attributeValues, ",");
-        };
-    }
-
-    /**
-     * Get variations closure.
-     *
-     * @param array $attributes
-     * @param array $result
      * @param int $variationCount
      * @return \Closure
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function getVariationsClosure(array $attributes, array $result, $variationCount)
+    private function getAdditionalAttributesClosure(array $attributes, $variationCount)
     {
-        return function ($index, $variationIndex) use ($attributes, $result, $variationCount) {
-            mt_srand($index);
-            $attributeSetCode = (count(array_keys($attributes)) > (($index - 1) % count($result))
-                ? array_keys($attributes)[mt_rand(0, count(array_keys($attributes)) - 1)] : 'Default');
-            $skus = [];
-            for ($i = 1; $i <= $variationCount; $i++) {
-                $skus[] = 'sku=' . sprintf($this->getConfigurableOptionSkuPattern(), $index) . $i;
-            }
-            $values = [];
-            if ($attributeSetCode == 'Default') {
-                for ($i = 1; $i <= $variationCount; $i++) {
-                    $values[] = 'configurable_variation=option ' . $i;
+        $optionsPerAttribute = array_map(function ($attr) {
+            return count($attr['values']);
+        }, $attributes);
+        $variationsMatrix = $this->generateVariationsMatrix(count($attributes), $optionsPerAttribute);
+
+        return function ($attributeSetId, $index, $entityNumber) use ($attributes, $variationCount, $variationsMatrix) {
+            $variationIndex = $this->getConfigurableVariationIndex($entityNumber, $variationCount) - 1;
+            if (isset($variationsMatrix[$variationIndex])) {
+                $tempProductData = [];
+                foreach ($variationsMatrix[$variationIndex] as $attributeIndex => $optionIndex) {
+                    $attributeCode = $attributes[$attributeIndex]['name'];
+                    $option = $attributes[$attributeIndex]['values'][$optionIndex];
+                    $tempProductData[$attributeCode] = $option;
                 }
-            } else {
-                for ($i = $variationCount; $i > 0; $i--) {
-                    $attributeValues = '';
-                    foreach ($attributes[$attributeSetCode] as $attribute) {
-                        $attributeValues = $attributeValues . $attribute['name'] . "=" .
-                            $attribute['values'][($variationIndex - $i) % count($attribute['values'])] . ",";
-                    }
-                    $values [] = $attributeValues;
-                }
+                return $tempProductData;
             }
-            $variations = [];
-            for ($i = 0; $i < $variationCount; $i++) {
-                $variations[] = trim(implode(",", [$skus[$i], $values[$i]]), ",");
-            }
-            return implode("|", $variations);
+
+            return [];
         };
     }
 
     /**
-     * Get configurable product sku pattern.
-     *
-     * @return string
+     * Generates matrix of all possible variations.
+     * @param int $attributesPerSet
+     * @param int $optionsPerAttribute
+     * @return array
      */
-    private function getConfigurableProductSkuPattern()
+    private function generateVariationsMatrix($attributesPerSet, $optionsPerAttribute)
     {
-        return 'Configurable Product ' . $this->getConfigurableProductPrefix() . ' %s';
+        $variationsMatrix = null;
+        for ($i = 0; $i < $attributesPerSet; $i++) {
+            $variationsMatrix[] = range(0, $optionsPerAttribute[$i] - 1);
+        }
+        return $this->generateVariations($variationsMatrix);
+    }
+
+    /**
+     * Build all possible variations based on attributes and options count.
+     * @param array|null $variationsMatrix
+     * @return array
+     */
+    private function generateVariations($variationsMatrix)
+    {
+        if (!$variationsMatrix) {
+            return [[]];
+        }
+        $set = array_shift($variationsMatrix);
+        $subset = $this->generateVariations($variationsMatrix);
+        $result = [];
+        foreach ($set as $value) {
+            foreach ($subset as $subValue) {
+                array_unshift($subValue, $value);
+                $result[] = $subValue;
+            }
+        }
+        return $result;
     }
 
     /**
      * Get configurable option sku pattern.
      *
+     * @param string $skuPattern
      * @return string
      */
-    protected function getConfigurableOptionSkuPattern()
+    private function getConfigurableOptionSkuPattern($skuPattern)
     {
-        return 'Configurable Product ' . $this->getConfigurableProductPrefix() . '%s-option';
+        return $skuPattern . ' - option %s';
     }
 
     /**
-     * Get url key prefix.
-     *
-     * @return string
+     * @param array|null $searchTerms
+     * @param int $simpleProductsCount
+     * @param int $configurableProductsCount
+     * @param int $maxAmountOfWordsDescription
+     * @param int $minAmountOfWordsDescription
+     * @param string $descriptionPrefix
+     * @return \Closure
      */
-    private function getUrlKeyPrefix()
-    {
-        return 'configurable-product' . $this->getConfigurableProductPrefix() . '-%s';
+    private function getDescriptionClosure(
+        $searchTerms,
+        $simpleProductsCount,
+        $configurableProductsCount,
+        $maxAmountOfWordsDescription,
+        $minAmountOfWordsDescription,
+        $descriptionPrefix = 'description'
+    ) {
+        if (null === $this->dataGenerator) {
+            $fileName = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'dictionary.csv';
+            $this->dataGenerator = new DataGenerator(realpath($fileName));
+        }
+
+        return function ($index) use (
+            $searchTerms,
+            $simpleProductsCount,
+            $configurableProductsCount,
+            $maxAmountOfWordsDescription,
+            $minAmountOfWordsDescription,
+            $descriptionPrefix
+        ) {
+            $count = $searchTerms === null
+                ? 0
+                : round(
+                    $searchTerms[$index % count($searchTerms)]['count'] * (
+                        $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
+                    )
+                );
+            mt_srand($index);
+            return $this->dataGenerator->generate(
+                $minAmountOfWordsDescription,
+                $maxAmountOfWordsDescription,
+                $descriptionPrefix . '-' . $index
+            ) .
+            ($index <= ($count * count($searchTerms)) ? ' ' .
+            $searchTerms[$index % count($searchTerms)]['term'] : '');
+        };
     }
 
     /**
-     * Get option url key prefix.
+     * Convert attribute set data to db format for use in simple product generation
      *
-     * @return string
+     * @param array $attributeSet
+     * @return array
      */
-    private function getOptionUrlKeyPrefix()
+    private function convertAttributesToDBFormat(array $attributeSet)
     {
-        return 'simple-of-configurable-product' . $this->getConfigurableProductPrefix();
-    }
+        $attributeSetName = $attributeSet['name'];
+        $attributeSetId = null;
+        $attributes = [];
+        foreach ($attributeSet['attributes'] as $attributeData) {
+            $attributeCollection = $this->attributeCollectionFactory->create();
 
-    /**
-     * Get additional configurations for configurable products.
-     *
-     * @return string|null
-     */
-    private function getAdditionalConfigurableProductsVariations()
-    {
-        return $this->fixtureModel->getValue('configurable_products_variations', null);
-    }
+            $attributeCollection->setAttributeSetFilterBySetName($attributeSetName, Product::ENTITY);
+            $attributeCollection->addFieldToFilter(
+                'attribute_code',
+                $attributeData['name']
+            );
+            /** @var Attribute $attribute */
+            foreach ($attributeCollection as $attribute) {
+                $attributeSetId = $attribute->getAttributeSetId();
+                $values = [];
+                $options = $attribute->getOptions();
+                foreach ($options ?: [] as $option) {
+                    if ($option->getValue()) {
+                        $values[] = $option->getValue();
+                    }
+                }
+                $attributes[] =
+                    [
+                        'name' => $attribute->getAttributeCode(),
+                        'id' => $attribute->getAttributeId(),
+                        'values' => $values
+                    ];
+            }
+        }
 
-    /**
-     * Get configurable product prefix.
-     *
-     * @return string
-     */
-    protected function getConfigurableProductPrefix()
-    {
-        return '';
+        return ['id' => $attributeSetId, 'name' => $attributeSetName, 'attributes' => $attributes];
     }
 }

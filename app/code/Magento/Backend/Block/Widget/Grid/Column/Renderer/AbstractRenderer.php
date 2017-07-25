@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
@@ -10,7 +10,9 @@ use Magento\Framework\DataObject;
 
 /**
  * Backend grid item abstract renderer
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {

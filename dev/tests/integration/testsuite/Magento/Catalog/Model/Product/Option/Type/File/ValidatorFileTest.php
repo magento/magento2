@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type\File;
@@ -282,9 +282,9 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         return [
             'type' => 'image/jpeg',
             'title' => 'test.jpg',
-            'quote_path' => 'custom_options/quote/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
-            'order_path' => 'custom_options/order/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
-            'size' => '3300',
+            'quote_path' => 'custom_options/quote/t/e/a071b9ffc8fda6df1652c05a4c61bf8a.jpg',
+            'order_path' => 'custom_options/order/t/e/a071b9ffc8fda6df1652c05a4c61bf8a.jpg',
+            'size' => '3046',
             'width' => 136,
             'height' => 131,
         ];

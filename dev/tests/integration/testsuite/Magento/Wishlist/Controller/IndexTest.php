@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller;
@@ -158,7 +158,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $actualResult = \Zend_Mime_Decode::decodeQuotedPrintable(
-            $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
 
         $this->assertStringMatchesFormat(

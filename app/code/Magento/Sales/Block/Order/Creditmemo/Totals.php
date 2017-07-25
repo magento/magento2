@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ namespace Magento\Sales\Block\Order\Creditmemo;
 
 use Magento\Sales\Model\Order\Creditmemo;
 
+/**
+ * @api
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
@@ -100,20 +103,20 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         /**
                 <?php if ($this->getCanDisplayTotalPaid()): ?>
                 <tr>
-           <td colspan="6" class="a-right"><strong><?php echo __('Total Paid') ?></strong></td>
-           <td class="last a-right"><strong><?php echo $_order->formatPrice($_creditmemo->getTotalPaid()) ?></strong></td>
+           <td colspan="6" class="a-right"><strong><?= __('Total Paid') ?></strong></td>
+           <td class="last a-right"><strong><?= $_order->formatPrice($_creditmemo->getTotalPaid()) ?></strong></td>
                 </tr>
                 <?php endif; ?>
                 <?php if ($this->getCanDisplayTotalRefunded()): ?>
                 <tr>
-           <td colspan="6" class="a-right"><strong><?php echo __('Total Refunded') ?></strong></td>
-           <td class="last a-right"><strong><?php echo $_order->formatPrice($_creditmemo->getTotalRefunded()) ?></strong></td>
+           <td colspan="6" class="a-right"><strong><?= __('Total Refunded') ?></strong></td>
+           <td class="last a-right"><strong><?= $_order->formatPrice($_creditmemo->getTotalRefunded()) ?></strong></td>
                 </tr>
                 <?php endif; ?>
                 <?php if ($this->getCanDisplayTotalDue()): ?>
                 <tr>
-           <td colspan="6" class="a-right"><strong><?php echo __('Total Due') ?></strong></td>
-           <td class="last a-right"><strong><?php echo $_order->formatPrice($_creditmemo->getTotalDue()) ?></strong></td>
+           <td colspan="6" class="a-right"><strong><?= __('Total Due') ?></strong></td>
+           <td class="last a-right"><strong><?= $_order->formatPrice($_creditmemo->getTotalDue()) ?></strong></td>
                 </tr>
                 <?php endif; ?>
         */

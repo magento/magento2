@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,8 +30,8 @@
 
     <preference for="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface" type="Magento\CatalogInventory\Model\StockRegistryProvider" />
     <preference for="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface" type="Magento\CatalogInventory\Model\StockStateProvider" />
-    
-    <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="\Magento\CatalogInventory\Model\ResourceModel\Stock" />
+
+    <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock" />
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
@@ -58,7 +58,7 @@
         </arguments>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Group">
-        <plugin name="storeGroupResourceAroundBeforeSave" type="\Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
+        <plugin name="storeGroupResourceAroundBeforeSave" type="Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
@@ -69,7 +69,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="catalogInventoryAfterLoad" type="\Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
+        <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="catalogInventoryAroundSave" sortOrder="20" type="Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
@@ -83,6 +83,31 @@
         <arguments>
             <argument name="baseSelectProcessors" xsi:type="array">
                 <item name="stock_status" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator" type="Magento\Framework\Indexer\IndexTableRowSizeEstimator">
+        <arguments>
+            <argument name="rowMemorySize" xsi:type="number">100</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <arguments>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="default" xsi:type="number">200</item>
+            </argument>
+            <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Framework\Data\CollectionModifier">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="stockStatusCondition" xsi:type="object">Magento\CatalogInventory\Model\ProductCollectionStockCondition</item>
             </argument>
         </arguments>
     </type>

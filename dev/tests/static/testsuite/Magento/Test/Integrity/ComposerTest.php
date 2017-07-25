@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -99,7 +99,12 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
         $appFactory = self::$objectManager->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $app = $appFactory->create();
-        $app->runComposerCommand(['command' => 'validate'], $path);
+
+        try {
+            $app->runComposerCommand(['command' => 'validate'], $path);
+        } catch (\RuntimeException $exception) {
+            $this->fail($exception->getMessage());
+        }
     }
 
     /**

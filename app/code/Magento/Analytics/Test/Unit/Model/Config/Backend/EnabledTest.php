@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,14 @@ namespace Magento\Analytics\Test\Unit\Model\Config\Backend;
 
 use Magento\Analytics\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class EnabledTest
+ */
 class EnabledTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,6 +29,11 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     private $loggerMock;
 
     /**
+     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
+
+    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -33,6 +42,16 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
      * @var Enabled
      */
     private $enabledModel;
+
+    /**
+     * @var int
+     */
+    private $valueEnabled = 1;
+
+    /**
+     * @var int
+     */
+    private $valueDisabled = 0;
 
     /**
      * @return void
@@ -47,6 +66,10 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->enabledModel = $this->objectManagerHelper->getObject(
@@ -54,6 +77,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
             [
                 'subscriptionHandler' => $this->subscriptionHandlerMock,
                 '_logger' => $this->loggerMock,
+                'config' => $this->configMock,
             ]
         );
     }
@@ -61,12 +85,72 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testAfterSaveSuccess()
+    public function testAfterSaveSuccessEnabled()
     {
+        $this->enabledModel->setData('value', $this->valueEnabled);
+
+        $this->configMock
+            ->expects($this->any())
+            ->method('getValue')
+            ->willReturn(!$this->valueEnabled);
+
         $this->subscriptionHandlerMock
             ->expects($this->once())
-            ->method('process')
-            ->with($this->enabledModel)
+            ->method('processEnabled')
+            ->with()
+            ->willReturn(true);
+
+        $this->assertInstanceOf(
+            Value::class,
+            $this->enabledModel->afterSave()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveSuccessDisabled()
+    {
+        $this->enabledModel->setData('value', $this->valueDisabled);
+
+        $this->configMock
+            ->expects($this->any())
+            ->method('getValue')
+            ->willReturn(!$this->valueDisabled);
+
+        $this->subscriptionHandlerMock
+            ->expects($this->once())
+            ->method('processDisabled')
+            ->with()
+            ->willReturn(true);
+
+        $this->assertInstanceOf(
+            Value::class,
+            $this->enabledModel->afterSave()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveSuccessValueNotChanged()
+    {
+        $this->enabledModel->setData('value', null);
+
+        $this->configMock
+            ->expects($this->any())
+            ->method('getValue')
+            ->willReturn(null);
+
+        $this->subscriptionHandlerMock
+            ->expects($this->never())
+            ->method('processEnabled')
+            ->with()
+            ->willReturn(true);
+        $this->subscriptionHandlerMock
+            ->expects($this->never())
+            ->method('processDisabled')
+            ->with()
             ->willReturn(true);
 
         $this->assertInstanceOf(
@@ -82,11 +166,12 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     public function testExecuteAfterSaveFailedWithLocalizedException()
     {
         $exception = new \Exception('Message');
+        $this->enabledModel->setData('value', $this->valueEnabled);
 
         $this->subscriptionHandlerMock
             ->expects($this->once())
-            ->method('process')
-            ->with($this->enabledModel)
+            ->method('processEnabled')
+            ->with()
             ->willThrowException($exception);
 
         $this->loggerMock

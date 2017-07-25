@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Xml;
@@ -111,7 +111,9 @@ class Parser
                         $value = ['_value' => $value, '_attribute' => $attributes];
                     }
                     if (isset($content[$node->nodeName])) {
-                        if (!isset($content[$node->nodeName][0]) || !is_array($content[$node->nodeName][0])) {
+                        if ((is_string($content[$node->nodeName]) || !isset($content[$node->nodeName][0]))
+                            || (is_array($value) && !is_array($content[$node->nodeName][0]))
+                        ) {
                             $oldValue = $content[$node->nodeName];
                             $content[$node->nodeName] = [];
                             $content[$node->nodeName][] = $oldValue;

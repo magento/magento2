@@ -7,10 +7,11 @@ jMeter:
 -- go to http://jmeter.apache.org/download_jmeter.cgi and download jMeter in Binary section (pay you attention that Java 6 or later is required)
 -- unzip archive
 
-Plugins (only if you want to use additional reports (like graphs)):
--- go to http://jmeter-plugins.org/downloads/all/ and download JMeterPlugins-Standard and JMeterPlugins-Extras
--- unzip them to appropriate ext directory of your jMeter instance.
--- additional reports can now be added via GUI.
+Json Plugins:
+-- go to https://jmeter-plugins.org/install/Install/
+-- download plugins-manager.jar and put it into <JMeter path>/lib/ext directory, then restart JMeter
+-- follow instructions from https://jmeter-plugins.org/wiki/PluginsManager/ to open Plugins Manager
+-- select Json Plugins in plugins listing from "Available Plugins" tab, then click "Apply changes and restart JMeter" button
 
 
 Usage
@@ -85,3 +86,6 @@ Details http://jmeter.apache.org/usermanual/component_reference.html#View_Result
 
 About other types read on
 http://jmeter.apache.org/usermanual/component_reference.html
+
+About fixtures generation
+http://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-perf-data.html

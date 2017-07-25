@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -11,6 +11,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
+use Magento\Customer\Model\Customer\CredentialsValidator;
+use Magento\Framework\App\ObjectManager;
 
 class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -26,20 +28,29 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
 
     /**
+     * @var CredentialsValidator
+     */
+    private $credentialsValidator;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
+     * @param CredentialsValidator|null $credentialsValidator
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         AccountManagementInterface $accountManagement,
-        CustomerRepositoryInterface $customerRepository
+        CustomerRepositoryInterface $customerRepository,
+        CredentialsValidator $credentialsValidator = null
     ) {
         $this->session = $customerSession;
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
+        $this->credentialsValidator = $credentialsValidator ?: ObjectManager::getInstance()
+            ->get(CredentialsValidator::class);
         parent::__construct($context);
     }
 
@@ -72,6 +83,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 
         try {
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
+            $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
             $this->accountManagement->resetPassword($customerEmail, $resetPasswordToken, $password);
             $this->session->unsRpToken();
             $this->session->unsRpCustomerId();

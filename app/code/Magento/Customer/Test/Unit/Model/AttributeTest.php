@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,11 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Metadata\AttributeMetadataCache;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Customer\Model\Metadata\AttributeMetadataCache;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -126,11 +127,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $dateTimeFormatter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $attributeCacheMock;
-
-    /**
      * @var \Magento\Customer\Model\Metadata\AttributeMetadataCache|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeMetadataCacheMock;
@@ -208,9 +204,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->indexerRegistryMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->attributeMetadataCacheMock = $this->getMockBuilder(AttributeMetadataCache::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -235,7 +228,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'dateTimeFormatter' => $this->dateTimeFormatter,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'resource' => $this->resourceMock,
-                'attributeCache' => $this->attributeCacheMock,
                 'attributeMetadataCache' => $this->attributeMetadataCacheMock
             ]
         );

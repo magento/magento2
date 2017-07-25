@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
 
-use Magento\Cms\Api\Data;
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Api\Data;
+use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -110,8 +110,10 @@ class BlockRepository implements BlockRepositoryInterface
      */
     public function save(Data\BlockInterface $block)
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        $block->setStoreId($storeId);
+        if (empty($block->getStoreId())) {
+            $block->setStoreId($this->storeManager->getStore()->getId());
+        }
+
         try {
             $this->resource->save($block);
         } catch (\Exception $exception) {
@@ -152,25 +154,10 @@ class BlockRepository implements BlockRepositoryInterface
 
         $this->collectionProcessor->process($criteria, $collection);
 
-        $blocks = [];
-        /** @var Block $blockModel */
-        foreach ($collection as $blockModel) {
-            $blockData = $this->dataBlockFactory->create();
-            $this->dataObjectHelper->populateWithArray(
-                $blockData,
-                $blockModel->getData(),
-                \Magento\Cms\Api\Data\BlockInterface::class
-            );
-            $blocks[] = $this->dataObjectProcessor->buildOutputDataArray(
-                $blockData,
-                \Magento\Cms\Api\Data\BlockInterface::class
-            );
-        }
-
         /** @var Data\BlockSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
-        $searchResults->setItems($blocks);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }

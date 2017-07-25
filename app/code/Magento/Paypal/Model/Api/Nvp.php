@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -914,15 +914,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Made additional request to paypal to get autharization id
+     * Made additional request to PayPal to get authorization id
      *
      * @return void
      */
     public function callDoReauthorization()
     {
-        $request = $this->_export($this->_doReauthorizationRequest);
+        $request = $this->_exportToRequest($this->_doReauthorizationRequest);
         $response = $this->call('DoReauthorization', $request);
-        $this->_import($response, $this->_doReauthorizationResponse);
+        $this->_importFromResponse($this->_doReauthorizationResponse, $response);
     }
 
     /**
@@ -1285,6 +1285,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         );
         $this->_logger->critical($exceptionLogMessage);
 
+        /**
+         * The response code 10415 'Transaction has already been completed for this token'
+         * must not fails place order. The old Paypal interface does not lock 'Send' button
+         * it may result to re-send data.
+         */
+        if (in_array((string)ProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED, $this->_callErrors)) {
+            return;
+        }
+
         $exceptionPhrase = __('PayPal gateway has rejected request. %1', $errorMessages);
 
         /** @var \Magento\Framework\Exception\LocalizedException $exception */
@@ -1482,9 +1491,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected function _applyStreetAndRegionWorkarounds(\Magento\Framework\DataObject $address)
     {
         // merge street addresses into 1
-        if ($address->hasStreet2()) {
-            $address->setStreet(implode("\n", [$address->getStreet(), $address->getStreetLine(2)]));
-            $address->unsStreet2();
+        if ($address->getData('street2') !== null) {
+            $address->setStreet(implode("\n", [$address->getData('street'), $address->getData('street2')]));
+            $address->unsetData('street2');
         }
         // attempt to fetch region_id from directory
         if ($address->getCountryId() && $address->getRegion()) {

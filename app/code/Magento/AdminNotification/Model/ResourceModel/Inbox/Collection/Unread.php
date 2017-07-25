@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
+/**
+ * @api
+ */
 class Unread extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
 {
     /**

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Checkout\Onepage\Success;
 
 /**
  * Billing agreement information on Order success page
+ *
+ * @api
  */
 class BillingAgreement extends \Magento\Framework\View\Element\Template
 {

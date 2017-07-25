@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,10 +12,10 @@
     <ul class="dashboard-totals-list">
         <?php foreach ($block->getTotals() as $_total): ?>
             <li class="dashboard-totals-item">
-                <span class="dashboard-totals-label"><?php /* @escapeNotVerified */ echo $_total['label'] ?></span>
+                <span class="dashboard-totals-label"><?= /* @escapeNotVerified */ $_total['label'] ?></span>
                 <strong class="dashboard-totals-value">
-                    <?php /* @escapeNotVerified */ echo $_total['value'] ?>
-                    <span class="dashboard-totals-decimals"><?php /* @escapeNotVerified */ echo $_total['decimals'] ?></span>
+                    <?= /* @escapeNotVerified */ $_total['value'] ?>
+                    <span class="dashboard-totals-decimals"><?= /* @escapeNotVerified */ $_total['decimals'] ?></span>
                 </strong>
             </li>
         <?php endforeach; ?>

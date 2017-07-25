@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -8,10 +8,12 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
+use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
@@ -21,19 +23,19 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
+use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
-use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
-use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Class Eav
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -553,7 +555,7 @@ class Eav extends AbstractModifier
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
-            'notice' => $attribute->getNote(),
+            'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),
@@ -798,8 +800,7 @@ class Eav extends AbstractModifier
      */
     private function getScopeLabel(ProductAttributeInterface $attribute)
     {
-        if (
-            $this->storeManager->isSingleStoreMode()
+        if ($this->storeManager->isSingleStoreMode()
             || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
         ) {
             return '';

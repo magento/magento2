@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,32 +26,51 @@ class ReportProvider
     private $connectionFactory;
 
     /**
+     * @var IteratorFactory
+     */
+    private $iteratorFactory;
+
+    /**
      * ReportProvider constructor.
+     *
      * @param QueryFactory $queryFactory
      * @param ConnectionFactory $connectionFactory
+     * @param IteratorFactory $iteratorFactory
      */
     public function __construct(
         QueryFactory $queryFactory,
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
+        IteratorFactory $iteratorFactory
     ) {
         $this->queryFactory = $queryFactory;
         $this->connectionFactory = $connectionFactory;
+        $this->iteratorFactory = $iteratorFactory;
+    }
+
+    /**
+     * Returns custom iterator name for report
+     * Null for default
+     *
+     * @param Query $query
+     * @return string|null
+     */
+    private function getIteratorName(Query $query)
+    {
+        $config = $query->getConfig();
+        return isset($config['iterator']) ? $config['iterator'] : null;
     }
 
     /**
      * Returns report data by name and criteria
      *
      * @param string $name
-     * @param SearchCriteria|null $criteria
      * @return \IteratorIterator
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getReport($name, SearchCriteria $criteria = null)
+    public function getReport($name)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
         $statement = $connection->query($query->getSelect());
-        return new \IteratorIterator($statement);
-
+        return $this->iteratorFactory->create($statement, $this->getIteratorName($query));
     }
 }

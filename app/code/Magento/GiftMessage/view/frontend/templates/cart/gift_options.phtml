@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -9,11 +9,11 @@
     <script type="text/x-magento-init">
         {
             "#gift-options-cart": {
-                "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+                "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
             }
         }
     </script>
     <script>
-        window.giftOptionsConfig = <?php /* @escapeNotVerified */ echo $block->getGiftOptionsConfigJson(); ?>;
+        window.giftOptionsConfig = <?= /* @escapeNotVerified */ $block->getGiftOptionsConfigJson() ?>;
     </script>
 </div>

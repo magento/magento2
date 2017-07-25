@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -11,11 +11,9 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Data collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ *
+ * @api
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -500,7 +498,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function walk($callback, array $args = [])
     {
-    	 $results = [];
+        $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
             $params = $args;
@@ -516,17 +514,29 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
-     * @param string|array $objMethod
+     * Call method or callback on each item in the collection.
+     * 
+     * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
      */
     public function each($objMethod, $args = [])
     {
-        foreach ($args->_items as $k => $item) {
-            $args->_items[$k] = call_user_func($objMethod, $item);
+        if ($objMethod instanceof \Closure) {
+            foreach ($this->getItems() as $item) {
+                $objMethod($item, ...$args);
+            }
+        } elseif (is_array($objMethod)) {
+            foreach ($this->getItems() as $item) {
+                call_user_func($objMethod, $item, ...$args);
+            }
+        } else {
+            foreach ($this->getItems() as $item) {
+                $item->$objMethod(...$args);
+            }
         }
     }
-
+    
     /**
      * Setting data for all collection items
      *

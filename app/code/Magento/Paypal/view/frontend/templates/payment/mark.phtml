@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,11 +13,11 @@
 $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
 ?>
 <!-- PayPal Logo -->
-<img src="<?php echo $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
-     alt="<?php echo $block->escapeHtml(__('Acceptance Mark')); ?>" class="paypal icon"/>
-<a href="<?php /* @noEscape */ echo $url; ?>"
+<img src="<?= $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
+     alt="<?= $block->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
+<a href="<?= /* @noEscape */ $url ?>"
    onclick="javascript:window.open(
-           '<?php /* @noEscape */ echo $url; ?>',
+           '<?= /* @noEscape */ $url ?>',
            'olcwhatispaypal',
            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
            'left=0, top=0, width=400, height=350'

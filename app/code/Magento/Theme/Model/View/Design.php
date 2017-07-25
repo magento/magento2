@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -254,6 +254,16 @@ class Design implements \Magento\Framework\View\DesignInterface
             $this->_locale = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         }
         return $this->_locale->getLocale();
+    }
+
+    /**
+     * @param \Magento\Framework\Locale\ResolverInterface $locale
+     * @return $this
+     */
+    public function setLocale(\Magento\Framework\Locale\ResolverInterface $locale)
+    {
+        $this->_locale = $locale;
+        return $this;
     }
 
     /**

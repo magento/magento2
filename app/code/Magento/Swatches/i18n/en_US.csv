@@ -15,7 +15,7 @@ Delete,Delete
 "Upload a file","Upload a file"
 Clear,Clear
 "Step 2: Attribute Values","Step 2: Attribute Values"
-"Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU."
+"Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU."
 "Sort Variations","Sort Variations"
 Options,Options
 "Select All","Select All"
@@ -34,4 +34,5 @@ Image,Image
 "Example format: 200x300.","Example format: 200x300."
 "Image Position","Image Position"
 "The value of Admin must be unique.","The value of Admin must be unique."
+"The value of Admin must be unique. (%1)","The value of Admin must be unique. (%1)"
 Description,Description

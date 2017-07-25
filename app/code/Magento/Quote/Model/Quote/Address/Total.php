@@ -1,21 +1,26 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * @method string getCode()
+ *
+ * @api
+ */
 class Total extends \Magento\Framework\DataObject
 {
     /**
      * @var array
      */
-    protected $totalAmounts;
+    protected $totalAmounts = [];
 
     /**
      * @var array
      */
-    protected $baseTotalAmounts;
+    protected $baseTotalAmounts = [];
 
     /**
      * Serializer interface instance.

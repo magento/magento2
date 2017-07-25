@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,12 +18,12 @@ require([
 window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
 <?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
-    ajaxBlockParam = 'block/tab_<?php /* @escapeNotVerified */ echo $tabId ?>/';
-    ajaxBlockUrl = '<?php echo $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
+    ajaxBlockParam = 'block/tab_<?= /* @escapeNotVerified */ $tabId ?>/';
+    ajaxBlockUrl = '<?= $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
-            tabContentElementId = '<?php /* @escapeNotVerified */ echo $block->getChildBlock('diagrams')->getId() ?>_<?php /* @escapeNotVerified */ echo $tabId ?>_content';
+            tabContentElementId = '<?= /* @escapeNotVerified */ $block->getChildBlock('diagrams')->getId() ?>_<?= /* @escapeNotVerified */ $tabId ?>_content';
             try {
                 if (transport.responseText.isJSON()) {
                     var response = transport.responseText.evalJSON()
@@ -45,7 +45,7 @@ window.changeDiagramsPeriod = function(periodObj) {
         }
     });
 <?php endforeach; ?>
-    ajaxBlockUrl = '<?php echo $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => '']) ?>' + periodParam;
+    ajaxBlockUrl = '<?= $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => '']) ?>' + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
@@ -78,31 +78,31 @@ window.changeDiagramsPeriod = function(periodObj) {
 <div class="dashboard-container row">
     <div class="dashboard-main col-m-8 col-m-push-4">
         <div class="dashboard-diagram-container">
-            <?php echo $block->getChildHtml('diagrams') ?>
+            <?= $block->getChildHtml('diagrams') ?>
             <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
                 <div id="diagram_tab_content" class="dashboard-diagram-tab-content"></div>
             <?php endif; ?>
         </div>
-        <?php echo $block->getChildHtml('totals') ?>
+        <?= $block->getChildHtml('totals') ?>
         <div class="dashboard-store-stats">
-            <?php echo $block->getChildHtml('grids') ?>
+            <?= $block->getChildHtml('grids') ?>
             <div id="grid_tab_content" class="dashboard-store-stats-content"></div>
-            <?php echo $block->getChildHtml('refresh_statistics') ?>
+            <?= $block->getChildHtml('refresh_statistics') ?>
         </div>
     </div>
     <div class="dashboard-secondary col-m-4 col-m-pull-8">
-        <?php echo $block->getChildHtml('sales') ?>
+        <?= $block->getChildHtml('sales') ?>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?php /* @escapeNotVerified */ echo __('Last Orders') ?></div>
-            <?php echo $block->getChildHtml('lastOrders'); ?>
+            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Last Orders') ?></div>
+            <?= $block->getChildHtml('lastOrders') ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?php /* @escapeNotVerified */ echo __('Last Search Terms') ?></div>
-            <?php echo $block->getChildHtml('lastSearches'); ?>
+            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Last Search Terms') ?></div>
+            <?= $block->getChildHtml('lastSearches') ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?php /* @escapeNotVerified */ echo __('Top Search Terms') ?></div>
-            <?php echo $block->getChildHtml('topSearches'); ?>
+            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Top Search Terms') ?></div>
+            <?= $block->getChildHtml('topSearches') ?>
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,14 @@
             <argument name="storage" xsi:type="object">Magento\CatalogSearch\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
-    <type name="\Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front">
-        <plugin name="search_weigh" type="\Magento\CatalogSearch\Block\Plugin\FrontTabPlugin" />
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front">
+        <plugin name="search_weigh" type="Magento\CatalogSearch\Block\Plugin\FrontTabPlugin" />
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
+        <arguments>
+            <argument name="addFilterStrategies" xsi:type="array">
+                <item name="fulltext" xsi:type="object">Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Block\Component;
 
+/**
+ * Multi steps wizard block
+ *
+ * @api
+ */
 class StepsWizard extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -40,6 +45,7 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     }
 
     // @codeCoverageIgnoreStart
+
     /**
      * @return array
      */
@@ -66,10 +72,12 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
 
     /**
      * @param array $initData
-     * @return array
+     * @return $this
      */
     public function setInitData($initData)
     {
         $this->initData = $initData;
+
+        return $this;
     }
 }

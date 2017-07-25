@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
-use Magento\Catalog\Model\Product\Option\Type\DefaultType;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\DataObject;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class TypeTest
@@ -38,7 +40,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $bundleCollection;
+    protected $bundleCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -76,6 +78,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private $priceCurrency;
 
     /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataPool;
+
+    /**
      * @var Json
      */
     private $serializer;
@@ -85,7 +92,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->bundleCollection =
+        $this->bundleCollectionFactory =
             $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory::class)
             ->setMethods(
                 [
@@ -148,13 +155,17 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
             \Magento\Bundle\Model\Product\Type::class,
             [
                 'bundleModelSelection' => $this->bundleModelSelection,
                 'bundleFactory' => $this->bundleFactory,
-                'bundleCollection' => $this->bundleCollection,
+                'bundleCollection' => $this->bundleCollectionFactory,
                 'bundleOption' => $this->bundleOptionFactory,
                 'catalogData' => $this->catalogData,
                 'storeManager' => $this->storeManager,
@@ -162,7 +173,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'stockState' => $this->stockState,
                 'catalogProduct' => $this->catalogProduct,
                 'priceCurrency' => $this->priceCurrency,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'metadataPool' => $this->metadataPool,
             ]
         );
     }
@@ -315,7 +327,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->setMethods(['getItems'])
+            ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
@@ -430,6 +442,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
+        $selectionCollection->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1);
         $selection->expects($this->once())
             ->method('isSalable')
             ->willReturn(false);
@@ -556,7 +571,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->setMethods(['getItems'])
+            ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
@@ -662,6 +677,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
+        $selectionCollection->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1);
         $selection->expects($this->once())
             ->method('isSalable')
             ->willReturn(false);
@@ -776,7 +794,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->setMethods(['getItems'])
+            ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
@@ -882,6 +900,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
+        $selectionCollection->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1);
         $selection->expects($this->once())
             ->method('isSalable')
             ->willReturn(false);
@@ -1078,7 +1099,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->setMethods(['getItems'])
+            ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
@@ -1157,9 +1178,15 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection->expects($this->at(0))
             ->method('getItems')
             ->willReturn([$selection]);
+        $selectionCollection->expects($this->at(0))
+            ->method('getSize')
+            ->willReturn(1);
         $selectionCollection->expects($this->at(1))
             ->method('getItems')
             ->willReturn([]);
+        $selectionCollection->expects($this->at(1))
+            ->method('getSize')
+            ->willReturn(0);
         $option->expects($this->any())
             ->method('getId')
             ->willReturn(3);
@@ -1195,7 +1222,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->setMethods(['getItems'])
+            ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
@@ -1275,6 +1302,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
+        $selectionCollection->expects($this->any())
+            ->method('getSize')
+            ->willReturn(1);
         $selection->expects($this->once())
             ->method('isSalable')
             ->willReturn(false);
@@ -1816,7 +1846,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @param int $getSelectionsIdsIndex
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-
     protected function getSelectionsByIdsMock($selectionIds, $productMock, $getSelectionsIndex, $getSelectionsIdsIndex)
     {
         $usedSelectionsMock = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
@@ -1918,6 +1947,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $websiteId = 1;
         $storeFilter = 'store_filter';
+        $this->expectProductEntityMetadata();
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1967,7 +1997,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsiteId')
             ->will($this->returnValue($websiteId));
 
-        $this->bundleCollection->expects($this->once())
+        $this->bundleCollectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($usedSelectionsMock));
 
@@ -2138,9 +2168,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option3->method('getId')
             ->willReturn(30);
 
+        $this->expectProductEntityMetadata();
+
         $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2, $option3]);
         $selectionCollectionMock = $this->getSelectionCollectionMock([$option1, $option2]);
-        $this->bundleCollection->expects($this->atLeastOnce())
+        $this->bundleCollectionFactory->expects($this->atLeastOnce())
             ->method('create')
             ->will($this->returnValue($selectionCollectionMock));
 
@@ -2179,8 +2211,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option = $this->getRequiredOptionMock(1, 10);
         $optionCollectionMock = $this->getOptionCollectionMock([$option]);
         $selectionCollectionMock = $this->getSelectionCollectionMock([]);
+        $this->expectProductEntityMetadata();
 
-        $this->bundleCollection->expects($this->once())
+        $this->bundleCollectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($selectionCollectionMock));
 
@@ -2198,38 +2231,40 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function nottestIsSalableWithRequiredOptionsOutOfStock()
+    public function testIsSalableWithNonSalableRequiredOptions()
     {
         $option1 = $this->getRequiredOptionMock(10, 10);
-        $option1
-            ->expects($this->atLeastOnce())
-            ->method('getSelectionCanChangeQty')
-            ->willReturn(false);
-
         $option2 = $this->getRequiredOptionMock(20, 10);
-        $option2
-            ->expects($this->atLeastOnce())
-            ->method('getSelectionCanChangeQty')
+        $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2]);
+        $this->expectProductEntityMetadata();
+
+        $selection1 = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['isSalable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selection1->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+
+        $selection2 = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['isSalable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selection2->expects($this->once())
+            ->method('isSalable')
             ->willReturn(false);
 
-        $this->stockRegistry->method('getStockItem')
-            ->willReturn($this->getStockItem(true));
-        $this->stockState
-            ->method('getStockQty')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [10, 10],
-                        [20, 5]
-                    ]
-                )
-            );
+        $selectionCollectionMock1 = $this->getSelectionCollectionMock([$selection1]);
+        $selectionCollectionMock2 = $this->getSelectionCollectionMock([$selection2]);
 
-        $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2]);
-        $selectionCollectionMock = $this->getSelectionCollectionMock([$option1, $option2]);
-        $this->bundleCollection->expects($this->once())
+        $this->bundleCollectionFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($selectionCollectionMock));
+            ->will($this->onConsecutiveCalls(
+                $selectionCollectionMock1,
+                $selectionCollectionMock2
+            ));
 
         $product = new \Magento\Framework\DataObject(
             [
@@ -2289,14 +2324,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $selectionCollectionMock = $this->getMockBuilder(
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $selectionCollectionMock
-            ->expects($this->any())
-            ->method('getItems')
-            ->willReturn($selectedOptions);
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $selectionCollectionMock
             ->expects($this->any())
@@ -2312,25 +2341,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getOptionCollectionMock(array $options)
     {
-        $ids = [];
-        foreach ($options as $option) {
-            $ids[] = $option->getId();
-        }
-
         $optionCollectionMock = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
-            ->setMethods(['getItems', 'getAllIds'])
+            ->setMethods(['getIterator'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionCollectionMock
-            ->expects($this->any())
-            ->method('getItems')
-            ->willReturn($options);
-
-        $optionCollectionMock
-            ->expects($this->any())
-            ->method('getAllIds')
-            ->willReturn($ids);
+        $optionCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue(new \ArrayIterator($options)));
 
         return $optionCollectionMock;
     }
@@ -2437,6 +2455,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
+        $this->expectProductEntityMetadata();
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
@@ -2444,7 +2463,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $product->expects($this->once())->method('getStoreId')->willReturn('store_id');
         $selectionCollection = $this->getSelectionCollection();
-        $this->bundleCollection->expects($this->once())->method('create')->willReturn($selectionCollection);
+        $this->bundleCollectionFactory->expects($this->once())->method('create')->willReturn($selectionCollection);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $store->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
         $selectionCollection->expects($this->any())->method('joinPrices')->with('website_id')->willReturnSelf();
@@ -2495,6 +2514,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->expectProductEntityMetadata();
         $resourceClassName = \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class;
         $dbResourceMock = $this->getMockBuilder($resourceClassName)
             ->setMethods(['getItems'])
@@ -2505,7 +2525,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId', 'getRequired'])
             ->getMock();
         $selectionCollection = $this->getSelectionCollection();
-        $this->bundleCollection->expects($this->once())->method('create')->willReturn($selectionCollection);
+        $this->bundleCollectionFactory->expects($this->once())->method('create')->willReturn($selectionCollection);
 
         $selectionItem = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
@@ -2553,6 +2573,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'hasData', 'getData', 'setData', 'getId', 'getStoreId'])
             ->getMock();
+        $this->expectProductEntityMetadata();
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])
@@ -2560,9 +2581,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection = $this->getSelectionCollection();
         $selectionCollection
             ->expects($this->any())
-            ->method('count')
+            ->method('getSize')
             ->willReturn(1);
-        $this->bundleCollection->expects($this->once())->method('create')->willReturn($selectionCollection);
+        $this->bundleCollectionFactory->expects($this->once())->method('create')->willReturn($selectionCollection);
 
         $product->expects($this->any())->method('getStoreId')->willReturn(0);
         $product->expects($this->once())
@@ -2589,8 +2610,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockBundleCollection();
         $product = $this->getProductMock();
+        $this->expectProductEntityMetadata();
         $product->method('getCustomOption')->willReturnMap([
-            ['bundle_selection_ids', new DataObject(['value' => ''])],
+            ['bundle_selection_ids', new DataObject(['value' => '[]'])],
             ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => ''])])],
         ]);
         $product->setCustomOption(json_encode([]));
@@ -2614,13 +2636,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockBundleCollection();
         $product = $this->getProductMock();
+        $this->expectProductEntityMetadata();
         $product->method('getCustomOption')->willReturnMap([
             ['bundle_selection_ids', new DataObject(['value' => json_encode([1])])],
             ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => [1]])])],
         ]);
         $product->setCustomOption(json_encode([]));
 
-        $this->bundleCollection->method('getItemById')->willReturn($element);
+        $this->bundleCollectionFactory->method('getItemById')->willReturn($element);
         $this->catalogProduct->setSkipSaleableCheck($check);
 
         try {
@@ -2643,6 +2666,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockBundleCollection();
         $product = $this->getProductMock();
+        $this->expectProductEntityMetadata();
         $product->method('getCustomOption')->willReturnMap([
             ['bundle_selection_ids', new DataObject(['value' => json_encode([])])],
             ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => [1]])])],
@@ -2655,7 +2679,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $falseSelection->method('isSalable')->willReturn(false);
 
-        $this->bundleCollection->method('getItemById')->willReturn($falseSelection);
+        $this->bundleCollectionFactory->method('getItemById')->willReturn($falseSelection);
         $this->catalogProduct->setSkipSaleableCheck(false);
 
         try {
@@ -2708,14 +2732,18 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function mockBundleCollection()
     {
-        $this->bundleCollection->method('create')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('addAttributeToSelect')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('setFlag')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('setPositionOrder')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('addStoreFilter')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('setStoreId')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('addFilterByRequiredOptions')->willReturn($this->bundleCollection);
-        $this->bundleCollection->method('setOptionIdsFilter')->willReturn($this->bundleCollection);
+        $selectionCollectionMock = $this->getSelectionCollectionMock([]);
+        $this->bundleCollectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($selectionCollectionMock));
+        $this->bundleCollectionFactory->method('create')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('addAttributeToSelect')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('setFlag')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('setPositionOrder')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('addStoreFilter')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('setStoreId')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('addFilterByRequiredOptions')->willReturn($selectionCollectionMock);
+        $selectionCollectionMock->method('setOptionIdsFilter')->willReturn($selectionCollectionMock);
     }
 
     /**
@@ -2741,5 +2769,17 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 false
             ],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    private function expectProductEntityMetadata()
+    {
+        $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->getMockForAbstractClass();
+        $this->metadataPool->expects($this->any())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,8 +26,9 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Open created store view
  * 4. Click "Delete Store View"
  * 5. Set "Create DB Backup" according to dataset
- * 6. Click "Delete Store View"
- * 7. Perform all assertions
+ * 6. Click "Delete Store View" - Warning message "This operation can take a long time" appears.
+ * 7. Click "OK".
+ * 8. Perform all assertions
  *
  * @group Store_Management
  * @ZephyrId MAGETWO-27942
@@ -107,5 +108,6 @@ class DeleteStoreEntityTest extends Injectable
         $this->editStore->getFormPageActions()->delete();
         $this->storeDelete->getStoreForm()->fillForm(['create_backup' => $createBackup]);
         $this->storeDelete->getFormPageActions()->delete();
+        $this->storeDelete->getModalBlock()->acceptAlert();
     }
 }

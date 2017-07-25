@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\State;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * A class to manage Magento modes
@@ -122,7 +122,7 @@ class Mode
      */
     public function getMode()
     {
-        $env = $this->reader->load(ConfigFilePool::APP_ENV);
+        $env = $this->reader->load();
         return isset($env[State::PARAM_MODE]) ? $env[State::PARAM_MODE] : null;
     }
 

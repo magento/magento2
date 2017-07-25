@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,8 +16,8 @@
     <noscript>
         <div class="messages">
             <div class="message message-warning message-noscript">
-                <strong><?php /* @escapeNotVerified */ echo __('JavaScript may be disabled in your browser.'); ?></strong>
-                <?php /* @escapeNotVerified */ echo __('To use this website you must first enable JavaScript in your browser.'); ?>
+                <strong><?= /* @escapeNotVerified */ __('JavaScript may be disabled in your browser.') ?></strong>
+                <?= /* @escapeNotVerified */ __('To use this website you must first enable JavaScript in your browser.') ?>
             </div>
         </div>
     </noscript>
@@ -25,7 +25,7 @@
 <?php if ($block->displayDemoNotice()): ?>
     <div class="messages">
         <div class="message message-warning message-demo-mode">
-            <?php /* @escapeNotVerified */ echo __('This is only a demo store. You can browse and place orders, but nothing will be processed.') ?>
+            <?= /* @escapeNotVerified */ __('This is only a demo store. You can browse and place orders, but nothing will be processed.') ?>
         </div>
     </div>
 <?php endif; ?>

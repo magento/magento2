@@ -1,111 +1,121 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\Setup\Model\Generator;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Setup\Model\Customer\CustomerDataGenerator;
+use Magento\Setup\Model\Customer\CustomerDataGeneratorFactory;
+use Magento\Setup\Model\FixtureGenerator\CustomerGenerator;
 
 /**
- * Class CustomersFixture
+ * Generate customers based on profile configuration
+ * Supports the following format:
+ * <customers>{customers amount}</customers>
+ * Customers will have normal distribution on all available websites
+ *
+ * Each customer will have absolutely the same data
+ * except customer email, customer group and customer addresses
+ *
+ * @see \Magento\Setup\Model\FixtureGenerator\CustomerTemplateGenerator
+ * to view general customer data
+ *
+ * @see \Magento\Setup\Model\Customer\CustomerDataGenerator
+ * if you need dynamically change data per each customer
+ *
+ * @see \Magento\Setup\Model\Address\AddressDataGenerator
+ * if you need dynamically change address data per each customer
+ *
+ * @see setup/performance-toolkit/config/customerConfig.xml
+ * here you can change amount of addresses to be generated per each customer
+ * Supports the following format:
+ * <customer-config>
+ *      <addresses-count>{amount of addresses}</addresses-count>
+ * </customer-config>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  */
 class CustomersFixture extends Fixture
 {
     /**
      * @var int
      */
-    protected $priority = 60;
+    protected $priority = 70;
+
+    /**
+     * @var CustomerGenerator
+     */
+    private $customerGenerator;
+
+    /**
+     * @var CustomerDataGeneratorFactory
+     */
+    private $customerDataGeneratorFactory;
+
+    /**
+     * @var array
+     */
+    private $defaultCustomerConfig = [
+        'addresses-count' => 2
+    ];
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @param FixtureModel $fixtureModel
+     * @param CustomerGenerator $customerGenerator
+     * @param CustomerDataGeneratorFactory $customerDataGeneratorFactory
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        FixtureModel $fixtureModel,
+        CustomerGenerator $customerGenerator,
+        CustomerDataGeneratorFactory $customerDataGeneratorFactory,
+        CollectionFactory $collectionFactory
+    ) {
+        parent::__construct($fixtureModel);
+
+        $this->customerGenerator = $customerGenerator;
+        $this->customerDataGeneratorFactory = $customerDataGeneratorFactory;
+        $this->collectionFactory = $collectionFactory;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function execute()
     {
-        $customersNumber = $this->fixtureModel->getValue('customers', 0);
+        $customersNumber = $this->getCustomersAmount();
         if (!$customersNumber) {
             return;
         }
-        $this->fixtureModel->resetObjectManager();
 
-        /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
-        /** @var $defaultStoreView \Magento\Store\Model\Store */
-        $defaultStoreView = $storeManager->getDefaultStoreView();
-        $defaultStoreViewId = $defaultStoreView->getStoreId();
-        $defaultStoreViewCode = $defaultStoreView->getCode();
-
-        $result = [];
-        //Get all websites
-        $websites = $storeManager->getWebsites();
-        foreach ($websites as $website) {
-            $result[] = $website->getCode();
-        }
-        $result = array_values($result);
-
-        $productWebsite = function ($index) use ($result) {
-            return $result[$index % count($result)];
-        };
-
-        $pattern = [
-            'email'                       => 'user_%s@example.com',
-            '_website'                    => $productWebsite,
-            '_store'                      => $defaultStoreViewCode,
-            'confirmation'                => null,
-            'created_at'                  => '30-08-2012 17:43',
-            'created_in'                  => 'Default',
-            'default_billing'             => '1',
-            'default_shipping'            => '1',
-            'disable_auto_group_change'   => '0',
-            'dob'                         => '12-10-1991',
-            'firstname'                   => 'Firstname',
-            'gender'                      => 'Male',
-            'group_id'                    => '1',
-            'lastname'                    => 'Lastname',
-            'middlename'                  => '',
-            'password_hash'               => '',
-            'prefix'                      => null,
-            'rp_token'                    => null,
-            'rp_token_created_at'         => null,
-            'store_id'                    => $defaultStoreViewId,
-            'suffix'                      => null,
-            'taxvat'                      => null,
-            'website_id'                  => '1',
-            'password'                    => '123123q',
-            '_address_city'               => 'Fayetteville',
-            '_address_company'            => '',
-            '_address_country_id'         => 'US',
-            '_address_fax'                => '',
-            '_address_firstname'          => 'Anthony',
-            '_address_lastname'           => 'Nealy',
-            '_address_middlename'         => '',
-            '_address_postcode'           => '123123',
-            '_address_prefix'             => '',
-            '_address_region'             => 'Arkansas',
-            '_address_street'             => '123 Freedom Blvd. #123',
-            '_address_suffix'             => '',
-            '_address_telephone'          => '022-333-4455',
-            '_address_vat_id'             => '',
-            '_address_default_billing_'   => '1',
-            '_address_default_shipping_'  => '1',
-        ];
-        $generator = new Generator($pattern, $customersNumber);
-        /** @var \Magento\ImportExport\Model\Import $import */
-        $import = $this->fixtureModel->getObjectManager()->create(
-            \Magento\ImportExport\Model\Import::class,
-            [
-                'data' => [
-                    'entity' => 'customer_composite',
-                    'behavior' => 'append',
-                    'validation_strategy' => 'validation-stop-on-errors'
-                ]
-            ]
+        /** @var CustomerDataGenerator $customerDataGenerator */
+        $customerDataGenerator = $this->customerDataGeneratorFactory->create(
+            $this->getCustomersConfig()
         );
-        // it is not obvious, but the validateSource() will actually save import queue data to DB
-        $import->validateSource($generator);
-        // this converts import queue into actual entities
-        $import->importSource();
+
+        $fixtureMap = [
+            'customer_data' => function ($customerId) use ($customerDataGenerator) {
+                return $customerDataGenerator->generate($customerId);
+            },
+        ];
+
+        $this->customerGenerator->generate($customersNumber, $fixtureMap);
+    }
+
+    /**
+     * @return int
+     */
+    private function getCustomersAmount()
+    {
+        return max(0, $this->fixtureModel->getValue('customers', 0) - $this->collectionFactory->create()->getSize());
     }
 
     /**
@@ -124,5 +134,13 @@ class CustomersFixture extends Fixture
         return [
             'customers' => 'Customers'
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getCustomersConfig()
+    {
+        return $this->fixtureModel->getValue('customer-config', $this->defaultCustomerConfig);
     }
 }

@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Indexer\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -23,11 +27,57 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $objectManager;
+
+    /**
+     * @var array
+     */
+    private $indexersState = [];
+
+    /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
+     * @var array
+     */
+    private $entityAsserts = [];
+
+    /**
+     * Set indexer mode to "scheduled" for do not perform reindex after creation entity
+     */
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->indexerRegistry = $this->objectManager->get(IndexerRegistry::class);
+
+        $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\SimpleProductsAssert::class);
+        $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\ConfigurableProductsAssert::class);
+        $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\BundleProductsAssert::class);
+        $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\ImagesAssert::class);
+
+        foreach ($this->objectManager->get(Config::class)->getIndexers() as $indexerId) {
+            $indexer = $this->indexerRegistry->get($indexerId['indexer_id']);
+            $this->indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
+            $indexer->setScheduled(true);
+        }
+    }
+
+    /**
+     * Return indexer to previous state
+     */
+    protected function tearDown()
+    {
+        foreach ($this->indexersState as $indexerId => $state) {
+            $indexer = $this->indexerRegistry->get($indexerId);
+            $indexer->setScheduled($state);
+        }
+    }
 
     public static function setUpBeforeClass()
     {
-        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+        $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
             ->getDbInstance();
         if (!$db->isDbDumpExists()) {
@@ -35,7 +85,9 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $db->restoreFromDbDump();
 
-        self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../../../setup/src/Magento/Setup/Fixtures');
+        self::$_generatorWorkingDir = realpath(
+            __DIR__ . '/../../../../../../../setup/src/Magento/Setup/Fixtures/_files'
+        );
         copy(
             self::$_generatorWorkingDir . '/tax_rates.csv',
             self::$_generatorWorkingDir . '/tax_rates.csv.bak'
@@ -47,25 +99,36 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    public function testTest()
+    /**
+     * Generate test profile and performs assertions that generated entities are valid
+     */
+    public function testFixtureGeneration()
     {
         $reindexCommand = Bootstrap::getObjectManager()->get(
             \Magento\Indexer\Console\Command\IndexerReindexCommand::class
         );
-        $parser = Bootstrap::getObjectManager()->get(\Magento\Framework\Xml\Parser::class);
-        $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
-        $model = new FixtureModel($reindexCommand, $parser, $itfApplication->getInitParams());
+        $itfApplication = Bootstrap::getInstance()->getBootstrap()->getApplication();
+        $model = new FixtureModel($reindexCommand, $itfApplication->getInitParams());
         $model->loadConfig(__DIR__ . '/_files/small.xml');
         $model->initObjectManager();
 
         foreach ($model->loadFixtures()->getFixtures() as $fixture) {
             $fixture->execute();
         }
+
+        foreach ($this->entityAsserts as $entityAssert) {
+            try {
+                $entityAssert->assert();
+            } catch (\AssertionError $assertionError) {
+                $this->assertTrue(false, $assertionError->getMessage());
+            }
+        }
     }
 
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
+
         unlink(self::$_generatorWorkingDir . '/tax_rates.csv');
         rename(
             self::$_generatorWorkingDir . '/tax_rates.csv.bak',

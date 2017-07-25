@@ -1,15 +1,17 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* @api */
 define([
     'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
     'jquery/ui',
-    'Magento_Payment/js/model/credit-card-validation/validator'
-], function ($, mageTemplate, alert) {
+    'Magento_Payment/js/model/credit-card-validation/validator',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function ($, mageTemplate, alert, ui, validator, fullScreenLoader) {
     'use strict';
 
     $.widget('mage.transparent', {
@@ -106,8 +108,8 @@ define([
                  * {Function}
                  */
                 beforeSend: function () {
-                    this.element.trigger('showAjaxLoader');
-                }.bind(this),
+                    fullScreenLoader.startLoader();
+                },
 
                 /**
                  * {Function}
@@ -130,6 +132,8 @@ define([
                         );
                         this._postPaymentToGateway(preparedData);
                     } else {
+                        fullScreenLoader.stopLoader(true);
+
                         msg = response['error_messages'];
 
                         if (this.options.context) {

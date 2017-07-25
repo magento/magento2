@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,11 +27,12 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 2. Go to Stores -> All Stores
  * 3. Open store view SVB from grid
  * 4. Change store group setting from STB to STA
- * 5. Save store entity
- * 6. Perform all assertions
+ * 5. Save store entity -  Warning message "This operation can take a long time" appears.
+ * 6. Click "OK".
+ * 7. Perform all assertions
  *
  * @group Store_Management
- * @ZephyrId MAGETWO-54026
+ * @ZephyrId MAGETWO-58361
  */
 class MoveStoreToOtherGroupSameWebsiteTest extends Injectable
 {
@@ -101,6 +102,7 @@ class MoveStoreToOtherGroupSameWebsiteTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenStore($storeInitialB);
         $this->editStore->getStoreForm()->selectStore($storeInitialA->getGroupId());
         $this->editStore->getFormPageActions()->save();
+        $this->editStore->getModalBlock()->acceptAlert();
 
         return ['store' => $store];
     }

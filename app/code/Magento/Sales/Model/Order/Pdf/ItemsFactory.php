@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Factory class for \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+ *
+ * @internal
  */
 class ItemsFactory
 {

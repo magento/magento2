@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\ReportXml;
@@ -139,7 +139,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queryCacheMock->expects($this->any())
             ->method('load')
             ->with($queryName)
-            ->willReturn('{"connectionName":"sales","select_parts":{}}');
+            ->willReturn('{"connectionName":"sales","config":{},"select_parts":{}}');
 
         $this->selectHydratorMock->expects($this->any())
             ->method('recreate')
@@ -153,7 +153,8 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
                 [
                     'select' => $this->selectMock,
                     'selectHydrator' => $this->selectHydratorMock,
-                    'connectionName' => 'sales'
+                    'connectionName' => 'sales',
+                    'config' => []
                 ]
             )
             ->willReturn($this->queryMock);
@@ -220,7 +221,8 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
                 [
                     'select' => $this->selectMock,
                     'selectHydrator' => $this->selectHydratorMock,
-                    'connectionName' => $queryConfigMock['connection']
+                    'connectionName' => $queryConfigMock['connection'],
+                    'config' => $queryConfigMock
                 ]
             )
             ->willReturn($this->queryMock);

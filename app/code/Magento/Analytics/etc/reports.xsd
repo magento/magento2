@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,6 +20,7 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="connection" type="xs:string"/>
+        <xs:attribute name="iterator" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="sourceDeclaration">
         <xs:choice minOccurs="1" maxOccurs="unbounded">
@@ -75,6 +76,7 @@
             <xs:enumeration value="max" />
             <xs:enumeration value="avg" />
             <xs:enumeration value="min" />
+            <xs:enumeration value="sha1" />
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="glueType">

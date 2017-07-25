@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Constraint;
@@ -18,13 +18,13 @@ class AssertAdvancedPriceAbsentOnProductForm extends AbstractConstraint
     /**
      * Assert advanced price is absent on product page in form.
      *
-     * @param FixtureInterface[] $products
+     * @param FixtureInterface[] $entities
      * @param CatalogProductEdit $productPage
      * @return void
      */
-    public function processAssert(array $products, CatalogProductEdit $productPage)
+    public function processAssert(array $entities, CatalogProductEdit $productPage)
     {
-        foreach ($products as $product) {
+        foreach ($entities as $product) {
             $productPage->open(['id' => $product->getData('id')]);
             /** @var AdvancedPricing $advancedPricing */
             $advancedPricing = $productPage->getProductForm()

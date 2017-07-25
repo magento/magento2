@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
@@ -47,31 +47,32 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $data
+     * @param $expectedResult
+     * @param $unserializeCalledNum
      * @dataProvider getDataProvider
      */
-    public function testGet($loadData, $expectedResult)
+    public function testGet($data, $expectedResult, $unserializeCalledNum = 1)
     {
         $key = 'key';
-        $this->cacheFrontendMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'diConfig' . $key
-        )->will(
-            $this->returnValue($loadData)
-        );
-        $this->serializerMock->expects($this->once())
+        $this->cacheFrontendMock->expects($this->once())
+            ->method('load')
+            ->with('diConfig' . $key)
+            ->willReturn($data);
+        $this->serializerMock->expects($this->exactly($unserializeCalledNum))
             ->method('unserialize')
-            ->with($loadData)
+            ->with($data)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->configCache->get($key));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         return [
-            [false, false],
+            [false, false, 0],
             ['serialized data', ['some data']],
         ];
     }

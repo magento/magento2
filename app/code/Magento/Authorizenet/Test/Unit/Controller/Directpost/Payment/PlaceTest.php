@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -95,6 +96,11 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
+    /**
      * @var CheckoutSession|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSessionMock;
@@ -152,6 +158,9 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->loggerMock = $this
+            ->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->placeOrderController = $this->objectManager->getObject(
@@ -165,6 +174,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'onepageCheckout' => $this->onepageCheckout,
                 'jsonHelper' => $this->jsonHelperMock,
+                'logger' => $this->loggerMock,
             ]
         );
     }
@@ -214,13 +224,15 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      * @param $controller
      * @param $quoteId
      * @param $result
+     * @param \Exception $exception Exception to check
      * @dataProvider textExecuteFailedPlaceOrderDataProvider
      */
     public function testExecuteFailedPlaceOrder(
         $paymentMethod,
         $controller,
         $quoteId,
-        $result
+        $result,
+        $exception
     ) {
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
@@ -238,7 +250,11 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
 
         $this->cartManagementMock->expects($this->once())
             ->method('placeOrder')
-            ->willThrowException(new \Exception());
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception);
 
         $this->jsonHelperMock->expects($this->any())
             ->method('jsonEncode')
@@ -278,11 +294,19 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      */
     public function textExecuteFailedPlaceOrderDataProvider()
     {
-        $objectFailed = new \Magento\Framework\DataObject();
-        $objectFailed->setData('error', true);
-        $objectFailed->setData(
-            'error_messages',
-            __('An error occurred on the server. Please try to place the order again.')
+        $objectFailed1 = new \Magento\Framework\DataObject(
+            [
+                'error' => true,
+                'error_messages' => __('An error occurred on the server. Please try to place the order again.')
+            ]
+        );
+        $generalException = new \Exception('Exception logging will save the world!');
+        $localizedException = new LocalizedException(__('Electronic payments save the trees.'));
+        $objectFailed2 = new \Magento\Framework\DataObject(
+            [
+                'error' => true,
+                'error_messages' => $localizedException->getMessage()
+            ]
         );
 
         return [
@@ -290,7 +314,15 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
                 ['method' => 'authorizenet_directpost'],
                 IframeConfigProvider::CHECKOUT_IDENTIFIER,
                 1,
-                $objectFailed
+                $objectFailed1,
+                $generalException,
+            ],
+            [
+                ['method' => 'authorizenet_directpost'],
+                IframeConfigProvider::CHECKOUT_IDENTIFIER,
+                1,
+                $objectFailed2,
+                $localizedException,
             ],
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,14 +11,14 @@ error_reporting(E_ALL);
 #ini_set('display_errors', 1);
 
 /* PHP version validation */
-if (!defined('PHP_VERSION_ID') || !(PHP_VERSION_ID >= 50605 && PHP_VERSION_ID < 50700 || PHP_VERSION_ID === 70002 || PHP_VERSION_ID === 70004 || PHP_VERSION_ID >= 70006)) {
+if (!defined('PHP_VERSION_ID') || !(PHP_VERSION_ID === 70002 || PHP_VERSION_ID === 70004 || PHP_VERSION_ID >= 70006)) {
     if (PHP_SAPI == 'cli') {
-        echo 'Magento supports PHP 5.6.5, 7.0.2, 7.0.4, and 7.0.6 or later. ' .
+        echo 'Magento supports 7.0.2, 7.0.4, and 7.0.6 or later. ' .
             'Please read http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 5.6.5, 7.0.2, 7.0.4, and 7.0.6 or later. Please read
+    <p>Magento supports PHP 7.0.2, 7.0.4, and 7.0.6 or later. Please read
     <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html">
     Magento System Requirements</a>.
 </div>
@@ -28,6 +28,9 @@ HTML;
 }
 
 require_once __DIR__ . '/autoload.php';
+// Sets default autoload mappings, may be overridden in Bootstrap::create
+\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
+
 require_once BP . '/app/functions.php';
 
 /* Custom umask value may be provided in optional mage_umask file in root */
@@ -60,5 +63,5 @@ if (!empty($_SERVER['MAGE_PROFILER'])
 date_default_timezone_set('UTC');
 
 /*  Adjustment of precision value for several versions of PHP */
-ini_set('precision', 17);
-ini_set('serialize_precision', 17);
+ini_set('precision', 15);
+ini_set('serialize_precision', 15);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model;
 /**
  * SalesRule Coupon Model
  *
+ * @api
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon _getResource()
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
  */
@@ -302,5 +303,6 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

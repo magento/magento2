@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\ResourceConnection;
@@ -63,9 +63,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     {
         $this->initConnections();
         $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
-
-        $resourceName = preg_replace("/_setup$/", '', $resourceName);
-
+ 
         if (!isset($this->_connectionNames[$resourceName])) {
             $resourcesConfig = $this->get();
             $pointerResourceName = $resourceName;

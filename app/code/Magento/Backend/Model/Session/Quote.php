@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
@@ -11,6 +11,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 /**
  * Adminhtml quote session
  *
+ * @api
  * @method Quote setCustomerId($id)
  * @method int getCustomerId()
  * @method bool hasCustomerId()

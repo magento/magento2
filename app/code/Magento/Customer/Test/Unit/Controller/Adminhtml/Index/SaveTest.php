@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
@@ -363,8 +363,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => true,
             'default_shipping' => true,
             'code' => 'value',
-            'region' =>
-                [
+            'region' => [
                     'region' => 'region',
                     'region_id' => 'region_id',
                 ],
@@ -610,7 +609,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 22;
         $addressId = 11;
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -650,8 +649,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => false,
             'default_shipping' => false,
             'code' => 'value',
-            'region' =>
-                [
+            'region' => [
                     'region' => 'region',
                     'region_id' => 'region_id',
                 ],
@@ -875,7 +873,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndValidationException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -1018,7 +1016,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndLocalizedException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -1161,7 +1159,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,

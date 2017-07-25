@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,8 +49,8 @@ class Samples extends Block
         $links = $this->_rootElement->getElements($this->linkTitle);
         $linksData = [];
 
-        foreach ($links as $link) {
-            $linksData[] = [
+        foreach ($links as $key => $link) {
+            $linksData[$key + 1] = [
                 'title' => $link->getText(),
             ];
         }

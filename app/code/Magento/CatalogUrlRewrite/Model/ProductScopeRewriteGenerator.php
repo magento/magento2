@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model;
@@ -171,7 +171,14 @@ class ProductScopeRewriteGenerator
         $mergeDataProvider->merge(
             $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
         );
-
+        $mergeDataProvider->merge(
+            $this->currentUrlRewritesRegenerator->generateAnchor(
+                $storeId,
+                $product,
+                $productCategories,
+                $rootCategoryId
+            )
+        );
         return $mergeDataProvider->getData();
     }
 

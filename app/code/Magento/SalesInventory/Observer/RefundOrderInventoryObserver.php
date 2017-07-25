@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,6 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Sales\Model\OrderRepository;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
@@ -91,11 +90,8 @@ class RefundOrderInventoryObserver implements ObserverInterface
                 $returnToStockItems[] = $item->getOrderItemId();
             }
         }
-        $this->returnProcessor->execute(
-            $creditmemo,
-            $order,
-            $returnToStockItems,
-            $this->stockConfiguration->isAutoReturnEnabled()
-        );
+        if (!empty($returnToStockItems)) {
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
+        }
     }
 }

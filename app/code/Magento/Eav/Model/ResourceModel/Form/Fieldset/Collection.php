@@ -1,25 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Eav\Model\ResourceModel\Form\Fieldset;
 
+use Magento\Eav\Model\Form\Type;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Eav Form Fieldset Resource Collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Eav\Model\ResourceModel\Form\Fieldset;
-
-use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Eav\Model\Form\Type;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Store\Model\StoreManagerInterface;
-
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

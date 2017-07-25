@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -56,6 +56,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods([
                 'getId',
+                'getTypeId',
                 'getStoreId',
                 'getResource',
                 'getData',

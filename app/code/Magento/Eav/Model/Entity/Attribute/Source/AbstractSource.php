@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 /**
  * Entity/Attribute/Model - attribute selection source abstract
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */

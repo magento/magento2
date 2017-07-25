@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,18 +14,18 @@
     <?php if ($_childHtml): ?>
         <tr class="row-gift-options">
             <td colspan="7">
-                <a class="action-link" href="#" id="gift_options_link_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"><?php /* @escapeNotVerified */ echo __('Gift Options') ?></a>
+                <a class="action-link" href="#" id="gift_options_link_<?= /* @escapeNotVerified */ $_item->getId() ?>"><?= /* @escapeNotVerified */ __('Gift Options') ?></a>
                 <script>
 require([
     "Magento_Sales/order/giftoptions_tooltip"
 ], function(){
 
-    giftOptionsTooltip.addTargetLink('gift_options_link_<?php /* @escapeNotVerified */ echo $_item->getId() ?>', <?php /* @escapeNotVerified */ echo $_item->getId() ?>);
+    giftOptionsTooltip.addTargetLink('gift_options_link_<?= /* @escapeNotVerified */ $_item->getId() ?>', <?= /* @escapeNotVerified */ $_item->getId() ?>);
 
 });
 </script>
-                <div id="gift_options_data_<?php /* @escapeNotVerified */ echo $_item->getId() ?>">
-                    <?php /* @escapeNotVerified */ echo $_childHtml ?>
+                <div id="gift_options_data_<?= /* @escapeNotVerified */ $_item->getId() ?>">
+                    <?= /* @escapeNotVerified */ $_childHtml ?>
                 </div>
             </td>
         </tr>

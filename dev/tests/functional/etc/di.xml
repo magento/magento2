@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Mtf\Console\CommandListInterface" type="Magento\Mtf\Console\CommandList" />
-    <preference for="Magento\Mtf\Util\Command\File\ExportInterface" type="\Magento\Mtf\Util\Command\File\Export" />
-    <preference for="Magento\Mtf\Util\Command\File\Export\ReaderInterface" type="\Magento\Mtf\Util\Command\File\Export\Reader" />
+    <preference for="Magento\Mtf\Util\Command\File\ExportInterface" type="Magento\Mtf\Util\Command\File\Export" />
+    <preference for="Magento\Mtf\Util\Command\File\Export\ReaderInterface" type="Magento\Mtf\Util\Command\File\Export\Reader" />
 
-    <type name="\Magento\Mtf\Util\Command\File\Export" shared="false" />
+    <type name="Magento\Mtf\Util\Command\File\Export" shared="false" />
 
     <virtualType name="Magento\Mtf\Config\SchemaLocator\Config" type="Magento\Mtf\Config\SchemaLocator">
         <arguments>

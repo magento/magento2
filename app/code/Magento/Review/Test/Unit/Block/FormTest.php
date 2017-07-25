@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block;
@@ -37,6 +37,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -64,6 +67,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
             \Magento\Review\Block\Form::class,
@@ -71,6 +76,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'reviewData' => $this->reviewDataMock,
                 'productRepository' => $this->productRepository,
+                'data' => [
+                    'jsLayout' => [
+                        'some-layout' => 'layout information'
+                    ]
+                ],
+                'serializer' => $this->serializerMock
             ]
         );
     }
@@ -131,5 +142,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
             [false, 'http://localhost/review/product/post', 3],
             [true, 'https://localhost/review/product/post' ,3],
         ];
+    }
+
+    public function testGetJsLayout()
+    {
+        $jsLayout = [
+            'some-layout' => 'layout information'
+        ];
+
+        $this->serializerMock->expects($this->once())->method('serialize')
+            ->will($this->returnValue(json_encode($jsLayout)));
+        $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
@@ -11,7 +11,7 @@ use Magento\Framework\DB\Ddl\Table;
 /**
  * Bundle Price View Attribute Renderer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {

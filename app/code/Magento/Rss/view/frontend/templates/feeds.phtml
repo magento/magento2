@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,24 +10,24 @@
 
 ?>
 <table class="data table rss">
-    <caption class="table-caption"><?php echo $block->escapeHtml(__('Feed')); ?></caption>
+    <caption class="table-caption"><?= $block->escapeHtml(__('Feed')) ?></caption>
     <tbody>
-        <th colspan="2" scope="col"><?php echo $block->escapeHtml(__('Miscellaneous Feeds')) ?></th>
+        <th colspan="2" scope="col"><?= $block->escapeHtml(__('Miscellaneous Feeds')) ?></th>
     <?php foreach ($block->getFeeds() as $feed): ?>
         <?php if (!isset($feed['group'])): ?>
         <tr>
-            <td class="col feed"><?php echo $block->escapeHtml($feed['label']) ?></td>
+            <td class="col feed"><?= $block->escapeHtml($feed['label']) ?></td>
             <td class="col action">
-                <a href="<?php echo $block->escapeUrl($feed['link']) ?>" class="action get"><span><?php echo $block->escapeHtml(__('Get Feed')); ?></span></a>
+                <a href="<?= $block->escapeUrl($feed['link']) ?>" class="action get"><span><?= $block->escapeHtml(__('Get Feed')) ?></span></a>
             </td>
         </tr>
         <?php else: ?>
-            <th colspan="2" scope="col"><?php echo $block->escapeHtml($feed['group']) ?></th>
+            <th colspan="2" scope="col"><?= $block->escapeHtml($feed['group']) ?></th>
             <?php foreach ($feed['feeds'] as $item) :?>
                 <tr>
-                    <td class="col feed"><?php echo $block->escapeHtml($item['label']) ?></td>
+                    <td class="col feed"><?= $block->escapeHtml($item['label']) ?></td>
                     <td class="col action">
-                        <a href="<?php echo $block->escapeUrl($item['link']) ?>" class="action get"><span><?php echo $block->escapeHtml(__('Get Feed')); ?></span></a>
+                        <a href="<?= $block->escapeUrl($item['link']) ?>" class="action get"><span><?= $block->escapeHtml(__('Get Feed')) ?></span></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

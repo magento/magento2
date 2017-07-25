@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,7 +33,7 @@
             <class>separator-top</class>
             <label>Store Email Addresses</label>
             <tab>general</tab>
-            <resource>Magento_Backend::trans_email</resource>
+            <resource>Magento_Config::trans_email</resource>
             <group id="ident_custom1" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Email 1</label>
                 <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -108,7 +108,7 @@
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::dev</resource>
+            <resource>Magento_Config::dev</resource>
             <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
                 <field id="template_hints_storefront" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -408,7 +408,7 @@
         <section id="web" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Web</label>
             <tab>general</tab>
-            <resource>Magento_Backend::web</resource>
+            <resource>Magento_Config::web</resource>
             <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Url Options</label>
                 <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">

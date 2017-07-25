@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
@@ -31,6 +30,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
  *  sales_order_delete_before
  *  sales_order_delete_after
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order getResource()
  * @method int getGiftMessageId()
@@ -618,7 +618,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        if (abs($this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
+        $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
+        if (abs($totalRefunded) < .0001) {
+            return false;
+        }
+        // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
+        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
             return false;
         }
 
@@ -1127,7 +1132,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $state = self::STATE_CANCELED;
             foreach ($this->getAllItems() as $item) {
                 if ($state != self::STATE_PROCESSING && $item->getQtyToRefund()) {
-                    if ($item->getQtyToShip() > $item->getQtyToCancel()) {
+                    if ($item->isProcessingAvailable()) {
                         $state = self::STATE_PROCESSING;
                     } else {
                         $state = self::STATE_COMPLETE;
@@ -4343,5 +4348,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         return $this->setData('shipping_method', $shippingMethod);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,11 +15,11 @@ class SimpleType
 {
     /**
      * List of attributes, type of which cannot be identified reliably. We do not validate these attributes.
-     * 
+     *
      * @var string[]
      */
     private $anyTypeAttributes = ['quantity_and_stock_status'];
-    
+
     /**
      * Get attribute type based on its frontend input and backend type.
      *
@@ -28,10 +28,14 @@ class SimpleType
      */
     public function getType($attribute)
     {
-        if (in_array($attribute->getAttributeCode(), $this->anyTypeAttributes)) {
+        $arrayFrontendInputs = ['multiselect'];
+        $frontendInput = $attribute->getFrontendInput();
+        if (in_array($attribute->getAttributeCode(), $this->anyTypeAttributes)
+            || in_array($frontendInput, $arrayFrontendInputs)
+        ) {
             return TypeProcessor::NORMALIZED_ANY_TYPE;
         }
-        $frontendInput = $attribute->getFrontendInput();
+
         $backendType = $attribute->getBackendType();
         $backendTypeMap = [
             'static' => TypeProcessor::NORMALIZED_ANY_TYPE,
@@ -41,11 +45,6 @@ class SimpleType
             'datetime' => TypeProcessor::NORMALIZED_STRING_TYPE,
             'decimal' => TypeProcessor::NORMALIZED_DOUBLE_TYPE,
         ];
-        $arrayFrontendInputs = ['multiselect'];
-        $type = $backendTypeMap[$backendType];
-        if (in_array($frontendInput, $arrayFrontendInputs)) {
-            $type .= '[]';
-        }
-        return $type;
+        return $backendTypeMap[$backendType];
     }
 }

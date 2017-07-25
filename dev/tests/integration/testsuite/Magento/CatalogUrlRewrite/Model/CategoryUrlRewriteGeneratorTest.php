@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@
 
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
-
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
@@ -26,7 +26,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
@@ -51,11 +51,56 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertResults($categoryExpectedResult, $actualResults);
+
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productForTest = $product->getId();
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [$productForTest]
+        ];
+        $actualResults = $this->getActualResults($productFilter);
+        $productExpectedResult = [
+            [
+                'simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest,
+                1,
+                0
+            ],
+            [
+                'new-url/category-1-1/category-1-1-1/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/5',
+                1,
+                0
+            ],
+            [
+                'new-url/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/3',
+                1,
+                0
+            ],
+            [
+                'new-url/category-1-1/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/4',
+                1,
+                0
+            ],
+            [
+                '/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/2',
+                1,
+                0
+            ]
+        ];
+
+        $this->assertResults($productExpectedResult, $actualResults);
     }
 
     /**
      * @magentoDbIsolation enabled
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoAppIsolation enabled
      */
     public function testGenerateUrlRewritesWithSaveHistory()
@@ -87,6 +132,69 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertResults($categoryExpectedResult, $actualResults);
+
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productForTest = $product->getId();
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [$productForTest]
+        ];
+        $actualResults = $this->getActualResults($productFilter);
+        $productExpectedResult = [
+            [
+                'simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest,
+                1,
+                0
+            ],
+            [
+                'new-url/category-1-1/category-1-1-1/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/5',
+                1,
+                0
+            ],
+            [
+                'category-1/category-1-1/category-1-1-1/simple-product-two.html',
+                'new-url/category-1-1/category-1-1-1/simple-product-two.html',
+                0,
+                OptionProvider::PERMANENT
+            ],
+            [
+                'new-url/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/3',
+                1,
+                0
+            ],
+            [
+                'new-url/category-1-1/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/4',
+                1,
+                0
+            ],
+            [
+                '/simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest . '/category/2',
+                1,
+                0
+            ],
+            [
+                'category-1/simple-product-two.html',
+                'new-url/simple-product-two.html',
+                0,
+                OptionProvider::PERMANENT
+            ],
+            [
+                'category-1/category-1-1/simple-product-two.html',
+                'new-url/category-1-1/simple-product-two.html',
+                0,
+                OptionProvider::PERMANENT
+            ],
+        ];
+
+        $this->assertResults($productExpectedResult, $actualResults);
     }
 
     /**
@@ -146,6 +254,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertResults($expected, $actual)
     {
+        $this->assertEquals(count($expected), count($actual), 'Number of rewrites does not match');
         foreach ($expected as $row) {
             $this->assertContains(
                 $row,
@@ -153,6 +262,5 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'Expected: ' . var_export($row, true) . "\nIn Actual: " . var_export($actual, true)
             );
         }
-
     }
 }

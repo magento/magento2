@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,9 +28,9 @@
 
                 <?php $version = sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()); ?>
 
-                if (versionObj.version !== '<?php /* @noEscape */ echo $version ?>') {
+                if (versionObj.version !== '<?= /* @noEscape */ $version ?>') {
                     dependencies.push(
-                        'text!<?php /* @noEscape */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
+                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
                     );
 
                 }
@@ -44,7 +44,7 @@
                             $.localStorage.set(
                                 'mage-translation-file-version',
                                 {
-                                    version: '<?php /* @noEscape */ echo $version ?>'
+                                    version: '<?= /* @noEscape */ $version ?>'
                                 }
                             );
                         } else {

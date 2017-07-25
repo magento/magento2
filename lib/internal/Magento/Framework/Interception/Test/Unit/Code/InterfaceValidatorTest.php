@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Interception\Test\Unit\Code;
 
 use \Magento\Framework\Interception\Code\InterfaceValidator;
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ValidPlugin;
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncompatibleInterface;
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncorrectSubject;
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ExtraParameters;
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed;
 
 class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +54,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ValidPlugin::class,
+            ValidPlugin::class,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments::class
         );
     }
@@ -64,20 +67,20 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateIncorrectInterface()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncompatibleInterface::class,
+            IncompatibleInterface::class,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
         );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Invalid [\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item] $subject type
+     * @expectedExceptionMessage $subject type
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
     public function testValidateIncorrectSubjectType()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncorrectSubject::class,
+            IncorrectSubject::class,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
         );
     }
@@ -91,8 +94,8 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateIncompatibleMethodArgumentsCount()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model::class
-                . '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsCount',
+            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model::class .
+            '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsCount',
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
         );
     }
@@ -106,8 +109,8 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateIncompatibleMethodArgumentsType()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model::class
-                . '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsType',
+            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model::class .
+            '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsType',
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments::class
         );
     }
@@ -120,7 +123,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateExtraParameters()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ExtraParameters::class,
+            ExtraParameters::class,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
         );
     }
@@ -133,7 +136,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateInvalidProceed()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed::class,
+            InvalidProceed::class,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
         );
     }

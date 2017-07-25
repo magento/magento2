@@ -2,7 +2,7 @@
 /**
  * Base HTTP response object
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
@@ -99,7 +99,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * Remove all headers
-     * 
+     *
      * @return $this
      */
     public function clearHeaders()

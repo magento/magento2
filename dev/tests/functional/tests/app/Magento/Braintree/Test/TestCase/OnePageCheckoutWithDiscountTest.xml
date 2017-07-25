@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -17,6 +17,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="prices" xsi:type="array">

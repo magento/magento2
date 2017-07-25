@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,22 +9,22 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <tr>
-    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
-    <td class="col-ordered-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-ordered-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
     <td class="col-qty <?php if ($block->isShipmentRegular()): ?>last<?php endif; ?>">
         <?php if ($block->canShipPartiallyItem()): ?>
             <input type="text"
                    class="input-text admin__control-text qty-item"
-                   name="shipment[items][<?php /* @escapeNotVerified */ echo $_item->getOrderItemId() ?>]"
-                   value="<?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>" />
+                   name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]"
+                   value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" />
         <?php else: ?>
-            <?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>
+            <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
         <?php endif; ?>
     </td>
     <?php if (!$block->canShipPartiallyItem()): ?>
     <td class="col-ship last">
-        <input type="hidden" name="shipment[items][<?php /* @escapeNotVerified */ echo $_item->getOrderItemId() ?>]" value="0" />
-        <input type="checkbox" name="shipment[items][<?php /* @escapeNotVerified */ echo $_item->getOrderItemId() ?>]" value="<?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>" checked />
+        <input type="hidden" name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]" value="0" />
+        <input type="checkbox" name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]" value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" checked />
     </td>
     <?php endif; ?>
 </tr>

@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 /**
  * Catalog category image attribute backend model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Model\Category\Attribute\Backend;
-
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -97,7 +96,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($imageName = $this->getUploadedImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
-        } else if (!is_string($value)) {
+        } elseif (!is_string($value)) {
             $object->setData($attributeName, '');
         }
 
@@ -120,6 +119,17 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Check if temporary file is available for new image upload.
+     *
+     * @param array $value
+     * @return bool
+     */
+    private function isTmpFileAvailable($value)
+    {
+        return is_array($value) && isset($value[0]['tmp_name']);
+    }
+
+    /**
      * Save uploaded file and set its name to category
      *
      * @param \Magento\Framework\DataObject $object
@@ -129,14 +139,13 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
-        if ($imageName = $this->getUploadedImageName($value)) {
+        if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
                 $this->getImageUploader()->moveFileFromTmp($imageName);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
         }
-
         return $this;
     }
 }

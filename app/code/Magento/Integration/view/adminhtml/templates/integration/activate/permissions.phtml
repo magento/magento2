@@ -2,7 +2,7 @@
 /**
  * Permissions form container template.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * @var \Magento\Backend\Block\Widget\Form\Container $block
@@ -10,8 +10,8 @@
 
 // @codingStandardsIgnoreFile
 ?>
-<div><p><?php /* @escapeNotVerified */ echo __('The integration you selected asks you to approve access to the following:'); ?></p></div>
+<div><p><?= /* @escapeNotVerified */ __('The integration you selected asks you to approve access to the following:') ?></p></div>
 <div id="integration-activate-permissions-tabs">
-    <?php echo $block->getChildHtml('tabs'); ?>
+    <?= $block->getChildHtml('tabs') ?>
 </div>
 <div id="integrations-activate-permissions-content"></div>

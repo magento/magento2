@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * JSON products custom options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Options;
 
 use Magento\Store\Model\Store;
 
+/**
+ * JSON products custom options
+ *
+ * @api
+ */
 class Ajax extends \Magento\Backend\Block\AbstractBlock
 {
     /**

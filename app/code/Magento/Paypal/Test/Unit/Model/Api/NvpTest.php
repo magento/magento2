@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\Info;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -194,14 +195,88 @@ class NvpTest extends \PHPUnit_Framework_TestCase
             ->method('read')
             ->will($this->returnValue(
                 "\r\n" . 'ACK=Success&SHIPTONAME=Ship%20To%20Name'
+                . '&SHIPTOSTREET=testStreet'
+                . '&SHIPTOSTREET2=testApartment'
+                . '&BUSINESS=testCompany'
+                . '&SHIPTOCITY=testCity'
+                . '&PHONENUM=223322'
+                . '&STATE=testSTATE'
             ));
         $this->model->callGetExpressCheckoutDetails();
-        $this->assertEquals('Ship To Name', $this->model->getExportedShippingAddress()->getData('firstname'));
+        $address = $this->model->getExportedShippingAddress();
+        $this->assertEquals('Ship To Name', $address->getData('firstname'));
+        $this->assertEquals(implode("\n", ['testStreet','testApartment']), $address->getStreet());
+        $this->assertEquals('testCompany', $address->getCompany());
+        $this->assertEquals('testCity', $address->getCity());
+        $this->assertEquals('223322', $address->getTelephone());
+        $this->assertEquals('testSTATE', $address->getRegion());
+    }
+
+    /**
+     * Tests that callDoReauthorization method is called without errors and
+     * needed data is imported from response.
+     */
+    public function testCallDoReauthorization()
+    {
+        $authorizationId = 555;
+        $paymentStatus = 'Completed';
+        $pendingReason = 'none';
+        $protectionEligibility = 'Eligible';
+        $protectionEligibilityType = 'ItemNotReceivedEligible';
+
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->willReturn(
+                "\r\n" . 'ACK=Success'
+                . '&AUTHORIZATIONID=' . $authorizationId
+                . '&PAYMENTSTATUS=' . $paymentStatus
+                . '&PENDINGREASON=' . $pendingReason
+                . '&PROTECTIONELIGIBILITY=' . $protectionEligibility
+                . '&PROTECTIONELIGIBILITYTYPE=' . $protectionEligibilityType
+            );
+
+        $this->model->callDoReauthorization();
+
+        $expectedImportedData = [
+            'authorization_id' => $authorizationId,
+            'payment_status' => Info::PAYMENTSTATUS_COMPLETED,
+            'pending_reason' => $pendingReason,
+            'protection_eligibility' => $protectionEligibility
+        ];
+
+        $this->assertNotContains($protectionEligibilityType, $this->model->getData());
+        $this->assertEquals($expectedImportedData, $this->model->getData());
     }
 
     public function testGetDebugReplacePrivateDataKeys()
     {
         $debugReplacePrivateDataKeys = $this->_invokeNvpProperty($this->model, '_debugReplacePrivateDataKeys');
         $this->assertEquals($debugReplacePrivateDataKeys, $this->model->getDebugReplacePrivateDataKeys());
+    }
+
+    /**
+     * Tests case if obtained response with code 10415 'Transaction has already
+     * been completed for this token'. It must does not throws the exception and
+     * must returns response array.
+     */
+    public function testCallTransactionHasBeenCompleted ()
+    {
+        $response =    "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
+            . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.';
+        $processableErrors =[10415];
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->will($this->returnValue($response));
+        $this->model->setProcessableErrors($processableErrors);
+        $this->customLoggerMock->expects($this->once())
+            ->method('debug');
+        $expectedResponse = [
+            'ACK' => 'Failure',
+            'L_ERRORCODE0' => '10415',
+            'L_SHORTMESSAGE0' => 'Message.',
+            'L_LONGMESSAGE0' => 'Long Message.'
+        ];
+
+        $this->assertEquals($expectedResponse, $this->model->call('some method', ['data' => 'some data']));
     }
 }

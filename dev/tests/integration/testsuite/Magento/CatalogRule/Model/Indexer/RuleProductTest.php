@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer;
@@ -32,7 +32,8 @@ class RuleProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testReindexAfterRuleCreation()
@@ -45,15 +46,9 @@ class RuleProductTest extends \PHPUnit_Framework_TestCase
         $product->setData('test_attribute', 'test_attribute_value')->save();
         $this->assertFalse($this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
 
-        $this->saveRule();
         // apply all rules
         $this->indexBuilder->reindexFull();
 
         $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
-    }
-
-    protected function saveRule()
-    {
-        require 'Magento/CatalogRule/_files/rule_by_attribute.php';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,6 +28,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavAttributeResource;
 
+    /** @var \Magento\Catalog\Model\ProductCategoryList|\PHPUnit_Framework_MockObject_MockObject */
+    private $productCategoryList;
+
     protected function setUp()
     {
         $this->config = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
@@ -35,7 +38,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Product::class,
             [
                 '__wakeup',
-                'getAvailableInCategories',
                 'hasData',
                 'getData',
                 'getId',
@@ -47,16 +49,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->productResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['loadAllAttributes',
-                'getAttributesByCode',
-                'getAttribute'
-            ],
-            [],
-            '',
-            false
-        );
+
+        $this->productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->setMethods(['loadAllAttributes', 'getAttributesByCode', 'getAttribute', 'getConnection', 'getTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->eavAttributeResource = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
@@ -93,7 +95,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             [
                 'config' => $this->config,
                 'product' => $this->productModel,
-                'productResource' => $this->productResource
+                'productResource' => $this->productResource,
+                'productCategoryList' => $this->productCategoryList
             ]
         );
     }
@@ -103,12 +106,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateMeetsCategory()
     {
+        $categoryIdList = [1, 2, 3];
+
+        $this->productCategoryList->method('getCategoryIds')->willReturn($categoryIdList);
         $this->product->setData('attribute', 'category_ids');
         $this->product->setData('value_parsed', '1');
-        $this->product->setData('operator', '>=');
+        $this->product->setData('operator', '{}');
 
-        $this->productModel->expects($this->once())->method('getAvailableInCategories')
-            ->will($this->returnValue('2'));
         $this->assertTrue($this->product->validate($this->productModel));
     }
 

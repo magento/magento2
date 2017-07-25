@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Backend\Block\Template;
 
 /**
  * Widget Instance page groups (predefined layouts group) to display on
  *
  * @method \Magento\Widget\Model\Widget\Instance getWidgetInstance()
  */
-class Layout extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Layout extends Template implements RendererInterface
 {
     /**
      * @var AbstractElement|null
@@ -33,16 +35,24 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     protected $_productType;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param array $data
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\Product\Type $productType,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_productType = $productType;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
     }
 
@@ -242,7 +252,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getLayoutsChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout::class
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout::class
         )->setName(
             'widget_instance[<%- data.id %>][pages][layout_handle]'
         )->setId(
@@ -268,7 +278,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getPageLayoutsPageChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction::class
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction::class
         )->setName(
             'widget_instance[<%- data.id %>][page_layouts][layout_handle]'
         )->setId(
@@ -335,17 +345,26 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
         $pageGroups = [];
         if ($widgetInstance->getPageGroups()) {
             foreach ($widgetInstance->getPageGroups() as $pageGroup) {
-                $pageGroups[] = [
-                    'page_id' => $pageGroup['page_id'],
-                    'group' => $pageGroup['page_group'],
-                    'block' => $pageGroup['block_reference'],
-                    'for_value' => $pageGroup['page_for'],
-                    'layout_handle' => $pageGroup['layout_handle'],
-                    $pageGroup['page_group'] . '_entities' => $pageGroup['entities'],
-                    'template' => $pageGroup['page_template'],
-                ];
+                $pageGroups[] = $this->serializer->serialize($this->getPageGroup($pageGroup));
             }
         }
         return $pageGroups;
+    }
+
+    /**
+     * @param array $pageGroup
+     * @return array
+     */
+    private function getPageGroup(array $pageGroup)
+    {
+        return [
+            'page_id' => $pageGroup['page_id'],
+            'group' => $pageGroup['page_group'],
+            'block' => $pageGroup['block_reference'],
+            'for_value' => $pageGroup['page_for'],
+            'layout_handle' => $pageGroup['layout_handle'],
+            $pageGroup['page_group'] . '_entities' => $pageGroup['entities'],
+            'template' => $pageGroup['page_template'],
+        ];
     }
 }

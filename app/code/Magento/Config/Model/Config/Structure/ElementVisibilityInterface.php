@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure;
@@ -8,6 +8,7 @@ namespace Magento\Config\Model\Config\Structure;
 /**
  * Checks visibility status of form elements on Stores > Settings > Configuration page in Admin Panel
  * by their paths in the system.xml structure.
+ * @api
  */
 interface ElementVisibilityInterface
 {

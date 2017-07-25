@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,9 @@ define([
     'jquery',
     'mageUtils',
     'uiRegistry',
-    './types'
-], function (_, $, utils, registry, types) {
+    './types',
+    '../../lib/logger/console-logger'
+], function (_, $, utils, registry, types, consoleLogger) {
     'use strict';
 
     var templates = registry.create(),
@@ -70,7 +71,25 @@ define([
      * @returns {jQueryPromise}
      */
     function loadDeps(node) {
-        var loaded = $.Deferred();
+        var loaded = $.Deferred(),
+            loggerUtils = consoleLogger.utils;
+
+        if (node.deps) {
+            consoleLogger.utils.asyncLog(
+                loaded,
+                {
+                    data: {
+                        component: node.name,
+                        deps: node.deps
+                    },
+                    messages: loggerUtils.createMessages(
+                        'depsStartRequesting',
+                        'depsFinishRequesting',
+                        'depsLoadingFail'
+                    )
+                }
+            );
+        }
 
         registry.get(node.deps, function (deps) {
             node.provider = node.extendProvider ? deps && deps.name : node.provider;
@@ -90,8 +109,19 @@ define([
         var loaded = $.Deferred(),
             source = node.component;
 
+        consoleLogger.info('componentStartLoading', {
+            component: node.component
+        });
+
         require([source], function (constr) {
+            consoleLogger.info('componentFinishLoading', {
+                component: node.component
+            });
             loaded.resolve(node, constr);
+        }, function () {
+            consoleLogger.error('componentLoadingFail', {
+                component: node.component
+            });
         });
 
         return loaded.promise();
@@ -105,6 +135,11 @@ define([
      */
     function initComponent(node, Constr) {
         var component = new Constr(_.omit(node, 'children'));
+
+        consoleLogger.info('componentStartInitialization', {
+            component: node.component,
+            componentName: node.name
+        });
 
         registry.set(node.name, component);
     }
