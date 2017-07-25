@@ -15,7 +15,6 @@ use Magento\Theme\Controller\Result\MessagePlugin;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractController extends \PHPUnit_Framework_TestCase
 {
@@ -26,12 +25,12 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     protected $_runOptions = [];
 
     /**
-     * @var \Magento\TestFramework\Request
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\TestFramework\Response
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -103,7 +102,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Request getter
      *
-     * @return \Magento\TestFramework\Request
+     * @return \Magento\Framework\App\RequestInterface
      */
     public function getRequest()
     {
@@ -116,7 +115,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Response getter
      *
-     * @return \Magento\TestFramework\Response
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function getResponse()
     {
