@@ -43,6 +43,18 @@ class Method extends Block
     protected $blockWaitElement = '._block-content-loading';
 
     /**
+     * Wait until shipping rates will appear.
+     *
+     * @return void
+     */
+    private function waitForShippingRates()
+    {
+        // Code under test uses JavaScript setTimeout at this point as well.
+        sleep(3);
+        $this->waitForElementNotVisible($this->blockWaitElement);
+    }
+
+    /**
      * Select shipping method.
      *
      * @param array $method
@@ -50,20 +62,19 @@ class Method extends Block
      */
     public function selectShippingMethod(array $method)
     {
-        // Code under test uses JavaScript setTimeout at this point as well.
-        sleep(3);
+        $this->waitForShippingRates();
         $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
-        $this->waitForElementNotVisible($this->blockWaitElement);
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }
 
     /**
-     * Click continue button
+     * Click continue button.
      *
      * @return void
      */
     public function clickContinue()
     {
+        $this->waitForShippingRates();
         $this->_rootElement->find($this->continue)->click();
         $browser = $this->browser;
         $selector = $this->waitElement;
