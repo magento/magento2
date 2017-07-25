@@ -210,6 +210,7 @@ Catalog,Catalog
 "An attribute with this code already exists.","An attribute with this code already exists."
 "An attribute with the same code (%1) already exists.","An attribute with the same code (%1) already exists."
 "The value of Admin must be unique.","The value of Admin must be unique."
+"The value of Admin scope can't be empty.","The value of Admin scope can't be empty."
 "You duplicated the product.","You duplicated the product."
 "This product doesn't exist.","This product doesn't exist."
 "Invalid product id. Should be numeric value greater than 0","Invalid product id. Should be numeric value greater than 0"
@@ -622,9 +623,13 @@ OK,OK
 "Image Detail","Image Detail"
 Adding...,Adding...
 Added,Added
+"does not implement Storage Interface","does not implement Storage Interface"
 "unselect all","unselect all"
 Inventory,Inventory
 "Catalog Section","Catalog Section"
+Small,Small
+Main,Main
+"Custom image","Custom image"
 "Product Fields Auto-Generation","Product Fields Auto-Generation"
 "Mask for SKU","Mask for SKU"
 "Use {{name}} as Product Name placeholder","Use {{name}} as Product Name placeholder"
@@ -633,6 +638,10 @@ Inventory,Inventory
 "Use {{name}} as Product Name or {{sku}} as Product SKU placeholders","Use {{name}} as Product Name or {{sku}} as Product SKU placeholders"
 "Mask for Meta Description","Mask for Meta Description"
 "Use {{name}} and {{description}} as Product Name and Product Description placeholders","Use {{name}} and {{description}} as Product Name and Product Description placeholders"
+"Recently Viewed/Compared Products","Recently Viewed/Compared Products"
+"Lifetime of products in Recently Viewed Widget","Lifetime of products in Recently Viewed Widget"
+"Lifetime of products in Recently Compared Widget","Lifetime of products in Recently Compared Widget"
+"Synchronize widget products with backend storage","Synchronize widget products with backend storage"
 Storefront,Storefront
 "List Mode","List Mode"
 "Products per Page on Grid Allowed Values","Products per Page on Grid Allowed Values"
@@ -666,6 +675,8 @@ Comma-separated.,Comma-separated.
 "Use Static URLs for Media Content in WYSIWYG for Catalog","Use Static URLs for Media Content in WYSIWYG for Catalog"
 "This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.","This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes."
 "Top Level Category","Top Level Category"
+"Product Info Column","Product Info Column"
+"Block after Info Column","Block after Info Column"
 "Product Flat Data","Product Flat Data"
 "Reorganize EAV product structure to flat structure","Reorganize EAV product structure to flat structure"
 "Category Flat Data","Category Flat Data"
@@ -709,6 +720,22 @@ Template,Template
 "If empty, we'll use the category name here.","If empty, we'll use the category name here."
 "Category Link Block Template","Category Link Block Template"
 "Category Link Inline Template","Category Link Inline Template"
+"Recently Viewed Products","Recently Viewed Products"
+"List of Products Recently Viewed by Visitor","List of Products Recently Viewed by Visitor"
+"UI Component","UI Component"
+"Number of Products to display","Number of Products to display"
+"Product attributes to show","Product attributes to show"
+Image,Image
+"Learn More Link","Learn More Link"
+"Buttons to show","Buttons to show"
+"Add to Wishlist","Add to Wishlist"
+"Viewed Products Grid Template","Viewed Products Grid Template"
+"Viewed Products List Template","Viewed Products List Template"
+"Viewed Products Sidebar Template","Viewed Products Sidebar Template"
+"Recently Compared Products","Recently Compared Products"
+"List of Products Recently Compared by Visitor","List of Products Recently Compared by Visitor"
+"Compared Products Grid Template","Compared Products Grid Template"
+"Compared Products List Template","Compared Products List Template"
 Set,Set
 "Category Information","Category Information"
 "Enable Category","Enable Category"
@@ -763,3 +790,8 @@ Overview,Overview
 "Skip to the end of the images gallery","Skip to the end of the images gallery"
 "Skip to the beginning of the images gallery","Skip to the beginning of the images gallery"
 Details,Details
+"Recently Compared","Recently Compared"
+"Add To Cart","Add To Cart"
+"Add To Compare","Add To Compare"
+"Learn more","Learn more"
+"Recently Viewed","Recently Viewed"
