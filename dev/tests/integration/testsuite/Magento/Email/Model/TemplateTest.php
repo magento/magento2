@@ -108,7 +108,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->model->getTemplateText());
         $this->assertNotEmpty($this->model->getTemplateSubject());
         $this->assertNotEmpty($this->model->getOrigTemplateVariables());
-        $this->assertInternalType('array', \Zend_Json::decode($this->model->getOrigTemplateVariables()));
+        $this->assertInternalType('array', json_decode($this->model->getOrigTemplateVariables()));
     }
 
     /**
