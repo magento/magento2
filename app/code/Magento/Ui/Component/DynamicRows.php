@@ -7,6 +7,7 @@ namespace Magento\Ui\Component;
 
 /**
  * Ui component DynamicRows
+ * @api
  */
 class DynamicRows extends AbstractComponent
 {

@@ -8,6 +8,7 @@ namespace Magento\Framework\Config\Data;
 
 /**
  * Data transfer object to store config data for config options
+ * @api
  */
 class ConfigData
 {

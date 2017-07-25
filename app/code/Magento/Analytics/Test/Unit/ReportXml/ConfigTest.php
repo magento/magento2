@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\Config;
-use Magento\Analytics\ReportXml\Config\Data;
+use Magento\Framework\Config\DataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dataMock;
 
@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->dataMock = $this->getMockBuilder(Data::class)
+        $this->dataMock = $this->getMockBuilder(DataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

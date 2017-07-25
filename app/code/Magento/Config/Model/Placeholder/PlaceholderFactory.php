@@ -8,6 +8,9 @@ namespace Magento\Config\Model\Placeholder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api
+ */
 class PlaceholderFactory
 {
     /**

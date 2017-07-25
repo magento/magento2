@@ -175,6 +175,13 @@ class Attribute extends Form
     private $attributesGridSpinner = '.productFormConfigurable [data-role="spinner"]';
 
     /**
+     * CSS Selector for attribute grid.
+     *
+     * @var string
+     */
+    private $attributesGridSelector = '#variation-steps-wizard_step1 .admin__data-grid-outer-wrap';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -192,6 +199,7 @@ class Attribute extends Form
         }
 
         //select attributes
+        $this->waitAttributesGridLoad();
         $this->getAttributesGrid()->resetFilter();
         $this->getAttributesGrid()->waitForElementNotVisible($this->attributesGridSpinner);
         $this->getTemplateBlock()->waitLoader();
@@ -221,13 +229,24 @@ class Attribute extends Form
     }
 
     /**
+     * Wait for 'Attributes Grid' loaded.
+     *
+     * @return void
+     */
+    private function waitAttributesGridLoad()
+    {
+        $this->waitForElementVisible($this->attributesGridSelector);
+        $this->waitForElementNotVisible($this->attributesGridSpinner);
+    }
+
+    /**
      * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid
      */
     public function getAttributesGrid()
     {
         return $this->blockFactory->create(
             \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid::class,
-            ['element' => $this->browser->find('#variation-steps-wizard_step1 .admin__data-grid-outer-wrap')]
+            ['element' => $this->browser->find($this->attributesGridSelector)]
         );
     }
 

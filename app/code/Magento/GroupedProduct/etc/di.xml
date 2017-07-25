@@ -87,11 +87,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock\Grouped">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
     <preference for="Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\GroupedInterface"
                 type="Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">

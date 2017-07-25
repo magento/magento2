@@ -64,5 +64,14 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
+
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation9">
+            <data name="products/0" xsi:type="string">bundleProduct::default_with_one_simple_product_and_custom_option</data>
+            <data name="qty" xsi:type="string">1</data>
+            <data name="toConfigure" xsi:type="boolean">true</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProceedToCheckoutButton" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
+        </variation>
     </testCase>
 </config>

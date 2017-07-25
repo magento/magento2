@@ -5,6 +5,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Quote;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
 {
     /**

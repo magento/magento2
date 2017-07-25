@@ -15,6 +15,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide functionality for Fulltext Search indexing.
+ *
+ * @api
  */
 class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
