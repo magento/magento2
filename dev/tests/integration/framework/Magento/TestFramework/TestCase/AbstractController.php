@@ -268,10 +268,21 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         /** @var $cookieManager CookieManagerInterface */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
-        $messages = json_decode(
-            $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, json_encode([]))
-        );
-        if (!is_array($messages)) {
+
+        /** @var $jsonSerializer \Magento\Framework\Serialize\Serializer\Json */
+        $jsonSerializer = $this->_objectManager->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        try {
+            $messages = $jsonSerializer->unserialize(
+                $cookieManager->getCookie(
+                    MessagePlugin::MESSAGES_COOKIES_NAME,
+                    $jsonSerializer->serialize([])
+                )
+            );
+
+            if (!is_array($messages)) {
+                $messages = [];
+            }
+        } catch (\InvalidArgumentException $e) {
             $messages = [];
         }
 
