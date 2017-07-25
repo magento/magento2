@@ -74,13 +74,6 @@ define([
         },
 
         /**
-         * @return {*}
-         */
-        getItems: function () {
-            return window.checkoutConfig.quoteItemData;
-        },
-
-        /**
          *
          * @return {*}
          */

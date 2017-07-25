@@ -254,7 +254,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['formKey'] = $this->formKey->getFormKey();
         $output['customerData'] = $this->getCustomerData();
         $output['quoteData'] = $this->getQuoteData();
-        $output['quoteItemData'] = $this->getQuoteItemData();
         $output['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
         $output['storeCode'] = $this->getStoreCode();
@@ -367,29 +366,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             }
         }
         return $quoteData;
-    }
-
-    /**
-     * Retrieve quote item data
-     *
-     * @return array
-     */
-    private function getQuoteItemData()
-    {
-        $quoteItemData = [];
-        $quoteId = $this->checkoutSession->getQuote()->getId();
-        if ($quoteId) {
-            $quoteItems = $this->quoteItemRepository->getList($quoteId);
-            foreach ($quoteItems as $index => $quoteItem) {
-                $quoteItemData[$index] = $quoteItem->toArray();
-                $quoteItemData[$index]['options'] = $this->getFormattedOptionValue($quoteItem);
-                $quoteItemData[$index]['thumbnail'] = $this->imageHelper->init(
-                    $quoteItem->getProduct(),
-                    'product_thumbnail_image'
-                )->getUrl();
-            }
-        }
-        return $quoteItemData;
     }
 
     /**
