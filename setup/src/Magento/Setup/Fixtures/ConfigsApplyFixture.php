@@ -14,7 +14,7 @@ class ConfigsApplyFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 150;
+    protected $priority = 0;
 
     /**
      * {@inheritdoc}
