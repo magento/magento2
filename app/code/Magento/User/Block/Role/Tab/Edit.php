@@ -200,7 +200,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     {
         $resources = $this->_aclResourceProvider->getAclResources();
         $rootArray = $this->_integrationData->mapResources(
-            isset($resources[1]['children']) ? $resources[1]['children'] : []
+            isset($resources[2]['children']) ? $resources[2]['children'] : []
         );
         return $rootArray;
     }
