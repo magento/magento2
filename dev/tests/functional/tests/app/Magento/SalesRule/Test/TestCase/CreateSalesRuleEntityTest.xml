@@ -447,8 +447,7 @@
             <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">140.00</data>
             <data name="cartPrice/discount" xsi:type="string">70.00</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-65554: [FT] Magento\SalesRule\Test\TestCase\CreateSalesRuleEntityTest fails on CI</data>
+            <data name="issue" xsi:type="string">MAGETWO-71041: Can not create Sales Rule with Auto-generated Coupon Code</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
