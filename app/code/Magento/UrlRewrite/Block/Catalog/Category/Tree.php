@@ -119,6 +119,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $result = $this->_getNodesArray($this->getRoot(null, $recursionLevel));
         }
 
+        $result = $this->convertNameSingleQuote($result);
+
         if ($asJson) {
             return $this->_jsonEncoder->encode($result);
         }
@@ -180,6 +182,27 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $result['expanded'] = !empty($result['children']);
 
         return $result;
+    }
+
+    /**
+     * Scrubs category names of single quotes, replacing them with HTML Entity equivalent
+     *
+     * @param array $node
+     * @return array
+     */
+    private function convertNameSingleQuote($node)
+    {
+        if (!empty($node['name']) && strpos($node['name'], '\'') !== false) {
+            $node['name'] = str_replace('\'', '&apos;', $node['name']);
+        }
+
+        // Recurse through all children
+        $childrenCount = !empty($node['children']) ? count($node['children']) : 0;
+        for ($i = 0; $i < $childrenCount; $i++) {
+            $node['children'][$i] = $this->convertNameSingleQuote($node['children'][$i]);
+        }
+
+        return $node;
     }
 
     /**
