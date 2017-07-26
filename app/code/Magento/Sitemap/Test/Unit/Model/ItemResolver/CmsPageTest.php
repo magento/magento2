@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Test\Unit\Model;
+namespace Magento\Sitemap\Test\Unit\Model\ItemResolver;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
