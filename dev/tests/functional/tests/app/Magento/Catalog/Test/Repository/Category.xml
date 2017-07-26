@@ -169,5 +169,15 @@
                 <item name="dataset" xsi:type="string">catalogProductSimple::default</item>
             </field>
         </dataset>
+
+        <dataset name="default_with_single_quote_in_name">
+            <field name="name" xsi:type="string">Category\'%isolation%</field>
+            <field name="url_key" xsi:type="string">category%isolation%</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
     </repository>
 </config>
