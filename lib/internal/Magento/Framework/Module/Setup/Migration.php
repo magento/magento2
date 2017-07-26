@@ -133,6 +133,11 @@ class Migration
     private $setup;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param ModuleDataSetupInterface $setup
      * @param Filesystem $filesystem
      * @param MigrationData $migrationData
@@ -144,7 +149,8 @@ class Migration
         Filesystem $filesystem,
         MigrationData $migrationData,
         $confPathToMapFile,
-        $compositeModules = []
+        $compositeModules = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pathToMapFile = $confPathToMapFile;
@@ -155,6 +161,8 @@ class Migration
         ];
         $this->_compositeModules = $compositeModules;
         $this->setup = $setup;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -694,10 +702,12 @@ class Migration
      *
      * @param string $encodedValue
      * @param int $objectDecodeType
-     * @return mixed
+     * @return array|bool|float|int|mixed|null|string
+     * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
+    protected function _jsonDecode($encodedValue, $objectDecodeType = 1)
     {
-        return \Zend_Json::decode($encodedValue, $objectDecodeType);
+        return $this->serializer->unserialize($encodedValue);
     }
 }
