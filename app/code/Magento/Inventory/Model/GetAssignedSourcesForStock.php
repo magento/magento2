@@ -85,7 +85,6 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
             return $searchResult->getItems();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            // TODO:
             throw new LocalizedException(__('Could not load Sources for Stock'), $e);
         }
     }
