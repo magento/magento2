@@ -143,6 +143,8 @@ class Migration
      * @param MigrationData $migrationData
      * @param string $confPathToMapFile
      * @param array $compositeModules
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
