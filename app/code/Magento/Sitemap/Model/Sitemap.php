@@ -277,6 +277,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param DataObject $sitemapItem
      * @return $this
      * @deprecated
+     * @see ItemResolverInterface
      */
     public function addSitemapItem(DataObject $sitemapItem)
     {
@@ -290,10 +291,37 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return void
      * @deprecated
+     * @see ItemResolverInterface
      */
     public function collectSitemapItems()
     {
+        /** @var $helper \Magento\Sitemap\Helper\Data */
+        $helper = $this->_sitemapData;
+        $storeId = $this->getStoreId();
 
+        $this->addSitemapItem(new DataObject(
+            [
+                'changefreq' => $helper->getCategoryChangefreq($storeId),
+                'priority' => $helper->getCategoryPriority($storeId),
+                'collection' => $this->_categoryFactory->create()->getCollection($storeId),
+            ]
+        ));
+
+        $this->addSitemapItem(new DataObject(
+            [
+                'changefreq' => $helper->getProductChangefreq($storeId),
+                'priority' => $helper->getProductPriority($storeId),
+                'collection' => $this->_productFactory->create()->getCollection($storeId),
+            ]
+        ));
+
+        $this->addSitemapItem(new DataObject(
+            [
+                'changefreq' => $helper->getPageChangefreq($storeId),
+                'priority' => $helper->getPagePriority($storeId),
+                'collection' => $this->_cmsFactory->create()->getCollection($storeId),
+            ]
+        ));
     }
 
     /**
@@ -304,7 +332,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _initSitemapItems()
     {
         $sitemapItems = $this->itemResolver->getItems($this->getStoreId());
-        $this->collectSitemapItems();
         $mappedItems = $this->mapToSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
@@ -791,7 +818,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $items = [];
 
         foreach ($this->_sitemapItems as $data) {
-            foreach($data->getCollection() as $item) {
+            foreach ($data->getCollection() as $item) {
                 $items[] = $this->sitemapItemFactory->create([
                     'url' => $item->getUrl(),
                     'updatedAt' => $item->getUpdatedAt(),
