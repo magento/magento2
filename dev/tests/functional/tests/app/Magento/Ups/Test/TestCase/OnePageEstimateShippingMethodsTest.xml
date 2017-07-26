@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageEstimateShippingMethodsTest" summary="Estimate shipping methods at checkout" ticketId="MAGETWO-71002">
-        <variation name="OnePageEstimateShippingMethodsTestUpsVariation" ticketId="MAGETWO-71003">
+        <variation name="OnePageEstimateShippingMethodsTestUpsVariation1" ticketId="MAGETWO-71003">
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="editAddressData" xsi:type="array">
@@ -15,8 +15,16 @@
                 <item name="region_id" xsi:type="string">Alabama</item>
                 <item name="postcode" xsi:type="string">35201</item>
             </data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="configData" xsi:type="string">ups, shipping_origin_US_CA</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodsSuccessEstimateAfterAddressEdit" />
+        </variation>
+        <variation name="OnePageEstimateShippingMethodsTestUpsVariation2" ticketId="MAGETWO-71044">
+            <data name="products" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="configData" xsi:type="string">ups, shipping_origin_US_CA</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodsSuccessEstimate" />
         </variation>
     </testCase>
 </config>
