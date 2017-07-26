@@ -58,6 +58,8 @@ class Json extends AbstractResult
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated
+     * @see Json::setArrayData
+     * @see Json::setJsonData
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
