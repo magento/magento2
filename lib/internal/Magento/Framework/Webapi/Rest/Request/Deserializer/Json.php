@@ -12,7 +12,10 @@ use Magento\Framework\Phrase;
 
 class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
-    /** @var \Magento\Framework\Json\Decoder */
+    /**
+     * @var \Magento\Framework\Json\Decoder
+     * @deprecated
+     */
     protected $decoder;
 
     /**
