@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
@@ -290,7 +289,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('addData')
             ->with($productData);
-        $this->productMock->expects($this->once())
         $this->productMock->expects($this->any())
             ->method('getSku')
             ->willReturn('sku');
