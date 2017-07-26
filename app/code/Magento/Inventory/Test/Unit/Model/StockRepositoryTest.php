@@ -5,17 +5,13 @@
  */
 namespace Magento\Inventory\Test\Unit\Model;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Inventory\Model\ResourceModel\Stock as StockResource;
-use Magento\Inventory\Model\ResourceModel\Stock\Collection as StockCollection;
-use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory as StockCollectionFactory;
 use Magento\Inventory\Model\Stock;
+use Magento\Inventory\Model\StockRepository\GetList;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -33,24 +29,9 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
     private $stockFactory;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $collectionProcessor;
-
-    /**
-     * @var StockCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockCollectionFactory;
-
-    /**
-     * @var StockSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockSearchResultsFactory;
-
-    /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteriaBuilder;
+    private $getList;
 
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -70,24 +51,12 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stockResource = $this->getMockBuilder(StockResource::class)->disableOriginalConstructor()->getMock();
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->stockFactory = $this->getMockBuilder(StockInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
+        $this->getList = $this->getMockBuilder(GetList::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])
-            ->getMock();
-        $this->stockCollectionFactory = $this->getMockBuilder(StockCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->stockSearchResultsFactory = $this->getMockBuilder(StockSearchResultsInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
@@ -102,10 +71,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'stockResource' => $this->stockResource,
                 'stockFactory' => $this->stockFactory,
-                'collectionProcessor' => $this->collectionProcessor,
-                'stockCollectionFactory' => $this->stockCollectionFactory,
-                'stockSearchResultsFactory' => $this->stockSearchResultsFactory,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+                'getList' => $this->getList,
                 'logger' => $this->loggerMock,
             ]
         );
@@ -195,116 +161,34 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListWithSearchCriteria()
     {
-        $items = [
-            $this->getMockBuilder(Stock::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(Stock::class)->disableOriginalConstructor()->getMock()
-        ];
-        $totalCount = 2;
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $stockCollection = $this->getMockBuilder(StockCollection::class)
+        $searchResult = $this->getMockBuilder(StockSearchResultsInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stockCollection
-            ->expects($this->once())
-            ->method('getItems')
-            ->willReturn($items);
-        $stockCollection
-            ->expects($this->once())
-            ->method('getSize')
-            ->willReturn($totalCount);
-        $this->stockCollectionFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($stockCollection);
 
-        $searchResults = $this->getMockBuilder(StockSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchResults
+        $this->getList
             ->expects($this->once())
-            ->method('setItems')
-            ->with($items);
-        $searchResults
-            ->expects($this->once())
-            ->method('setTotalCount')
-            ->with($totalCount);
-        $searchResults
-            ->expects($this->once())
-            ->method('setSearchCriteria')
-            ->with($searchCriteria);
-        $this->stockSearchResultsFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($searchResults);
+            ->method('execute')
+            ->with($searchCriteria)
+            ->willReturn($searchResult);
 
-        $this->collectionProcessor
-            ->expects($this->once())
-            ->method('process')
-            ->with($searchCriteria, $stockCollection);
-
-        self::assertSame($searchResults, $this->model->getList($searchCriteria));
+        self::assertSame($searchResult, $this->model->getList($searchCriteria));
     }
 
     public function testGetListWithoutSearchCriteria()
     {
-        $items = [
-            $this->getMockBuilder(Stock::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(Stock::class)->disableOriginalConstructor()->getMock()
-        ];
-        $totalCount = 2;
-
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
+        $searchResult = $this->getMockBuilder(StockSearchResultsInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->searchCriteriaBuilder
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($searchCriteria);
 
-        $stockCollection = $this->getMockBuilder(StockCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stockCollection
+        $this->getList
             ->expects($this->once())
-            ->method('getItems')
-            ->willReturn($items);
-        $stockCollection
-            ->expects($this->once())
-            ->method('getSize')
-            ->willReturn($totalCount);
-        $this->stockCollectionFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($stockCollection);
+            ->method('execute')
+            ->willReturn($searchResult);
 
-        $searchResults = $this->getMockBuilder(StockSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchResults
-            ->expects($this->once())
-            ->method('setItems')
-            ->with($items);
-        $searchResults
-            ->expects($this->once())
-            ->method('setTotalCount')
-            ->with($totalCount);
-        $searchResults
-            ->expects($this->once())
-            ->method('setSearchCriteria')
-            ->with($searchCriteria);
-        $this->stockSearchResultsFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($searchResults);
-
-        $this->collectionProcessor
-            ->expects($this->never())
-            ->method('process');
-
-        self::assertSame($searchResults, $this->model->getList());
+        self::assertSame($searchResult, $this->model->getList());
     }
 
     public function testDeleteById()
