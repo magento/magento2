@@ -14,15 +14,15 @@
 
 <?php if ($block->getFilesCount() > 0): ?>
     <?php foreach ($block->getFiles() as $file): ?>
-        <div class="filecnt file-font" id="<?php /* @escapeNotVerified */ echo $file['id'] ?>">
+        <div class="filecnt file-font" id="<?= /* @escapeNotVerified */ $file['id'] ?>">
             <p class="nm">
-                <?php /* @escapeNotVerified */ echo $file['text'] ?>
+                <?= /* @escapeNotVerified */ $file['text'] ?>
                 <?php if (isset($file['thumbnailParams'])): ?>
-                    <img src="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
+                    <img src="<?= /* @escapeNotVerified */ $block->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
                 <?php endif; ?>
             </p>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <?php /* @escapeNotVerified */ echo __('We found no files.') ?>
+    <?= /* @escapeNotVerified */ __('We found no files.') ?>
 <?php endif; ?>

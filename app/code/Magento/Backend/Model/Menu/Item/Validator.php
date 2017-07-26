@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Menu\Item;
 
+/**
+ * @api
+ */
 class Validator
 {
     /**

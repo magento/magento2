@@ -56,14 +56,14 @@
             </settings>
             <field name="head_shortcut_icon" formElement="fileUploader">
                 <settings>
-                    <notice translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</notice>
+                    <notice translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!</notice>
                     <label translate="true">Favicon Icon</label>
                     <componentType>fileUploader</componentType>
                 </settings>
                 <formElements>
                     <fileUploader>
                         <settings>
-                            <allowedExtensions>jpg jpeg gif png svg ico apng</allowedExtensions>
+                            <allowedExtensions>jpg jpeg gif png ico apng</allowedExtensions>
                             <maxFileSize>2097152</maxFileSize>
                             <uploaderConfig>
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
@@ -153,14 +153,14 @@
             </settings>
             <field name="header_logo_src" formElement="fileUploader">
                 <settings>
-                    <notice translate="true">Allowed file types: png, gif, jpg, jpeg, svg.</notice>
+                    <notice translate="true">Allowed file types: png, gif, jpg, jpeg.</notice>
                     <label translate="true">Logo Image</label>
                     <componentType>fileUploader</componentType>
                 </settings>
                 <formElements>
                     <fileUploader>
                         <settings>
-                            <allowedExtensions>jpg jpeg gif png svg</allowedExtensions>
+                            <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                             <maxFileSize>2097152</maxFileSize>
                             <uploaderConfig>
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
@@ -247,6 +247,7 @@
                     <dataType>text</dataType>
                     <label translate="true">Default Robots</label>
                     <dataScope>default_robots</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
                 </settings>
                 <formElements>
                     <select>
@@ -261,12 +262,14 @@
                     <dataType>text</dataType>
                     <label translate="true">Edit custom instruction of robots.txt File</label>
                     <dataScope>custom_instructions</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
                 </settings>
             </field>
             <field name="reset_to_defaults" class="Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton" component="Magento_Theme/js/form/component/robots-reset-button" template="Magento_Theme/form/button-field" formElement="button">
                 <settings>
                     <notice translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</notice>
                     <dataScope>reset_to_defaults</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
                 </settings>
                 <formElements>
                     <button>
