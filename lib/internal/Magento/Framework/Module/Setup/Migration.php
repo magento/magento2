@@ -707,8 +707,23 @@ class Migration
      * @return array|bool|float|int|mixed|null|string
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
+     * @see \Magento\Framework\Module\Setup\Migration::jsonDecode
      */
     protected function _jsonDecode($encodedValue, $objectDecodeType = 1)
+    {
+        return $this->jsonDecode($encodedValue);
+    }
+
+    /**
+     * Decodes the given $encodedValue string which is
+     * encoded in the JSON format
+     *
+     * @param string $encodedValue
+     * @return array|bool|float|int|mixed|null|string
+     * @throws \InvalidArgumentException
+     */
+    private function jsonDecode($encodedValue)
     {
         return $this->serializer->unserialize($encodedValue);
     }
