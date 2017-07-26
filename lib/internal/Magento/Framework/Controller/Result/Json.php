@@ -69,7 +69,6 @@ class Json extends AbstractResult
             return $this->setArrayData($data);
         }
 
-        //Should we validate the json here?
         if (is_string($data)) {
             return $this->setJsonData($data);
         }
@@ -80,8 +79,6 @@ class Json extends AbstractResult
     }
 
     /**
-     * Should cover this with a test or 2
-     *
      * @param array $data
      * @return $this
      * @throws \InvalidArgumentException
