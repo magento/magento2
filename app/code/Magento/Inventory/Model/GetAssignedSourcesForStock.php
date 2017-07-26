@@ -90,7 +90,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     }
 
     /**
-     * @param $stockId
+     * @param int $stockId
      * @return \Magento\Framework\DataObject[]
      */
     private function getSourceIds($stockId)

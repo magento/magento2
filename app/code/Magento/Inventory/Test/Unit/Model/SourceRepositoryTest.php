@@ -25,7 +25,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SourceResource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceSource;
+    private $sourceResource;
 
     /**
      * @var SourceInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -69,7 +69,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceSource = $this->getMockBuilder(SourceResource::class)->disableOriginalConstructor()->getMock();
+        $this->sourceResource = $this->getMockBuilder(SourceResource::class)->disableOriginalConstructor()->getMock();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,7 +100,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             \Magento\Inventory\Model\SourceRepository::class,
             [
-                'resourceSource' => $this->resourceSource,
+                'sourceResource' => $this->sourceResource,
                 'sourceFactory' => $this->sourceFactory,
                 'collectionProcessor' => $this->collectionProcessor,
                 'sourceCollectionFactory' => $this->sourceCollectionFactory,
@@ -119,7 +119,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getSourceId')
             ->willReturn($sourceId);
-        $this->resourceSource
+        $this->sourceResource
             ->expects($this->once())
             ->method('save')
             ->with($this->source);
@@ -134,7 +134,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $message = 'some message';
 
-        $this->resourceSource
+        $this->sourceResource
             ->expects($this->once())
             ->method('save')
             ->willThrowException(new \Exception($message));
@@ -159,7 +159,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->source);
-        $this->resourceSource
+        $this->sourceResource
             ->expects($this->once())
             ->method('load')
             ->with($this->source, $sourceId, SourceInterface::SOURCE_ID);
@@ -182,7 +182,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->source);
-        $this->resourceSource->expects($this->once())
+        $this->sourceResource->expects($this->once())
             ->method('load')
             ->with(
                 $this->source,

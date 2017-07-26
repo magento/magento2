@@ -5,7 +5,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Inventory\Model\ResourceModel\SourceItem as SourceResource;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResource;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory as SourceItemCollectionFactory;
 use Magento\Inventory\Model\SourceItem;
@@ -22,9 +22,9 @@ use Psr\Log\LoggerInterface;
 class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SourceResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceItemResource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceSource;
+    private $sourceItemResource;
 
     /**
      * @var SourceItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -68,7 +68,9 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceSource = $this->getMockBuilder(SourceResource::class)->disableOriginalConstructor()->getMock();
+        $this->sourceItemResource = $this->getMockBuilder(SourceItemResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -97,7 +99,7 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->sourceItemRepository = $objectManager->getObject(
             SourceItemRepository::class,
             [
-                'resourceSource' => $this->resourceSource,
+                'sourceItemResource' => $this->sourceItemResource,
                 'sourceItemFactory' => $this->sourceItemFactory,
                 'collectionProcessor' => $this->collectionProcessor,
                 'sourceItemCollectionFactory' => $this->sourceItemCollectionFactory,
@@ -163,7 +165,7 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $this->resourceSource
+        $this->sourceItemResource
             ->expects($this->once())
             ->method('delete')
             ->with($this->sourceItem);

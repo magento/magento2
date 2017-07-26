@@ -25,7 +25,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var StockResource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceStock;
+    private $stockResource;
 
     /**
      * @var StockInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -69,7 +69,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceStock = $this->getMockBuilder(StockResource::class)->disableOriginalConstructor()->getMock();
+        $this->stockResource = $this->getMockBuilder(StockResource::class)->disableOriginalConstructor()->getMock();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,7 +100,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             \Magento\Inventory\Model\StockRepository::class,
             [
-                'resourceStock' => $this->resourceStock,
+                'stockResource' => $this->stockResource,
                 'stockFactory' => $this->stockFactory,
                 'collectionProcessor' => $this->collectionProcessor,
                 'stockCollectionFactory' => $this->stockCollectionFactory,
@@ -119,7 +119,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getStockId')
             ->willReturn($stockId);
-        $this->resourceStock
+        $this->stockResource
             ->expects($this->once())
             ->method('save')
             ->with($this->stock);
@@ -134,7 +134,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $message = 'some message';
 
-        $this->resourceStock
+        $this->stockResource
             ->expects($this->once())
             ->method('save')
             ->willThrowException(new \Exception($message));
@@ -159,7 +159,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->stock);
-        $this->resourceStock
+        $this->stockResource
             ->expects($this->once())
             ->method('load')
             ->with($this->stock, $stockId, StockInterface::STOCK_ID);
@@ -182,7 +182,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->stock);
-        $this->resourceStock->expects($this->once())
+        $this->stockResource->expects($this->once())
             ->method('load')
             ->with(
                 $this->stock,
@@ -318,12 +318,12 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->stock);
-        $this->resourceStock
+        $this->stockResource
             ->expects($this->once())
             ->method('load')
             ->with($this->stock, $stockId, StockInterface::STOCK_ID);
 
-        $this->resourceStock
+        $this->stockResource
             ->expects($this->once())
             ->method('delete')
             ->with($this->stock);
@@ -346,7 +346,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->stock);
-        $this->resourceStock->expects($this->once())
+        $this->stockResource->expects($this->once())
             ->method('load')
             ->with(
                 $this->stock,
