@@ -64,10 +64,10 @@ class PackageInfo
     private $serializer;
 
     /**
-     * Constructor
-     *
      * @param Dir\Reader $reader
      * @param ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Dir\Reader $reader,
