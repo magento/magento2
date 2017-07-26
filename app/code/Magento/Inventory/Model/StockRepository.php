@@ -5,19 +5,14 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
-use Magento\Inventory\Model\ResourceModel\Stock\Collection;
-use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory;
+use Magento\Inventory\Model\StockRepository\GetList;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -37,24 +32,9 @@ class StockRepository implements StockRepositoryInterface
     private $stockFactory;
 
     /**
-     * @var CollectionProcessorInterface
+     * @var GetList
      */
-    private $collectionProcessor;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $stockCollectionFactory;
-
-    /**
-     * @var StockSearchResultsInterfaceFactory
-     */
-    private $stockSearchResultsFactory;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $getList;
 
     /**
      * @var LoggerInterface
@@ -66,27 +46,18 @@ class StockRepository implements StockRepositoryInterface
      *
      * @param StockResourceModel $stockResource
      * @param StockInterfaceFactory $stockFactory
-     * @param CollectionProcessorInterface $collectionProcessor
-     * @param CollectionFactory $stockCollectionFactory
-     * @param StockSearchResultsInterfaceFactory $stockSearchResultsFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param GetList $getList
      * @param LoggerInterface $logger
      */
     public function __construct(
         StockResourceModel $stockResource,
         StockInterfaceFactory $stockFactory,
-        CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $stockCollectionFactory,
-        StockSearchResultsInterfaceFactory $stockSearchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        GetList $getList,
         LoggerInterface $logger
     ) {
         $this->stockResource = $stockResource;
         $this->stockFactory = $stockFactory;
-        $this->collectionProcessor = $collectionProcessor;
-        $this->stockCollectionFactory = $stockCollectionFactory;
-        $this->stockSearchResultsFactory = $stockSearchResultsFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->getList = $getList;
         $this->logger = $logger;
     }
 
@@ -139,20 +110,6 @@ class StockRepository implements StockRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
-        /** @var Collection $collection */
-        $collection = $this->stockCollectionFactory->create();
-
-        if (null === $searchCriteria) {
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-        } else {
-            $this->collectionProcessor->process($searchCriteria, $collection);
-        }
-
-        /** @var StockSearchResultsInterface $searchResult */
-        $searchResult = $this->stockSearchResultsFactory->create();
-        $searchResult->setItems($collection->getItems());
-        $searchResult->setTotalCount($collection->getSize());
-        $searchResult->setSearchCriteria($searchCriteria);
-        return $searchResult;
+        return $this->getList->execute($searchCriteria);
     }
 }
