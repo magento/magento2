@@ -46,17 +46,17 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that the getTree() method scrubs single quotes and apostrophes from names
+     * Test that the getTreeArray() method scrubs single quotes and apostrophes from names
      *
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category_with_apostrophe.php
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_products.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_with_apostrophe.php
      */
     public function testGetTreeArrayApostropheReplaced()
     {
         $tree = $this->_treeBlock->getTreeArray();
 
-        $this->assertContains('&apos;', $tree['children'][0]['children'][0]['children'][0]['name']);
+        $this->assertNotContains('\'', $tree['children'][0]['children'][0]['children'][0]['name']);
+        $this->assertEquals('&#039;Category 6&#039;', $tree['children'][0]['children'][0]['children'][0]['name']);
     }
 
     /**
