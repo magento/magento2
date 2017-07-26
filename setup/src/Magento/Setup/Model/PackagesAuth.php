@@ -99,6 +99,7 @@ class PackagesAuth
      */
     public function checkCredentials($token, $secretKey)
     {
+        $response = ['success' => true];
         $serviceUrl = $this->getPackagesJsonUrl();
         $this->curlClient->setCredentials($token, $secretKey);
         try {
@@ -107,13 +108,13 @@ class PackagesAuth
                 $packagesInfo = $this->curlClient->getBody();
                 $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
                 $directory->writeFile(self::PATH_TO_PACKAGES_FILE, $packagesInfo);
-                return $this->serializer->serialize(['success' => true]);
             } else {
-                return $this->serializer->serialize(['success' => false, 'message' => 'Bad credentials']);
+                $response = ['success' => false, 'message' => 'Bad credentials'];
             }
         } catch (\Exception $e) {
-            return $this->serializer->serialize(['success' => false, 'message' => $e->getMessage()]);
+            $response = ['success' => false, 'message' => $e->getMessage()];
         }
+        return $this->serializer->serialize($response);
     }
 
     /**
