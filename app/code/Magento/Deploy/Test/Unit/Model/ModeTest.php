@@ -114,17 +114,17 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         ];
         $this->writerMock->expects($this->once())
             ->method("saveConfig")
-            ->willReturnCallback(function($data) use (&$dataStorage){
+            ->willReturnCallback(function ($data) use (&$dataStorage) {
                 $dataStorage = $data;
             });
         $this->readerMock->expects($this->any())
             ->method('load')
-            ->willReturnCallback(function() use (&$dataStorage){
+            ->willReturnCallback(function () use (&$dataStorage) {
                 return $dataStorage[ConfigFilePool::APP_ENV];
             });
         $this->filesystemMock->expects($this->once())
             ->method("regenerateStatic")
-            ->willReturnCallback(function() use (&$modeModel, &$mode){
+            ->willReturnCallback(function () use (&$modeModel, &$mode) {
                 $mode = $modeModel->getMode();
             });
         $this->model->enableProductionMode();
@@ -140,7 +140,6 @@ class ModeTest extends \PHPUnit_Framework_TestCase
     public function testEnableDeveloperModeOnFail()
     {
         $mode = State::MODE_DEVELOPER;
-        $modeModel = $this->model;
         $dataStorage = [
             ConfigFilePool::APP_ENV => [
                 State::PARAM_MODE => State::MODE_DEVELOPER,
@@ -152,12 +151,12 @@ class ModeTest extends \PHPUnit_Framework_TestCase
                 [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]])],
                 [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]])]
             )
-            ->willReturnCallback(function($data) use (&$dataStorage){
+            ->willReturnCallback(function ($data) use (&$dataStorage) {
                 $dataStorage = $data;
             });
         $this->readerMock->expects($this->any())
             ->method('load')
-            ->willReturnCallback(function() use (&$dataStorage){
+            ->willReturnCallback(function () use (&$dataStorage) {
                 return $dataStorage[ConfigFilePool::APP_ENV];
             });
         $this->filesystemMock->expects($this->once())
