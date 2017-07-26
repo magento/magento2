@@ -50,18 +50,28 @@ class PackagesAuth
     private $filesystem;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Magento\Framework\HTTP\Client\Curl $curl
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator,
         \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->curlClient = $curl;
         $this->filesystem = $filesystem;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -85,6 +95,7 @@ class PackagesAuth
      * @param string $token
      * @param string $secretKey
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function checkCredentials($token, $secretKey)
     {
@@ -96,12 +107,12 @@ class PackagesAuth
                 $packagesInfo = $this->curlClient->getBody();
                 $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
                 $directory->writeFile(self::PATH_TO_PACKAGES_FILE, $packagesInfo);
-                return \Zend_Json::encode(['success' => true]);
+                return $this->serializer->serialize(['success' => true]);
             } else {
-                return \Zend_Json::encode(['success' => false, 'message' => 'Bad credentials']);
+                return $this->serializer->serialize(['success' => false, 'message' => 'Bad credentials']);
             }
         } catch (\Exception $e) {
-            return \Zend_Json::encode(['success' => false, 'message' => $e->getMessage()]);
+            return $this->serializer->serialize(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
