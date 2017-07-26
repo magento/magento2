@@ -133,47 +133,15 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        /** @var string $productSku */
         $productSku = $option->getProductSku();
         if (!$productSku) {
             throw new CouldNotSaveException(__('ProductSku should be specified'));
         }
-        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku);
-        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $option->setData('product_id', $product->getData($metadata->getLinkField()));
-        $option->setData('store_id', $product->getStoreId());
-
-        if ($option->getOptionId()) {
-            $options = $product->getOptions();
-            if (!$options) {
-                $options = $this->getProductOptions($product);
-            }
-            $persistedOption = array_filter(
-                $options,
-                function ($iOption) use ($option) {
-                    return $option->getOptionId() == $iOption->getOptionId();
-                }
-            );
-            $persistedOption = reset($persistedOption);
-
-            if (!$persistedOption) {
-                throw new NoSuchEntityException();
-            }
-
-            /** @var array $originalValues */
-            $originalValues = $persistedOption->getValues();
-            /** @var array $newValues */
-            $newValues = $option->getData('values');
-            if ($newValues) {
-                $newValues = $this->markRemovedValues($newValues, $originalValues);
-                $option->setData('values', $newValues);
-            }
-        }
-
+        $option->setOptionId(null);
         $option->save();
-
         return $option;
     }
 
@@ -235,7 +203,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->optionFactory) {
             $this->optionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\OptionFactory::class);
+                ->get('Magento\Catalog\Model\Product\OptionFactory');
         }
         return $this->optionFactory;
     }
@@ -248,7 +216,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->collectionFactory) {
             $this->collectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class);
+                ->get('Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory');
         }
         return $this->collectionFactory;
     }
@@ -261,7 +229,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }
@@ -274,7 +242,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->hydratorPool) {
             $this->hydratorPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\HydratorPool::class);
+                ->get('Magento\Framework\EntityManager\HydratorPool');
         }
         return $this->hydratorPool;
     }
