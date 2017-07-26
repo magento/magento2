@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Locale;
  * Locale manager model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Manager
 {

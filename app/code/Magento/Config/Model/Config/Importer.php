@@ -13,8 +13,7 @@ use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\Flag\FlagResource;
-use Magento\Framework\FlagFactory;
+use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
@@ -23,6 +22,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  *
  * {@inheritdoc}
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
+ * @api
  */
 class Importer implements ImporterInterface
 {
@@ -32,18 +32,11 @@ class Importer implements ImporterInterface
     const FLAG_CODE = 'system_config_snapshot';
 
     /**
-     * The flag factory.
+     * The flag manager.
      *
-     * @var FlagFactory
+     * @var FlagManager
      */
-    private $flagFactory;
-
-    /**
-     * The flag resource.
-     *
-     * @var FlagResource
-     */
-    private $flagResource;
+    private $flagManager;
 
     /**
      * An array utils.
@@ -81,8 +74,7 @@ class Importer implements ImporterInterface
     private $saveProcessor;
 
     /**
-     * @param FlagFactory $flagFactory The flag factory
-     * @param FlagResource $flagResource The flag resource
+     * @param FlagManager $flagManager The flag manager
      * @param ArrayUtils $arrayUtils An array utils
      * @param SaveProcessor $saveProcessor Saves configuration data
      * @param ScopeConfigInterface $scopeConfig The application config storage.
@@ -90,16 +82,14 @@ class Importer implements ImporterInterface
      * @param ScopeInterface $scope The application scope
      */
     public function __construct(
-        FlagFactory $flagFactory,
-        FlagResource $flagResource,
+        FlagManager $flagManager,
         ArrayUtils $arrayUtils,
         SaveProcessor $saveProcessor,
         ScopeConfigInterface $scopeConfig,
         State $state,
         ScopeInterface $scope
     ) {
-        $this->flagFactory = $flagFactory;
-        $this->flagResource = $flagResource;
+        $this->flagManager = $flagManager;
         $this->arrayUtils = $arrayUtils;
         $this->saveProcessor = $saveProcessor;
         $this->scopeConfig = $scopeConfig;
@@ -118,13 +108,10 @@ class Importer implements ImporterInterface
         $currentScope = $this->scope->getCurrentScope();
 
         try {
-            $flag = $this->flagFactory->create(['data' => ['flag_code' => static::FLAG_CODE]]);
-            $this->flagResource->load($flag, static::FLAG_CODE, 'flag_code');
-            $previouslyProcessedData = $flag->getFlagData() ?: [];
-
+            $savedFlag = $this->flagManager->getFlagData(static::FLAG_CODE) ?: [];
             $changedData = array_replace_recursive(
-                $this->arrayUtils->recursiveDiff($previouslyProcessedData, $data),
-                $this->arrayUtils->recursiveDiff($data, $previouslyProcessedData)
+                $this->arrayUtils->recursiveDiff($savedFlag, $data),
+                $this->arrayUtils->recursiveDiff($data, $savedFlag)
             );
 
             /**
@@ -135,15 +122,13 @@ class Importer implements ImporterInterface
                 $this->scopeConfig->clean();
             }
 
-            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData) {
+            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData, $data) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
                 // Invoke saving of new values.
                 $this->saveProcessor->process($changedData);
+                $this->flagManager->saveFlag(static::FLAG_CODE, $data);
             });
-
-            $flag->setFlagData($data);
-            $this->flagResource->save($flag);
         } catch (\Exception $e) {
             throw new InvalidTransitionException(__('%1', $e->getMessage()), $e);
         } finally {

@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Search;
  * Search Order Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Order extends \Magento\Framework\DataObject
 {
