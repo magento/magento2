@@ -50,20 +50,45 @@ class Json extends AbstractResult
     /**
      * Set json data
      *
-     * @param mixed $data
-     * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
-     * @param array $options Additional options used during encoding
-     * @return $this
+     * @param array|string|\Magento\Framework\DataObject $data
+     * @param bool $cycleCheck
+     * @param array $options
+     * @return Json
      * @throws \InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        if (is_object($data) && method_exists($data, 'toJson')) {
-            $this->json = $data->toJson();
-        } else {
-            $this->json = $this->serializer->serialize($data);
+        if ($data instanceof \Magento\Framework\DataObject) {
+            return $this->setArrayData($data->toArray());
         }
+
+        if (is_array($data)) {
+            return $this->setArrayData($data);
+        }
+
+        //Should we validate the json here?
+        if (is_string($data)) {
+            return $this->setJsonData($data);
+        }
+
+        throw new \Magento\Framework\Exception\LocalizedException(
+            new \Magento\Framework\Phrase('Invalid argument type')
+        );
+    }
+
+    /**
+     * Should cover this with a test or 2
+     *
+     * @param array $data
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setArrayData(array $data)
+    {
+        $this->setJsonData($this->serializer->serialize($data));
         return $this;
     }
 
