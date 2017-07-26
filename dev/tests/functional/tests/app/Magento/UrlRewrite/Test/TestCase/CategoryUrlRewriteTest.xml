@@ -17,15 +17,5 @@
             <data name="categoryUpdates/data/url_key" xsi:type="string">UrlKey%isolation%</data>
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertCategoryUrlWithCustomStoreView" />
         </variation>
-        <variation name="CategoryUrlRewriteTestVariation2">
-            <data name="storeView/dataset" xsi:type="string">custom</data>
-            <data name="childCategory/dataset" xsi:type="string">default</data>
-            <data name="childCategory/data/category_products/dataset" xsi:type="string">catalogProductSimple::default_with_single_quote_in_name</data>
-            <data name="parentCategory/dataset" xsi:type="string">default</data>
-            <data name="parentCategory/data/category_products/dataset" xsi:type="string">catalogProductSimple::default_with_single_quote_in_name</data>
-            <data name="categoryUpdates/data/use_default_url_key" xsi:type="string">No</data>
-            <data name="categoryUpdates/data/url_key" xsi:type="string">UrlKey%isolation%</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertCategoryUrlWithCustomStoreView" />
-        </variation>
     </testCase>
 </config>
