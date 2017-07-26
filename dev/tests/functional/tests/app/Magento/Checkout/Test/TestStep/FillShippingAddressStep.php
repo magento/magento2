@@ -51,6 +51,7 @@ class FillShippingAddressStep implements TestStepInterface
     {
         if ($this->shippingAddress) {
             $this->checkoutOnepage->getShippingBlock()->fill($this->shippingAddress);
+            $this->checkoutOnepage->getShippingMethodBlock()->waitForShippingRates();
         }
     }
 }
