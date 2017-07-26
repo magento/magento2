@@ -254,7 +254,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['formKey'] = $this->formKey->getFormKey();
         $output['customerData'] = $this->getCustomerData();
         $output['quoteData'] = $this->getQuoteData();
-        $output['quoteItemData'] = $this->getQuoteItemData();
+        $output['quoteItemData'] = $this->getQuoteItemData(); //@deprecated see $this->getQuoteItemData()
         $output['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
         $output['storeCode'] = $this->getStoreCode();
@@ -373,6 +373,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve quote item data
      *
      * @return array
+     * @deprecated Items data should be accessed using "getTotalsData()['items']"
      */
     private function getQuoteItemData()
     {
