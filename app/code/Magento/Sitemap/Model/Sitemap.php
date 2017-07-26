@@ -10,6 +10,7 @@ namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
@@ -175,6 +176,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private $configReader;
 
     /**
+     * Sitemap Item Factory
+     *
+     * @var SitemapItemInterfaceFactory|null
+     */
+    private $sitemapItemFactory;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -195,6 +203,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param DocumentRoot|null $documentRoot
      * @param ItemResolverInterface|null $itemResolver
      * @param SitemapConfigReaderInterface|null $configReader
+     * @param SitemapItemInterfaceFactory|null $sitemapItemFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -215,11 +224,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         array $data = [],
         \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
         ItemResolverInterface $itemResolver = null,
-        SitemapConfigReaderInterface $configReader = null
+        SitemapConfigReaderInterface $configReader = null,
+        SitemapItemInterfaceFactory $sitemapItemFactory = null
     ) {
+        $objectManager = ObjectManager::getInstance();
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
+        $documentRoot = $documentRoot ?: $objectManager->get(DocumentRoot::class);
         $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
@@ -228,10 +239,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
-        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
-        $this->configReader = $configReader ?: ObjectManager::getInstance()->get(SitemapConfigReaderInterface::class);
-
+        $this->itemResolver = $itemResolver ?: $objectManager->get(ItemResolverInterface::class);
+        $this->configReader = $configReader ?: $objectManager->get(SitemapConfigReaderInterface::class);
+        $this->sitemapItemFactory = $sitemapItemFactory ?: $objectManager->get(SitemapItemInterfaceFactory::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+
     }
 
     /**
@@ -260,13 +272,42 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     }
 
     /**
+     * Add a sitemap item to the array of sitemap items
+     *
+     * @param DataObject $sitemapItem
+     * @return $this
+     * @deprecated
+     */
+    public function addSitemapItem(DataObject $sitemapItem)
+    {
+        $this->_sitemapItems[] = $sitemapItem;
+
+        return $this;
+    }
+
+    /**
+     * Collect all sitemap items
+     *
+     * @return void
+     * @deprecated
+     */
+    public function collectSitemapItems()
+    {
+
+    }
+
+    /**
      * Initialize sitemap
      *
      * @return void
      */
     protected function _initSitemapItems()
     {
-        $this->_sitemapItems = $this->itemResolver->getItems($this->getStoreId());
+        $sitemapItems = $this->itemResolver->getItems($this->getStoreId());
+        $this->collectSitemapItems();
+        $mappedItems = $this->mapToSitemapItem();
+        $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
+
 
         $this->_tags = [
             self::TYPE_INDEX => [
@@ -738,6 +779,30 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         }
 
         return PHP_EOL;
+    }
+
+    /**
+     * Sitemap item mapper for backwards compatibility
+     *
+     * @return array
+     */
+    private function mapToSitemapItem()
+    {
+        $items = [];
+
+        foreach ($this->_sitemapItems as $data) {
+            foreach($data->getCollection() as $item) {
+                $items[] = $this->sitemapItemFactory->create([
+                    'url' => $item->getUrl(),
+                    'updatedAt' => $item->getUpdatedAt(),
+                    'images' => $item->getImages(),
+                    'priority' => $data->getPriority(),
+                    'changeFrequency' => $data->getChangeFrequency(),
+                ]);
+            }
+        }
+
+        return $items;
     }
 
     /**
