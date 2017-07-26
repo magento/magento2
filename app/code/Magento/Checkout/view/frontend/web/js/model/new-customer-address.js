@@ -30,7 +30,7 @@ define([], function () {
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode,
+            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode || undefined,
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,

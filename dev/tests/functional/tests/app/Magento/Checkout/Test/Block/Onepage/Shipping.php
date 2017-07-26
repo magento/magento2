@@ -157,4 +157,14 @@ class Shipping extends Form
     {
         $this->_rootElement->find($this->popupSelector)->click();
     }
+
+    /**
+     * Returns form's required elements.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getRequiredFields()
+    {
+        return $this->_rootElement->getElements("div .field._required");
+    }
 }
