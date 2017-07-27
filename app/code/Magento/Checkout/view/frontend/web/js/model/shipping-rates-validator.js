@@ -13,8 +13,8 @@ define(
         './postcode-validator',
         'mage/translate',
         'uiRegistry',
-        'Magento_Checkout/js/model/shipping-address/form-popup-state',
-        'Magento_Checkout/js/model/quote'
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/shipping-address/form-popup-state'
     ],
     function (
         $,
