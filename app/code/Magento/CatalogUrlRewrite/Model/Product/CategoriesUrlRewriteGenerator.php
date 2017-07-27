@@ -43,10 +43,15 @@ class CategoriesUrlRewriteGenerator extends BaseUrlRewriteGenerator
      * @param int $storeId
      * @param Product $product
      * @param ObjectRegistry $productCategories
+     * @param MergeDataProvider|null $urlRewrites
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product, ObjectRegistry $productCategories, MergeDataProvider $urlRewrites = null)
-    {
+    public function generate(
+        $storeId,
+        Product $product,
+        ObjectRegistry $productCategories,
+        MergeDataProvider $urlRewrites = null
+    ) {
         $this->urlRewrites = $urlRewrites;
         $urls = [];
         foreach ($productCategories->getList() as $category) {

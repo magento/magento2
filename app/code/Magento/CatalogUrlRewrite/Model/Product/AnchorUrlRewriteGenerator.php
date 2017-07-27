@@ -54,8 +54,12 @@ class AnchorUrlRewriteGenerator extends BaseUrlRewriteGenerator
      * @param MergeDataProvider $urlRewrites
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product, ObjectRegistry $productCategories, MergeDataProvider $urlRewrites = null)
-    {
+    public function generate(
+        $storeId,
+        Product $product,
+        ObjectRegistry $productCategories,
+        MergeDataProvider $urlRewrites = null
+    ) {
         $this->urlRewrites = $urlRewrites;
 
         $urls = [];

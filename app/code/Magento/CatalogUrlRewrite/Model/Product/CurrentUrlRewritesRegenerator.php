@@ -96,10 +96,16 @@ class CurrentUrlRewritesRegenerator extends BaseUrlRewriteGenerator
      * @param Product $product
      * @param ObjectRegistry $productCategories
      * @param int|null $rootCategoryId
+     * @param MergeDataProvider|null $urlRewrites
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product, ObjectRegistry $productCategories, $rootCategoryId = null, MergeDataProvider $urlRewrites = null)
-    {
+    public function generate(
+        $storeId,
+        Product $product,
+        ObjectRegistry $productCategories,
+        $rootCategoryId = null,
+        MergeDataProvider $urlRewrites = null
+    ) {
         $this->urlRewrites = $urlRewrites;
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $currentUrlRewrites = $this->urlRewriteFinder->findAllByData(
