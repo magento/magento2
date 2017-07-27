@@ -121,7 +121,7 @@ class Save extends Action
          * in order to delete value from db config but not set empty string,
          * which may cause an error in Magento/Theme/Model/ResourceModel/Theme/Collection::getThemeByFullPath().
          */
-        if (isset($data['theme_theme_id']) && !$data['theme_theme_id']) {
+        if (empty($data['theme_theme_id'])) {
             $data['theme_theme_id'] = null;
         }
 
