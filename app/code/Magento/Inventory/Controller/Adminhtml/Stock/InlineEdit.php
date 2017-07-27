@@ -7,9 +7,9 @@ namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -26,9 +26,9 @@ class InlineEdit extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::stock';
 
     /**
-     * @var HydratorInterface
+     * @var DataObjectHelper
      */
-    private $hydrator;
+    private $dataObjectHelper;
 
     /**
      * @var StockRepositoryInterface
@@ -37,16 +37,16 @@ class InlineEdit extends Action
 
     /**
      * @param Context $context
-     * @param HydratorInterface $hydrator
+     * @param DataObjectHelper $dataObjectHelper
      * @param StockRepositoryInterface $stockRepository
      */
     public function __construct(
         Context $context,
-        HydratorInterface $hydrator,
+        DataObjectHelper $dataObjectHelper,
         StockRepositoryInterface $stockRepository
     ) {
         parent::__construct($context);
-        $this->hydrator = $hydrator;
+        $this->dataObjectHelper = $dataObjectHelper;
         $this->stockRepository = $stockRepository;
     }
 
@@ -65,7 +65,7 @@ class InlineEdit extends Action
                     $stock = $this->stockRepository->get(
                         $itemData[StockInterface::STOCK_ID]
                     );
-                    $stock = $this->hydrator->hydrate($stock, $itemData);
+                    $this->dataObjectHelper->populateWithArray($stock, $itemData, StockInterface::class);
                     $this->stockRepository->save($stock);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
@@ -79,7 +79,7 @@ class InlineEdit extends Action
                 }
             }
         } else {
-            $errorMessages[] = __('Please correct the data sent.');
+            $errorMessages[] = __('Please correct the sent data.');
         }
 
         /** @var Json $resultJson */

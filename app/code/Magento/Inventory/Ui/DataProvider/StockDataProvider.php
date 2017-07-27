@@ -90,7 +90,7 @@ class StockDataProvider extends DataProvider
         $data = parent::getData();
         if ('inventory_stock_form_data_source' === $this->name) {
             // It is need for support of several fieldsets.
-            // For details see \Magento\Ui\Component\Form::getDatastockData
+            // For details see \Magento\Ui\Component\Form::getDataSourceData
             if ($data['totalRecords'] > 0) {
                 $stockId = $data['items'][0][StockInterface::STOCK_ID];
                 $stockGeneralData = $data['items'][0];

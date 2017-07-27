@@ -15,7 +15,7 @@ use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
 
 /**
  * At the time of processing Stock save form this class used to save links correctly
- * Perform replace strategy of sources for the stock
+ * Performs replace strategy of sources for the stock
  */
 class StockSourceLinkProcessor
 {

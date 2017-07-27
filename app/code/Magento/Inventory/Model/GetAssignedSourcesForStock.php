@@ -76,7 +76,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
             throw new InputException(__('Input data is empty'));
         }
         try {
-            $sourceIds = $this->getSourceIds($stockId);
+            $sourceIds = $this->getAssignedSourceIds($stockId);
 
             $searchCriteria = $this->searchCriteriaBuilder
                 ->addFilter(SourceInterface::SOURCE_ID, $sourceIds, 'in')
@@ -91,9 +91,9 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
 
     /**
      * @param int $stockId
-     * @return \Magento\Framework\DataObject[]
+     * @return array
      */
-    private function getSourceIds($stockId)
+    private function getAssignedSourceIds($stockId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLink::STOCK_ID, (int)$stockId)

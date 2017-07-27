@@ -7,9 +7,9 @@ namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -26,9 +26,9 @@ class InlineEdit extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::source';
 
     /**
-     * @var HydratorInterface
+     * @var DataObjectHelper
      */
-    private $hydrator;
+    private $dataObjectHelper;
 
     /**
      * @var SourceRepositoryInterface
@@ -37,16 +37,16 @@ class InlineEdit extends Action
 
     /**
      * @param Context $context
-     * @param HydratorInterface $hydrator
+     * @param DataObjectHelper $dataObjectHelper
      * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(
         Context $context,
-        HydratorInterface $hydrator,
+        DataObjectHelper $dataObjectHelper,
         SourceRepositoryInterface $sourceRepository
     ) {
         parent::__construct($context);
-        $this->hydrator = $hydrator;
+        $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceRepository = $sourceRepository;
     }
 
@@ -65,7 +65,7 @@ class InlineEdit extends Action
                     $source = $this->sourceRepository->get(
                         $itemData[SourceInterface::SOURCE_ID]
                     );
-                    $source = $this->hydrator->hydrate($source, $itemData);
+                    $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
@@ -79,7 +79,7 @@ class InlineEdit extends Action
                 }
             }
         } else {
-            $errorMessages[] = __('Please correct the data sent.');
+            $errorMessages[] = __('Please correct the sent data.');
         }
 
         /** @var Json $resultJson */
