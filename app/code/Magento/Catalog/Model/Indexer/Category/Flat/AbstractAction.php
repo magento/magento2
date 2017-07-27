@@ -372,15 +372,16 @@ class AbstractAction
         foreach ($entityIds as $entityId) {
             $values[$entityId] = [];
         }
+        $identifierField = $this->getCategoryMetadata()->getIdentifierField();
         $attributes = $this->getAttributes();
         $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
-                if (isset($row[$this->getCategoryMetadata()->getLinkField()]) && isset($row['attribute_id'])) {
+                if (isset($row[$identifierField]) && isset($row['attribute_id'])) {
                     $attributeId = $row['attribute_id'];
                     if (isset($attributes[$attributeId])) {
                         $attributeCode = $attributes[$attributeId]['attribute_code'];
-                        $values[$row[$this->getCategoryMetadata()->getLinkField()]][$attributeCode] = $row['value'];
+                        $values[$row[$identifierField]][$attributeCode] = $row['value'];
                     }
                 }
             }
