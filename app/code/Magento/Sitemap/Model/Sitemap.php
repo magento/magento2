@@ -178,7 +178,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * Sitemap Item Factory
      *
-     * @var SitemapItemInterfaceFactory|null
+     * @var \Magento\Sitemap\Model\SitemapItemInterfaceFactory
      */
     private $sitemapItemFactory;
 
@@ -203,7 +203,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param DocumentRoot|null $documentRoot
      * @param ItemResolverInterface|null $itemResolver
      * @param SitemapConfigReaderInterface|null $configReader
-     * @param SitemapItemInterfaceFactory|null $sitemapItemFactory
+     * @param \Magento\Sitemap\Model\SitemapItemInterfaceFactory|null $sitemapItemFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -225,12 +225,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
         ItemResolverInterface $itemResolver = null,
         SitemapConfigReaderInterface $configReader = null,
-        SitemapItemInterfaceFactory $sitemapItemFactory = null
+        \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
     ) {
-        $objectManager = ObjectManager::getInstance();
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $documentRoot = $documentRoot ?: $objectManager->get(DocumentRoot::class);
+        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
         $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
@@ -239,9 +238,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
-        $this->itemResolver = $itemResolver ?: $objectManager->get(ItemResolverInterface::class);
-        $this->configReader = $configReader ?: $objectManager->get(SitemapConfigReaderInterface::class);
-        $this->sitemapItemFactory = $sitemapItemFactory ?: $objectManager->get(SitemapItemInterfaceFactory::class);
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
+        $this->configReader = $configReader ?: ObjectManager::getInstance()->get(SitemapConfigReaderInterface::class);
+        $this->sitemapItemFactory = $sitemapItemFactory ?: ObjectManager::getInstance()->get(
+            \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
+        );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 
     }
