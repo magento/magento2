@@ -40,7 +40,6 @@ class AssertShippingMethodsSuccessEstimateAfterAddressEdit extends AbstractConst
         }
 
         if (!empty ($editAddressData)) {
-
             $address = $fixtureFactory->createByCode('address', ['data' => $editAddressData]);
             $testStepFactory->create(
                 FillShippingAddressStep::class,
