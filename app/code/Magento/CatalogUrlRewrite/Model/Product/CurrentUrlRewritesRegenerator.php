@@ -180,11 +180,11 @@ class CurrentUrlRewritesRegenerator extends BaseUrlRewriteGenerator
         if ($product->getData('save_rewrites_history')) {
 
             $paths = [
-                $this->productUrlPathGenerator->getUrlPathWithSuffix($this->product, $storeId, $category),
-                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($this->product, $storeId, $category)
+                $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category),
+                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category)
             ];
 
-            $targetPath = $this->checkRequestPaths($paths, $this->product->getId(), $storeId);
+            $targetPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);
 
             if ($url->getRequestPath() !== $targetPath) {
                 $generatedUrl = clone $this->urlRewritePrototype;
@@ -215,11 +215,11 @@ class CurrentUrlRewritesRegenerator extends BaseUrlRewriteGenerator
         if ($url->getRedirectType()) {
 
             $paths = [
-                $this->productUrlPathGenerator->getUrlPathWithSuffix($this->product, $storeId, $category),
-                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($this->product, $storeId, $category)
+                $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category),
+                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category)
             ];
 
-            $targetPath = $this->checkRequestPaths($paths, $this->product->getId(), $storeId);
+            $targetPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);
 
         } else {
             $targetPath = $url->getTargetPath();
