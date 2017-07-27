@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
@@ -44,8 +45,9 @@ class CategoriesUrlRewriteGenerator extends BaseUrlRewriteGenerator
      * @param ObjectRegistry $productCategories
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product, ObjectRegistry $productCategories)
+    public function generate($storeId, Product $product, ObjectRegistry $productCategories, MergeDataProvider $urlRewrites = null)
     {
+        $this->urlRewrites = $urlRewrites;
         $urls = [];
         foreach ($productCategories->getList() as $category) {
 

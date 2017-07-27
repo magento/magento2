@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
+use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -12,6 +13,9 @@ class BaseUrlRewriteGenerator
 {
     /** @var UrlFinderInterface */
     protected $urlFinder;
+
+    /** @var MergeDataProvider|null */
+    protected $urlRewrites = null;
 
     /**
      * @param array $paths
@@ -22,6 +26,15 @@ class BaseUrlRewriteGenerator
     protected function checkRequestPaths($paths, $entityId, $storeId)
     {
         $data = [];
+
+        if ($this->urlRewrites) {
+            foreach ($this->urlRewrites->getData() as $urlRewrite) {
+                if ($urlRewrite->getEntityId() != $entityId && $urlRewrite->getStoreId() == $storeId) {
+                    $data[] = $urlRewrite->getRequestPath();
+                }
+            }
+        }
+
         $urlRewrites = $this->urlFinder->findAllByData(
             [
                 UrlRewrite::STORE_ID => $storeId,

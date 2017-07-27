@@ -8,6 +8,7 @@ namespace Magento\CatalogUrlRewrite\Model\Product;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
@@ -42,8 +43,10 @@ class CanonicalUrlRewriteGenerator extends BaseUrlRewriteGenerator
      * @param Product $product
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product)
+    public function generate($storeId, Product $product, MergeDataProvider $urlRewrites = null)
     {
+        $this->urlRewrites = $urlRewrites;
+
         $paths = [
             $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId),
             $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId)

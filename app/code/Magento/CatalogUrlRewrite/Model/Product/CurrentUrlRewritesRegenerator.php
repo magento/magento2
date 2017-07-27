@@ -8,6 +8,7 @@ namespace Magento\CatalogUrlRewrite\Model\Product;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\Product;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
@@ -97,8 +98,9 @@ class CurrentUrlRewritesRegenerator extends BaseUrlRewriteGenerator
      * @param int|null $rootCategoryId
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product, ObjectRegistry $productCategories, $rootCategoryId = null)
+    public function generate($storeId, Product $product, ObjectRegistry $productCategories, $rootCategoryId = null, MergeDataProvider $urlRewrites = null)
     {
+        $this->urlRewrites = $urlRewrites;
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $currentUrlRewrites = $this->urlRewriteFinder->findAllByData(
             $product->getEntityId(),
