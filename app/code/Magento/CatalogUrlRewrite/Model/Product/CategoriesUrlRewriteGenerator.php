@@ -50,7 +50,7 @@ class CategoriesUrlRewriteGenerator extends BaseUrlRewriteGenerator
         $storeId,
         Product $product,
         ObjectRegistry $productCategories,
-        MergeDataProvider $urlRewrites = null
+        $urlRewrites = null
     ) {
         $this->urlRewrites = $urlRewrites;
         $urls = [];

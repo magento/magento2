@@ -130,7 +130,7 @@ class ProductUrlRewriteGenerator
     public function generate(
         Product $product,
         $rootCategoryId = null,
-        MergeDataProvider $urlRewrites = null
+        $urlRewrites = null
     ) {
         if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
             return [];

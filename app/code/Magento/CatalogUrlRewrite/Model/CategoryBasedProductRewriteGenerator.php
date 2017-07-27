@@ -40,7 +40,7 @@ class CategoryBasedProductRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProvider|null $urlRewrites
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate(Product $product, Category $category, $rootCategoryId = null, $urlRewrites)
+    public function generate(Product $product, Category $category, $rootCategoryId = null, $urlRewrites = null)
     {
         if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
             return [];

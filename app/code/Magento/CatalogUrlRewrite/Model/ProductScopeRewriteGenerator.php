@@ -149,7 +149,7 @@ class ProductScopeRewriteGenerator
         $productCategories,
         Product $product,
         $rootCategoryId = null,
-        MergeDataProvider $urlRewrites = null
+        $urlRewrites = null
     ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $categories = [];
