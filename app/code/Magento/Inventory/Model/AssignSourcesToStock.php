@@ -43,7 +43,7 @@ class AssignSourcesToStock implements AssignSourcesToStockInterface
      */
     public function execute($stockId, array $sourceIds)
     {
-        if (0 === (int)$stockId || empty($sourceIds)) {
+        if (!is_numeric($stockId) || empty($sourceIds)) {
             throw new InputException(__('Input data is invalid'));
         }
         try {

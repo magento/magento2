@@ -8,11 +8,11 @@ namespace Magento\Inventory\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Inventory\Setup\InstallStep\CreateSourceCarrierLinkTable;
-use Magento\Inventory\Setup\InstallStep\CreateSourceItemTable;
-use Magento\Inventory\Setup\InstallStep\CreateSourceTable;
-use Magento\Inventory\Setup\InstallStep\CreateStockSourceLinkTable;
-use Magento\Inventory\Setup\InstallStep\CreateStockTable;
+use Magento\Inventory\Setup\Operation\CreateSourceCarrierLinkTable;
+use Magento\Inventory\Setup\Operation\CreateSourceItemTable;
+use Magento\Inventory\Setup\Operation\CreateSourceTable;
+use Magento\Inventory\Setup\Operation\CreateStockSourceLinkTable;
+use Magento\Inventory\Setup\Operation\CreateStockTable;
 
 class InstallSchema implements InstallSchemaInterface
 {

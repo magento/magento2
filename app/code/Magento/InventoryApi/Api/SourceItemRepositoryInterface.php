@@ -39,7 +39,6 @@ interface SourceItemRepositoryInterface
      *
      * @param SourceItemInterface $sourceItem
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(SourceItemInterface $sourceItem);

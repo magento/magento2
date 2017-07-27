@@ -72,8 +72,8 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
      */
     public function execute($stockId)
     {
-        if (0 === (int)$stockId) {
-            throw new InputException(__('Input data is empty'));
+        if (!is_numeric($stockId)) {
+            throw new InputException(__('Input data is invalid'));
         }
         try {
             $sourceIds = $this->getAssignedSourceIds($stockId);

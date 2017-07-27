@@ -94,10 +94,14 @@ class StockRepository implements StockRepositoryInterface
      */
     public function deleteById($stockId)
     {
-        $stockItem = $this->get($stockId);
+        try {
+            $stock = $this->get($stockId);
+        } catch (NoSuchEntityException $e) {
+            return;
+        }
 
         try {
-            $this->stockResource->delete($stockItem);
+            $this->stockResource->delete($stock);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete Stock'), $e);

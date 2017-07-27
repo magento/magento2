@@ -71,7 +71,7 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
      */
     public function execute($stockId, $sourceId)
     {
-        if (0 === (int)$stockId || 0 === (int)$sourceId) {
+        if (!is_numeric($stockId) || !is_numeric($sourceId)) {
             throw new InputException(__('Input data is invalid'));
         }
 
@@ -84,12 +84,6 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
         $collection = $this->stockLinkCollectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $items = $collection->getItems();
-
-        if (empty($items)) {
-            throw new CouldNotDeleteException(
-                __('Source Stock Link is missed (Stock id: %1, Source id: %2 )', $stockId, $sourceId)
-            );
-        }
 
         try {
             $stockSourceLink = reset($items);
