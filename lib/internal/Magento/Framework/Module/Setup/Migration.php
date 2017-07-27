@@ -704,7 +704,7 @@ class Migration
      *
      * @param string $encodedValue
      * @param int $objectDecodeType
-     * @return array|bool|float|int|mixed|null|string
+     * @return string|int|float|bool|array|null
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated
@@ -720,7 +720,7 @@ class Migration
      * encoded in the JSON format
      *
      * @param string $encodedValue
-     * @return array|bool|float|int|mixed|null|string
+     * @return string|int|float|bool|array|null
      * @throws \InvalidArgumentException
      */
     private function jsonDecode($encodedValue)
