@@ -66,8 +66,8 @@ class AnchorUrlRewriteGenerator extends BaseUrlRewriteGenerator
                         [Category::ROOT_CATEGORY_ID, Category::TREE_ROOT_ID]
                     )) {
                         $paths = [
-                            $this->urlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $anchorCategory),
-                            $this->urlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
+                            $this->urlPathGenerator->getUrlPathWithSuffix($product, $storeId, $anchorCategory),
+                            $this->urlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category)
                         ];
 
                         $requestPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);

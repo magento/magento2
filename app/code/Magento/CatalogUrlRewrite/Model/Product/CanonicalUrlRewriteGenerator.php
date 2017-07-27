@@ -45,8 +45,8 @@ class CanonicalUrlRewriteGenerator extends BaseUrlRewriteGenerator
     public function generate($storeId, Product $product)
     {
         $paths = [
-            $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId),
-            $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId)
+            $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId),
+            $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId)
         ];
 
         $requestPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);

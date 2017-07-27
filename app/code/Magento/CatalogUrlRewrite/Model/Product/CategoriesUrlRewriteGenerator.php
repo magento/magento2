@@ -50,8 +50,8 @@ class CategoriesUrlRewriteGenerator extends BaseUrlRewriteGenerator
         foreach ($productCategories->getList() as $category) {
 
             $paths = [
-                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category),
-                $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
+                $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category),
+                $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category)
             ];
 
             $requestPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);
