@@ -144,7 +144,13 @@ class ProductUrlRewriteGenerator
 
         $urls = $this->isGlobalScope($storeId)
             ? $this->generateForGlobalScope($productCategories, $product, $rootCategoryId, $urlRewrites)
-            : $this->generateForSpecificStoreView($storeId, $productCategories, $product, $rootCategoryId, $urlRewrites);
+            : $this->generateForSpecificStoreView(
+                $storeId,
+                $productCategories,
+                $product,
+                $rootCategoryId,
+                $urlRewrites
+            );
 
         return $urls;
     }

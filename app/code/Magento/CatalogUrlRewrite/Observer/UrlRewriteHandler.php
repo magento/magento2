@@ -161,7 +161,12 @@ class UrlRewriteHandler
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
             $mergeDataProvider->merge(
-                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId, $mergeDataProvider)
+                $this->getCategoryBasedProductRewriteGenerator()->generate(
+                    $product,
+                    $category,
+                    $rootCategoryId,
+                    $mergeDataProvider
+                )
             );
         }
 
