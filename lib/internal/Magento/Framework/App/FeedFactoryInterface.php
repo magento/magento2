@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App;
 
-interface FeedImporterInterface
+interface FeedFactoryInterface
 {
 
     /**
@@ -16,5 +16,8 @@ interface FeedImporterInterface
      * @param  string $format
      * @return FeedInterface
      */
-    public function importArray(array $data, $format = 'atom');
+    public function importArray(
+        array $data, 
+        $format = FeedFormatsInterface::DEFAULT_FORMAT
+    );
 }

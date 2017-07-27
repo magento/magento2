@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Feed;
+namespace Magento\Framework\App;
 
 use Magento\Framework\App\FeedFactory;
 use Psr\Log\LoggerInterface;
@@ -11,17 +11,12 @@ use Psr\Log\LoggerInterface;
 /**
  * Feed importer
  */
-class Importer implements \Magento\Framework\App\FeedImporterInterface
+class FeedFactory implements \Magento\Framework\App\FeedImporterInterface
 {
     /**
      * @var \Zend_Feed
      */
     private $feedProcessor;
-
-    /**
-     * @var FeedFactory
-     */
-    private $feedFactory;
 
     /**
      * @var LoggerInterface
@@ -30,16 +25,13 @@ class Importer implements \Magento\Framework\App\FeedImporterInterface
 
     /**
      * @param \Zend_Feed $feedProcessor
-     * @param FeedFactory $feedFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         \Zend_Feed $feedProcessor,
-        FeedFactory $feedFactory,
         LoggerInterface $logger
     ) {
         $this->feedProcessor = $feedProcessor;
-        $this->feedFactory = $feedFactory;
         $this->logger = $logger;
     }
 
@@ -55,8 +47,7 @@ class Importer implements \Magento\Framework\App\FeedImporterInterface
     {
 
         try {
-            $feed = $this->feedProcessor->importArray($data, $format);
-            return $this->feedFactory->create(['feed' => $feed]);
+            return $this->feedProcessor->importArray($data, $format);
         } catch (\Zend_Feed_Exception $e) {
             $this->logger->error($e->getMessage());
             throw new \Magento\Framework\Exception\RuntimeException(
