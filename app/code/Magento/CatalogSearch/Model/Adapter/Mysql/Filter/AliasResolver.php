@@ -10,6 +10,7 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator;
 
 /**
  * Purpose of class is to resolve table alias for Search Request filter
+ * @api
  */
 class AliasResolver
 {
