@@ -68,6 +68,11 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     protected $groupManagement;
 
     /**
+     * @var \Magento\Customer\Model\Group\RetrieverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerGroupRetriever;
+
+    /**
      * Initialize base dependencies
      */
     protected function setUp()
@@ -82,9 +87,11 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->product->expects($this->any())->method('getPriceInfo')->will($this->returnValue($this->priceInfo));
+        $this->customerGroupRetriever = $this->getMockBuilder(\Magento\Customer\Model\Group\RetrieverInterface::class)
+            ->disableOriginalConstructor()->getMock();
 
         $this->session = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->session->expects($this->any())->method('getCustomerGroupId')
+        $this->customerGroupRetriever->expects($this->any())->method('getCustomerGroupId')
             ->will($this->returnValue($this->customerGroup));
 
         $this->calculator = $this->getMock(\Magento\Framework\Pricing\Adjustment\Calculator::class, [], [], '', false);
@@ -104,7 +111,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             $this->calculator,
             $this->priceCurrencyMock,
             $this->session,
-            $this->groupManagement
+            $this->groupManagement,
+            $this->customerGroupRetriever
         );
     }
 
@@ -248,7 +256,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             $this->calculator,
             $this->priceCurrencyMock,
             $this->session,
-            $this->groupManagement
+            $this->groupManagement,
+            $this->customerGroupRetriever
         );
         $group = $this->getMock(
             \Magento\Customer\Model\Data\Group::class,

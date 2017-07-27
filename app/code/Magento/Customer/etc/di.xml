@@ -59,6 +59,8 @@
                 type="Magento\Customer\Model\Customer\Attribute\Source\Group"/>
     <preference for="Magento\Customer\Block\Account\SortLinkInterface"
                 type="Magento\Customer\Block\Account\SortLink"/>
+    <preference for="Magento\Customer\Model\Group\RetrieverInterface"
+                type="Magento\Customer\Model\Group\Retriever"/>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
