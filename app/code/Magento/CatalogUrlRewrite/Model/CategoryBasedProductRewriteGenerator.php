@@ -37,9 +37,10 @@ class CategoryBasedProductRewriteGenerator
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Category $category
      * @param int|null $rootCategoryId
+     * @param \Magento\UrlRewrite\Model\MergeDataProvider|null $urlRewrites
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate(Product $product, Category $category, $rootCategoryId = null)
+    public function generate(Product $product, Category $category, $rootCategoryId = null, $urlRewrites)
     {
         if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
             return [];
@@ -48,12 +49,17 @@ class CategoryBasedProductRewriteGenerator
         $storeId = $product->getStoreId();
 
         $urls = $this->productScopeRewriteGenerator->isGlobalScope($storeId)
-            ? $this->productScopeRewriteGenerator->generateForGlobalScope([$category], $product, $rootCategoryId)
-            : $this->productScopeRewriteGenerator->generateForSpecificStoreView(
+            ? $this->productScopeRewriteGenerator->generateForGlobalScope(
+                [$category],
+                $product,
+                $rootCategoryId,
+                $urlRewrites
+            ) : $this->productScopeRewriteGenerator->generateForSpecificStoreView(
                 $storeId,
                 [$category],
                 $product,
-                $rootCategoryId
+                $rootCategoryId,
+                $urlRewrites
             );
 
         return $urls;

@@ -96,7 +96,7 @@ class UrlRewriteHandler
                 $product->setStoreId($storeId);
                 $product->setData('save_rewrites_history', $saveRewriteHistory);
                 $mergeDataProvider->merge(
-                    $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
+                    $this->productUrlRewriteGenerator->generate($product, $category->getEntityId(), $mergeDataProvider)
                 );
             }
         } else {
@@ -105,7 +105,8 @@ class UrlRewriteHandler
                     $category,
                     $storeId,
                     $saveRewriteHistory,
-                    $category->getEntityId()
+                    $category->getEntityId(),
+                    $mergeDataProvider
                 )
             );
         }
@@ -115,7 +116,8 @@ class UrlRewriteHandler
                     $childCategory,
                     $storeId,
                     $saveRewriteHistory,
-                    $category->getEntityId()
+                    $category->getEntityId(),
+                    $mergeDataProvider
                 )
             );
         }
@@ -159,7 +161,7 @@ class UrlRewriteHandler
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
             $mergeDataProvider->merge(
-                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId)
+                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId, $mergeDataProvider)
             );
         }
 

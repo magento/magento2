@@ -104,7 +104,7 @@ class CurrentUrlRewritesRegenerator extends BaseUrlRewriteGenerator
         Product $product,
         ObjectRegistry $productCategories,
         $rootCategoryId = null,
-        MergeDataProvider $urlRewrites = null
+        $urlRewrites = null
     ) {
         $this->urlRewrites = $urlRewrites;
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;

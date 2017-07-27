@@ -44,7 +44,7 @@ class CanonicalUrlRewriteGenerator extends BaseUrlRewriteGenerator
      * @param MergeDataProvider|null $urlRewrites
      * @return UrlRewrite[]
      */
-    public function generate($storeId, Product $product, MergeDataProvider $urlRewrites = null)
+    public function generate($storeId, Product $product, $urlRewrites = null)
     {
         $this->urlRewrites = $urlRewrites;
 
