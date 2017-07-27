@@ -28,6 +28,16 @@
         <step name="addProductsToTheCart" module="Magento_Checkout" next="removeProductsFromTheCart" />
         <step name="removeProductsFromTheCart" module="Magento_Checkout" />
     </scenario>
+    <scenario name="OnePageEstimateShippingMethodsTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod"/>
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="fillShippingAddress" module="Magento_Checkout" next="resolveShippingMethods" />
+        <step name="resolveShippingMethods" module="Magento_Checkout" />
+    </scenario>
     <scenario name="OnePageCheckoutJsValidationTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
