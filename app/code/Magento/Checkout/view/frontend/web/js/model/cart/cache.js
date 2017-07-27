@@ -24,7 +24,7 @@ define([
             shippingCarrierCode: null,
             rates: null
         },
-        
+
         /**
          * Set data to local storage.
          *
@@ -33,7 +33,7 @@ define([
         setData = function (checkoutData) {
             storage.set(cacheKey, checkoutData);
         },
-        
+
         /**
          * Get data from local storage.
          *
@@ -49,7 +49,7 @@ define([
 
             return data;
         },
-        
+
         /**
          * Build method name base on name, prefix and suffix.
          *
