@@ -18,6 +18,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Json\DecoderInterface | \PHPUnit_Framework_MockObject_MockObject  */
     protected $jsonDecoderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Serialize\Serializer\Json
+     */
     private $serializerMock;
 
     protected function setUp()
