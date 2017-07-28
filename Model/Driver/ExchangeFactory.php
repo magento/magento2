@@ -7,6 +7,7 @@ namespace Magento\MysqlMq\Model\Driver;
 
 /**
  * Factory class for @see \Magento\MysqlMq\Model\Driver\Exchange
+ * @since 2.2.0
  */
 class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactoryInterface
 {
@@ -14,6 +15,7 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -21,6 +23,7 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.2.0
      */
     private $instanceName = null;
 
@@ -29,6 +32,7 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -42,6 +46,7 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function create($connectionName, array $data = [])
     {

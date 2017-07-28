@@ -9,6 +9,7 @@ namespace Magento\MysqlMq\Model;
  * Main class for managing MySQL implementation of message queue.
  *
  * @api
+ * @since 2.0.0
  */
 class QueueManagement
 {
@@ -45,16 +46,19 @@ class QueueManagement
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     private $dateTime;
 
     /**
      * @var \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory
+     * @since 2.0.0
      */
     private $messageStatusCollectionFactory;
 
@@ -63,6 +67,7 @@ class QueueManagement
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory $messageStatusCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource,
@@ -83,6 +88,7 @@ class QueueManagement
      * @param string $message
      * @param string[] $queueNames
      * @return $this
+     * @since 2.0.0
      */
     public function addMessageToQueues($topic, $message, $queueNames)
     {
@@ -98,6 +104,7 @@ class QueueManagement
      * @param array $messages
      * @param string[] $queueNames
      * @return $this
+     * @since 2.2.0
      */
     public function addMessagesToQueues($topic, $messages, $queueNames)
     {
@@ -111,6 +118,7 @@ class QueueManagement
      * Delete marked messages
      *
      * @return void
+     * @since 2.0.0
      */
     public function markMessagesForDelete()
     {
@@ -138,6 +146,7 @@ class QueueManagement
      *
      * @param MessageStatus $messageStatus
      * @return void
+     * @since 2.0.0
      */
     private function processMessagePerStatus($messageStatus)
     {
@@ -167,6 +176,7 @@ class QueueManagement
      * Compose a set of statuses to track for deletion based on configuration.
      *
      * @return array
+     * @since 2.0.0
      */
     private function getStatusesToClear()
     {
@@ -198,6 +208,7 @@ class QueueManagement
      * Indicates how long message in COMPLETE state will stay in table with statuses
      *
      * @return int
+     * @since 2.0.0
      */
     private function getCompletedMessageLifetime()
     {
@@ -213,6 +224,7 @@ class QueueManagement
      * Indicates how long message in ERROR state will stay in table with statuses
      *
      * @return int
+     * @since 2.0.0
      */
     private function getErrorMessageLifetime()
     {
@@ -228,6 +240,7 @@ class QueueManagement
      * Indicates how long message will stay in IN PROGRESS status before attempted to retry
      *
      * @return int
+     * @since 2.0.0
      */
     private function getInProgressRetryAfter()
     {
@@ -243,6 +256,7 @@ class QueueManagement
      * Indicates how long message in NEW state will stay in table with statuses
      *
      * @return int
+     * @since 2.0.0
      */
     private function getNewMessageLifetime()
     {
@@ -273,6 +287,7 @@ class QueueManagement
      *     ],
      *     ...
      * ]</pre>
+     * @since 2.0.0
      */
     public function readMessages($queue, $maxMessagesNumber = null)
     {
@@ -298,6 +313,7 @@ class QueueManagement
      *
      * @param int $messageRelationId
      * @return void
+     * @since 2.0.0
      */
     public function pushToQueueForRetry($messageRelationId)
     {
@@ -310,6 +326,7 @@ class QueueManagement
      * @param int[] $messageRelationIds
      * @param int $status
      * @return void
+     * @since 2.0.0
      */
     public function changeStatus($messageRelationIds, $status)
     {

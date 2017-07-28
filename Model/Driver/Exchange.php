@@ -10,15 +10,22 @@ use Magento\Framework\MessageQueue\ExchangeInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\MysqlMq\Model\QueueManagement;
 
+/**
+ * Class \Magento\MysqlMq\Model\Driver\Exchange
+ *
+ * @since 2.0.0
+ */
 class Exchange implements ExchangeInterface
 {
     /**
      * @var MessageQueueConfig
+     * @since 2.0.0
      */
     private $messageQueueConfig;
 
     /**
      * @var QueueManagement
+     * @since 2.0.0
      */
     private $queueManagement;
 
@@ -27,6 +34,7 @@ class Exchange implements ExchangeInterface
      *
      * @param MessageQueueConfig $messageQueueConfig
      * @param QueueManagement $queueManagement
+     * @since 2.0.0
      */
     public function __construct(MessageQueueConfig $messageQueueConfig, QueueManagement $queueManagement)
     {
@@ -40,6 +48,7 @@ class Exchange implements ExchangeInterface
      * @param string $topic
      * @param EnvelopeInterface $envelope
      * @return mixed
+     * @since 2.0.0
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {

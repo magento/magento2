@@ -7,6 +7,7 @@ namespace Magento\MysqlMq\Model\ResourceModel;
 
 /**
  * Resource model for queue messages.
+ * @since 2.0.0
  */
 class Message extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -14,6 +15,7 @@ class Message extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

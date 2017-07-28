@@ -13,36 +13,43 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Queue based on MessageQueue protocol
+ * @since 2.0.0
  */
 class Queue implements QueueInterface
 {
     /**
      * @var QueueManagement
+     * @since 2.0.0
      */
     private $queueManagement;
 
     /**
      * @var EnvelopeFactory
+     * @since 2.0.0
      */
     private $envelopeFactory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $queueName;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $interval;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $maxNumberOfTrials;
 
     /**
      * @var LoggerInterface $logger
+     * @since 2.1.0
      */
     private $logger;
 
@@ -55,6 +62,7 @@ class Queue implements QueueInterface
      * @param string $queueName
      * @param int $interval
      * @param int $maxNumberOfTrials
+     * @since 2.0.0
      */
     public function __construct(
         QueueManagement $queueManagement,
@@ -74,6 +82,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function dequeue()
     {
@@ -93,6 +102,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
@@ -104,6 +114,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function subscribe($callback)
     {
@@ -122,6 +133,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
@@ -140,6 +152,7 @@ class Queue implements QueueInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.1.0
      */
     public function push(EnvelopeInterface $envelope)
     {

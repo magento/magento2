@@ -9,6 +9,7 @@ namespace Magento\MysqlMq\Model;
  * Message model for queue based on MySQL.
  *
  * @api
+ * @since 2.0.0
  */
 class Queue extends \Magento\Framework\Model\AbstractModel
 {
@@ -16,6 +17,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -38,6 +41,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel
      * Get queue name.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {

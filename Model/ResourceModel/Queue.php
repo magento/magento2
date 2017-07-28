@@ -9,6 +9,7 @@ use Magento\MysqlMq\Model\QueueManagement;
 
 /**
  * Resource model for queue.
+ * @since 2.0.0
  */
 class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $messageTopic
      * @param string $messageBody
      * @return int ID of the inserted record
+     * @since 2.0.0
      */
     public function saveMessage($messageTopic, $messageBody)
     {
@@ -44,6 +47,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $messageTopic
      * @param array $messages
      * @return array List of IDs of inserted records
+     * @since 2.2.0
      */
     public function saveMessages($messageTopic, array $messages)
     {
@@ -62,6 +66,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $messageId
      * @param string[] $queueNames
      * @return $this
+     * @since 2.0.0
      */
     public function linkQueues($messageId, $queueNames)
     {
@@ -74,6 +79,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $messageIds
      * @param string[] $queueNames
      * @return $this
+     * @since 2.2.0
      */
     public function linkMessagesWithQueues(array $messageIds, array $queueNames)
     {
@@ -104,6 +110,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string[] $queueNames
      * @return int[]
+     * @since 2.0.0
      */
     protected function getQueueIdsByNames($queueNames)
     {
@@ -120,6 +127,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $queueName
      * @param int|null $limit
      * @return array
+     * @since 2.0.0
      */
     public function getMessages($queueName, $limit = null)
     {
@@ -160,6 +168,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Delete messages if there is no queue whrere the message is not in status TO BE DELETED
      *
      * @return void
+     * @since 2.0.0
      */
     public function deleteMarkedMessages()
     {
@@ -180,6 +189,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int[] $relationIds
      * @return int[] IDs of messages which should be taken in progress by current process.
+     * @since 2.0.0
      */
     public function takeMessagesInProgress($relationIds)
     {
@@ -207,6 +217,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $relationId
      * @return void
+     * @since 2.0.0
      */
     public function pushBackForRetry($relationId)
     {
@@ -226,6 +237,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int[] $relationIds
      * @param int $status
      * @return void
+     * @since 2.0.0
      */
     public function changeStatus($relationIds, $status)
     {
@@ -240,6 +252,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get name of table storing message statuses and associations to queues.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getMessageStatusTable()
     {
@@ -250,6 +263,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get name of table storing declared queues.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getQueueTable()
     {
@@ -260,6 +274,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get name of table storing message body and topic.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getMessageTable()
     {
