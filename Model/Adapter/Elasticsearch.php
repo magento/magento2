@@ -24,6 +24,7 @@ class Elasticsearch
 
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager
+     * @since 2.1.0
      */
     protected $connectionManager;
 
