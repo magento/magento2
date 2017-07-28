@@ -3,12 +3,12 @@
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/framework": "100.2.*",
-        "magento/framework-message-queue": "100.2.*",
-        "magento/framework-amqp": "100.0.*"
+        "magento/framework": "100.3.*",
+        "magento/framework-message-queue": "100.3.*",
+        "magento/framework-amqp": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.3.0-dev",
     "license": [
         "proprietary"
     ],
