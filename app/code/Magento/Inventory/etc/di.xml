@@ -11,8 +11,10 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source" />
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-    <!-- SourceCarrierLinkManagementInterface is extension point for carrier links storage replacing (spi) -->
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
+    <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
+    <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
+    <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemSaveInterface" type="Magento\Inventory\Model\SourceItemSave"/>

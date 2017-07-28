@@ -5,20 +5,12 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
-use Magento\Inventory\Model\ResourceModel\Source\Collection;
-use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
+use Magento\Inventory\Model\Source\Command\GetInterface;
+use Magento\Inventory\Model\Source\Command\GetListInterface;
+use Magento\Inventory\Model\Source\Command\SaveInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
-use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
-use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -26,67 +18,33 @@ use Psr\Log\LoggerInterface;
 class SourceRepository implements SourceRepositoryInterface
 {
     /**
-     * @var SourceResourceModel
+     * @var SaveInterface
      */
-    private $sourceResource;
+    private $commandSave;
 
     /**
-     * @var SourceInterfaceFactory
+     * @var GetInterface
      */
-    private $sourceFactory;
+    private $commandGet;
 
     /**
-     * @var CollectionProcessorInterface
+     * @var GetListInterface
      */
-    private $collectionProcessor;
+    private $commandGetList;
 
     /**
-     * @var CollectionFactory
-     */
-    private $sourceCollectionFactory;
-
-    /**
-     * @var SourceSearchResultsInterfaceFactory
-     */
-    private $sourceSearchResultsFactory;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * SourceRepository constructor
-     *
-     * @param SourceResourceModel $sourceResource
-     * @param SourceInterfaceFactory $sourceFactory
-     * @param CollectionProcessorInterface $collectionProcessor
-     * @param CollectionFactory $sourceCollectionFactory
-     * @param SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param LoggerInterface $logger
+     * @param SaveInterface $commandSave
+     * @param GetInterface $commandGet
+     * @param GetListInterface $commandGetList
      */
     public function __construct(
-        SourceResourceModel $sourceResource,
-        SourceInterfaceFactory $sourceFactory,
-        CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $sourceCollectionFactory,
-        SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        LoggerInterface $logger
+        SaveInterface $commandSave,
+        GetInterface $commandGet,
+        GetListInterface $commandGetList
     ) {
-        $this->sourceResource = $sourceResource;
-        $this->sourceFactory = $sourceFactory;
-        $this->collectionProcessor = $collectionProcessor;
-        $this->sourceCollectionFactory = $sourceCollectionFactory;
-        $this->sourceSearchResultsFactory = $sourceSearchResultsFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->logger = $logger;
+        $this->commandSave = $commandSave;
+        $this->commandGet = $commandGet;
+        $this->commandGetList = $commandGetList;
     }
 
     /**
@@ -94,13 +52,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function save(SourceInterface $source)
     {
-        try {
-            $this->sourceResource->save($source);
-            return $source->getSourceId();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Source'), $e);
-        }
+        $this->commandSave->execute($source);
     }
 
     /**
@@ -108,13 +60,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function get($sourceId)
     {
-        $source = $this->sourceFactory->create();
-        $this->sourceResource->load($source, $sourceId, SourceInterface::SOURCE_ID);
-
-        if (null === $source->getSourceId()) {
-            throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
-        }
-        return $source;
+        return $this->commandGet->execute($sourceId);
     }
 
     /**
@@ -122,20 +68,6 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
-        /** @var Collection $collection */
-        $collection = $this->sourceCollectionFactory->create();
-
-        if (null === $searchCriteria) {
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-        } else {
-            $this->collectionProcessor->process($searchCriteria, $collection);
-        }
-
-        /** @var SourceSearchResultsInterface $searchResult */
-        $searchResult = $this->sourceSearchResultsFactory->create();
-        $searchResult->setItems($collection->getItems());
-        $searchResult->setTotalCount($collection->getSize());
-        $searchResult->setSearchCriteria($searchCriteria);
-        return $searchResult;
+        return $this->commandGetList->execute($searchCriteria);
     }
 }
