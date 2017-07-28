@@ -10,6 +10,7 @@ namespace Magento\Customer\Api;
 /**
  * Customer CRUD interface.
  * @api
+ * @since 2.0.0
  */
 interface CustomerRepositoryInterface
 {
@@ -22,6 +23,7 @@ interface CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null);
 
@@ -33,6 +35,7 @@ interface CustomerRepositoryInterface
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified email does not exist.
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function get($email, $websiteId = null);
 
@@ -43,6 +46,7 @@ interface CustomerRepositoryInterface
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getById($customerId);
 
@@ -56,6 +60,7 @@ interface CustomerRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -65,6 +70,7 @@ interface CustomerRepositoryInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer);
 
@@ -75,6 +81,7 @@ interface CustomerRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteById($customerId);
 }

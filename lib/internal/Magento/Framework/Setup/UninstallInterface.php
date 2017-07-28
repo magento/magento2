@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * Interface for handling data removal during module uninstall
  *
  * @api
+ * @since 2.0.0
  */
 interface UninstallInterface
 {
@@ -18,6 +19,7 @@ interface UninstallInterface
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @since 2.0.0
      */
     public function uninstall(SchemaSetupInterface $setup, ModuleContextInterface $context);
 }

@@ -11,26 +11,35 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\AbstractModel;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Attribute
+ *
+ * @since 2.0.0
+ */
 class Attribute
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @param AppResource $resource
      * @param EventManager $eventManager
+     * @since 2.0.0
      */
     public function __construct(
         AppResource $resource,
@@ -42,6 +51,7 @@ class Attribute
 
     /**
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected function getConnection()
     {
@@ -57,6 +67,7 @@ class Attribute
      * @param AbstractModel $object
      * @param string $attribute
      * @return \Magento\Sales\Model\ResourceModel\Attribute
+     * @since 2.0.0
      */
     protected function _beforeSaveAttribute(AbstractModel $object, $attribute)
     {
@@ -80,6 +91,7 @@ class Attribute
      * @param string $attribute
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function saveAttribute(AbstractModel $object, $attribute)
     {
@@ -119,6 +131,7 @@ class Attribute
      * @param AbstractModel $object
      * @param string $attribute
      * @return \Magento\Sales\Model\ResourceModel\Attribute
+     * @since 2.0.0
      */
     protected function _afterSaveAttribute(AbstractModel $object, $attribute)
     {

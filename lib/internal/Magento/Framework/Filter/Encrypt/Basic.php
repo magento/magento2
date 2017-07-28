@@ -5,15 +5,22 @@
  */
 namespace Magento\Framework\Filter\Encrypt;
 
+/**
+ * Class \Magento\Framework\Filter\Encrypt\Basic
+ *
+ * @since 2.0.0
+ */
 class Basic implements \Zend_Filter_Encrypt_Interface
 {
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $encryptor;
 
     /**
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Encryption\EncryptorInterface $encryptor)
     {
@@ -25,6 +32,7 @@ class Basic implements \Zend_Filter_Encrypt_Interface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function encrypt($value)
     {
@@ -36,6 +44,7 @@ class Basic implements \Zend_Filter_Encrypt_Interface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function decrypt($value)
     {

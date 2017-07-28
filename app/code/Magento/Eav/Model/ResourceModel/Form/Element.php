@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel\Form;
  * Eav Form Element Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Element extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Element extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,6 +34,7 @@ class Element extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Eav\Model\Form\Element $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {

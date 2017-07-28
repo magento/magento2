@@ -9,16 +9,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Pool for database maps
+ * @since 2.2.0
  */
 class DatabaseMapPool
 {
     /**
      * @var DatabaseMapInterface[]
+     * @since 2.2.0
      */
     private $dataArray = [];
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -26,6 +29,7 @@ class DatabaseMapPool
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -39,6 +43,7 @@ class DatabaseMapPool
      * @param string $instanceName
      * @param int $categoryId
      * @return DatabaseMapInterface
+     * @since 2.2.0
      */
     public function getDataMap($instanceName, $categoryId)
     {
@@ -66,6 +71,7 @@ class DatabaseMapPool
      * @param string $instanceName
      * @param int $categoryId
      * @return void
+     * @since 2.2.0
      */
     public function resetMap($instanceName, $categoryId)
     {

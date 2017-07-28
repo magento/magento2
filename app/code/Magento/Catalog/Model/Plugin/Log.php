@@ -7,15 +7,22 @@
  */
 namespace Magento\Catalog\Model\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Plugin\Log
+ *
+ * @since 2.0.0
+ */
 class Log
 {
     /**
      * @var \Magento\Catalog\Model\Product\Compare\Item
+     * @since 2.0.0
      */
     protected $_productCompareItem;
 
     /**
      * @param \Magento\Catalog\Model\Product\Compare\Item $productCompareItem
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\Product\Compare\Item $productCompareItem)
     {
@@ -31,6 +38,7 @@ class Log
      *
      * @return \Magento\Customer\Model\ResourceModel\Visitor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterClean(\Magento\Customer\Model\ResourceModel\Visitor $subject, $logResourceModel)
     {

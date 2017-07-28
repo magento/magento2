@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Page\Config;
  * Page config structure model
  *
  * @api
+ * @since 2.0.0
  */
 class Structure
 {
@@ -17,6 +18,7 @@ class Structure
      * Map of class properties.
      *
      * @var array
+     * @since 2.2.0
      */
     private $serializableProperties = [
         'assets',
@@ -33,6 +35,7 @@ class Structure
      * Information assets elements on page
      *
      * @var array
+     * @since 2.0.0
      */
     protected $assets = [];
 
@@ -40,36 +43,43 @@ class Structure
      * List asset which will be removed
      *
      * @var array
+     * @since 2.0.0
      */
     protected $removeAssets = [];
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $title;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $metadata = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $elementAttributes = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $removeElementAttributes = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $bodyClasses = [];
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $isBodyClassesDeleted = false;
 
@@ -78,6 +88,7 @@ class Structure
      * @param string $attributeName
      * @param string $attributeValue
      * @return $this
+     * @since 2.0.0
      */
     public function setElementAttribute($element, $attributeName, $attributeValue)
     {
@@ -91,6 +102,7 @@ class Structure
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function processRemoveElementAttributes()
     {
@@ -109,6 +121,7 @@ class Structure
     /**
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setBodyClass($value)
     {
@@ -122,6 +135,7 @@ class Structure
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getBodyClasses()
     {
@@ -130,6 +144,7 @@ class Structure
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getElementAttributes()
     {
@@ -139,6 +154,7 @@ class Structure
     /**
      * @param string $title
      * @return $this
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -148,6 +164,7 @@ class Structure
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -158,6 +175,7 @@ class Structure
      * @param string $name
      * @param string $content
      * @return $this
+     * @since 2.0.0
      */
     public function setMetadata($name, $content)
     {
@@ -167,6 +185,7 @@ class Structure
 
     /**
      * @return string[]
+     * @since 2.0.0
      */
     public function getMetadata()
     {
@@ -177,6 +196,7 @@ class Structure
      * @param string $name
      * @param array $attributes
      * @return $this
+     * @since 2.0.0
      */
     public function addAssets($name, $attributes)
     {
@@ -187,6 +207,7 @@ class Structure
     /**
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function removeAssets($name)
     {
@@ -196,6 +217,7 @@ class Structure
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function processRemoveAssets()
     {
@@ -206,6 +228,7 @@ class Structure
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAssets()
     {
@@ -216,6 +239,7 @@ class Structure
      * Reformat 'Page config structure' to array.
      *
      * @return array
+     * @since 2.2.0
      */
     public function __toArray()
     {
@@ -232,6 +256,7 @@ class Structure
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function populateWithArray(array $data)
     {
@@ -246,6 +271,7 @@ class Structure
      * @param string $key
      * @param array $array
      * @return array
+     * @since 2.2.0
      */
     private function getArrayValueByKey($key, array $array)
     {

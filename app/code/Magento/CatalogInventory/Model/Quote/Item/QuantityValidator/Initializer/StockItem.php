@@ -9,20 +9,28 @@ use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem
+ *
+ * @since 2.0.0
+ */
 class StockItem
 {
     /**
      * @var QuoteItemQtyList
+     * @since 2.0.0
      */
     protected $quoteItemQtyList;
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $typeConfig;
 
     /**
      * @var StockStateInterface
+     * @since 2.0.0
      */
     protected $stockState;
 
@@ -30,6 +38,7 @@ class StockItem
      * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockStateInterface $stockState
+     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $typeConfig,
@@ -52,6 +61,7 @@ class StockItem
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function initialize(
         \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,

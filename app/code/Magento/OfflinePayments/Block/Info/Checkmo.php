@@ -5,20 +5,28 @@
  */
 namespace Magento\OfflinePayments\Block\Info;
 
+/**
+ * Class \Magento\OfflinePayments\Block\Info\Checkmo
+ *
+ * @since 2.0.0
+ */
 class Checkmo extends \Magento\Payment\Block\Info
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_payableTo;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_mailingAddress;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_OfflinePayments::info/checkmo.phtml';
 
@@ -26,6 +34,7 @@ class Checkmo extends \Magento\Payment\Block\Info
      * Enter description here...
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPayableTo()
     {
@@ -39,6 +48,7 @@ class Checkmo extends \Magento\Payment\Block\Info
      * Enter description here...
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMailingAddress()
     {
@@ -49,8 +59,9 @@ class Checkmo extends \Magento\Payment\Block\Info
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return $this
+     * @since 2.0.0
      */
     protected function _convertAdditionalData()
     {
@@ -61,6 +72,7 @@ class Checkmo extends \Magento\Payment\Block\Info
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function toPdf()
     {

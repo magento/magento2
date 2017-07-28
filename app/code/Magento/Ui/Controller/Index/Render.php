@@ -11,16 +11,19 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Is responsible for providing ui components information on store front
+ * @since 2.2.0
  */
 class Render extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var Context
+     * @since 2.2.0
      */
     private $context;
 
     /**
      * @var UiComponentFactory
+     * @since 2.2.0
      */
     private $uiComponentFactory;
 
@@ -28,6 +31,7 @@ class Render extends \Magento\Framework\App\Action\Action
      * Render constructor.
      * @param Context $context
      * @param UiComponentFactory $uiComponentFactory
+     * @since 2.2.0
      */
     public function __construct(Context $context, UiComponentFactory $uiComponentFactory)
     {
@@ -40,6 +44,7 @@ class Render extends \Magento\Framework\App\Action\Action
      * Action for AJAX request
      *
      * @return void
+     * @since 2.2.0
      */
     public function execute()
     {
@@ -58,6 +63,7 @@ class Render extends \Magento\Framework\App\Action\Action
      *
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.2.0
      */
     private function prepareComponent(UiComponentInterface $component)
     {

@@ -12,6 +12,7 @@ use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderIn
  * Catalog Product Flat resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements DefaultAttributesProvider
 {
@@ -19,6 +20,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Store scope Id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -26,6 +28,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -33,11 +36,13 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
+     * @since 2.0.0
      */
     protected $defaultAttributes;
 
@@ -47,6 +52,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,6 +71,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Init connection and resource table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -76,6 +83,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Retrieve store for resource model
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -87,6 +95,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param null|string|bool|int|Store $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($store)
     {
@@ -109,6 +118,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param mixed $store
      * @return string
+     * @since 2.0.0
      */
     public function getFlatTableName($store = null)
     {
@@ -122,6 +132,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Retrieve entity type id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTypeId()
     {
@@ -133,6 +144,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param string $attributeCode
      * @return array|null
+     * @since 2.0.0
      */
     public function getAttributeForSelect($attributeCode)
     {
@@ -155,6 +167,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param string $attributeCode
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeSortColumn($attributeCode)
     {
@@ -173,6 +186,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Retrieve Flat Table columns list
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllTableColumns()
     {
@@ -186,6 +200,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param integer|string|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     public function isAttributeStatic($attribute)
     {
@@ -213,6 +228,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Rewrote for EAV collection compatibility
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityIdField()
     {
@@ -225,6 +241,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param mixed $attribute
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @since 2.0.0
      */
     public function getAttribute($attribute)
     {
@@ -235,6 +252,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Retrieve main resource table name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMainTable()
     {
@@ -245,6 +263,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * Retrieve default entity static attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getDefaultAttributes()
     {

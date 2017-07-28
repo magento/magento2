@@ -12,6 +12,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  * @method getArea()
  * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setTheme($theme)
  * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setArea($area)
+ * @since 2.0.0
  */
 class Container extends \Magento\Framework\View\Element\Html\Select
 {
@@ -31,6 +32,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
+     * @since 2.0.0
      */
     protected $_themesFactory;
 
@@ -39,6 +41,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -55,6 +58,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Assign attributes for the HTML select element
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,6 +74,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Add necessary options
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -111,6 +116,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      *
      * @param int $themeId
      * @return \Magento\Theme\Model\Theme|null
+     * @since 2.0.0
      */
     protected function _getThemeInstance($themeId)
     {
@@ -123,6 +129,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Retrieve page layouts
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getPageLayouts()
     {

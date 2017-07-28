@@ -7,6 +7,11 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Boolean
+ *
+ * @since 2.0.0
+ */
 class Boolean extends Select
 {
     /**
@@ -14,6 +19,7 @@ class Boolean extends Select
      *
      * @param int $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getOptionText($value)
     {

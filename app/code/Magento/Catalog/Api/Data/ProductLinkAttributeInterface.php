@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductLinkAttributeInterface extends ExtensibleDataInterface
 {
@@ -17,6 +18,7 @@ interface ProductLinkAttributeInterface extends ExtensibleDataInterface
      * Get attribute code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode();
 
@@ -25,6 +27,7 @@ interface ProductLinkAttributeInterface extends ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -32,6 +35,7 @@ interface ProductLinkAttributeInterface extends ExtensibleDataInterface
      * Get attribute type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 
@@ -40,6 +44,7 @@ interface ProductLinkAttributeInterface extends ExtensibleDataInterface
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type);
 
@@ -47,6 +52,7 @@ interface ProductLinkAttributeInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -55,6 +61,7 @@ interface ProductLinkAttributeInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface $extensionAttributes

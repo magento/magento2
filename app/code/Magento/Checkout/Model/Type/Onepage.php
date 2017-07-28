@@ -18,6 +18,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Onepage
 {
@@ -32,26 +33,31 @@ class Onepage
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     protected $_quote = null;
 
     /**
      * @var \Magento\Checkout\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -59,6 +65,7 @@ class Onepage
      * Customer url
      *
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -66,106 +73,127 @@ class Onepage
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
+     * @since 2.0.0
      */
     protected $_customrAddrFactory;
 
     /**
      * @var \Magento\Customer\Model\FormFactory
+     * @since 2.0.0
      */
     protected $_customerFormFactory;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
+     * @since 2.0.0
      */
     protected $_customerFactory;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
+     * @since 2.0.0
      */
     protected $_objectCopyService;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
+     * @since 2.0.0
      */
     protected $_formFactory;
 
     /**
      * @var CustomerDataFactory
+     * @since 2.0.0
      */
     protected $customerDataFactory;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var AddressRepositoryInterface
+     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var AccountManagementInterface
+     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var OrderSender
+     * @since 2.0.0
      */
     protected $orderSender;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @since 2.0.0
      */
     protected $extensibleDataObjectConverter;
 
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
+     * @since 2.0.0
      */
     protected $quoteManagement;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
+     * @since 2.0.0
      */
     protected $totalsCollector;
 
@@ -199,6 +227,7 @@ class Onepage
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -263,6 +292,7 @@ class Onepage
      *
      * @return \Magento\Checkout\Model\Session
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -273,6 +303,7 @@ class Onepage
      * Quote object getter
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -288,6 +319,7 @@ class Onepage
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -300,6 +332,7 @@ class Onepage
      *
      * @return \Magento\Customer\Model\Session
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCustomerSession()
     {
@@ -311,6 +344,7 @@ class Onepage
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function initCheckout()
     {
@@ -345,6 +379,7 @@ class Onepage
      * Get quote checkout method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutMethod()
     {
@@ -366,6 +401,7 @@ class Onepage
      *
      * @param   string $method
      * @return  array
+     * @since 2.0.0
      */
     public function saveCheckoutMethod($method)
     {
@@ -382,6 +418,7 @@ class Onepage
      * Check whether checkout method is "register"
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isCheckoutMethodRegister()
     {
@@ -396,6 +433,7 @@ class Onepage
      * @return  array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function saveShipping($data, $customerAddressId)
     {
@@ -475,6 +513,7 @@ class Onepage
      *
      * @param   string $shippingMethod
      * @return  array
+     * @since 2.0.0
      */
     public function saveShippingMethod($shippingMethod)
     {
@@ -501,6 +540,7 @@ class Onepage
      *
      * @param   array $data
      * @return  array
+     * @since 2.0.0
      */
     public function savePayment($data)
     {
@@ -537,6 +577,7 @@ class Onepage
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function validate()
     {
@@ -557,6 +598,7 @@ class Onepage
      * Prepare quote for guest checkout order submit
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareGuestQuote()
     {
@@ -572,6 +614,7 @@ class Onepage
      * Prepare quote for customer registration and customer order submit
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareNewCustomerQuote()
     {
@@ -616,6 +659,7 @@ class Onepage
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _prepareCustomerQuote()
     {
@@ -659,6 +703,7 @@ class Onepage
      * Involve new customer to system
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _involveNewCustomer()
     {
@@ -684,6 +729,7 @@ class Onepage
      * Create order based on checkout type. Create customer if necessary.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function saveOrder()
     {
@@ -760,6 +806,7 @@ class Onepage
      * @param int $websiteId
      * @return false|\Magento\Customer\Model\Customer
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _customerEmailExists($email, $websiteId = null)
     {
@@ -770,6 +817,7 @@ class Onepage
      * Get last order increment id by order id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastOrderId()
     {

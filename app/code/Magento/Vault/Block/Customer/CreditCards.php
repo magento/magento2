@@ -11,11 +11,13 @@ use Magento\Vault\Model\CreditCardTokenFactory;
  * Class CreditCards
  *
  * @api
+ * @since 2.2.0
  */
 class CreditCards extends PaymentTokens
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getType()
     {

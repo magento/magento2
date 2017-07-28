@@ -11,6 +11,7 @@ namespace Magento\Config\Model\Config\Structure;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractMapper implements MapperInterface
 {
@@ -20,6 +21,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param string $key
      * @param array $target
      * @return bool
+     * @since 2.0.0
      */
     protected function _hasValue($key, $target)
     {

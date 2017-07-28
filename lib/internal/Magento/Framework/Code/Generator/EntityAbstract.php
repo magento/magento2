@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Code\Generator;
 
+/**
+ * Class \Magento\Framework\Code\Generator\EntityAbstract
+ *
+ * @since 2.0.0
+ */
 abstract class EntityAbstract
 {
     /**
@@ -14,6 +19,7 @@ abstract class EntityAbstract
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $_errors = [];
 
@@ -21,6 +27,7 @@ abstract class EntityAbstract
      * Source model class name
      *
      * @var string
+     * @since 2.0.0
      */
     private $_sourceClassName;
 
@@ -28,11 +35,13 @@ abstract class EntityAbstract
      * Result model class name
      *
      * @var string
+     * @since 2.0.0
      */
     private $_resultClassName;
 
     /**
      * @var Io
+     * @since 2.0.0
      */
     private $_ioObject;
 
@@ -40,11 +49,13 @@ abstract class EntityAbstract
      * Class generator object
      *
      * @var \Magento\Framework\Code\Generator\CodeGeneratorInterface
+     * @since 2.0.0
      */
     protected $_classGenerator;
 
     /**
      * @var DefinedClasses
+     * @since 2.0.0
      */
     private $definedClasses;
 
@@ -54,6 +65,7 @@ abstract class EntityAbstract
      * @param Io $ioObject
      * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
+     * @since 2.0.0
      */
     public function __construct(
         $sourceClassName = null,
@@ -90,6 +102,7 @@ abstract class EntityAbstract
      * Generation template method
      *
      * @return bool
+     * @since 2.0.0
      */
     public function generate()
     {
@@ -114,6 +127,7 @@ abstract class EntityAbstract
      * List of occurred generation errors
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getErrors()
     {
@@ -124,6 +138,7 @@ abstract class EntityAbstract
      * Get full source class name, with namespace
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSourceClassName()
     {
@@ -134,6 +149,7 @@ abstract class EntityAbstract
      * Get source class without namespace.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSourceClassNameWithoutNamespace()
     {
@@ -146,6 +162,7 @@ abstract class EntityAbstract
      *
      * @param string $className
      * @return string
+     * @since 2.0.0
      */
     protected function _getFullyQualifiedClassName($className)
     {
@@ -157,6 +174,7 @@ abstract class EntityAbstract
      * Get result class name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getResultClassName()
     {
@@ -168,6 +186,7 @@ abstract class EntityAbstract
      *
      * @param string $modelClassName
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultResultClassName($modelClassName)
     {
@@ -178,6 +197,7 @@ abstract class EntityAbstract
      * Returns list of properties for class generator
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -198,6 +218,7 @@ abstract class EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _getDefaultConstructorDefinition();
 
@@ -205,6 +226,7 @@ abstract class EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _getClassMethods();
 
@@ -212,6 +234,7 @@ abstract class EntityAbstract
      * Generate code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _generateCode()
     {
@@ -228,6 +251,7 @@ abstract class EntityAbstract
      *
      * @param string $message
      * @return $this
+     * @since 2.0.0
      */
     protected function _addError($message)
     {
@@ -237,6 +261,7 @@ abstract class EntityAbstract
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     protected function _validateData()
     {
@@ -262,6 +287,7 @@ abstract class EntityAbstract
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassDocBlock()
     {
@@ -271,6 +297,7 @@ abstract class EntityAbstract
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _getGeneratedCode()
     {
@@ -281,6 +308,7 @@ abstract class EntityAbstract
     /**
      * @param string $sourceCode
      * @return string
+     * @since 2.0.0
      */
     protected function _fixCodeStyle($sourceCode)
     {
@@ -294,6 +322,7 @@ abstract class EntityAbstract
      * Get value generator for null default value
      *
      * @return \Zend\Code\Generator\ValueGenerator
+     * @since 2.0.0
      */
     protected function _getNullDefaultValue()
     {
@@ -307,6 +336,7 @@ abstract class EntityAbstract
      *
      * @param \ReflectionParameter $parameter
      * @return array
+     * @since 2.0.0
      */
     protected function _getMethodParameterInfo(\ReflectionParameter $parameter)
     {
@@ -344,6 +374,7 @@ abstract class EntityAbstract
      * @param string $sourceClassName
      * @param string $resultClassName
      * @return void
+     * @since 2.0.0
      */
     public function init($sourceClassName, $resultClassName)
     {

@@ -10,6 +10,7 @@ namespace Magento\Framework\Filesystem\Io;
  * Sftp client interface
  *
  * @link        http://www.php.net/manual/en/function.ssh2-connect.php
+ * @since 2.0.0
  */
 class Sftp extends AbstractIo
 {
@@ -18,6 +19,7 @@ class Sftp extends AbstractIo
 
     /**
      * @var \phpseclib\Net\SFTP $_connection
+     * @since 2.0.0
      */
     protected $_connection = null;
 
@@ -31,6 +33,7 @@ class Sftp extends AbstractIo
      *        int $args[timeout] Connection timeout [=10]
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function open(array $args = [])
     {
@@ -55,6 +58,7 @@ class Sftp extends AbstractIo
      * Close a connection
      *
      * @return void
+     * @since 2.0.0
      */
     public function close()
     {
@@ -74,6 +78,7 @@ class Sftp extends AbstractIo
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -100,6 +105,7 @@ class Sftp extends AbstractIo
      * @return bool
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -140,6 +146,7 @@ class Sftp extends AbstractIo
      * Get current working directory
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function pwd()
     {
@@ -152,6 +159,7 @@ class Sftp extends AbstractIo
      * @param string $dir
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function cd($dir)
     {
@@ -164,6 +172,7 @@ class Sftp extends AbstractIo
      * @param string $filename remote file name
      * @param string|null $destination local file name (optional)
      * @return mixed
+     * @since 2.0.0
      */
     public function read($filename, $destination = null)
     {
@@ -180,6 +189,7 @@ class Sftp extends AbstractIo
      * @param string $source string data or local file name
      * @param int $mode ignored parameter
      * @return bool
+     * @since 2.0.0
      */
     public function write($filename, $source, $mode = null)
     {
@@ -193,6 +203,7 @@ class Sftp extends AbstractIo
      * @param string $filename
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function rm($filename)
     {
@@ -206,6 +217,7 @@ class Sftp extends AbstractIo
      * @param string $destination
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function mv($source, $destination)
     {
@@ -218,6 +230,7 @@ class Sftp extends AbstractIo
      * @param string $filename
      * @param int $mode
      * @return mixed
+     * @since 2.0.0
      */
     public function chmod($filename, $mode)
     {
@@ -231,6 +244,7 @@ class Sftp extends AbstractIo
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function ls($grep = null)
     {
@@ -247,6 +261,7 @@ class Sftp extends AbstractIo
      * Returns a list of files in the current directory
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function rawls()
     {

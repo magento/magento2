@@ -13,16 +13,19 @@ namespace Magento\Backup\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class BackupFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -35,6 +38,7 @@ class BackupFactory
      * @param int $timestamp
      * @param string $type
      * @return \Magento\Backup\Model\Backup
+     * @since 2.0.0
      */
     public function create($timestamp, $type)
     {

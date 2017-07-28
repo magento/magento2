@@ -7,6 +7,7 @@ namespace Magento\Swatches\Model\Plugin;
 
 /**
  * Class ProductImage replace original configurable product with first child
+ * @since 2.0.0
  */
 class ProductImage
 {
@@ -21,16 +22,19 @@ class ProductImage
      * Data helper to get child product image
      *
      * @var \Magento\Swatches\Helper\Data $productHelper
+     * @since 2.0.0
      */
     protected $swatchHelperData;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Framework\App\Request\Http
+     * @since 2.0.0
      */
     protected $request;
 
@@ -38,6 +42,7 @@ class ProductImage
      * @param \Magento\Swatches\Helper\Data $swatchesHelperData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Request\Http $request
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Swatches\Helper\Data $swatchesHelperData,
@@ -58,6 +63,7 @@ class ProductImage
      * @param string $location
      * @param array $attributes
      * @return array
+     * @since 2.0.0
      */
     public function beforeGetImage(
         \Magento\Catalog\Block\Product\AbstractProduct $subject,
@@ -82,6 +88,7 @@ class ProductImage
      * @param \Magento\Catalog\Model\Product $parentProduct
      * @param array $filterArray
      * @return bool|\Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function loadSimpleVariation(\Magento\Catalog\Model\Product $parentProduct, array $filterArray)
     {
@@ -100,6 +107,7 @@ class ProductImage
      *
      * @param array $request
      * @return array
+     * @since 2.0.0
      */
     protected function getFilterArray(array $request)
     {
@@ -121,6 +129,7 @@ class ProductImage
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     protected function canReplaceImageWithSwatch($attribute)
     {

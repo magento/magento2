@@ -14,6 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * document lists the products and their quantities in the delivery package. Merchants and customers can track
  * shipments.
  * @api
+ * @since 2.0.0
  */
 interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
 {
@@ -70,6 +71,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderId($id);
 
@@ -77,6 +79,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the order_id for the shipment package.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getOrderId();
 
@@ -84,6 +87,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the created-at timestamp for the shipment package.
      *
      * @return string|null Created-at timestamp.
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -92,6 +96,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param string $createdAt timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -99,6 +104,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the ID for the shipment package.
      *
      * @return int|null Shipment package ID.
+     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -107,6 +113,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -114,6 +121,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the parent ID for the shipment package.
      *
      * @return int Parent ID.
+     * @since 2.0.0
      */
     public function getParentId();
 
@@ -121,6 +129,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the updated-at timestamp for the shipment package.
      *
      * @return string|null Updated-at timestamp.
+     * @since 2.0.0
      */
     public function getUpdatedAt();
 
@@ -129,6 +138,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param string $timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($timestamp);
 
@@ -137,6 +147,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -145,6 +156,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param float $weight
      * @return $this
+     * @since 2.0.0
      */
     public function setWeight($weight);
 
@@ -152,6 +164,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the weight for the shipment package.
      *
      * @return float Weight.
+     * @since 2.0.0
      */
     public function getWeight();
 
@@ -160,6 +173,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -167,6 +181,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the quantity for the shipment package.
      *
      * @return float Quantity.
+     * @since 2.0.0
      */
     public function getQty();
 
@@ -175,6 +190,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param string $description
      * @return $this
+     * @since 2.0.0
      */
     public function setDescription($description);
 
@@ -182,6 +198,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Gets the description for the shipment package.
      *
      * @return string Description.
+     * @since 2.0.0
      */
     public function getDescription();
 
@@ -189,6 +206,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -197,6 +215,7 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes

@@ -13,16 +13,19 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Coupon management class for guest carts.
+ * @since 2.0.0
  */
 class GuestCouponManagement implements GuestCouponManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
+     * @since 2.0.0
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var CouponManagementInterface
+     * @since 2.0.0
      */
     private $couponManagement;
 
@@ -31,6 +34,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
      *
      * @param CouponManagementInterface $couponManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @since 2.0.0
      */
     public function __construct(
         CouponManagementInterface $couponManagement,
@@ -42,6 +46,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -52,6 +57,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function set($cartId, $couponCode)
     {
@@ -62,6 +68,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($cartId)
     {

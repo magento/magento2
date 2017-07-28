@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Api;
  * Manage options of configurable product
  *
  * @api
+ * @since 2.0.0
  */
 interface OptionRepositoryInterface
 {
@@ -21,6 +22,7 @@ interface OptionRepositoryInterface
      * @return \Magento\ConfigurableProduct\Api\Data\OptionInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function get($sku, $id);
 
@@ -31,6 +33,7 @@ interface OptionRepositoryInterface
      * @return \Magento\ConfigurableProduct\Api\Data\OptionInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function getList($sku);
 
@@ -39,6 +42,7 @@ interface OptionRepositoryInterface
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option);
 
@@ -50,6 +54,7 @@ interface OptionRepositoryInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function deleteById($sku, $id);
 
@@ -62,6 +67,7 @@ interface OptionRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function save($sku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option);
 }

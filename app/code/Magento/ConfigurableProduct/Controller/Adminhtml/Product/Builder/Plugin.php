@@ -12,21 +12,29 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin
+ *
+ * @since 2.0.0
+ */
 class Plugin
 {
     /**
      * @var ProductFactory
+     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @since 2.0.0
      */
     protected $configurableType;
 
     /**
      * @param ProductFactory $productFactory
      * @param Type\Configurable $configurableType
+     * @since 2.0.0
      */
     public function __construct(ProductFactory $productFactory, Type\Configurable $configurableType)
     {
@@ -43,6 +51,7 @@ class Plugin
      * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.2.0
      */
     public function afterBuild(CatalogProductBuilder $subject, Product $product, RequestInterface $request)
     {

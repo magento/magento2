@@ -9,6 +9,7 @@ namespace Magento\Review\Block\Adminhtml\Add;
  * Adminhtml add product review form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Review data
      *
      * @var \Magento\Review\Helper\Data
+     * @since 2.0.0
      */
     protected $_reviewData = null;
 
@@ -23,6 +25,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Core system store model
      *
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_systemStore;
 
@@ -33,6 +36,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Review\Helper\Data $reviewData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,6 +56,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -8,6 +8,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 /**
  * Class CookieMetadata
  * @api
+ * @since 2.0.0
  */
 class CookieMetadata
 {
@@ -30,6 +31,7 @@ class CookieMetadata
 
     /**
      * @param array $metadata
+     * @since 2.0.0
      */
     public function __construct($metadata = [])
     {
@@ -45,6 +47,7 @@ class CookieMetadata
      * If a value has not yet been set then the key will not show up in the array.
      *
      * @return array
+     * @since 2.0.0
      */
     public function __toArray()
     {
@@ -56,6 +59,7 @@ class CookieMetadata
      *
      * @param string $domain
      * @return $this
+     * @since 2.0.0
      */
     public function setDomain($domain)
     {
@@ -66,6 +70,7 @@ class CookieMetadata
      * Get the domain for the cookie
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDomain()
     {
@@ -77,6 +82,7 @@ class CookieMetadata
      *
      * @param string $path
      * @return $this
+     * @since 2.0.0
      */
     public function setPath($path)
     {
@@ -87,6 +93,7 @@ class CookieMetadata
      * Get the path of the cookie
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPath()
     {
@@ -98,6 +105,7 @@ class CookieMetadata
      *
      * @param string $name
      * @return int|float|string|bool|null
+     * @since 2.0.0
      */
     protected function get($name)
     {
@@ -113,6 +121,7 @@ class CookieMetadata
      * @param string $name
      * @param int|float|string|bool|null $value
      * @return $this
+     * @since 2.0.0
      */
     protected function set($name, $value)
     {
@@ -124,6 +133,7 @@ class CookieMetadata
      * Get HTTP Only flag
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getHttpOnly()
     {
@@ -134,6 +144,7 @@ class CookieMetadata
      * Get whether the cookie is only available under HTTPS
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getSecure()
     {

@@ -8,6 +8,7 @@ namespace Magento\Framework\Model\Operation;
 
 /**
  * Interface WriteInterface
+ * @since 2.1.0
  */
 interface WriteInterface
 {
@@ -15,6 +16,7 @@ interface WriteInterface
      * @param string $entityType
      * @param object $entity
      * @return object|bool
+     * @since 2.1.0
      */
     public function execute($entityType, $entity);
 }

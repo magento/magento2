@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Filters\Type;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
 {
@@ -16,6 +17,7 @@ class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
      * Prepare component configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -28,6 +30,7 @@ class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
      * Transfer filters to dataProvider
      *
      * @return void
+     * @since 2.0.0
      */
     protected function applyFilter()
     {

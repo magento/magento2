@@ -9,6 +9,7 @@ namespace Magento\Framework\Data\Argument;
  * Interface that encapsulates complexity of expression computation
  *
  * @api
+ * @since 2.0.0
  */
 interface InterpreterInterface
 {
@@ -19,6 +20,7 @@ interface InterpreterInterface
      * @return mixed
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function evaluate(array $data);
 }

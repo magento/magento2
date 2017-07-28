@@ -9,6 +9,7 @@ use Magento\Framework\View\Design\Theme\ListInterface;
 
 /**
  * Theme filesystem data collection
+ * @since 2.0.0
  */
 class Collection extends \Magento\Theme\Model\Theme\Collection implements ListInterface
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Theme\Model\Theme\Collection implements ListIn
      * Model of collection item
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_itemObjectClass = \Magento\Theme\Model\Theme\Data::class;
 }

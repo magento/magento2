@@ -10,16 +10,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Interpreter that retrieves options from an option source model
+ * @since 2.0.0
  */
 class Options implements InterpreterInterface
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -31,6 +34,7 @@ class Options implements InterpreterInterface
      * @return array Format: array(array('value' => <value>, 'label' => '<label>'), ...)
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

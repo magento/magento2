@@ -8,12 +8,18 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Persistent\Observer\ClearExpiredCronJobObserver
+ *
+ * @since 2.0.0
+ */
 class ClearExpiredCronJobObserver
 {
     /**
      * Website collection factory
      *
      * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory
+     * @since 2.0.0
      */
     protected $_websiteCollectionFactory;
 
@@ -21,12 +27,14 @@ class ClearExpiredCronJobObserver
      * Session factory
      *
      * @var \Magento\Persistent\Model\SessionFactory
+     * @since 2.0.0
      */
     protected $_sessionFactory;
 
     /**
      * @param \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websiteCollectionFactory
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websiteCollectionFactory,
@@ -42,6 +50,7 @@ class ClearExpiredCronJobObserver
      * @param \Magento\Cron\Model\Schedule $schedule
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(\Magento\Cron\Model\Schedule $schedule)
     {

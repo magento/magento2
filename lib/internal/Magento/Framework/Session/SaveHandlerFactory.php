@@ -7,6 +7,7 @@ namespace Magento\Framework\Session;
 
 /**
  * Magento session save handler factory
+ * @since 2.0.0
  */
 class SaveHandlerFactory
 {
@@ -19,6 +20,7 @@ class SaveHandlerFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,6 +28,7 @@ class SaveHandlerFactory
      * Handlers
      *
      * @var array
+     * @since 2.0.0
      */
     protected $handlers = [];
 
@@ -34,6 +37,7 @@ class SaveHandlerFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManger
      * @param array $handlers
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger, array $handlers = [])
     {
@@ -50,6 +54,7 @@ class SaveHandlerFactory
      * @param array $params
      * @return \SessionHandler
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function create($saveMethod, $params = [])
     {

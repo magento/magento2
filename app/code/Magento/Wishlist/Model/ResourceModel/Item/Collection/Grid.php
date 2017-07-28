@@ -13,11 +13,13 @@ use Magento\Customer\Controller\RegistryConstants as RegistryConstants;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registryManager;
 
@@ -43,6 +45,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -92,6 +95,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * Initialize db select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -108,6 +112,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * @param   string $field
      * @param   string $direction
      * @return  \Magento\Framework\Data\Collection\AbstractDb
+     * @since 2.0.0
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -129,6 +134,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * @param null|string|array $condition
      * @see self::_getConditionSql for $condition
      * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {

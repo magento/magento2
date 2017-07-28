@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Command for setting index mode for indexers.
+ * @since 2.0.0
  */
 class IndexerSetModeCommand extends AbstractIndexerManageCommand
 {
@@ -26,6 +27,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -38,6 +40,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -81,6 +84,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
      * Get list of arguments for the command
      *
      * @return InputOption[]
+     * @since 2.0.0
      */
     public function getInputList()
     {
@@ -98,6 +102,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
      *
      * @param InputInterface $input
      * @return string[]
+     * @since 2.0.0
      */
     public function validate(InputInterface $input)
     {

@@ -13,21 +13,25 @@ use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Communication configuration validator. Validates data, that have been read from env.php.
+ * @since 2.1.0
  */
 class Validator extends ConfigValidator
 {
     /**
      * @var TypeProcessor
+     * @since 2.1.0
      */
     private $typeProcessor;
 
     /**
      * @var MethodsMap
+     * @since 2.1.0
      */
     private $methodsMap;
 
     /**
      * @var BooleanUtils
+     * @since 2.1.0
      */
     private $booleanUtils;
 
@@ -35,6 +39,7 @@ class Validator extends ConfigValidator
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
+     * @since 2.1.0
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -52,6 +57,7 @@ class Validator extends ConfigValidator
      *
      * @param array $configData
      * @return void
+     * @since 2.1.0
      */
     public function validate($configData)
     {
@@ -83,6 +89,7 @@ class Validator extends ConfigValidator
      * @param mixed $configDataItem
      * @param string $topicName
      * @return void
+     * @since 2.1.0
      */
     private function validateTopicName($configDataItem, $topicName)
     {
@@ -108,6 +115,7 @@ class Validator extends ConfigValidator
      * @param mixed $configDataItem
      * @param string $topicName
      * @return void
+     * @since 2.1.0
      */
     private function validateTopic($configDataItem, $topicName)
     {
@@ -166,6 +174,7 @@ class Validator extends ConfigValidator
      *
      * @param array $configDataItem
      * @return void
+     * @since 2.1.0
      */
     private function validateTopicResponseHandler($configDataItem)
     {
@@ -214,6 +223,7 @@ class Validator extends ConfigValidator
      * @param string $topicName
      * @param string $requestSchema
      * @return void
+     * @since 2.1.0
      */
     protected function validateRequestTypeValue($requestType, $topicName, $requestSchema)
     {

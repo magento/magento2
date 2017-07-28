@@ -10,27 +10,32 @@ namespace Magento\Setup\Model;
  *
  * Class responsible for applying search terms to description
  * based on search terms description
+ * @since 2.2.0
  */
 class SearchTermManager
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $searchTerms;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $searchTermsUseRate;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $totalProductsCount;
 
     /**
      * @param array $searchTerms
      * @param int $totalProductsCount
+     * @since 2.2.0
      */
     public function __construct(array $searchTerms, $totalProductsCount)
     {
@@ -45,6 +50,7 @@ class SearchTermManager
      * @param string $description
      * @param int $currentProductIndex
      * @return void
+     * @since 2.2.0
      */
     public function applySearchTermsToDescription(&$description, $currentProductIndex)
     {
@@ -69,6 +75,7 @@ class SearchTermManager
      * and number of each search term
      *
      * @return void;
+     * @since 2.2.0
      */
     private function calculateSearchTermsUseRate()
     {

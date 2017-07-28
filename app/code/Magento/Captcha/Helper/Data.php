@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\DriverInterface;
  * Captcha image model
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -44,21 +45,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * List uses Models of Captcha
      * @var array
+     * @since 2.0.0
      */
     protected $_captcha = [];
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Captcha\Model\CaptchaFactory
+     * @since 2.0.0
      */
     protected $_factory;
 
@@ -67,6 +72,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -85,6 +91,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $formId
      * @return \Magento\Captcha\Model\CaptchaInterface
+     * @since 2.0.0
      */
     public function getCaptcha($formId)
     {
@@ -107,6 +114,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\App\Config\Element
+     * @since 2.0.0
      */
     public function getConfig($key, $store = null)
     {
@@ -124,6 +132,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * [['arial'] => ['label' => 'Arial', 'path' => '/www/magento/fonts/arial.ttf']]
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFonts()
     {
@@ -146,6 +155,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $website
      * @return string
+     * @since 2.0.0
      */
     public function getImgDir($website = null)
     {
@@ -160,6 +170,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $website
      * @return string
+     * @since 2.0.0
      */
     protected function _getWebsiteCode($website = null)
     {
@@ -171,6 +182,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $website
      * @return string
+     * @since 2.0.0
      */
     public function getImgUrl($website = null)
     {

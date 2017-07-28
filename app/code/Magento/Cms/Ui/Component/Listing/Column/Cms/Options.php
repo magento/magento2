@@ -9,6 +9,7 @@ use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
 /**
  * Store Options for Cms Pages and Blocks
+ * @since 2.0.0
  */
 class Options extends StoreOptions
 {
@@ -21,6 +22,7 @@ class Options extends StoreOptions
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

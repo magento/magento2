@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Class BlockFactory
  *
  * @api
+ * @since 2.0.0
  */
 class BlockFactory
 {
@@ -18,6 +19,7 @@ class BlockFactory
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,6 +27,7 @@ class BlockFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -38,6 +41,7 @@ class BlockFactory
      * @param array $arguments
      * @return \Magento\Framework\View\Element\BlockInterface
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function createBlock($blockName, array $arguments = [])
     {

@@ -7,16 +7,19 @@ namespace Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid;
 
 /**
  * Sales creditmemo statuses option array
+ * @since 2.0.0
  */
 class StatusList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
+     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
     /**
      * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
+     * @since 2.0.0
      */
     public function __construct(\Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository)
     {
@@ -27,6 +30,7 @@ class StatusList implements \Magento\Framework\Option\ArrayInterface
      * Return option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

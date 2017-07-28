@@ -8,10 +8,16 @@ namespace Magento\Backend\Block\Widget\Button;
 
 use Magento\Framework\View\LayoutInterface;
 
+/**
+ * Class \Magento\Backend\Block\Widget\Button\Toolbar
+ *
+ * @since 2.0.0
+ */
 class Toolbar implements ToolbarInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function pushButtons(
         \Magento\Framework\View\Element\AbstractBlock $context,
@@ -44,6 +50,7 @@ class Toolbar implements ToolbarInterface
      * @param string $containerName
      * @param \Magento\Backend\Block\Widget\Button\Item $buttonItem
      * @return \Magento\Backend\Block\Widget\Button\Toolbar\Container
+     * @since 2.0.0
      */
     protected function createContainer(LayoutInterface $layout, $containerName, $buttonItem)
     {
@@ -61,6 +68,7 @@ class Toolbar implements ToolbarInterface
      * @param \Magento\Framework\View\Element\AbstractBlock $context
      * @param string $region
      * @return \Magento\Backend\Block\Template
+     * @since 2.0.0
      */
     protected function getToolbar(\Magento\Framework\View\Element\AbstractBlock $context, $region)
     {

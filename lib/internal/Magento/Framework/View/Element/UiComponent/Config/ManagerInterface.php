@@ -7,7 +7,8 @@ namespace Magento\Framework\View\Element\UiComponent\Config;
 
 /**
  * Interface ManagerInterface
- * @deprecated since 2.2.0
+ * @deprecated 2.2.0 since 2.2.0
+ * @since 2.0.0
  */
 interface ManagerInterface
 {
@@ -42,6 +43,7 @@ interface ManagerInterface
      * @param string $name
      * @return ManagerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function prepareData($name);
 
@@ -50,6 +52,7 @@ interface ManagerInterface
      *
      * @param string $name
      * @return array
+     * @since 2.0.0
      */
     public function getData($name);
 
@@ -58,6 +61,7 @@ interface ManagerInterface
      *
      * @param string $component
      * @return array
+     * @since 2.0.0
      */
     public function createRawComponentData($component);
 
@@ -66,6 +70,7 @@ interface ManagerInterface
      *
      * @param string $name
      * @return UiReaderInterface
+     * @since 2.0.0
      */
     public function getReader($name);
 }

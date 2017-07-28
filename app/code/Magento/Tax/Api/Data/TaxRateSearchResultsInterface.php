@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Interface for tax rate search results.
  * @api
+ * @since 2.0.0
  */
 interface TaxRateSearchResultsInterface extends SearchResultsInterface
 {
@@ -19,6 +20,7 @@ interface TaxRateSearchResultsInterface extends SearchResultsInterface
      * Get items
      *
      * @return \Magento\Tax\Api\Data\TaxRateInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -27,6 +29,7 @@ interface TaxRateSearchResultsInterface extends SearchResultsInterface
      *
      * @param \Magento\Tax\Api\Data\TaxRateInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

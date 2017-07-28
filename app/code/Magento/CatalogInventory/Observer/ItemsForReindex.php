@@ -6,16 +6,23 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+/**
+ * Class \Magento\CatalogInventory\Observer\ItemsForReindex
+ *
+ * @since 2.0.0
+ */
 class ItemsForReindex
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $itemsForReindex;
 
     /**
      * @param array $items
      * @return void
+     * @since 2.0.0
      */
     public function setItems(array $items)
     {
@@ -24,6 +31,7 @@ class ItemsForReindex
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -32,6 +40,7 @@ class ItemsForReindex
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function clear()
     {

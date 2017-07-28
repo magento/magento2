@@ -6,10 +6,16 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Design\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

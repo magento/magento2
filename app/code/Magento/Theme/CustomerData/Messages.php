@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Messages section
+ * @since 2.0.0
  */
 class Messages implements SectionSourceInterface
 {
@@ -20,11 +21,13 @@ class Messages implements SectionSourceInterface
      * Manager messages
      *
      * @var MessageManager
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var InterpretationStrategyInterface
+     * @since 2.0.0
      */
     private $interpretationStrategy;
 
@@ -33,6 +36,7 @@ class Messages implements SectionSourceInterface
      *
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
+     * @since 2.0.0
      */
     public function __construct(
         MessageManager $messageManager,
@@ -44,6 +48,7 @@ class Messages implements SectionSourceInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getSectionData()
     {

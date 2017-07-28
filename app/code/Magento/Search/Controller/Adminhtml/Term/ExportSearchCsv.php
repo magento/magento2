@@ -11,16 +11,23 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term\ExportSearchCsv
+ *
+ * @since 2.0.0
+ */
 class ExportSearchCsv extends TermController
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -34,6 +41,7 @@ class ExportSearchCsv extends TermController
      * Export search report grid to CSV format
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

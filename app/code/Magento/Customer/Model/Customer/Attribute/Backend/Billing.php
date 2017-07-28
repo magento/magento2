@@ -9,12 +9,14 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
  * Customer default billing address backend
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -27,6 +29,7 @@ class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @since 2.0.0
      */
     public function afterSave($object)
     {

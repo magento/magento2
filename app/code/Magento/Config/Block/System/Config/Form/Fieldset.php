@@ -13,17 +13,20 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Framework\View\Helper\Js
+     * @since 2.0.0
      */
     protected $_jsHelper;
 
@@ -31,6 +34,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      * Whether is collapsed by default
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $isCollapsedDefault = false;
 
@@ -39,6 +43,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -56,6 +61,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -72,6 +78,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.1.0
      */
     protected function _getChildrenElementsHtml(AbstractElement $element)
     {
@@ -93,6 +100,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getHeaderHtml($element)
     {
@@ -138,6 +146,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getFrontendClass($element)
     {
@@ -151,6 +160,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getHeaderTitleHtml($element)
     {
@@ -171,6 +181,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getHeaderCommentHtml($element)
     {
@@ -181,6 +192,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      * Return full css class name for form fieldset
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getFieldsetCss()
     {
@@ -196,6 +208,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getFooterHtml($element)
     {
@@ -226,6 +239,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getExtraJs($element)
     {
@@ -239,6 +253,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param AbstractElement $element
      * @return bool
+     * @since 2.0.0
      */
     protected function _isCollapseState($element)
     {

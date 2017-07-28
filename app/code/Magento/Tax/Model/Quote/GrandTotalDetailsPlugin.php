@@ -9,35 +9,46 @@ use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Tax\Model\Quote\GrandTotalDetailsPlugin
+ *
+ * @since 2.0.0
+ */
 class GrandTotalDetailsPlugin
 {
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory
+     * @since 2.0.0
      */
     private $detailsFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory
+     * @since 2.0.0
      */
     private $ratesFactory;
 
     /**
      * @var TotalSegmentExtensionFactory
+     * @since 2.0.0
      */
     private $totalSegmentExtensionFactory;
 
     /**
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     private $taxConfig;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $code;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -49,6 +60,7 @@ class GrandTotalDetailsPlugin
      * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param Json $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
@@ -68,6 +80,7 @@ class GrandTotalDetailsPlugin
     /**
      * @param array $rates
      * @return array
+     * @since 2.0.0
      */
     protected function getRatesData($rates)
     {
@@ -88,6 +101,7 @@ class GrandTotalDetailsPlugin
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.2.0
      */
     public function afterProcess(
         \Magento\Quote\Model\Cart\TotalsConverter $subject,

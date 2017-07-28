@@ -10,6 +10,7 @@ namespace Magento\Backend\Block\Store;
  * Store switcher block
  *
  * @api
+ * @since 2.0.0
  */
 class Switcher extends \Magento\Backend\Block\Template
 {
@@ -22,6 +23,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Name of website variable
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultWebsiteVarName = 'website';
 
@@ -29,6 +31,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Name of store group variable
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultStoreGroupVarName = 'group';
 
@@ -36,11 +39,13 @@ class Switcher extends \Magento\Backend\Block\Template
      * Name of store variable
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultStoreVarName = 'store';
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_storeIds;
 
@@ -48,11 +53,13 @@ class Switcher extends \Magento\Backend\Block\Template
      * Url for store switcher hint
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_hintUrl;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_hasDefaultOption = true;
 
@@ -60,6 +67,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Block template filename
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::store/switcher.phtml';
 
@@ -67,6 +75,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Website factory
      *
      * @var \Magento\Store\Model\WebsiteFactory
+     * @since 2.0.0
      */
     protected $_websiteFactory;
 
@@ -74,6 +83,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Store Group Factory
      *
      * @var \Magento\Store\Model\GroupFactory
+     * @since 2.0.0
      */
     protected $_storeGroupFactory;
 
@@ -81,6 +91,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Store Factory
      *
      * @var \Magento\Store\Model\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
@@ -90,6 +101,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -106,6 +118,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -130,6 +143,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Store\Model\ResourceModel\Website\Collection
+     * @since 2.0.0
      */
     public function getWebsiteCollection()
     {
@@ -147,6 +161,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get websites
      *
      * @return \Magento\Store\Model\Website[]
+     * @since 2.0.0
      */
     public function getWebsites()
     {
@@ -161,6 +176,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Check if can switch to websites
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isWebsiteSwitchEnabled()
     {
@@ -170,6 +186,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param string $varName
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteVarName($varName)
     {
@@ -179,6 +196,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getWebsiteVarName()
     {
@@ -192,6 +210,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Store\Model\Website $website
      * @return bool
+     * @since 2.0.0
      */
     public function isWebsiteSelected(\Magento\Store\Model\Website $website)
     {
@@ -200,6 +219,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -212,6 +232,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param int|\Magento\Store\Model\Website $website
      * @return \Magento\Store\Model\ResourceModel\Group\Collection
+     * @since 2.0.0
      */
     public function getGroupCollection($website)
     {
@@ -226,6 +247,7 @@ class Switcher extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Store\Model\Website|int $website
      * @return array
+     * @since 2.0.0
      */
     public function getStoreGroups($website)
     {
@@ -239,6 +261,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Check if can switch to store group
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isStoreGroupSwitchEnabled()
     {
@@ -248,6 +271,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param string $varName
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreGroupVarName($varName)
     {
@@ -257,6 +281,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getStoreGroupVarName()
     {
@@ -270,6 +295,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Store\Model\Group $group
      * @return bool
+     * @since 2.0.0
      */
     public function isStoreGroupSelected(\Magento\Store\Model\Group $group)
     {
@@ -278,6 +304,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getStoreGroupId()
     {
@@ -290,6 +317,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Store\Model\Group|int $group
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
+     * @since 2.0.0
      */
     public function getStoreCollection($group)
     {
@@ -309,6 +337,7 @@ class Switcher extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Store\Model\Group|int $group
      * @return \Magento\Store\Model\Store[]
+     * @since 2.0.0
      */
     public function getStores($group)
     {
@@ -328,6 +357,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -340,6 +370,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Store\Model\Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function isStoreSelected(\Magento\Store\Model\Store $store)
     {
@@ -350,6 +381,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Check if can switch to store views
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isStoreSwitchEnabled()
     {
@@ -359,6 +391,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param string $varName
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreVarName($varName)
     {
@@ -368,6 +401,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return mixed|string
+     * @since 2.0.0
      */
     public function getStoreVarName()
     {
@@ -380,6 +414,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSwitchUrl()
     {
@@ -399,6 +434,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function hasScopeSelected()
     {
@@ -409,6 +445,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get current selection name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentSelectionName()
     {
@@ -426,6 +463,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get current website name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentWebsiteName()
     {
@@ -442,6 +480,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get current store group name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentStoreGroupName()
     {
@@ -458,6 +497,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get current store view name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentStoreName()
     {
@@ -473,6 +513,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * @param array $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {
@@ -482,6 +523,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -490,6 +532,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isShow()
     {
@@ -498,6 +541,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -512,6 +556,7 @@ class Switcher extends \Magento\Backend\Block\Template
      *
      * @param bool $hasDefaultOption
      * @return bool
+     * @since 2.0.0
      */
     public function hasDefaultOption($hasDefaultOption = null)
     {
@@ -525,6 +570,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Return url for store switcher hint
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHintUrl()
     {
@@ -535,6 +581,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Return store switcher hint html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHintHtml()
     {
@@ -556,6 +603,7 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get whether iframe is being used
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isUsingIframe()
     {

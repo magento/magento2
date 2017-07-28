@@ -5,10 +5,16 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Widget;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Widget\Chooser
+ *
+ * @since 2.0.0
+ */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.0.0
      */
     protected $ruleFactory;
 
@@ -17,6 +23,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -32,6 +39,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Block constructor, prepare grid params
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +53,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare rules collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -64,6 +73,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element Form Element
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @since 2.0.0
      */
     public function prepareElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -99,6 +109,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Grid Row JS Callback
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRowClickCallback()
     {
@@ -126,6 +137,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare columns for rules grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -183,6 +195,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {

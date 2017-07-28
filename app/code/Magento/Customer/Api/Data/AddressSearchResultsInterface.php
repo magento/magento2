@@ -9,6 +9,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Interface for customer address search results.
  * @api
+ * @since 2.0.0
  */
 interface AddressSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -16,6 +17,7 @@ interface AddressSearchResultsInterface extends \Magento\Framework\Api\SearchRes
      * Get customer addresses list.
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -24,6 +26,7 @@ interface AddressSearchResultsInterface extends \Magento\Framework\Api\SearchRes
      *
      * @param \Magento\Customer\Api\Data\AddressInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

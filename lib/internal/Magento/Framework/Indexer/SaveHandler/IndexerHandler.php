@@ -14,51 +14,65 @@ use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 
+/**
+ * Class \Magento\Framework\Indexer\SaveHandler\IndexerHandler
+ *
+ * @since 2.0.0
+ */
 class IndexerHandler implements IndexerInterface
 {
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $dataTypes = ['searchable', 'filterable'];
 
     /**
      * @var IndexStructureInterface
+     * @since 2.0.0
      */
     protected $indexStructure;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $data;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $fields;
 
     /**
      * @var Resource|Resource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var Batch
+     * @since 2.0.0
      */
     protected $batch;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $batchSize;
 
     /**
      * @var IndexScopeResolverInterface[]
+     * @since 2.0.0
      */
     protected $scopeResolvers;
 
     /**
      * @param IndexStructureInterface $indexStructure
      * @var AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -70,6 +84,7 @@ class IndexerHandler implements IndexerInterface
      * @param \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $data
      * @param int $batchSize
+     * @since 2.0.0
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -95,6 +110,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -106,6 +122,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -119,6 +136,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function cleanIndex($dimensions)
     {
@@ -128,6 +146,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAvailable()
     {
@@ -138,6 +157,7 @@ class IndexerHandler implements IndexerInterface
      * @param string $dataType
      * @param Dimension[] $dimensions
      * @return string
+     * @since 2.0.0
      */
     protected function getTableName($dataType, $dimensions)
     {
@@ -146,6 +166,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getIndexName()
     {
@@ -156,6 +177,7 @@ class IndexerHandler implements IndexerInterface
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
+     * @since 2.0.0
      */
     private function insertDocumentsForSearchable(array $documents, array $dimensions)
     {
@@ -170,6 +192,7 @@ class IndexerHandler implements IndexerInterface
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
+     * @since 2.0.0
      */
     protected function insertDocumentsForFilterable(array $documents, array $dimensions)
     {
@@ -190,6 +213,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @param array $documents
      * @return array
+     * @since 2.0.0
      */
     protected function prepareFilterableFields(array $documents)
     {
@@ -209,6 +233,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @param array $documents
      * @return array
+     * @since 2.0.0
      */
     private function prepareSearchableFields(array $documents)
     {
@@ -230,6 +255,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @return void
+     * @since 2.0.0
      */
     private function prepareFields()
     {

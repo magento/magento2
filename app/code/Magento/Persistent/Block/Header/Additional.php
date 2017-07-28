@@ -9,16 +9,19 @@ namespace Magento\Persistent\Block\Header;
  * Remember Me block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Additional extends \Magento\Framework\View\Element\Html\Link
 {
     /**
      * @var \Magento\Customer\Helper\View
+     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
     /**
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSessionHelper;
 
@@ -26,6 +29,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
      * Customer repository
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -37,6 +41,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
      * @param \Magento\Persistent\Helper\Session $persistentSessionHelper
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -57,6 +62,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
      * Retrieve unset cookie link
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -67,6 +73,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
      * Render additional header html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

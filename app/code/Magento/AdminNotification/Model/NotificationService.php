@@ -10,16 +10,19 @@ namespace Magento\AdminNotification\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class NotificationService
 {
     /**
      * @var \Magento\AdminNotification\Model\InboxFactory $notificationFactory
+     * @since 2.0.0
      */
     protected $_notificationFactory;
 
     /**
      * @param \Magento\AdminNotification\Model\InboxFactory $notificationFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\AdminNotification\Model\InboxFactory $notificationFactory)
     {
@@ -32,6 +35,7 @@ class NotificationService
      * @param int $notificationId
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function markAsRead($notificationId)
     {

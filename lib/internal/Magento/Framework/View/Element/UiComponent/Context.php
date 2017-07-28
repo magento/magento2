@@ -21,16 +21,19 @@ use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
  * Class Context
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Context implements ContextInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $namespace;
 
     /**
      * @var DataProviderInterface
+     * @since 2.0.0
      */
     protected $dataProvider;
 
@@ -38,6 +41,7 @@ class Context implements ContextInterface
      * Application request
      *
      * @var RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
@@ -45,6 +49,7 @@ class Context implements ContextInterface
      * Factory renderer for a content type
      *
      * @var ContentTypeFactory
+     * @since 2.0.0
      */
     protected $contentTypeFactory;
 
@@ -52,21 +57,25 @@ class Context implements ContextInterface
      * Accept type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $acceptType;
 
     /**
      * @var PageLayoutInterface
+     * @since 2.0.0
      */
     protected $pageLayout;
 
     /**
      * @var ButtonProviderFactory
+     * @since 2.0.0
      */
     protected $buttonProviderFactory;
 
     /**
      * @var ActionPoolInterface
+     * @since 2.0.0
      */
     protected $actionPool;
 
@@ -74,6 +83,7 @@ class Context implements ContextInterface
      * Registry components
      *
      * @var array
+     * @since 2.0.0
      */
     protected $componentsDefinitions = [];
 
@@ -81,11 +91,13 @@ class Context implements ContextInterface
      * Url Builder
      *
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var Processor
+     * @since 2.0.0
      */
     protected $processor;
 
@@ -101,6 +113,7 @@ class Context implements ContextInterface
      * @param DataProviderInterface|null $dataProvider
      * @param null $namespace
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         PageLayoutInterface $pageLayout,
@@ -133,6 +146,7 @@ class Context implements ContextInterface
      * @param string $name
      * @param array $config
      * @return void
+     * @since 2.0.0
      */
     public function addComponentDefinition($name, array $config)
     {
@@ -148,6 +162,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getComponentsDefinitions()
     {
@@ -156,6 +171,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRenderEngine()
     {
@@ -164,6 +180,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getNamespace()
     {
@@ -172,6 +189,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAcceptType()
     {
@@ -180,6 +198,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRequestParams()
     {
@@ -188,6 +207,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRequestParam($key, $defaultValue = null)
     {
@@ -196,6 +216,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFiltersParams()
     {
@@ -204,6 +225,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFilterParam($key, $defaultValue = null)
     {
@@ -213,6 +235,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataProvider()
     {
@@ -221,6 +244,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataSourceData(UiComponentInterface $component)
     {
@@ -246,6 +270,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPageLayout()
     {
@@ -254,6 +279,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function addButtons(array $buttons, UiComponentInterface $component)
     {
@@ -289,6 +315,7 @@ class Context implements ContextInterface
      * @param array $itemA
      * @param array $itemB
      * @return int
+     * @since 2.0.0
      */
     public function sortButtons(array $itemA, array $itemB)
     {
@@ -301,6 +328,7 @@ class Context implements ContextInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.1.0
      */
     public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component)
     {
@@ -315,6 +343,7 @@ class Context implements ContextInterface
      * Getting requested accept type
      *
      * @return void
+     * @since 2.0.0
      */
     protected function setAcceptType()
     {
@@ -332,6 +361,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDataProvider(DataProviderInterface $dataProvider)
     {
@@ -340,6 +370,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -352,6 +383,7 @@ class Context implements ContextInterface
      * @param array $data
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     protected function prepareDataSource(array & $data, UiComponentInterface $component)
     {
@@ -366,6 +398,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getProcessor()
     {
@@ -374,6 +407,7 @@ class Context implements ContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getUiComponentFactory()
     {

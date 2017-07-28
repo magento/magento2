@@ -6,21 +6,29 @@
 
 namespace Magento\Framework\File\Transfer\Adapter;
 
+/**
+ * Class \Magento\Framework\File\Transfer\Adapter\Http
+ *
+ * @since 2.0.0
+ */
 class Http
 {
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @since 2.0.0
      */
     private $response;
 
     /**
      * @var \Magento\Framework\File\Mime
+     * @since 2.0.0
      */
     private $mime;
 
     /**
      * @param \Magento\Framework\App\Response\Http $response
      * @param \Magento\Framework\File\Mime $mime
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\HTTP\PhpEnvironment\Response $response,
@@ -37,6 +45,7 @@ class Http
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      * @return void
+     * @since 2.0.0
      */
     public function send($options = null)
     {

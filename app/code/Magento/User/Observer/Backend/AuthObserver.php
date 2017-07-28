@@ -21,6 +21,7 @@ use Magento\User\Model\UserFactory;
 /**
  * User backend observer model for authentication
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AuthObserver implements ObserverInterface
 {
@@ -28,6 +29,7 @@ class AuthObserver implements ObserverInterface
      * Backend configuration interface
      *
      * @var ObserverConfig
+     * @since 2.0.0
      */
     protected $observerConfig;
 
@@ -35,6 +37,7 @@ class AuthObserver implements ObserverInterface
      * Admin user resource model
      *
      * @var ResourceUser
+     * @since 2.0.0
      */
     protected $userResource;
 
@@ -42,6 +45,7 @@ class AuthObserver implements ObserverInterface
      * Backend url interface
      *
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $url;
 
@@ -49,6 +53,7 @@ class AuthObserver implements ObserverInterface
      * Backend authorization session
      *
      * @var Session
+     * @since 2.0.0
      */
     protected $authSession;
 
@@ -56,6 +61,7 @@ class AuthObserver implements ObserverInterface
      * Factory class for user model
      *
      * @var UserFactory
+     * @since 2.0.0
      */
     protected $userFactory;
 
@@ -63,6 +69,7 @@ class AuthObserver implements ObserverInterface
      * Encryption model
      *
      * @var EncryptorInterface
+     * @since 2.0.0
      */
     protected $encryptor;
 
@@ -70,6 +77,7 @@ class AuthObserver implements ObserverInterface
      * Message manager interface
      *
      * @var ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -81,6 +89,7 @@ class AuthObserver implements ObserverInterface
      * @param UserFactory $userFactory
      * @param EncryptorInterface $encryptor
      * @param ManagerInterface $messageManager
+     * @since 2.0.0
      */
     public function __construct(
         ObserverConfig $observerConfig,
@@ -106,6 +115,7 @@ class AuthObserver implements ObserverInterface
      * @param EventObserver $observer
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {
@@ -151,6 +161,7 @@ class AuthObserver implements ObserverInterface
      *
      * @param \Magento\User\Model\User $user
      * @return void
+     * @since 2.0.0
      */
     private function _updateLockingInformation($user)
     {
@@ -185,6 +196,7 @@ class AuthObserver implements ObserverInterface
      *
      * @param array $latestPassword
      * @return void
+     * @since 2.0.0
      */
     private function _checkExpiredPassword($latestPassword)
     {

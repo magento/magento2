@@ -13,21 +13,25 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
  * Class SignUp
+ * @since 2.2.0
  */
 class SignUp
 {
     /**
      * @var Connector
+     * @since 2.2.0
      */
     private $connector;
 
     /**
      * @var WriterInterface
+     * @since 2.2.0
      */
     private $configWriter;
 
     /**
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
@@ -35,6 +39,7 @@ class SignUp
      * Reinitable Config Model.
      *
      * @var ReinitableConfigInterface
+     * @since 2.2.0
      */
     private $reinitableConfig;
 
@@ -43,6 +48,7 @@ class SignUp
      * @param WriterInterface $configWriter
      * @param FlagManager $flagManager
      * @param ReinitableConfigInterface $reinitableConfig
+     * @since 2.2.0
      */
     public function __construct(
         Connector $connector,
@@ -61,6 +67,7 @@ class SignUp
      * In case of failure writes message to notifications inbox
      *
      * @return bool
+     * @since 2.2.0
      */
     public function execute()
     {
@@ -91,6 +98,7 @@ class SignUp
      * re-initialize config cache to avoid auto-generate new schedule items.
      *
      * @return bool
+     * @since 2.2.0
      */
     private function deleteAnalyticsCronExpr()
     {

@@ -12,6 +12,7 @@ use Magento\Payment\Gateway\CommandInterface;
  * Interface CommandPoolInterface
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 2.0.0
  */
 interface CommandPoolInterface
 {
@@ -21,6 +22,7 @@ interface CommandPoolInterface
      * @param string $commandCode
      * @return CommandInterface
      * @throws NotFoundException
+     * @since 2.0.0
      */
     public function get($commandCode);
 }

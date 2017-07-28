@@ -15,6 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
 {
@@ -22,6 +23,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Product type code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_typeId;
 
@@ -29,6 +31,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Product Type is composite flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isComposite = false;
 
@@ -36,6 +39,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Core data
      *
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
@@ -43,11 +47,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var bool|null
+     * @since 2.2.0
      */
     private $hasEntity = null;
 
@@ -61,6 +67,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
      * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -79,6 +86,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Get Table strategy
      *
      * @return \Magento\Framework\Indexer\Table\StrategyInterface
+     * @since 2.0.0
      */
     public function getTableStrategy()
     {
@@ -89,6 +97,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Define main price index table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -100,6 +109,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @param string $typeCode
      * @return $this
+     * @since 2.0.0
      */
     public function setTypeId($typeCode)
     {
@@ -112,6 +122,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getTypeId()
     {
@@ -128,6 +139,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setIsComposite($flag)
     {
@@ -140,6 +152,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsComposite()
     {
@@ -151,6 +164,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -171,6 +185,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @param int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @since 2.0.0
      */
     public function reindexEntity($entityIds)
     {
@@ -181,6 +196,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * @param null|int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @since 2.0.0
      */
     protected function reindex($entityIds = null)
     {
@@ -198,6 +214,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @see _prepareDefaultFinalPriceTable()
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultFinalPriceTable()
     {
@@ -208,6 +225,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare final price temporary index table
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareDefaultFinalPriceTable()
     {
@@ -219,6 +237,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Retrieve website current dates table name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getWebsiteDateTable()
     {
@@ -231,6 +250,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param int|array $entityIds the entity ids limitation
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareFinalPriceData($entityIds = null)
     {
@@ -244,6 +264,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param string|null $type product type, all if null
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
@@ -265,6 +286,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.2.0
      */
     protected function getSelect($entityIds = null, $type = null)
     {
@@ -406,6 +428,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Retrieve table name for custom option temporary aggregation data
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCustomOptionAggregateTable()
     {
@@ -416,6 +439,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Retrieve table name for custom option prices data
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCustomOptionPriceTable()
     {
@@ -426,6 +450,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare table structure for custom option temporary aggregation data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCustomOptionAggregateTable()
     {
@@ -437,6 +462,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare table structure for custom option prices data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCustomOptionPriceTable()
     {
@@ -449,6 +475,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _applyCustomOption()
     {
@@ -628,6 +655,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      *
      * @param int[]|null $entityIds
      * @return $this
+     * @since 2.0.0
      */
     protected function _movePriceDataToIndexTable($entityIds = null)
     {
@@ -663,6 +691,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Retrieve table name for product tier price index
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getTierPriceIndexTable()
     {
@@ -675,6 +704,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param string $table
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getIdxTable($table = null)
     {
@@ -683,6 +713,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     protected function hasEntity()
     {

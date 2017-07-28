@@ -7,11 +7,13 @@ namespace Magento\Framework\Acl\AclResource\Config;
 
 /**
  * ACL resources configuration schema locator
+ * @since 2.0.0
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * @var \Magento\Framework\Config\Dom\UrnResolver
+     * @since 2.0.0
      */
     protected $urnResolver;
 
@@ -19,6 +21,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
@@ -27,6 +30,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSchema()
     {
@@ -35,6 +39,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPerFileSchema()
     {

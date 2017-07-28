@@ -9,12 +9,18 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * Class \Magento\Backend\Block\Widget\Grid\Column\Filter\Store
+ *
+ * @since 2.0.0
+ */
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     const ALL_STORE_VIEWS = '0';
 
     /**
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_systemStore;
 
@@ -23,6 +29,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -40,6 +47,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -112,6 +120,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Form condition from element's value
      *
      * @return array|null
+     * @since 2.0.0
      */
     public function getCondition()
     {

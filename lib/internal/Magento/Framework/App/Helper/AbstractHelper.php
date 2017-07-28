@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Helper;
  * Abstract helper
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractHelper
 {
@@ -16,6 +17,7 @@ abstract class AbstractHelper
      * Helper module name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_moduleName;
 
@@ -23,26 +25,31 @@ abstract class AbstractHelper
      * Request object
      *
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $_moduleManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_urlBuilder;
 
     /**
      * @var \Magento\Framework\HTTP\Header
+     * @since 2.0.0
      */
     protected $_httpHeader;
 
@@ -50,36 +57,43 @@ abstract class AbstractHelper
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     * @since 2.0.0
      */
     protected $_remoteAddress;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
+     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\Framework\Url\DecoderInterface
+     * @since 2.0.0
      */
     protected $urlDecoder;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\Cache\ConfigInterface
+     * @since 2.1.0
      */
     protected $_cacheConfig;
 
     /**
      * @param Context $context
+     * @since 2.0.0
      */
     public function __construct(Context $context)
     {
@@ -100,6 +114,7 @@ abstract class AbstractHelper
      * Retrieve request object
      *
      * @return \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected function _getRequest()
     {
@@ -110,6 +125,7 @@ abstract class AbstractHelper
      * Retrieve helper module name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getModuleName()
     {
@@ -126,6 +142,7 @@ abstract class AbstractHelper
      * @param string $moduleName Full module name
      * @return boolean
      * use \Magento\Framework\Module\Manager::isOutputEnabled()
+     * @since 2.0.0
      */
     public function isModuleOutputEnabled($moduleName = null)
     {
@@ -141,6 +158,7 @@ abstract class AbstractHelper
      * @param   string $route
      * @param   array $params
      * @return  string
+     * @since 2.0.0
      */
     protected function _getUrl($route, $params = [])
     {

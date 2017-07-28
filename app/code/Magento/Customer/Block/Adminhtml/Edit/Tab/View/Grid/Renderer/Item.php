@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Adminhtml customers wishlist grid item renderer for name/options cell
+ * @since 2.0.0
  */
 class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -16,11 +17,13 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Catalog product configuration
      *
      * @var \Magento\Catalog\Helper\Product\Configuration|null
+     * @since 2.0.0
      */
     protected $_productConfig = null;
 
     /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
+     * @since 2.0.0
      */
     protected $_productConfigPool;
 
@@ -31,6 +34,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $productConfigPool
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -48,6 +52,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param Product $product
      * @return \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+     * @since 2.0.0
      */
     protected function _getProductHelper($product)
     {
@@ -81,6 +86,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Returns product associated with this block
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -91,6 +97,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Returns list of options and their values for product configuration
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getOptionList()
     {
@@ -105,6 +112,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param \Magento\Wishlist\Model\Item\Option $option
      * @return array
+     * @since 2.0.0
      */
     protected function getFormattedOptionValue($option)
     {
@@ -117,6 +125,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\DataObject $item
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $item)
     {
@@ -132,6 +141,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param Product $product
      * @param array $options
      * @return string
+     * @since 2.0.0
      */
     protected function _renderItemOptions(Product $product, array $options)
     {

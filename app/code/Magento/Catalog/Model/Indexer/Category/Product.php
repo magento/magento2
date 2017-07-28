@@ -11,6 +11,7 @@ use Magento\Framework\Indexer\CacheContext;
  * Category product indexer
  *
  * @api
+ * @since 2.0.0
  */
 class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
@@ -21,21 +22,25 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
 
     /**
      * @var Product\Action\FullFactory
+     * @since 2.0.0
      */
     protected $fullActionFactory;
 
     /**
      * @var Product\Action\RowsFactory
+     * @since 2.0.0
      */
     protected $rowsActionFactory;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
+     * @since 2.1.0
      */
     protected $cacheContext;
 
@@ -43,6 +48,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      * @param Product\Action\FullFactory $fullActionFactory
      * @param Product\Action\RowsFactory $rowsActionFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @since 2.0.0
      */
     public function __construct(
         Product\Action\FullFactory $fullActionFactory,
@@ -59,6 +65,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     public function execute($ids)
     {
@@ -71,6 +78,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      *
      * @param int[] $ids
      * @return void
+     * @since 2.1.0
      */
     protected function registerEntities($ids)
     {
@@ -81,6 +89,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      * Execute full indexation
      *
      * @return void
+     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -92,6 +101,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      * Add tags to cache context
      *
      * @return void
+     * @since 2.1.0
      */
     protected function registerTags()
     {
@@ -103,6 +113,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -114,6 +125,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      *
      * @param int $id
      * @return void
+     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -125,6 +137,7 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      *
      * @param int[] $ids
      * @return $this
+     * @since 2.0.0
      */
     protected function executeAction($ids)
     {
@@ -145,7 +158,8 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getCacheContext()
     {

@@ -10,6 +10,7 @@ namespace Magento\Tax\Api\Data;
 /**
  * Interface OrderTaxDetailsInterface
  * @api
+ * @since 2.0.0
  */
 interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,6 +18,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * Get applied taxes at order level
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] | null
+     * @since 2.0.0
      */
     public function getAppliedTaxes();
 
@@ -25,6 +27,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
+     * @since 2.0.0
      */
     public function setAppliedTaxes(array $appliedTaxes = null);
 
@@ -32,6 +35,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * Get order item tax details
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] | null
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -40,6 +44,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items = null);
 
@@ -47,6 +52,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -55,6 +61,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes

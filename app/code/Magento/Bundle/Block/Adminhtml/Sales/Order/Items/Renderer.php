@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Adminhtml sales order item renderer
  *
  * @api
+ * @since 2.0.0
  */
 class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
@@ -19,6 +20,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * Serializer
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -29,6 +31,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,6 +56,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param string &$remainder
      * @param bool $breakWords
      * @return string
+     * @since 2.0.0
      */
     public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
     {
@@ -67,6 +71,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      *
      * @param \Magento\Framework\DataObject $item
      * @return array|null
+     * @since 2.0.0
      */
     public function getChildren($item)
     {
@@ -103,6 +108,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function isShipmentSeparately($item = null)
     {
@@ -139,6 +145,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function isChildCalculated($item = null)
     {
@@ -176,6 +183,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     /**
      * @param mixed $item
      * @return mixed|null
+     * @since 2.0.0
      */
     public function getSelectionAttributes($item)
     {
@@ -192,6 +200,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getOrderOptions()
     {
@@ -213,6 +222,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getOrderItem()
     {
@@ -226,6 +236,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     /**
      * @param mixed $item
      * @return string
+     * @since 2.0.0
      */
     public function getValueHtml($item)
     {
@@ -248,6 +259,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     /**
      * @param object $item
      * @return bool
+     * @since 2.0.0
      */
     public function canShowPriceInfo($item)
     {

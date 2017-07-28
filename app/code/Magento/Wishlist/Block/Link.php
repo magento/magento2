@@ -16,6 +16,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
 {
@@ -23,11 +24,13 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
      * Template name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Wishlist::link.phtml';
 
     /**
      * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected $_wishlistHelper;
 
@@ -35,6 +38,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -47,6 +51,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -58,6 +63,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -66,6 +72,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -74,6 +81,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSortOrder()
     {

@@ -11,6 +11,7 @@ use Magento\Framework\Interception\DefinitionInterface;
 
 /**
  * Provides plugin list configuration
+ * @since 2.2.0
  */
 class PluginList extends Interception\PluginList\PluginList
 {
@@ -34,6 +35,7 @@ class PluginList extends Interception\PluginList\PluginList
     /**
      * Mapping of plugin type codes to plugin types
      * @var array
+     * @since 2.2.0
      */
     private $pluginTypeMapping = [
         DefinitionInterface::LISTENER_AROUND => self::PLUGIN_TYPE_AROUND,
@@ -45,6 +47,7 @@ class PluginList extends Interception\PluginList\PluginList
      * Returns plugins config
      *
      * @return array
+     * @since 2.2.0
      */
     public function getPluginsConfig()
     {
@@ -59,6 +62,7 @@ class PluginList extends Interception\PluginList\PluginList
      * @param array $areaCodes
      *
      * @return void
+     * @since 2.2.0
      */
     public function setScopePriorityScheme($areaCodes)
     {
@@ -72,6 +76,7 @@ class PluginList extends Interception\PluginList\PluginList
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     protected function isCurrentScope($scopeCode)
     {
@@ -83,6 +88,7 @@ class PluginList extends Interception\PluginList\PluginList
      *
      * @param string $type
      * @return array
+     * @since 2.2.0
      */
     private function getPlugins($type)
     {
@@ -99,6 +105,7 @@ class PluginList extends Interception\PluginList\PluginList
      * @param string $className
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function getPluginsListByClass($className)
     {
@@ -140,6 +147,7 @@ class PluginList extends Interception\PluginList\PluginList
      * @param int $methodTypes
      * @param int $typeCode
      * @return void
+     * @since 2.2.0
      */
     private function addPluginToList($pluginInstance, $pluginMethod, $methodTypes, $typeCode)
     {

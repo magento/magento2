@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 /**
  * Class ServiceDataAttributesScanner
+ * @since 2.0.0
  */
 class ServiceDataAttributesScanner implements ScannerInterface
 {
@@ -15,6 +16,7 @@ class ServiceDataAttributesScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {

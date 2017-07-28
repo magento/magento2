@@ -7,12 +7,18 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
+/**
+ * Class \Magento\UrlRewrite\Model\ResourceModel\UrlRewrite
+ *
+ * @since 2.0.0
+ */
 class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -23,6 +29,7 @@ class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize array fields
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -39,6 +46,7 @@ class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\UrlRewrite\Model\UrlRewrite $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {

@@ -12,16 +12,19 @@ namespace Magento\Customer\Controller\Ajax;
  *
  * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
+ * @since 2.0.0
  */
 class Logout extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Session\Generic
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
@@ -31,6 +34,7 @@ class Logout extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -46,6 +50,7 @@ class Logout extends \Magento\Framework\App\Action\Action
      * Customer logout action
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

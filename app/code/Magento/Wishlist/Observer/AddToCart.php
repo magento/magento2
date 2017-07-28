@@ -15,21 +15,34 @@ use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * Class AddToCart
- * @deprecated
+ * @deprecated 2.2.0
  * @package Magento\Wishlist\Observer
+ * @since 2.0.0
  */
 class AddToCart implements ObserverInterface
 {
-    /** @var CheckoutSession */
+    /**
+     * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
+     */
     protected $checkoutSession;
 
-    /** @var CustomerSession */
+    /**
+     * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
+     */
     protected $customerSession;
 
-    /** @var WishlistFactory */
+    /**
+     * @var \Magento\Wishlist\Model\WishlistFactory
+     * @since 2.0.0
+     */
     protected $wishlistFactory;
 
-    /** @var ManagerInterface */
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
+     */
     protected $messageManager;
 
     /**
@@ -37,6 +50,7 @@ class AddToCart implements ObserverInterface
      * @param CustomerSession $customerSession
      * @param WishlistFactory $wishlistFactory
      * @param ManagerInterface $messageManager
+     * @since 2.0.0
      */
     public function __construct(
         CheckoutSession $checkoutSession,
@@ -54,6 +68,7 @@ class AddToCart implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

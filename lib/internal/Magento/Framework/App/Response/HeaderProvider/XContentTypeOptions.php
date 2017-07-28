@@ -7,11 +7,22 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 
 use Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider;
 
+/**
+ * Class \Magento\Framework\App\Response\HeaderProvider\XContentTypeOptions
+ *
+ * @since 2.1.0
+ */
 class XContentTypeOptions extends AbstractHeaderProvider
 {
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.1.0
+     */
     protected $headerValue = 'nosniff';
 
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.1.0
+     */
     protected $headerName = 'X-Content-Type-Options';
 }

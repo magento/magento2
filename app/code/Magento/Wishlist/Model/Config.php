@@ -7,6 +7,7 @@ namespace Magento\Wishlist\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Config
 {
@@ -20,11 +21,13 @@ class Config
 
     /**
      * @var \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     private $_catalogConfig;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
+     * @since 2.0.0
      */
     private $_attributeConfig;
 
@@ -32,6 +35,7 @@ class Config
      * Number of emails allowed for sharing wishlist
      *
      * @var int
+     * @since 2.0.0
      */
     private $_sharingEmailLimit;
 
@@ -39,6 +43,7 @@ class Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -63,6 +68,7 @@ class Config
      * Get product attributes that need in wishlist
      *
      * @return array
+     * @since 2.0.0
      */
     public function getProductAttributes()
     {
@@ -75,6 +81,7 @@ class Config
      * Retrieve number of emails allowed for sharing wishlist
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSharingEmailLimit()
     {
@@ -85,6 +92,7 @@ class Config
      * Retrieve maximum length of sharing email text
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSharingTextLimit()
     {

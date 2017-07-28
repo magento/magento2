@@ -8,11 +8,13 @@ namespace Magento\Bundle\Block\Catalog\Product;
 /**
  * Bundle product price block
  * @api
+ * @since 2.0.0
  */
 class Price extends \Magento\Catalog\Block\Product\Price
 {
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxHelper;
 
@@ -26,6 +28,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,6 +59,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
      * With corrections for Dynamic prices
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayBothPrices()
     {
@@ -71,6 +75,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return bool|\Magento\Store\Model\Website
+     * @since 2.0.0
      */
     public function getWebsite($storeId)
     {

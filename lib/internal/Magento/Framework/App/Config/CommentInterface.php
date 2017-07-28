@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Interface CommentInterface
+ * @since 2.2.0
  */
 interface CommentInterface
 {
@@ -16,6 +17,7 @@ interface CommentInterface
      * Retrieve comment for configuration data.
      *
      * @return string
+     * @since 2.2.0
      */
     public function get();
 }

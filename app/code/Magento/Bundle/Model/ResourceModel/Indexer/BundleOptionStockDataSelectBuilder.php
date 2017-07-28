@@ -14,12 +14,14 @@ use Magento\Framework\DB\Select;
  * Is used to create Select object that is used for Bundle product stock status indexation
  *
  * @see \Magento\Bundle\Model\ResourceModel\Indexer\Stock::_prepareBundleOptionStockData
+ * @since 2.2.0
  */
 class BundleOptionStockDataSelectBuilder
 {
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -32,6 +34,7 @@ class BundleOptionStockDataSelectBuilder
     /**
      * @param string $idxTable
      * @return Select
+     * @since 2.2.0
      */
     public function buildSelect($idxTable)
     {

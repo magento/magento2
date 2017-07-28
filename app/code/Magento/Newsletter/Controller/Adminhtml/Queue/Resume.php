@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Resume
+ *
+ * @since 2.0.0
+ */
 class Resume extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
      * Resume Newsletter queue
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

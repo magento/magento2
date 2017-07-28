@@ -16,17 +16,20 @@ use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Class QuantityValidator
+ * @since 2.2.0
  */
 class QuantityValidator implements ValidatorInterface
 {
     /**
      * @var OrderRepositoryInterface
+     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * InvoiceValidator constructor.
      * @param OrderRepositoryInterface $orderRepository
+     * @since 2.2.0
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository
@@ -39,6 +42,7 @@ class QuantityValidator implements ValidatorInterface
      * @return array
      * @throws DocumentValidationException
      * @throws NoSuchEntityException
+     * @since 2.2.0
      */
     public function validate($entity)
     {
@@ -85,6 +89,7 @@ class QuantityValidator implements ValidatorInterface
     /**
      * @param OrderInterface $order
      * @return OrderItemInterface[]
+     * @since 2.2.0
      */
     private function getOrderItems(OrderInterface $order)
     {
@@ -100,6 +105,7 @@ class QuantityValidator implements ValidatorInterface
      * @param Item $orderItem
      * @param int $qty
      * @return bool
+     * @since 2.2.0
      */
     private function isQtyAvailable(Item $orderItem, $qty)
     {

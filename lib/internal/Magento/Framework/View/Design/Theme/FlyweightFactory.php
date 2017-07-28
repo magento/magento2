@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Theme factory
+ * @since 2.0.0
  */
 class FlyweightFactory
 {
@@ -14,6 +15,7 @@ class FlyweightFactory
      * Theme provider
      *
      * @var ThemeProviderInterface
+     * @since 2.0.0
      */
     protected $themeProvider;
 
@@ -21,6 +23,7 @@ class FlyweightFactory
      * Themes
      *
      * @var \Magento\Framework\View\Design\ThemeInterface[]
+     * @since 2.0.0
      */
     protected $themes = [];
 
@@ -28,6 +31,7 @@ class FlyweightFactory
      * Themes by path
      *
      * @var \Magento\Framework\View\Design\ThemeInterface[]
+     * @since 2.0.0
      */
     protected $themesByPath = [];
 
@@ -35,6 +39,7 @@ class FlyweightFactory
      * Constructor
      *
      * @param ThemeProviderInterface $themeProvider
+     * @since 2.0.0
      */
     public function __construct(ThemeProviderInterface $themeProvider)
     {
@@ -53,6 +58,7 @@ class FlyweightFactory
      * @return \Magento\Framework\View\Design\ThemeInterface
      * @throws \InvalidArgumentException when incorrect $themeKey was specified
      * @throws \LogicException when theme with appropriate $themeKey was not found
+     * @since 2.0.0
      */
     public function create($themeKey, $area = \Magento\Framework\View\DesignInterface::DEFAULT_AREA)
     {
@@ -77,6 +83,7 @@ class FlyweightFactory
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     private function extractThemeId($path)
     {
@@ -92,6 +99,7 @@ class FlyweightFactory
      *
      * @param int $themeId
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected function _loadById($themeId)
     {
@@ -108,6 +116,7 @@ class FlyweightFactory
      * @param string $themePath
      * @param string $area
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected function _loadByPath($themePath, $area)
     {
@@ -124,6 +133,7 @@ class FlyweightFactory
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $themeModel
      * @return $this
+     * @since 2.0.0
      */
     protected function _addTheme(\Magento\Framework\View\Design\ThemeInterface $themeModel)
     {

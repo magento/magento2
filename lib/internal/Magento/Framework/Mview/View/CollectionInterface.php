@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Interface \Magento\Framework\Mview\View\CollectionInterface
+ *
+ * @since 2.0.0
+ */
 interface CollectionInterface
 {
     /**
@@ -12,6 +17,7 @@ interface CollectionInterface
      *
      * @param string $mode
      * @return \Magento\Framework\Mview\ViewInterface[]
+     * @since 2.0.0
      */
     public function getViewsByStateMode($mode);
 
@@ -21,6 +27,7 @@ interface CollectionInterface
      * @param   string $column
      * @param   mixed $value
      * @return  \Magento\Framework\Mview\ViewInterface[]
+     * @since 2.0.0
      */
     public function getItemsByColumnValue($column, $value);
 
@@ -28,6 +35,7 @@ interface CollectionInterface
      * Retrieve collection views
      *
      * @return \Magento\Framework\Mview\ViewInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 }

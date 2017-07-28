@@ -11,6 +11,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Frontend;
  * Frontend is providing the user interface for the attribute
  *
  * @api
+ * @since 2.0.0
  */
 interface FrontendInterface
 {

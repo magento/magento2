@@ -13,11 +13,13 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
  * Class ValidatorComposite
  * @package Magento\Payment\Gateway\Validator
  * @api
+ * @since 2.0.0
  */
 class ValidatorComposite extends AbstractValidator
 {
     /**
      * @var ValidatorInterface[] | TMap
+     * @since 2.0.0
      */
     private $validators;
 
@@ -25,6 +27,7 @@ class ValidatorComposite extends AbstractValidator
      * @param ResultInterfaceFactory $resultFactory
      * @param TMapFactory $tmapFactory
      * @param array $validators
+     * @since 2.0.0
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
@@ -45,6 +48,7 @@ class ValidatorComposite extends AbstractValidator
      *
      * @param array $validationSubject
      * @return ResultInterface
+     * @since 2.0.0
      */
     public function validate(array $validationSubject)
     {

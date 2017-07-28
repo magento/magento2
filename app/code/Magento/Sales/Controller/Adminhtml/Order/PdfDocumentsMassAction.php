@@ -8,10 +8,16 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
+ *
+ * @since 2.2.0
+ */
 abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @since 2.2.0
      */
     protected $orderCollectionFactory;
 
@@ -20,6 +26,7 @@ abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtm
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @since 2.2.0
      */
     public function execute()
     {
@@ -38,7 +45,8 @@ abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtm
      * Get Order Collection Factory
      *
      * @return \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getOrderCollection()
     {

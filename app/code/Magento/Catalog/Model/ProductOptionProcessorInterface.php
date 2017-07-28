@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
  * Allows to dump and apply product configurations
  *
  * @api
+ * @since 2.0.0
  */
 interface ProductOptionProcessorInterface
 {
@@ -20,6 +21,7 @@ interface ProductOptionProcessorInterface
      *
      * @param ProductOptionInterface $productOption
      * @return DataObject
+     * @since 2.0.0
      */
     public function convertToBuyRequest(ProductOptionInterface $productOption);
 
@@ -28,6 +30,7 @@ interface ProductOptionProcessorInterface
      *
      * @param DataObject $request
      * @return array
+     * @since 2.0.0
      */
     public function convertToProductOption(DataObject $request);
 }

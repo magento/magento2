@@ -20,51 +20,61 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class PageRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class PageRepository implements PageRepositoryInterface
 {
     /**
      * @var ResourcePage
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $pageFactory;
 
     /**
      * @var PageCollectionFactory
+     * @since 2.0.0
      */
     protected $pageCollectionFactory;
 
     /**
      * @var Data\PageSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\Cms\Api\Data\PageInterfaceFactory
+     * @since 2.0.0
      */
     protected $dataPageFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     private $storeManager;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -78,6 +88,7 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         ResourcePage $resource,
@@ -107,6 +118,7 @@ class PageRepository implements PageRepositoryInterface
      * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return Page
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
@@ -131,6 +143,7 @@ class PageRepository implements PageRepositoryInterface
      * @param string $pageId
      * @return Page
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getById($pageId)
     {
@@ -149,6 +162,7 @@ class PageRepository implements PageRepositoryInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return \Magento\Cms\Api\Data\PageSearchResultsInterface
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
@@ -171,6 +185,7 @@ class PageRepository implements PageRepositoryInterface
      * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return bool
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function delete(\Magento\Cms\Api\Data\PageInterface $page)
     {
@@ -192,6 +207,7 @@ class PageRepository implements PageRepositoryInterface
      * @return bool
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function deleteById($pageId)
     {
@@ -201,8 +217,9 @@ class PageRepository implements PageRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

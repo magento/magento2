@@ -9,6 +9,7 @@ namespace Magento\Reports\Block\Adminhtml\Grid;
  * Adminhtml shopping carts report grid block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -16,6 +17,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Stores current currency code
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_currentCurrencyCode = null;
 
@@ -23,6 +25,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Ids of current stores
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storeIds = [];
 
@@ -32,6 +35,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param array $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {
@@ -43,6 +47,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve currency code based on selected store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentCurrencyCode()
     {
@@ -62,6 +67,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string|\Magento\Directory\Model\Currency $toCurrency
      * @return float
+     * @since 2.0.0
      */
     public function getRate($toCurrency)
     {

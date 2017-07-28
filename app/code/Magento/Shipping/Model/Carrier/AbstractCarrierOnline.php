@@ -16,6 +16,7 @@ use Magento\Framework\Xml\Security;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
@@ -31,6 +32,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Array of quotes
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_quotesCache = [];
 
@@ -38,6 +40,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Flag for check carriers for activity
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_activeFlag = 'active';
 
@@ -45,56 +48,67 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Directory data
      *
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $_directoryData = null;
 
     /**
      * @var \Magento\Shipping\Model\Simplexml\ElementFactory
+     * @since 2.0.0
      */
     protected $_xmlElFactory;
 
     /**
      * @var \Magento\Shipping\Model\Rate\ResultFactory
+     * @since 2.0.0
      */
     protected $_rateFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
+     * @since 2.0.0
      */
     protected $_rateMethodFactory;
 
     /**
      * @var \Magento\Shipping\Model\Tracking\ResultFactory
+     * @since 2.0.0
      */
     protected $_trackFactory;
 
     /**
      * @var \Magento\Shipping\Model\Tracking\Result\ErrorFactory
+     * @since 2.0.0
      */
     protected $_trackErrorFactory;
 
     /**
      * @var \Magento\Shipping\Model\Tracking\Result\StatusFactory
+     * @since 2.0.0
      */
     protected $_trackStatusFactory;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
+     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory
+     * @since 2.0.0
      */
     protected $_countryFactory;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
@@ -102,6 +116,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Raw rate request data
      *
      * @var \Magento\Framework\DataObject|null
+     * @since 2.0.0
      */
     protected $_rawRequest = null;
 
@@ -109,6 +124,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * The security scanner XML document
      *
      * @var Security
+     * @since 2.0.0
      */
     protected $xmlSecurity;
 
@@ -131,6 +147,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -171,6 +188,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $code
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function setActiveFlag($code = 'active')
     {
@@ -183,6 +201,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Return code of carrier
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCarrierCode()
     {
@@ -195,6 +214,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $tracking
      * @return string|false
      * @api
+     * @since 2.0.0
      */
     public function getTrackingInfo($tracking)
     {
@@ -217,6 +237,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * All \Magento\Usa carriers have shipping tracking option available
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isTrackingAvailable()
     {
@@ -227,6 +248,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Check if city option required
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isCityRequired()
     {
@@ -238,6 +260,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string|null $countryId
      * @return bool
+     * @since 2.0.0
      */
     public function isZipCodeRequired($countryId = null)
     {
@@ -252,6 +275,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Check if carrier has shipping label option available
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isShippingLabelsAvailable()
     {
@@ -267,6 +291,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @api
+     * @since 2.0.0
      */
     public function getAllItems(RateRequest $request)
     {
@@ -302,6 +327,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
@@ -368,6 +394,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string|array $requestParams
      * @return string
+     * @since 2.0.0
      */
     protected function _getQuotesCacheKey($requestParams)
     {
@@ -389,6 +416,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string|array $requestParams
      * @return null|string
+     * @since 2.0.0
      */
     protected function _getCachedQuotes($requestParams)
     {
@@ -403,6 +431,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string|array $requestParams
      * @param string $response
      * @return $this
+     * @since 2.0.0
      */
     protected function _setCachedQuotes($requestParams, $response)
     {
@@ -417,6 +446,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string|object $name service name or object with implemented __toString() method
      * @return string              prepared service name
+     * @since 2.0.0
      */
     protected function _prepareServiceName($name)
     {
@@ -432,6 +462,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param \Magento\Framework\DataObject $request
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -450,6 +481,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param Request $request
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function requestToShipment($request)
     {
@@ -498,6 +530,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param Request $request
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function returnOfShipment($request)
     {
@@ -551,6 +584,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @todo implement rollback logic
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @api
+     * @since 2.0.0
      */
     public function rollBack($data)
     {
@@ -562,6 +596,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     abstract protected function _doShipmentRequest(\Magento\Framework\DataObject $request);
 
@@ -570,6 +605,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $countyId
      * @return boolean
+     * @since 2.0.0
      */
     protected function _isUSCountry($countyId)
     {
@@ -602,6 +638,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @api
+     * @since 2.0.0
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
@@ -612,6 +649,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param \Magento\Framework\DataObject|null $request
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function setRawRequest($request)
     {
@@ -627,6 +665,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $method
      * @return float|string
      * @api
+     * @since 2.0.0
      */
     public function getMethodPrice($cost, $method = '')
     {
@@ -650,6 +689,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @throws LocalizedException
      *
      * @api
+     * @since 2.0.0
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
@@ -665,6 +705,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Checks if shipping method can collect rates
      * @return bool
+     * @since 2.0.0
      */
     public function canCollectRates()
     {
@@ -676,6 +717,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param Error $errors
      *
      * @return void
+     * @since 2.0.0
      */
     protected function debugErrors($errors)
     {
@@ -689,6 +731,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Get error messages
      *
      * @return bool|Error
+     * @since 2.0.0
      */
     protected function getErrorMessage()
     {

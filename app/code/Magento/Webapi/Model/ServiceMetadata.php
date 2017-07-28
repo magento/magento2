@@ -12,6 +12,7 @@ use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Service Metadata Model
+ * @since 2.0.0
  */
 class ServiceMetadata
 {
@@ -55,29 +56,37 @@ class ServiceMetadata
      * List of services with route data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $routes;
 
     /**
      * @var WebApiCache
+     * @since 2.0.0
      */
     protected $cache;
 
-    /** @var \Magento\Webapi\Model\Config */
+    /**
+     * @var \Magento\Webapi\Model\Config
+     * @since 2.0.0
+     */
     protected $config;
 
     /**
      * @var \Magento\Webapi\Model\Config\ClassReflector
+     * @since 2.0.0
      */
     protected $classReflector;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
+     * @since 2.0.0
      */
     protected $typeProcessor;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -89,6 +98,7 @@ class ServiceMetadata
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Webapi\Model\Config $config,
@@ -108,6 +118,7 @@ class ServiceMetadata
      * Collect the list of services metadata
      *
      * @return array
+     * @since 2.0.0
      */
     protected function initServicesMetadata()
     {
@@ -145,6 +156,7 @@ class ServiceMetadata
      * Return services loaded from cache if enabled or from files merged previously
      *
      * @return array
+     * @since 2.0.0
      */
     public function getServicesConfig()
     {
@@ -175,6 +187,7 @@ class ServiceMetadata
      * @param string $serviceName
      * @return array
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function getServiceMetadata($serviceName)
     {
@@ -200,6 +213,7 @@ class ServiceMetadata
      * @return string
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getServiceName($interfaceName, $version, $preserveVersion = true)
     {
@@ -251,6 +265,7 @@ class ServiceMetadata
      * @param string $serviceName
      * @return array
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function getRouteMetadata($serviceName)
     {
@@ -265,6 +280,7 @@ class ServiceMetadata
      * Return routes loaded from cache if enabled or from files merged previously
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRoutesConfig()
     {
@@ -293,6 +309,7 @@ class ServiceMetadata
      * Collect the list of services with routes and request types for use in REST.
      *
      * @return array
+     * @since 2.0.0
      */
     protected function initRoutesMetadata()
     {

@@ -11,12 +11,18 @@
  */
 namespace Magento\Fedex\Model\Source;
 
+/**
+ * Class \Magento\Fedex\Model\Source\Packaging
+ *
+ * @since 2.0.0
+ */
 class Packaging extends \Magento\Fedex\Model\Source\Generic
 {
     /**
      * Carrier code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = 'packaging';
 }

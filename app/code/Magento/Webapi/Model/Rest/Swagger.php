@@ -15,6 +15,7 @@ use Magento\Webapi\Model\Config as ModelConfig;
  * @method Swagger setHost(string $host)
  * @method Swagger setDefinitions(array $definitions)
  * @method Swagger setSchemes(array $schemes)
+ * @since 2.0.0
  */
 class Swagger extends \Magento\Framework\DataObject
 {
@@ -25,6 +26,7 @@ class Swagger extends \Magento\Framework\DataObject
 
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -45,6 +47,7 @@ class Swagger extends \Magento\Framework\DataObject
      * @param string $httpOperation
      * @param string[] $pathInfo
      * @return $this
+     * @since 2.0.0
      */
     public function addPath($path, $httpOperation, $pathInfo)
     {
@@ -57,6 +60,7 @@ class Swagger extends \Magento\Framework\DataObject
      *
      * @param string $tagInfo
      * @return $this
+     * @since 2.0.0
      */
     public function addTag($tagInfo)
     {
@@ -68,6 +72,7 @@ class Swagger extends \Magento\Framework\DataObject
      * Get JSON encoded REST schema
      *
      * @return string
+     * @since 2.0.0
      */
     public function toSchema()
     {
@@ -79,6 +84,7 @@ class Swagger extends \Magento\Framework\DataObject
      *
      * @param array $info
      * @return $this
+     * @since 2.0.0
      */
     public function setInfo($info)
     {
@@ -99,6 +105,7 @@ class Swagger extends \Magento\Framework\DataObject
      *
      * @param string $basePath
      * @return $this
+     * @since 2.0.0
      */
     public function setBasePath($basePath)
     {

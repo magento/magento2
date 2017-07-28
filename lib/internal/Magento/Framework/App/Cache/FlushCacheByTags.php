@@ -8,26 +8,31 @@ namespace Magento\Framework\App\Cache;
 
 /**
  * Automatic cache cleaner plugin
+ * @since 2.1.0
  */
 class FlushCacheByTags
 {
     /**
      * @var Type\FrontendPool
+     * @since 2.1.0
      */
     private $cachePool;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $cacheList;
 
     /**
      * @var StateInterface
+     * @since 2.1.0
      */
     private $cacheState;
 
     /**
      * @var Tag\Resolver
+     * @since 2.2.0
      */
     private $tagResolver;
 
@@ -38,6 +43,7 @@ class FlushCacheByTags
      * @param StateInterface $cacheState
      * @param array $cacheList
      * @param Tag\Resolver $tagResolver
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cachePool,
@@ -59,6 +65,7 @@ class FlushCacheByTags
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function aroundSave(
         \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
@@ -80,6 +87,7 @@ class FlushCacheByTags
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function aroundDelete(
         \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
@@ -97,6 +105,7 @@ class FlushCacheByTags
      *
      * @param  string[] $tags
      * @return void
+     * @since 2.1.0
      */
     private function cleanCacheByTags($tags)
     {

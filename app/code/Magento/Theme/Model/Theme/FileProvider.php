@@ -5,15 +5,22 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+/**
+ * Class \Magento\Theme\Model\Theme\FileProvider
+ *
+ * @since 2.0.0
+ */
 class FileProvider implements \Magento\Framework\View\Design\Theme\FileProviderInterface
 {
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @param \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory)
     {
@@ -22,6 +29,7 @@ class FileProvider implements \Magento\Framework\View\Design\Theme\FileProviderI
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems(\Magento\Framework\View\Design\ThemeInterface $theme, array $filters = [])
     {

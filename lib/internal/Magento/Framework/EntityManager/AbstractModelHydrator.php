@@ -9,11 +9,13 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class AbstractModelHydrator
+ * @since 2.1.0
  */
 class AbstractModelHydrator implements HydratorInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function extract($entity)
     {
@@ -22,6 +24,7 @@ class AbstractModelHydrator implements HydratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function hydrate($entity, array $data)
     {

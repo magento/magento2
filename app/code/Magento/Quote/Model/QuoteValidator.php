@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as 
 
 /**
  * @api
+ * @since 2.0.0
  */
 class QuoteValidator
 {
@@ -24,11 +25,13 @@ class QuoteValidator
 
     /**
      * @var AllowedCountries
+     * @since 2.2.0
      */
     private $allowedCountryReader;
 
     /**
      * @var OrderAmountValidationMessage
+     * @since 2.2.0
      */
     private $minimumAmountMessage;
 
@@ -37,6 +40,7 @@ class QuoteValidator
      *
      * @param AllowedCountries|null $allowedCountryReader
      * @param OrderAmountValidationMessage|null $minimumAmountMessage
+     * @since 2.2.0
      */
     public function __construct(
         AllowedCountries $allowedCountryReader = null,
@@ -54,6 +58,7 @@ class QuoteValidator
      * @param QuoteEntity $quote
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function validateQuoteAmount(QuoteEntity $quote, $amount)
     {
@@ -70,6 +75,7 @@ class QuoteValidator
      * @param Quote $quote
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function validateBeforeSubmit(QuoteEntity $quote)
     {

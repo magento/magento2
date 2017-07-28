@@ -14,6 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\Table;
 
+/**
+ * Class \Magento\Developer\Console\Command\DiInfoCommand
+ *
+ * @since 2.2.0
+ */
 class DiInfoCommand extends Command
 {
     /**
@@ -28,11 +33,13 @@ class DiInfoCommand extends Command
 
     /**
      * @var Information
+     * @since 2.2.0
      */
     private $diInformation;
 
     /**
      * @param Information $diInformation
+     * @since 2.2.0
      */
     public function __construct(
         Information $diInformation
@@ -44,6 +51,7 @@ class DiInfoCommand extends Command
     /**
      * {@inheritdoc}
      * @throws InvalidArgumentException
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -62,6 +70,7 @@ class DiInfoCommand extends Command
      * @param string $className
      * @param OutputInterface $output
      * @return void
+     * @since 2.2.0
      */
     private function printPreference($className, $output)
     {
@@ -77,6 +86,7 @@ class DiInfoCommand extends Command
      * @param string $className
      * @param OutputInterface $output
      * @return void
+     * @since 2.2.0
      */
     private function printConstructorArguments($className, $output)
     {
@@ -102,6 +112,7 @@ class DiInfoCommand extends Command
      * @param string $className
      * @param OutputInterface $output
      * @return void
+     * @since 2.2.0
      */
     private function printVirtualTypes($className, $output)
     {
@@ -122,6 +133,7 @@ class DiInfoCommand extends Command
      * @param OutputInterface $output
      * @param string $label
      * @return void
+     * @since 2.2.0
      */
     private function printPlugins($className, $output, $label)
     {
@@ -148,6 +160,7 @@ class DiInfoCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

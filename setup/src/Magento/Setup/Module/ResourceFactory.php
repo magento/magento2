@@ -9,12 +9,18 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Module\Setup\ResourceConfig;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class \Magento\Setup\Module\ResourceFactory
+ *
+ * @since 2.0.0
+ */
 class ResourceFactory
 {
     /**
      * Zend Framework's service locator
      *
      * @var ServiceLocatorInterface
+     * @since 2.0.0
      */
     protected $serviceLocator;
 
@@ -22,6 +28,7 @@ class ResourceFactory
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
+     * @since 2.0.0
      */
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
@@ -31,6 +38,7 @@ class ResourceFactory
     /**
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @return Resource
+     * @since 2.0.0
      */
     public function create(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {

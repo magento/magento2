@@ -11,15 +11,22 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
+/**
+ * Class \Magento\Framework\Locale\TranslatedLists
+ *
+ * @since 2.0.0
+ */
 class TranslatedLists implements ListsInterface
 {
     /**
      * @var \Magento\Framework\Locale\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -27,6 +34,7 @@ class TranslatedLists implements ListsInterface
      * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $locale
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Locale\ConfigInterface $config,
@@ -42,6 +50,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getOptionLocales()
     {
@@ -50,6 +59,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getTranslatedOptionLocales()
     {
@@ -62,6 +72,7 @@ class TranslatedLists implements ListsInterface
      * @param   bool $translatedName translation flag
      * @return  array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _getOptionLocales($translatedName = false)
     {
@@ -97,6 +108,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getOptionTimezones()
     {
@@ -115,6 +127,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false)
     {
@@ -131,6 +144,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getOptionCountries()
     {
@@ -144,6 +158,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getOptionCurrencies()
     {
@@ -161,6 +176,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getOptionAllCurrencies()
     {
@@ -178,6 +194,7 @@ class TranslatedLists implements ListsInterface
     /**
      * @param array $option
      * @return array
+     * @since 2.0.0
      */
     protected function _sortOptionArray($option)
     {
@@ -195,6 +212,7 @@ class TranslatedLists implements ListsInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getCountryTranslation($value, $locale = null)
     {

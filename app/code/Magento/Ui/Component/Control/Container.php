@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Container
+ * @since 2.0.0
  */
 class Container extends AbstractBlock
 {
@@ -25,6 +26,7 @@ class Container extends AbstractBlock
      * @param string $blockName
      * @param string $blockClassName
      * @return ControlInterface
+     * @since 2.0.0
      */
     protected function createButton($blockName, $blockClassName = null)
     {
@@ -39,6 +41,7 @@ class Container extends AbstractBlock
      * Render element HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

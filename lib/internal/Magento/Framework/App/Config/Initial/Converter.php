@@ -7,22 +7,30 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Node paths to process
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_nodeMap = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_metadata = [];
 
     /**
      * @param array $nodeMap
+     * @since 2.0.0
      */
     public function __construct(array $nodeMap = [])
     {
@@ -34,6 +42,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -56,6 +65,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @return array|string|null
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _convertNode(\DOMNode $node, $path = '')
     {

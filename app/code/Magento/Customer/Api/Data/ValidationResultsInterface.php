@@ -10,6 +10,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Validation results interface.
  * @api
+ * @since 2.0.0
  */
 interface ValidationResultsInterface
 {
@@ -24,6 +25,7 @@ interface ValidationResultsInterface
      * Check if the provided data is valid.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isValid();
 
@@ -32,6 +34,7 @@ interface ValidationResultsInterface
      *
      * @param bool $isValid
      * @return $this
+     * @since 2.0.0
      */
     public function setIsValid($isValid);
 
@@ -39,6 +42,7 @@ interface ValidationResultsInterface
      * Get error messages as array in case of validation failure, else return empty array.
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getMessages();
 
@@ -47,6 +51,7 @@ interface ValidationResultsInterface
      *
      * @param string[] $messages
      * @return string[]
+     * @since 2.0.0
      */
     public function setMessages(array $messages);
 }

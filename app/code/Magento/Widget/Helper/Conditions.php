@@ -11,22 +11,26 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Widget Conditions helper.
+ * @since 2.0.0
  */
 class Conditions
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var Normalizer
+     * @since 2.2.0
      */
     private $normalizer;
 
     /**
      * @param Json $serializer
      * @param Normalizer $normalizer
+     * @since 2.2.0
      */
     public function __construct(
         Json $serializer = null,
@@ -41,6 +45,7 @@ class Conditions
      *
      * @param array $value
      * @return string
+     * @since 2.0.0
      */
     public function encode(array $value)
     {
@@ -52,6 +57,7 @@ class Conditions
      *
      * @param string $value
      * @return array
+     * @since 2.0.0
      */
     public function decode($value)
     {

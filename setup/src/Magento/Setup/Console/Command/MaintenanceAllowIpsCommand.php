@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for setting allowed IPs in maintenance mode
+ * @since 2.0.0
  */
 class MaintenanceAllowIpsCommand extends AbstractSetupCommand
 {
@@ -27,11 +28,13 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
 
     /**
      * @var MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenanceMode;
 
     /**
      * @var IpValidator
+     * @since 2.0.0
      */
     private $ipValidator;
 
@@ -40,6 +43,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      *
      * @param MaintenanceMode $maintenanceMode
      * @param IpValidator $ipValidator
+     * @since 2.0.0
      */
     public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
@@ -52,6 +56,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -78,6 +83,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -108,6 +114,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      *
      * @param string[] $addresses
      * @return string[]
+     * @since 2.0.0
      */
     protected function validate(array $addresses)
     {

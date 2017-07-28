@@ -14,6 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 
+/**
+ * Class \Magento\Developer\Console\Command\QueryLogEnableCommand
+ *
+ * @since 2.2.0
+ */
 class QueryLogEnableCommand extends Command
 {
     /**
@@ -43,6 +48,7 @@ class QueryLogEnableCommand extends Command
 
     /**
      * @var Writer
+     * @since 2.2.0
      */
     private $deployConfigWriter;
 
@@ -50,6 +56,7 @@ class QueryLogEnableCommand extends Command
      * QueryLogEnableCommand constructor.
      * @param Writer $deployConfigWriter
      * @param null $name
+     * @since 2.2.0
      */
     public function __construct(
         Writer $deployConfigWriter,
@@ -61,6 +68,7 @@ class QueryLogEnableCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -98,6 +106,7 @@ class QueryLogEnableCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

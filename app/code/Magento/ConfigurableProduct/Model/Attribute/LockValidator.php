@@ -13,16 +13,19 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class LockValidator
+ * @since 2.0.0
  */
 class LockValidator implements LockValidatorInterface
 {
     /**
      * @var Resource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -30,6 +33,7 @@ class LockValidator implements LockValidatorInterface
      * Constructor
      *
      * @param ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource
@@ -44,6 +48,7 @@ class LockValidator implements LockValidatorInterface
      * @param null $attributeSet
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
@@ -79,6 +84,7 @@ class LockValidator implements LockValidatorInterface
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

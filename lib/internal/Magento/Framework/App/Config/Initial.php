@@ -10,6 +10,11 @@ namespace Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial
+ *
+ * @since 2.0.0
+ */
 class Initial
 {
     /**
@@ -21,6 +26,7 @@ class Initial
      * Config data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data = [];
 
@@ -28,11 +34,13 @@ class Initial
      * Config metadata
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_metadata = [];
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -42,6 +50,7 @@ class Initial
      * @param Initial\Reader $reader
      * @param \Magento\Framework\App\Cache\Type\Config $cache
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\Initial\Reader $reader,
@@ -66,6 +75,7 @@ class Initial
      *
      * @param string $scope Format is scope type and scope code separated by pipe: e.g. "type|code"
      * @return array
+     * @since 2.0.0
      */
     public function getData($scope)
     {
@@ -83,6 +93,7 @@ class Initial
      * Get configuration metadata
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMetadata()
     {

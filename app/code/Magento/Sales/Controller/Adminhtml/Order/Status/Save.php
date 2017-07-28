@@ -6,12 +6,18 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
      * Save status form processing
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

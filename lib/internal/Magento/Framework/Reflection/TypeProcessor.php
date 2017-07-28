@@ -16,6 +16,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class TypeProcessor
 {
@@ -63,6 +64,7 @@ class TypeProcessor
 
     /**
      * @var NameFinder
+     * @since 2.1.0
      */
     private $nameFinder;
 
@@ -71,7 +73,8 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getNameFinder()
     {
@@ -86,6 +89,7 @@ class TypeProcessor
      * Retrieve processed types data.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTypesData()
     {
@@ -99,6 +103,7 @@ class TypeProcessor
      *
      * @param array $typesData
      * @return $this
+     * @since 2.0.0
      */
     public function setTypesData($typesData)
     {
@@ -112,6 +117,7 @@ class TypeProcessor
      * @param string $typeName
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getTypeData($typeName)
     {
@@ -127,6 +133,7 @@ class TypeProcessor
      * @param string $typeName
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function setTypeData($typeName, $data)
     {
@@ -143,6 +150,7 @@ class TypeProcessor
      * @param string $type
      * @return string Complex type name
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function register($type)
     {
@@ -174,6 +182,7 @@ class TypeProcessor
      * @return array
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _processComplexType($class)
     {
@@ -208,6 +217,7 @@ class TypeProcessor
      * @param MethodReflection $methodReflection
      * @param string $typeName
      * @return void
+     * @since 2.0.0
      */
     protected function _processMethod(MethodReflection $methodReflection, $typeName)
     {
@@ -238,6 +248,7 @@ class TypeProcessor
      *
      * @param DocBlockReflection $doc
      * @return string
+     * @since 2.0.0
      */
     public function getDescription(DocBlockReflection $doc)
     {
@@ -260,7 +271,8 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -273,7 +285,8 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -291,6 +304,7 @@ class TypeProcessor
      *     'parameterCount' => $numberOfRequiredParameters
      * )</pre>
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getGetterReturnType($methodReflection)
     {
@@ -327,6 +341,7 @@ class TypeProcessor
      *
      * @param MethodReflection $methodReflection
      * @return array
+     * @since 2.0.0
      */
     public function getExceptions($methodReflection)
     {
@@ -350,6 +365,7 @@ class TypeProcessor
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function normalizeType($type)
     {
@@ -371,6 +387,7 @@ class TypeProcessor
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     public function isTypeSimple($type)
     {
@@ -391,6 +408,7 @@ class TypeProcessor
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     public function isTypeAny($type)
     {
@@ -407,6 +425,7 @@ class TypeProcessor
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     public function isArrayType($type)
     {
@@ -419,6 +438,7 @@ class TypeProcessor
      * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
      * @param string $type
      * @return bool
+     * @since 2.1.0
      */
     public function isValidTypeDeclaration($type)
     {
@@ -430,6 +450,7 @@ class TypeProcessor
      *
      * @param string $arrayType
      * @return string
+     * @since 2.0.0
      */
     public function getArrayItemType($arrayType)
     {
@@ -447,6 +468,7 @@ class TypeProcessor
      * @param string $class
      * @return string
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function translateTypeName($class)
     {
@@ -471,6 +493,7 @@ class TypeProcessor
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function translateArrayTypeName($type)
     {
@@ -486,6 +509,7 @@ class TypeProcessor
      * @throws SerializationException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function processSimpleAndAnyType($value, $type)
     {
@@ -530,6 +554,7 @@ class TypeProcessor
      * @param ParameterReflection $param
      * @return string
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function getParamType(ParameterReflection $param)
     {
@@ -561,6 +586,7 @@ class TypeProcessor
      *
      * @param ParameterReflection $param
      * @return string|null
+     * @since 2.0.0
      */
     public function getParamDescription(ParameterReflection $param)
     {
@@ -584,7 +610,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -597,6 +624,7 @@ class TypeProcessor
      * @param mixed $value
      * @param string $type
      * @return true on successful type cast
+     * @since 2.0.0
      */
     protected function setType(&$value, $type)
     {
@@ -622,7 +650,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -639,7 +668,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -660,7 +690,8 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
@@ -675,6 +706,7 @@ class TypeProcessor
      * @param string $methodName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function processInterfaceCallInfo($interface, $serviceName, $methodName)
     {
@@ -707,6 +739,7 @@ class TypeProcessor
      * @param string $serviceName API service name
      * @param string $methodName
      * @return string
+     * @since 2.0.0
      */
     public function getOperationName($serviceName, $methodName)
     {
@@ -718,6 +751,7 @@ class TypeProcessor
      *
      * @param string $type
      * @return string
+     * @since 2.1.0
      */
     private function getNormalizedType($type)
     {

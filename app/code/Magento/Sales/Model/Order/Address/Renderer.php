@@ -13,16 +13,19 @@ use Magento\Sales\Model\Order\Address;
 /**
  * Class Renderer used for formatting an order address
  * @api
+ * @since 2.0.0
  */
 class Renderer
 {
     /**
      * @var AddressConfig
+     * @since 2.0.0
      */
     protected $addressConfig;
 
     /**
      * @var EventManager
+     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -31,6 +34,7 @@ class Renderer
      *
      * @param AddressConfig $addressConfig
      * @param EventManager $eventManager
+     * @since 2.0.0
      */
     public function __construct(
         AddressConfig $addressConfig,
@@ -46,6 +50,7 @@ class Renderer
      * @param Address $address
      * @param string $type
      * @return string|null
+     * @since 2.0.0
      */
     public function format(Address $address, $type)
     {

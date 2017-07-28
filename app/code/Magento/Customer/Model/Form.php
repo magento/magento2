@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model;
 
+/**
+ * Class \Magento\Customer\Model\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Eav\Model\Form
 {
     /**
@@ -22,6 +27,7 @@ class Form extends \Magento\Eav\Model\Form
      * Current module pathname
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_moduleName = 'Magento_Customer';
 
@@ -29,6 +35,7 @@ class Form extends \Magento\Eav\Model\Form
      * Current EAV entity type code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityTypeCode = 'customer';
 
@@ -37,6 +44,7 @@ class Form extends \Magento\Eav\Model\Form
      * exclude 'created_at'
      *
      * @return \Magento\Customer\Model\ResourceModel\Form\Attribute\Collection
+     * @since 2.0.0
      */
     protected function _getFormAttributeCollection()
     {

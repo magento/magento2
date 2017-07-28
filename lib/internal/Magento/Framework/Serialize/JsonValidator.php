@@ -7,6 +7,7 @@ namespace Magento\Framework\Serialize;
 
 /**
  * Validate JSON string
+ * @since 2.2.0
  */
 class JsonValidator
 {
@@ -15,6 +16,7 @@ class JsonValidator
      *
      * @param string $string
      * @return bool
+     * @since 2.2.0
      */
     public function isValid($string)
     {

@@ -9,16 +9,23 @@ use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\App\Response\HeaderManager
+ *
+ * @since 2.1.0
+ */
 class HeaderManager
 {
     /**
      * @var HeaderProviderInterface[]
+     * @since 2.1.0
      */
     private $headerProviders;
 
     /**
      * @param HeaderProviderInterface[] $headerProviderList
      * @throws LocalizedException In case one of the header providers is invalid
+     * @since 2.1.0
      */
     public function __construct($headerProviderList)
     {
@@ -34,6 +41,7 @@ class HeaderManager
      * @param \Magento\Framework\App\Response\Http $subject
      * @return void
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {

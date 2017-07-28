@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 /**
  * Class ImageProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ImageProcessor implements ImageProcessorInterface
 {
@@ -22,6 +23,7 @@ class ImageProcessor implements ImageProcessorInterface
      * MIME type/extension map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $mimeTypeExtensionMap = [
         'image/jpg' => 'jpg',
@@ -32,31 +34,37 @@ class ImageProcessor implements ImageProcessorInterface
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     private $contentValidator;
 
     /**
      * @var DataObjectHelper
+     * @since 2.0.0
      */
     private $dataObjectHelper;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var Uploader
+     * @since 2.0.0
      */
     private $uploader;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     private $mediaDirectory;
 
@@ -66,6 +74,7 @@ class ImageProcessor implements ImageProcessorInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
      * @param Uploader $uploader
+     * @since 2.0.0
      */
     public function __construct(
         Filesystem $fileSystem,
@@ -84,6 +93,7 @@ class ImageProcessor implements ImageProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
@@ -135,6 +145,7 @@ class ImageProcessor implements ImageProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function processImageContent($entityType, $imageContent)
     {
@@ -169,6 +180,7 @@ class ImageProcessor implements ImageProcessorInterface
     /**
      * @param string $mimeType
      * @return string
+     * @since 2.0.0
      */
     protected function getMimeTypeExtension($mimeType)
     {
@@ -179,6 +191,7 @@ class ImageProcessor implements ImageProcessorInterface
      * @param ImageContentInterface $imageContent
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     private function getFileName($imageContent)
     {

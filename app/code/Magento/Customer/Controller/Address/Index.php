@@ -10,11 +10,13 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Index extends \Magento\Customer\Controller\Address
 {
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -32,6 +34,7 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -67,6 +70,7 @@ class Index extends \Magento\Customer\Controller\Address
      * Customer addresses list
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

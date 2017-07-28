@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Source;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Yesno implements \Magento\Framework\Option\ArrayInterface
 {
@@ -14,6 +15,7 @@ class Yesno implements \Magento\Framework\Option\ArrayInterface
      * Options getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -24,6 +26,7 @@ class Yesno implements \Magento\Framework\Option\ArrayInterface
      * Get options in "key-value" format
      *
      * @return array
+     * @since 2.0.0
      */
     public function toArray()
     {

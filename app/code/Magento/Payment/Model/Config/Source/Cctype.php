@@ -5,12 +5,18 @@
  */
 namespace Magento\Payment\Model\Config\Source;
 
+/**
+ * Class \Magento\Payment\Model\Config\Source\Cctype
+ *
+ * @since 2.0.0
+ */
 class Cctype implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Payment config model
      *
      * @var \Magento\Payment\Model\Config
+     * @since 2.0.0
      */
     protected $_paymentConfig;
 
@@ -18,6 +24,7 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
      * Construct
      *
      * @param \Magento\Payment\Model\Config $paymentConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Payment\Model\Config $paymentConfig)
     {
@@ -26,6 +33,7 @@ class Cctype implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

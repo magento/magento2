@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Manage;
 
+/**
+ * Class \Magento\Newsletter\Controller\Manage\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Newsletter\Controller\Manage
 {
     /**
      * Managing newsletter subscription page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

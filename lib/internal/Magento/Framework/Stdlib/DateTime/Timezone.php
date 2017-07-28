@@ -10,11 +10,13 @@ use Magento\Framework\Phrase;
 
 /**
  * Timezone library
+ * @since 2.0.0
  */
 class Timezone implements TimezoneInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_allowedFormats = [
         \IntlDateFormatter::FULL,
@@ -25,31 +27,37 @@ class Timezone implements TimezoneInterface
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_scopeType;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.0.0
      */
     protected $_scopeResolver;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $_dateTime;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultTimezonePath;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.1.0
      */
     protected $_localeResolver;
 
@@ -60,6 +68,7 @@ class Timezone implements TimezoneInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
@@ -79,6 +88,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDefaultTimezonePath()
     {
@@ -87,6 +97,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDefaultTimezone()
     {
@@ -95,6 +106,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
@@ -107,6 +119,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -119,6 +132,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDateFormatWithLongYear()
     {
@@ -131,6 +145,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTimeFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -143,6 +158,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDateTimeFormat($type)
     {
@@ -152,6 +168,7 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
@@ -184,6 +201,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
@@ -197,6 +215,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
@@ -211,6 +230,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function scopeTimeStamp($scope = null)
     {
@@ -224,6 +244,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
@@ -256,6 +277,7 @@ class Timezone implements TimezoneInterface
      * @param null $timezone
      * @param string|null $pattern
      * @return string
+     * @since 2.0.0
      */
     public function formatDateTime(
         $date,
@@ -298,6 +320,7 @@ class Timezone implements TimezoneInterface
      * @param string $format
      * @throws LocalizedException
      * @return string
+     * @since 2.1.0
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {

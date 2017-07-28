@@ -12,26 +12,31 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class BnCodeDataBuilder
+ * @since 2.1.0
  */
 class ChannelDataBuilder implements BuilderInterface
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $channel = 'channel';
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $channelValue = 'Magento2_Cart_%s_BT';
 
     /**
      * @var ProductMetadataInterface
+     * @since 2.1.0
      */
     private $productMetadata;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
@@ -40,6 +45,7 @@ class ChannelDataBuilder implements BuilderInterface
      *
      * @param ProductMetadataInterface $productMetadata
      * @param Config $config
+     * @since 2.1.0
      */
     public function __construct(ProductMetadataInterface $productMetadata, Config $config = null)
     {
@@ -49,6 +55,7 @@ class ChannelDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function build(array $buildSubject)
     {

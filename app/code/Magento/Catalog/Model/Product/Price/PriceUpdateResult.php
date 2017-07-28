@@ -10,11 +10,13 @@ use Magento\Catalog\Api\Data\PriceUpdateResultInterface;
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel implements PriceUpdateResultInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getMessage()
     {
@@ -23,6 +25,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setMessage($message)
     {
@@ -31,6 +34,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getParameters()
     {
@@ -39,6 +43,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setParameters(array $parameters)
     {
@@ -47,6 +52,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -55,6 +61,7 @@ class PriceUpdateResult extends \Magento\Framework\Model\AbstractExtensibleModel
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\PriceUpdateResultExtensionInterface $extensionAttributes

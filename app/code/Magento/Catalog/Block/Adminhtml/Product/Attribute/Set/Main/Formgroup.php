@@ -11,10 +11,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formgroup
+ *
+ * @since 2.0.0
+ */
 class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory
+     * @since 2.0.0
      */
     protected $_typeFactory;
 
@@ -24,6 +30,7 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,6 +45,7 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -78,6 +86,7 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return int
+     * @since 2.0.0
      */
     protected function _getSetId()
     {

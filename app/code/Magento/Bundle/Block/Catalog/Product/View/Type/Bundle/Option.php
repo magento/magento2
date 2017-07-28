@@ -11,6 +11,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 /**
  * Bundle option renderer
  * @api
+ * @since 2.0.0
  */
 class Option extends \Magento\Bundle\Block\Catalog\Product\Price
 {
@@ -18,6 +19,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Store pre-configured options
      *
      * @var int|array|string
+     * @since 2.0.0
      */
     protected $_selectedOptions;
 
@@ -25,21 +27,25 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Show if option has a single selection
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_showSingle;
 
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
+     * @since 2.0.0
      */
     protected $pricingHelper;
 
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.0.0
      */
     protected $_catalogHelper;
 
@@ -56,6 +62,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -89,6 +96,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Check if option has a single selection
      *
      * @return bool
+     * @since 2.0.0
      */
     public function showSingle()
     {
@@ -106,6 +114,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Retrieve default values for template
      *
      * @return array
+     * @since 2.0.0
      */
     public function getDefaultValues()
     {
@@ -138,6 +147,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Collect selected options
      *
      * @return int|array|string
+     * @since 2.0.0
      */
     protected function _getSelectedOptions()
     {
@@ -167,6 +177,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      *
      * @param  \Magento\Catalog\Model\Product $selection
      * @return bool
+     * @since 2.0.0
      */
     public function isSelected($selection)
     {
@@ -186,6 +197,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Retrieve selected option qty
      *
      * @return int
+     * @since 2.0.0
      */
     protected function _getSelectedQty()
     {
@@ -207,6 +219,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * Get product model
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -220,6 +233,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Catalog\Model\Product $selection
      * @param bool $includeContainer
      * @return string
+     * @since 2.0.0
      */
     public function getSelectionQtyTitlePrice($selection, $includeContainer = true)
     {
@@ -237,6 +251,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      *
      * @param \Magento\Catalog\Model\Product $selection
      * @return int|float
+     * @since 2.0.0
      */
     public function getSelectionPrice($selection)
     {
@@ -261,6 +276,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Catalog\Model\Product $selection
      * @param bool $includeContainer
      * @return string
+     * @since 2.0.0
      */
     public function getSelectionTitlePrice($selection, $includeContainer = true)
     {
@@ -277,6 +293,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param int $containerId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setValidationContainer($elementId, $containerId)
     {
@@ -288,6 +305,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      *
      * @param \Magento\Bundle\Model\Option $option
      * @return mixed
+     * @since 2.0.0
      */
     public function setOption(\Magento\Bundle\Model\Option $option)
     {
@@ -302,6 +320,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Catalog\Model\Product $selection
      * @param bool $includeContainer
      * @return string
+     * @since 2.0.0
      */
     public function renderPriceString($selection, $includeContainer = true)
     {

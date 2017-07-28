@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * PayPal specific model for certificate based authentication
+ * @since 2.0.0
  */
 class Cert extends \Magento\Framework\Model\AbstractModel
 {
@@ -20,11 +21,13 @@ class Cert extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var WriteInterface
+     * @since 2.0.0
      */
     protected $varDirectory;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $encryptor;
 
@@ -36,6 +39,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -55,6 +59,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,6 +72,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      * @param int $websiteId
      * @param bool $strictLoad
      * @return $this
+     * @since 2.0.0
      */
     public function loadByWebsite($websiteId, $strictLoad = true)
     {
@@ -80,6 +86,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getCertPath()
     {
@@ -101,6 +108,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $file
      * @return void
+     * @since 2.0.0
      */
     protected function _createCertFile($file)
     {
@@ -114,6 +122,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      * Check and remove outdated certificate file by website
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _removeOutdatedCertFile()
     {
@@ -128,6 +137,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      * Delete assigned certificate file after delete object
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterDelete()
     {

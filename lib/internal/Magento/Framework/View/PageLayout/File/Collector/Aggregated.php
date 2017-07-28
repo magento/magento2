@@ -10,6 +10,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Source of layout files aggregated from a theme and its parents according to merging and overriding conventions
+ * @since 2.0.0
  */
 class Aggregated extends \Magento\Framework\View\Layout\File\Collector\Aggregated
 {
@@ -17,6 +18,7 @@ class Aggregated extends \Magento\Framework\View\Layout\File\Collector\Aggregate
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return array
+     * @since 2.0.0
      */
     public function getFilesContent(ThemeInterface $theme, $filePath)
     {

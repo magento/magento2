@@ -14,6 +14,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 /**
  * Class Type
  *
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\Option\ArrayInterface,
@@ -40,6 +41,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -67,6 +69,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get Bundle Option Type
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -81,6 +84,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -89,6 +93,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -100,6 +105,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -111,6 +117,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -121,6 +128,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Bundle\Api\Data\OptionTypeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -132,6 +140,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Bundle\Api\Data\OptionTypeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\OptionTypeExtensionInterface $extensionAttributes)
     {

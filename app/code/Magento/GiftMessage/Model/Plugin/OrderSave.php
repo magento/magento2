@@ -9,12 +9,23 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\GiftMessage\Model\Plugin\OrderSave
+ *
+ * @since 2.0.0
+ */
 class OrderSave
 {
-    /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderRepositoryInterface
+     * @since 2.0.0
+     */
     protected $giftMessageOrderRepository;
 
-    /** @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+     * @since 2.0.0
+     */
     protected $giftMessageOrderItemRepository;
 
     /**
@@ -22,6 +33,7 @@ class OrderSave
      *
      * @param \Magento\GiftMessage\Api\OrderRepositoryInterface $giftMessageOrderRepository
      * @param \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\GiftMessage\Api\OrderRepositoryInterface $giftMessageOrderRepository,
@@ -39,6 +51,7 @@ class OrderSave
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws CouldNotSaveException
+     * @since 2.1.0
      */
     public function afterSave(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,
@@ -57,6 +70,7 @@ class OrderSave
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     protected function saveOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
@@ -84,6 +98,7 @@ class OrderSave
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     protected function saveOrderItemGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {

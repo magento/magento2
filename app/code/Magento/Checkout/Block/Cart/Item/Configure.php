@@ -11,6 +11,7 @@ namespace Magento\Checkout\Block\Cart\Item;
  *
  * @api
  * @module     Checkout
+ * @since 2.0.0
  */
 class Configure extends \Magento\Framework\View\Element\Template
 {
@@ -18,6 +19,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Configure product view blocks
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

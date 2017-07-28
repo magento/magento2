@@ -11,6 +11,7 @@ use Magento\Payment\Model\InfoInterface;
  * Service for creation transferable payment object from model
  *
  * @api
+ * @since 2.0.0
  */
 interface PaymentDataObjectFactoryInterface
 {
@@ -19,6 +20,7 @@ interface PaymentDataObjectFactoryInterface
      *
      * @param InfoInterface $paymentInfo
      * @return PaymentDataObjectInterface
+     * @since 2.0.0
      */
     public function create(InfoInterface $paymentInfo);
 }

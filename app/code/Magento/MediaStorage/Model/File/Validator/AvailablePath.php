@@ -26,6 +26,11 @@
  */
 namespace Magento\MediaStorage\Model\File\Validator;
 
+/**
+ * Class \Magento\MediaStorage\Model\File\Validator\AvailablePath
+ *
+ * @since 2.0.0
+ */
 class AvailablePath extends \Zend_Validate_Abstract
 {
     const PROTECTED_PATH = 'protectedPath';
@@ -38,6 +43,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * The path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_value;
 
@@ -45,6 +51,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * Protected paths
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_protectedPaths = [];
 
@@ -52,6 +59,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * Available paths
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_availablePaths = [];
 
@@ -59,11 +67,13 @@ class AvailablePath extends \Zend_Validate_Abstract
      * Cache of made regular expressions from path masks
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_pathsData;
 
     /**
      * Construct
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -74,6 +84,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * Initialize message templates with translating
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initMessageTemplates()
     {
@@ -93,6 +104,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * @param array $paths  All paths masks types.
      *                      E.g.: array('available' => array(...), 'protected' => array(...))
      * @return $this
+     * @since 2.0.0
      */
     public function setPaths(array $paths)
     {
@@ -110,6 +122,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      *
      * @param array $paths
      * @return $this
+     * @since 2.0.0
      */
     public function setProtectedPaths(array $paths)
     {
@@ -122,6 +135,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      *
      * @param string|string[] $path
      * @return $this
+     * @since 2.0.0
      */
     public function addProtectedPath($path)
     {
@@ -137,6 +151,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * Get protected paths masks
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getProtectedPaths()
     {
@@ -148,6 +163,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      *
      * @param array $paths
      * @return $this
+     * @since 2.0.0
      */
     public function setAvailablePaths(array $paths)
     {
@@ -160,6 +176,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      *
      * @param string|string[] $path
      * @return $this
+     * @since 2.0.0
      */
     public function addAvailablePath($path)
     {
@@ -175,6 +192,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * Get available paths masks
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getAvailablePaths()
     {
@@ -192,6 +210,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * @return bool
      * @throws \Exception       Throw exception on empty both paths masks types
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -235,6 +254,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _isValidByPaths($valuePathInfo, $paths, $protected)
     {

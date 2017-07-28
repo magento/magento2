@@ -9,6 +9,11 @@ namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
 
+/**
+ * Class \Magento\Framework\Phrase\Renderer\Placeholder
+ *
+ * @since 2.0.0
+ */
 class Placeholder implements RendererInterface
 {
     /**
@@ -17,6 +22,7 @@ class Placeholder implements RendererInterface
      * @param [] $source
      * @param [] $arguments
      * @return string
+     * @since 2.0.0
      */
     public function render(array $source, array $arguments)
     {
@@ -37,6 +43,7 @@ class Placeholder implements RendererInterface
      * @param string|int $key
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     * @since 2.0.0
      */
     private function keyToPlaceholder($key)
     {

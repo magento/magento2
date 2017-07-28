@@ -12,6 +12,7 @@ use Magento\Framework\FlagManager;
 /**
  * The source with previously imported configuration.
  * @api
+ * @since 2.2.0
  */
 class InitialSnapshotConfigSource implements ConfigSourceInterface
 {
@@ -19,6 +20,7 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      * The factory of Flag instances.
      *
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
@@ -26,12 +28,14 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      * The factory of DataObject instances.
      *
      * @var DataObjectFactory
+     * @since 2.2.0
      */
     private $dataObjectFactory;
 
     /**
      * @param FlagManager $flagManager The factory of Flag instances
      * @param DataObjectFactory $dataObjectFactory The factory of DataObject instances
+     * @since 2.2.0
      */
     public function __construct(FlagManager $flagManager, DataObjectFactory $dataObjectFactory)
     {
@@ -44,6 +48,7 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      * Snapshots are stored in flags.
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function get($path = '')
     {

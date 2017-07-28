@@ -11,6 +11,7 @@ use Magento\Ui\Component\AbstractComponent;
  * Class AbstractDataType
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractDataType extends AbstractComponent implements DataTypeInterface
 {
@@ -18,6 +19,7 @@ abstract class AbstractDataType extends AbstractComponent implements DataTypeInt
      * Validate value
      *
      * @return bool
+     * @since 2.0.0
      */
     public function validate()
     {

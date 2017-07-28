@@ -10,16 +10,19 @@ use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Interpreter of boolean data type, such as boolean itself or boolean string
+ * @since 2.0.0
  */
 class Boolean implements InterpreterInterface
 {
     /**
      * @var BooleanUtils
+     * @since 2.0.0
      */
     private $booleanUtils;
 
     /**
      * @param BooleanUtils $booleanUtils
+     * @since 2.0.0
      */
     public function __construct(BooleanUtils $booleanUtils)
     {
@@ -30,6 +33,7 @@ class Boolean implements InterpreterInterface
      * {@inheritdoc}
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

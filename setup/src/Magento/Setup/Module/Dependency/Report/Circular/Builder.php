@@ -12,6 +12,7 @@ use Magento\Setup\Module\Dependency\Report\WriterInterface;
 
 /**
  *  Dependencies report builder
+ * @since 2.0.0
  */
 class Builder extends AbstractBuilder
 {
@@ -19,6 +20,7 @@ class Builder extends AbstractBuilder
      * Circular dependencies builder
      *
      * @var \Magento\Setup\Module\Dependency\Circular
+     * @since 2.0.0
      */
     protected $circularBuilder;
 
@@ -28,6 +30,7 @@ class Builder extends AbstractBuilder
      * @param \Magento\Setup\Module\Dependency\ParserInterface $dependenciesParser
      * @param \Magento\Setup\Module\Dependency\Report\WriterInterface $reportWriter
      * @param \Magento\Setup\Module\Dependency\Circular $circularBuilder
+     * @since 2.0.0
      */
     public function __construct(
         ParserInterface $dependenciesParser,
@@ -44,6 +47,7 @@ class Builder extends AbstractBuilder
      *
      * @param array $modulesData
      * @return \Magento\Setup\Module\Dependency\Report\Circular\Data\Config
+     * @since 2.0.0
      */
     protected function buildData($modulesData)
     {
@@ -63,6 +67,7 @@ class Builder extends AbstractBuilder
      *
      * @param array $modulesData
      * @return array
+     * @since 2.0.0
      */
     protected function buildCircularDependencies($modulesData)
     {

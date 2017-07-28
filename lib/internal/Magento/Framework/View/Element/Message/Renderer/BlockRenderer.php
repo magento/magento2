@@ -8,6 +8,11 @@ namespace Magento\Framework\View\Element\Message\Renderer;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\Renderer\BlockRenderer
+ *
+ * @since 2.0.0
+ */
 class BlockRenderer implements RendererInterface
 {
     /**
@@ -17,16 +22,19 @@ class BlockRenderer implements RendererInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $configuration;
 
     /**
      * @var Template
+     * @since 2.0.0
      */
     private $template;
 
     /**
      * @param Template $template
+     * @since 2.0.0
      */
     public function __construct(
         Template $template
@@ -40,6 +48,7 @@ class BlockRenderer implements RendererInterface
      * @param MessageInterface $message
      * @param array $initializationData
      * @return string
+     * @since 2.0.0
      */
     public function render(MessageInterface $message, array $initializationData)
     {
@@ -56,6 +65,7 @@ class BlockRenderer implements RendererInterface
      * @param array $configuration
      * @param array $initializationData
      * @return void
+     * @since 2.0.0
      */
     private function setUpConfiguration(array $configuration, array $initializationData)
     {
@@ -71,6 +81,7 @@ class BlockRenderer implements RendererInterface
 
     /**
      * @return void
+     * @since 2.0.0
      */
     private function tearDownConfiguration()
     {

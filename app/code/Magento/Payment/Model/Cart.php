@@ -9,6 +9,7 @@ namespace Magento\Payment\Model;
  * Provide methods for collecting cart items information of specific sales model entity
  *
  * @api
+ * @since 2.0.0
  */
 class Cart
 {
@@ -22,8 +23,7 @@ class Cart
     const AMOUNT_DISCOUNT = 'discount';
 
     const AMOUNT_SUBTOTAL = 'subtotal';
-
-    /**@@+*/
+    /**#@-*/
 
     /**
      * Sales model
@@ -36,6 +36,7 @@ class Cart
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -43,6 +44,7 @@ class Cart
      * Amounts
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_amounts;
 
@@ -50,6 +52,7 @@ class Cart
      * Custom items list
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_customItems = [];
 
@@ -57,6 +60,7 @@ class Cart
      * Items imported from sales model
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_salesModelItems = [];
 
@@ -64,6 +68,7 @@ class Cart
      * Flags that indicates whether discount, shopping and taxes should be transferred as cart item
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_transferFlags = [];
 
@@ -71,6 +76,7 @@ class Cart
      * Flags which indicates whether items data is outdated and has to be recollected
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_itemsCollectingRequired = true;
 
@@ -78,6 +84,7 @@ class Cart
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Quote\Api\Data\CartInterface $salesModel
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
@@ -94,6 +101,7 @@ class Cart
      *
      * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
      * @api
+     * @since 2.0.0
      */
     public function getSalesModel()
     {
@@ -106,6 +114,7 @@ class Cart
      * @param float $taxAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function addTax($taxAmount)
     {
@@ -118,6 +127,7 @@ class Cart
      * @param float $taxAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function setTax($taxAmount)
     {
@@ -129,6 +139,7 @@ class Cart
      *
      * @return float
      * @api
+     * @since 2.0.0
      */
     public function getTax()
     {
@@ -141,6 +152,7 @@ class Cart
      * @param float $discountAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function addDiscount($discountAmount)
     {
@@ -153,6 +165,7 @@ class Cart
      * @param float $discountAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function setDiscount($discountAmount)
     {
@@ -164,6 +177,7 @@ class Cart
      *
      * @return float
      * @api
+     * @since 2.0.0
      */
     public function getDiscount()
     {
@@ -176,6 +190,7 @@ class Cart
      * @param float $shippingAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function addShipping($shippingAmount)
     {
@@ -188,6 +203,7 @@ class Cart
      * @param float $shippingAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function setShipping($shippingAmount)
     {
@@ -199,6 +215,7 @@ class Cart
      *
      * @return float
      * @api
+     * @since 2.0.0
      */
     public function getShipping()
     {
@@ -211,6 +228,7 @@ class Cart
      * @param float $subtotalAmount
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function addSubtotal($subtotalAmount)
     {
@@ -222,6 +240,7 @@ class Cart
      *
      * @return float
      * @api
+     * @since 2.0.0
      */
     public function getSubtotal()
     {
@@ -237,6 +256,7 @@ class Cart
      * @param string|null $identifier
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function addCustomItem($name, $qty, $amount, $identifier = null)
     {
@@ -248,6 +268,7 @@ class Cart
      *
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getAllItems()
     {
@@ -260,6 +281,7 @@ class Cart
      *
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getAmounts()
     {
@@ -273,6 +295,7 @@ class Cart
      *
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function setTransferShippingAsItem()
     {
@@ -284,6 +307,7 @@ class Cart
      *
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function setTransferDiscountAsItem()
     {
@@ -294,6 +318,7 @@ class Cart
      * Collect all items, discounts, taxes, shipping to cart
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _collectItemsAndAmounts()
     {
@@ -318,6 +343,7 @@ class Cart
      * Import items from sales model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _importItemsFromSalesModel()
     {
@@ -346,6 +372,7 @@ class Cart
      * Calculate subtotal from custom items
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _calculateCustomItemsSubtotal()
     {
@@ -368,6 +395,7 @@ class Cart
      * @param string $flagType
      * @param bool $value
      * @return void
+     * @since 2.0.0
      */
     protected function _setTransferFlag($flagType, $value)
     {
@@ -379,6 +407,7 @@ class Cart
      * @param string $amountType
      * @param float $amount
      * @return void
+     * @since 2.0.0
      */
     protected function _setAmount($amountType, $amount)
     {
@@ -389,6 +418,7 @@ class Cart
      * @param string $amountType
      * @param float $amount
      * @return void
+     * @since 2.0.0
      */
     protected function _addAmount($amountType, $amount)
     {
@@ -400,6 +430,7 @@ class Cart
      *
      * @param string $amountType
      * @return float
+     * @since 2.0.0
      */
     protected function _getAmount($amountType)
     {
@@ -414,6 +445,7 @@ class Cart
      * @param float $amount
      * @param null|string $identifier
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _createItemFromData($name, $qty, $amount, $identifier = null)
     {
@@ -430,6 +462,7 @@ class Cart
      * Set all amount types to zero
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _resetAmounts()
     {

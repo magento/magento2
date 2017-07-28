@@ -9,6 +9,7 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 /**
  * Factory class for @see
  * \Magento\Framework\Api\ExtensionAttribute\JoinDataInterface
+ * @since 2.0.0
  */
 class JoinDataInterfaceFactory
 {
@@ -16,6 +17,7 @@ class JoinDataInterfaceFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -23,6 +25,7 @@ class JoinDataInterfaceFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -31,6 +34,7 @@ class JoinDataInterfaceFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -45,6 +49,7 @@ class JoinDataInterfaceFactory
      *
      * @param array $data
      * @return \Magento\Framework\Api\ExtensionAttribute\JoinData
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

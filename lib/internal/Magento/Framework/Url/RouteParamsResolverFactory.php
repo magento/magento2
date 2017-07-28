@@ -5,21 +5,29 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Class \Magento\Framework\Url\RouteParamsResolverFactory
+ *
+ * @since 2.0.0
+ */
 class RouteParamsResolverFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -34,6 +42,7 @@ class RouteParamsResolverFactory
      *
      * @param array $data
      * @return \Magento\Framework\Url\RouteParamsResolverInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

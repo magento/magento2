@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Interface ContextInterface
+ * @since 2.0.0
  */
 interface ContextInterface
 {
@@ -27,6 +28,7 @@ interface ContextInterface
      * @param string $name
      * @param array $config
      * @return void
+     * @since 2.0.0
      */
     public function addComponentDefinition($name, array $config);
 
@@ -34,6 +36,7 @@ interface ContextInterface
      * Get components definitions
      *
      * @return array
+     * @since 2.0.0
      */
     public function getComponentsDefinitions();
 
@@ -41,6 +44,7 @@ interface ContextInterface
      * Getting root component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNamespace();
 
@@ -48,6 +52,7 @@ interface ContextInterface
      * Getting accept type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAcceptType();
 
@@ -56,6 +61,7 @@ interface ContextInterface
      *
      * @param DataProviderInterface $dataProvider
      * @return void
+     * @since 2.0.0
      */
     public function setDataProvider(DataProviderInterface $dataProvider);
 
@@ -63,6 +69,7 @@ interface ContextInterface
      * Get data provider
      *
      * @return DataProviderInterface
+     * @since 2.0.0
      */
     public function getDataProvider();
 
@@ -71,6 +78,7 @@ interface ContextInterface
      *
      * @param UiComponentInterface $component
      * @return array
+     * @since 2.0.0
      */
     public function getDataSourceData(UiComponentInterface $component);
 
@@ -78,6 +86,7 @@ interface ContextInterface
      * Getting all request data
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getRequestParams();
 
@@ -87,6 +96,7 @@ interface ContextInterface
      * @param string $key
      * @param mixed|null $defaultValue
      * @return mixed
+     * @since 2.0.0
      */
     public function getRequestParam($key, $defaultValue = null);
 
@@ -94,6 +104,7 @@ interface ContextInterface
      * Get filters params
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFiltersParams();
 
@@ -103,6 +114,7 @@ interface ContextInterface
      * @param string $key
      * @param null|string $defaultValue
      * @return mixed|null
+     * @since 2.0.0
      */
     public function getFilterParam($key, $defaultValue = null);
 
@@ -110,6 +122,7 @@ interface ContextInterface
      * Get root layout
      *
      * @return PageLayoutInterface
+     * @since 2.0.0
      */
     public function getPageLayout();
 
@@ -119,6 +132,7 @@ interface ContextInterface
      * @param array $buttons
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     public function addButtons(array $buttons, UiComponentInterface $component);
 
@@ -128,6 +142,7 @@ interface ContextInterface
      * @param array $htmlBlocks
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.1.0
      */
     public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component);
 
@@ -135,6 +150,7 @@ interface ContextInterface
      * Get render engine
      *
      * @return ContentTypeInterface
+     * @since 2.0.0
      */
     public function getRenderEngine();
 
@@ -144,6 +160,7 @@ interface ContextInterface
      * @param   string $route
      * @param   array $params
      * @return  string
+     * @since 2.0.0
      */
     public function getUrl($route = '', $params = []);
 
@@ -151,6 +168,7 @@ interface ContextInterface
      * Get component processor
      *
      * @return Processor
+     * @since 2.0.0
      */
     public function getProcessor();
 
@@ -158,6 +176,7 @@ interface ContextInterface
      * Get Ui Component Factory
      *
      * @return UiComponentFactory
+     * @since 2.1.0
      */
     public function getUiComponentFactory();
 }

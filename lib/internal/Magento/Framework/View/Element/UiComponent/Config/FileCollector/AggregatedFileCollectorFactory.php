@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class AggregatedFileCollectorFactory
+ * @since 2.0.0
  */
 class AggregatedFileCollectorFactory
 {
@@ -17,6 +18,7 @@ class AggregatedFileCollectorFactory
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -24,6 +26,7 @@ class AggregatedFileCollectorFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -35,6 +38,7 @@ class AggregatedFileCollectorFactory
      *
      * @param array $arguments
      * @return AggregatedFileCollector
+     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

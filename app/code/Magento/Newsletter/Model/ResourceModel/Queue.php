@@ -14,6 +14,7 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,6 +22,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Subscriber collection
      *
      * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
+     * @since 2.0.0
      */
     protected $_subscriberCollection;
 
@@ -30,6 +32,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection $subscriberCollection
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -44,6 +47,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -57,6 +61,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $subscriberIds
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function addSubscribersToQueue(ModelQueue $queue, array $subscriberIds)
     {
@@ -106,6 +111,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ModelQueue $queue
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function removeSubscribersFromQueue(ModelQueue $queue)
     {
@@ -129,6 +135,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param ModelQueue $queue
      * @return $this
+     * @since 2.0.0
      */
     public function setStores(ModelQueue $queue)
     {
@@ -175,6 +182,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param ModelQueue $queue
      * @return array
+     * @since 2.0.0
      */
     public function getStores(ModelQueue $queue)
     {
@@ -198,6 +206,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $queue
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $queue)
     {

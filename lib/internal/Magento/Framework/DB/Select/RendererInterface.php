@@ -10,6 +10,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * Interface RendererInterface
+ * @since 2.1.0
  */
 interface RendererInterface
 {
@@ -19,6 +20,7 @@ interface RendererInterface
      * @param Select $select
      * @param string $sql
      * @return string
+     * @since 2.1.0
      */
     public function render(Select $select, $sql = '');
 }

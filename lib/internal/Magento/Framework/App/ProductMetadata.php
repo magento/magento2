@@ -15,6 +15,7 @@ use \Magento\Framework\Composer\ComposerInformation;
 /**
  * Class ProductMetadata
  * @package Magento\Framework\App
+ * @since 2.0.0
  */
 class ProductMetadata implements ProductMetadataInterface
 {
@@ -32,22 +33,26 @@ class ProductMetadata implements ProductMetadataInterface
      * Product version
      *
      * @var string
+     * @since 2.1.0
      */
     protected $version;
 
     /**
      * @var \Magento\Framework\Composer\ComposerJsonFinder
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected $composerJsonFinder;
 
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
+     * @since 2.1.0
      */
     private $composerInformation;
 
     /**
      * @param ComposerJsonFinder $composerJsonFinder
+     * @since 2.1.0
      */
     public function __construct(ComposerJsonFinder $composerJsonFinder)
     {
@@ -58,6 +63,7 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product version
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVersion()
     {
@@ -77,6 +83,7 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product edition
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEdition()
     {
@@ -87,6 +94,7 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -97,7 +105,8 @@ class ProductMetadata implements ProductMetadataInterface
      * Get version from system package
      *
      * @return string
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getSystemPackageVersion()
     {
@@ -114,7 +123,8 @@ class ProductMetadata implements ProductMetadataInterface
      * Load composerInformation
      *
      * @return ComposerInformation
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getComposerInformation()
     {

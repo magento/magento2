@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Result Factory
  *
  * @api
+ * @since 2.0.0
  */
 class ResultFactory
 {
@@ -42,6 +43,7 @@ class ResultFactory
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -50,6 +52,7 @@ class ResultFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $typeMap
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -64,6 +67,7 @@ class ResultFactory
      *
      * @param array $typeMap
      * @return void
+     * @since 2.0.0
      */
     protected function mergeTypes(array $typeMap)
     {
@@ -81,6 +85,7 @@ class ResultFactory
      * @param array $arguments
      * @throws \InvalidArgumentException
      * @return ResultInterface
+     * @since 2.0.0
      */
     public function create($type, array $arguments = [])
     {

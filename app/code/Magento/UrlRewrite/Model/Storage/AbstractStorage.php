@@ -11,18 +11,26 @@ use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Abstract db storage
+ * @since 2.0.0
  */
 abstract class AbstractStorage implements StorageInterface
 {
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     * @since 2.0.0
+     */
     protected $urlRewriteFactory;
 
-    /** @var  DataObjectHelper */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
+     */
     protected $dataObjectHelper;
 
     /**
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
@@ -34,6 +42,7 @@ abstract class AbstractStorage implements StorageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function findAllByData(array $data)
     {
@@ -51,11 +60,13 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     abstract protected function doFindAllByData(array $data);
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function findOneByData(array $data)
     {
@@ -69,11 +80,13 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     abstract protected function doFindOneByData(array $data);
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function replace(array $urls)
     {
@@ -89,6 +102,7 @@ abstract class AbstractStorage implements StorageInterface
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException|\Exception
+     * @since 2.0.0
      */
     abstract protected function doReplace(array $urls);
 
@@ -97,6 +111,7 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param array $data
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @since 2.0.0
      */
     protected function createUrlRewrite($data)
     {

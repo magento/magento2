@@ -14,6 +14,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
 
 /**
  * 'import' instruction preprocessor
+ * @since 2.0.0
  */
 class Import implements PreProcessorInterface
 {
@@ -28,16 +29,19 @@ class Import implements PreProcessorInterface
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module
+     * @since 2.0.0
      */
     private $notationResolver;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $relatedFiles = [];
 
     /**
      * @var RelatedGenerator
+     * @since 2.0.0
      */
     private $relatedFileGenerator;
 
@@ -46,6 +50,7 @@ class Import implements PreProcessorInterface
      *
      * @param NotationResolver\Module $notationResolver
      * @param RelatedGenerator $relatedFileGenerator
+     * @since 2.0.0
      */
     public function __construct(
         NotationResolver\Module $notationResolver,
@@ -57,6 +62,7 @@ class Import implements PreProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function process(Chain $chain)
     {
@@ -79,6 +85,7 @@ class Import implements PreProcessorInterface
      *
      * @param string $content
      * @return string
+     * @since 2.0.0
      */
     private function removeComments($content)
     {
@@ -94,6 +101,7 @@ class Import implements PreProcessorInterface
      * because it uses a 3rd-party library, which requires the files to physically reside in the base same directory.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRelatedFiles()
     {
@@ -104,6 +112,7 @@ class Import implements PreProcessorInterface
      * Clear the record of related files, processed so far
      *
      * @return void
+     * @since 2.0.0
      */
     public function resetRelatedFiles()
     {
@@ -116,6 +125,7 @@ class Import implements PreProcessorInterface
      * @param string $matchedFileId
      * @param LocalInterface $asset
      * @return void
+     * @since 2.0.0
      */
     protected function recordRelatedFile($matchedFileId, LocalInterface $asset)
     {
@@ -129,6 +139,7 @@ class Import implements PreProcessorInterface
      * @param LocalInterface $asset
      * @param string $contentType
      * @return string
+     * @since 2.0.0
      */
     protected function replace(array $matchedContent, LocalInterface $asset, $contentType)
     {
@@ -152,6 +163,7 @@ class Import implements PreProcessorInterface
      * @param string $contentType
      * @return string
      * @link http://lesscss.org/features/#import-directives-feature-file-extensions
+     * @since 2.0.0
      */
     protected function fixFileExtension($fileId, $contentType)
     {

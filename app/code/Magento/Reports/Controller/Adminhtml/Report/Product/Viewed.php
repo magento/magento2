@@ -8,6 +8,11 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Reports\Model\Flag;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Viewed
+ *
+ * @since 2.0.0
+ */
 class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
@@ -21,6 +26,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
      * Most viewed products
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
  * Backend menu model
  *
  * @api
+ * @since 2.0.0
  */
 class Menu extends \ArrayObject
 {
@@ -22,21 +23,25 @@ class Menu extends \ArrayObject
      * Path in tree structure
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_path = '';
 
     /**
      * @var LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var Factory
+     * @since 2.2.0
      */
     private $menuItemFactory;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -47,6 +52,7 @@ class Menu extends \ArrayObject
      * @param string $pathInMenuStructure
      * @param Factory|null $menuItemFactory
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         LoggerInterface $logger,
@@ -72,6 +78,7 @@ class Menu extends \ArrayObject
      * @param int $index
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function add(Item $item, $parentId = null, $index = null)
     {
@@ -99,6 +106,7 @@ class Menu extends \ArrayObject
      *
      * @param string $itemId
      * @return Item|null
+     * @since 2.0.0
      */
     public function get($itemId)
     {
@@ -125,6 +133,7 @@ class Menu extends \ArrayObject
      * @param int $sortIndex
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function move($itemId, $toItemId, $sortIndex = null)
     {
@@ -141,6 +150,7 @@ class Menu extends \ArrayObject
      *
      * @param string $itemId
      * @return bool
+     * @since 2.0.0
      */
     public function remove($itemId)
     {
@@ -169,6 +179,7 @@ class Menu extends \ArrayObject
      * @param string $itemId
      * @param int $position
      * @return bool
+     * @since 2.0.0
      */
     public function reorder($itemId, $position)
     {
@@ -192,6 +203,7 @@ class Menu extends \ArrayObject
      *
      * @param Item $item
      * @return bool
+     * @since 2.0.0
      */
     public function isLast(Item $item)
     {
@@ -202,6 +214,7 @@ class Menu extends \ArrayObject
      * Find first menu item that user is able to access
      *
      * @return Item|null
+     * @since 2.0.0
      */
     public function getFirstAvailable()
     {
@@ -228,6 +241,7 @@ class Menu extends \ArrayObject
      *
      * @param string $itemId
      * @return Item[]
+     * @since 2.0.0
      */
     public function getParentItems($itemId)
     {
@@ -243,6 +257,7 @@ class Menu extends \ArrayObject
      * @param string $itemId
      * @param array &$parents
      * @return bool
+     * @since 2.0.0
      */
     protected function _findParentItems($menu, $itemId, &$parents)
     {
@@ -265,6 +280,7 @@ class Menu extends \ArrayObject
      * Serialize menu
      *
      * @return string
+     * @since 2.0.0
      */
     public function serialize()
     {
@@ -275,6 +291,7 @@ class Menu extends \ArrayObject
      * Get menu data represented as an array
      *
      * @return array
+     * @since 2.2.0
      */
     public function toArray()
     {
@@ -290,6 +307,7 @@ class Menu extends \ArrayObject
      *
      * @param string $serialized
      * @return void
+     * @since 2.2.0
      */
     public function unserialize($serialized)
     {
@@ -302,6 +320,7 @@ class Menu extends \ArrayObject
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function populateFromArray(array $data)
     {

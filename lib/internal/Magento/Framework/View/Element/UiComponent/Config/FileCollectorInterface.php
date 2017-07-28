@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\UiComponent\Config;
 
 /**
  * Interface FileCollectorInterface
+ * @since 2.0.0
  */
 interface FileCollectorInterface
 {
@@ -15,6 +16,7 @@ interface FileCollectorInterface
      *
      * @param string|null $searchPattern
      * @return array
+     * @since 2.0.0
      */
     public function collectFiles($searchPattern = null);
 }

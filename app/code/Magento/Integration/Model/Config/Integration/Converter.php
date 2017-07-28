@@ -8,7 +8,8 @@ namespace Magento\Integration\Model\Config\Integration;
 /**
  * Converter of api.xml content into array format.
  *
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -23,6 +24,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convert($source)
     {

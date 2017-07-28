@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Config\Source\Product\Options;
 
 /**
  * Product option types mode source
+ * @since 2.0.0
  */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
@@ -14,6 +15,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
      * Product Option Config
      *
      * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface
+     * @since 2.0.0
      */
     protected $_productOptionConfig;
 
@@ -21,6 +23,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
      * Constructor
      *
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig)
     {
@@ -29,6 +32,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

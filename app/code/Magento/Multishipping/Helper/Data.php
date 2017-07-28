@@ -10,6 +10,7 @@ namespace Magento\Multishipping\Helper;
 
 /**
  * Data helper
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -34,6 +35,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -47,6 +49,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve checkout quote
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -57,6 +60,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get maximum quantity allowed for shipping to multiple addresses
      *
      * @return int
+     * @since 2.0.0
      */
     public function getMaximumQty()
     {
@@ -68,6 +72,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * There should be a valid quote in checkout session. If not, only the config value will be returned
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMultishippingCheckoutAvailable()
     {

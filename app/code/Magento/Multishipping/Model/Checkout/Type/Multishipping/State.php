@@ -12,6 +12,7 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping;
  * Multishipping checkout state model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class State extends \Magento\Framework\DataObject
 {
@@ -29,6 +30,7 @@ class State extends \Magento\Framework\DataObject
      * Allow steps array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_steps;
 
@@ -36,11 +38,13 @@ class State extends \Magento\Framework\DataObject
      * Checkout model
      *
      * @var Multishipping
+     * @since 2.0.0
      */
     protected $_multishipping;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -49,6 +53,7 @@ class State extends \Magento\Framework\DataObject
      *
      * @param Session $checkoutSession
      * @param Multishipping $multishipping
+     * @since 2.0.0
      */
     public function __construct(Session $checkoutSession, Multishipping $multishipping)
     {
@@ -73,6 +78,7 @@ class State extends \Magento\Framework\DataObject
      * Retrieve checkout model
      *
      * @return Multishipping
+     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -83,6 +89,7 @@ class State extends \Magento\Framework\DataObject
      * Retrieve available checkout steps
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSteps()
     {
@@ -93,6 +100,7 @@ class State extends \Magento\Framework\DataObject
      * Retrieve active step code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getActiveStep()
     {
@@ -106,6 +114,7 @@ class State extends \Magento\Framework\DataObject
     /**
      * @param string $step
      * @return $this
+     * @since 2.0.0
      */
     public function setActiveStep($step)
     {
@@ -130,6 +139,7 @@ class State extends \Magento\Framework\DataObject
      *
      * @param string $step
      * @return $this
+     * @since 2.0.0
      */
     public function setCompleteStep($step)
     {
@@ -145,6 +155,7 @@ class State extends \Magento\Framework\DataObject
      * @param string $step
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCompleteStep($step)
     {
@@ -159,6 +170,7 @@ class State extends \Magento\Framework\DataObject
      *
      * @param string $step
      * @return $this
+     * @since 2.0.0
      */
     public function unsCompleteStep($step)
     {
@@ -170,6 +182,7 @@ class State extends \Magento\Framework\DataObject
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canSelectAddresses()
     {
@@ -177,6 +190,7 @@ class State extends \Magento\Framework\DataObject
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canInputShipping()
     {
@@ -184,6 +198,7 @@ class State extends \Magento\Framework\DataObject
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canSeeOverview()
     {
@@ -191,6 +206,7 @@ class State extends \Magento\Framework\DataObject
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canSuccess()
     {
@@ -200,6 +216,7 @@ class State extends \Magento\Framework\DataObject
      * Retrieve checkout session
      *
      * @return Session
+     * @since 2.0.0
      */
     public function getCheckoutSession()
     {

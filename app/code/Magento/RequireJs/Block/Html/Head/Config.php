@@ -13,31 +13,37 @@ use Magento\Framework\View\Asset\Minification;
  * Block responsible for including RequireJs config on the page
  *
  * @api
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var RequireJsConfig
+     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var \Magento\RequireJs\Model\FileManager
+     * @since 2.0.0
      */
     private $fileManager;
 
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var Minification
+     * @since 2.0.0
      */
     protected $minification;
 
     /**
      * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @since 2.2.0
      */
     private $bundleConfig;
 
@@ -49,6 +55,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
      * @param Minification $minification
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -71,6 +78,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      * Include RequireJs configuration as an asset on the page
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

@@ -23,6 +23,7 @@ namespace Magento\Store\Model;
  * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -35,16 +36,19 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_cacheTag = true;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'website';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'website';
 
@@ -52,6 +56,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Cache configuration array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_configCache = [];
 
@@ -59,6 +64,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website Group Collection array
      *
      * @var \Magento\Store\Model\Store[]
+     * @since 2.0.0
      */
     protected $_groups;
 
@@ -66,6 +72,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website group ids array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_groupIds = [];
 
@@ -73,6 +80,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * The number of groups in a website
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_groupsCount;
 
@@ -80,6 +88,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website Store collection array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_stores;
 
@@ -87,6 +96,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website store ids array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storeIds = [];
 
@@ -94,6 +104,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website store codes array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storeCodes = [];
 
@@ -101,6 +112,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * The number of stores in a website
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storesCount = 0;
 
@@ -108,6 +120,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website default group
      *
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_defaultGroup;
 
@@ -115,6 +128,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Website default store
      *
      * @var Store
+     * @since 2.0.0
      */
     protected $_defaultStore;
 
@@ -122,41 +136,49 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * is can delete website
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isCanDelete;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     private $_isReadOnly = false;
 
     /**
      * @var \Magento\Config\Model\ResourceModel\Config\Data
+     * @since 2.0.0
      */
     protected $_configDataResource;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @since 2.0.0
      */
     protected $storeListFactory;
 
     /**
      * @var \Magento\Store\Model\GroupFactory
+     * @since 2.0.0
      */
     protected $_storeGroupFactory;
 
     /**
      * @var WebsiteFactory
+     * @since 2.0.0
      */
     protected $_websiteFactory;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -176,6 +198,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -215,6 +238,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * init model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -227,6 +251,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param int|string $id
      * @param string $field
      * @return $this
+     * @since 2.0.0
      */
     public function load($id, $field = null)
     {
@@ -242,6 +267,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param string $path
      * @return mixed
+     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -263,6 +289,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Load group collection and set internal data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _loadGroups()
     {
@@ -283,6 +310,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param array $groups
      * @return $this
+     * @since 2.0.0
      */
     public function setGroups($groups)
     {
@@ -303,6 +331,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve new (not loaded) Group collection object with website filter
      *
      * @return \Magento\Store\Model\ResourceModel\Group\Collection
+     * @since 2.0.0
      */
     public function getGroupCollection()
     {
@@ -314,6 +343,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website groups
      *
      * @return \Magento\Store\Model\Store[]
+     * @since 2.0.0
      */
     public function getGroups()
     {
@@ -327,6 +357,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website group ids
      *
      * @return array
+     * @since 2.0.0
      */
     public function getGroupIds()
     {
@@ -340,6 +371,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve number groups in a website
      *
      * @return int
+     * @since 2.0.0
      */
     public function getGroupsCount()
     {
@@ -353,6 +385,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve default group model
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getDefaultGroup()
     {
@@ -369,6 +402,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Load store collection and set internal data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _loadStores()
     {
@@ -390,6 +424,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param array $stores
      * @return void
+     * @since 2.0.0
      */
     public function setStores($stores)
     {
@@ -410,6 +445,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve new (not loaded) Store collection object with website filter
      *
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
+     * @since 2.0.0
      */
     public function getStoreCollection()
     {
@@ -420,6 +456,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website store objects
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStores()
     {
@@ -433,6 +470,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website store ids
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -446,6 +484,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website store codes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStoreCodes()
     {
@@ -459,6 +498,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve number stores in a website
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoresCount()
     {
@@ -472,6 +512,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Can delete website
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCanDelete()
     {
@@ -489,6 +530,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve unique website-group-store key for collection with groups and stores
      *
      * @return string
+     * @since 2.0.0
      */
     public function getWebsiteGroupStore()
     {
@@ -497,6 +539,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getDefaultGroupId()
     {
@@ -505,6 +548,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setDefaultGroupId($defaultGroupId)
     {
@@ -513,6 +557,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -521,6 +566,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -529,6 +575,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -537,6 +584,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -545,6 +593,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -563,6 +612,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Rewrite in order to clear configuration cache
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -575,6 +625,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Clear configuration cache after creation website
      *
      * @return $this
+     * @since 2.2.0
      */
     public function afterSave()
     {
@@ -589,6 +640,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website base currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -611,6 +663,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve website base currency
      *
      * @return \Magento\Directory\Model\Currency
+     * @since 2.0.0
      */
     public function getBaseCurrency()
     {
@@ -626,6 +679,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve Default Website Store or null
      *
      * @return Store
+     * @since 2.0.0
      */
     public function getDefaultStore()
     {
@@ -640,6 +694,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param bool $withDefault include/exclude default admin website
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     public function getDefaultStoresSelect($withDefault = false)
     {
@@ -651,6 +706,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function isReadOnly($value = null)
     {
@@ -664,6 +720,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Get identities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -672,6 +729,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getScopeType()
     {
@@ -680,6 +738,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getScopeTypeName()
     {
@@ -688,6 +747,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -696,6 +756,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes

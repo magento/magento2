@@ -12,6 +12,7 @@ use Magento\Framework\App;
  * Page title
  *
  * @api
+ * @since 2.0.0
  */
 class Title
 {
@@ -22,22 +23,31 @@ class Title
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     private $scopeConfig;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     * @since 2.0.0
+     */
     private $prependedValues = [];
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     * @since 2.0.0
+     */
     private $appendedValues = [];
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $textValue;
 
     /**
      * @param App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         App\Config\ScopeConfigInterface $scopeConfig
@@ -50,6 +60,7 @@ class Title
      *
      * @param string $title
      * @return $this
+     * @since 2.0.0
      */
     public function set($title)
     {
@@ -61,6 +72,7 @@ class Title
      * Retrieve title element text (encoded)
      *
      * @return string
+     * @since 2.0.0
      */
     public function get()
     {
@@ -71,6 +83,7 @@ class Title
      * Same as getTitle(), but return only first item from chunk
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getShort()
     {
@@ -81,6 +94,7 @@ class Title
     /**
      * Same as getShort(), but return title without prefix and suffix
      * @return mixed
+     * @since 2.0.0
      */
     public function getShortHeading()
     {
@@ -91,6 +105,7 @@ class Title
     /**
      * @param bool $withConfigValues
      * @return array
+     * @since 2.0.0
      */
     protected function build($withConfigValues = true)
     {
@@ -104,6 +119,7 @@ class Title
     /**
      * @param string $title
      * @return string
+     * @since 2.0.0
      */
     protected function addConfigValues($title)
     {
@@ -121,6 +137,7 @@ class Title
      * Retrieve default title text
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefault()
     {
@@ -134,6 +151,7 @@ class Title
     /**
      * @param string $suffix
      * @return void
+     * @since 2.0.0
      */
     public function append($suffix)
     {
@@ -143,6 +161,7 @@ class Title
     /**
      * @param string $prefix
      * @return void
+     * @since 2.0.0
      */
     public function prepend($prefix)
     {
@@ -153,6 +172,7 @@ class Title
      * Unset title
      *
      * @return void
+     * @since 2.0.0
      */
     public function unsetValue()
     {

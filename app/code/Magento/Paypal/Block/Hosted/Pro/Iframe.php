@@ -9,6 +9,7 @@ namespace Magento\Paypal\Block\Hosted\Pro;
  * Hosted Pro iframe block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Iframe extends \Magento\Paypal\Block\Iframe
 {
@@ -17,6 +18,7 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Set payment method code
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * Get iframe action URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrameActionUrl()
     {

@@ -10,6 +10,7 @@ namespace Magento\Directory\Model\Data;
  * Class Country Information
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Directory\Api\Data\CountryInformationInterface
@@ -23,6 +24,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -31,6 +33,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -39,6 +42,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getTwoLetterAbbreviation()
     {
@@ -47,6 +51,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setTwoLetterAbbreviation($abbreviation)
     {
@@ -55,6 +60,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getThreeLetterAbbreviation()
     {
@@ -63,6 +69,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setThreeLetterAbbreviation($abbreviation)
     {
@@ -71,6 +78,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getFullNameLocale()
     {
@@ -79,6 +87,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setFullNameLocale($fullNameLocale)
     {
@@ -87,6 +96,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getFullNameEnglish()
     {
@@ -95,6 +105,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setFullNameEnglish($fullNameEnglish)
     {
@@ -103,6 +114,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getAvailableRegions()
     {
@@ -111,6 +123,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setAvailableRegions($availableRegions)
     {
@@ -119,6 +132,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -127,6 +141,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\CountryInformationExtensionInterface $extensionAttributes

@@ -16,6 +16,7 @@ use Magento\Tax\Model\Calculation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractCalculator
 {
@@ -40,6 +41,7 @@ abstract class AbstractCalculator
      * Tax calculation tool
      *
      * @var Calculation
+     * @since 2.0.0
      */
     protected $calculationTool;
 
@@ -47,6 +49,7 @@ abstract class AbstractCalculator
      * Store id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $storeId;
 
@@ -54,6 +57,7 @@ abstract class AbstractCalculator
      * Customer tax class id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $customerTaxClassId;
 
@@ -61,6 +65,7 @@ abstract class AbstractCalculator
      * Customer id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $customerId;
 
@@ -68,6 +73,7 @@ abstract class AbstractCalculator
      * Shipping Address
      *
      * @var CustomerAddress
+     * @since 2.0.0
      */
     protected $shippingAddress;
 
@@ -75,6 +81,7 @@ abstract class AbstractCalculator
      * Billing Address
      *
      * @var CustomerAddress
+     * @since 2.0.0
      */
     protected $billingAddress;
 
@@ -82,6 +89,7 @@ abstract class AbstractCalculator
      * Tax configuration object
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
@@ -96,6 +104,7 @@ abstract class AbstractCalculator
      *  store (->getStore())
      *
      * @var \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     private $addressRateRequest = null;
 
@@ -109,6 +118,7 @@ abstract class AbstractCalculator
      *          'rate' => 'rounding delta',
      *      ],
      *  ]
+     * @since 2.0.0
      */
     protected $roundingDeltas;
 
@@ -116,16 +126,19 @@ abstract class AbstractCalculator
      * Tax Class Service
      *
      * @var TaxClassManagementInterface
+     * @since 2.0.0
      */
     protected $taxClassManagement;
 
     /**
      * @var AppliedTaxInterfaceFactory
+     * @since 2.0.0
      */
     protected $appliedTaxDataObjectFactory;
 
     /**
      * @var AppliedTaxRateInterfaceFactory
+     * @since 2.0.0
      */
     protected $appliedTaxRateDataObjectFactory;
 
@@ -140,6 +153,7 @@ abstract class AbstractCalculator
      * @param \Magento\Tax\Model\Config $config
      * @param int $storeId
      * @param \Magento\Framework\DataObject $addressRateRequest
+     * @since 2.0.0
      */
     public function __construct(
         TaxClassManagementInterface $taxClassService,
@@ -167,6 +181,7 @@ abstract class AbstractCalculator
      * @codeCoverageIgnoreStart
      * @param CustomerAddress $billingAddress
      * @return void
+     * @since 2.0.0
      */
     public function setBillingAddress(CustomerAddress $billingAddress)
     {
@@ -178,6 +193,7 @@ abstract class AbstractCalculator
      *
      * @param CustomerAddress $shippingAddress
      * @return void
+     * @since 2.0.0
      */
     public function setShippingAddress(CustomerAddress $shippingAddress)
     {
@@ -189,6 +205,7 @@ abstract class AbstractCalculator
      *
      * @param int $customerTaxClassId
      * @return void
+     * @since 2.0.0
      */
     public function setCustomerTaxClassId($customerTaxClassId)
     {
@@ -200,6 +217,7 @@ abstract class AbstractCalculator
      *
      * @param int $customerId
      * @return void
+     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {
@@ -215,6 +233,7 @@ abstract class AbstractCalculator
      * @param int $quantity
      * @param bool $round
      * @return TaxDetailsItemInterface
+     * @since 2.0.0
      */
     public function calculate(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -232,6 +251,7 @@ abstract class AbstractCalculator
      * @param int $quantity
      * @param bool $round
      * @return TaxDetailsItemInterface
+     * @since 2.0.0
      */
     abstract protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true);
 
@@ -242,6 +262,7 @@ abstract class AbstractCalculator
      * @param int $quantity
      * @param bool $round
      * @return TaxDetailsItemInterface
+     * @since 2.0.0
      */
     abstract protected function calculateWithTaxNotInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true);
 
@@ -256,6 +277,7 @@ abstract class AbstractCalculator
      *  store (->getStore())
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function getAddressRateRequest()
     {
@@ -277,6 +299,7 @@ abstract class AbstractCalculator
      * @param float $rate
      * @param float $storeRate
      * @return bool
+     * @since 2.0.0
      */
     protected function isSameRateAsStore($rate, $storeRate)
     {
@@ -303,6 +326,7 @@ abstract class AbstractCalculator
      *      ],
      *  ]
      * @return \Magento\Tax\Api\Data\AppliedTaxInterface
+     * @since 2.0.0
      */
     protected function getAppliedTax($rowTax, $appliedRate)
     {
@@ -352,6 +376,7 @@ abstract class AbstractCalculator
      *      ],
      *  ]
      * @return \Magento\Tax\Api\Data\AppliedTaxInterface[]
+     * @since 2.0.0
      */
     protected function getAppliedTaxes($rowTax, $totalTaxRate, $appliedRates)
     {
@@ -406,6 +431,7 @@ abstract class AbstractCalculator
      * @param string $type
      * @param bool $round
      * @return float
+     * @since 2.0.0
      */
     protected function deltaRound($price, $rate, $direction, $type = self::KEY_REGULAR_DELTA_ROUNDING, $round = true)
     {
@@ -436,6 +462,7 @@ abstract class AbstractCalculator
      * @param float $customerRate
      * @param boolean $round
      * @return float
+     * @since 2.0.0
      */
     protected function calculatePriceInclTax($storePriceInclTax, $storeRate, $customerRate, $round = true)
     {

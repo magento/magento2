@@ -10,11 +10,13 @@ use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * Admin session logout all
+ * @since 2.1.0
  */
 class LogoutAll extends \Magento\Backend\App\Action
 {
     /**
      * @var AdminSessionsManager
+     * @since 2.1.0
      */
     protected $sessionsManager;
 
@@ -22,6 +24,7 @@ class LogoutAll extends \Magento\Backend\App\Action
      * Check constructor.
      * @param Context $context
      * @param AdminSessionsManager $sessionsManager
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -33,6 +36,7 @@ class LogoutAll extends \Magento\Backend\App\Action
 
     /**
      * @return void
+     * @since 2.1.0
      */
     public function execute()
     {

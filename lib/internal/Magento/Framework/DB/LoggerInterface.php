@@ -7,6 +7,7 @@ namespace Magento\Framework\DB;
 
 /**
  * DB logger interface
+ * @since 2.0.0
  */
 interface LoggerInterface
 {
@@ -23,11 +24,13 @@ interface LoggerInterface
      *
      * @param string $str
      * @return void
+     * @since 2.0.0
      */
     public function log($str);
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function startTimer();
 
@@ -37,12 +40,14 @@ interface LoggerInterface
      * @param array $bind
      * @param \Zend_Db_Statement_Pdo|null $result
      * @return void
+     * @since 2.0.0
      */
     public function logStats($type, $sql, $bind = [], $result = null);
 
     /**
      * @param \Exception $e
      * @return void
+     * @since 2.0.0
      */
     public function critical(\Exception $e);
 }

@@ -11,6 +11,7 @@ namespace Magento\CustomerImportExport\Model\Export;
  * @api
  *
  * @method \Magento\Customer\Model\ResourceModel\Attribute\Collection getAttributeCollection() getAttributeCollection()
+ * @since 2.0.0
  */
 class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -57,6 +58,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Array of attributes codes which are disabled for export
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_disabledAttributes = ['default_billing', 'default_shipping'];
 
@@ -64,6 +66,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Attributes with index (not label) value.
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_indexValueAttributes = ['group_id', 'website_id', 'store_id'];
 
@@ -71,6 +74,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Permanent entity columns.
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_permanentAttributes = [self::COLUMN_EMAIL, self::COLUMN_WEBSITE, self::COLUMN_STORE];
 
@@ -78,6 +82,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Customers whose data is exported
      *
      * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
+     * @since 2.0.0
      */
     protected $_customerCollection;
 
@@ -90,6 +95,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -122,6 +128,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Export process.
      *
      * @return string
+     * @since 2.0.0
      */
     public function export()
     {
@@ -139,6 +146,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Get customers collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Customer\Collection
+     * @since 2.0.0
      */
     protected function _getEntityCollection()
     {
@@ -147,6 +155,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _getHeaderColumns()
     {
@@ -159,6 +168,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @param \Magento\Customer\Model\Customer $item
      * @return void
+     * @since 2.0.0
      */
     public function exportItem($item)
     {
@@ -174,6 +184,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     public function filterAttributeCollection(\Magento\Framework\Data\Collection $collection)
     {
@@ -195,6 +206,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * EAV entity type code getter.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -205,6 +217,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Retrieve list of overridden attributes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOverriddenAttributes()
     {

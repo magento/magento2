@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * Interface for DB schema installs of a module
  *
  * @api
+ * @since 2.0.0
  */
 interface InstallSchemaInterface
 {
@@ -18,6 +19,7 @@ interface InstallSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @since 2.0.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context);
 }

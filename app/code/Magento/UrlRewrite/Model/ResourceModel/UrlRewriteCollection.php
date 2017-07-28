@@ -7,12 +7,18 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
+/**
+ * Class \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
+ *
+ * @since 2.0.0
+ */
 class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Store Manager Model
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -24,6 +30,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -42,6 +49,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
      * Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,6 +66,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
      * @param bool $withAdmin
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function addStoreFilter($store, $withAdmin = true)
     {

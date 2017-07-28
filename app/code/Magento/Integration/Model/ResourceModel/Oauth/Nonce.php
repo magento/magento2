@@ -9,6 +9,7 @@ namespace Magento\Integration\Model\ResourceModel\Oauth;
  * oAuth nonce resource model
  *
  * @author Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Nonce extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Nonce extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Nonce extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $minutes Delete entries older than
      * @return int
+     * @since 2.0.0
      */
     public function deleteOldEntries($minutes)
     {
@@ -48,6 +51,7 @@ class Nonce extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $nonce - The nonce string
      * @param int $consumerId - The consumer id
      * @return array - Array of data
+     * @since 2.0.0
      */
     public function selectByCompositeKey($nonce, $consumerId)
     {

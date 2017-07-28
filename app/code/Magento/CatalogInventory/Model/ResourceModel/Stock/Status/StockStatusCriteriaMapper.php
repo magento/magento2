@@ -11,11 +11,13 @@ use Magento\Framework\DB\GenericMapper;
 /**
  * Class StockStatusCriteriaMapper
  * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
+ * @since 2.0.0
  */
 class StockStatusCriteriaMapper extends GenericMapper
 {
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function init()
     {
@@ -26,6 +28,7 @@ class StockStatusCriteriaMapper extends GenericMapper
      * Apply initial query parameters
      *
      * @return void
+     * @since 2.0.0
      */
     public function mapInitialCondition()
     {
@@ -41,6 +44,7 @@ class StockStatusCriteriaMapper extends GenericMapper
      *
      * @param int|\Magento\Store\Model\Website $website
      * @return void
+     * @since 2.0.0
      */
     public function mapWebsiteFilter($website)
     {
@@ -55,6 +59,7 @@ class StockStatusCriteriaMapper extends GenericMapper
      *
      * @param int|array|\Magento\Catalog\Model\Product|\Magento\Catalog\Model\Product[] $products
      * @return void
+     * @since 2.0.0
      */
     public function mapProductsFilter($products)
     {
@@ -80,6 +85,7 @@ class StockStatusCriteriaMapper extends GenericMapper
      *
      * @param float|int $qty
      * @return void
+     * @since 2.0.0
      */
     public function mapQtyFilter($qty)
     {

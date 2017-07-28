@@ -10,16 +10,19 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected $_sessionQuote;
 
     /**
      * @var \Magento\GiftMessage\Helper\Message
+     * @since 2.0.0
      */
     protected $_messageHelper;
 
@@ -28,6 +31,7 @@ class Form extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,6 +48,7 @@ class Form extends \Magento\Backend\Block\Template
      * Indicates that block can display gift message form
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplayGiftmessageForm()
     {

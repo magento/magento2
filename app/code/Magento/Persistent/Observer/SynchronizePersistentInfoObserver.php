@@ -10,6 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Persistent Session Observer
+ * @since 2.0.0
  */
 class SynchronizePersistentInfoObserver implements ObserverInterface
 {
@@ -17,6 +18,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession;
 
@@ -24,6 +26,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -31,6 +34,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -38,6 +42,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
@@ -54,7 +59,8 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

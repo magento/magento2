@@ -6,12 +6,18 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Statistics\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**
      * Refresh statistics action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

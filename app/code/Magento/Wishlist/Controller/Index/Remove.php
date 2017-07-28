@@ -13,16 +13,19 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Remove extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
+     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var Validator
+     * @since 2.1.0
      */
     protected $formKeyValidator;
 
@@ -30,6 +33,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param Validator $formKeyValidator
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -46,6 +50,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
+     * @since 2.0.0
      */
     public function execute()
     {

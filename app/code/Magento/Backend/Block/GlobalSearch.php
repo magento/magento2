@@ -7,17 +7,20 @@ namespace Magento\Backend\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class GlobalSearch extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::system/search.phtml';
 
     /**
      * Get components configuration
      * @return array
+     * @since 2.0.0
      */
     public function getWidgetInitOptions()
     {

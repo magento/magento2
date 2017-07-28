@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Stock
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Stock
 {
@@ -24,6 +25,7 @@ class Stock
      * Store model manager
      *
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -31,26 +33,31 @@ class Stock
      * Core store config
      *
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var Status
+     * @since 2.0.0
      */
     protected $stockStatusResource;
 
     /**
      * @var StatusFactory
+     * @since 2.0.0
      */
     protected $stockStatusFactory;
 
     /**
      * @var StockRegistryProviderInterface
+     * @since 2.0.0
      */
     private $stockRegistryProvider;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     private $stockConfiguration;
 
@@ -59,6 +66,7 @@ class Stock
      * @param ScopeConfigInterface $scopeConfig
      * @param StatusFactory $stockStatusFactory
      * @param StockRegistryProviderInterface $stockRegistryProvider
+     * @since 2.0.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -78,6 +86,7 @@ class Stock
      * @param Product $product
      * @param int $status
      * @return void
+     * @since 2.0.0
      */
     public function assignStatusToProduct(Product $product, $status = null)
     {
@@ -93,8 +102,9 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
-     * @deprecated Use Stock::addIsInStockFilterToCollection instead
+     * @deprecated 2.1.0 Use Stock::addIsInStockFilterToCollection instead
      * @return void
+     * @since 2.0.0
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
     {
@@ -112,6 +122,7 @@ class Stock
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @return void
+     * @since 2.0.0
      */
     public function addInStockFilterToCollection($collection)
     {
@@ -144,6 +155,7 @@ class Stock
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return void
+     * @since 2.0.0
      */
     public function addIsInStockFilterToCollection($collection)
     {
@@ -164,6 +176,7 @@ class Stock
 
     /**
      * @return Status
+     * @since 2.0.0
      */
     protected function getStockStatusResource()
     {
@@ -176,7 +189,8 @@ class Stock
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStockConfiguration()
     {

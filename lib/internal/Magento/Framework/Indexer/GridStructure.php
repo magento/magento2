@@ -11,20 +11,28 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Class \Magento\Framework\Indexer\GridStructure
+ *
+ * @since 2.0.0
+ */
 class GridStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var FlatScopeResolver
+     * @since 2.0.0
      */
     private $flatScopeResolver;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
@@ -40,6 +48,7 @@ class GridStructure implements IndexStructureInterface
      * @param ResourceConnection $resource
      * @param FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -55,6 +64,7 @@ class GridStructure implements IndexStructureInterface
      * @param string $index
      * @param Dimension[] $dimensions
      * @return void
+     * @since 2.0.0
      */
     public function delete($index, array $dimensions = [])
     {
@@ -70,6 +80,7 @@ class GridStructure implements IndexStructureInterface
      * @param array $fields
      * @param Dimension[] $dimensions
      * @return void
+     * @since 2.0.0
      */
     public function create($index, array $fields, array $dimensions = [])
     {
@@ -81,6 +92,7 @@ class GridStructure implements IndexStructureInterface
      * @param array $fields
      * @throws \Zend_Db_Exception
      * @return void
+     * @since 2.0.0
      */
     protected function createFlatTable($tableName, array $fields)
     {
@@ -127,6 +139,7 @@ class GridStructure implements IndexStructureInterface
 
     /**
      * @return false|AdapterInterface
+     * @since 2.0.0
      */
     private function getAdapter()
     {

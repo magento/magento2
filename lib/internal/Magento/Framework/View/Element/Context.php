@@ -20,6 +20,7 @@ namespace Magento\Framework\View\Element;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
@@ -27,6 +28,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Request
      *
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
@@ -34,6 +36,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Layout
      *
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $_layout;
 
@@ -41,6 +44,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -48,6 +52,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * URL builder
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_urlBuilder;
 
@@ -55,6 +60,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Cache
      *
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
@@ -62,6 +68,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Design
      *
      * @var \Magento\Framework\View\DesignInterface
+     * @since 2.0.0
      */
     protected $_design;
 
@@ -69,6 +76,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Session
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $_session;
 
@@ -76,6 +84,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * SID Resolver
      *
      * @var \Magento\Framework\Session\SidResolverInterface
+     * @since 2.0.0
      */
     protected $_sidResolver;
 
@@ -83,11 +92,13 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -95,6 +106,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * View config model
      *
      * @var \Magento\Framework\View\ConfigInterface
+     * @since 2.0.0
      */
     protected $_viewConfig;
 
@@ -102,6 +114,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Cache state
      *
      * @var \Magento\Framework\App\Cache\StateInterface
+     * @since 2.0.0
      */
     protected $_cacheState;
 
@@ -109,6 +122,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Logger
      *
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -116,6 +130,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Escaper
      *
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -123,16 +138,19 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Filter manager
      *
      * @var \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
      */
     protected $_filterManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
+     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -157,6 +175,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -200,6 +219,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get cache
      *
      * @return \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     public function getCache()
     {
@@ -210,6 +230,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get design package
      *
      * @return \Magento\Framework\View\DesignInterface
+     * @since 2.0.0
      */
     public function getDesignPackage()
     {
@@ -220,6 +241,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get event manager
      *
      * @return \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     public function getEventManager()
     {
@@ -230,6 +252,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get layout
      *
      * @return \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     public function getLayout()
     {
@@ -240,6 +263,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get request
      *
      * @return \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -250,6 +274,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get session
      *
      * @return \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     public function getSession()
     {
@@ -260,6 +285,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get SID resolver
      *
      * @return \Magento\Framework\Session\SidResolverInterface
+     * @since 2.0.0
      */
     public function getSidResolver()
     {
@@ -270,6 +296,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get scope config
      *
      * @return \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     public function getScopeConfig()
     {
@@ -280,6 +307,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get inline translation status object
      *
      * @return \Magento\Framework\Translate\Inline\StateInterface
+     * @since 2.0.0
      */
     public function getInlineTranslation()
     {
@@ -290,6 +318,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get URL builder
      *
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     public function getUrlBuilder()
     {
@@ -300,6 +329,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get asset service
      *
      * @return \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     public function getAssetRepository()
     {
@@ -310,6 +340,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get view config
      *
      * @return \Magento\Framework\View\ConfigInterface
+     * @since 2.0.0
      */
     public function getViewConfig()
     {
@@ -320,6 +351,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get cache state
      *
      * @return \Magento\Framework\App\Cache\StateInterface
+     * @since 2.0.0
      */
     public function getCacheState()
     {
@@ -330,6 +362,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     public function getLogger()
     {
@@ -340,6 +373,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get escaper
      *
      * @return \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     public function getEscaper()
     {
@@ -350,6 +384,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Get filter manager
      *
      * @return \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
      */
     public function getFilterManager()
     {
@@ -358,6 +393,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     public function getLocaleDate()
     {

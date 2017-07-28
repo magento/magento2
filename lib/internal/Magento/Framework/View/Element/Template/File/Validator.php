@@ -11,6 +11,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  * Class Validator
  * @package Magento\Framework\View\Element\Template\File
+ * @since 2.0.0
  */
 class Validator
 {
@@ -23,6 +24,7 @@ class Validator
      * Template files map
      *
      * @var []
+     * @since 2.0.0
      */
     protected $_templatesValidationResults = [];
 
@@ -30,6 +32,7 @@ class Validator
      * View filesystem
      *
      * @var \Magento\Framework\FileSystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -37,6 +40,7 @@ class Validator
      * Allow symlinks flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isAllowSymlinks = false;
 
@@ -44,6 +48,7 @@ class Validator
      * Root directory
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $directory = null;
 
@@ -51,6 +56,7 @@ class Validator
      * Themes directory
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_themesDir;
 
@@ -58,6 +64,7 @@ class Validator
      * Application directory
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_appDir;
 
@@ -65,6 +72,7 @@ class Validator
      * Compiled templates directory
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_compiledDir;
 
@@ -75,6 +83,7 @@ class Validator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
      * @param ComponentRegistrar $componentRegistrar
      * @param string|null $scope
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -100,6 +109,7 @@ class Validator
      *
      * @param string $filename
      * @return bool
+     * @since 2.0.0
      */
     public function isValid($filename)
     {
@@ -121,6 +131,7 @@ class Validator
      * @param string $path
      * @param string|array $directories
      * @return bool
+     * @since 2.0.0
      */
     protected function isPathInDirectories($path, $directories)
     {
@@ -139,6 +150,7 @@ class Validator
      * Instantiates filesystem directory
      *
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected function getRootDirectory()
     {

@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Payment\Block\Form\Container
 {
@@ -17,6 +18,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Session quote
      *
      * @var \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected $_sessionQuote;
 
@@ -27,6 +29,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param array $data
      * @param array $additionalChecks
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -45,6 +48,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      *
      * @param \Magento\Payment\Model\MethodInterface|null $method
      * @return bool
+     * @since 2.0.0
      */
     protected function _canUseMethod($method)
     {
@@ -55,6 +59,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Check existing of payment methods
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasMethods()
     {
@@ -69,6 +74,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Get current payment method code or the only available, if there is only one method
      *
      * @return string|false
+     * @since 2.0.0
      */
     public function getSelectedMethodCode()
     {
@@ -94,6 +100,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Enter description here...
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -104,7 +111,8 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Whether switch/solo card type available
      *
      * @return true
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function hasSsCardType()
     {

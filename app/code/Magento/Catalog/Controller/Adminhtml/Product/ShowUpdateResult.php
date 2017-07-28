@@ -10,15 +10,24 @@ use Magento\Catalog\Helper\Product\Composite;
 use Magento\Backend\Model\Session;
 use Magento\Backend\App\Action\Context;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult
+ *
+ * @since 2.0.0
+ */
 class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
 {
-    /** @var Composite */
+    /**
+     * @var \Magento\Catalog\Helper\Product\Composite
+     * @since 2.0.0
+     */
     protected $productCompositeHelper;
 
     /**
      * @param Context $context
      * @param Builder $productBuilder
      * @param Composite $productCompositeHelper
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -34,6 +43,7 @@ class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
      * in Wishlist and Cart controllers.
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

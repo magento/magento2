@@ -5,6 +5,11 @@
  */
 namespace Magento\GroupedProduct\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped
+ *
+ * @since 2.0.0
+ */
 class Grouped implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
@@ -12,6 +17,7 @@ class Grouped implements \Magento\Catalog\Model\Product\CopyConstructorInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Collection
+     * @since 2.0.0
      */
     protected function _getGroupedLinkCollection(\Magento\Catalog\Model\Product $product)
     {
@@ -33,6 +39,7 @@ class Grouped implements \Magento\Catalog\Model\Product\CopyConstructorInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
      * @return void
+     * @since 2.0.0
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {

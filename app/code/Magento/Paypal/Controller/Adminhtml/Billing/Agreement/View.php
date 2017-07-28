@@ -6,6 +6,11 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Adminhtml\Billing\Agreement\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
 {
     /**
@@ -19,6 +24,7 @@ class View extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      * View billing agreement action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

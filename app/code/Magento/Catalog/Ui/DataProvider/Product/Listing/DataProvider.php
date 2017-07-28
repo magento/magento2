@@ -14,11 +14,13 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Provide information about current store and currency for product listing ui component
+ * @since 2.2.0
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -33,6 +35,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param StoreManager $storeManager
      * @param array $meta
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         $name,
@@ -62,6 +65,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getData()
     {

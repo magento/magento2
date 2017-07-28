@@ -8,6 +8,11 @@ namespace Magento\Framework\Mview\View;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Mview\View\Changelog
+ *
+ * @since 2.0.0
+ */
 class Changelog implements ChangelogInterface
 {
     /**
@@ -24,6 +29,7 @@ class Changelog implements ChangelogInterface
      * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -31,16 +37,19 @@ class Changelog implements ChangelogInterface
      * View Id identifier
      *
      * @var string
+     * @since 2.0.0
      */
     protected $viewId;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -54,6 +63,7 @@ class Changelog implements ChangelogInterface
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function checkConnection()
     {
@@ -67,6 +77,7 @@ class Changelog implements ChangelogInterface
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function create()
     {
@@ -96,6 +107,7 @@ class Changelog implements ChangelogInterface
      *
      * @return void
      * @throws ChangelogTableNotExistsException
+     * @since 2.0.0
      */
     public function drop()
     {
@@ -113,6 +125,7 @@ class Changelog implements ChangelogInterface
      * @param int $versionId
      * @return boolean
      * @throws ChangelogTableNotExistsException
+     * @since 2.0.0
      */
     public function clear($versionId)
     {
@@ -133,6 +146,7 @@ class Changelog implements ChangelogInterface
      * @param int $toVersionId
      * @return int[]
      * @throws ChangelogTableNotExistsException
+     * @since 2.0.0
      */
     public function getList($fromVersionId, $toVersionId)
     {
@@ -162,6 +176,7 @@ class Changelog implements ChangelogInterface
      * @return int
      * @throws ChangelogTableNotExistsException
      * @throws \Exception
+     * @since 2.0.0
      */
     public function getVersion()
     {
@@ -184,6 +199,7 @@ class Changelog implements ChangelogInterface
      *
      * @throws \Exception
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -197,6 +213,7 @@ class Changelog implements ChangelogInterface
      * Get changlog entity column name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getColumnName()
     {
@@ -208,6 +225,7 @@ class Changelog implements ChangelogInterface
      *
      * @param string $viewId
      * @return Changelog
+     * @since 2.0.0
      */
     public function setViewId($viewId)
     {
@@ -217,6 +235,7 @@ class Changelog implements ChangelogInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getViewId()
     {

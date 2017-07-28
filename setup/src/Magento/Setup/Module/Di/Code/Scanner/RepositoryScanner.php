@@ -9,11 +9,13 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 
 /**
  * Class RepositoryScanner
+ * @since 2.0.0
  */
 class RepositoryScanner implements ScannerInterface
 {
     /**
      * @var bool
+     * @since 2.0.0
      */
     private $useAutoload = true;
 
@@ -22,6 +24,7 @@ class RepositoryScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {
@@ -60,6 +63,7 @@ class RepositoryScanner implements ScannerInterface
      *
      * @param boolean $useAutoload
      * @return void
+     * @since 2.0.0
      */
     public function setUseAutoload($useAutoload)
     {

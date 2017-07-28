@@ -14,11 +14,13 @@ use Psr\Log\LoggerInterface;
 /**
  * Class CommentsHistory
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -38,6 +40,7 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -73,6 +76,7 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      * Generate order history for ajax request
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

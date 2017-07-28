@@ -7,13 +7,15 @@ namespace Magento\Backend\Block\Widget\Grid;
 
 /**
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
  * @method string|array getInputNames()
+ * @since 2.0.0
  */
 class Serializer extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -21,6 +23,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -35,6 +38,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
      * Preparing global layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -52,6 +56,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
      * Set serializer template
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -64,6 +69,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
      *
      * @param bool $asJSON
      * @return string|array
+     * @since 2.0.0
      */
     public function getColumnInputNames($asJSON = false)
     {
@@ -77,6 +83,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
      * Get object data as JSON
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDataAsJSON()
     {

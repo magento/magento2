@@ -11,27 +11,48 @@ use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor
+ *
+ * @since 2.0.0
+ */
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
-    /** @var DataObject\Factory  */
+    /**
+     * @var \Magento\Framework\DataObject\Factory
+     * @since 2.0.0
+     */
     protected $objectFactory;
 
-    /** @var \Magento\Quote\Model\Quote\ProductOptionFactory  */
+    /**
+     * @var \Magento\Quote\Model\Quote\ProductOptionFactory
+     * @since 2.0.0
+     */
     protected $productOptionFactory;
 
-    /** @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory  */
+    /**
+     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     * @since 2.0.0
+     */
     protected $extensionFactory;
 
-    /** @var CustomOptionFactory  */
+    /**
+     * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
+     * @since 2.0.0
+     */
     protected $customOptionFactory;
 
-    /** @var \Magento\Catalog\Model\Product\Option\UrlBuilder */
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     * @since 2.1.0
+     */
     private $urlBuilder;
 
     /**
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -41,6 +62,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
@@ -59,6 +81,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -79,6 +102,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function processOptions(CartItemInterface $cartItem)
     {
@@ -106,6 +130,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param CartItemInterface $cartItem
      * @return array
+     * @since 2.0.0
      */
     protected function getOptions(CartItemInterface $cartItem)
     {
@@ -122,6 +147,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param array $options
      * @return null
+     * @since 2.0.0
      */
     protected function updateOptionsValues(array &$options)
     {
@@ -144,6 +170,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param array $optionValue
      * @return array
+     * @since 2.1.0
      */
     private function processFileOptionValue(array $optionValue)
     {
@@ -164,6 +191,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      *
      * @param array $optionValue
      * @return array
+     * @since 2.2.0
      */
     private function processDateOptionValue(array $optionValue)
     {
@@ -180,7 +208,8 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getUrlBuilder()
     {

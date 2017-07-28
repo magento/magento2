@@ -15,6 +15,7 @@ use Magento\Framework\Profiler;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Framework\Data\Form\AbstractForm
 {
@@ -22,6 +23,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * All form elements collection
      *
      * @var ElementCollection
+     * @since 2.0.0
      */
     protected $_allElements;
 
@@ -29,26 +31,31 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * form elements index
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_elementsIndex;
 
     /**
      * @var FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var RendererInterface
+     * @since 2.0.0
      */
     protected static $_defaultElementRenderer;
 
     /**
      * @var RendererInterface
+     * @since 2.0.0
      */
     protected static $_defaultFieldsetRenderer;
 
     /**
      * @var RendererInterface
+     * @since 2.0.0
      */
     protected static $_defaultFieldsetElementRenderer;
 
@@ -57,6 +64,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * @param ElementCollectionFactory $factoryCollection
      * @param FormKey $formKey
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -72,6 +80,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param RendererInterface $renderer
      * @return void
+     * @since 2.0.0
      */
     public static function setElementRenderer(RendererInterface $renderer = null)
     {
@@ -81,6 +90,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param RendererInterface $renderer
      * @return void
+     * @since 2.0.0
      */
     public static function setFieldsetRenderer(RendererInterface $renderer = null)
     {
@@ -90,6 +100,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param RendererInterface $renderer
      * @return void
+     * @since 2.0.0
      */
     public static function setFieldsetElementRenderer(RendererInterface $renderer = null)
     {
@@ -98,6 +109,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return RendererInterface
+     * @since 2.0.0
      */
     public static function getElementRenderer()
     {
@@ -106,6 +118,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return RendererInterface
+     * @since 2.0.0
      */
     public static function getFieldsetRenderer()
     {
@@ -114,6 +127,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return RendererInterface
+     * @since 2.0.0
      */
     public static function getFieldsetElementRenderer()
     {
@@ -124,6 +138,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * Return allowed HTML form attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -136,6 +151,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * @param AbstractElement $element
      * @param bool $after
      * @return $this
+     * @since 2.0.0
      */
     public function addElement(AbstractElement $element, $after = false)
     {
@@ -150,6 +166,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      *
      * @param   string $elementId
      * @return  bool
+     * @since 2.0.0
      */
     protected function _elementIdExists($elementId)
     {
@@ -159,6 +176,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param AbstractElement $element
      * @return $this
+     * @since 2.0.0
      */
     public function addElementToCollection($element)
     {
@@ -171,6 +189,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * @param string $elementId
      * @return bool
      * @throws \Exception
+     * @since 2.0.0
      */
     public function checkElementId($elementId)
     {
@@ -182,6 +201,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function getForm()
     {
@@ -193,6 +213,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      *
      * @param string $elementId
      * @return null|AbstractElement
+     * @since 2.0.0
      */
     public function getElement($elementId)
     {
@@ -205,6 +226,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param array $values
      * @return $this
+     * @since 2.0.0
      */
     public function setValues($values)
     {
@@ -221,6 +243,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param array $values
      * @return $this
+     * @since 2.0.0
      */
     public function addValues($values)
     {
@@ -241,6 +264,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      *
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function addFieldNameSuffix($suffix)
     {
@@ -257,6 +281,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      * @param string $name
      * @param string $suffix
      * @return string
+     * @since 2.0.0
      */
     public function addSuffixToName($name, $suffix)
     {
@@ -277,6 +302,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param string $elementId
      * @return $this
+     * @since 2.0.0
      */
     public function removeField($elementId)
     {
@@ -289,6 +315,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     /**
      * @param string $prefix
      * @return $this
+     * @since 2.0.0
      */
     public function setFieldContainerIdPrefix($prefix)
     {
@@ -298,6 +325,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFieldContainerIdPrefix()
     {
@@ -306,6 +334,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -334,6 +363,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHtml()
     {

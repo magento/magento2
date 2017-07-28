@@ -9,12 +9,18 @@ namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency\FetchRates
+ *
+ * @since 2.0.0
+ */
 class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
     /**
      * Fetch rates action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

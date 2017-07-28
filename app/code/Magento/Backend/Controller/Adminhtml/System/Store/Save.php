@@ -10,6 +10,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
  * Class Save
  *
  * Save controller for system entities such as: Store, StoreGroup, Website
+ * @since 2.0.0
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
@@ -18,6 +19,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      *
      * @param array $postData
      * @return array
+     * @since 2.2.0
      */
     private function processWebsiteSave($postData)
     {
@@ -43,6 +45,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      * @param array $postData
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
+     * @since 2.2.0
      */
     private function processStoreSave($postData)
     {
@@ -83,6 +86,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      * @param array $postData
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
+     * @since 2.2.0
      */
     private function processGroupSave($postData)
     {
@@ -111,6 +115,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -161,6 +166,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      * @param array $postData
      * @param \Magento\Store\Model\Group $groupModel
      * @return bool
+     * @since 2.1.0
      */
     private function isSelectedDefaultStoreActive(array $postData, \Magento\Store\Model\Group $groupModel)
     {

@@ -16,31 +16,37 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var DataProviderContainer
+     * @since 2.0.0
      */
     private $dataProviderContainer;
 
     /**
      * @var Builder\Container
+     * @since 2.0.0
      */
     private $aggregationContainer;
 
     /**
      * @var EntityMetadata
+     * @since 2.0.0
      */
     private $entityMetadata;
 
     /**
      * @var Resource
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var AggregationResolverInterface
+     * @since 2.1.0
      */
     private $aggregationResolver;
 
@@ -50,6 +56,7 @@ class Builder
      * @param AggregationContainer $aggregationContainer
      * @param EntityMetadata $entityMetadata
      * @param AggregationResolverInterface $aggregationResolver
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -70,6 +77,7 @@ class Builder
      * @param Table $documentsTable
      * @param array $documents
      * @return array
+     * @since 2.0.0
      */
     public function build(RequestInterface $request, Table $documentsTable, array $documents = [])
     {
@@ -81,6 +89,7 @@ class Builder
      * @param Table $documentsTable
      * @param array $documents
      * @return array
+     * @since 2.0.0
      */
     private function processAggregations(RequestInterface $request, Table $documentsTable, $documents)
     {
@@ -106,6 +115,7 @@ class Builder
      *
      * @param array $documents
      * @return array
+     * @since 2.1.0
      */
     private function extractDocumentIds(array $documents)
     {
@@ -117,7 +127,8 @@ class Builder
      *
      * @param Table $documentsTable
      * @return array
-     * @deprecated Added for backward compatibility
+     * @deprecated 2.1.0 Added for backward compatibility
+     * @since 2.1.0
      */
     private function getDocumentIds(Table $documentsTable)
     {
@@ -131,6 +142,7 @@ class Builder
      * Get Connection
      *
      * @return AdapterInterface
+     * @since 2.1.0
      */
     private function getConnection()
     {

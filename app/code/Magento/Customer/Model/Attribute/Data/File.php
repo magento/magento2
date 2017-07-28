@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\File
+ *
+ * @since 2.0.0
+ */
 class File extends \Magento\Eav\Model\Attribute\Data\File
 {
 }

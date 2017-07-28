@@ -6,12 +6,18 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFolder
+ *
+ * @since 2.0.0
+ */
 class DeleteFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * Delete folder action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

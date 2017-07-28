@@ -11,12 +11,18 @@
  */
 namespace Magento\Customer\Model\Config\Source\Address;
 
+/**
+ * Class \Magento\Customer\Model\Config\Source\Address\Type
+ *
+ * @since 2.0.0
+ */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Retrieve possible customer address types
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

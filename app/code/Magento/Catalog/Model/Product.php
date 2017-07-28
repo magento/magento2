@@ -37,6 +37,7 @@ use Magento\Framework\Pricing\SaleableInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Product extends \Magento\Catalog\Model\AbstractModel implements
     IdentityInterface,
@@ -45,6 +46,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 {
     /**
      * @var ProductLinkRepositoryInterface
+     * @since 2.1.0
      */
     protected $linkRepository;
 
@@ -71,21 +73,25 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalog_product';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'product';
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_canAffectOptions = false;
 
@@ -93,6 +99,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Product type singleton instance
      *
      * @var \Magento\Catalog\Model\Product\Type\AbstractType
+     * @since 2.0.0
      */
     protected $_typeInstance = null;
 
@@ -100,6 +107,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Product link instance
      *
      * @var Product\Link
+     * @since 2.0.0
      */
     protected $_linkInstance;
 
@@ -107,6 +115,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Product object customization (not stored in DB)
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_customOptions = [];
 
@@ -114,16 +123,19 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Product Url Instance
      *
      * @var Product\Url
+     * @since 2.0.0
      */
     protected $_urlModel = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected static $_url;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -131,6 +143,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Product option factory
      *
      * @var Product\OptionFactory
+     * @since 2.0.0
      */
     protected $optionFactory;
 
@@ -138,11 +151,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Product option
      *
      * @var Product\Option
+     * @since 2.0.0
      */
     protected $optionInstance;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_links = null;
 
@@ -150,6 +165,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Flag for available duplicate function
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_isDuplicable = true;
 
@@ -157,6 +173,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Flag for get Price function
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_calculatePrice = true;
 
@@ -164,16 +181,19 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
+     * @since 2.0.0
      */
     protected $_catalogProduct = null;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var \Magento\Framework\Data\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -181,6 +201,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Catalog product type
      *
      * @var Product\Type
+     * @since 2.0.0
      */
     protected $_catalogProductType;
 
@@ -188,6 +209,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Catalog product media config
      *
      * @var Product\Media\Config
+     * @since 2.0.0
      */
     protected $_catalogProductMediaConfig;
 
@@ -195,6 +217,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Catalog product status
      *
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @since 2.0.0
      */
     protected $_catalogProductStatus;
 
@@ -202,6 +225,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Catalog product visibility
      *
      * @var Product\Visibility
+     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -209,6 +233,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Stock item factory
      *
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
+     * @since 2.0.0
      */
     protected $_stockItemFactory;
 
@@ -216,6 +241,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Item option factory
      *
      * @var \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory
+     * @since 2.0.0
      */
     protected $_itemOptionFactory;
 
@@ -223,34 +249,43 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Filesystem facade
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
+     */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
+     * @since 2.0.0
      */
     protected $_productFlatIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @since 2.0.0
      */
     protected $_productPriceIndexerProcessor;
 
     /**
      * @var Indexer\Product\Eav\Processor
+     * @since 2.0.0
      */
     protected $_productEavIndexerProcessor;
 
     /**
      * @var \Magento\Framework\Pricing\PriceInfo\Base
+     * @since 2.0.0
      */
     protected $_priceInfo;
 
     /**
      * @var CategoryRepository
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -258,52 +293,62 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Instance of category collection.
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @since 2.0.0
      */
     protected $categoryCollection;
 
     /**
      * @var Product\Image\CacheFactory
+     * @since 2.0.0
      */
     protected $imageCacheFactory;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.0.0
      */
     protected $metadataService;
 
     /*
      * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
+     * @since 2.0.0
      */
     protected $entityCollectionProvider;
 
     /*
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @since 2.0.0
      */
     protected $linkProvider;
 
     /*
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
+     * @since 2.0.0
      */
     protected $productLinkFactory;
 
     /*
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
+     * @since 2.0.0
      */
     protected $productLinkExtensionFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_productIdCached;
 
     /**
      * List of attributes in ProductInterface
      * @var array
+     * @since 2.0.0
      */
     protected $interfaceAttributes = [
         ProductInterface::SKU,
@@ -322,6 +367,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $joinProcessor;
 
@@ -329,16 +375,19 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Media converter pool
      *
      * @var Product\Attribute\Backend\Media\EntryConverterPool
+     * @since 2.0.0
      */
     protected $mediaGalleryEntryConverterPool;
 
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     * @since 2.1.0
      */
     protected $mediaGalleryProcessor;
 
     /**
      * @var Product\LinkTypeProvider
+     * @since 2.1.0
      */
     protected $linkTypeProvider;
 
@@ -382,6 +431,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -463,6 +513,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Initialize resources
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -471,6 +522,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function getCustomAttributesCodes()
     {
@@ -485,6 +537,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve Store Id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -498,6 +551,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get collection instance
      *
      * @return object
+     * @since 2.0.0
      */
     public function getResourceCollection()
     {
@@ -510,6 +564,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product url model
      *
      * @return Product\Url
+     * @since 2.0.0
      */
     public function getUrlModel()
     {
@@ -522,6 +577,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @todo implement full validation process with errors returning which are ignoring now
      *
      * @return array
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -536,6 +592,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return string
      * @codeCoverageIgnoreStart
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -548,6 +605,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product price through type instance
      *
      * @return float
+     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -564,6 +622,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @see \Magento\Catalog\Model\Product\Visibility
      *
      * @return int
+     * @since 2.0.0
      */
     public function getVisibility()
     {
@@ -574,6 +633,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product attribute set id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getAttributeSetId()
     {
@@ -584,6 +644,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product creation date
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -594,6 +655,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get previous product update date
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdatedAt()
     {
@@ -605,6 +667,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param bool $calculate
      * @return void
+     * @since 2.0.0
      */
     public function setPriceCalculation($calculate = true)
     {
@@ -615,6 +678,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product type identifier
      *
      * @return array|string
+     * @since 2.0.0
      */
     public function getTypeId()
     {
@@ -627,6 +691,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product status
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -639,6 +704,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Type instance implements product type depended logic and is a singleton shared by all products of the same type.
      *
      * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @since 2.0.0
      */
     public function getTypeInstance()
     {
@@ -653,6 +719,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param \Magento\Catalog\Model\Product\Type\AbstractType|null $instance  Product type instance
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function setTypeInstance($instance)
     {
@@ -664,6 +731,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve link instance
      *
      * @return  Product\Link
+     * @since 2.0.0
      */
     public function getLinkInstance()
     {
@@ -675,6 +743,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   string $sku
      * @return  integer
+     * @since 2.0.0
      */
     public function getIdBySku($sku)
     {
@@ -685,6 +754,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve product category id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCategoryId()
     {
@@ -699,6 +769,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve product category
      *
      * @return \Magento\Catalog\Model\Category
+     * @since 2.0.0
      */
     public function getCategory()
     {
@@ -714,6 +785,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve assigned category Ids
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCategoryIds()
     {
@@ -737,6 +809,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve product categories
      *
      * @return \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     public function getCategoryCollection()
     {
@@ -753,6 +826,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param \Magento\Framework\Data\Collection $categoryCollection
      * @return $this
+     * @since 2.0.0
      */
     protected function setCategoryCollection(\Magento\Framework\Data\Collection $categoryCollection)
     {
@@ -764,6 +838,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve product websites identifiers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWebsiteIds()
     {
@@ -778,6 +853,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get all sore ids where product is presented
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -802,6 +878,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $skipSuper Not used
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getAttributes($groupId = null, $skipSuper = false)
     {
@@ -826,6 +903,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -894,6 +972,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   bool $value
      * @return  bool
+     * @since 2.0.0
      */
     public function canAffectOptions($value = null)
     {
@@ -907,6 +986,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Saving product type related data and init index
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -940,6 +1020,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -954,6 +1035,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get quantity for product
      *
      * @return float
+     * @since 2.0.0
      */
     public function getQty()
     {
@@ -964,6 +1046,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Callback for entity reindex
      *
      * @return void
+     * @since 2.0.0
      */
     public function priceReindexCallback()
     {
@@ -976,6 +1059,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Reindex callback for EAV indexer
      *
      * @return void
+     * @since 2.0.0
      */
     public function eavReindexCallback()
     {
@@ -988,6 +1072,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check if data was changed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDataChanged()
     {
@@ -1003,6 +1088,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Init indexing process after product save
      *
      * @return void
+     * @since 2.0.0
      */
     public function reindex()
     {
@@ -1020,6 +1106,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Register indexing event before delete product
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -1031,6 +1118,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Init indexing process after product delete commit
      *
      * @return void
+     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -1043,6 +1131,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Load product options if they exists
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -1057,6 +1146,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Clear cache related with product id
      *
      * @return $this
+     * @since 2.0.0
      */
     public function cleanCache()
     {
@@ -1068,6 +1158,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product price model
      *
      * @return \Magento\Catalog\Model\Product\Type\Price
+     * @since 2.0.0
      */
     public function getPriceModel()
     {
@@ -1078,6 +1169,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product Price Info object
      *
      * @return \Magento\Framework\Pricing\PriceInfo\Base
+     * @since 2.0.0
      */
     public function getPriceInfo()
     {
@@ -1091,6 +1183,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Gets list of product tier prices
      *
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     * @since 2.0.0
      */
     public function getTierPrices()
     {
@@ -1102,6 +1195,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
+     * @since 2.0.0
      */
     public function setTierPrices(array $tierPrices = null)
     {
@@ -1114,6 +1208,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   float $qty
      * @return  float|array
+     * @since 2.0.0
      */
     public function getTierPrice($qty = null)
     {
@@ -1124,6 +1219,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get formatted by currency product price
      *
      * @return  array || double
+     * @since 2.0.0
      */
     public function getFormatedPrice()
     {
@@ -1139,6 +1235,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param float $price Price amount
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function setFinalPrice($price)
     {
@@ -1151,6 +1248,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param float $qty
      * @return float
+     * @since 2.0.0
      */
     public function getFinalPrice($qty = null)
     {
@@ -1164,6 +1262,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns calculated final price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getCalculatedFinalPrice()
     {
@@ -1174,6 +1273,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns minimal price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getMinimalPrice()
     {
@@ -1184,6 +1284,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns special price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getSpecialPrice()
     {
@@ -1194,6 +1295,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns starting date of the special price
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getSpecialFromDate()
     {
@@ -1204,6 +1306,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns end date of the special price
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getSpecialToDate()
     {
@@ -1214,6 +1317,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve array of related products
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRelatedProducts()
     {
@@ -1232,6 +1336,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve related products identifiers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRelatedProductIds()
     {
@@ -1249,6 +1354,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve collection related product
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
+     * @since 2.0.0
      */
     public function getRelatedProductCollection()
     {
@@ -1261,6 +1367,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve collection related link
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Collection
+     * @since 2.0.0
      */
     public function getRelatedLinkCollection()
     {
@@ -1276,6 +1383,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve array of up sell products
      *
      * @return array
+     * @since 2.0.0
      */
     public function getUpSellProducts()
     {
@@ -1293,6 +1401,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve up sell products identifiers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getUpSellProductIds()
     {
@@ -1310,6 +1419,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve collection up sell product
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
+     * @since 2.0.0
      */
     public function getUpSellProductCollection()
     {
@@ -1322,6 +1432,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve collection up sell link
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Collection
+     * @since 2.0.0
      */
     public function getUpSellLinkCollection()
     {
@@ -1337,6 +1448,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve array of cross sell products
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCrossSellProducts()
     {
@@ -1354,6 +1466,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve cross sell products identifiers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCrossSellProductIds()
     {
@@ -1371,6 +1484,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve collection cross sell product
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
+     * @since 2.0.0
      */
     public function getCrossSellProductCollection()
     {
@@ -1383,6 +1497,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve collection cross sell link
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Collection
+     * @since 2.0.0
      */
     public function getCrossSellLinkCollection()
     {
@@ -1398,6 +1513,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product links info
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @since 2.0.0
      */
     public function getProductLinks()
     {
@@ -1412,6 +1528,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
      * @return $this
+     * @since 2.0.0
      */
     public function setProductLinks(array $links = null)
     {
@@ -1428,6 +1545,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve attributes for media gallery
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMediaAttributes()
     {
@@ -1447,6 +1565,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve assoc array that contains media attribute values of the product
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMediaAttributeValues()
     {
@@ -1462,6 +1581,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve media gallery images
      *
      * @return \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     public function getMediaGalleryImages()
     {
@@ -1490,6 +1610,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Checks whether product has Media Gallery attribute.
      *
      * @return bool
+     * @since 2.1.0
      */
     public function hasGalleryAttribute()
     {
@@ -1513,6 +1634,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param boolean       $move              if true, it will move source file
      * @param boolean       $exclude           mark image as disabled in product page view
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function addImageToMediaGallery($file, $mediaAttribute = null, $move = false, $exclude = true)
     {
@@ -1533,6 +1655,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve product media config
      *
      * @return Product\Media\Config
+     * @since 2.0.0
      */
     public function getMediaConfig()
     {
@@ -1543,6 +1666,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns visible status IDs in catalog
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVisibleInCatalogStatuses()
     {
@@ -1553,6 +1677,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve visible statuses
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVisibleStatuses()
     {
@@ -1563,6 +1688,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check Product visible in catalog
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isVisibleInCatalog()
     {
@@ -1573,6 +1699,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve visible in site visibilities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVisibleInSiteVisibilities()
     {
@@ -1583,6 +1710,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check Product visible in site
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isVisibleInSiteVisibility()
     {
@@ -1593,6 +1721,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Checks product can be duplicated
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isDuplicable()
     {
@@ -1604,6 +1733,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param boolean $value
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function setIsDuplicable($value)
     {
@@ -1615,6 +1745,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check is product available for sale
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSalable()
     {
@@ -1646,6 +1777,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check whether the product type or stock allows to purchase the product
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable()
     {
@@ -1657,6 +1789,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsSalable()
     {
@@ -1676,6 +1809,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Data helper wrapper
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isVirtual()
     {
@@ -1686,6 +1820,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Alias for isSalable()
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSaleable()
     {
@@ -1696,6 +1831,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Whether product available in stock
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isInStock()
     {
@@ -1707,6 +1843,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $attributeCode Code of the attribute
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeText($attributeCode)
     {
@@ -1719,6 +1856,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns array with dates for custom design
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCustomDesignDate()
     {
@@ -1734,6 +1872,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param  bool $useSid
      * @return string
+     * @since 2.0.0
      */
     public function getProductUrl($useSid = null)
     {
@@ -1745,6 +1884,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $params the route params
      * @return string
+     * @since 2.0.0
      */
     public function getUrlInStore($params = [])
     {
@@ -1756,6 +1896,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $str URL
      * @return string
+     * @since 2.0.0
      */
     public function formatUrlKey($str)
     {
@@ -1769,6 +1910,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param mixed  $value New attribute value
      * @param int    $store Store ID
      * @return void
+     * @since 2.0.0
      */
     public function addAttributeUpdate($code, $value, $store)
     {
@@ -1788,6 +1930,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $arrAttributes Attribute array
      * @return array
+     * @since 2.0.0
      */
     public function toArray(array $arrAttributes = [])
     {
@@ -1805,6 +1948,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $data Array to form the object from
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function fromArray(array $data)
     {
@@ -1829,6 +1973,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns request path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRequestPath()
     {
@@ -1838,6 +1983,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Custom function for other modules
      * @return string
+     * @since 2.0.0
      */
     public function getGiftMessageAvailable()
     {
@@ -1848,6 +1994,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check is product composite
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isComposite()
     {
@@ -1858,6 +2005,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check if product can be configured
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canConfigure()
     {
@@ -1869,6 +2017,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve sku through type instance
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSku()
     {
@@ -1879,6 +2028,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve weight through type instance
      *
      * @return float
+     * @since 2.0.0
      */
     public function getWeight()
     {
@@ -1889,6 +2039,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve option instance
      *
      * @return Product\Option
+     * @since 2.0.0
      */
     public function getOptionInstance()
     {
@@ -1904,6 +2055,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param Product\Option $option
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function addOption(Product\Option $option)
     {
@@ -1919,6 +2071,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $optionId
      * @return Product\Option|null
+     * @since 2.0.0
      */
     public function getOptionById($optionId)
     {
@@ -1938,6 +2091,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve options collection of product
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     * @since 2.0.0
      */
     public function getProductOptionsCollection()
     {
@@ -1948,6 +2102,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get all options of product
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -1957,6 +2112,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null)
     {
@@ -1969,6 +2125,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsVirtual()
     {
@@ -1982,6 +2139,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param   mixed  $value   Value of the option
      * @param   int|Product    $product Product ID
      * @return  $this
+     * @since 2.0.0
      */
     public function addCustomOption($code, $value, $product = null)
     {
@@ -1998,6 +2156,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $options Array of options
      * @return void
+     * @since 2.0.0
      */
     public function setCustomOptions(array $options)
     {
@@ -2008,6 +2167,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get all custom options of the product
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCustomOptions()
     {
@@ -2019,6 +2179,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   string $code
      * @return  array
+     * @since 2.0.0
      */
     public function getCustomOption($code)
     {
@@ -2032,6 +2193,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Checks if there custom option for this product
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasCustomOptions()
     {
@@ -2047,6 +2209,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   int $categoryId
      * @return  bool
+     * @since 2.0.0
      */
     public function canBeShowInCategory($categoryId)
     {
@@ -2057,6 +2220,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve category ids where product is available
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAvailableInCategories()
     {
@@ -2067,6 +2231,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve default attribute set id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDefaultAttributeSetId()
     {
@@ -2077,6 +2242,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Reset all model data
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -2089,6 +2255,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get cache tags associated with object id
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getCacheIdTags()
     {
@@ -2108,6 +2275,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param  array $productIds
      * @return boolean|null
+     * @since 2.0.0
      */
     public function isProductsHasSku(array $productIds)
     {
@@ -2128,6 +2296,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param  \Magento\Framework\DataObject $buyRequest
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function processBuyRequest(\Magento\Framework\DataObject $buyRequest)
     {
@@ -2160,6 +2329,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get preconfigured values from product
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getPreconfiguredValues()
     {
@@ -2176,6 +2346,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * To be sure that all product custom options does not has ID and has product instance
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function prepareCustomOptions()
     {
@@ -2192,6 +2363,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Clearing references on product
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function _clearReferences()
     {
@@ -2203,6 +2375,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Clearing product's data
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function _clearData()
     {
@@ -2225,6 +2398,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Clearing references to product from product's options
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function _clearOptionReferences()
     {
@@ -2247,6 +2421,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string|array $columns One or several columns
      * @return array
+     * @since 2.0.0
      */
     public function getProductEntitiesInfo($columns = null)
     {
@@ -2257,6 +2432,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Checks whether product has disabled status
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisabled()
     {
@@ -2267,6 +2443,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Sets product image from it's child if possible
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImage()
     {
@@ -2278,6 +2455,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get identities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -2304,6 +2482,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check whether stock status changed
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isStockStatusChanged()
     {
@@ -2325,6 +2504,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Reload PriceInfo object
      *
      * @return \Magento\Framework\Pricing\PriceInfo\Base
+     * @since 2.0.0
      */
     public function reloadPriceInfo()
     {
@@ -2339,6 +2519,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
+     * @since 2.0.0
      */
     public function __toArray()
     {
@@ -2365,6 +2546,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Convert Category model into flat array.
      *
      * @return array
+     * @since 2.0.0
      */
     public function toFlatArray()
     {
@@ -2387,6 +2569,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -2398,6 +2581,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -2409,6 +2593,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -2420,6 +2605,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $attributeSetId
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeSetId($attributeSetId)
     {
@@ -2431,6 +2617,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -2442,6 +2629,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $status
      * @return $this
+     * @since 2.0.0
      */
     public function setStatus($status)
     {
@@ -2453,6 +2641,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $visibility
      * @return $this
+     * @since 2.0.0
      */
     public function setVisibility($visibility)
     {
@@ -2464,6 +2653,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $createdAt
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -2475,6 +2665,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $updatedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -2486,6 +2677,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param float $weight
      * @return $this
+     * @since 2.0.0
      */
     public function setWeight($weight)
     {
@@ -2497,6 +2689,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $typeId
      * @return $this
+     * @since 2.0.0
      */
     public function setTypeId($typeId)
     {
@@ -2510,6 +2703,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductExtensionInterface
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -2527,6 +2721,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes)
     {
@@ -2538,6 +2733,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param array $mediaGallery
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
+     * @since 2.0.0
      */
     protected function convertToMediaGalleryInterface(array $mediaGallery)
     {
@@ -2554,6 +2750,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
+     * @since 2.0.0
      */
     public function getMediaGalleryEntries()
     {
@@ -2569,6 +2766,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @param ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
+     * @since 2.0.0
      */
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null)
     {
@@ -2589,6 +2787,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Identifier getter
      *
      * @return int
+     * @since 2.1.0
      */
     public function getId()
     {
@@ -2600,6 +2799,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param int $value
      * @return $this
+     * @since 2.1.0
      */
     public function setId($value)
     {
@@ -2608,6 +2808,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return ProductLinkRepositoryInterface
+     * @since 2.1.0
      */
     private function getLinkRepository()
     {
@@ -2620,6 +2821,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return Product\Gallery\Processor
+     * @since 2.1.0
      */
     private function getMediaGalleryProcessor()
     {
@@ -2635,6 +2837,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param array $productIds
      * @return $this
+     * @since 2.2.0
      */
     public function setAssociatedProductIds(array $productIds)
     {
@@ -2647,10 +2850,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|null
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function getQuantityAndStockStatus()
     {
@@ -2663,10 +2867,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $quantityAndStockStatusData
      * @return $this
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function setQuantityAndStockStatus($quantityAndStockStatusData)
     {
@@ -2679,10 +2884,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|null
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function getStockData()
     {
@@ -2695,10 +2901,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $stockData
      * @return $this
      *
-     * @deprecated as Product model shouldn't be responsible for stock status
+     * @deprecated 2.2.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     * @since 2.2.0
      */
     public function setStockData($stockData)
     {

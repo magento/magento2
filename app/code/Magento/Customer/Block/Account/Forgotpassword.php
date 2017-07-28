@@ -12,11 +12,13 @@ use Magento\Framework\View\Element\Template;
  * Customer account navigation sidebar
  *
  * @api
+ * @since 2.0.0
  */
 class Forgotpassword extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var Url
+     * @since 2.0.0
      */
     protected $customerUrl;
 
@@ -24,6 +26,7 @@ class Forgotpassword extends \Magento\Framework\View\Element\Template
      * @param Template\Context $context
      * @param Url $customerUrl
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -38,6 +41,7 @@ class Forgotpassword extends \Magento\Framework\View\Element\Template
      * Get login URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLoginUrl()
     {

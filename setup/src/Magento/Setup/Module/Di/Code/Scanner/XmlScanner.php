@@ -7,15 +7,22 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\ObjectManager\Code\Generator\Proxy as ProxyGenerator;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\XmlScanner
+ *
+ * @since 2.0.0
+ */
 class XmlScanner implements ScannerInterface
 {
     /**
      * @var \Magento\Setup\Module\Di\Compiler\Log\Log $log
+     * @since 2.0.0
      */
     protected $_log;
 
     /**
      * @param \Magento\Setup\Module\Di\Compiler\Log\Log $log
+     * @since 2.0.0
      */
     public function __construct(\Magento\Setup\Module\Di\Compiler\Log\Log $log)
     {
@@ -27,6 +34,7 @@ class XmlScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {
@@ -56,6 +64,7 @@ class XmlScanner implements ScannerInterface
      *
      * @param array $output
      * @return array
+     * @since 2.0.0
      */
     protected function _filterEntities(array $output)
     {

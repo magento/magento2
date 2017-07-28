@@ -7,16 +7,19 @@ namespace Magento\Framework\Filter\FilterManager;
 
 /**
  * Filter plugin manager config
+ * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $factories = [\Magento\Framework\Filter\Factory::class, \Magento\Framework\Filter\ZendFactory::class];
 
     /**
      * @param string[] $factories
+     * @since 2.0.0
      */
     public function __construct(array $factories = [])
     {
@@ -29,6 +32,7 @@ class Config implements ConfigInterface
      * Get list of factories
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getFactories()
     {

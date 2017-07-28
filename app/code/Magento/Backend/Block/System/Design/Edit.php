@@ -5,10 +5,16 @@
  */
 namespace Magento\Backend\Block\System\Design;
 
+/**
+ * Class \Magento\Backend\Block\System\Design\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::system/design/edit.phtml';
 
@@ -16,6 +22,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -23,6 +30,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -35,6 +43,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -89,6 +99,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDesignChangeId()
     {
@@ -97,6 +108,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDeleteUrl()
     {
@@ -105,6 +117,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -113,6 +126,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getValidationUrl()
     {
@@ -121,6 +135,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHeader()
     {

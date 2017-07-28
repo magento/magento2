@@ -9,10 +9,16 @@ namespace Magento\Sales\Controller\Guest;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Guest\PrintShipment
+ *
+ * @since 2.0.0
+ */
 class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintShipment
 {
     /**
      * @var OrderLoader
+     * @since 2.0.0
      */
     protected $orderLoader;
 
@@ -22,6 +28,7 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
      * @param OrderLoader $orderLoader
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -41,6 +48,7 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Compiled extends AbstractEnvironment implements EnvironmentInterface
 {
@@ -33,6 +34,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
 
     /**
      * @var \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
+     * @since 2.0.0
      */
     private $configLoader;
 
@@ -43,6 +45,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * @param string $factoryClass
      *
      * @return FactoryInterface
+     * @since 2.0.0
      */
     protected function createFactory($arguments, $factoryClass)
     {
@@ -57,6 +60,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * Returns initialized compiled config
      *
      * @return \Magento\Framework\Interception\ObjectManager\ConfigInterface
+     * @since 2.0.0
      */
     public function getDiConfig()
     {
@@ -73,6 +77,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * Returns config data as array
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getConfigData()
     {
@@ -83,6 +88,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * Returns new instance of compiled config loader
      *
      * @return \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
+     * @since 2.0.0
      */
     public function getObjectManagerConfigLoader()
     {
@@ -96,6 +102,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {

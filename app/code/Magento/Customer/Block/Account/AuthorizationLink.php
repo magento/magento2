@@ -13,6 +13,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
 {
@@ -20,16 +21,19 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
      * Customer session
      *
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $_customerUrl;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
+     * @since 2.0.0
      */
     protected $_postDataHelper;
 
@@ -39,6 +43,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -55,6 +60,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -65,6 +71,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -75,6 +82,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
      * Retrieve params for post request
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPostParams()
     {
@@ -85,6 +93,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
      * Is logged in
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isLoggedIn()
     {
@@ -93,6 +102,7 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implem
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSortOrder()
     {

@@ -11,12 +11,18 @@
  */
 namespace Magento\Captcha\Model\Config;
 
+/**
+ * Class \Magento\Captcha\Model\Config\Mode
+ *
+ * @since 2.0.0
+ */
 class Mode implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Get options for captcha mode selection field
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

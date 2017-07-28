@@ -5,25 +5,34 @@
  */
 namespace Magento\Sales\Helper;
 
+/**
+ * Class \Magento\Sales\Helper\Admin
+ *
+ * @since 2.0.0
+ */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Sales\Model\Config
+     * @since 2.0.0
      */
     protected $_salesConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
@@ -33,6 +42,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Escaper $escaper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -56,6 +66,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   bool $strong
      * @param   string $separator
      * @return  string
+     * @since 2.0.0
      */
     public function displayPriceAttribute($dataObject, $code, $strong = false, $separator = '<br/>')
     {
@@ -81,6 +92,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   bool $strong
      * @param   string $separator
      * @return  string
+     * @since 2.0.0
      */
     public function displayPrices($dataObject, $basePrice, $price, $strong = false, $separator = '<br/>')
     {
@@ -115,6 +127,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @since 2.0.0
      */
     public function applySalableProductTypesFilter($collection)
     {
@@ -142,6 +155,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $data
      * @param null|array $allowedTags
      * @return string
+     * @since 2.0.0
      */
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {

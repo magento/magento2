@@ -9,6 +9,7 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
 /**
  * Admin role data grid collection
+ * @since 2.0.0
  */
 class Collection extends \Magento\Authorization\Model\ResourceModel\Role\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Authorization\Model\ResourceModel\Role\Collect
      * Prepare select for load
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

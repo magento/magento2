@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib\Cookie;
  * Class PublicCookieMetadata
  *
  * @api
+ * @since 2.0.0
  */
 class PublicCookieMetadata extends CookieMetadata
 {
@@ -20,6 +21,7 @@ class PublicCookieMetadata extends CookieMetadata
      *
      * @param int $duration Time in seconds.
      * @return $this
+     * @since 2.0.0
      */
     public function setDuration($duration)
     {
@@ -30,6 +32,7 @@ class PublicCookieMetadata extends CookieMetadata
      * Set the cookie duration to one year
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setDurationOneYear()
     {
@@ -42,6 +45,7 @@ class PublicCookieMetadata extends CookieMetadata
      * The cookie duration can be translated into an expiration date at the time the cookie is sent.
      *
      * @return int|null Time in seconds.
+     * @since 2.0.0
      */
     public function getDuration()
     {
@@ -53,6 +57,7 @@ class PublicCookieMetadata extends CookieMetadata
      *
      * @param bool $httpOnly
      * @return $this
+     * @since 2.0.0
      */
     public function setHttpOnly($httpOnly)
     {
@@ -64,6 +69,7 @@ class PublicCookieMetadata extends CookieMetadata
      *
      * @param bool $secure
      * @return $this
+     * @since 2.0.0
      */
     public function setSecure($secure)
     {

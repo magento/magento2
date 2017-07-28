@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Webapi;
 
+/**
+ * Class \Magento\Framework\Webapi\Response
+ *
+ * @since 2.0.0
+ */
 class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implements
     \Magento\Framework\App\Response\HttpInterface
 {
@@ -45,6 +50,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
      *
      * @param string $mimeType MIME type
      * @return $this
+     * @since 2.0.0
      */
     public function setMimeType($mimeType)
     {
@@ -59,6 +65,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
      * @param array $params
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function addMessage($message, $code, $params = [], $type = self::MESSAGE_TYPE_ERROR)
     {
@@ -72,6 +79,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
      * Has messages.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasMessages()
     {
@@ -82,6 +90,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
      * Return messages.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMessages()
     {
@@ -92,6 +101,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
      * Clear messages.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clearMessages()
     {

@@ -9,6 +9,7 @@ namespace Magento\Customer\Controller\Adminhtml\System\Config;
  * VAT validation controller
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class Validatevat extends \Magento\Backend\App\Action
 {
@@ -16,6 +17,7 @@ abstract class Validatevat extends \Magento\Backend\App\Action
      * Perform customer VAT ID validation
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _validate()
     {

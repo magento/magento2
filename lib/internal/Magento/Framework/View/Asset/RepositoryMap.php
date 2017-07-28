@@ -11,6 +11,7 @@ use Magento\Framework\View\DesignInterface;
 
 /**
  * Class RepositoryMap
+ * @since 2.2.0
  */
 class RepositoryMap
 {
@@ -44,16 +45,19 @@ class RepositoryMap
 
     /**
      * @var DesignInterface
+     * @since 2.2.0
      */
     private $design;
 
     /**
      * @var Filesystem
+     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $maps = [];
 
@@ -61,6 +65,7 @@ class RepositoryMap
      * RepositoryMap constructor.
      * @param DesignInterface $design
      * @param Filesystem $filesystem
+     * @since 2.2.0
      */
     public function __construct(DesignInterface $design, Filesystem $filesystem)
     {
@@ -72,6 +77,7 @@ class RepositoryMap
      * @param string $fileId
      * @param array $params
      * @return array
+     * @since 2.2.0
      */
     public function getMap($fileId, array $params)
     {

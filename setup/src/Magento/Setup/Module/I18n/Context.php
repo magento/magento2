@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem;
 
 /**
  *  Context
+ * @since 2.0.0
  */
 class Context
 {
@@ -39,6 +40,7 @@ class Context
      * Constructor
      *
      * @param ComponentRegistrar $componentRegistrar
+     * @since 2.0.0
      */
     public function __construct(ComponentRegistrar $componentRegistrar)
     {
@@ -54,6 +56,7 @@ class Context
      * @param string $path
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getContextByPath($path)
     {
@@ -76,6 +79,7 @@ class Context
      * @param string $componentType
      * @param string $path
      * @return bool|string
+     * @since 2.0.0
      */
     private function getComponentName($componentType, $path)
     {
@@ -95,6 +99,7 @@ class Context
      * @param array $value
      * @return string|null
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function buildPathToLocaleDirectoryByContext($type, $value)
     {

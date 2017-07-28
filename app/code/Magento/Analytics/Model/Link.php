@@ -11,16 +11,19 @@ use Magento\Analytics\Api\Data\LinkInterface;
  * Class Link
  *
  * Represents link with collected data and initialized vector for decryption.
+ * @since 2.2.0
  */
 class Link implements LinkInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $url;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $initializationVector;
 
@@ -29,6 +32,7 @@ class Link implements LinkInterface
      *
      * @param string $url
      * @param string $initializationVector
+     * @since 2.2.0
      */
     public function __construct($url, $initializationVector)
     {
@@ -38,6 +42,7 @@ class Link implements LinkInterface
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getUrl()
     {
@@ -46,6 +51,7 @@ class Link implements LinkInterface
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getInitializationVector()
     {

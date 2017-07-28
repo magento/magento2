@@ -11,6 +11,11 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
+/**
+ * Class \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links
+ *
+ * @since 2.0.0
+ */
 class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
@@ -18,6 +23,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -33,6 +39,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Generates element html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -61,6 +68,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
      *
      * @param array $option
      * @return string
+     * @since 2.0.0
      */
     protected function _optionToHtml(array $option)
     {
@@ -87,6 +95,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Prepare array of anchor attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

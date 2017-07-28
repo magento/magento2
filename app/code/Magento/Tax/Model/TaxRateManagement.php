@@ -12,25 +12,34 @@ use Magento\Tax\Api\TaxRateManagementInterface;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 
+/**
+ * Class \Magento\Tax\Model\TaxRateManagement
+ *
+ * @since 2.0.0
+ */
 class TaxRateManagement implements TaxRateManagementInterface
 {
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var TaxRuleRepositoryInterface
+     * @since 2.0.0
      */
     protected $taxRuleRepository;
 
     /**
      * @var TaxRateRepositoryInterface
+     * @since 2.0.0
      */
     protected $taxRateRepository;
 
@@ -39,6 +48,7 @@ class TaxRateManagement implements TaxRateManagementInterface
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @since 2.0.0
      */
     public function __construct(
         TaxRuleRepositoryInterface $taxRuleRepository,
@@ -54,6 +64,7 @@ class TaxRateManagement implements TaxRateManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRatesByCustomerAndProductTaxClassId($customerTaxClassId, $productTaxClassId)
     {

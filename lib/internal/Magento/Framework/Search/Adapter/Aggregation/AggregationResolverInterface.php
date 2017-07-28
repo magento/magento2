@@ -7,6 +7,11 @@ namespace Magento\Framework\Search\Adapter\Aggregation;
 
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * Interface \Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface
+ *
+ * @since 2.1.0
+ */
 interface AggregationResolverInterface
 {
     /**
@@ -15,6 +20,7 @@ interface AggregationResolverInterface
      * @param RequestInterface $request
      * @param array $documentIds
      * @return array
+     * @since 2.1.0
      */
     public function resolve(RequestInterface $request, array $documentIds);
 }

@@ -9,6 +9,7 @@ namespace Magento\Downloadable\Model;
  * Downloadable component interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ComponentInterface
 {
@@ -16,6 +17,7 @@ interface ComponentInterface
      * Retrieve Base files path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBasePath();
 
@@ -23,6 +25,7 @@ interface ComponentInterface
      * Retrieve base temporary path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseTmpPath();
 
@@ -32,6 +35,7 @@ interface ComponentInterface
      * @param int $productId
      * @param int $storeId
      * @return array
+     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId);
 }

@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Validator\File;
 
+/**
+ * Class \Magento\Framework\Validator\File\Size
+ *
+ * @since 2.0.0
+ */
 class Size extends \Zend_Validate_File_Size implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

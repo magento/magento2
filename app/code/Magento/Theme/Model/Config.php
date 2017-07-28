@@ -11,20 +11,28 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Class \Magento\Theme\Model\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**
      * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     * @since 2.0.0
      */
     protected $_configWriter;
 
     /**
      * @var \Magento\Framework\App\Config\ValueInterface
+     * @since 2.0.0
      */
     protected $_configData;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -32,16 +40,19 @@ class Config
      * Application event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
+     * @since 2.0.0
      */
     protected $_configCache;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
+     * @since 2.0.0
      */
     protected $_layoutCache;
 
@@ -52,6 +63,7 @@ class Config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Cache\FrontendInterface $configCache
      * @param \Magento\Framework\Cache\FrontendInterface $layoutCache
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ValueInterface $configData,
@@ -76,6 +88,7 @@ class Config
      * @param array $stores
      * @param string $scope
      * @return $this
+     * @since 2.0.0
      */
     public function assignToStore(
         $theme,
@@ -111,6 +124,7 @@ class Config
      * @param string $scope
      * @param string $configPath
      * @return \Magento\Config\Model\ResourceModel\Config\Data\Collection
+     * @since 2.0.0
      */
     protected function _getAssignedScopesCollection($scope, $configPath)
     {
@@ -131,6 +145,7 @@ class Config
      * @param string $scope
      * @param bool &$isReassigned
      * @return $this
+     * @since 2.0.0
      */
     protected function _unassignThemeFromStores($themeId, $stores, $scope, &$isReassigned)
     {
@@ -152,6 +167,7 @@ class Config
      * @param string $scope
      * @param bool &$isReassigned
      * @return $this
+     * @since 2.0.0
      */
     protected function _assignThemeToStores($themeId, $stores, $scope, &$isReassigned)
     {
@@ -171,6 +187,7 @@ class Config
      * @param string $themeId
      * @param bool &$isReassigned
      * @return $this
+     * @since 2.0.0
      */
     protected function _assignThemeToDefaultScope($themeId, &$isReassigned)
     {

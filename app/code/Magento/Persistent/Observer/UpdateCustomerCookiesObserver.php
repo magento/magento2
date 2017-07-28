@@ -9,6 +9,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class UpdateCustomerCookies
+ * @since 2.0.0
  */
 class UpdateCustomerCookiesObserver implements ObserverInterface
 {
@@ -16,6 +17,7 @@ class UpdateCustomerCookiesObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession;
 
@@ -23,6 +25,7 @@ class UpdateCustomerCookiesObserver implements ObserverInterface
      * Customer repository
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -31,6 +34,7 @@ class UpdateCustomerCookiesObserver implements ObserverInterface
      *
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -45,6 +49,7 @@ class UpdateCustomerCookiesObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

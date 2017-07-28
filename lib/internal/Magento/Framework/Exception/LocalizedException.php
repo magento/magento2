@@ -12,16 +12,19 @@ use Magento\Framework\Phrase\Renderer\Placeholder;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class LocalizedException extends \Exception
 {
     /**
      * @var \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected $phrase;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $logMessage;
 
@@ -29,6 +32,7 @@ class LocalizedException extends \Exception
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param int $code
+     * @since 2.0.0
      */
     public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
@@ -40,6 +44,7 @@ class LocalizedException extends \Exception
      * Get the un-processed message, without the parameters filled in
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRawMessage()
     {
@@ -50,6 +55,7 @@ class LocalizedException extends \Exception
      * Get parameters, corresponding to placeholders in raw exception message
      *
      * @return array
+     * @since 2.0.0
      */
     public function getParameters()
     {
@@ -60,6 +66,7 @@ class LocalizedException extends \Exception
      * Get the un-localized message, but with the parameters filled in
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLogMessage()
     {

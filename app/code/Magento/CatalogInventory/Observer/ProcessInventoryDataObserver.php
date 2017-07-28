@@ -15,10 +15,11 @@ use Magento\Framework\Event\Observer as EventObserver;
  * This observer prepares stock data for saving by combining stock data from the stock data property
  * and quantity_and_stock_status attribute and setting it to the single point represented by stock data property.
  *
- * @deprecated Stock data should be processed using the module API
+ * @deprecated 2.2.0 Stock data should be processed using the module API
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+ * @since 2.2.0
  */
 class ProcessInventoryDataObserver implements ObserverInterface
 {
@@ -26,6 +27,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      * Stock Registry
      *
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @since 2.2.0
      */
     private $stockRegistry;
 
@@ -33,6 +35,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      * Construct
      *
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -45,6 +48,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.2.0
      */
     public function execute(EventObserver $observer)
     {
@@ -60,6 +64,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      *
      * @param Product $product
      * @return void
+     * @since 2.2.0
      */
     private function processStockData(Product $product)
     {
@@ -86,6 +91,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      * @param StockItemInterface $stockItem
      * @param array $quantityAndStockStatus
      * @return array
+     * @since 2.2.0
      */
     private function prepareQuantityAndStockStatus(StockItemInterface $stockItem, array $quantityAndStockStatus)
     {
@@ -120,6 +126,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
      * @param Item $stockItem
      * @param array $quantityAndStockStatus
      * @return void
+     * @since 2.2.0
      */
     private function setStockDataToProduct(Product $product, Item $stockItem, array $quantityAndStockStatus)
     {

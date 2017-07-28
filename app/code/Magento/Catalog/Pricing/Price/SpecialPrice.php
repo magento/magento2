@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Special price model
+ * @since 2.0.0
  */
 class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BasePriceProviderInterface
 {
@@ -24,6 +25,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
 
     /**
      * @var TimezoneInterface
+     * @since 2.0.0
      */
     protected $localeDate;
 
@@ -33,6 +35,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $localeDate
+     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -47,6 +50,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
 
     /**
      * @return bool|float
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -65,6 +69,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      * Returns special price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getSpecialPrice()
     {
@@ -79,6 +84,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      * Returns starting date of the special price
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getSpecialFromDate()
     {
@@ -89,6 +95,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      * Returns end date of the special price
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getSpecialToDate()
     {
@@ -97,6 +104,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isScopeDateInInterval()
     {
@@ -109,6 +117,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isPercentageDiscount()
     {

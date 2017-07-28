@@ -9,10 +9,16 @@ namespace Magento\AdminNotification\Block\Grid\Renderer;
 
 use Magento\Framework\Notification\MessageInterface;
 
+/**
+ * Class \Magento\AdminNotification\Block\Grid\Renderer\Severity
+ *
+ * @since 2.0.0
+ */
 class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\AdminNotification\Model\Inbox
+     * @since 2.0.0
      */
     protected $_notice;
 
@@ -20,6 +26,7 @@ class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\AdminNotification\Model\Inbox $notice
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -35,6 +42,7 @@ class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

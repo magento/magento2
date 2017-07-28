@@ -19,6 +19,7 @@ use Magento\Tax\Api\Data\TaxRateInterface;
  * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate _getResource()
  * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
 {
@@ -47,20 +48,24 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\Title
+     * @since 2.0.0
      */
     protected $_titleModel = null;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
+     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\TitleFactory
+     * @since 2.0.0
      */
     protected $_titleFactory;
     /**
      * @var Region
+     * @since 2.0.0
      */
     protected $directoryRegion;
 
@@ -76,6 +81,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -107,6 +113,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Magento model constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -120,6 +127,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -189,6 +197,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Save rate titles
      *
      * @return \Magento\Tax\Model\Calculation\Rate
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -202,6 +211,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @return \Magento\Tax\Model\Calculation\Rate
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -218,6 +228,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * redeclared for dispatch tax_settings_change_after event
      *
      * @return \Magento\Tax\Model\Calculation\Rate
+     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -230,6 +241,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param array|null $titles
      * @return void
+     * @since 2.0.0
      */
     public function saveTitles($titles = null)
     {
@@ -259,6 +271,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Returns a tax title
      *
      * @return \Magento\Tax\Model\Calculation\Rate\Title
+     * @since 2.0.0
      */
     public function getTitleModel()
     {
@@ -270,6 +283,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTitles()
     {
@@ -286,6 +300,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Deletes all tax rates
      *
      * @return \Magento\Tax\Model\Calculation\Rate
+     * @since 2.0.0
      */
     public function deleteAllRates()
     {
@@ -299,6 +314,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param  string $code
      * @return \Magento\Tax\Model\Calculation\Rate
+     * @since 2.0.0
      */
     public function loadByCode($code)
     {
@@ -310,6 +326,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Check if rate exists in tax rule
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _isInRule()
     {
@@ -318,6 +335,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRegionName()
     {
@@ -331,6 +349,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * @codeCoverageIgnoreStart
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTaxCalculationRateId()
     {
@@ -339,6 +358,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTaxCountryId()
     {
@@ -347,6 +367,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTaxRegionId()
     {
@@ -355,6 +376,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTaxPostcode()
     {
@@ -363,6 +385,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getZipFrom()
     {
@@ -371,6 +394,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getZipTo()
     {
@@ -379,6 +403,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRate()
     {
@@ -387,6 +412,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -395,6 +421,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getZipIsRange()
     {
@@ -406,6 +433,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param string $taxCountryId
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxCountryId($taxCountryId)
     {
@@ -417,6 +445,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int $taxRegionId
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxRegionId($taxRegionId)
     {
@@ -428,6 +457,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param string $regionName
      * @return $this
+     * @since 2.0.0
      */
     public function setRegionName($regionName)
     {
@@ -439,6 +469,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param string $taxPostCode
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxPostcode($taxPostCode)
     {
@@ -450,6 +481,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int $zipIsRange
      * @return $this
+     * @since 2.0.0
      */
     public function setZipIsRange($zipIsRange)
     {
@@ -461,6 +493,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int $zipFrom
      * @return $this
+     * @since 2.0.0
      */
     public function setZipFrom($zipFrom)
     {
@@ -472,6 +505,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param int $zipTo
      * @return $this
+     * @since 2.0.0
      */
     public function setZipTo($zipTo)
     {
@@ -483,6 +517,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setRate($rate)
     {
@@ -494,6 +529,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -505,6 +541,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param \Magento\Tax\Api\Data\TaxRateTitleInterface[] $titles
      * @return $this
+     * @since 2.0.0
      */
     public function setTitles(array $titles = null)
     {
@@ -517,6 +554,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\TaxRateExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -528,6 +566,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * @param \Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes)
     {

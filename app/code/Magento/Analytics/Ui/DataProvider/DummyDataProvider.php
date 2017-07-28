@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * Class which serves as stub for degenerated UI component.
+ * @since 2.2.0
  */
 class DummyDataProvider implements DataProviderInterface
 {
@@ -19,6 +20,7 @@ class DummyDataProvider implements DataProviderInterface
      * Search result object.
      *
      * @var SearchResultInterface
+     * @since 2.2.0
      */
     private $searchResult;
 
@@ -26,6 +28,7 @@ class DummyDataProvider implements DataProviderInterface
      * Search criteria object.
      *
      * @var SearchCriteriaInterface
+     * @since 2.2.0
      */
     private $searchCriteria;
 
@@ -33,6 +36,7 @@ class DummyDataProvider implements DataProviderInterface
      * Data collection.
      *
      * @var Collection
+     * @since 2.2.0
      */
     private $collection;
 
@@ -40,6 +44,7 @@ class DummyDataProvider implements DataProviderInterface
      * Own name of this provider.
      *
      * @var string
+     * @since 2.2.0
      */
     private $name;
 
@@ -47,6 +52,7 @@ class DummyDataProvider implements DataProviderInterface
      * Provider configuration data.
      *
      * @var array
+     * @since 2.2.0
      */
     private $data;
 
@@ -56,6 +62,7 @@ class DummyDataProvider implements DataProviderInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param Collection $collection
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         $name,
@@ -75,6 +82,7 @@ class DummyDataProvider implements DataProviderInterface
      * Get Data Provider name
      *
      * @return string
+     * @since 2.2.0
      */
     public function getName()
     {
@@ -85,6 +93,7 @@ class DummyDataProvider implements DataProviderInterface
      * Get config data
      *
      * @return mixed
+     * @since 2.2.0
      */
     public function getConfigData()
     {
@@ -97,6 +106,7 @@ class DummyDataProvider implements DataProviderInterface
      * @param mixed $config
      *
      * @return bool
+     * @since 2.2.0
      */
     public function setConfigData($config)
     {
@@ -107,6 +117,7 @@ class DummyDataProvider implements DataProviderInterface
 
     /**
      * @return array
+     * @since 2.2.0
      */
     public function getMeta()
     {
@@ -119,6 +130,7 @@ class DummyDataProvider implements DataProviderInterface
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
@@ -132,6 +144,7 @@ class DummyDataProvider implements DataProviderInterface
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
@@ -143,6 +156,7 @@ class DummyDataProvider implements DataProviderInterface
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
@@ -153,6 +167,7 @@ class DummyDataProvider implements DataProviderInterface
      * Get primary field name
      *
      * @return string
+     * @since 2.2.0
      */
     public function getPrimaryFieldName()
     {
@@ -163,6 +178,7 @@ class DummyDataProvider implements DataProviderInterface
      * Get field name in request
      *
      * @return string
+     * @since 2.2.0
      */
     public function getRequestFieldName()
     {
@@ -173,6 +189,7 @@ class DummyDataProvider implements DataProviderInterface
      * Get data
      *
      * @return mixed
+     * @since 2.2.0
      */
     public function getData()
     {
@@ -186,6 +203,7 @@ class DummyDataProvider implements DataProviderInterface
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -199,6 +217,7 @@ class DummyDataProvider implements DataProviderInterface
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function addOrder($field, $direction)
     {
@@ -212,6 +231,7 @@ class DummyDataProvider implements DataProviderInterface
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function setLimit($offset, $size)
     {
@@ -221,6 +241,7 @@ class DummyDataProvider implements DataProviderInterface
      * Returns search criteria
      *
      * @return SearchCriteriaInterface
+     * @since 2.2.0
      */
     public function getSearchCriteria()
     {
@@ -229,6 +250,7 @@ class DummyDataProvider implements DataProviderInterface
 
     /**
      * @return SearchResultInterface
+     * @since 2.2.0
      */
     public function getSearchResult()
     {

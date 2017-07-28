@@ -10,10 +10,16 @@ use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Assign
+ *
+ * @since 2.0.0
+ */
 class Assign extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -21,6 +27,7 @@ class Assign extends \Magento\Sales\Controller\Adminhtml\Order\Status
      * @param Context $context
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -35,6 +42,7 @@ class Assign extends \Magento\Sales\Controller\Adminhtml\Order\Status
      * Assign status to state form
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

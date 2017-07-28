@@ -17,6 +17,7 @@ namespace Magento\Customer\Model\Data;
  * @method setRpTokenCreatedAt(string $rpTokenCreatedAt)
  * @method setPasswordHash(string $hashedPassword)
  * @method setDeleteable(bool $deleteable)
+ * @since 2.0.0
  */
 class CustomerSecure extends \Magento\Framework\DataObject
 {

@@ -11,15 +11,20 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * Customer Show Customer Model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Customer extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $storeManager;
 
     /**
@@ -32,6 +37,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -53,6 +59,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      * Retrieve attribute code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getAttributeCode()
     {
@@ -63,6 +70,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      * Retrieve attribute objects
      *
      * @return AbstractAttribute[]
+     * @since 2.0.0
      */
     protected function _getAttributeObjects()
     {
@@ -73,6 +81,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      * Actions after save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -117,6 +126,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      * Processing object after delete data
      *
      * @return \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     public function afterDelete()
     {

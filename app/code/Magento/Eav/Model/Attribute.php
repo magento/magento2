@@ -19,6 +19,7 @@ use Magento\Store\Model\Website;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -39,6 +40,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Active Website instance
      *
      * @var Website
+     * @since 2.0.0
      */
     protected $_website;
 
@@ -48,6 +50,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param Website|int $website
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setWebsite($website)
     {
@@ -59,6 +62,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return active website instance
      *
      * @return Website
+     * @since 2.0.0
      */
     public function getWebsite()
     {
@@ -73,6 +77,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Processing object after save data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -84,6 +89,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return forms in which the attribute
      *
      * @return array
+     * @since 2.0.0
      */
     public function getUsedInForms()
     {
@@ -99,6 +105,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return validate rules
      *
      * @return array
+     * @since 2.0.0
      */
     public function getValidateRules()
     {
@@ -116,6 +123,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @param array|string $rules
      * @return $this
+     * @since 2.0.0
      */
     public function setValidateRules($rules)
     {
@@ -134,6 +142,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getScopeValue($key)
     {
@@ -149,6 +158,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getIsRequired()
     {
@@ -160,6 +170,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getIsVisible()
     {
@@ -171,6 +182,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getDefaultValue()
     {
@@ -182,6 +194,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getMultilineCount()
     {
@@ -190,6 +203,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function afterDelete()
     {

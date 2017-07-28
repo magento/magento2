@@ -7,15 +7,22 @@ namespace Magento\Quote\Model\Product\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
+/**
+ * Class \Magento\Quote\Model\Product\Plugin\RemoveQuoteItems
+ *
+ * @since 2.2.0
+ */
 class RemoveQuoteItems
 {
     /**
      * @var \Magento\Quote\Model\Product\QuoteItemsCleanerInterface
+     * @since 2.2.0
      */
     private $quoteItemsCleaner;
 
     /**
      * @param \Magento\Quote\Model\Product\QuoteItemsCleanerInterface $quoteItemsCleaner
+     * @since 2.2.0
      */
     public function __construct(\Magento\Quote\Model\Product\QuoteItemsCleanerInterface $quoteItemsCleaner)
     {
@@ -28,6 +35,7 @@ class RemoveQuoteItems
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return ProductResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterDelete(
         ProductResource $subject,

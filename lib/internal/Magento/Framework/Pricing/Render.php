@@ -19,10 +19,11 @@ use Magento\Framework\View\Element\Template;
  * @method string getPriceRenderHandle()
  *
  * @api
+ * @since 2.0.0
  */
 class Render extends AbstractBlock
 {
-    /**@#+
+    /**#@+
      * Zones where prices displaying can be configured
      */
     const ZONE_ITEM_VIEW = 'item_view';
@@ -32,7 +33,9 @@ class Render extends AbstractBlock
     const ZONE_EMAIL     = 'email';
     const ZONE_CART      = 'cart';
     const ZONE_DEFAULT   = null;
-    /**@#-*/
+
+    /**#@-*/
+
 
     /**
      * Default type renderer
@@ -45,6 +48,7 @@ class Render extends AbstractBlock
      * Price layout
      *
      * @var Layout
+     * @since 2.0.0
      */
     protected $priceLayout;
 
@@ -54,6 +58,7 @@ class Render extends AbstractBlock
      * @param Template\Context $context
      * @param Layout $priceLayout
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -68,6 +73,7 @@ class Render extends AbstractBlock
      * Prepare layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -85,6 +91,7 @@ class Render extends AbstractBlock
      * @return string
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function render($priceCode, SaleableInterface $saleableItem, array $arguments = [])
     {
@@ -110,6 +117,7 @@ class Render extends AbstractBlock
      * @param array $arguments
      * @return string
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function renderAmount(
         AmountInterface $amount,

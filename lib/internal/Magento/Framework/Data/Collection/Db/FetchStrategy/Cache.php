@@ -11,36 +11,43 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Retrieve collection data from cache, fail over to another fetch strategy, if cache does not exist yet
+ * @since 2.0.0
  */
 class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
 {
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
+     * @since 2.0.0
      */
     private $_cache;
 
     /**
      * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
+     * @since 2.0.0
      */
     private $_fetchStrategy;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheIdPrefix = '';
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_cacheTags = [];
 
     /**
      * @var int|bool|null
+     * @since 2.0.0
      */
     protected $_cacheLifetime = null;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -53,6 +60,7 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
      * @param array $cacheTags
      * @param int|bool|null $cacheLifetime
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Cache\FrontendInterface $cache,
@@ -72,6 +80,7 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function fetchAll(Select $select, array $bindParams = [])
     {
@@ -96,6 +105,7 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
      *
      * @param \Magento\Framework\DB\Select|string $select
      * @return string
+     * @since 2.0.0
      */
     protected function _getSelectCacheId($select)
     {

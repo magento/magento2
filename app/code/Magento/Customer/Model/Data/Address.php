@@ -15,12 +15,14 @@ use \Magento\Framework\Api\AttributeValueFactory;
  *
  *
  * @api
+ * @since 2.0.0
  */
 class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\AddressInterface
 {
     /**
      * @var \Magento\Customer\Api\AddressMetadataInterface
+     * @since 2.0.0
      */
     protected $metadataService;
 
@@ -29,6 +31,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @param AttributeValueFactory $attributeValueFactory
      * @param \Magento\Customer\Api\AddressMetadataInterface $metadataService
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
@@ -42,6 +45,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function getCustomAttributesCodes()
     {
@@ -55,6 +59,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -65,6 +70,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get region
      *
      * @return \Magento\Customer\Api\Data\RegionInterface|null
+     * @since 2.0.0
      */
     public function getRegion()
     {
@@ -75,6 +81,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get region ID
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRegionId()
     {
@@ -85,6 +92,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get country id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCountryId()
     {
@@ -95,6 +103,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get street
      *
      * @return string[]|null
+     * @since 2.0.0
      */
     public function getStreet()
     {
@@ -105,6 +114,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get company
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCompany()
     {
@@ -115,6 +125,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get telephone number
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getTelephone()
     {
@@ -125,6 +136,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get fax number
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getFax()
     {
@@ -135,6 +147,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get postcode
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPostcode()
     {
@@ -145,6 +158,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get city name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCity()
     {
@@ -155,6 +169,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get first name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getFirstname()
     {
@@ -165,6 +180,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get last name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getLastname()
     {
@@ -175,6 +191,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get middle name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getMiddlename()
     {
@@ -185,6 +202,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get prefix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPrefix()
     {
@@ -195,6 +213,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get suffix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSuffix()
     {
@@ -205,6 +224,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get Vat id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getVatId()
     {
@@ -215,6 +235,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get customer id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -225,6 +246,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get if this address is default shipping address.
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function isDefaultShipping()
     {
@@ -235,6 +257,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Get if this address is default billing address
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function isDefaultBilling()
     {
@@ -246,6 +269,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -257,6 +281,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {
@@ -268,6 +293,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\Customer\Api\Data\RegionInterface $region
      * @return $this
+     * @since 2.0.0
      */
     public function setRegion(RegionInterface $region = null)
     {
@@ -279,6 +305,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param int $regionId
      * @return $this
+     * @since 2.0.0
      */
     public function setRegionId($regionId)
     {
@@ -290,6 +317,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $countryId
      * @return $this
+     * @since 2.0.0
      */
     public function setCountryId($countryId)
     {
@@ -301,6 +329,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string[] $street
      * @return $this
+     * @since 2.0.0
      */
     public function setStreet(array $street)
     {
@@ -312,6 +341,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $company
      * @return $this
+     * @since 2.0.0
      */
     public function setCompany($company)
     {
@@ -323,6 +353,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $telephone
      * @return $this
+     * @since 2.0.0
      */
     public function setTelephone($telephone)
     {
@@ -334,6 +365,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $fax
      * @return $this
+     * @since 2.0.0
      */
     public function setFax($fax)
     {
@@ -345,6 +377,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $postcode
      * @return $this
+     * @since 2.0.0
      */
     public function setPostcode($postcode)
     {
@@ -356,6 +389,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $city
      * @return $this
+     * @since 2.0.0
      */
     public function setCity($city)
     {
@@ -367,6 +401,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $firstName
      * @return $this
+     * @since 2.0.0
      */
     public function setFirstname($firstName)
     {
@@ -378,6 +413,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $lastName
      * @return $this
+     * @since 2.0.0
      */
     public function setLastname($lastName)
     {
@@ -389,6 +425,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $middleName
      * @return $this
+     * @since 2.0.0
      */
     public function setMiddlename($middleName)
     {
@@ -400,6 +437,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $prefix
      * @return $this
+     * @since 2.0.0
      */
     public function setPrefix($prefix)
     {
@@ -411,6 +449,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function setSuffix($suffix)
     {
@@ -422,6 +461,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param string $vatId
      * @return $this
+     * @since 2.0.0
      */
     public function setVatId($vatId)
     {
@@ -433,6 +473,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $isDefaultShipping
      * @return $this
+     * @since 2.0.0
      */
     public function setIsDefaultShipping($isDefaultShipping)
     {
@@ -444,6 +485,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param bool $isDefaultBilling
      * @return $this
+     * @since 2.0.0
      */
     public function setIsDefaultBilling($isDefaultBilling)
     {
@@ -454,6 +496,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * {@inheritdoc}
      *
      * @return \Magento\Customer\Api\Data\AddressExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -465,6 +508,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      *
      * @param \Magento\Customer\Api\Data\AddressExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Customer\Api\Data\AddressExtensionInterface $extensionAttributes)
     {

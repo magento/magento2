@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\DataObject\Copy\Config;
 
+/**
+ * Class \Magento\Framework\DataObject\Copy\Config\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -12,6 +17,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -30,6 +36,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $scope
      * @return array
+     * @since 2.0.0
      */
     protected function _convertScope($scope)
     {
@@ -49,6 +56,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $fieldset
      * @return array
+     * @since 2.0.0
      */
     protected function _convertFieldset($fieldset)
     {
@@ -68,6 +76,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $field
      * @return array
+     * @since 2.0.0
      */
     protected function _convertField($field)
     {

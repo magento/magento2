@@ -8,10 +8,16 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\PageCache\Observer\InvalidateCache
+ *
+ * @since 2.0.0
+ */
 class InvalidateCache implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @since 2.0.0
      */
     protected $_typeList;
 
@@ -19,12 +25,14 @@ class InvalidateCache implements ObserverInterface
      * Application config object
      *
      * @var \Magento\PageCache\Model\Config
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\Framework\App\Cache\TypeListInterface $typeList
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
@@ -40,6 +48,7 @@ class InvalidateCache implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

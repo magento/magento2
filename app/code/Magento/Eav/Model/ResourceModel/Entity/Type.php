@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity;
  * EAV entity type resource model
  *
  * @api
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Additional attribute tables data
      *
      * @var array
+     * @since 2.2.0
      */
     private $additionalAttributeTables = [];
 
@@ -24,6 +26,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -37,6 +40,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $code
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function loadByCode($object, $code)
     {
@@ -48,6 +52,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param integer $entityTypeId
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {

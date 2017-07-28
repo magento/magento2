@@ -19,41 +19,49 @@ use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 
 /**
  * Fallback through different scopes and merge them
+ * @since 2.2.0
  */
 class Fallback implements PostProcessorInterface
 {
     /**
      * @var Scopes
+     * @since 2.2.0
      */
     private $scopes;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $storeData = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $websiteData = [];
 
     /**
      * @var Store
+     * @since 2.2.0
      */
     private $storeResource;
 
     /**
      * @var Website
+     * @since 2.2.0
      */
     private $websiteResource;
 
     /**
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 
@@ -65,6 +73,7 @@ class Fallback implements PostProcessorInterface
      * @param Store $storeResource
      * @param Website $websiteResource
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.2.0
      */
     public function __construct(
         Scopes $scopes,
@@ -82,6 +91,7 @@ class Fallback implements PostProcessorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function process(array $data)
     {
@@ -115,6 +125,7 @@ class Fallback implements PostProcessorInterface
      * @param array $defaultConfig
      * @param array $websitesConfig
      * @return array
+     * @since 2.2.0
      */
     private function prepareWebsitesConfig(
         array $defaultConfig,
@@ -138,6 +149,7 @@ class Fallback implements PostProcessorInterface
      * @param array $websitesConfig
      * @param array $storesConfig
      * @return array
+     * @since 2.2.0
      */
     private function prepareStoresConfig(
         array $defaultConfig,
@@ -166,6 +178,7 @@ class Fallback implements PostProcessorInterface
      * @param array $websites Has next format: (website_code => [website_data])
      * @param int $id
      * @return array
+     * @since 2.2.0
      */
     private function getWebsiteConfig(array $websites, $id)
     {

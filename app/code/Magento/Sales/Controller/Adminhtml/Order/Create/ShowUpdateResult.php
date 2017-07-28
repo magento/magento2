@@ -10,10 +10,16 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\ShowUpdateResult
+ *
+ * @since 2.0.0
+ */
 class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * @var RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -24,6 +30,7 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -48,6 +55,7 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * to prevent popup alert with resend data question
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

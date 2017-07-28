@@ -7,6 +7,7 @@ namespace Magento\Framework\Api\Search;
 
 /**
  * Facet Bucket
+ * @since 2.0.0
  */
 interface BucketInterface
 {
@@ -14,6 +15,7 @@ interface BucketInterface
      * Get field name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -21,6 +23,7 @@ interface BucketInterface
      * Get field values
      *
      * @return \Magento\Framework\Api\Search\AggregationValueInterface[]
+     * @since 2.0.0
      */
     public function getValues();
 }

@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\DefinitionInterface
+ *
+ * @since 2.0.0
+ */
 interface DefinitionInterface
 {
     /**
@@ -24,6 +29,7 @@ interface DefinitionInterface
      *
      * @param string $className
      * @return array|null
+     * @since 2.0.0
      */
     public function getParameters($className);
 
@@ -31,6 +37,7 @@ interface DefinitionInterface
      * Retrieve list of all classes covered with definitions
      *
      * @return array
+     * @since 2.0.0
      */
     public function getClasses();
 }

@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Base for service collections
+ * @since 2.0.0
  */
 abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collection
 {
@@ -27,21 +28,25 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @see addFieldToFilter() for more information on conditions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $fieldFilters = [];
 
     /**
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\SortOrderBuilder
+     * @since 2.0.0
      */
     protected $sortOrderBuilder;
 
@@ -50,6 +55,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder
+     * @since 2.0.0
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -106,6 +112,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param string|int|array $condition
      * @throws LocalizedException if some error in the input could be detected.
      * @return $this
+     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -129,6 +136,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param string|array $field
      * @param string|int|array $condition
      * @return $this
+     * @since 2.0.0
      */
     private function processFilters($field, $condition)
     {
@@ -158,6 +166,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param string|array $field
      * @param string|int|array $condition
      * @return $this
+     * @since 2.0.0
      */
     private function addFilterGroupsForSingleConditions($field, $condition)
     {
@@ -170,6 +179,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param string|array $field
      * @param array $condition
      * @return $this
+     * @since 2.0.0
      */
     private function addFilterGroupsForMultipleConditions($field, $condition)
     {
@@ -201,6 +211,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * Creates a search criteria DTO based on the array of field filters.
      *
      * @return SearchCriteria
+     * @since 2.0.0
      */
     protected function getSearchCriteria()
     {
@@ -236,6 +247,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param string $field Field for new filter
      * @param string|array $condition Condition for new filter.
      * @return Filter
+     * @since 2.0.0
      */
     protected function createFilterData($field, $condition)
     {

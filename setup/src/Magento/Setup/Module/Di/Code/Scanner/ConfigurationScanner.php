@@ -7,6 +7,11 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\App\Area;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner
+ *
+ * @since 2.1.0
+ */
 class ConfigurationScanner
 {
     /**
@@ -14,6 +19,7 @@ class ConfigurationScanner
      *
      * @param \Magento\Framework\App\Config\FileResolver $fileResolver
      * @param \Magento\Framework\App\AreaList $areaList
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\Config\FileResolver $fileResolver,
@@ -29,6 +35,7 @@ class ConfigurationScanner
      * @param string $fileName
      *
      * @return array array of paths to the configuration files
+     * @since 2.1.0
      */
     public function scan($fileName)
     {

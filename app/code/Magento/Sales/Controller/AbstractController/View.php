@@ -9,15 +9,22 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\View
+ *
+ * @since 2.0.0
+ */
 abstract class View extends Action\Action
 {
     /**
      * @var \Magento\Sales\Controller\AbstractController\OrderLoaderInterface
+     * @since 2.0.0
      */
     protected $orderLoader;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -25,6 +32,7 @@ abstract class View extends Action\Action
      * @param Action\Context $context
      * @param OrderLoaderInterface $orderLoader
      * @param PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -40,6 +48,7 @@ abstract class View extends Action\Action
      * Order view page
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

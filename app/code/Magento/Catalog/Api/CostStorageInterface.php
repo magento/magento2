@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Product cost storage.
  * @api
+ * @since 2.2.0
  */
 interface CostStorageInterface
 {
@@ -18,6 +19,7 @@ interface CostStorageInterface
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\CostInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.2.0
      */
     public function get(array $skus);
 
@@ -31,6 +33,7 @@ interface CostStorageInterface
      *
      * @param \Magento\Catalog\Api\Data\CostInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
+     * @since 2.2.0
      */
     public function update(array $prices);
 
@@ -42,6 +45,7 @@ interface CostStorageInterface
      * @return bool Will return True if deleted.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @since 2.2.0
      */
     public function delete(array $skus);
 }

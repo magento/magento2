@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * Layer attribute filter
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
@@ -16,6 +17,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Resource instance
      *
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute
+     * @since 2.0.0
      */
     protected $_resource;
 
@@ -23,11 +25,13 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\Framework\Filter\StripTags
+     * @since 2.0.0
      */
     protected $tagFilter;
 
@@ -40,6 +44,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Filter\StripTags $tagFilter
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -62,6 +67,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Retrieve resource instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -73,6 +79,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param   \Magento\Framework\App\RequestInterface $request
      * @return  $this
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -94,6 +101,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
+     * @since 2.0.0
      */
     protected function _getItemsData()
     {

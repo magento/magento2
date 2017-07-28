@@ -12,6 +12,11 @@ use Magento\Framework\DB\SelectFactory;
 /*
  * Connection adapter interface
  */
+/**
+ * Interface \Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface
+ *
+ * @since 2.0.0
+ */
 interface ConnectionAdapterInterface
 {
     /**
@@ -21,6 +26,7 @@ interface ConnectionAdapterInterface
      * @param SelectFactory|null $selectFactory
      * @return AdapterInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getConnection(LoggerInterface $logger = null, SelectFactory $selectFactory = null);
 }

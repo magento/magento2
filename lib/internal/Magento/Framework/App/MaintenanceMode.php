@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem;
 
 /**
  * Application Maintenance Mode
+ * @since 2.0.0
  */
 class MaintenanceMode
 {
@@ -35,6 +36,7 @@ class MaintenanceMode
      * Path to store files
      *
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $flagDir;
 
@@ -42,6 +44,7 @@ class MaintenanceMode
      * Constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -55,6 +58,7 @@ class MaintenanceMode
      *
      * @param string $remoteAddr
      * @return bool
+     * @since 2.0.0
      */
     public function isOn($remoteAddr = '')
     {
@@ -70,6 +74,7 @@ class MaintenanceMode
      *
      * @param bool $isOn
      * @return bool
+     * @since 2.0.0
      */
     public function set($isOn)
     {
@@ -88,6 +93,7 @@ class MaintenanceMode
      * @param string $addresses
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function setAddresses($addresses)
     {
@@ -109,6 +115,7 @@ class MaintenanceMode
      * Get list of IP addresses effective for maintenance mode
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getAddressInfo()
     {

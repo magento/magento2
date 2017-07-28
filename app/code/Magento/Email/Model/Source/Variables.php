@@ -9,6 +9,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Store Contact Information source model
+ * @since 2.0.0
  */
 class Variables implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,11 +17,13 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      * Assoc array of configuration variables
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_configVariables = [];
 
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -55,6 +58,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      *
      * @param bool $withGroup
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray($withGroup = false)
     {
@@ -76,6 +80,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getData()
     {

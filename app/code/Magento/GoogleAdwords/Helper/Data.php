@@ -9,6 +9,7 @@ namespace Magento\GoogleAdwords\Helper;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -78,6 +79,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -91,6 +93,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Is Google AdWords active
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isGoogleAdwordsActive()
     {
@@ -109,6 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve language codes from config
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getLanguageCodes()
     {
@@ -120,6 +124,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $language
      * @return string
+     * @since 2.0.0
      */
     public function convertLanguageCodeToLocaleCode($language)
     {
@@ -131,6 +136,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get conversion path to js src
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConversionJsSrc()
     {
@@ -141,6 +147,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get conversion img src
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConversionImgSrc()
     {
@@ -155,6 +162,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getConversionId()
     {
@@ -168,6 +176,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion language
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConversionLanguage()
     {
@@ -181,6 +190,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion format
      *
      * @return int
+     * @since 2.0.0
      */
     public function getConversionFormat()
     {
@@ -194,6 +204,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion color
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConversionColor()
     {
@@ -207,6 +218,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConversionLabel()
     {
@@ -220,6 +232,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion value type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConversionValueType()
     {
@@ -233,6 +246,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Checks if conversion value is dynamic
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDynamicConversionValue()
     {
@@ -243,6 +257,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion value constant
      *
      * @return float
+     * @since 2.0.0
      */
     public function getConversionValueConstant()
     {
@@ -256,6 +271,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Google AdWords conversion value
      *
      * @return float
+     * @since 2.0.0
      */
     public function getConversionValue()
     {

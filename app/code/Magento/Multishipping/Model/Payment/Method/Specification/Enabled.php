@@ -9,6 +9,7 @@ use Magento\Payment\Model\Method\Specification\AbstractSpecification;
 
 /**
  * Enable method specification
+ * @since 2.0.0
  */
 class Enabled extends AbstractSpecification
 {
@@ -19,6 +20,7 @@ class Enabled extends AbstractSpecification
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isSatisfiedBy($paymentMethod)
     {

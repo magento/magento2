@@ -7,6 +7,7 @@ namespace Magento\MediaStorage\Model\File\Storage\Database;
 
 /**
  * Class AbstractDatabase
+ * @since 2.0.0
  */
 abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
 {
@@ -19,6 +20,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_coreFileStorageDb = null;
 
@@ -26,11 +28,13 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Date model
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_configuration;
 
@@ -38,6 +42,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Connection name
      *
      * @var string
+     * @since 2.0.0
      */
     private $connectionName = self::CONNECTION_DEFAULT;
 
@@ -51,6 +56,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param string $connectionName
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -77,6 +83,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Retrieve connection name saved at config
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConfigConnectionName()
     {
@@ -95,6 +102,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -108,6 +116,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Prepare data storage
      *
      * @return $this
+     * @since 2.0.0
      */
     public function prepareStorage()
     {
@@ -121,6 +130,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $connectionName
      * @return $this
+     * @since 2.0.0
      */
     public function setConnectionName($connectionName)
     {
@@ -136,6 +146,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Get connection name
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getConnectionName()
     {

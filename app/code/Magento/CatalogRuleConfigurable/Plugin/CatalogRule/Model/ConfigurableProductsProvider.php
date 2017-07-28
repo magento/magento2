@@ -6,18 +6,28 @@
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model;
 
+/**
+ * Class \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider
+ *
+ * @since 2.0.0
+ */
 class ConfigurableProductsProvider
 {
-    /** @var \Magento\Framework\App\ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
+     */
     private $resource;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $productIds = [];
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -27,6 +37,7 @@ class ConfigurableProductsProvider
     /**
      * @param array $ids
      * @return array
+     * @since 2.0.0
      */
     public function getIds(array $ids)
     {

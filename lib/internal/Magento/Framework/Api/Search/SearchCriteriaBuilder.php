@@ -14,21 +14,25 @@ use Magento\Framework\Api\SortOrderBuilder;
  * Builder for SearchCriteria Service Data Object
  *
  * @api
+ * @since 2.0.0
  */
 class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 {
     /**
      * @var SortOrderBuilder
+     * @since 2.0.0
      */
     protected $sortOrderBuilder;
 
     /**
      * @var FilterGroupBuilder
+     * @since 2.0.0
      */
     protected $filterGroupBuilder;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $filters = [];
 
@@ -36,6 +40,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * @param ObjectFactory $objectFactory
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param SortOrderBuilder $sortOrderBuilder
+     * @since 2.0.0
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -51,6 +56,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * Builds the SearchCriteria Data Object
      *
      * @return SearchCriteria
+     * @since 2.0.0
      */
     public function create()
     {
@@ -68,6 +74,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param \Magento\Framework\Api\Filter $filter
      * @return $this
+     * @since 2.0.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -79,6 +86,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * @param string $field
      * @param string $direction
      * @return $this
+     * @since 2.0.0
      */
     public function addSortOrder($field, $direction)
     {
@@ -92,6 +100,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param int $pageSize
      * @return $this
+     * @since 2.0.0
      */
     public function setPageSize($pageSize)
     {
@@ -103,6 +112,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      *
      * @param int $currentPage
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrentPage($currentPage)
     {

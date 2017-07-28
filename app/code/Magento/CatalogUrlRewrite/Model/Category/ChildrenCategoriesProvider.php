@@ -7,15 +7,24 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+ *
+ * @since 2.0.0
+ */
 class ChildrenCategoriesProvider
 {
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $childrenIds = [];
 
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
      * @return \Magento\Catalog\Model\Category[]
+     * @since 2.0.0
      */
     public function getChildren(Category $category, $recursive = false)
     {
@@ -30,6 +39,7 @@ class ChildrenCategoriesProvider
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
      * @return int[]
+     * @since 2.0.0
      */
     public function getChildrenIds(Category $category, $recursive = false)
     {

@@ -9,6 +9,7 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ValueType implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,6 +17,7 @@ class ValueType implements \Magento\Framework\Option\ArrayInterface
      * Get conversation value type option
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

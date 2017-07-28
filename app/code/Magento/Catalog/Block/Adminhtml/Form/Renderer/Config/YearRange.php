@@ -14,11 +14,17 @@ namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\YearRange
+ *
+ * @since 2.0.0
+ */
 class YearRange extends Field
 {
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

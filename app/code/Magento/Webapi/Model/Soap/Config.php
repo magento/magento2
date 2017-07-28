@@ -11,23 +11,34 @@ use Magento\Webapi\Model\ServiceMetadata;
  * Webapi Config Model for Soap.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Config
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
+     */
     protected $objectManager;
 
     /**
      * List of SOAP operations available in the system
      *
      * @var array
+     * @since 2.0.0
      */
     protected $soapOperations;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     * @since 2.0.0
+     */
     protected $registry;
 
-    /** @var  \Magento\Webapi\Model\ServiceMetadata */
+    /**
+     * @var \Magento\Webapi\Model\ServiceMetadata
+     * @since 2.0.0
+     */
     protected $serviceMetadata;
 
     /**
@@ -36,6 +47,7 @@ class Config
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -60,6 +72,7 @@ class Config
      *     ),
      *      ...
      * )</pre>
+     * @since 2.0.0
      */
     protected function getSoapOperations($requestedServices)
     {
@@ -89,6 +102,7 @@ class Config
      * @param array $requestedServices The list of requested services with their versions
      * @return array
      * @throws \Magento\Framework\Webapi\Exception
+     * @since 2.0.0
      */
     public function getServiceMethodInfo($soapOperation, $requestedServices)
     {
@@ -113,6 +127,7 @@ class Config
      *
      * @param array $requestedServices array('FooBarV1', 'OtherBazV2', ...)
      * @return array Filtered list of services
+     * @since 2.0.0
      */
     public function getRequestedSoapServices(array $requestedServices)
     {
@@ -133,6 +148,7 @@ class Config
      * @param string $methodName e.g. create
      * @param string $version
      * @return string e.g. catalogProductCreate
+     * @since 2.0.0
      */
     public function getSoapOperation($interfaceName, $methodName, $version)
     {

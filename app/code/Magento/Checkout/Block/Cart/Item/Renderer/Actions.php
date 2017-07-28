@@ -11,11 +11,13 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Actions extends Text
 {
     /**
      * @var AbstractItem
+     * @since 2.0.0
      */
     protected $item;
 
@@ -24,6 +26,7 @@ class Actions extends Text
      *
      * @return AbstractItem
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItem()
     {
@@ -36,6 +39,7 @@ class Actions extends Text
      * @param AbstractItem $item
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setItem(AbstractItem $item)
     {
@@ -47,6 +51,7 @@ class Actions extends Text
      * Render html output
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

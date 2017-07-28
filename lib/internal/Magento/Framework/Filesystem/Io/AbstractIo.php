@@ -8,6 +8,7 @@ namespace Magento\Framework\Filesystem\Io;
 
 /**
  * Install and upgrade client abstract class
+ * @since 2.0.0
  */
 abstract class AbstractIo implements IoInterface
 {
@@ -16,6 +17,7 @@ abstract class AbstractIo implements IoInterface
      * create non-existant directories
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_allowCreateFolders = false;
 
@@ -24,6 +26,7 @@ abstract class AbstractIo implements IoInterface
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setAllowCreateFolders($flag)
     {
@@ -36,6 +39,7 @@ abstract class AbstractIo implements IoInterface
      *
      * @param array $args
      * @return false
+     * @since 2.0.0
      */
     public function open(array $args = [])
     {
@@ -44,6 +48,7 @@ abstract class AbstractIo implements IoInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function dirsep()
     {
@@ -54,6 +59,7 @@ abstract class AbstractIo implements IoInterface
      * @param string $path
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getCleanPath($path)
     {
@@ -100,6 +106,7 @@ abstract class AbstractIo implements IoInterface
      * @param string $haystackPath
      * @param string $needlePath
      * @return bool
+     * @since 2.0.0
      */
     public function allowedPath($haystackPath, $needlePath)
     {

@@ -11,21 +11,32 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Map that holds data for category ids and its subcategories ids
+ * @since 2.2.0
  */
 class DataCategoryHashMap implements HashMapInterface
 {
-    /** @var int[] */
+    /**
+     * @var int[]
+     * @since 2.2.0
+     */
     private $hashMap = [];
 
-    /** @var CategoryRepository */
+    /**
+     * @var \Magento\Catalog\Model\CategoryRepository
+     * @since 2.2.0
+     */
     private $categoryRepository;
 
-    /** @var CategoryFactory */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\CategoryFactory
+     * @since 2.2.0
+     */
     private $categoryResourceFactory;
 
     /**
      * @param CategoryRepository $categoryRepository
      * @param CategoryFactory $categoryResourceFactory
+     * @since 2.2.0
      */
     public function __construct(
         CategoryRepository $categoryRepository,
@@ -40,6 +51,7 @@ class DataCategoryHashMap implements HashMapInterface
      *
      * @param int $categoryId
      * @return array
+     * @since 2.2.0
      */
     public function getAllData($categoryId)
     {
@@ -52,6 +64,7 @@ class DataCategoryHashMap implements HashMapInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getData($categoryId, $key)
     {
@@ -67,6 +80,7 @@ class DataCategoryHashMap implements HashMapInterface
      *
      * @param CategoryInterface $category
      * @return int[]
+     * @since 2.2.0
      */
     private function getAllCategoryChildrenIds(CategoryInterface $category)
     {
@@ -81,6 +95,7 @@ class DataCategoryHashMap implements HashMapInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function resetData($categoryId)
     {

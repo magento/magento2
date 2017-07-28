@@ -9,10 +9,16 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
+/**
+ * Class \Magento\CatalogRule\Model\Rule\Condition\Combine
+ *
+ * @since 2.0.0
+ */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**
      * @var \Magento\CatalogRule\Model\Rule\Condition\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -20,6 +26,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -33,6 +40,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getNewChildSelectOptions()
     {
@@ -61,6 +69,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     /**
      * @param array $productCollection
      * @return $this
+     * @since 2.0.0
      */
     public function collectValidatedAttributes($productCollection)
     {

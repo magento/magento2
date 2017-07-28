@@ -10,6 +10,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Tab extends \Magento\Backend\Block\Template implements TabInterface
 {
@@ -17,6 +18,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
      * Return Tab label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -27,6 +29,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
      * Return Tab title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -37,6 +40,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
      * Can show tab in tabs
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -47,6 +51,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
      * Tab is hidden
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -55,6 +60,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -63,6 +69,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTabUrl()
     {

@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\Theme\FileInterface;
 
 /**
  * Theme files model class
+ * @since 2.0.0
  */
 class File extends AbstractModel implements FileInterface
 {
@@ -18,6 +19,7 @@ class File extends AbstractModel implements FileInterface
      * {@inheritdoc}
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'theme_file';
 
@@ -25,26 +27,31 @@ class File extends AbstractModel implements FileInterface
      * {@inheritdoc}
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'file';
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected $_theme;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory
+     * @since 2.0.0
      */
     protected $_fileServiceFactory;
 
     /**
      * @var CustomizationFileInterface
+     * @since 2.0.0
      */
     protected $_fileService;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @since 2.0.0
      */
     protected $_themeFactory;
 
@@ -56,6 +63,7 @@ class File extends AbstractModel implements FileInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -75,6 +83,7 @@ class File extends AbstractModel implements FileInterface
      * Theme files model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,6 +94,7 @@ class File extends AbstractModel implements FileInterface
      * {@inheritdoc}
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomizationService(CustomizationFileInterface $fileService)
     {
@@ -97,6 +107,7 @@ class File extends AbstractModel implements FileInterface
      *
      * @return CustomizationFileInterface
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function getCustomizationService()
     {
@@ -110,6 +121,7 @@ class File extends AbstractModel implements FileInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -123,6 +135,7 @@ class File extends AbstractModel implements FileInterface
      * {@inheritdoc}
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getTheme()
     {
@@ -135,6 +148,7 @@ class File extends AbstractModel implements FileInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setFileName($fileName)
     {
@@ -144,6 +158,7 @@ class File extends AbstractModel implements FileInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFileName()
     {
@@ -152,6 +167,7 @@ class File extends AbstractModel implements FileInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFullPath()
     {
@@ -160,6 +176,7 @@ class File extends AbstractModel implements FileInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -168,6 +185,7 @@ class File extends AbstractModel implements FileInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFileInfo()
     {
@@ -182,6 +200,7 @@ class File extends AbstractModel implements FileInterface
      * Prepare file before it will be saved
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -195,6 +214,7 @@ class File extends AbstractModel implements FileInterface
      * Prepare file before it will be deleted
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeDelete()
     {

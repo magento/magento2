@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Popup extends \Magento\Framework\View\Element\Template
 {
@@ -19,11 +20,13 @@ class Popup extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var DateTimeFormatterInterface
+     * @since 2.0.0
      */
     protected $dateTimeFormatter;
 
@@ -32,6 +35,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -48,6 +52,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * Retrieve array of tracking info
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTrackingInfo()
     {
@@ -63,6 +68,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * @param string $date
      * @param string $time
      * @return string
+     * @since 2.0.0
      */
     public function formatDeliveryDateTime($date, $time)
     {
@@ -74,6 +80,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      *
      * @param string $date
      * @return string
+     * @since 2.0.0
      */
     public function formatDeliveryDate($date)
     {
@@ -87,6 +94,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * @param string $time
      * @param string $date
      * @return string
+     * @since 2.0.0
      */
     public function formatDeliveryTime($time, $date = null)
     {
@@ -103,6 +111,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getContactUsEnabled()
     {
@@ -114,6 +123,7 @@ class Popup extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getStoreSupportEmail()
     {
@@ -125,6 +135,7 @@ class Popup extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getContactUs()
     {

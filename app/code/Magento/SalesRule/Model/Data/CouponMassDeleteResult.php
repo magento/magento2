@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Model\Data;
  * Class CouponMassDeleteResult
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
@@ -18,6 +19,7 @@ class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFailedItems()
     {
@@ -26,6 +28,7 @@ class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setFailedItems(array $items)
     {
@@ -34,6 +37,7 @@ class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMissingItems()
     {
@@ -42,6 +46,7 @@ class CouponMassDeleteResult extends \Magento\Framework\Api\AbstractSimpleObject
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setMissingItems(array $items)
     {

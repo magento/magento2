@@ -13,11 +13,13 @@ namespace Magento\Backend\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Page extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -25,6 +27,7 @@ class Page extends \Magento\Backend\Block\Template
      * @param Template\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,6 +42,7 @@ class Page extends \Magento\Backend\Block\Template
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,6 +55,7 @@ class Page extends \Magento\Backend\Block\Template
      * Get current language
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLang()
     {
@@ -62,6 +67,7 @@ class Page extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {

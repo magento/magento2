@@ -15,11 +15,13 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -30,6 +32,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,6 +56,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * Return true if order(s) has one or more downloadable products
      *
      * @return bool
+     * @since 2.0.0
      */
     private function orderHasDownloadableProducts()
     {
@@ -66,6 +70,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * Prepares block data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function prepareBlockData()
     {
@@ -82,6 +87,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * Return url to list of ordered downloadable products of customer
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDownloadableProductsUrl()
     {

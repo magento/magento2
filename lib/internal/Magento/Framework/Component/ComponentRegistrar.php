@@ -11,6 +11,7 @@ namespace Magento\Framework\Component;
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  *
  * @api
+ * @since 2.0.0
  */
 class ComponentRegistrar implements ComponentRegistrarInterface
 {
@@ -43,6 +44,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      * @param string $path Absolute file path to the component
      * @throws \LogicException
      * @return void
+     * @since 2.0.0
      */
     public static function register($type, $componentName, $path)
     {
@@ -59,6 +61,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPaths($type)
     {
@@ -68,6 +71,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPath($type, $componentName)
     {
@@ -81,6 +85,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      * @param string $type
      * @return void
      * @throws \LogicException
+     * @since 2.0.0
      */
     private static function validateType($type)
     {

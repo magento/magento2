@@ -9,12 +9,18 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Review\ExportCustomerExcel
+ *
+ * @since 2.0.0
+ */
 class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
     /**
      * Export review customer report to Excel XML format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

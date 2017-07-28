@@ -12,6 +12,7 @@ namespace Magento\ImportExport\Helper;
  * ImportExport data helper
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -32,6 +33,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\File\Size $fileSize
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -47,6 +49,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get maximum upload size message
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getMaxUploadSizeMessage()
     {
@@ -63,6 +66,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get valid path masks to files for importing/exporting
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getLocalValidPaths()
     {
@@ -74,6 +78,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve size of bunch (how many entities should be involved in one import iteration)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getBunchSize()
     {

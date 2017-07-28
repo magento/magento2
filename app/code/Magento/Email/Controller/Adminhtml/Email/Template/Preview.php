@@ -6,12 +6,18 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+/**
+ * Class \Magento\Email\Controller\Adminhtml\Email\Template\Preview
+ *
+ * @since 2.0.0
+ */
 class Preview extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
      * Preview transactional email action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

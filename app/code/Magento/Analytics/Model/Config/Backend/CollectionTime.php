@@ -17,6 +17,7 @@ use Magento\Framework\Registry;
 
 /**
  * Config value backend model.
+ * @since 2.2.0
  */
 class CollectionTime extends Value
 {
@@ -27,6 +28,7 @@ class CollectionTime extends Value
 
     /**
      * @var WriterInterface
+     * @since 2.2.0
      */
     private $configWriter;
 
@@ -39,6 +41,7 @@ class CollectionTime extends Value
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -60,6 +63,7 @@ class CollectionTime extends Value
      * {@inheritdoc}. Set schedule setting for cron.
      *
      * @return Value
+     * @since 2.2.0
      */
     public function afterSave()
     {

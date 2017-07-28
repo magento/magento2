@@ -9,16 +9,19 @@ namespace Magento\Customer\Model\ResourceModel;
 /**
  * Class Visitor
  * @package Magento\Customer\Model\ResourceModel
+ * @since 2.0.0
  */
 class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $date;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -27,6 +30,7 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -43,6 +47,7 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -54,6 +59,7 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $visitor
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $visitor)
     {
@@ -69,6 +75,7 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Customer\Model\Visitor $object
      * @return $this
+     * @since 2.0.0
      */
     public function clean(\Magento\Customer\Model\Visitor $object)
     {

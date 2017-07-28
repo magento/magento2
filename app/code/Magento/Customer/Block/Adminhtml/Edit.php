@@ -10,8 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
- * @deprecated for UiComponent replacement
+ * @deprecated 2.2.0 for UiComponent replacement
  * @see app/code/Magento/Customer/view/base/ui_component/customer_form.xml
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -19,16 +20,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var AccountManagementInterface
+     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -36,6 +40,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Customer view helper
      *
      * @var \Magento\Customer\Helper\View
+     * @since 2.0.0
      */
     protected $_viewHelper;
 
@@ -48,6 +53,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $viewHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -66,6 +72,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -134,6 +141,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve the Url for creating an order.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreateOrderUrl()
     {
@@ -144,6 +152,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return the customer Id.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -155,6 +164,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve the header text, either the name of an existing customer or 'New Customer'.
      *
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -171,6 +181,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Prepare form Html. Add block for configurable product modification interface.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormHtml()
     {
@@ -185,6 +196,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve customer validation Url.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValidationUrl()
     {
@@ -195,6 +207,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Prepare the layout.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -222,6 +235,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve the save and continue edit Url.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getSaveAndContinueUrl()
     {

@@ -10,6 +10,11 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface
+ *
+ * @since 2.0.0
+ */
 interface DataProviderInterface
 {
     /**
@@ -17,6 +22,7 @@ interface DataProviderInterface
      * @param Dimension[] $dimensions
      * @param Table $entityIdsTable
      * @return Select
+     * @since 2.0.0
      */
     public function getDataSet(
         BucketInterface $bucket,
@@ -29,6 +35,7 @@ interface DataProviderInterface
      *
      * @param Select $select
      * @return array
+     * @since 2.0.0
      */
     public function execute(Select $select);
 }

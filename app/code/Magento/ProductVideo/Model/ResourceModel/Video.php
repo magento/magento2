@@ -5,12 +5,18 @@
  */
 namespace Magento\ProductVideo\Model\ResourceModel;
 
+/**
+ * Class \Magento\ProductVideo\Model\ResourceModel\Video
+ *
+ * @since 2.0.0
+ */
 class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -22,6 +28,7 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $fields
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function insertOnDuplicate(array $data, array $fields = [])
     {
@@ -32,6 +39,7 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $ids
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function loadByIds(array $ids)
     {

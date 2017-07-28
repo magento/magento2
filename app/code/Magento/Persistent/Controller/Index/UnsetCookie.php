@@ -8,12 +8,18 @@ namespace Magento\Persistent\Controller\Index;
 use Magento\Persistent\Controller\Index;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Persistent\Controller\Index\UnsetCookie
+ *
+ * @since 2.0.0
+ */
 class UnsetCookie extends Index
 {
     /**
      * Unset persistent cookie action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -30,6 +36,7 @@ class UnsetCookie extends Index
      * Revert all persistent data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function cleanup()
     {

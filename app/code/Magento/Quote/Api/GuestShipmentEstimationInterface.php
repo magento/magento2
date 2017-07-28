@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface GuestShipmentEstimationInterface
  * @api
+ * @since 2.1.0
  */
 interface GuestShipmentEstimationInterface extends ShipmentEstimationInterface
 {

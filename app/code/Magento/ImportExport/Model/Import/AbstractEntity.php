@@ -19,6 +19,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractEntity
 {
@@ -92,6 +93,7 @@ abstract class AbstractEntity
      * Has data process validation done?
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_dataValidated = false;
 
@@ -99,6 +101,7 @@ abstract class AbstractEntity
      * Valid column names
      *
      * @array
+     * @since 2.0.0
      */
     protected $validColumnNames = [];
 
@@ -106,6 +109,7 @@ abstract class AbstractEntity
      * If we should check column names
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $needColumnCheck = false;
 
@@ -113,11 +117,13 @@ abstract class AbstractEntity
      * DB data source model
      *
      * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @since 2.0.0
      */
     protected $_dataSourceModel;
 
     /**
      * @var ProcessingErrorAggregatorInterface
+     * @since 2.0.0
      */
     protected $errorAggregator;
 
@@ -125,6 +131,7 @@ abstract class AbstractEntity
      * Flag to disable import
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_importAllowed = true;
 
@@ -132,6 +139,7 @@ abstract class AbstractEntity
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -139,6 +147,7 @@ abstract class AbstractEntity
      * Entity model parameters
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_parameters = [];
 
@@ -146,6 +155,7 @@ abstract class AbstractEntity
      * Column names that holds values with particular meaning
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_specialAttributes = [self::COLUMN_ACTION];
 
@@ -153,6 +163,7 @@ abstract class AbstractEntity
      * Permanent entity columns
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_permanentAttributes = [];
 
@@ -160,6 +171,7 @@ abstract class AbstractEntity
      * Number of entities processed by validation
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_processedEntitiesCount = 0;
 
@@ -167,6 +179,7 @@ abstract class AbstractEntity
      * Number of rows processed by validation
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_processedRowsCount = 0;
 
@@ -174,6 +187,7 @@ abstract class AbstractEntity
      * Need to log in import history
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $logInHistory = true;
 
@@ -185,6 +199,7 @@ abstract class AbstractEntity
      * [Row number N] => true
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_skippedRows = [];
 
@@ -192,6 +207,7 @@ abstract class AbstractEntity
      * Array of numbers of validated rows as keys and boolean TRUE as values
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_validatedRows = [];
 
@@ -199,6 +215,7 @@ abstract class AbstractEntity
      * Source model
      *
      * @var AbstractSource
+     * @since 2.0.0
      */
     protected $_source;
 
@@ -206,6 +223,7 @@ abstract class AbstractEntity
      * Array of unique attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_uniqueAttributes = [];
 
@@ -213,6 +231,7 @@ abstract class AbstractEntity
      * List of available behaviors
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_availableBehaviors = [
         \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
@@ -224,6 +243,7 @@ abstract class AbstractEntity
      * Number of items to fetch from db in one query
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_pageSize;
 
@@ -231,6 +251,7 @@ abstract class AbstractEntity
      * Maximum size of packet, that can be sent to DB
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_maxDataSize;
 
@@ -238,6 +259,7 @@ abstract class AbstractEntity
      * Number of items to save to the db in one query
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_bunchSize;
 
@@ -245,6 +267,7 @@ abstract class AbstractEntity
      * Code of a primary attribute which identifies the entity group if import contains of multiple rows
      *
      * @var string
+     * @since 2.0.0
      */
     protected $masterAttributeCode;
 
@@ -252,6 +275,7 @@ abstract class AbstractEntity
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -259,6 +283,7 @@ abstract class AbstractEntity
      * Count if created items
      *
      * @var int
+     * @since 2.0.0
      */
     protected $countItemsCreated = 0;
 
@@ -266,6 +291,7 @@ abstract class AbstractEntity
      * Count if updated items
      *
      * @var int
+     * @since 2.0.0
      */
     protected $countItemsUpdated = 0;
 
@@ -273,6 +299,7 @@ abstract class AbstractEntity
      * Count if deleted items
      *
      * @var int
+     * @since 2.0.0
      */
     protected $countItemsDeleted = 0;
 
@@ -280,6 +307,7 @@ abstract class AbstractEntity
      * Json Serializer Instance
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -292,6 +320,7 @@ abstract class AbstractEntity
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -336,6 +365,7 @@ abstract class AbstractEntity
 
     /**
      * @return ProcessingErrorAggregatorInterface
+     * @since 2.0.0
      */
     public function getErrorAggregator()
     {
@@ -347,6 +377,7 @@ abstract class AbstractEntity
      *
      * @abstract
      * @return boolean
+     * @since 2.0.0
      */
     abstract protected function _importData();
 
@@ -355,6 +386,7 @@ abstract class AbstractEntity
      *
      * @abstract
      * @return string
+     * @since 2.0.0
      */
     abstract public function getEntityTypeCode();
 
@@ -363,6 +395,7 @@ abstract class AbstractEntity
      *
      * @param array $rowData
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareRowForDb(array $rowData)
     {
@@ -385,6 +418,7 @@ abstract class AbstractEntity
      * @param string $code
      * @param array|mixed $errors
      * @return void
+     * @since 2.0.0
      */
     protected function addErrors($code, $errors)
     {
@@ -404,6 +438,7 @@ abstract class AbstractEntity
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _saveValidatedBunches()
     {
@@ -491,7 +526,8 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {
@@ -511,6 +547,7 @@ abstract class AbstractEntity
      * @param string $errorLevel
      * @param string $errorDescription
      * @return $this
+     * @since 2.0.0
      */
     public function addRowError(
         $errorCode,
@@ -539,6 +576,7 @@ abstract class AbstractEntity
      * @param string $errorCode Error code
      * @param string $message Message template
      * @return $this
+     * @since 2.0.0
      */
     public function addMessageTemplate($errorCode, $message)
     {
@@ -552,6 +590,7 @@ abstract class AbstractEntity
      *
      * @param array $rowData
      * @return string
+     * @since 2.0.0
      */
     public function getBehavior(array $rowData = null)
     {
@@ -590,6 +629,7 @@ abstract class AbstractEntity
      * Get default import behavior
      *
      * @return string
+     * @since 2.0.0
      */
     public static function getDefaultBehavior()
     {
@@ -600,6 +640,7 @@ abstract class AbstractEntity
      * Returns number of checked entities
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProcessedEntitiesCount()
     {
@@ -610,6 +651,7 @@ abstract class AbstractEntity
      * Returns number of checked rows
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProcessedRowsCount()
     {
@@ -621,6 +663,7 @@ abstract class AbstractEntity
      *
      * @return AbstractSource
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -634,6 +677,7 @@ abstract class AbstractEntity
      * Import process start
      *
      * @return bool Result of operation
+     * @since 2.0.0
      */
     public function importData()
     {
@@ -645,6 +689,7 @@ abstract class AbstractEntity
      *
      * @param string $attributeCode
      * @return bool
+     * @since 2.0.0
      */
     public function isAttributeParticular($attributeCode)
     {
@@ -653,6 +698,7 @@ abstract class AbstractEntity
 
     /**
      * @return string the master attribute code to use in an import
+     * @since 2.0.0
      */
     public function getMasterAttributeCode()
     {
@@ -669,6 +715,7 @@ abstract class AbstractEntity
      * @param string $multiSeparator
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function isAttributeValid(
         $attributeCode,
@@ -743,6 +790,7 @@ abstract class AbstractEntity
      * Import possibility getter
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isImportAllowed()
     {
@@ -755,6 +803,7 @@ abstract class AbstractEntity
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
+     * @since 2.0.0
      */
     public function isRowAllowedToImport(array $rowData, $rowNumber)
     {
@@ -765,6 +814,7 @@ abstract class AbstractEntity
      * Is import need to log in history.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isNeedToLogInHistory()
     {
@@ -777,6 +827,7 @@ abstract class AbstractEntity
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
+     * @since 2.0.0
      */
     abstract public function validateRow(array $rowData, $rowNumber);
 
@@ -785,6 +836,7 @@ abstract class AbstractEntity
      *
      * @param array $parameters
      * @return $this
+     * @since 2.0.0
      */
     public function setParameters(array $parameters)
     {
@@ -797,6 +849,7 @@ abstract class AbstractEntity
      *
      * @param AbstractSource $source
      * @return $this
+     * @since 2.0.0
      */
     public function setSource(AbstractSource $source)
     {
@@ -811,6 +864,7 @@ abstract class AbstractEntity
      *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function validateData()
     {
@@ -853,6 +907,7 @@ abstract class AbstractEntity
      * Get count of created items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCreatedItemsCount()
     {
@@ -863,6 +918,7 @@ abstract class AbstractEntity
      * Get count of updated items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getUpdatedItemsCount()
     {
@@ -873,6 +929,7 @@ abstract class AbstractEntity
      * Get count of deleted items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDeletedItemsCount()
     {
@@ -886,6 +943,7 @@ abstract class AbstractEntity
      * @param array $updated
      * @param array $deleted
      * @return $this
+     * @since 2.0.0
      */
     protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
     {
@@ -899,6 +957,7 @@ abstract class AbstractEntity
      * Retrieve valid column names
      *
      * @return array
+     * @since 2.0.0
      */
     public function getValidColumnNames()
     {

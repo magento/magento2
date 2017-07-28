@@ -15,11 +15,13 @@ use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterfac
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Main extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/attribute/set/main.phtml';
 
@@ -27,31 +29,37 @@ class Main extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory
+     * @since 2.0.0
      */
     protected $_typeFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\GroupFactory
+     * @since 2.0.0
      */
     protected $_groupFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface
+     * @since 2.0.0
      */
     protected $attributeMapper;
 
@@ -64,6 +72,7 @@ class Main extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param AttributeMapperInterface $attributeMapper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -88,6 +97,7 @@ class Main extends \Magento\Backend\Block\Template
      * Prepare Global Layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -168,6 +178,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Attribute Set Group Tree HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGroupTreeHtml()
     {
@@ -178,6 +189,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Attribute Set Edit Form HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSetFormHtml()
     {
@@ -188,6 +200,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Block Header Text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _getHeader()
     {
@@ -198,6 +211,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Attribute Set Save URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMoveUrl()
     {
@@ -208,6 +222,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Attribute Set Group Save URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGroupUrl()
     {
@@ -218,6 +233,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Attribute Set Group Tree as JSON format
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGroupTreeJson()
     {
@@ -259,6 +275,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Unused in Attribute Set Attribute Tree as JSON
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeTreeJson()
     {
@@ -309,6 +326,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Delete Group Button HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDeleteGroupButton()
     {
@@ -319,6 +337,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve Add New Group Button HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAddGroupButton()
     {
@@ -329,6 +348,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve current Attribute Set object
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Set
+     * @since 2.0.0
      */
     protected function _getAttributeSet()
     {
@@ -339,6 +359,7 @@ class Main extends \Magento\Backend\Block\Template
      * Retrieve current attribute set Id
      *
      * @return int
+     * @since 2.0.0
      */
     protected function _getSetId()
     {
@@ -350,6 +371,7 @@ class Main extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsCurrentSetDefault()
     {
@@ -368,6 +390,7 @@ class Main extends \Magento\Backend\Block\Template
      * Prepare HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

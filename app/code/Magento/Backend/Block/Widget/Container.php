@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Container extends \Magento\Backend\Block\Template implements ContainerInterface
 {
@@ -35,22 +36,26 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Header text
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_headerText = 'Container Widget Header';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
+     * @since 2.0.0
      */
     protected $buttonList;
 
     /**
      * @var Button\ToolbarInterface
+     * @since 2.0.0
      */
     protected $toolbar;
 
     /**
      * @param Context $context
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Block\Widget\Context $context, array $data = [])
     {
@@ -63,6 +68,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Initialize "controller" and "header text"
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -84,6 +90,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * @param integer $sortOrder
      * @param string|null $region That button should be displayed in ('toolbar', 'header', 'footer', null)
      * @return $this
+     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -96,6 +103,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      *
      * @param string $buttonId
      * @return $this
+     * @since 2.0.0
      */
     public function removeButton($buttonId)
     {
@@ -110,6 +118,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * @param string|null $key
      * @param string $data
      * @return $this
+     * @since 2.0.0
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -121,6 +130,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Preparing child blocks for each added button
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -133,6 +143,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      *
      * @param string $region
      * @return string
+     * @since 2.0.0
      */
     public function getButtonsHtml($region = null)
     {
@@ -153,6 +164,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Get header text
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -163,6 +175,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Get header CSS class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -173,6 +186,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Get header HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderHtml()
     {
@@ -183,6 +197,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * Check if there's anything to display in footer
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function hasFooterButtons()
     {
@@ -201,6 +216,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      *
      * @param \Magento\Backend\Block\Widget\Button\Item $item
      * @return bool
+     * @since 2.0.0
      */
     public function canRender(Button\Item $item)
     {

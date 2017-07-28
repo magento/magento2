@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Backend grid item renderer line to wrap
  *
  * @api
+ * @since 2.0.0
  */
 class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -16,6 +17,7 @@ class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Default max length of a line at one row
      *
      * @var integer
+     * @since 2.0.0
      */
     protected $_defaultMaxLineLength = 60;
 
@@ -23,6 +25,7 @@ class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -30,6 +33,7 @@ class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -45,6 +49,7 @@ class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory that produces view file list instances
+ * @since 2.0.0
  */
 class Factory
 {
@@ -22,6 +23,7 @@ class Factory
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -29,6 +31,7 @@ class Factory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -41,6 +44,7 @@ class Factory
      * @param string $instanceName
      * @return \Magento\Framework\View\File\FileList
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function create($instanceName = self::FILE_LIST_COLLATOR)
     {

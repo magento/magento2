@@ -8,6 +8,7 @@ namespace Magento\Framework\Setup;
 /**
  * DB schema resource interface
  * @api
+ * @since 2.0.0
  */
 interface SchemaSetupInterface extends SetupInterface
 {
@@ -18,6 +19,7 @@ interface SchemaSetupInterface extends SetupInterface
      * @param array|string $fields
      * @param string $indexType
      * @return string
+     * @since 2.0.0
      */
     public function getIdxName($tableName, $fields, $indexType = '');
 
@@ -29,6 +31,7 @@ interface SchemaSetupInterface extends SetupInterface
      * @param string $refTableName  the reference table name
      * @param string $refColumnName the reference table column name
      * @return string
+     * @since 2.0.0
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName);
 }

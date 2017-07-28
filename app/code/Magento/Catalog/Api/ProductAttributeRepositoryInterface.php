@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Interface RepositoryInterface must be implemented in new model
  * @api
+ * @since 2.0.0
  */
 interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {
@@ -17,6 +18,7 @@ interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\Met
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -26,6 +28,7 @@ interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\Met
      * @param string $attributeCode
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($attributeCode);
 
@@ -37,6 +40,7 @@ interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\Met
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
+     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute);
 
@@ -47,6 +51,7 @@ interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\Met
      * @return bool True if the entity was deleted (always true)
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute);
 
@@ -57,6 +62,7 @@ interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\Met
      * @return bool
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function deleteById($attributeCode);
 }

@@ -9,6 +9,7 @@ namespace Magento\Tax\Model\ResourceModel\Calculation;
  * Tax rate resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -26,6 +28,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule
+     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -40,6 +43,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $customerTaxClassIds
      * @param array $productTaxClassIds
      * @return array
+     * @since 2.0.0
      */
     public function fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds)
     {

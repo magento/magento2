@@ -13,6 +13,7 @@ use Magento\Framework\Webapi\Request;
  * SOAP Server
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Server
 {
@@ -32,41 +33,49 @@ class Server
 
     /**
      * @var \Magento\Framework\App\AreaLIst
+     * @since 2.0.0
      */
     protected $_areaList;
 
     /**
      * @var \Magento\Framework\Config\ScopeInterface
+     * @since 2.0.0
      */
     protected $_configScope;
 
     /**
      * @var Request
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Webapi\Model\Soap\ServerFactory
+     * @since 2.0.0
      */
     protected $_soapServerFactory;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
+     * @since 2.0.0
      */
     protected $_typeProcessor;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var Wsdl\Generator
+     * @since 2.1.0
      */
     private $wsdlGenerator;
 
@@ -82,6 +91,7 @@ class Server
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Wsdl\Generator $wsdlGenerator
      * @throws \Magento\Framework\Webapi\Exception
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
@@ -114,6 +124,7 @@ class Server
      * Handle SOAP request. Response is sent by SOAP server.
      *
      * @return void
+     * @since 2.0.0
      */
     public function handle()
     {
@@ -130,6 +141,7 @@ class Server
      * Local WSDL URI is used to be able to pass wsdl schema to SoapServer without authorization
      *
      * @return string
+     * @since 2.1.0
      */
     private function getWsdlLocalUri()
     {
@@ -146,6 +158,7 @@ class Server
      * Retrieve charset used in SOAP API.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getApiCharset()
     {
@@ -161,6 +174,7 @@ class Server
      *
      * @param bool $isWsdl
      * @return string
+     * @since 2.0.0
      */
     public function generateUri($isWsdl = false)
     {
@@ -176,6 +190,7 @@ class Server
      * Generate URI of SOAP endpoint.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEndpointUri()
     {
@@ -193,6 +208,7 @@ class Server
      * @param string $soapRequest
      * @throws \Magento\Framework\Webapi\Exception With invalid SOAP extension
      * @return $this
+     * @since 2.0.0
      */
     protected function _checkRequest($soapRequest)
     {

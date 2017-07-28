@@ -9,10 +9,16 @@ use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\UpdaterSuccess
+ *
+ * @since 2.0.0
+ */
 class UpdaterSuccess extends AbstractActionController
 {
     /**
      * @var MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -20,6 +26,7 @@ class UpdaterSuccess extends AbstractActionController
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
+     * @since 2.0.0
      */
     public function __construct(MaintenanceMode $maintenanceMode)
     {
@@ -28,6 +35,7 @@ class UpdaterSuccess extends AbstractActionController
 
     /**
      * @return ViewModel
+     * @since 2.0.0
      */
     public function indexAction()
     {

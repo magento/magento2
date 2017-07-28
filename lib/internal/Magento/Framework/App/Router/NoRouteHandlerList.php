@@ -7,28 +7,37 @@
  */
 namespace Magento\Framework\App\Router;
 
+/**
+ * Class \Magento\Framework\App\Router\NoRouteHandlerList
+ *
+ * @since 2.0.0
+ */
 class NoRouteHandlerList
 {
     /**
      * No route handlers instances
      *
      * @var NoRouteHandlerInterface[]
+     * @since 2.0.0
      */
     protected $_handlers;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_handlerList;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $handlerClassesList
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $handlerClassesList)
     {
@@ -40,6 +49,7 @@ class NoRouteHandlerList
      * Get noRoute handlers
      *
      * @return NoRouteHandlerInterface[]
+     * @since 2.0.0
      */
     public function getHandlers()
     {

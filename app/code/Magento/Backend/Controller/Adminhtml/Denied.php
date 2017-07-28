@@ -6,16 +6,23 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Denied
+ *
+ * @since 2.0.0
+ */
 class Denied extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -27,6 +34,7 @@ class Denied extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

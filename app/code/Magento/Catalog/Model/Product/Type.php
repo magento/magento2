@@ -12,6 +12,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * Product type model
  *
  * @api
+ * @since 2.0.0
  */
 class Type implements OptionSourceInterface
 {
@@ -42,6 +43,7 @@ class Type implements OptionSourceInterface
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -49,6 +51,7 @@ class Type implements OptionSourceInterface
      * Product types
      *
      * @var array|string
+     * @since 2.0.0
      */
     protected $_types;
 
@@ -56,6 +59,7 @@ class Type implements OptionSourceInterface
      * Composite product type Ids
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_compositeTypes;
 
@@ -63,6 +67,7 @@ class Type implements OptionSourceInterface
      * Price models
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_priceModels;
 
@@ -70,6 +75,7 @@ class Type implements OptionSourceInterface
      * Product types by type indexing priority
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_typesPriority;
 
@@ -77,6 +83,7 @@ class Type implements OptionSourceInterface
      * Product type factory
      *
      * @var \Magento\Catalog\Model\Product\Type\Pool
+     * @since 2.0.0
      */
     protected $_productTypePool;
 
@@ -84,11 +91,13 @@ class Type implements OptionSourceInterface
      * Price model factory
      *
      * @var \Magento\Catalog\Model\Product\Type\Price\Factory
+     * @since 2.0.0
      */
     protected $_priceFactory;
 
     /**
      * @var \Magento\Framework\Pricing\PriceInfo\Factory
+     * @since 2.0.0
      */
     protected $_priceInfoFactory;
 
@@ -99,6 +108,7 @@ class Type implements OptionSourceInterface
      * @param \Magento\Catalog\Model\Product\Type\Pool $productTypePool
      * @param \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
      * @param \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
@@ -117,6 +127,7 @@ class Type implements OptionSourceInterface
      *
      * @param   \Magento\Catalog\Model\Product $product
      * @return  \Magento\Catalog\Model\Product\Type\AbstractType
+     * @since 2.0.0
      */
     public function factory($product)
     {
@@ -140,6 +151,7 @@ class Type implements OptionSourceInterface
      *
      * @param   string $productType
      * @return  \Magento\Catalog\Model\Product\Type\Price
+     * @since 2.0.0
      */
     public function priceFactory($productType)
     {
@@ -164,6 +176,7 @@ class Type implements OptionSourceInterface
      *
      * @param Product $saleableItem
      * @return \Magento\Framework\Pricing\PriceInfoInterface
+     * @since 2.0.0
      */
     public function getPriceInfo(Product $saleableItem)
     {
@@ -174,6 +187,7 @@ class Type implements OptionSourceInterface
      * Get product type labels array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptionArray()
     {
@@ -188,6 +202,7 @@ class Type implements OptionSourceInterface
      * Get product type labels array with empty value
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllOption()
     {
@@ -200,6 +215,7 @@ class Type implements OptionSourceInterface
      * Get product type labels array with empty value for option element
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -212,6 +228,7 @@ class Type implements OptionSourceInterface
      * Get product type labels array for option element
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -227,6 +244,7 @@ class Type implements OptionSourceInterface
      *
      * @param string $optionId
      * @return null|string
+     * @since 2.0.0
      */
     public function getOptionText($optionId)
     {
@@ -238,6 +256,7 @@ class Type implements OptionSourceInterface
      * Get product types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTypes()
     {
@@ -255,6 +274,7 @@ class Type implements OptionSourceInterface
      * Return composite product type Ids
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCompositeTypes()
     {
@@ -274,6 +294,7 @@ class Type implements OptionSourceInterface
      * Return product types by type indexing priority
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTypesByPriority()
     {
@@ -307,6 +328,7 @@ class Type implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

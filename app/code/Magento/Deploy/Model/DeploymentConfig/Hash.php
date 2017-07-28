@@ -17,6 +17,7 @@ use Magento\Framework\FlagFactory;
  * and import is required.
  *
  * @see \Magento\Deploy\Model\DeploymentConfig\ChangeDetector::hasChanges()
+ * @since 2.2.0
  */
 class Hash
 {
@@ -29,6 +30,7 @@ class Hash
      * Hash generator.
      *
      * @var Hash\Generator
+     * @since 2.2.0
      */
     private $configHashGenerator;
 
@@ -36,6 +38,7 @@ class Hash
      * Config data collector.
      *
      * @var DataCollector
+     * @since 2.2.0
      */
     private $dataConfigCollector;
 
@@ -43,6 +46,7 @@ class Hash
      * Flag Resource model.
      *
      * @var FlagResource
+     * @since 2.2.0
      */
     private $flagResource;
 
@@ -50,6 +54,7 @@ class Hash
      * Factory class for \Magento\Framework\Flag
      *
      * @var FlagFactory
+     * @since 2.2.0
      */
     private $flagFactory;
 
@@ -58,6 +63,7 @@ class Hash
      * @param DataCollector $dataConfigCollector the config data collector
      * @param FlagResource $flagResource
      * @param FlagFactory $flagFactory
+     * @since 2.2.0
      */
     public function __construct(
         Hash\Generator $configHashGenerator,
@@ -81,6 +87,7 @@ class Hash
      * @param string $sectionName the specific section name
      * @return void
      * @throws LocalizedException is thrown when hash was not saved
+     * @since 2.2.0
      */
     public function regenerate($sectionName = null)
     {
@@ -105,6 +112,7 @@ class Hash
      * Retrieves saved hashes from storage.
      *
      * @return array
+     * @since 2.2.0
      */
     public function get()
     {
@@ -119,6 +127,7 @@ class Hash
      * We use it for saving hashes of sections in the DB.
      *
      * @return Flag
+     * @since 2.2.0
      */
     private function getFlagObject()
     {

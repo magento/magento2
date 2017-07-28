@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Config\CatalogClone\Media;
  * Clone model for media images related config fields
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class Image extends \Magento\Framework\App\Config\Value
 {
@@ -16,6 +17,7 @@ class Image extends \Magento\Framework\App\Config\Value
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -23,6 +25,7 @@ class Image extends \Magento\Framework\App\Config\Value
      * Attribute collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     protected $_attributeCollectionFactory;
 
@@ -36,6 +39,7 @@ class Image extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -57,6 +61,7 @@ class Image extends \Magento\Framework\App\Config\Value
      * Get fields prefixes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPrefixes()
     {

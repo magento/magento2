@@ -16,11 +16,13 @@ use Magento\MediaStorage\Model\File\Uploader;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @api
+ * @since 2.0.0
  */
 class File extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface
+     * @since 2.0.0
      */
     protected $_requestData;
 
@@ -28,21 +30,25 @@ class File extends \Magento\Framework\App\Config\Value
      * Upload max file size in kilobytes
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_maxFileSize = 0;
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $_mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @since 2.0.0
      */
     protected $_uploaderFactory;
 
@@ -57,6 +63,7 @@ class File extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -82,6 +89,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -122,6 +130,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Receiving uploaded file data
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getFileData()
     {
@@ -145,6 +154,7 @@ class File extends \Magento\Framework\App\Config\Value
      * @param  string $filePath Path to temporary uploaded file
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function validateMaxSize($filePath)
     {
@@ -163,6 +173,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Makes a decision about whether to add info about the scope.
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _addWhetherScopeInfo()
     {
@@ -176,6 +187,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getUploadDir()
     {
@@ -210,6 +222,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $uploadDir
      * @return string
+     * @since 2.1.0
      */
     protected function getUploadDirPath($uploadDir)
     {
@@ -223,6 +236,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     protected function _prependScopeInfo($path)
     {
@@ -240,6 +254,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     protected function _appendScopeInfo($path)
     {
@@ -254,6 +269,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Getter for allowed extensions of uploaded files
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAllowedExtensions()
     {

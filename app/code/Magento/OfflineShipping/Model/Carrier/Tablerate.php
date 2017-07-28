@@ -12,42 +12,50 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Table rate shipping model
  *
  * @api
+ * @since 2.0.0
  */
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_code = 'tablerate';
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isFixed = true;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultConditionName = 'package_weight';
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_conditionNames = [];
 
     /**
      * @var \Magento\Shipping\Model\Rate\ResultFactory
+     * @since 2.0.0
      */
     protected $_rateResultFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
+     * @since 2.0.0
      */
     protected $_resultMethodFactory;
 
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory
+     * @since 2.0.0
      */
     protected $_tablerateFactory;
 
@@ -60,6 +68,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -85,6 +94,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -198,6 +208,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     /**
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
+     * @since 2.0.0
      */
     public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
@@ -209,6 +220,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param string $code
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getCode($type, $code = '')
     {
@@ -244,6 +256,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * Get allowed shipping methods
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedMethods()
     {
@@ -256,6 +269,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param float $shippingPrice
      * @param float $cost
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
+     * @since 2.2.0
      */
     private function createShippingMethod($shippingPrice, $cost)
     {

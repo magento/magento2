@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Store;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Select extends \Magento\Backend\Block\Store\Switcher
 {
@@ -17,6 +18,7 @@ class Select extends \Magento\Backend\Block\Store\Switcher
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

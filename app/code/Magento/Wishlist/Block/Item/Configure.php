@@ -14,6 +14,7 @@ namespace Magento\Wishlist\Block\Item;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Configure extends \Magento\Framework\View\Element\Template
 {
@@ -21,6 +22,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Wishlist data
      *
      * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected $_wishlistData = null;
 
@@ -28,6 +30,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -36,6 +39,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -52,6 +56,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Return wishlist widget options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWishlistOptions()
     {
@@ -62,6 +67,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Returns product being edited
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -72,6 +78,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Get update params for http post
      *
      * @return bool|string
+     * @since 2.0.0
      */
     public function getUpdateParams()
     {
@@ -82,6 +89,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Returns wishlist item being configured
      *
      * @return \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item
+     * @since 2.0.0
      */
     protected function getWishlistItem()
     {
@@ -92,6 +100,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      * Configure product view blocks
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

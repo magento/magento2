@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Route;
  * Routes configuration interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -18,6 +19,7 @@ interface ConfigInterface
      * @param string $routeId
      * @param string $scope
      * @return string
+     * @since 2.0.0
      */
     public function getRouteFrontName($routeId, $scope = null);
 
@@ -27,6 +29,7 @@ interface ConfigInterface
      * @param string $frontName
      * @param string $scope
      * @return string
+     * @since 2.0.0
      */
     public function getRouteByFrontName($frontName, $scope = null);
 
@@ -36,6 +39,7 @@ interface ConfigInterface
      * @param string $frontName
      * @param string $scope
      * @return string[]
+     * @since 2.0.0
      */
     public function getModulesByFrontName($frontName, $scope = null);
 }

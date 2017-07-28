@@ -14,16 +14,19 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class UseConfigSettings sets default value from configuration
+ * @since 2.1.0
  */
 class UseConfigSettings extends Checkbox
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var JsonValidator
+     * @since 2.2.0
      */
     private $jsonValidator;
 
@@ -35,6 +38,7 @@ class UseConfigSettings extends Checkbox
      * @param array $data
      * @param Json|null $serializer
      * @param JsonValidator|null $jsonValidator
+     * @since 2.2.0
      */
     public function __construct(
         ContextInterface $context,
@@ -52,6 +56,7 @@ class UseConfigSettings extends Checkbox
      * Prepare component configuration
      *
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {

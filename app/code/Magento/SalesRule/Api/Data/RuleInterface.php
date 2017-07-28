@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * Interface RuleInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -29,6 +30,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return rule id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getRuleId();
 
@@ -37,6 +39,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $ruleId
      * @return $this
+     * @since 2.0.0
      */
     public function setRuleId($ruleId);
 
@@ -44,6 +47,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get rule name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getName();
 
@@ -52,6 +56,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -59,6 +64,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get display label
      *
      * @return \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null
+     * @since 2.0.0
      */
     public function getStoreLabels();
 
@@ -67,6 +73,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null $storeLabels
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabels(array $storeLabels = null);
 
@@ -74,6 +81,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get description
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDescription();
 
@@ -82,6 +90,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $description
      * @return $this
+     * @since 2.0.0
      */
     public function setDescription($description);
 
@@ -89,6 +98,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get a list of websites the rule applies to
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getWebsiteIds();
 
@@ -97,6 +107,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int[] $websiteIds
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteIds(array $websiteIds);
 
@@ -104,6 +115,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get ids of customer groups that the rule applies to
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getCustomerGroupIds();
 
@@ -112,6 +124,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int[] $customerGroupIds
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerGroupIds(array $customerGroupIds);
 
@@ -119,6 +132,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get the start date when the coupon is active
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getFromDate();
 
@@ -127,6 +141,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $fromDate
      * @return $this
+     * @since 2.0.0
      */
     public function setFromDate($fromDate);
 
@@ -134,6 +149,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get the end date when the coupon is active
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getToDate();
 
@@ -142,6 +158,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $fromDate
      * @return $this
+     * @since 2.0.0
      */
     public function setToDate($fromDate);
 
@@ -149,6 +166,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get number of uses per customer
      *
      * @return int
+     * @since 2.0.0
      */
     public function getUsesPerCustomer();
 
@@ -157,6 +175,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $usesPerCustomer
      * @return $this
+     * @since 2.0.0
      */
     public function setUsesPerCustomer($usesPerCustomer);
 
@@ -165,6 +184,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsActive();
 
@@ -173,6 +193,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $isActive
      * @return bool
+     * @since 2.0.0
      */
     public function setIsActive($isActive);
 
@@ -180,6 +201,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get condition for the rule
      *
      * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
+     * @since 2.0.0
      */
     public function getCondition();
 
@@ -188,6 +210,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $condition
      * @return $this
+     * @since 2.0.0
      */
     public function setCondition(ConditionInterface $condition = null);
 
@@ -195,6 +218,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get action condition
      *
      * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
+     * @since 2.0.0
      */
     public function getActionCondition();
 
@@ -203,6 +227,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $actionCondition
      * @return $this
+     * @since 2.0.0
      */
     public function setActionCondition(ConditionInterface $actionCondition = null);
 
@@ -211,6 +236,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getStopRulesProcessing();
 
@@ -219,6 +245,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $stopRulesProcessing
      * @return $this
+     * @since 2.0.0
      */
     public function setStopRulesProcessing($stopRulesProcessing);
 
@@ -227,12 +254,14 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsAdvanced();
 
     /**
      * @param bool $isAdvanced
      * @return $this
+     * @since 2.0.0
      */
     public function setIsAdvanced($isAdvanced);
 
@@ -240,6 +269,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return product ids
      *
      * @return int[]|null
+     * @since 2.0.0
      */
     public function getProductIds();
 
@@ -248,6 +278,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int[]|null $productIds
      * @return $this
+     * @since 2.0.0
      */
     public function setProductIds(array $productIds = null);
 
@@ -255,12 +286,14 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get sort order
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSortOrder();
 
     /**
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -268,6 +301,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get simple action of the rule
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSimpleAction();
 
@@ -276,6 +310,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $simpleAction
      * @return $this
+     * @since 2.0.0
      */
     public function setSimpleAction($simpleAction);
 
@@ -283,6 +318,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get discount amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getDiscountAmount();
 
@@ -291,6 +327,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountAmount($discountAmount);
 
@@ -298,6 +335,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return maximum qty discount is applied
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getDiscountQty();
 
@@ -306,6 +344,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountQty
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountQty($discountQty);
 
@@ -313,6 +352,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get discount step
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDiscountStep();
 
@@ -321,6 +361,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $discountStep
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountStep($discountStep);
 
@@ -329,6 +370,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getApplyToShipping();
 
@@ -337,6 +379,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $applyToShipping
      * @return $this
+     * @since 2.0.0
      */
     public function setApplyToShipping($applyToShipping);
 
@@ -344,6 +387,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return how many times the rule has been used
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTimesUsed();
 
@@ -352,6 +396,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $timesUsed
      * @return $this
+     * @since 2.0.0
      */
     public function setTimesUsed($timesUsed);
 
@@ -360,6 +405,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsRss();
 
@@ -368,6 +414,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $isRss
      * @return $this
+     * @since 2.0.0
      */
     public function setIsRss($isRss);
 
@@ -375,6 +422,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get coupon type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCouponType();
 
@@ -383,6 +431,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $couponType
      * @return $this
+     * @since 2.0.0
      */
     public function setCouponType($couponType);
 
@@ -391,6 +440,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseAutoGeneration();
 
@@ -399,6 +449,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $useAutoGeneration
      * @return $this
+     * @since 2.0.0
      */
     public function setUseAutoGeneration($useAutoGeneration);
 
@@ -406,6 +457,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return limit of uses per coupon
      *
      * @return int
+     * @since 2.0.0
      */
     public function getUsesPerCoupon();
 
@@ -414,6 +466,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $usesPerCoupon
      * @return $this
+     * @since 2.0.0
      */
     public function setUsesPerCoupon($usesPerCoupon);
 
@@ -421,6 +474,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * When to grant free shipping
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSimpleFreeShipping();
 
@@ -429,6 +483,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $simpleFreeShipping
      * @return $this
+     * @since 2.0.0
      */
     public function setSimpleFreeShipping($simpleFreeShipping);
 
@@ -436,6 +491,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -444,6 +500,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes);
 }

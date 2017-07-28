@@ -15,6 +15,7 @@ use Magento\ImportExport\Model\Export;
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 abstract class AbstractEntity
 {
@@ -43,6 +44,7 @@ abstract class AbstractEntity
      * Error codes with arrays of corresponding row numbers
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -50,6 +52,7 @@ abstract class AbstractEntity
      * Error counter
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_errorsCount = 0;
 
@@ -57,6 +60,7 @@ abstract class AbstractEntity
      * Limit of errors after which pre-processing will exit
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_errorsLimit = 100;
 
@@ -64,6 +68,7 @@ abstract class AbstractEntity
      * Validation information about processed rows
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_invalidRows = [];
 
@@ -71,6 +76,7 @@ abstract class AbstractEntity
      * Validation failure message template definitions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messageTemplates = [];
 
@@ -78,6 +84,7 @@ abstract class AbstractEntity
      * Parameters
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_parameters = [];
 
@@ -85,6 +92,7 @@ abstract class AbstractEntity
      * Number of entities processed by validation
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_processedEntitiesCount = 0;
 
@@ -92,6 +100,7 @@ abstract class AbstractEntity
      * Number of rows processed by validation
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_processedRowsCount = 0;
 
@@ -99,6 +108,7 @@ abstract class AbstractEntity
      * Source model
      *
      * @var AbstractAdapter
+     * @since 2.0.0
      */
     protected $_writer;
 
@@ -106,6 +116,7 @@ abstract class AbstractEntity
      * Array of pairs store ID to its code
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storeIdToCode = [];
 
@@ -113,6 +124,7 @@ abstract class AbstractEntity
      * Website ID-to-code
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_websiteIdToCode = [];
 
@@ -120,6 +132,7 @@ abstract class AbstractEntity
      * Disabled attributes
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_disabledAttributes = [];
 
@@ -127,6 +140,7 @@ abstract class AbstractEntity
      * Export file name
      *
      * @var string|null
+     * @since 2.0.0
      */
     protected $_fileName = null;
 
@@ -134,6 +148,7 @@ abstract class AbstractEntity
      * Address attributes collection
      *
      * @var \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     protected $_attributeCollection;
 
@@ -141,6 +156,7 @@ abstract class AbstractEntity
      * Number of items to fetch from db in one query
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_pageSize;
 
@@ -148,6 +164,7 @@ abstract class AbstractEntity
      * Collection by pages iterator
      *
      * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
+     * @since 2.0.0
      */
     protected $_byPagesIterator;
 
@@ -155,6 +172,7 @@ abstract class AbstractEntity
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -162,6 +180,7 @@ abstract class AbstractEntity
      * Attribute code to its values. Only attributes with options and only default store values used
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributeCodes = null;
 
@@ -169,6 +188,7 @@ abstract class AbstractEntity
      * Permanent entity columns
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_permanentAttributes = [];
 
@@ -179,6 +199,7 @@ abstract class AbstractEntity
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -209,6 +230,7 @@ abstract class AbstractEntity
      * Initialize stores hash
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initStores()
     {
@@ -227,6 +249,7 @@ abstract class AbstractEntity
      *
      * @param bool $withDefault
      * @return $this
+     * @since 2.0.0
      */
     protected function _initWebsites($withDefault = false)
     {
@@ -243,6 +266,7 @@ abstract class AbstractEntity
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number
      * @return $this
+     * @since 2.0.0
      */
     public function addRowError($errorCode, $errorRowNum)
     {
@@ -261,6 +285,7 @@ abstract class AbstractEntity
      * @param string $errorCode Error code
      * @param string $message Message template
      * @return $this
+     * @since 2.0.0
      */
     public function addMessageTemplate($errorCode, $message)
     {
@@ -274,6 +299,7 @@ abstract class AbstractEntity
      *
      * @param string $errorCode
      * @return null|string
+     * @since 2.0.0
      */
     public function retrieveMessageTemplate($errorCode)
     {
@@ -287,6 +313,7 @@ abstract class AbstractEntity
      * Export process
      *
      * @return string
+     * @since 2.0.0
      */
     abstract public function export();
 
@@ -295,6 +322,7 @@ abstract class AbstractEntity
      *
      * @param \Magento\Framework\Model\AbstractModel $item
      * @return void
+     * @since 2.0.0
      */
     abstract public function exportItem($item);
 
@@ -303,6 +331,7 @@ abstract class AbstractEntity
      *
      * @param \Magento\Framework\Data\Collection\AbstractDb $collection
      * @return void
+     * @since 2.0.0
      */
     protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\AbstractDb $collection)
     {
@@ -313,6 +342,7 @@ abstract class AbstractEntity
      * Get attributes codes which are appropriate for export
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getExportAttributeCodes()
     {
@@ -346,6 +376,7 @@ abstract class AbstractEntity
      *
      * @abstract
      * @return string
+     * @since 2.0.0
      */
     abstract public function getEntityTypeCode();
 
@@ -353,6 +384,7 @@ abstract class AbstractEntity
      * Get header columns
      *
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _getHeaderColumns();
 
@@ -360,6 +392,7 @@ abstract class AbstractEntity
      * Get entity collection
      *
      * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @since 2.0.0
      */
     abstract protected function _getEntityCollection();
 
@@ -367,6 +400,7 @@ abstract class AbstractEntity
      * Entity attributes collection getter
      *
      * @return \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     public function getAttributeCollection()
     {
@@ -378,6 +412,7 @@ abstract class AbstractEntity
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     public function filterAttributeCollection(\Magento\Framework\Data\Collection $collection)
     {
@@ -395,6 +430,7 @@ abstract class AbstractEntity
      * Returns error information
      *
      * @return array
+     * @since 2.0.0
      */
     public function getErrorMessages()
     {
@@ -419,6 +455,7 @@ abstract class AbstractEntity
      * Returns error counter value
      *
      * @return int
+     * @since 2.0.0
      */
     public function getErrorsCount()
     {
@@ -429,6 +466,7 @@ abstract class AbstractEntity
      * Returns invalid rows count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getInvalidRowsCount()
     {
@@ -439,6 +477,7 @@ abstract class AbstractEntity
      * Returns number of checked entities
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProcessedEntitiesCount()
     {
@@ -449,6 +488,7 @@ abstract class AbstractEntity
      * Returns number of checked rows
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProcessedRowsCount()
     {
@@ -460,6 +500,7 @@ abstract class AbstractEntity
      *
      * @return AbstractAdapter
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getWriter()
     {
@@ -475,6 +516,7 @@ abstract class AbstractEntity
      *
      * @param string[] $parameters
      * @return $this
+     * @since 2.0.0
      */
     public function setParameters(array $parameters)
     {
@@ -488,6 +530,7 @@ abstract class AbstractEntity
      *
      * @param AbstractAdapter $writer
      * @return $this
+     * @since 2.0.0
      */
     public function setWriter(AbstractAdapter $writer)
     {
@@ -501,6 +544,7 @@ abstract class AbstractEntity
      *
      * @param null|string $fileName
      * @return void
+     * @since 2.0.0
      */
     public function setFileName($fileName)
     {
@@ -511,6 +555,7 @@ abstract class AbstractEntity
      * Get export file name
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getFileName()
     {
@@ -521,6 +566,7 @@ abstract class AbstractEntity
      * Retrieve list of disabled attributes codes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getDisabledAttributes()
     {

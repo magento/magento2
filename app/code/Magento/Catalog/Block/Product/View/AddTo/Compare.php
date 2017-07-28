@@ -10,6 +10,7 @@ namespace Magento\Catalog\Block\Product\View\AddTo;
  * Product view compare block
  *
  * @api
+ * @since 2.2.0
  */
 class Compare extends \Magento\Catalog\Block\Product\View
 {
@@ -17,6 +18,7 @@ class Compare extends \Magento\Catalog\Block\Product\View
      * Return compare params
      *
      * @return string
+     * @since 2.2.0
      */
     public function getPostDataParams()
     {

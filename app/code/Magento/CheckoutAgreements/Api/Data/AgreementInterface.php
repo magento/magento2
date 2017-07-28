@@ -8,6 +8,7 @@ namespace Magento\CheckoutAgreements\Api\Data;
 /**
  * Interface AgreementInterface
  * @api
+ * @since 2.0.0
  */
 interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -28,6 +29,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Returns the agreement ID.
      *
      * @return int Agreement ID.
+     * @since 2.0.0
      */
     public function getAgreementId();
 
@@ -36,6 +38,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setAgreementId($id);
 
@@ -43,6 +46,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Returns the agreement name.
      *
      * @return string Agreement name.
+     * @since 2.0.0
      */
     public function getName();
 
@@ -51,6 +55,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -58,6 +63,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Returns the agreement content.
      *
      * @return string Agreement content.
+     * @since 2.0.0
      */
     public function getContent();
 
@@ -66,6 +72,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $content
      * @return $this
+     * @since 2.0.0
      */
     public function setContent($content);
 
@@ -73,6 +80,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Returns the agreement content height, which is an optional CSS property.
      *
      * @return string|null Agreement content height. Otherwise, null.
+     * @since 2.0.0
      */
     public function getContentHeight();
 
@@ -81,6 +89,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string|null $height
      * @return $this
+     * @since 2.0.0
      */
     public function setContentHeight($height);
 
@@ -88,6 +97,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Returns the agreement checkbox text.
      *
      * @return string Agreement checkbox text.
+     * @since 2.0.0
      */
     public function getCheckboxText();
 
@@ -96,6 +106,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $text
      * @return $this
+     * @since 2.0.0
      */
     public function setCheckboxText($text);
 
@@ -104,6 +115,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @return bool Agreement status.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsActive();
 
@@ -112,6 +124,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param bool $status
      * @return $this
+     * @since 2.0.0
      */
     public function setIsActive($status);
 
@@ -121,6 +134,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return bool * true - HTML.
      * * false - plain text.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsHtml();
 
@@ -131,6 +145,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param bool $isHtml
      * @return $this
+     * @since 2.0.0
      */
     public function setIsHtml($isHtml);
 
@@ -138,6 +153,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Returns the agreement applied mode.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getMode();
 
@@ -146,6 +162,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $mode
      * @return $this
+     * @since 2.0.0
      */
     public function setMode($mode);
 
@@ -153,6 +170,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -161,6 +179,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes

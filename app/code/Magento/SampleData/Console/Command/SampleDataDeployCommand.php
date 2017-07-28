@@ -16,27 +16,32 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for deployment of Sample Data
+ * @since 2.0.0
  */
 class SampleDataDeployCommand extends Command
 {
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\SampleData\Model\Dependency
+     * @since 2.0.0
      */
     private $sampleDataDependency;
 
     /**
      * @var \Symfony\Component\Console\Input\ArrayInputFactory
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     private $arrayInputFactory;
 
     /**
      * @var \Composer\Console\ApplicationFactory
+     * @since 2.0.0
      */
     private $applicationFactory;
 
@@ -45,6 +50,7 @@ class SampleDataDeployCommand extends Command
      * @param \Magento\SampleData\Model\Dependency $sampleDataDependency
      * @param \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory
      * @param \Composer\Console\ApplicationFactory $applicationFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -61,6 +67,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -71,6 +78,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -111,6 +119,7 @@ class SampleDataDeployCommand extends Command
      *
      * @return void
      * @throws \Exception
+     * @since 2.2.0
      */
     private function createAuthFile()
     {
@@ -130,6 +139,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * @return void
+     * @since 2.1.0
      */
     private function updateMemoryLimit()
     {
@@ -145,6 +155,7 @@ class SampleDataDeployCommand extends Command
     /**
      * @param string $value
      * @return int
+     * @since 2.1.0
      */
     private function getMemoryInBytes($value)
     {

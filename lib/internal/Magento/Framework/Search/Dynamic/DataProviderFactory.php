@@ -11,16 +11,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class DataProviderFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $dataProvider;
 
@@ -30,6 +33,7 @@ class DataProviderFactory
      * @param string $configPath
      * @param string[] $dataProviders
      * @param string $scope
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -52,6 +56,7 @@ class DataProviderFactory
      *
      * @param array $data
      * @return DataProviderInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

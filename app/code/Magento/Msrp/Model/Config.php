@@ -10,6 +10,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Msrp\Model\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**#@+
@@ -28,16 +33,19 @@ class Config
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $storeId;
 
@@ -45,6 +53,7 @@ class Config
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param Escaper $escaper
+     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -61,6 +70,7 @@ class Config
      *
      * @param int $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($store)
     {
@@ -73,6 +83,7 @@ class Config
      *
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -87,6 +98,7 @@ class Config
      * Return Msrp display actual type
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getDisplayActualPriceType()
     {
@@ -101,6 +113,7 @@ class Config
      * Return Msrp explanation message
      *
      * @return string
+     * @since 2.0.0
      */
     public function getExplanationMessage()
     {
@@ -118,6 +131,7 @@ class Config
      * Return Msrp explanation message for "Whats This" window
      *
      * @return string
+     * @since 2.0.0
      */
     public function getExplanationMessageWhatsThis()
     {

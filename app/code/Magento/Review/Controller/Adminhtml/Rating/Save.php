@@ -8,12 +8,18 @@ namespace Magento\Review\Controller\Adminhtml\Rating;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Rating\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends RatingController
 {
     /**
      * Save rating
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

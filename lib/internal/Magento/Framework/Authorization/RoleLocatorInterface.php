@@ -11,6 +11,7 @@ namespace Magento\Framework\Authorization;
  * Should be implemented by application developer that uses \Magento\Framework\Authorization component.
  *
  * @api
+ * @since 2.0.0
  */
 interface RoleLocatorInterface
 {
@@ -18,6 +19,7 @@ interface RoleLocatorInterface
      * Retrieve current role
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAclRoleId();
 }

@@ -7,6 +7,7 @@ namespace Magento\SalesRule\Model\Coupon;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface CodegeneratorInterface
 {
@@ -14,6 +15,7 @@ interface CodegeneratorInterface
      * Retrieve generated code
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateCode();
 
@@ -21,6 +23,7 @@ interface CodegeneratorInterface
      * Retrieve delimiter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDelimiter();
 }

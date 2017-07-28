@@ -10,6 +10,7 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Group extends AbstractComposite
 {
@@ -17,12 +18,14 @@ class Group extends AbstractComposite
      * Group clone model factory
      *
      * @var \Magento\Config\Model\Config\BackendClone\Factory
+     * @since 2.0.0
      */
     protected $_cloneModelFactory;
 
     /**
      *
      * @var \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper
+     * @since 2.0.0
      */
     protected $_dependencyMapper;
 
@@ -32,6 +35,7 @@ class Group extends AbstractComposite
      * @param Iterator\Field $childrenIterator
      * @param \Magento\Config\Model\Config\BackendClone\Factory $cloneModelFactory
      * @param Dependency\Mapper $dependencyMapper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -49,6 +53,7 @@ class Group extends AbstractComposite
      * Should group fields be cloned
      *
      * @return bool
+     * @since 2.0.0
      */
     public function shouldCloneFields()
     {
@@ -60,6 +65,7 @@ class Group extends AbstractComposite
      *
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getCloneModel()
     {
@@ -76,6 +82,7 @@ class Group extends AbstractComposite
      *
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
+     * @since 2.0.0
      */
     public function populateFieldset(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
@@ -92,6 +99,7 @@ class Group extends AbstractComposite
      * Check whether group should be expanded
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isExpanded()
     {
@@ -102,6 +110,7 @@ class Group extends AbstractComposite
      * Retrieve group fieldset css
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFieldsetCss()
     {
@@ -113,6 +122,7 @@ class Group extends AbstractComposite
      *
      * @param string $storeCode
      * @return array
+     * @since 2.0.0
      */
     public function getDependencies($storeCode)
     {

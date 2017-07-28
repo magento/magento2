@@ -7,6 +7,7 @@ namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
@@ -14,11 +15,13 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\Address
+     * @since 2.0.0
      */
     protected $_conditionAddress;
 
@@ -27,6 +30,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -44,6 +48,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * Get new child select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getNewChildSelectOptions()
     {

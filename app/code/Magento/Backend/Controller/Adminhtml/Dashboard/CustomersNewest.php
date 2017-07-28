@@ -6,12 +6,18 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersNewest
+ *
+ * @since 2.0.0
+ */
 class CustomersNewest extends AjaxBlock
 {
     /**
      * Gets latest customers list
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

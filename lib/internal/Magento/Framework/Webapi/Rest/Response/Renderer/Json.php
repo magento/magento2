@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Response\Renderer\Json
+ *
+ * @since 2.0.0
+ */
 class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -14,13 +19,17 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const MIME_TYPE = 'application/json';
 
-    /** @var \Magento\Framework\Json\Encoder */
+    /**
+     * @var \Magento\Framework\Json\Encoder
+     * @since 2.0.0
+     */
     protected $encoder;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Json\Encoder $encoder
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Json\Encoder $encoder)
     {
@@ -32,6 +41,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      *
      * @param object|array|int|string|bool|float|null $data
      * @return string
+     * @since 2.0.0
      */
     public function render($data)
     {
@@ -42,6 +52,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      * Get JSON renderer MIME type.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMimeType()
     {

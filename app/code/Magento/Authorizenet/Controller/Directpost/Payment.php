@@ -11,6 +11,7 @@ use Magento\Payment\Block\Transparent\Iframe;
  * DirectPost Payment Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class Payment extends \Magento\Framework\App\Action\Action
 {
@@ -18,11 +19,13 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Authorizenet\Helper\DataFactory
+     * @since 2.0.0
      */
     protected $dataFactory;
 
@@ -32,6 +35,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -45,6 +49,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected function _getCheckout()
     {
@@ -55,6 +60,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * Get session model
      *
      * @return \Magento\Authorizenet\Model\Directpost\Session
+     * @since 2.0.0
      */
     protected function _getDirectPostSession()
     {
@@ -67,6 +73,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      *
      * @param string $area
      * @return void
+     * @since 2.0.0
      */
     protected function _responseAction($area = 'frontend')
     {
@@ -121,6 +128,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * @param bool $cancelOrder
      * @param string $errorMsg
      * @return void
+     * @since 2.0.0
      */
     protected function _returnCustomerQuote($cancelOrder = false, $errorMsg = '')
     {

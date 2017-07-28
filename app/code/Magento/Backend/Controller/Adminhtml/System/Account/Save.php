@@ -14,11 +14,13 @@ use Magento\Security\Model\SecurityCookie;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
      * @var SecurityCookie
+     * @since 2.1.0
      */
     private $securityCookie;
 
@@ -26,7 +28,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getSecurityCookie()
     {
@@ -42,6 +45,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

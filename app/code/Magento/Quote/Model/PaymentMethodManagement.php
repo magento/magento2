@@ -9,21 +9,25 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
  * Class PaymentMethodManagement
+ * @since 2.0.0
  */
 class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagementInterface
 {
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Payment\Model\Checks\ZeroTotal
+     * @since 2.0.0
      */
     protected $zeroTotalValidator;
 
     /**
      * @var \Magento\Payment\Model\MethodList
+     * @since 2.0.0
      */
     protected $methodList;
 
@@ -33,6 +37,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
      * @param \Magento\Payment\Model\MethodList $methodList
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -46,6 +51,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
@@ -86,6 +92,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -100,6 +107,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList($cartId)
     {

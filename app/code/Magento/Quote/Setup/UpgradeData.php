@@ -9,15 +9,22 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
+/**
+ * Class \Magento\Quote\Setup\UpgradeData
+ *
+ * @since 2.2.0
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var QuoteSetupFactory
+     * @since 2.2.0
      */
     private $quoteSetupFactory;
 
     /**
      * @var ConvertSerializedDataToJsonFactory
+     * @since 2.2.0
      */
     private $convertSerializedDataToJsonFactory;
 
@@ -26,6 +33,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory
+     * @since 2.2.0
      */
     public function __construct(
         QuoteSetupFactory $quoteSetupFactory,
@@ -37,6 +45,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

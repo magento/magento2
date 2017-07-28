@@ -16,6 +16,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Attribute extends \Magento\Backend\Block\Widget
 {
@@ -23,6 +24,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Adminhtml catalog product edit action attribute
      *
      * @var ActionAttribute
+     * @since 2.0.0
      */
     protected $_helperActionAttribute = null;
 
@@ -30,6 +32,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param ActionAttribute $helperActionAttribute
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +45,7 @@ class Attribute extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -85,6 +89,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Retrieve selected products for update
      *
      * @return Collection
+     * @since 2.0.0
      */
     public function getProducts()
     {
@@ -95,6 +100,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Retrieve block attributes update helper
      *
      * @return ActionAttribute|null
+     * @since 2.0.0
      */
     protected function _getHelper()
     {
@@ -105,6 +111,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Retrieve back button html code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackButtonHtml()
     {
@@ -115,6 +122,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Retrieve cancel button html code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCancelButtonHtml()
     {
@@ -125,6 +133,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Retrieve save button html code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -135,6 +144,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Get save url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -146,6 +156,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      * Get validation url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValidationUrl()
     {

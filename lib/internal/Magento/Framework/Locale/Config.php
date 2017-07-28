@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Class \Magento\Framework\Locale\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements \Magento\Framework\Locale\ConfigInterface
 {
     /**
      * List of allowed locales
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allowedLocales = [
         'af_ZA', /*Afrikaans (South Africa)*/
@@ -107,6 +113,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
      * List of allowed currencies
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allowedCurrencies = [
         'AFN', /*Afghani*/
@@ -283,6 +290,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
 
     /**
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(array $data = [])
     {
@@ -297,6 +305,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getAllowedLocales()
     {
@@ -305,6 +314,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getAllowedCurrencies()
     {

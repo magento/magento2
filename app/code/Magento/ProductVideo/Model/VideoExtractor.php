@@ -7,6 +7,11 @@ namespace Magento\ProductVideo\Model;
 
 use Magento\ProductVideo\Helper\Media;
 
+/**
+ * Class \Magento\ProductVideo\Model\VideoExtractor
+ *
+ * @since 2.0.0
+ */
 class VideoExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {
     /**
@@ -20,6 +25,7 @@ class VideoExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
      * @param \DOMElement $mediaNode
      * @param string $mediaParentTag
      * @return array
+     * @since 2.0.0
      */
     public function process(\DOMElement $mediaNode, $mediaParentTag)
     {

@@ -6,15 +6,22 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\GridOnly
+ *
+ * @since 2.0.0
+ */
 class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -23,6 +30,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -39,6 +47,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
      * Get specified tab grid
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

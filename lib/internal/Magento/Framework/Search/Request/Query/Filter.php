@@ -10,6 +10,7 @@ use Magento\Framework\Search\Request\QueryInterface;
 /**
  * Term Query
  * @api
+ * @since 2.0.0
  */
 class Filter implements QueryInterface
 {
@@ -31,6 +32,7 @@ class Filter implements QueryInterface
      * Boost
      *
      * @var int|null
+     * @since 2.0.0
      */
     protected $boost;
 
@@ -38,6 +40,7 @@ class Filter implements QueryInterface
      * Reference Type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $referenceType;
 
@@ -45,6 +48,7 @@ class Filter implements QueryInterface
      * Reference Name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $reference;
 
@@ -53,6 +57,7 @@ class Filter implements QueryInterface
      * @param int|null $boost
      * @param string $referenceType
      * @param string $reference
+     * @since 2.0.0
      */
     public function __construct($name, $boost, $referenceType, $reference)
     {
@@ -65,6 +70,7 @@ class Filter implements QueryInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -74,6 +80,7 @@ class Filter implements QueryInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -82,6 +89,7 @@ class Filter implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBoost()
     {
@@ -93,6 +101,7 @@ class Filter implements QueryInterface
      *
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getReference()
     {
@@ -104,6 +113,7 @@ class Filter implements QueryInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getReferenceType()
     {

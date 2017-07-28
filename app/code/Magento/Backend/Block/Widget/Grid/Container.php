@@ -11,7 +11,8 @@ namespace Magento\Backend\Block\Widget\Grid;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {
@@ -33,16 +34,19 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_backButtonLabel;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Backend';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/grid/container.phtml';
 
@@ -50,6 +54,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Initialize object state with incoming parameters
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -78,6 +83,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -106,6 +112,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCreateUrl()
     {
@@ -114,6 +121,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getGridHtml()
     {
@@ -122,6 +130,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAddButtonLabel()
     {
@@ -130,6 +139,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBackButtonLabel()
     {
@@ -140,6 +150,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Create "New" button
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addNewButton()
     {
@@ -155,6 +166,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _addBackButton()
     {
@@ -170,6 +182,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -178,6 +191,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderWidth()
     {

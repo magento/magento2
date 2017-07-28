@@ -9,6 +9,11 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\MongoDb
+ *
+ * @since 2.0.0
+ */
 class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -35,6 +40,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * List of available options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options = [
         'connection_string' => 'mongodb://localhost:27017', // MongoDB connection string
@@ -45,6 +51,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
 
     /**
      * @param array $options
+     * @since 2.0.0
      */
     public function __construct(array $options = [])
     {
@@ -63,6 +70,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * Get collection
      *
      * @return \MongoCollection
+     * @since 2.0.0
      */
     protected function _getCollection()
     {
@@ -78,6 +86,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * Return an array of stored cache ids
      *
      * @return string[] array of stored cache ids (string)
+     * @since 2.0.0
      */
     public function getIds()
     {
@@ -88,6 +97,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * Return an array of stored tags
      *
      * @return string[] array of stored tags (string)
+     * @since 2.0.0
      */
     public function getTags()
     {
@@ -102,6 +112,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param string[] $tags array of tags
      * @return string[] array of matching cache ids (string)
+     * @since 2.0.0
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -120,6 +131,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
+     * @since 2.0.0
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -138,6 +150,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param string[] $tags array of tags
      * @return string[] array of any matching cache ids (string)
+     * @since 2.0.0
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -155,6 +168,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * @param string[] $tags
      * @param string $comparisonMode
      * @return array
+     * @since 2.0.0
      */
     protected function _getQueryMatchingTags(array $tags, $comparisonMode)
     {
@@ -179,6 +193,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @return int integer between 0 and 100
      * TODO: implement basing on info from MongoDB server
+     * @since 2.0.0
      */
     public function getFillingPercentage()
     {
@@ -195,6 +210,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param string $cacheId cache id
      * @return array|false array of metadatas (false if the cache id is not found)
+     * @since 2.0.0
      */
     public function getMetadatas($cacheId)
     {
@@ -211,6 +227,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * @param string $cacheId cache id
      * @param int $extraLifetime
      * @return boolean true if ok
+     * @since 2.0.0
      */
     public function touch($cacheId, $extraLifetime)
     {
@@ -233,6 +250,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
+     * @since 2.0.0
      */
     public function getCapabilities()
     {
@@ -254,6 +272,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * @param  string  $cacheId                     Cache id
      * @param  boolean $notTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|bool cached data. Return false if nothing found
+     * @since 2.0.0
      */
     public function load($cacheId, $notTestCacheValidity = false)
     {
@@ -273,6 +292,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param  string $cacheId cache id
      * @return int|bool "last modified" timestamp of the available cache record or false if cache is not available
+     * @since 2.0.0
      */
     public function test($cacheId)
     {
@@ -300,6 +320,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * @param  string[] $tags             Array of strings, the cache record will be tagged by each string entry
      * @param  int|bool $specificLifetime If != false, set a specific lifetime (null => infinite lifetime)
      * @return boolean true if no problem
+     * @since 2.0.0
      */
     public function save($data, $cacheId, $tags = [], $specificLifetime = false)
     {
@@ -322,6 +343,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param  string $cacheId Cache id
      * @return boolean True if no problem
+     * @since 2.0.0
      */
     public function remove($cacheId)
     {
@@ -344,6 +366,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * @param  string $mode Clean mode
      * @param  string[] $tags Array of tags
      * @return bool true if no problem
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -376,6 +399,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _quoteString($value)
     {

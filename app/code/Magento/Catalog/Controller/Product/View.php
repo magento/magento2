@@ -9,20 +9,28 @@ namespace Magento\Catalog\Controller\Product;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Product\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Catalog\Controller\Product
 {
     /**
      * @var \Magento\Catalog\Helper\Product\View
+     * @since 2.0.0
      */
     protected $viewHelper;
 
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -33,6 +41,7 @@ class View extends \Magento\Catalog\Controller\Product
      * @param \Magento\Catalog\Helper\Product\View $viewHelper
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -50,6 +59,7 @@ class View extends \Magento\Catalog\Controller\Product
      * Redirect if product failed to load
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\Result\Forward
+     * @since 2.0.0
      */
     protected function noProductRedirect()
     {
@@ -68,6 +78,7 @@ class View extends \Magento\Catalog\Controller\Product
      * Product view action
      *
      * @return \Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

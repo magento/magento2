@@ -5,10 +5,16 @@
  */
 namespace Magento\Sitemap\Model\Config\Source;
 
+/**
+ * Class \Magento\Sitemap\Model\Config\Source\Frequency
+ *
+ * @since 2.0.0
+ */
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

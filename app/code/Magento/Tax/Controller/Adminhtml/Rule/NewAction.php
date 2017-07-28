@@ -8,10 +8,16 @@ namespace Magento\Tax\Controller\Adminhtml\Rule;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rule\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Class DbVersionInfo
  *
+ * @since 2.0.0
  */
 class DbVersionInfo
 {
@@ -29,12 +30,14 @@ class DbVersionInfo
 
     /**
      * @var ResourceInterface
+     * @since 2.0.0
      */
     private $moduleResource;
 
     /**
      * @param ModuleListInterface $moduleList
      * @param ResourceInterface $moduleResource
+     * @since 2.0.0
      */
     public function __construct(
         ModuleListInterface $moduleList,
@@ -49,6 +52,7 @@ class DbVersionInfo
      *
      * @param string $moduleName
      * @return bool
+     * @since 2.0.0
      */
     public function isSchemaUpToDate($moduleName)
     {
@@ -59,6 +63,7 @@ class DbVersionInfo
     /**
      * @param string $moduleName
      * @return bool
+     * @since 2.0.0
      */
     public function isDataUpToDate($moduleName)
     {
@@ -71,6 +76,7 @@ class DbVersionInfo
      *
      * @return string[] Array of errors, each error contains module name, current version, required version,
      *                  and type (schema or data).  The array will be empty if all schema and data are current.
+     * @since 2.0.0
      */
     public function getDbVersionErrors()
     {
@@ -92,6 +98,7 @@ class DbVersionInfo
      *
      * @param string $moduleName
      * @return string[] Contains current and needed version strings
+     * @since 2.0.0
      */
     private function getSchemaInfo($moduleName)
     {
@@ -112,6 +119,7 @@ class DbVersionInfo
      *
      * @param string $moduleName
      * @return string[]
+     * @since 2.0.0
      */
     private function getDataInfo($moduleName)
     {
@@ -134,6 +142,7 @@ class DbVersionInfo
      * @param string|bool $version
      * @return bool
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     private function isModuleVersionEqual($moduleName, $version)
     {

@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model\Connector\Http;
 
 /**
  * A factory for an HTTP response.
+ * @since 2.2.0
  */
 class ResponseFactory
 {
@@ -15,6 +16,7 @@ class ResponseFactory
      *
      * @param string $response
      * @return \Zend_Http_Response
+     * @since 2.2.0
      */
     public function create($response)
     {

@@ -7,17 +7,20 @@ namespace Magento\Config\Block\System\Config\Form\Field;
 
 /**
  * Backend system config array field renderer
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Factory
+     * @since 2.0.0
      */
     protected $_elementFactory;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\LabelFactory
+     * @since 2.0.0
      */
     protected $_labelFactory;
 
@@ -26,6 +29,7 @@ class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\Field
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +46,7 @@ class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\Field
      * Initialise form fields
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -57,6 +62,7 @@ class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\Field
      *
      * @param string $columnName
      * @return string
+     * @since 2.0.0
      */
     public function renderCellTemplate($columnName)
     {

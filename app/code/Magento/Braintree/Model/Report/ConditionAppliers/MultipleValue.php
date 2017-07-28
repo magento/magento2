@@ -9,6 +9,7 @@ use Braintree\MultipleValueNode;
 
 /**
  * MultipleValue applier
+ * @since 2.1.0
  */
 class MultipleValue implements ApplierInterface
 {
@@ -19,6 +20,7 @@ class MultipleValue implements ApplierInterface
      * @param string $condition
      * @param mixed $value
      * @return bool
+     * @since 2.1.0
      */
     public function apply($field, $condition, $value)
     {

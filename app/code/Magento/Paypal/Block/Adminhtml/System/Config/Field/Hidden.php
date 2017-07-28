@@ -9,6 +9,11 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Field;
 
+/**
+ * Class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Hidden
+ *
+ * @since 2.0.0
+ */
 class Hidden extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
@@ -17,6 +22,7 @@ class Hidden extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string
+     * @since 2.0.0
      */
     protected function _decorateRowHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element, $html)
     {

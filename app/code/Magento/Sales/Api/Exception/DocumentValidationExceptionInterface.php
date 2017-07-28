@@ -7,6 +7,7 @@ namespace Magento\Sales\Api\Exception;
 
 /**
  * @api
+ * @since 2.2.0
  */
 interface DocumentValidationExceptionInterface
 {

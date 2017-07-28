@@ -8,15 +8,22 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 use Magento\Indexer\Model\Config\Data;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData
+ *
+ * @since 2.0.0
+ */
 class IndexerConfigData
 {
     /**
      * @var State
+     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @param State $state
+     * @since 2.0.0
      */
     public function __construct(State $state)
     {
@@ -33,6 +40,7 @@ class IndexerConfigData
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterGet(Data $subject, $data, $path = null, $default = null)
     {

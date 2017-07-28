@@ -7,6 +7,7 @@ namespace Magento\Checkout\Controller\Cart;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class CouponPost extends \Magento\Checkout\Controller\Cart
 {
@@ -14,6 +15,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * Sales quote repository
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -21,6 +23,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * Coupon factory
      *
      * @var \Magento\SalesRule\Model\CouponFactory
+     * @since 2.0.0
      */
     protected $couponFactory;
 
@@ -34,6 +37,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -63,6 +67,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

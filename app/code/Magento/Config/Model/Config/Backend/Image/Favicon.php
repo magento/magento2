@@ -11,6 +11,7 @@ namespace Magento\Config\Model\Config\Backend\Image;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Favicon extends \Magento\Config\Model\Config\Backend\Image
 {
@@ -25,6 +26,7 @@ class Favicon extends \Magento\Config\Model\Config\Backend\Image
      *
      * @return string
      * @throw \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getUploadDir()
     {
@@ -35,6 +37,7 @@ class Favicon extends \Magento\Config\Model\Config\Backend\Image
      * Makes a decision about whether to add info about the scope.
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _addWhetherScopeInfo()
     {
@@ -45,6 +48,7 @@ class Favicon extends \Magento\Config\Model\Config\Backend\Image
      * Getter for allowed extensions of uploaded files.
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getAllowedExtensions()
     {

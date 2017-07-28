@@ -11,6 +11,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Loads attributes by attribute set
+ * @since 2.2.0
  */
 class AttributeLoader
 {
@@ -19,16 +20,19 @@ class AttributeLoader
 
     /**
      * @var AttributeRepository
+     * @since 2.2.0
      */
     private $attributeRepository;
 
     /**
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
@@ -38,6 +42,7 @@ class AttributeLoader
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @since 2.2.0
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -55,6 +60,7 @@ class AttributeLoader
      * @param string $entityType
      * @param int|null $attributeSetId
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @since 2.2.0
      */
     public function getAttributes($entityType, $attributeSetId = null)
     {

@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Block\Widget\Form\Element;
  * Form element dependencies mapper
  * Assumes that one element may depend on other element values.
  * Will toggle as "enabled" only if all elements it depends from toggle as true.
+ * @since 2.0.0
  */
 class Dependence extends \Magento\Backend\Block\Widget\Form\Element\Dependence
 {
@@ -17,6 +18,7 @@ class Dependence extends \Magento\Backend\Block\Widget\Form\Element\Dependence
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -29,6 +31,7 @@ class Dependence extends \Magento\Backend\Block\Widget\Form\Element\Dependence
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

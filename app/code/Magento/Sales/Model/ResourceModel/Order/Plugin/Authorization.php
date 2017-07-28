@@ -11,15 +11,22 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization
+ *
+ * @since 2.0.0
+ */
 class Authorization
 {
     /**
      * @var UserContextInterface
+     * @since 2.0.0
      */
     protected $userContext;
 
     /**
      * @param UserContextInterface $userContext
+     * @since 2.0.0
      */
     public function __construct(
         UserContextInterface $userContext
@@ -34,6 +41,7 @@ class Authorization
      * @return ResourceOrder
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterLoad(
         ResourceOrder $subject,
@@ -53,6 +61,7 @@ class Authorization
      *
      * @param \Magento\Sales\Model\Order $order
      * @return bool
+     * @since 2.0.0
      */
     protected function isAllowed(Order $order)
     {

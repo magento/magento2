@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model\ResourceModel\Option;
 /**
  * Bundle Options Resource Collection
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,6 +16,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * All item ids cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_itemIds;
 
@@ -22,6 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * True when selections appended
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_selectionsAppended = false;
 
@@ -29,6 +32,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Init model and resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,6 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function joinValues($storeId)
     {
@@ -90,6 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $productId
      * @return $this
+     * @since 2.0.0
      */
     public function setProductIdFilter($productId)
     {
@@ -113,6 +119,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $productLinkFieldValue
      *
      * @return $this
+     * @since 2.1.0
      */
     public function setProductLinkFilter($productLinkFieldValue)
     {
@@ -127,6 +134,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Sets order by position
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setPositionOrder()
     {
@@ -143,6 +151,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $stripBefore
      * @param bool $appendAll
      * @return \Magento\Framework\DataObject[]
+     * @since 2.0.0
      */
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
     {
@@ -172,6 +181,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Removes appended selections before
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _stripSelections()
     {
@@ -187,6 +197,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|int $ids
      * @return $this
+     * @since 2.0.0
      */
     public function setIdFilter($ids)
     {
@@ -202,6 +213,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Reset all item ids cache
      *
      * @return $this
+     * @since 2.0.0
      */
     public function resetAllIds()
     {
@@ -213,6 +225,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve all ids for collection
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllIds()
     {

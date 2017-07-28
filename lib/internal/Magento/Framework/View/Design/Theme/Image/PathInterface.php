@@ -9,6 +9,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Theme Image Path interface
+ * @since 2.0.0
  */
 interface PathInterface
 {
@@ -22,6 +23,7 @@ interface PathInterface
      *
      * @param ThemeInterface $theme
      * @return string
+     * @since 2.0.0
      */
     public function getPreviewImageUrl(ThemeInterface $theme);
 
@@ -30,6 +32,7 @@ interface PathInterface
      *
      * @param ThemeInterface $theme
      * @return string
+     * @since 2.0.0
      */
     public function getPreviewImagePath(ThemeInterface $theme);
 
@@ -37,6 +40,7 @@ interface PathInterface
      * Return default themes preview image url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPreviewImageDefaultUrl();
 
@@ -44,6 +48,7 @@ interface PathInterface
      * Get directory path for preview image
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImagePreviewDirectory();
 
@@ -51,6 +56,7 @@ interface PathInterface
      * Temporary directory path to store images
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemporaryDirectory();
 }

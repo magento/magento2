@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractModel;
  * SalesRule Resource Coupon
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\SalesRule\Model\Spi\CouponResourceInterface
@@ -19,6 +20,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * Constructor adds unique fields
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,6 +33,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      *
      * @param AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     public function _beforeSave(AbstractModel $object)
     {
@@ -55,6 +58,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @param \Magento\SalesRule\Model\Coupon $object
      * @param \Magento\SalesRule\Model\Rule|int $rule
      * @return bool
+     * @since 2.0.0
      */
     public function loadPrimaryByRule(\Magento\SalesRule\Model\Coupon $object, $rule)
     {
@@ -91,6 +95,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      *
      * @param string $code
      * @return bool
+     * @since 2.0.0
      */
     public function exists($code)
     {
@@ -110,6 +115,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return $this
+     * @since 2.0.0
      */
     public function updateSpecificCoupons(\Magento\SalesRule\Model\Rule $rule)
     {

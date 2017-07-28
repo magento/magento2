@@ -9,16 +9,19 @@ namespace Magento\Review\Block\Rating\Entity;
  * Entity rating block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Detailed extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'detailed.phtml';
 
     /**
      * @var \Magento\Review\Model\RatingFactory
+     * @since 2.0.0
      */
     protected $_ratingFactory;
 
@@ -26,6 +29,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -38,6 +42,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

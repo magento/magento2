@@ -9,6 +9,11 @@ namespace Magento\Webapi\Model\Soap;
 
 use Magento\Framework\App\State;
 
+/**
+ * Class \Magento\Webapi\Model\Soap\Fault
+ *
+ * @since 2.0.0
+ */
 class Fault
 {
     const FAULT_REASON_INTERNAL = 'Internal Error.';
@@ -46,6 +51,7 @@ class Fault
      * Parameters are extracted from exception and can be inserted into 'Detail' node as 'Parameters'.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_parameters = [];
 
@@ -53,6 +59,7 @@ class Fault
      * Wrapped errors are extracted from exception and can be inserted into 'Detail' node as 'WrappedErrors'.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_wrappedErrors = [];
 
@@ -60,6 +67,7 @@ class Fault
      * Fault name is used for details wrapper node name generation.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_faultName = '';
 
@@ -67,36 +75,43 @@ class Fault
      * Details that are used to generate 'Detail' node of SoapFault.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_details = [];
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var Server
+     * @since 2.0.0
      */
     protected $_soapServer;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $appState;
 
     /**
      * @var null|string
+     * @since 2.0.0
      */
     protected $stackTrace;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $message;
 
@@ -106,6 +121,7 @@ class Fault
      * @param \Magento\Framework\Webapi\Exception $exception
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param State $appState
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -129,6 +145,7 @@ class Fault
      * Render exception as XML.
      *
      * @return string
+     * @since 2.0.0
      */
     public function toXml()
     {
@@ -149,6 +166,7 @@ class Fault
      * Retrieve additional details about current fault.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getParameters()
     {
@@ -159,6 +177,7 @@ class Fault
      * Retrieve wrapped errors about current fault.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWrappedErrors()
     {
@@ -170,6 +189,7 @@ class Fault
      *
      * @param array $details Associative array containing details about current fault
      * @return $this
+     * @since 2.0.0
      */
     public function addDetails($details)
     {
@@ -181,6 +201,7 @@ class Fault
      * Retrieve additional details about current fault.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getDetails()
     {
@@ -191,6 +212,7 @@ class Fault
      * Retrieve SOAP fault code.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSoapCode()
     {
@@ -201,6 +223,7 @@ class Fault
      * Retrieve SOAP fault language.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLanguage()
     {
@@ -209,6 +232,7 @@ class Fault
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -222,6 +246,7 @@ class Fault
      * @param string $code SOAP fault code
      * @param array|null $details Detailed reason message(s)
      * @return string
+     * @since 2.0.0
      */
     public function getSoapFaultMessage($reason, $code, $details = null)
     {
@@ -257,6 +282,7 @@ FAULT_MESSAGE;
      *
      * @param array $details
      * @return string
+     * @since 2.0.0
      */
     protected function _generateDetailXml($details)
     {
@@ -279,6 +305,7 @@ FAULT_MESSAGE;
      *
      * @param array $details
      * @return string
+     * @since 2.0.0
      */
     protected function _convertDetailsToXml($details)
     {
@@ -310,6 +337,7 @@ FAULT_MESSAGE;
      *
      * @param array $parameters
      * @return string
+     * @since 2.0.0
      */
     protected function _getParametersXml($parameters)
     {
@@ -345,6 +373,7 @@ FAULT_MESSAGE;
      *
      * @param array $wrappedErrors
      * @return string
+     * @since 2.0.0
      */
     protected function _getWrappedErrorsXml($wrappedErrors)
     {
@@ -370,6 +399,7 @@ FAULT_MESSAGE;
      *
      * @param array $error
      * @return string
+     * @since 2.0.0
      */
     protected function _generateErrorNodeXML($error)
     {

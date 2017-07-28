@@ -17,11 +17,13 @@ use Magento\Customer\Api\GroupManagementInterface;
  * Catalog product abstract group price backend attribute model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractGroupPrice extends Price
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -29,6 +31,7 @@ abstract class AbstractGroupPrice extends Price
      * Website currency codes and rates
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_rates;
 
@@ -37,6 +40,7 @@ abstract class AbstractGroupPrice extends Price
      *
      * @abstract
      * @return string
+     * @since 2.0.0
      */
     abstract protected function _getDuplicateErrorMessage();
 
@@ -44,11 +48,13 @@ abstract class AbstractGroupPrice extends Price
      * Catalog product type
      *
      * @var \Magento\Catalog\Model\Product\Type
+     * @since 2.0.0
      */
     protected $_catalogProductType;
 
     /**
      * @var GroupManagementInterface
+     * @since 2.0.0
      */
     protected $_groupManagement;
 
@@ -61,6 +67,7 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param GroupManagementInterface $groupManagement
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -88,6 +95,7 @@ abstract class AbstractGroupPrice extends Price
      * Retrieve websites currency rates and base currency codes
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getWebsiteCurrencyRates()
     {
@@ -124,6 +132,7 @@ abstract class AbstractGroupPrice extends Price
      * Retrieve resource instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
+     * @since 2.0.0
      */
     abstract protected function _getResource();
 
@@ -133,6 +142,7 @@ abstract class AbstractGroupPrice extends Price
      * @param array $objectArray
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getAdditionalUniqueFields($objectArray)
     {
@@ -145,6 +155,7 @@ abstract class AbstractGroupPrice extends Price
      * @param array $objectArray
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     protected function getAdditionalFields($objectArray)
     {
@@ -156,6 +167,7 @@ abstract class AbstractGroupPrice extends Price
      *
      * @param \Magento\Catalog\Model\Product\Type\Price $priceObject
      * @return bool
+     * @since 2.0.0
      */
     protected function _isPriceFixed($priceObject)
     {
@@ -170,6 +182,7 @@ abstract class AbstractGroupPrice extends Price
      * @return \Magento\Framework\Phrase|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -252,6 +265,7 @@ abstract class AbstractGroupPrice extends Price
      * @param array $priceRow
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     protected function validatePrice(array $priceRow)
     {
@@ -269,6 +283,7 @@ abstract class AbstractGroupPrice extends Price
      * @param string $productTypeId
      * @param int $websiteId
      * @return array
+     * @since 2.0.0
      */
     public function preparePriceData(array $priceData, $productTypeId, $websiteId)
     {
@@ -301,6 +316,7 @@ abstract class AbstractGroupPrice extends Price
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
+     * @since 2.0.0
      */
     public function afterLoad($object)
     {
@@ -316,6 +332,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * @param int $storeId
      * @return int|null
+     * @since 2.2.0
      */
     private function getWebsiteId($storeId)
     {
@@ -331,6 +348,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * @param \Magento\Catalog\Model\Product $object
      * @param array $priceData
+     * @since 2.2.0
      */
     public function setPriceData($object, $priceData)
     {
@@ -355,6 +373,7 @@ abstract class AbstractGroupPrice extends Price
      * @param array $data
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     protected function modifyPriceData($object, $data)
     {
@@ -378,6 +397,7 @@ abstract class AbstractGroupPrice extends Price
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function afterSave($object)
     {
@@ -494,6 +514,7 @@ abstract class AbstractGroupPrice extends Price
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean
+     * @since 2.2.0
      */
     protected function updateValues(array $valuesToUpdate, array $oldValues)
     {
@@ -518,6 +539,7 @@ abstract class AbstractGroupPrice extends Price
      *
      * @param  \Magento\Catalog\Model\Product $object
      * @return array
+     * @since 2.0.0
      */
     public function getAffectedFields($object)
     {
@@ -539,6 +561,7 @@ abstract class AbstractGroupPrice extends Price
      * Get resource model instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
+     * @since 2.0.0
      */
     public function getResource()
     {
@@ -547,6 +570,7 @@ abstract class AbstractGroupPrice extends Price
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

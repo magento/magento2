@@ -8,12 +8,18 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\ResetPassword
+ *
+ * @since 2.0.0
+ */
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * Reset password handler
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

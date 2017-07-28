@@ -9,6 +9,7 @@ use Magento\Framework\Event;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Observer extends \Magento\Framework\DataObject
 {
@@ -17,6 +18,7 @@ class Observer extends \Magento\Framework\DataObject
      *
      * @param Event $event
      * @return boolean
+     * @since 2.0.0
      */
     public function isValidFor(Event $event)
     {
@@ -28,6 +30,7 @@ class Observer extends \Magento\Framework\DataObject
      *
      * @param Event $event
      * @return $this
+     * @since 2.0.0
      */
     public function dispatch(Event $event)
     {
@@ -55,6 +58,7 @@ class Observer extends \Magento\Framework\DataObject
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -64,6 +68,7 @@ class Observer extends \Magento\Framework\DataObject
     /**
      * @param string $data
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function setName($data)
     {
@@ -72,6 +77,7 @@ class Observer extends \Magento\Framework\DataObject
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getEventName()
     {
@@ -81,6 +87,7 @@ class Observer extends \Magento\Framework\DataObject
     /**
      * @param string $data
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function setEventName($data)
     {
@@ -89,6 +96,7 @@ class Observer extends \Magento\Framework\DataObject
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCallback()
     {
@@ -98,6 +106,7 @@ class Observer extends \Magento\Framework\DataObject
     /**
      * @param string $data
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function setCallback($data)
     {
@@ -108,6 +117,7 @@ class Observer extends \Magento\Framework\DataObject
      * Get observer event object
      *
      * @return Event
+     * @since 2.0.0
      */
     public function getEvent()
     {
@@ -117,6 +127,7 @@ class Observer extends \Magento\Framework\DataObject
     /**
      * @param mixed $data
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function setEvent($data)
     {

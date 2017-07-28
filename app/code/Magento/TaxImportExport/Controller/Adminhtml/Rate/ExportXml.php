@@ -9,12 +9,18 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportXml
+ *
+ * @since 2.0.0
+ */
 class ExportXml extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
      * Export rates grid to XML format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

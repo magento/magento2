@@ -15,8 +15,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated since 2.2.0
+ * @deprecated 2.2.0 since 2.2.0
  * @see \Magento\Deploy\Service\Bundle
+ * @since 2.0.0
  */
 class Manager
 {
@@ -28,26 +29,45 @@ class Manager
 
     const ASSET_TYPE_HTML = 'html';
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
+     */
     protected $filesystem;
 
-    /** @var  Bundle */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle
+     * @since 2.0.0
+     */
     protected $bundle;
 
-    /** @var Bundle\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     * @since 2.0.0
+     */
     protected $bundleConfig;
 
-    /** @var Asset\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @since 2.0.0
+     */
     protected $assetConfig;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $excluded = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
 
     /**
      * @var Asset\Minification
+     * @since 2.0.0
      */
     private $minification;
 
@@ -57,6 +77,7 @@ class Manager
      * @param Bundle\ConfigInterface $bundleConfig
      * @param Asset\ConfigInterface $assetConfig
      * @param Asset\Minification $minification
+     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -77,6 +98,7 @@ class Manager
      *
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function isExcluded(LocalInterface $asset)
     {
@@ -104,6 +126,7 @@ class Manager
      * @param string $directoryPath
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function isExcludedDirectory($directoryPath, $asset)
     {
@@ -126,6 +149,7 @@ class Manager
      * @param string $filePath
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function isExcludedFile($filePath, $asset)
     {
@@ -143,6 +167,7 @@ class Manager
      * @param array $filePathInfo
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function compareModules($filePathInfo, $asset)
     {
@@ -160,6 +185,7 @@ class Manager
      *
      * @param string $path
      * @return array|bool
+     * @since 2.0.0
      */
     protected function splitPath($path)
     {
@@ -178,6 +204,7 @@ class Manager
      *
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     public function addAsset(LocalInterface $asset)
     {
@@ -192,6 +219,7 @@ class Manager
     /**
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function isAssetMinification(LocalInterface $asset)
     {
@@ -219,6 +247,7 @@ class Manager
     /**
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function isValidAsset(LocalInterface $asset)
     {
@@ -234,6 +263,7 @@ class Manager
     /**
      * @param LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     protected function isValidType(LocalInterface $asset)
     {
@@ -249,6 +279,7 @@ class Manager
      * Flush bundle
      *
      * @return void
+     * @since 2.0.0
      */
     public function flush()
     {

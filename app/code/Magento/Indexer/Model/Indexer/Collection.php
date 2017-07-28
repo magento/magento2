@@ -5,22 +5,30 @@
  */
 namespace Magento\Indexer\Model\Indexer;
 
+/**
+ * Class \Magento\Indexer\Model\Indexer\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * Item object class name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_itemObjectClass = \Magento\Framework\Indexer\IndexerInterface::class;
 
     /**
      * @var \Magento\Framework\Indexer\ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory
+     * @since 2.0.0
      */
     protected $statesFactory;
 
@@ -28,6 +36,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $config
      * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory $statesFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -47,6 +56,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * @return \Magento\Indexer\Model\Indexer\Collection
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

@@ -9,6 +9,7 @@ namespace Magento\ProductAlert\Model\ResourceModel\Stock\Customer;
  * ProductAlert Stock Customer collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
@@ -18,6 +19,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param int $productId
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function join($productId, $websiteId)
     {

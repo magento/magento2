@@ -15,16 +15,19 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  * Bundle Selection Resource Model
  *
  * @api
+ * @since 2.0.0
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var EntityManager
+     * @since 2.2.0
      */
     private $entityManager;
 
@@ -35,6 +38,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param MetadataPool $metadataPool
      * @param null|string $connectionName
      * @param EntityManager|null $entityManager
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -57,6 +61,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and id field
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +77,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param bool $required
      * @return array
+     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -127,6 +133,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|array $childId
      * @return array
+     * @since 2.0.0
      */
     public function getParentIdsByChild($childId)
     {
@@ -154,6 +161,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Bundle\Model\Selection $item
      * @return void
+     * @since 2.0.0
      */
     public function saveSelectionPrice($item)
     {
@@ -185,6 +193,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

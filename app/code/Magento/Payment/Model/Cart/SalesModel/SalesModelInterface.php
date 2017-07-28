@@ -7,6 +7,7 @@ namespace Magento\Payment\Model\Cart\SalesModel;
 
 /**
  * Wrapper interface for accessing sales model data
+ * @since 2.0.0
  */
 interface SalesModelInterface
 {
@@ -15,30 +16,35 @@ interface SalesModelInterface
      *
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getAllItems();
 
     /**
      * @return float|null
      * @api
+     * @since 2.0.0
      */
     public function getBaseSubtotal();
 
     /**
      * @return float|null
      * @api
+     * @since 2.0.0
      */
     public function getBaseTaxAmount();
 
     /**
      * @return float|null
      * @api
+     * @since 2.0.0
      */
     public function getBaseShippingAmount();
 
     /**
      * @return float|null
      * @api
+     * @since 2.0.0
      */
     public function getBaseDiscountAmount();
 
@@ -49,6 +55,7 @@ interface SalesModelInterface
      * @param mixed $args
      * @return mixed
      * @api
+     * @since 2.0.0
      */
     public function getDataUsingMethod($key, $args = null);
 
@@ -57,6 +64,7 @@ interface SalesModelInterface
      *
      * @return \Magento\Sales\Api\Data\OrderInterface|\Magento\Quote\Api\Data\AddressInterface
      * @api
+     * @since 2.0.0
      */
     public function getTaxContainer();
 }

@@ -14,22 +14,26 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
  * Class TokenUiComponentProvider
+ * @since 2.2.0
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
     /**
      * @var TokenUiComponentInterfaceFactory
+     * @since 2.2.0
      */
     private $componentFactory;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @param TokenUiComponentInterfaceFactory $componentFactory
      * @param UrlInterface $urlBuilder
+     * @since 2.2.0
      */
     public function __construct(
         TokenUiComponentInterfaceFactory $componentFactory,
@@ -43,6 +47,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
      * Get UI component for token
      * @param PaymentTokenInterface $paymentToken
      * @return TokenUiComponentInterface
+     * @since 2.2.0
      */
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
@@ -65,6 +70,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     /**
      * Get url to retrieve payment method nonce
      * @return string
+     * @since 2.2.0
      */
     private function getNonceRetrieveUrl()
     {

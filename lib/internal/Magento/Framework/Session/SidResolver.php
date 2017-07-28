@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Session;
 
+/**
+ * Class \Magento\Framework\Session\SidResolver
+ *
+ * @since 2.0.0
+ */
 class SidResolver implements SidResolverInterface
 {
     /**
@@ -16,21 +21,25 @@ class SidResolver implements SidResolverInterface
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $sidNameMap;
 
@@ -38,6 +47,7 @@ class SidResolver implements SidResolverInterface
      * Use session var instead of SID for session in URL
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_useSessionVar = false;
 
@@ -46,11 +56,13 @@ class SidResolver implements SidResolverInterface
      *
      * @var bool
      * @see \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_useSessionInUrl = true;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_scopeType;
 
@@ -60,6 +72,7 @@ class SidResolver implements SidResolverInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $scopeType
      * @param array $sidNameMap
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -78,6 +91,7 @@ class SidResolver implements SidResolverInterface
     /**
      * @param SessionManagerInterface $session
      * @return string
+     * @since 2.0.0
      */
     public function getSid(SessionManagerInterface $session)
     {
@@ -101,6 +115,7 @@ class SidResolver implements SidResolverInterface
      *
      * @param SessionManagerInterface $session
      * @return string
+     * @since 2.0.0
      */
     public function getSessionIdQueryParam(SessionManagerInterface $session)
     {
@@ -116,6 +131,7 @@ class SidResolver implements SidResolverInterface
      *
      * @param bool $var
      * @return $this
+     * @since 2.0.0
      */
     public function setUseSessionVar($var)
     {
@@ -128,6 +144,7 @@ class SidResolver implements SidResolverInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseSessionVar()
     {
@@ -139,6 +156,7 @@ class SidResolver implements SidResolverInterface
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setUseSessionInUrl($flag = true)
     {
@@ -151,6 +169,7 @@ class SidResolver implements SidResolverInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseSessionInUrl()
     {

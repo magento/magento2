@@ -17,6 +17,7 @@ namespace Magento\GoogleOptimizer\Model;
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
  * @api
+ * @since 2.0.0
  */
 class Code extends \Magento\Framework\Model\AbstractModel
 {
@@ -39,6 +40,7 @@ class Code extends \Magento\Framework\Model\AbstractModel
     /**
      * Model construct that should be used for object initialization
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +55,7 @@ class Code extends \Magento\Framework\Model\AbstractModel
      * @param string $entityType One of self::CODE_ENTITY_TYPE_
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByEntityIdAndType($entityId, $entityType, $storeId = 0)
     {

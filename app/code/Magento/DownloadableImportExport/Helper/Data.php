@@ -9,6 +9,7 @@ use Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable;
 
 /**
  * Class Data
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -17,6 +18,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $rowData
      * @return bool
+     * @since 2.0.0
      */
     public function isRowDownloadableEmptyOptions(array $rowData)
     {
@@ -32,6 +34,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $rowData
      * @return bool
+     * @since 2.0.0
      */
     public function isRowDownloadableNoValid(array $rowData)
     {
@@ -47,6 +50,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $option
      * @param array $existingOptions
      * @return array
+     * @since 2.0.0
      */
     public function fillExistOptions(array $base, array $option, array $existingOptions)
     {
@@ -71,6 +75,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $base
      * @param array $replacement
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataForSave(array $base, array $replacement)
     {
@@ -86,6 +91,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $option
      * @return string
+     * @since 2.0.0
      */
     public function getTypeByValue($option)
     {

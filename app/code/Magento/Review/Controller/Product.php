@@ -14,6 +14,7 @@ use Magento\Review\Model\Review;
  * Review controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class Product extends \Magento\Framework\App\Action\Action
 {
@@ -21,6 +22,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
@@ -28,6 +30,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Customer session model
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
@@ -35,6 +38,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Generic session
      *
      * @var \Magento\Framework\Session\Generic
+     * @since 2.0.0
      */
     protected $reviewSession;
 
@@ -42,6 +46,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Catalog catgory model
      *
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -49,6 +54,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Logger
      *
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -56,6 +62,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Catalog product model
      *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -63,6 +70,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Review model
      *
      * @var \Magento\Review\Model\ReviewFactory
+     * @since 2.0.0
      */
     protected $reviewFactory;
 
@@ -70,6 +78,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
+     * @since 2.0.0
      */
     protected $ratingFactory;
 
@@ -77,6 +86,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Catalog design model
      *
      * @var \Magento\Catalog\Model\Design
+     * @since 2.0.0
      */
     protected $catalogDesign;
 
@@ -84,6 +94,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Core model store manager interface
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -91,6 +102,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Core form key validator
      *
      * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @since 2.0.0
      */
     protected $formKeyValidator;
 
@@ -108,6 +120,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -143,6 +156,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -173,6 +187,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * Initialize and check product
      *
      * @return \Magento\Catalog\Model\Product|bool
+     * @since 2.0.0
      */
     protected function initProduct()
     {
@@ -210,6 +225,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      *
      * @param int $productId
      * @return bool|CatalogProduct
+     * @since 2.0.0
      */
     protected function loadProduct($productId)
     {

@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * Fallback Rule Theme
  *
  * An aggregate of a fallback rule that propagates it to every theme according to a hierarchy
+ * @since 2.0.0
  */
 class Theme implements RuleInterface
 {
@@ -22,6 +23,7 @@ class Theme implements RuleInterface
      * Rule
      *
      * @var RuleInterface
+     * @since 2.0.0
      */
     protected $rule;
 
@@ -29,11 +31,13 @@ class Theme implements RuleInterface
      * Component registrar
      *
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
     /**
      * @var DirectoryList
+     * @since 2.2.0
      */
     private $directoryList;
 
@@ -42,6 +46,7 @@ class Theme implements RuleInterface
      *
      * @param RuleInterface $rule
      * @param ComponentRegistrarInterface $componentRegistrar
+     * @since 2.0.0
      */
     public function __construct(RuleInterface $rule, ComponentRegistrarInterface $componentRegistrar)
     {
@@ -55,6 +60,7 @@ class Theme implements RuleInterface
      * @param array $params
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getPatternDirs(array $params)
     {
@@ -88,6 +94,7 @@ class Theme implements RuleInterface
      * @param ThemeInterface $theme
      * @param array $params
      * @return array
+     * @since 2.2.0
      */
     private function getThemePubStaticDir(ThemeInterface $theme, $params = [])
     {
@@ -108,7 +115,8 @@ class Theme implements RuleInterface
      * Get DirectoryList instance
      * @return DirectoryList
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getDirectoryList()
     {

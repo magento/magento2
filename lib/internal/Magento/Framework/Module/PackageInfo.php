@@ -10,6 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
  * and mapping of module name to package version
+ * @since 2.0.0
  */
 class PackageInfo
 {
@@ -17,6 +18,7 @@ class PackageInfo
      * Package name to module name map
      *
      * @var string[]
+     * @since 2.0.0
      */
     private $packageModuleMap;
 
@@ -24,6 +26,7 @@ class PackageInfo
      * Map of module name to package version
      *
      * @var string[]
+     * @since 2.0.0
      */
     private $modulePackageVersionMap;
 
@@ -31,6 +34,7 @@ class PackageInfo
      * "require" field of each module, contains depending modules' name
      *
      * @var array[]
+     * @since 2.0.0
      */
     private $requireMap;
 
@@ -38,6 +42,7 @@ class PackageInfo
      * "conflict" field of each module, contains conflicting modules' name and version constraint
      *
      * @var array[]
+     * @since 2.0.0
      */
     private $conflictMap;
 
@@ -45,16 +50,19 @@ class PackageInfo
      * Reader of composer.json files
      *
      * @var Dir\Reader
+     * @since 2.0.0
      */
     private $reader;
 
     /**
      * @var ComponentRegistrar
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $nonExistingDependencies = [];
 
@@ -63,6 +71,7 @@ class PackageInfo
      *
      * @param Dir\Reader $reader
      * @param ComponentRegistrar $componentRegistrar
+     * @since 2.0.0
      */
     public function __construct(Dir\Reader $reader, ComponentRegistrar $componentRegistrar)
     {
@@ -76,6 +85,7 @@ class PackageInfo
      * @return void
      * @throws \Zend_Json_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     private function load()
     {
@@ -118,6 +128,7 @@ class PackageInfo
      *
      * @param string $packageName
      * @return string
+     * @since 2.0.0
      */
     public function getModuleName($packageName)
     {
@@ -139,6 +150,7 @@ class PackageInfo
      *
      * @param string $dependency
      * @return void
+     * @since 2.0.0
      */
     protected function addNonExistingDependency($dependency)
     {
@@ -151,6 +163,7 @@ class PackageInfo
      * Return list of non existing dependencies
      *
      * @return array
+     * @since 2.0.0
      */
     public function getNonExistingDependencies()
     {
@@ -162,6 +175,7 @@ class PackageInfo
      *
      * @param string $packageName
      * @return string|null
+     * @since 2.0.0
      */
     protected function convertPackageNameToModuleName($packageName)
     {
@@ -177,6 +191,7 @@ class PackageInfo
      *
      * @param string $packageName
      * @return bool
+     * @since 2.0.0
      */
     protected function isMagentoPackage($packageName)
     {
@@ -188,6 +203,7 @@ class PackageInfo
      *
      * @param string $moduleName
      * @return string
+     * @since 2.0.0
      */
     public function getPackageName($moduleName)
     {
@@ -200,6 +216,7 @@ class PackageInfo
      *
      * @param string[] $packageNames
      * @return string[]
+     * @since 2.0.0
      */
     private function convertToModuleNames($packageNames)
     {
@@ -215,6 +232,7 @@ class PackageInfo
      *
      * @param string $moduleName
      * @return array
+     * @since 2.0.0
      */
     public function getRequire($moduleName)
     {
@@ -231,6 +249,7 @@ class PackageInfo
      *
      * @param string $requiredModuleName
      * @return array
+     * @since 2.2.0
      */
     public function getRequiredBy($requiredModuleName)
     {
@@ -250,6 +269,7 @@ class PackageInfo
      *
      * @param string $moduleName
      * @return array
+     * @since 2.0.0
      */
     public function getConflict($moduleName)
     {
@@ -269,6 +289,7 @@ class PackageInfo
      *
      * @param string $moduleName
      * @return string
+     * @since 2.0.0
      */
     public function getVersion($moduleName)
     {

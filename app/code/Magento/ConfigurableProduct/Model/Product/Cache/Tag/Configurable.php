@@ -9,6 +9,7 @@ use Magento\Framework\App\Cache\Tag\StrategyInterface;
 
 /**
  * Add parent invalidation tags
+ * @since 2.2.0
  */
 class Configurable implements StrategyInterface
 {
@@ -16,11 +17,13 @@ class Configurable implements StrategyInterface
      *  Configurable product type resource
      *
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     * @since 2.2.0
      */
     private $catalogProductTypeConfigurable;
 
     /**
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
@@ -30,6 +33,7 @@ class Configurable implements StrategyInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTags($object)
     {

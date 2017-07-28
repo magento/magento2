@@ -11,6 +11,7 @@ use Magento\Framework\Code\Minifier\AdapterInterface;
 
 /**
  * Adapter for JShrink library
+ * @since 2.0.0
  */
 class JShrink implements AdapterInterface
 {
@@ -21,6 +22,7 @@ class JShrink implements AdapterInterface
      * @param string $content The raw javascript to be minified
      * @throws \Exception
      * @return bool|string
+     * @since 2.0.0
      */
     public function minify($content)
     {

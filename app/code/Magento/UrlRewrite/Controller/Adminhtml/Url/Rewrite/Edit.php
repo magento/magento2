@@ -6,6 +6,11 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+/**
+ * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**#@+
@@ -21,6 +26,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      * Get current mode
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getMode()
     {
@@ -42,6 +48,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      * Show urlrewrite edit/create page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

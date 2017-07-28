@@ -6,6 +6,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Cancel
+ *
+ * @since 2.0.0
+ */
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -19,6 +24,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
      * Cancel order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

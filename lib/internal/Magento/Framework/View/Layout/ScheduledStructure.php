@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Layout;
  * Layout structure model
  *
  * @api
+ * @since 2.0.0
  */
 class ScheduledStructure
 {
@@ -41,6 +42,7 @@ class ScheduledStructure
      * Information about structural elements, scheduled for creation
      *
      * @var array
+     * @since 2.0.0
      */
     protected $scheduledStructure = [];
 
@@ -48,6 +50,7 @@ class ScheduledStructure
      * Scheduled structure data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $scheduledData = [];
 
@@ -55,6 +58,7 @@ class ScheduledStructure
      * Full information about elements to be populated in the layout structure after generating structure
      *
      * @var array
+     * @since 2.0.0
      */
     protected $scheduledElements = [];
 
@@ -62,6 +66,7 @@ class ScheduledStructure
      * Scheduled structure elements moves
      *
      * @var array
+     * @since 2.0.0
      */
     protected $scheduledMoves = [];
 
@@ -69,6 +74,7 @@ class ScheduledStructure
      * Scheduled structure elements removes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $scheduledRemoves = [];
 
@@ -76,6 +82,7 @@ class ScheduledStructure
      * Materialized paths for overlapping workaround of scheduled structural elements
      *
      * @var array
+     * @since 2.0.0
      */
     protected $scheduledPaths = [];
 
@@ -83,6 +90,7 @@ class ScheduledStructure
      * Elements with reference to non-existing parent element
      *
      * @var array
+     * @since 2.0.0
      */
     protected $brokenParent = [];
 
@@ -90,11 +98,13 @@ class ScheduledStructure
      * Elements that need to sort
      *
      * @var array
+     * @since 2.0.0
      */
     protected $elementsToSort = [];
 
     /**
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(array $data = [])
     {
@@ -109,6 +119,7 @@ class ScheduledStructure
      * @param string|int|null $offsetOrSibling
      * @param bool $isAfter
      * @return void
+     * @since 2.0.0
      */
     public function setElementToSortList($parentName, $elementName, $offsetOrSibling, $isAfter = true)
     {
@@ -124,6 +135,7 @@ class ScheduledStructure
      * Check if elements list of sorting is empty
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isListToSortEmpty()
     {
@@ -135,6 +147,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function unsetElementToSort($elementName)
     {
@@ -147,6 +160,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param array $default
      * @return array
+     * @since 2.0.0
      */
     public function getElementToSort($elementName, array $default = [])
     {
@@ -157,6 +171,7 @@ class ScheduledStructure
      * Get elements to sort
      *
      * @return array
+     * @since 2.0.0
      */
     public function getListToSort()
     {
@@ -167,6 +182,7 @@ class ScheduledStructure
      * Get elements to move
      *
      * @return array
+     * @since 2.0.0
      */
     public function getListToMove()
     {
@@ -177,6 +193,7 @@ class ScheduledStructure
      * Get elements to remove
      *
      * @return array
+     * @since 2.0.0
      */
     public function getListToRemove()
     {
@@ -190,6 +207,7 @@ class ScheduledStructure
      * Get scheduled elements list
      *
      * @return array
+     * @since 2.0.0
      */
     public function getElements()
     {
@@ -202,6 +220,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param array $default
      * @return bool|array
+     * @since 2.0.0
      */
     public function getElement($elementName, $default = [])
     {
@@ -212,6 +231,7 @@ class ScheduledStructure
      * Check if scheduled elements list is empty
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isElementsEmpty()
     {
@@ -224,6 +244,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function setElement($elementName, array $data)
     {
@@ -235,6 +256,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return bool
+     * @since 2.0.0
      */
     public function hasElement($elementName)
     {
@@ -246,6 +268,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function unsetElement($elementName)
     {
@@ -258,6 +281,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param mixed $default
      * @return mixed
+     * @since 2.0.0
      */
     public function getElementToMove($elementName, $default = null)
     {
@@ -270,6 +294,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function setElementToMove($elementName, array $data)
     {
@@ -281,6 +306,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function unsetElementFromListToRemove($elementName)
     {
@@ -292,6 +318,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function setElementToRemoveList($elementName)
     {
@@ -302,6 +329,7 @@ class ScheduledStructure
      * Get scheduled structure
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStructure()
     {
@@ -314,6 +342,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param mixed|null $default
      * @return mixed
+     * @since 2.0.0
      */
     public function getStructureElement($elementName, $default = null)
     {
@@ -324,6 +353,7 @@ class ScheduledStructure
      * Check if scheduled structure is empty
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isStructureEmpty()
     {
@@ -335,6 +365,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return bool
+     * @since 2.0.0
      */
     public function hasStructureElement($elementName)
     {
@@ -347,6 +378,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function setStructureElement($elementName, array $data)
     {
@@ -358,6 +390,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function unsetStructureElement($elementName)
     {
@@ -371,6 +404,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param null $default
      * @return null
+     * @since 2.0.0
      */
     public function getStructureElementData($elementName, $default = null)
     {
@@ -383,6 +417,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function setStructureElementData($elementName, array $data)
     {
@@ -393,6 +428,7 @@ class ScheduledStructure
      * Get scheduled paths
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPaths()
     {
@@ -405,6 +441,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param mixed $default
      * @return mixed
+     * @since 2.0.0
      */
     public function getPath($elementName, $default = null)
     {
@@ -416,6 +453,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return bool
+     * @since 2.0.0
      */
     public function hasPath($elementName)
     {
@@ -428,6 +466,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param string $data
      * @return void
+     * @since 2.0.0
      */
     public function setPathElement($elementName, $data)
     {
@@ -439,6 +478,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function unsetPathElement($elementName)
     {
@@ -450,6 +490,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function unsetElementFromBrokenParentList($elementName)
     {
@@ -461,6 +502,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     public function setElementToBrokenParentList($elementName)
     {
@@ -471,6 +513,7 @@ class ScheduledStructure
      * Flush scheduled paths list
      *
      * @return void
+     * @since 2.0.0
      */
     public function flushPaths()
     {
@@ -481,6 +524,7 @@ class ScheduledStructure
      * Flush scheduled structure list
      *
      * @return void
+     * @since 2.0.0
      */
     public function flushScheduledStructure()
     {
@@ -493,6 +537,7 @@ class ScheduledStructure
      * Reformat 'Layout scheduled structure' to array.
      *
      * @return array
+     * @since 2.2.0
      */
     public function __toArray()
     {
@@ -509,6 +554,7 @@ class ScheduledStructure
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function populateWithArray(array $data)
     {
@@ -523,6 +569,7 @@ class ScheduledStructure
      * @param string $key
      * @param array $array
      * @return array
+     * @since 2.2.0
      */
     private function getArrayValueByKey($key, array $array)
     {

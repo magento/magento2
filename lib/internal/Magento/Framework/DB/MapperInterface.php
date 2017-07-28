@@ -7,6 +7,7 @@ namespace Magento\Framework\DB;
 
 /**
  * Interface MapperInterface
+ * @since 2.0.0
  */
 interface MapperInterface
 {
@@ -19,6 +20,7 @@ interface MapperInterface
      *
      * @param \Magento\Framework\Api\CriteriaInterface $criteria
      * @return Select
+     * @since 2.0.0
      */
     public function map(\Magento\Framework\Api\CriteriaInterface $criteria);
 
@@ -26,6 +28,7 @@ interface MapperInterface
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     public function getResource();
 
@@ -39,6 +42,7 @@ interface MapperInterface
      * @param string $expression
      * @param array|string $fields
      * @return $this
+     * @since 2.0.0
      */
     public function addExpressionFieldToSelect($alias, $expression, $fields);
 
@@ -79,6 +83,7 @@ interface MapperInterface
      * @param string|int|array $condition
      * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return void
+     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null);
 
@@ -86,6 +91,7 @@ interface MapperInterface
      * Reset Select object state
      *
      * @return void
+     * @since 2.0.0
      */
     public function reset();
 }

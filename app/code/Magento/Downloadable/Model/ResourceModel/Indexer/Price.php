@@ -11,12 +11,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Downloadable products Price indexer resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * @param null|int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @since 2.0.0
      */
     protected function reindex($entityIds = null)
     {
@@ -36,6 +38,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * @see _prepareDefaultFinalPriceTable()
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDownloadableLinkPriceTable()
     {
@@ -46,6 +49,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Prepare downloadable links price temporary index table
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareDownloadableLinkPriceTable()
     {
@@ -57,6 +61,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      * Calculate and apply Downloadable links price to index
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _applyDownloadableLink()
     {

@@ -9,14 +9,23 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\Website\Link
+ *
+ * @since 2.2.0
+ */
 class Link
 {
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
+     */
     private $resourceConnection;
 
     /**
      * Link constructor.
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection
@@ -28,6 +37,7 @@ class Link
      * Retrieve associated with product websites ids
      * @param int $productId
      * @return array
+     * @since 2.2.0
      */
     public function getWebsiteIdsByProductId($productId)
     {
@@ -49,6 +59,7 @@ class Link
      * @param ProductInterface $product
      * @param array $websiteIds
      * @return bool
+     * @since 2.2.0
      */
     public function saveWebsiteIds(ProductInterface $product, array $websiteIds)
     {
@@ -82,6 +93,7 @@ class Link
 
     /**
      * @return string
+     * @since 2.2.0
      */
     private function getProductWebsiteTable()
     {

@@ -9,6 +9,11 @@
  */
 namespace Magento\Framework\Translate;
 
+/**
+ * Class \Magento\Framework\Translate\Adapter
+ *
+ * @since 2.0.0
+ */
 class Adapter extends AbstractAdapter
 {
     /**
@@ -18,6 +23,7 @@ class Adapter extends AbstractAdapter
      * @param array|string $messageId
      * @param null|string $locale
      * @return string
+     * @since 2.0.0
      */
     public function translate($messageId, $locale = null)
     {
@@ -35,6 +41,7 @@ class Adapter extends AbstractAdapter
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @return string
+     * @since 2.0.0
      */
     public function __()
     {

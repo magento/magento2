@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Api;
 /**
  * Interface GuestItemRepositoryInterface
  * @api
+ * @since 2.0.0
  */
 interface GuestItemRepositoryInterface
 {
@@ -18,6 +19,7 @@ interface GuestItemRepositoryInterface
      * @param int $itemId The item ID.
      * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item does not exist in the cart.
+     * @since 2.0.0
      */
     public function get($cartId, $itemId);
 
@@ -31,6 +33,7 @@ interface GuestItemRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\InputException You cannot add gift messages to empty carts.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
+     * @since 2.0.0
      */
     public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage, $itemId);
 }

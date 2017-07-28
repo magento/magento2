@@ -9,6 +9,7 @@ namespace Magento\Reports\Model\ResourceModel\Quote;
  * Factory class for @see \Magento\Reports\Model\ResourceModel\Quote\Collection
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\CollectionFactoryInterface
 {
@@ -16,6 +17,7 @@ class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\Co
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -23,6 +25,7 @@ class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\Co
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -31,6 +34,7 @@ class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\Co
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -42,6 +46,7 @@ class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\Co
 
     /**
      * {@inheritdoc)
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

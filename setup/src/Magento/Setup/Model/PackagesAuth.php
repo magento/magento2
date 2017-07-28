@@ -11,6 +11,7 @@ use Zend\View\Model\JsonModel;
 
 /**
  * Class PackagesAuth, checks, saves and removes auth details related to packages.
+ * @since 2.1.0
  */
 class PackagesAuth
 {
@@ -36,16 +37,19 @@ class PackagesAuth
 
     /**
      * @var \Magento\Framework\HTTP\Client\Curl
+     * @since 2.1.0
      */
     protected $curlClient;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $urlPrefix = 'https://';
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.1.0
      */
     private $filesystem;
 
@@ -53,6 +57,7 @@ class PackagesAuth
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Magento\Framework\HTTP\Client\Curl $curl
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.1.0
      */
     public function __construct(
         \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator,
@@ -66,6 +71,7 @@ class PackagesAuth
 
     /**
      * @return string
+     * @since 2.1.0
      */
     private function getPackagesJsonUrl()
     {
@@ -74,6 +80,7 @@ class PackagesAuth
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getCredentialBaseUrl()
     {
@@ -85,6 +92,7 @@ class PackagesAuth
      * @param string $token
      * @param string $secretKey
      * @return string
+     * @since 2.1.0
      */
     public function checkCredentials($token, $secretKey)
     {
@@ -109,6 +117,7 @@ class PackagesAuth
      * Gets auth.json file
      *
      * @return array|false
+     * @since 2.1.0
      */
     public function getAuthJsonData()
     {
@@ -127,6 +136,7 @@ class PackagesAuth
      *
      * @return bool|mixed
      * @throws \Exception
+     * @since 2.1.0
      */
     private function getAuthJson()
     {
@@ -147,6 +157,7 @@ class PackagesAuth
      *
      * @return bool
      * @throws \Exception
+     * @since 2.1.0
      */
     public function removeCredentials()
     {
@@ -174,6 +185,7 @@ class PackagesAuth
      * @param string $password
      * @return bool
      * @throws \Exception
+     * @since 2.1.0
      */
     public function saveAuthJson($username, $password)
     {

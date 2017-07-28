@@ -12,6 +12,11 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Class \Magento\Setup\Model\AdminAccount
+ *
+ * @since 2.0.0
+ */
 class AdminAccount
 {
     /**#@+
@@ -36,11 +41,13 @@ class AdminAccount
      * Configurations
      *
      * @var []
+     * @since 2.0.0
      */
     private $data;
 
     /**
      * @var EncryptorInterface
+     * @since 2.0.0
      */
     private $encryptor;
 
@@ -50,6 +57,7 @@ class AdminAccount
      * @param AdapterInterface $connection
      * @param EncryptorInterface $encryptor
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         AdapterInterface $connection,
@@ -65,6 +73,7 @@ class AdminAccount
      * Generate password string
      *
      * @return string
+     * @since 2.0.0
      */
     protected function generatePassword()
     {
@@ -77,6 +86,7 @@ class AdminAccount
      * If the administrator account exists, update it.
      *
      * @return void
+     * @since 2.0.0
      */
     public function save()
     {
@@ -91,6 +101,7 @@ class AdminAccount
      * and set the is_active flag.
      *
      * @return int The admin user id
+     * @since 2.0.0
      */
     private function saveAdminUser()
     {
@@ -140,6 +151,7 @@ class AdminAccount
      * @param int $adminId
      * @param string $passwordHash
      * @return void
+     * @since 2.2.0
      */
     private function trackPassword($adminId, $passwordHash)
     {
@@ -160,6 +172,7 @@ class AdminAccount
      * @return void
      * @throws \Exception If the username and email do not both match data provided to install
      * @throws \Exception If password is empty and if password is the same as the user name
+     * @since 2.0.0
      */
     public function validateUserMatches()
     {
@@ -213,6 +226,7 @@ class AdminAccount
      *
      * @param int $adminId User id of administrator to set role for
      * @return void
+     * @since 2.0.0
      */
     private function saveAdminUserRole($adminId)
     {
@@ -240,6 +254,7 @@ class AdminAccount
      *
      * @return int The id of the Administrators role
      * @throws \Exception If Administrators role not found or problem connecting with database.
+     * @since 2.0.0
      */
     private function retrieveAdministratorsRoleId()
     {
@@ -271,6 +286,7 @@ class AdminAccount
      *
      * @param string $table
      * @return string
+     * @since 2.2.0
      */
     private function getTableName($table)
     {

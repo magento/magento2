@@ -13,21 +13,25 @@ use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of base files introduced by modules
+ * @since 2.0.0
  */
 class Base implements CollectorInterface
 {
     /**
      * @var DirSearch
+     * @since 2.0.0
      */
     protected $componentDirSearch;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $subDir;
 
     /**
      * @var FileFactory
+     * @since 2.0.0
      */
     private $fileFactory;
 
@@ -37,6 +41,7 @@ class Base implements CollectorInterface
      * @param DirSearch $dirSearch
      * @param FileFactory $fileFactory
      * @param string $subDir
+     * @since 2.0.0
      */
     public function __construct(
         DirSearch $dirSearch,
@@ -54,6 +59,7 @@ class Base implements CollectorInterface
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
+     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

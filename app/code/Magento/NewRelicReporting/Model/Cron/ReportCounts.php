@@ -13,36 +13,43 @@ use Magento\Catalog\Api\CategoryManagementInterface;
 
 /**
  * Class ReportCounts
+ * @since 2.0.0
  */
 class ReportCounts
 {
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var ProductManagementInterface
+     * @since 2.0.0
      */
     protected $productManagement;
 
     /**
      * @var ConfigurableProductManagementInterface
+     * @since 2.0.0
      */
     protected $configurableManagement;
 
     /**
      * @var CategoryManagementInterface
+     * @since 2.0.0
      */
     protected $categoryManagement;
 
     /**
      * @var \Magento\NewRelicReporting\Model\CountsFactory
+     * @since 2.0.0
      */
     protected $countsFactory;
 
     /**
      * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory
+     * @since 2.0.0
      */
     protected $countsCollectionFactory;
 
@@ -55,6 +62,7 @@ class ReportCounts
      * @param CategoryManagementInterface $categoryManagement
      * @param \Magento\NewRelicReporting\Model\CountsFactory $countsFactory
      * @param \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory $countsCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -79,6 +87,7 @@ class ReportCounts
      * @param \Magento\NewRelicReporting\Model\Counts $model
      * @param string $type
      * @return void
+     * @since 2.0.0
      */
     protected function updateCount($count, \Magento\NewRelicReporting\Model\Counts $model, $type)
     {
@@ -105,6 +114,7 @@ class ReportCounts
      * Reports product size to the database reporting_counts table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function reportProductsSize()
     {
@@ -118,6 +128,7 @@ class ReportCounts
      * Reports configurable product size to the database reporting_counts table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function reportConfigurableProductsSize()
     {
@@ -131,6 +142,7 @@ class ReportCounts
      * Reports number of active products to the database reporting_counts table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function reportProductsActive()
     {
@@ -144,6 +156,7 @@ class ReportCounts
      * Reports category size to the database reporting_counts table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function reportCategorySize()
     {
@@ -157,6 +170,7 @@ class ReportCounts
      * Reports Modules and module changes to the database reporting_module_status table
      *
      * @return \Magento\NewRelicReporting\Model\Cron\ReportCounts
+     * @since 2.0.0
      */
     public function report()
     {

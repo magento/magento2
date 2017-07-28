@@ -14,31 +14,37 @@ use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * This class checks for dependencies between components after an upgrade. It is used in readiness check.
+ * @since 2.0.0
  */
 class DependencyReadinessCheck
 {
     /**
      * @var ComposerJsonFinder
+     * @since 2.0.0
      */
     private $composerJsonFinder;
 
     /**
      * @var DirectoryList
+     * @since 2.0.0
      */
     private $directoryList;
 
     /**
      * @var RequireUpdateDryRunCommand
+     * @since 2.0.0
      */
     private $requireUpdateDryRunCommand;
 
     /**
      * @var File
+     * @since 2.0.0
      */
     private $file;
 
     /**
      * @var MagentoComposerApplication
+     * @since 2.0.0
      */
     private $magentoComposerApplication;
 
@@ -49,6 +55,7 @@ class DependencyReadinessCheck
      * @param DirectoryList $directoryList
      * @param File $file
      * @param MagentoComposerApplicationFactory $composerAppFactory
+     * @since 2.0.0
      */
     public function __construct(
         ComposerJsonFinder $composerJsonFinder,
@@ -69,6 +76,7 @@ class DependencyReadinessCheck
      * @param array $packages
      * @return array
      * @throws \Exception
+     * @since 2.0.0
      */
     public function runReadinessCheck(array $packages)
     {

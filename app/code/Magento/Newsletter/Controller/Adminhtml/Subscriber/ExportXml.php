@@ -9,12 +9,18 @@ namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\ExportXml
+ *
+ * @since 2.0.0
+ */
 class ExportXml extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**
      * Export subscribers grid to XML format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

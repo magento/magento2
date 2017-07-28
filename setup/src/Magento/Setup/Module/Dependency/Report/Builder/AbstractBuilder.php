@@ -11,6 +11,7 @@ use Magento\Setup\Module\Dependency\Report\WriterInterface;
 
 /**
  *  Abstract report builder by config files
+ * @since 2.0.0
  */
 abstract class AbstractBuilder implements BuilderInterface
 {
@@ -18,6 +19,7 @@ abstract class AbstractBuilder implements BuilderInterface
      * Dependencies parser
      *
      * @var \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     protected $dependenciesParser;
 
@@ -25,11 +27,13 @@ abstract class AbstractBuilder implements BuilderInterface
      * Report writer
      *
      * @var \Magento\Setup\Module\Dependency\Report\WriterInterface
+     * @since 2.0.0
      */
     protected $reportWriter;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options = [];
 
@@ -38,6 +42,7 @@ abstract class AbstractBuilder implements BuilderInterface
      *
      * @param ParserInterface $dependenciesParser
      * @param WriterInterface $reportWriter
+     * @since 2.0.0
      */
     public function __construct(ParserInterface $dependenciesParser, WriterInterface $reportWriter)
     {
@@ -49,6 +54,7 @@ abstract class AbstractBuilder implements BuilderInterface
      * Template method. Main algorithm
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function build(array $options)
     {
@@ -65,6 +71,7 @@ abstract class AbstractBuilder implements BuilderInterface
      * @param array $options
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function checkOptions($options)
     {
@@ -82,6 +89,7 @@ abstract class AbstractBuilder implements BuilderInterface
      *
      * @param array $modulesData
      * @return \Magento\Setup\Module\Dependency\Report\Data\ConfigInterface
+     * @since 2.0.0
      */
     abstract protected function buildData($modulesData);
 }

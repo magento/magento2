@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Class \Magento\Framework\Image\Adapter\Gd2
+ *
+ * @since 2.0.0
+ */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
      * Required extensions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_requiredExtensions = ["gd"];
 
@@ -18,6 +24,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Image output callbacks by type
      *
      * @var array
+     * @since 2.0.0
      */
     private static $_callbacks = [
         IMAGETYPE_GIF => ['output' => 'imagegif', 'create' => 'imagecreatefromgif'],
@@ -31,6 +38,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Whether image was resized or not
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_resized = false;
 
@@ -38,6 +46,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * For properties reset, e.g. mimeType caching.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _reset()
     {
@@ -51,6 +60,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $filename
      * @return void
      * @throws \OverflowException
+     * @since 2.0.0
      */
     public function open($filename)
     {
@@ -69,6 +79,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks whether memory limit is reached.
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isMemoryLimitReached()
     {
@@ -86,6 +97,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string $file
      * @return float|int
+     * @since 2.0.0
      */
     protected function _getImageNeedMemorySize($file)
     {
@@ -113,6 +125,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string $memoryValue
      * @return int
+     * @since 2.0.0
      */
     protected function _convertToByte($memoryValue)
     {
@@ -135,6 +148,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param null|string $newName
      * @return void
      * @throws \Exception  If destination path is not writable
+     * @since 2.0.0
      */
     public function save($destination = null, $newName = null)
     {
@@ -187,6 +201,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     /**
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
+     * @since 2.0.0
      */
     public function getImage()
     {
@@ -203,6 +218,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $unsupportedText
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     private function _getCallback($callbackType, $fileType = null, $unsupportedText = 'Unsupported image format.')
     {
@@ -226,6 +242,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @return int
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     private function _fillBackgroundColor(&$imageResourceTo)
     {
@@ -285,6 +302,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string $fileName
      * @return boolean
+     * @since 2.0.0
      */
     public function checkAlpha($fileName)
     {
@@ -300,6 +318,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param bool &$isTrueColor
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
     {
@@ -331,6 +350,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param null|int $frameWidth
      * @param null|int $frameHeight
      * @return void
+     * @since 2.0.0
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -379,6 +399,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
+     * @since 2.0.0
      */
     public function rotate($angle)
     {
@@ -401,6 +422,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
@@ -577,6 +599,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $right
      * @param int $bottom
      * @return bool
+     * @since 2.0.0
      */
     public function crop($top = 0, $left = 0, $right = 0, $bottom = 0)
     {
@@ -616,6 +639,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @return void
      * @throws \Exception If some of dependencies are missing
+     * @since 2.0.0
      */
     public function checkDependencies()
     {
@@ -630,6 +654,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Reassign image dimensions
      *
      * @return void
+     * @since 2.0.0
      */
     public function refreshImageDimensions()
     {
@@ -639,6 +664,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Standard destructor. Destroy stored information about image
+     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -649,6 +675,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Helper function to free up memory associated with _imageHandler resource
      *
      * @return void
+     * @since 2.1.0
      */
     private function imageDestroy()
     {
@@ -662,6 +689,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param resource $imageHandler
      * @return void
+     * @since 2.0.0
      */
     private function _saveAlpha($imageHandler)
     {
@@ -677,6 +705,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $x
      * @param int $y
      * @return array
+     * @since 2.0.0
      */
     public function getColorAt($x, $y)
     {
@@ -690,6 +719,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $text
      * @param string $font
      * @return \Magento\Framework\Image\Adapter\AbstractAdapter
+     * @since 2.0.0
      */
     public function createPngFromString($text, $font = '')
     {
@@ -713,6 +743,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string $text
      * @return void
+     * @since 2.0.0
      */
     protected function _createImageFromText($text)
     {
@@ -733,6 +764,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $font
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _createImageFromTtfText($text, $font)
     {
@@ -764,6 +796,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $width
      * @param int $height
      * @return void
+     * @since 2.0.0
      */
     protected function _createEmptyImage($width, $height)
     {

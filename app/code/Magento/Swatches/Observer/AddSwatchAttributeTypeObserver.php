@@ -12,16 +12,19 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Observer model
+ * @since 2.0.0
  */
 class AddSwatchAttributeTypeObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @param Manager $moduleManager
+     * @since 2.0.0
      */
     public function __construct(Manager $moduleManager)
     {
@@ -31,6 +34,7 @@ class AddSwatchAttributeTypeObserver implements ObserverInterface
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

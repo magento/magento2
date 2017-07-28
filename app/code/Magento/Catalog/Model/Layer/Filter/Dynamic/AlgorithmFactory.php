@@ -11,6 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory
+ *
+ * @since 2.0.0
+ */
 class AlgorithmFactory
 {
     /**
@@ -26,16 +31,19 @@ class AlgorithmFactory
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $algorithms;
 
@@ -45,6 +53,7 @@ class AlgorithmFactory
      * @param ObjectManagerInterface $objectManager
      * @param ScopeConfigInterface $scopeConfig
      * @param array $algorithms
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -62,6 +71,7 @@ class AlgorithmFactory
      * @param array $data
      * @return AlgorithmInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

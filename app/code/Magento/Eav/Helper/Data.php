@@ -8,6 +8,7 @@ namespace Magento\Eav\Helper;
 
 /**
  * Eav data helper
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -20,21 +21,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_attributesLockedFields = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_entityTypeFrontendClasses = [];
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Config
+     * @since 2.0.0
      */
     protected $_attributeConfig;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -43,6 +48,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
      * @param \Magento\Eav\Model\Config $eavConfig
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -58,6 +64,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return default frontend classes value label array
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDefaultFrontendClasses()
     {
@@ -77,6 +84,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $entityTypeCode
      * @return array
+     * @since 2.0.0
      */
     public function getFrontendClasses($entityTypeCode)
     {
@@ -94,6 +102,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $entityTypeCode
      * @return array
+     * @since 2.0.0
      */
     public function getAttributeLockedFields($entityTypeCode)
     {
@@ -115,6 +124,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get input types validator data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getInputTypesValidatorData()
     {
@@ -135,6 +145,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *      'attribute_table' => $attributeTable
      *      'backend_type' => $backendType
      * ]</pre>
+     * @since 2.0.0
      */
     public function getAttributeMetadata($entityTypeCode, $attributeCode)
     {

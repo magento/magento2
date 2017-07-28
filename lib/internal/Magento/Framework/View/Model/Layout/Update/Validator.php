@@ -12,6 +12,7 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
  * Validator for custom layout update
  *
  * Validator checked XML validation and protected expressions
+ * @since 2.0.0
  */
 class Validator extends \Zend_Validate_Abstract
 {
@@ -33,6 +34,7 @@ class Validator extends \Zend_Validate_Abstract
      * The Magento SimpleXml object
      *
      * @var \Magento\Framework\Simplexml\Element
+     * @since 2.0.0
      */
     protected $_value;
 
@@ -40,6 +42,7 @@ class Validator extends \Zend_Validate_Abstract
      * Protected expressions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_protectedExpressions = [
         self::HELPER_ARGUMENT_TYPE => '//*[@xsi:type="helper"]',
@@ -50,17 +53,20 @@ class Validator extends \Zend_Validate_Abstract
      * XSD Schemas for Layout Update validation
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_xsdSchemas;
 
     /**
      * @var \Magento\Framework\Config\DomFactory
+     * @since 2.0.0
      */
     protected $_domConfigFactory;
 
     /**
      * @param \Magento\Framework\Config\DomFactory $domConfigFactory
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\DomFactory $domConfigFactory,
@@ -82,6 +88,7 @@ class Validator extends \Zend_Validate_Abstract
      * Initialize messages templates with translating
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initMessageTemplates()
     {
@@ -116,6 +123,7 @@ class Validator extends \Zend_Validate_Abstract
      * @param bool $isSecurityCheck
      * @return bool
      * @throws \Exception
+     * @since 2.0.0
      */
     public function isValid($value, $schema = self::LAYOUT_SCHEMA_PAGE_HANDLE, $isSecurityCheck = true)
     {

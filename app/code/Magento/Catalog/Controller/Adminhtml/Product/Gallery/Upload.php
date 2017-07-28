@@ -8,6 +8,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Gallery\Upload
+ *
+ * @since 2.0.0
+ */
 class Upload extends \Magento\Backend\App\Action
 {
     /**
@@ -19,12 +24,14 @@ class Upload extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,6 +43,7 @@ class Upload extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

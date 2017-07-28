@@ -10,6 +10,7 @@ namespace Magento\Review\Block\Form;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Configure extends \Magento\Review\Block\Form
 {
@@ -17,6 +18,7 @@ class Configure extends \Magento\Review\Block\Form
      * Get review product id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProductId()
     {

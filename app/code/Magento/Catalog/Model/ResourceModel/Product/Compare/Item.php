@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
  * Catalog compare item resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
      * @param \Magento\Catalog\Model\Product|int $product
      * @return bool
+     * @since 2.0.0
      */
     public function loadByProduct(\Magento\Catalog\Model\Product\Compare\Item $object, $product)
     {
@@ -63,6 +66,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $customerId
      * @param int $visitorId
      * @return int
+     * @since 2.0.0
      */
     public function getCount($customerId, $visitorId)
     {
@@ -84,6 +88,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Clean compare table
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clean()
     {
@@ -123,6 +128,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
      * @return $this
+     * @since 2.0.0
      */
     public function purgeVisitorByCustomer($object)
     {
@@ -144,6 +150,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
      * @return $this
+     * @since 2.0.0
      */
     public function updateCustomerFromVisitor($object)
     {
@@ -224,6 +231,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $visitorId
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function clearItems($visitorId = null, $customerId = null)
     {

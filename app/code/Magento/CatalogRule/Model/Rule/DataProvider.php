@@ -13,21 +13,25 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 /**
  * Class DataProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var Collection
+     * @since 2.1.0
      */
     protected $collection;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $loadedData;
 
     /**
      * @var DataPersistorInterface
+     * @since 2.1.0
      */
     protected $dataPersistor;
 
@@ -39,6 +43,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -56,6 +61,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getData()
     {

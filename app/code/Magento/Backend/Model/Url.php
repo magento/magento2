@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlInterface
 {
@@ -28,11 +29,13 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Authentication session
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Backend\Model\Menu
+     * @since 2.0.0
      */
     protected $_menu;
 
@@ -40,11 +43,13 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Startup page url from config
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_startupMenuItemId;
 
     /**
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_backendHelper;
 
@@ -52,31 +57,37 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Menu config
      *
      * @var \Magento\Backend\Model\Menu\Config
+     * @since 2.0.0
      */
     protected $_menuConfig;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Store\Model\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_scope;
 
@@ -105,6 +116,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param HostChecker|null $hostChecker
      * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
@@ -159,6 +171,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Retrieve is secure mode for ULR logic
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isSecure()
     {
@@ -174,6 +187,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param array $data
      * @param bool $unsetOldParams
      * @return $this
+     * @since 2.0.0
      */
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
@@ -193,6 +207,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param string $routePath
      * @param array $routeParams
      * @return string
+     * @since 2.0.0
      */
     public function getUrl($routePath = null, $routeParams = null)
     {
@@ -238,6 +253,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param string $controller Controller name
      * @param string $action Action name
      * @return string
+     * @since 2.0.0
      */
     public function getSecretKey($routeName = null, $controller = null, $action = null)
     {
@@ -272,6 +288,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Return secret key settings flag
      *
      * @return bool
+     * @since 2.0.0
      */
     public function useSecretKey()
     {
@@ -282,6 +299,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Enable secret key using
      *
      * @return $this
+     * @since 2.0.0
      */
     public function turnOnSecretKey()
     {
@@ -293,6 +311,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Disable secret key using
      *
      * @return $this
+     * @since 2.0.0
      */
     public function turnOffSecretKey()
     {
@@ -304,6 +323,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Refresh admin menu cache etc.
      *
      * @return void
+     * @since 2.0.0
      */
     public function renewSecretUrls()
     {
@@ -314,6 +334,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Find admin start page url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStartupPageUrl()
     {
@@ -332,6 +353,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Find first menu item that user is able to access
      *
      * @return string
+     * @since 2.0.0
      */
     public function findFirstAvailableMenu()
     {
@@ -353,6 +375,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Get Menu model
      *
      * @return \Magento\Backend\Model\Menu
+     * @since 2.0.0
      */
     protected function _getMenu()
     {
@@ -367,6 +390,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      *
      * @param \Magento\Backend\Model\Auth\Session $session
      * @return $this
+     * @since 2.0.0
      */
     public function setSession(\Magento\Backend\Model\Auth\Session $session)
     {
@@ -378,6 +402,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Retrieve auth session
      *
      * @return \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -388,6 +413,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Return backend area front name, defined in configuration
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAreaFrontName()
     {
@@ -402,6 +428,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Add backend area front name as a prefix to action path
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getActionPath()
     {
@@ -418,6 +445,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * Get scope for the url instance
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected function _getScope()
     {
@@ -437,6 +465,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     protected function _getConfigCacheId($path)
     {
@@ -449,6 +478,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      *
      * @param string $path
      * @return null|string
+     * @since 2.0.0
      */
     protected function _getConfig($path)
     {

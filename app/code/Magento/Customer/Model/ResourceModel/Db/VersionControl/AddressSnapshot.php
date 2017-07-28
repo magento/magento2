@@ -8,10 +8,16 @@ namespace Magento\Customer\Model\ResourceModel\Db\VersionControl;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot
+ *
+ * @since 2.1.0
+ */
 class AddressSnapshot extends Snapshot
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function isModified(DataObject $entity)
     {
@@ -32,6 +38,7 @@ class AddressSnapshot extends Snapshot
      *
      * @param DataObject $entity
      * @return bool
+     * @since 2.1.0
      */
     private function isAddressDefault(DataObject $entity)
     {

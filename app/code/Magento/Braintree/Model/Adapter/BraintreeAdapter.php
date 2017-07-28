@@ -16,17 +16,20 @@ use Magento\Braintree\Model\Adminhtml\Source\Environment;
 /**
  * Class BraintreeAdapter
  * @codeCoverageIgnore
+ * @since 2.1.0
  */
 class BraintreeAdapter
 {
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @param Config $config
+     * @since 2.1.0
      */
     public function __construct(Config $config)
     {
@@ -38,6 +41,7 @@ class BraintreeAdapter
      * Initializes credentials.
      *
      * @return void
+     * @since 2.1.0
      */
     protected function initCredentials()
     {
@@ -54,6 +58,7 @@ class BraintreeAdapter
     /**
      * @param string|null $value
      * @return mixed
+     * @since 2.1.0
      */
     public function environment($value = null)
     {
@@ -63,6 +68,7 @@ class BraintreeAdapter
     /**
      * @param string|null $value
      * @return mixed
+     * @since 2.1.0
      */
     public function merchantId($value = null)
     {
@@ -72,6 +78,7 @@ class BraintreeAdapter
     /**
      * @param string|null $value
      * @return mixed
+     * @since 2.1.0
      */
     public function publicKey($value = null)
     {
@@ -81,6 +88,7 @@ class BraintreeAdapter
     /**
      * @param string|null $value
      * @return mixed
+     * @since 2.1.0
      */
     public function privateKey($value = null)
     {
@@ -90,6 +98,7 @@ class BraintreeAdapter
     /**
      * @param array $params
      * @return \Braintree\Result\Successful|\Braintree\Result\Error|null
+     * @since 2.1.0
      */
     public function generate(array $params = [])
     {
@@ -103,6 +112,7 @@ class BraintreeAdapter
     /**
      * @param string $token
      * @return \Braintree\CreditCard|null
+     * @since 2.1.0
      */
     public function find($token)
     {
@@ -116,6 +126,7 @@ class BraintreeAdapter
     /**
      * @param array $filters
      * @return \Braintree\ResourceCollection
+     * @since 2.1.0
      */
     public function search(array $filters)
     {
@@ -125,6 +136,7 @@ class BraintreeAdapter
     /**
      * @param string $token
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @since 2.1.0
      */
     public function createNonce($token)
     {
@@ -134,6 +146,7 @@ class BraintreeAdapter
     /**
      * @param array $attributes
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @since 2.1.0
      */
     public function sale(array $attributes)
     {
@@ -144,6 +157,7 @@ class BraintreeAdapter
      * @param string $transactionId
      * @param null|float $amount
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @since 2.1.0
      */
     public function submitForSettlement($transactionId, $amount = null)
     {
@@ -153,6 +167,7 @@ class BraintreeAdapter
     /**
      * @param string $transactionId
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @since 2.1.0
      */
     public function void($transactionId)
     {
@@ -163,6 +178,7 @@ class BraintreeAdapter
      * @param string $transactionId
      * @param null|float $amount
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @since 2.1.0
      */
     public function refund($transactionId, $amount = null)
     {
@@ -174,6 +190,7 @@ class BraintreeAdapter
      * @param string $transactionId
      * @param array $attributes
      * @return mixed
+     * @since 2.1.0
      */
     public function cloneTransaction($transactionId, array $attributes)
     {

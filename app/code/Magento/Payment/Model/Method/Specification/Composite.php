@@ -13,6 +13,7 @@ use Magento\Payment\Model\Method\SpecificationInterface;
  * Use this class for virtual types declaration.
  *
  * @api
+ * @since 2.0.0
  */
 class Composite implements SpecificationInterface
 {
@@ -20,6 +21,7 @@ class Composite implements SpecificationInterface
      * Specifications collection
      *
      * @var SpecificationInterface[]
+     * @since 2.0.0
      */
     protected $specifications = [];
 
@@ -28,6 +30,7 @@ class Composite implements SpecificationInterface
      *
      * @param Factory $factory
      * @param array $specifications
+     * @since 2.0.0
      */
     public function __construct(Factory $factory, $specifications = [])
     {
@@ -38,6 +41,7 @@ class Composite implements SpecificationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isSatisfiedBy($paymentMethod)
     {

@@ -10,10 +10,16 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\Data\PaymentInterface;
 
+/**
+ * Class \Magento\Paypal\Observer\PayflowProAddCcData
+ *
+ * @since 2.1.0
+ */
 class PayflowProAddCcData extends AbstractDataAssignObserver
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     private $ccKeys = [
         'cc_type',
@@ -25,6 +31,7 @@ class PayflowProAddCcData extends AbstractDataAssignObserver
     /**
      * @param Observer $observer
      * @return void
+     * @since 2.1.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -56,6 +63,7 @@ class PayflowProAddCcData extends AbstractDataAssignObserver
     /**
      * @param array $ccData
      * @return array
+     * @since 2.1.0
      */
     private function sortCcData(array $ccData)
     {

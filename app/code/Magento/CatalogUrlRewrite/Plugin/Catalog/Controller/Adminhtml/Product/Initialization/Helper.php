@@ -5,13 +5,22 @@
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+ *
+ * @since 2.0.0
+ */
 class Helper
 {
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
+     */
     protected $request;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request
@@ -24,6 +33,7 @@ class Helper
      * @param \Magento\Catalog\Model\Product $result
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,

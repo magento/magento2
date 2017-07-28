@@ -10,6 +10,7 @@ use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
 /**
  * Plugin for \Magento\Backend\Block\Store\Switcher
+ * @since 2.0.0
  */
 class SwitcherPlugin
 {
@@ -20,6 +21,7 @@ class SwitcherPlugin
      * @param string $route
      * @param array $params
      * @return array
+     * @since 2.2.0
      */
     public function beforeGetUrl(StoreSwitcherBlock $subject, $route = '', $params = [])
     {

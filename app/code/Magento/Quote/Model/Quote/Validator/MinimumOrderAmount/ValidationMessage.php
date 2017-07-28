@@ -5,20 +5,28 @@
  */
 namespace Magento\Quote\Model\Quote\Validator\MinimumOrderAmount;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+ *
+ * @since 2.1.0
+ */
 class ValidationMessage
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @since 2.1.0
      */
     private $currency;
 
@@ -26,6 +34,7 @@ class ValidationMessage
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\CurrencyInterface $currency
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -42,6 +51,7 @@ class ValidationMessage
      *
      * @return \Magento\Framework\Phrase
      * @throws \Zend_Currency_Exception
+     * @since 2.1.0
      */
     public function getMessage()
     {

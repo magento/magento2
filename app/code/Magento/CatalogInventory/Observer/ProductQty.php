@@ -10,6 +10,7 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
  * Prepare array with information about used product qty and product stock item
+ * @since 2.0.0
  */
 class ProductQty
 {
@@ -18,6 +19,7 @@ class ProductQty
      *
      * @param array $relatedItems
      * @return array
+     * @since 2.0.0
      */
     public function getProductQty($relatedItems)
     {
@@ -45,6 +47,7 @@ class ProductQty
      * @param QuoteItem $quoteItem
      * @param array &$items
      * @return void
+     * @since 2.0.0
      */
     protected function _addItemToQtyArray(QuoteItem $quoteItem, &$items)
     {

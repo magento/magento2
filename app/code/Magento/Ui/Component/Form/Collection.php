@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends AbstractComponent implements UiComponentInterface
 {
@@ -19,6 +20,7 @@ class Collection extends AbstractComponent implements UiComponentInterface
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

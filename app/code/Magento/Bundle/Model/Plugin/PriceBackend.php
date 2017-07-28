@@ -9,6 +9,7 @@ namespace Magento\Bundle\Model\Plugin;
  * Class PriceBackend
  *
  *  Make price validation optional for bundle dynamic
+ * @since 2.0.0
  */
 class PriceBackend
 {
@@ -18,6 +19,7 @@ class PriceBackend
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundValidate(
         \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject,

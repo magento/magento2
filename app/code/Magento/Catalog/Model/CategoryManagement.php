@@ -9,25 +9,34 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\CategoryManagement
+ *
+ * @since 2.0.0
+ */
 class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInterface
 {
     /**
      * @var CategoryRepository
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
     /**
      * @var \Magento\Catalog\Model\Category\Tree
+     * @since 2.0.0
      */
     protected $categoryTree;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.1.0
      */
     private $scopeResolver;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @since 2.1.0
      */
     private $categoriesFactory;
     
@@ -35,6 +44,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoriesFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
@@ -48,6 +58,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTree($rootCategoryId = null, $depth = null)
     {
@@ -66,6 +77,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * Check is request use default scope
      *
      * @return bool
+     * @since 2.1.0
      */
     private function isAdminStore()
     {
@@ -76,6 +88,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * Get store manager for operations with admin code
      *
      * @return \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.1.0
      */
     private function getScopeResolver()
     {
@@ -91,6 +104,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * Get top level hidden root category
      *
      * @return \Magento\Catalog\Model\Category
+     * @since 2.1.0
      */
     private function getTopLevelCategory()
     {
@@ -100,6 +114,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function move($categoryId, $parentId, $afterId = null)
     {
@@ -128,6 +143,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCount()
     {

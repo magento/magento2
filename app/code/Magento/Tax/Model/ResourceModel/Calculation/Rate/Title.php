@@ -9,6 +9,7 @@ namespace Magento\Tax\Model\ResourceModel\Calculation\Rate;
  * Tax Rate Title Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Title extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Title extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Title extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $rateId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteByRateId($rateId)
     {

@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Quote extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,6 +18,7 @@ class Quote extends \Magento\Backend\Block\Widget\Grid\Container
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

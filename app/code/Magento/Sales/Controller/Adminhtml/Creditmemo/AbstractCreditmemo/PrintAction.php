@@ -9,6 +9,11 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\PrintAction
+ *
+ * @since 2.0.0
+ */
 class PrintAction extends \Magento\Backend\App\Action
 {
     /**
@@ -20,16 +25,19 @@ class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var CreditmemoRepositoryInterface
+     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
@@ -38,6 +46,7 @@ class PrintAction extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -53,6 +62,7 @@ class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,16 +10,19 @@ namespace Magento\Backend\Block\Dashboard\Orders;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $_moduleManager;
 
@@ -29,6 +32,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,6 +48,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +58,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -88,6 +94,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      * Process collection after loading
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoadCollection()
     {
@@ -101,6 +108,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      * Prepares page sizes for dashboard grid with las 5 orders
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _preparePage()
     {
@@ -111,6 +119,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -150,6 +159,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

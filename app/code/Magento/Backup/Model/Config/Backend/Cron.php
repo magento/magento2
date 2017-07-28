@@ -8,6 +8,7 @@ namespace Magento\Backup\Model\Config\Backend;
 /**
  * Backup by cron backend model
  * @api
+ * @since 2.0.0
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
@@ -21,10 +22,16 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     const XML_PATH_BACKUP_FREQUENCY = 'groups/backup/fields/frequency/value';
 
-    /** @var \Magento\Framework\App\Config\ValueFactory */
+    /**
+     * @var \Magento\Framework\App\Config\ValueFactory
+     * @since 2.0.0
+     */
     protected $_configValueFactory;
 
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.0.0
+     */
     protected $_runModelPath = '';
 
     /**
@@ -37,6 +44,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param string $runModelPath
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -59,6 +67,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function afterSave()
     {

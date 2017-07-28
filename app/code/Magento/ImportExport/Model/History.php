@@ -14,6 +14,7 @@ namespace Magento\ImportExport\Model;
  * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class History extends \Magento\Framework\Model\AbstractModel
 {
@@ -41,6 +42,7 @@ class History extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\ImportExport\Helper\Report
+     * @since 2.0.0
      */
     protected $reportHelper;
 
@@ -54,6 +56,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -74,6 +77,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Initialize history resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,6 +89,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $filename
      * @return $this
+     * @since 2.0.0
      */
     public function addReport($filename)
     {
@@ -100,6 +105,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $filename
      * @return $this
+     * @since 2.0.0
      */
     public function addErrorReportFile($filename)
     {
@@ -114,6 +120,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * @param Import $import
      * @param bool $updateSummary
      * @return $this
+     * @since 2.0.0
      */
     public function updateReport(Import $import, $updateSummary = false)
     {
@@ -136,6 +143,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param Import $import
      * @return $this
+     * @since 2.0.0
      */
     public function invalidateReport(Import $import)
     {
@@ -151,6 +159,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get import history report ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -161,6 +170,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get import history report ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStartedAt()
     {
@@ -171,6 +181,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get import history report ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -181,6 +192,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get imported file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImportedFile()
     {
@@ -191,6 +203,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get error file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getErrorFile()
     {
@@ -201,6 +214,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get import execution time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getExecutionTime()
     {
@@ -211,6 +225,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Get import history report summary
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSummary()
     {
@@ -222,6 +237,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -233,6 +249,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $startedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setStartedAt($startedAt)
     {
@@ -244,6 +261,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $userId
      * @return $this
+     * @since 2.0.0
      */
     public function setUserId($userId)
     {
@@ -255,6 +273,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $importedFile
      * @return $this
+     * @since 2.0.0
      */
     public function setImportedFile($importedFile)
     {
@@ -266,6 +285,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $errorFile
      * @return $this
+     * @since 2.0.0
      */
     public function setErrorFile($errorFile)
     {
@@ -277,6 +297,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $executionTime
      * @return $this
+     * @since 2.0.0
      */
     public function setExecutionTime($executionTime)
     {
@@ -288,6 +309,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $summary
      * @return $this
+     * @since 2.0.0
      */
     public function setSummary($summary)
     {
@@ -296,6 +318,7 @@ class History extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadLastInsertItem()
     {
@@ -308,6 +331,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Retrieve admin ID
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getAdminId()
     {
@@ -322,6 +346,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * Retrieve last history report ID
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getLastItemId()
     {

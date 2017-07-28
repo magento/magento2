@@ -9,6 +9,11 @@ namespace Magento\Catalog\Model\Layer\Category;
 
 use Magento\Catalog\Model\Layer\AvailabilityFlagInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Category\AvailabilityFlag
+ *
+ * @since 2.0.0
+ */
 class AvailabilityFlag implements AvailabilityFlagInterface
 {
     /**
@@ -17,6 +22,7 @@ class AvailabilityFlag implements AvailabilityFlagInterface
      * @param \Magento\Catalog\Model\Layer $layer
      * @param array $filters
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled($layer, array $filters = [])
     {
@@ -26,6 +32,7 @@ class AvailabilityFlag implements AvailabilityFlagInterface
     /**
      * @param array $filters
      * @return bool
+     * @since 2.0.0
      */
     protected function canShowOptions($filters)
     {

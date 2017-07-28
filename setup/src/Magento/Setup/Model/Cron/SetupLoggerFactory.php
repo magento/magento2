@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Cron;
 
 /**
  * Class to get PSR-3 compliant logger instance
+ * @since 2.1.0
  */
 class SetupLoggerFactory
 {
@@ -17,6 +18,7 @@ class SetupLoggerFactory
      * @param string $channelName
      *
      * @return \Psr\Log\LoggerInterface
+     * @since 2.1.0
      */
     public function create($channelName = 'setup-cron')
     {

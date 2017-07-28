@@ -5,6 +5,11 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**#@+
@@ -58,11 +63,13 @@ class Config
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $encryptor;
 
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
+     * @since 2.0.0
      */
     protected $resourceConfig;
 
@@ -72,6 +79,7 @@ class Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -87,6 +95,7 @@ class Config
      * Returns module's enabled status
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isNewRelicEnabled()
     {
@@ -97,6 +106,7 @@ class Config
      * Returns configured URL for API
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNewRelicApiUrl()
     {
@@ -107,6 +117,7 @@ class Config
      * Returns configured URL for Insights API
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInsightsApiUrl()
     {
@@ -117,6 +128,7 @@ class Config
      * Returns configured account ID for New Relic
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNewRelicAccountId()
     {
@@ -127,6 +139,7 @@ class Config
      * Return configured NR Application ID
      *
      * @return int
+     * @since 2.0.0
      */
     public function getNewRelicAppId()
     {
@@ -137,6 +150,7 @@ class Config
      * Returns configured API key for APM
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNewRelicApiKey()
     {
@@ -147,6 +161,7 @@ class Config
      * Returns configured Insights insert key for New Relic events related to cron jobs
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInsightsInsertKey()
     {
@@ -157,6 +172,7 @@ class Config
      * Returns configured NR Application name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNewRelicAppName()
     {
@@ -167,6 +183,7 @@ class Config
      * Returns config setting for overall cron to be enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCronEnabled()
     {
@@ -181,6 +198,7 @@ class Config
      * @param string $scope
      * @param int $scopeId
      * @return void
+     * @since 2.0.0
      */
     protected function setConfigValue($pathId, $value, $scope = 'default', $scopeId = 0)
     {
@@ -191,6 +209,7 @@ class Config
      * Disable module's functionality for case when new relic extension is not available
      *
      * @return void
+     * @since 2.0.0
      */
     public function disableModule()
     {

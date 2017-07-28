@@ -9,12 +9,18 @@
  */
 namespace Magento\Catalog\Model\Product\Type\Price;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Type\Price\Factory
+ *
+ * @since 2.0.0
+ */
 class Factory
 {
     /**
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -22,6 +28,7 @@ class Factory
      * Construct
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -35,6 +42,7 @@ class Factory
      * @param array $data
      * @return \Magento\Catalog\Model\Product\Type\Price
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function create($className, array $data = [])
     {

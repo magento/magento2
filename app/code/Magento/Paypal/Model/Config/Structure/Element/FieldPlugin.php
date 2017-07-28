@@ -11,16 +11,19 @@ use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
 /**
  * Plugin for \Magento\Config\Model\Config\Structure\Element\Field
+ * @since 2.0.0
  */
 class FieldPlugin
 {
     /**
      * @var RequestInterface
+     * @since 2.2.0
      */
     private $request;
 
     /**
      * @param RequestInterface $request
+     * @since 2.0.0
      */
     public function __construct(RequestInterface $request)
     {
@@ -33,6 +36,7 @@ class FieldPlugin
      * @param FieldConfigStructure $subject
      * @param string|null $result
      * @return string|null
+     * @since 2.2.0
      */
     public function afterGetConfigPath(FieldConfigStructure $subject, $result)
     {

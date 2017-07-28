@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Data object for sort order.
+ * @since 2.0.0
  */
 class SortOrder extends AbstractSimpleObject
 {
@@ -23,6 +24,7 @@ class SortOrder extends AbstractSimpleObject
      * Initialize object and validate sort direction
      *
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(array $data = [])
     {
@@ -36,6 +38,7 @@ class SortOrder extends AbstractSimpleObject
      * Get sorting field.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getField()
     {
@@ -47,6 +50,7 @@ class SortOrder extends AbstractSimpleObject
      *
      * @param string $field
      * @return $this
+     * @since 2.0.0
      */
     public function setField($field)
     {
@@ -57,6 +61,7 @@ class SortOrder extends AbstractSimpleObject
      * Get sorting direction.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDirection()
     {
@@ -68,6 +73,7 @@ class SortOrder extends AbstractSimpleObject
      *
      * @param string $direction
      * @return $this
+     * @since 2.0.0
      */
     public function setDirection($direction)
     {
@@ -81,6 +87,7 @@ class SortOrder extends AbstractSimpleObject
      * @param mixed $direction
      * @return null
      * @throws InputException
+     * @since 2.0.0
      */
     private function validateDirection($direction)
     {
@@ -92,6 +99,7 @@ class SortOrder extends AbstractSimpleObject
      * @param string $direction
      * @throws InputException
      * @return null
+     * @since 2.0.0
      */
     private function validateDirectionIsString($direction)
     {
@@ -107,6 +115,7 @@ class SortOrder extends AbstractSimpleObject
      * @param string $direction
      * @throws InputException
      * @return null
+     * @since 2.0.0
      */
     private function validateDirectionIsAscOrDesc($direction)
     {
@@ -122,6 +131,7 @@ class SortOrder extends AbstractSimpleObject
     /**
      * @param string $direction
      * @return string
+     * @since 2.0.0
      */
     private function normalizeDirectionInput($direction)
     {

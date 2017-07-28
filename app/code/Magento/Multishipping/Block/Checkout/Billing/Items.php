@@ -13,16 +13,19 @@ namespace Magento\Multishipping\Block\Checkout\Billing;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @since 2.0.0
      */
     protected $_multishipping;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -31,6 +34,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -48,6 +52,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Get multishipping checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -58,6 +63,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve quote model object
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -68,6 +74,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve virtual product edit url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVirtualProductEditUrl()
     {
@@ -78,6 +85,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve virtual product collection array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVirtualQuoteItems()
     {

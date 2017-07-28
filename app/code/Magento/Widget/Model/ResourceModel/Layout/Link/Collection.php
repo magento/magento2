@@ -7,11 +7,13 @@ namespace Magento\Widget\Model\ResourceModel\Layout\Link;
 
 /**
  * Layout update collection model
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -41,6 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +57,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $themeId
      * @return $this
+     * @since 2.0.0
      */
     public function addThemeFilter($themeId)
     {
@@ -65,6 +70,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $fields
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinWithUpdate($fields = [])
     {
@@ -86,6 +92,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $isTemporary
      * @return $this
+     * @since 2.0.0
      */
     public function addTemporaryFilter($isTemporary)
     {
@@ -98,6 +105,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $days
      * @return $this
+     * @since 2.0.0
      */
     public function addUpdatedDaysBeforeFilter($days)
     {

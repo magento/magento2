@@ -5,11 +5,17 @@
  */
 namespace Magento\Framework\Data;
 
+/**
+ * Class \Magento\Framework\Data\Schema
+ *
+ * @since 2.0.0
+ */
 class Schema extends \Magento\Framework\DataObject
 {
     /**
      * @param mixed $schema
      * @return void
+     * @since 2.0.0
      */
     public function load($schema)
     {
@@ -26,6 +32,7 @@ class Schema extends \Magento\Framework\DataObject
     /**
      * @param mixed $rawData
      * @return DataArray
+     * @since 2.0.0
      */
     public function extract($rawData)
     {

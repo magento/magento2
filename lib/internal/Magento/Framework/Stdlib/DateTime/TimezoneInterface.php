@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\DateTime;
 /**
  * Timezone Interface
  * @api
+ * @since 2.0.0
  */
 interface TimezoneInterface
 {
@@ -16,6 +17,7 @@ interface TimezoneInterface
      * Return path to default timezone
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultTimezonePath();
 
@@ -23,6 +25,7 @@ interface TimezoneInterface
      * Retrieve timezone code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultTimezone();
 
@@ -31,6 +34,7 @@ interface TimezoneInterface
      *
      * @param   int $type
      * @return  string
+     * @since 2.0.0
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT);
 
@@ -38,6 +42,7 @@ interface TimezoneInterface
      * Retrieve short date format with 4-digit year
      *
      * @return  string
+     * @since 2.0.0
      */
     public function getDateFormatWithLongYear();
 
@@ -46,6 +51,7 @@ interface TimezoneInterface
      *
      * @param   string $type
      * @return  string
+     * @since 2.0.0
      */
     public function getTimeFormat($type = null);
 
@@ -54,6 +60,7 @@ interface TimezoneInterface
      *
      * @param   string $type
      * @return  string
+     * @since 2.0.0
      */
     public function getDateTimeFormat($type);
 
@@ -65,6 +72,7 @@ interface TimezoneInterface
      * @param bool $useTimezone
      * @param bool $includeTime
      * @return \DateTime
+     * @since 2.0.0
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true);
 
@@ -75,6 +83,7 @@ interface TimezoneInterface
      * @param   string|integer|\DateTime|array|null $date date in UTC
      * @param   boolean $includeTime flag for including time to date
      * @return  \DateTime
+     * @since 2.0.0
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false);
 
@@ -84,6 +93,7 @@ interface TimezoneInterface
      *
      * @param   mixed $scope
      * @return  int
+     * @since 2.0.0
      */
     public function scopeTimeStamp($scope = null);
 
@@ -94,6 +104,7 @@ interface TimezoneInterface
      * @param int $format
      * @param bool $showTime
      * @return string
+     * @since 2.0.0
      */
     public function formatDate(
         $date = null,
@@ -107,6 +118,7 @@ interface TimezoneInterface
      * @param string $scopeType
      * @param string $scopeCode
      * @return string
+     * @since 2.0.0
      */
     public function getConfigTimezone($scopeType = null, $scopeCode = null);
 
@@ -117,6 +129,7 @@ interface TimezoneInterface
      * @param string|null $dateFrom
      * @param string|null $dateTo
      * @return bool
+     * @since 2.0.0
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
@@ -128,6 +141,7 @@ interface TimezoneInterface
      * @param null $timezone
      * @param string|null $pattern
      * @return string
+     * @since 2.0.0
      */
     public function formatDateTime(
         $date,
@@ -142,6 +156,7 @@ interface TimezoneInterface
      * @param string|\DateTimeInterface $date
      * @param string $format
      * @return string
+     * @since 2.1.0
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
 }

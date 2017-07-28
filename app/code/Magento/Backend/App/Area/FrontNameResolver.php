@@ -15,6 +15,7 @@ use Magento\Store\Model\Store;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
 {
@@ -33,16 +34,19 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $standardPorts = ['http' => '80', 'https' => '443'];
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $defaultFrontName;
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
@@ -50,16 +54,21 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      * Deployment configuration
      *
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     protected $deploymentConfig;
 
-    /** @var ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
+     */
     private $scopeConfig;
 
     /**
      * @param \Magento\Backend\App\Config $config
      * @param DeploymentConfig $deploymentConfig
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Config $config,
@@ -76,6 +85,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      *
      * @param bool $checkHost If true, verify front name is valid for this url (hostname is correct)
      * @return string|bool
+     * @since 2.0.0
      */
     public function getFrontName($checkHost = false)
     {
@@ -93,6 +103,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      * Return whether the host from request is the backend host
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHostBackend()
     {
@@ -110,6 +121,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      *
      * @param string $url
      * @return mixed|string
+     * @since 2.0.0
      */
     private function getHostWithPort($url)
     {

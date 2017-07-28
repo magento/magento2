@@ -9,16 +9,19 @@ namespace Magento\Framework;
  * Image handler library
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Image
 {
     /**
      * @var Image\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $_adapter;
 
     /**
      * @var null|string
+     * @since 2.0.0
      */
     protected $_fileName;
 
@@ -27,6 +30,7 @@ class Image
      *
      * @param Image\Adapter\AdapterInterface $adapter
      * @param string|null $fileName
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Image\Adapter\AdapterInterface $adapter, $fileName = null)
     {
@@ -43,6 +47,7 @@ class Image
      * @access public
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function open()
     {
@@ -60,6 +65,7 @@ class Image
      *
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function display()
     {
@@ -73,6 +79,7 @@ class Image
      * @param null|string $newFileName Default value is NULL
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function save($destination = null, $newFileName = null)
     {
@@ -85,6 +92,7 @@ class Image
      * @param int $angle
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function rotate($angle)
     {
@@ -100,6 +108,7 @@ class Image
      * @param int $bottom Default value is 0
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function crop($top = 0, $left = 0, $right = 0, $bottom = 0)
     {
@@ -113,6 +122,7 @@ class Image
      * @param int $height
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function resize($width, $height = null)
     {
@@ -124,6 +134,7 @@ class Image
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function keepAspectRatio($value)
     {
@@ -135,6 +146,7 @@ class Image
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function keepFrame($value)
     {
@@ -146,6 +158,7 @@ class Image
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function keepTransparency($value)
     {
@@ -157,6 +170,7 @@ class Image
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function constrainOnly($value)
     {
@@ -168,6 +182,7 @@ class Image
      *
      * @param null|array $value
      * @return array|null
+     * @since 2.0.0
      */
     public function backgroundColor($value)
     {
@@ -179,6 +194,7 @@ class Image
      *
      * @param int $value
      * @return int
+     * @since 2.0.0
      */
     public function quality($value)
     {
@@ -196,6 +212,7 @@ class Image
      * @access public
      * @throws \Exception
      * @return void
+     * @since 2.0.0
      */
     public function watermark(
         $watermarkImage,
@@ -215,6 +232,7 @@ class Image
      *
      * @access public
      * @return string
+     * @since 2.0.0
      */
     public function getMimeType()
     {
@@ -226,6 +244,7 @@ class Image
      *
      * @access public
      * @return int
+     * @since 2.0.0
      */
     public function getImageType()
     {
@@ -237,6 +256,7 @@ class Image
      *
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function process()
     {
@@ -247,6 +267,7 @@ class Image
      *
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function instruction()
     {
@@ -258,6 +279,7 @@ class Image
      * @param int $color
      * @access public
      * @return void
+     * @since 2.0.0
      */
     public function setImageBackgroundColor($color)
     {
@@ -269,6 +291,7 @@ class Image
      *
      * @param string $position
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkPosition($position)
     {
@@ -281,6 +304,7 @@ class Image
      *
      * @param int $imageOpacity
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -293,6 +317,7 @@ class Image
      *
      * @param int $width
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkWidth($width)
     {
@@ -305,6 +330,7 @@ class Image
      *
      * @param int $height
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkHeight($height)
     {
@@ -316,6 +342,7 @@ class Image
      * Retrieve original image width
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getOriginalWidth()
     {
@@ -326,6 +353,7 @@ class Image
      * Retrieve original image height
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getOriginalHeight()
     {
@@ -338,6 +366,7 @@ class Image
      * @param string $text
      * @param string $font Path to font file
      * @return $this
+     * @since 2.0.0
      */
     public function createPngFromString($text, $font = '')
     {

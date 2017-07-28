@@ -10,6 +10,7 @@ use Magento\Usps\Helper\Data as DataHelper;
 
 /**
  * Plugin class
+ * @since 2.0.0
  */
 class DisplayGirth
 {
@@ -17,6 +18,7 @@ class DisplayGirth
      * Usps data helper
      *
      * @var \Magento\Usps\Helper\Data
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -24,6 +26,7 @@ class DisplayGirth
      * Construct
      *
      * @param \Magento\Usps\Helper\Data $helper
+     * @since 2.0.0
      */
     public function __construct(DataHelper $helper)
     {
@@ -38,6 +41,7 @@ class DisplayGirth
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundIsDisplayGirthValue(Packaging $subject, \Closure $proceed)
     {

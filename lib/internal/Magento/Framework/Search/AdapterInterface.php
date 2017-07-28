@@ -9,6 +9,7 @@ use Magento\Framework\Search\Response\QueryResponse;
 
 /**
  * Search Adapter interface
+ * @since 2.0.0
  */
 interface AdapterInterface
 {
@@ -17,6 +18,7 @@ interface AdapterInterface
      *
      * @param RequestInterface $request
      * @return QueryResponse
+     * @since 2.0.0
      */
     public function query(RequestInterface $request);
 }

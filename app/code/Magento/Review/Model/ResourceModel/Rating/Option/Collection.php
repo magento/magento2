@@ -9,6 +9,7 @@ namespace Magento\Review\Model\ResourceModel\Rating\Option;
  * Rating option collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Rating votes table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_ratingVoteTable;
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -38,6 +41,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param   int|array $rating
      * @return  $this
+     * @since 2.0.0
      */
     public function addRatingFilter($rating)
     {
@@ -54,6 +58,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param   string $dir
      * @return  $this
+     * @since 2.0.0
      */
     public function setPositionOrder($dir = 'ASC')
     {

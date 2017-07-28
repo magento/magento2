@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 
 /**
  * Class Pool
+ * @since 2.0.0
  */
 class Pool
 {
@@ -19,11 +20,13 @@ class Pool
      * Layouts pool
      *
      * @var array
+     * @since 2.0.0
      */
     protected $types;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -32,6 +35,7 @@ class Pool
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $types
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -47,6 +51,7 @@ class Pool
      * @param string $layoutType
      * @param array $arguments
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function create($layoutType, array $arguments = [])
     {

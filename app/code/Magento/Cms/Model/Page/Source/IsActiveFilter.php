@@ -7,11 +7,13 @@ namespace Magento\Cms\Model\Page\Source;
 
 /**
  * Is active filter source
+ * @since 2.0.0
  */
 class IsActiveFilter extends IsActive
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

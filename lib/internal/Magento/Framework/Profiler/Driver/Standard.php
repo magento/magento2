@@ -12,12 +12,18 @@ use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Standard
+ *
+ * @since 2.0.0
+ */
 class Standard implements DriverInterface
 {
     /**
      * Storage for timers statistics
      *
      * @var Stat
+     * @since 2.0.0
      */
     protected $_stat;
 
@@ -25,6 +31,7 @@ class Standard implements DriverInterface
      * List of profiler driver outputs
      *
      * @var OutputInterface[]
+     * @since 2.0.0
      */
     protected $_outputs = [];
 
@@ -32,6 +39,7 @@ class Standard implements DriverInterface
      * Constructor
      *
      * @param array|null $config
+     * @since 2.0.0
      */
     public function __construct(array $config = null)
     {
@@ -45,6 +53,7 @@ class Standard implements DriverInterface
      *
      * @param array|null $config
      * @return void
+     * @since 2.0.0
      */
     protected function _initOutputs(array $config = null)
     {
@@ -73,6 +82,7 @@ class Standard implements DriverInterface
      *
      * @param mixed $outputConfig
      * @return array|bool
+     * @since 2.0.0
      */
     protected function _parseOutputConfig($outputConfig)
     {
@@ -94,6 +104,7 @@ class Standard implements DriverInterface
      *
      * @param array $config
      * @return array
+     * @since 2.0.0
      */
     protected function _getOutputConfigs(array $config = null)
     {
@@ -111,6 +122,7 @@ class Standard implements DriverInterface
      *
      * @param array|null $config
      * @return OutputFactory
+     * @since 2.0.0
      */
     protected function _getOutputFactory(array $config = null)
     {
@@ -127,6 +139,7 @@ class Standard implements DriverInterface
      *
      * @param array $config|null
      * @return void
+     * @since 2.0.0
      */
     protected function _initStat(array $config = null)
     {
@@ -142,6 +155,7 @@ class Standard implements DriverInterface
      *
      * @param string|null $timerId
      * @return void
+     * @since 2.0.0
      */
     public function clear($timerId = null)
     {
@@ -155,6 +169,7 @@ class Standard implements DriverInterface
      * @param array|null $tags
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function start($timerId, array $tags = null)
     {
@@ -166,6 +181,7 @@ class Standard implements DriverInterface
      *
      * @param string $timerId
      * @return void
+     * @since 2.0.0
      */
     public function stop($timerId)
     {
@@ -177,6 +193,7 @@ class Standard implements DriverInterface
      *
      * @param OutputInterface $output
      * @return void
+     * @since 2.0.0
      */
     public function registerOutput(OutputInterface $output)
     {
@@ -187,6 +204,7 @@ class Standard implements DriverInterface
      * Display collected statistics with registered outputs
      *
      * @return void
+     * @since 2.0.0
      */
     public function display()
     {

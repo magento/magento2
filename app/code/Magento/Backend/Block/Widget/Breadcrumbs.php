@@ -10,6 +10,7 @@ namespace Magento\Backend\Block\Widget;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Breadcrumbs extends \Magento\Backend\Block\Template
 {
@@ -17,16 +18,19 @@ class Breadcrumbs extends \Magento\Backend\Block\Template
      * Breadcrumbs links
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_links = [];
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/breadcrumbs.phtml';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -38,6 +42,7 @@ class Breadcrumbs extends \Magento\Backend\Block\Template
      * @param string|null $title
      * @param string|null $url
      * @return $this
+     * @since 2.0.0
      */
     public function addLink($label, $title = null, $url = null)
     {
@@ -50,6 +55,7 @@ class Breadcrumbs extends \Magento\Backend\Block\Template
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

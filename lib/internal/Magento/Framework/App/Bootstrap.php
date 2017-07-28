@@ -21,6 +21,7 @@ use Magento\Framework\Filesystem\DriverPool;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Bootstrap
 {
@@ -68,6 +69,7 @@ class Bootstrap
      * The initialization parameters (normally come from the $_SERVER)
      *
      * @var array
+     * @since 2.0.0
      */
     private $server;
 
@@ -75,6 +77,7 @@ class Bootstrap
      * Root directory
      *
      * @var string
+     * @since 2.0.0
      */
     private $rootDir;
 
@@ -82,6 +85,7 @@ class Bootstrap
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -89,6 +93,7 @@ class Bootstrap
      * Maintenance mode manager
      *
      * @var \Magento\Framework\App\MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenance;
 
@@ -96,6 +101,7 @@ class Bootstrap
      * Bootstrap-specific error code that may have been set in runtime
      *
      * @var int
+     * @since 2.0.0
      */
     private $errorCode = 0;
 
@@ -103,6 +109,7 @@ class Bootstrap
      * Attribute for creating object manager
      *
      * @var ObjectManagerFactory
+     * @since 2.0.0
      */
     private $factory;
 
@@ -113,6 +120,7 @@ class Bootstrap
      * @param array $initParams
      * @param ObjectManagerFactory $factory
      * @return Bootstrap
+     * @since 2.0.0
      */
     public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
     {
@@ -129,6 +137,7 @@ class Bootstrap
      * @param string $rootDir
      * @param array $initParams
      * @return void
+     * @since 2.0.0
      */
     public static function populateAutoloader($rootDir, $initParams)
     {
@@ -143,6 +152,7 @@ class Bootstrap
      * @param string $rootDir
      * @param array $initParams
      * @return ObjectManagerFactory
+     * @since 2.0.0
      */
     public static function createObjectManagerFactory($rootDir, array $initParams)
     {
@@ -158,6 +168,7 @@ class Bootstrap
      * @param string $rootDir
      * @param array $initParams
      * @return DirectoryList
+     * @since 2.0.0
      */
     public static function createFilesystemDirectoryList($rootDir, array $initParams)
     {
@@ -173,6 +184,7 @@ class Bootstrap
      *
      * @param array $initParams
      * @return DriverPool
+     * @since 2.0.0
      */
     public static function createFilesystemDriverPool(array $initParams)
     {
@@ -187,6 +199,7 @@ class Bootstrap
      * Creates instance of configuration files pool
      *
      * @return DriverPool
+     * @since 2.0.0
      */
     public static function createConfigFilePool()
     {
@@ -199,6 +212,7 @@ class Bootstrap
      * @param ObjectManagerFactory $factory
      * @param string $rootDir
      * @param array $initParams
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerFactory $factory, $rootDir, array $initParams)
     {
@@ -212,6 +226,7 @@ class Bootstrap
      * Gets the current parameters
      *
      * @return array
+     * @since 2.0.0
      */
     public function getParams()
     {
@@ -225,6 +240,7 @@ class Bootstrap
      * @param array $arguments
      * @return \Magento\Framework\AppInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function createApplication($type, $arguments = [])
     {
@@ -244,6 +260,7 @@ class Bootstrap
      *
      * @param \Magento\Framework\AppInterface $application
      * @return void
+     * @since 2.0.0
      */
     public function run(AppInterface $application)
     {
@@ -272,6 +289,7 @@ class Bootstrap
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function assertMaintenance()
     {
@@ -304,6 +322,7 @@ class Bootstrap
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function assertInstalled()
     {
@@ -330,6 +349,7 @@ class Bootstrap
      * @param string $key
      * @param bool $default
      * @return bool|null
+     * @since 2.0.0
      */
     private function getIsExpected($key, $default)
     {
@@ -346,6 +366,7 @@ class Bootstrap
      * Determines whether application is installed
      *
      * @return bool
+     * @since 2.0.0
      */
     private function isInstalled()
     {
@@ -358,6 +379,7 @@ class Bootstrap
      * Gets the object manager instance
      *
      * @return \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     public function getObjectManager()
     {
@@ -368,6 +390,7 @@ class Bootstrap
      * Sets a custom error handler
      *
      * @return void
+     * @since 2.0.0
      */
     private function initErrorHandler()
     {
@@ -379,6 +402,7 @@ class Bootstrap
      * Getter for error code
      *
      * @return int
+     * @since 2.0.0
      */
     public function getErrorCode()
     {
@@ -389,6 +413,7 @@ class Bootstrap
      * Checks whether developer mode is set in the initialization parameters
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDeveloperMode()
     {
@@ -412,6 +437,7 @@ class Bootstrap
      * @param \Exception $e
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     protected function terminate(\Exception $e)
     {

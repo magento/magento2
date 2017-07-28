@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 
 /**
  * Class BasePrice
+ * @since 2.0.0
  */
 class BasePrice extends AbstractPrice
 {
@@ -23,6 +24,7 @@ class BasePrice extends AbstractPrice
      * Get Base Price Value
      *
      * @return float|bool
+     * @since 2.0.0
      */
     public function getValue()
     {

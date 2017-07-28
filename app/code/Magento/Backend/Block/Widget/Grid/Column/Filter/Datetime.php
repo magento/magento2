@@ -11,6 +11,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        date format
+ * @since 2.0.0
  */
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
 {
@@ -21,6 +22,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getValue($index = null)
     {
@@ -61,6 +63,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
      *
      * @param string $date
      * @return \DateTime|null
+     * @since 2.0.0
      */
     protected function _convertDate($date)
     {
@@ -83,6 +86,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
      * Render filter html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -142,6 +146,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
      *
      * @param string $index
      * @return string
+     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {

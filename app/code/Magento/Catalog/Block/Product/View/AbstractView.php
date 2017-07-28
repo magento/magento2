@@ -9,12 +9,14 @@ namespace Magento\Catalog\Block\Product\View;
  * Product view abstract block
  *
  * @api
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
      * @var \Magento\Framework\Stdlib\ArrayUtils
+     * @since 2.0.0
      */
     protected $arrayUtils;
 
@@ -22,6 +24,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -39,6 +42,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
      * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -56,6 +60,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
      * @param string $prefix
      * @param bool $forceSetAll
      * @return array
+     * @since 2.0.0
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {

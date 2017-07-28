@@ -10,11 +10,13 @@ use Magento\Framework\Setup\Lists;
 
 /**
  * Timezone validator model
+ * @since 2.0.0
  */
 class Timezone
 {
     /**
      * @var Lists
+     * @since 2.0.0
      */
     protected $lists;
 
@@ -22,6 +24,7 @@ class Timezone
      * Constructor
      *
      * @param Lists $lists
+     * @since 2.0.0
      */
     public function __construct(Lists $lists)
     {
@@ -34,6 +37,7 @@ class Timezone
      * @param string $timezoneCode
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function isValid($timezoneCode)
     {

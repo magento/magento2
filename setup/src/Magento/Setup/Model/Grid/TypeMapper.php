@@ -9,6 +9,7 @@ use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class TypeMapper
+ * @since 2.2.0
  */
 class TypeMapper
 {
@@ -41,6 +42,7 @@ class TypeMapper
      * @param string $packageType
      * @return string
      * @internal param string $packageName
+     * @since 2.2.0
      */
     public function map($packageType)
     {

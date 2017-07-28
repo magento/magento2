@@ -7,6 +7,7 @@ namespace Magento\Framework;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface CurrencyInterface
 {
@@ -17,6 +18,7 @@ interface CurrencyInterface
      * @param  array         $options OPTIONAL options to set temporary
      * @throws \Zend_Currency_Exception When the value is not a number
      * @return string
+     * @since 2.0.0
      */
     public function toCurrency($value = null, array $options = []);
 
@@ -27,6 +29,7 @@ interface CurrencyInterface
      *
      * @param  array $options (Optional) Options to set
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function setFormat(array $options = []);
 
@@ -37,6 +40,7 @@ interface CurrencyInterface
      * @param  string             $currency (Optional) Currency name
      * @param  string $locale   (Optional) Locale to display informations
      * @return string
+     * @since 2.0.0
      */
     public function getSymbol($currency = null, $locale = null);
 
@@ -46,6 +50,7 @@ interface CurrencyInterface
      * @param  string             $currency OPTIONAL Currency's name
      * @param  string $locale   OPTIONAL The locale
      * @return string
+     * @since 2.0.0
      */
     public function getShortName($currency = null, $locale = null);
 
@@ -55,6 +60,7 @@ interface CurrencyInterface
      * @param  string             $currency (Optional) Currency's short name
      * @param  string $locale   (Optional) The locale
      * @return string
+     * @since 2.0.0
      */
     public function getName($currency = null, $locale = null);
 
@@ -64,6 +70,7 @@ interface CurrencyInterface
      * @param  string $currency OPTIONAL Currency's short name
      * @throws \Zend_Currency_Exception When no currency was defined
      * @return array List of regions
+     * @since 2.0.0
      */
     public function getRegionList($currency = null);
 
@@ -74,6 +81,7 @@ interface CurrencyInterface
      *
      * @param  string $region OPTIONAL Region to return the currencies for
      * @return array List of currencies
+     * @since 2.0.0
      */
     public function getCurrencyList($region = null);
 
@@ -81,6 +89,7 @@ interface CurrencyInterface
      * Returns the actual currency name
      *
      * @return string
+     * @since 2.0.0
      */
     public function toString();
 
@@ -88,6 +97,7 @@ interface CurrencyInterface
      * Returns the set cache
      *
      * @return \Zend_Cache_Core The set cache
+     * @since 2.0.0
      */
     public static function getCache();
 
@@ -96,6 +106,7 @@ interface CurrencyInterface
      *
      * @param  \Zend_Cache_Core $cache Cache to set
      * @return void
+     * @since 2.0.0
      */
     public static function setCache(\Zend_Cache_Core $cache);
 
@@ -103,6 +114,7 @@ interface CurrencyInterface
      * Returns true when a cache is set
      *
      * @return boolean
+     * @since 2.0.0
      */
     public static function hasCache();
 
@@ -110,6 +122,7 @@ interface CurrencyInterface
      * Removes any set cache
      *
      * @return void
+     * @since 2.0.0
      */
     public static function removeCache();
 
@@ -118,6 +131,7 @@ interface CurrencyInterface
      *
      * @param string $tag Tag to clear when the default tag name is not used
      * @return void
+     * @since 2.0.0
      */
     public static function clearCache($tag = null);
 
@@ -129,6 +143,7 @@ interface CurrencyInterface
      * @param  string $locale (Optional) Locale for parsing input
      * @throws \Zend_Currency_Exception When the given locale does not exist
      * @return $this
+     * @since 2.0.0
      */
     public function setLocale($locale = null);
 
@@ -136,6 +151,7 @@ interface CurrencyInterface
      * Returns the actual set locale
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLocale();
 
@@ -143,6 +159,7 @@ interface CurrencyInterface
      * Returns the value
      *
      * @return float
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -152,6 +169,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Add this value to currency
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to add
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function setValue($value, $currency = null);
 
@@ -161,6 +179,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Add this value to currency
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to add
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function add($value, $currency = null);
 
@@ -170,6 +189,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Substracts this value from currency
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to substract
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function sub($value, $currency = null);
 
@@ -179,6 +199,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Divides this value from currency
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to divide
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function div($value, $currency = null);
 
@@ -188,6 +209,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Multiplies this value from currency
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to multiply
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function mul($value, $currency = null);
 
@@ -197,6 +219,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Calculate modulo from this value
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to calculate the modulo
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function mod($value, $currency = null);
 
@@ -206,6 +229,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Compares the currency with this value
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to compare this value from
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function compare($value, $currency = null);
 
@@ -215,6 +239,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Compares the currency with this value
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to compare this value from
      * @return boolean
+     * @since 2.0.0
      */
     public function equals($value, $currency = null);
 
@@ -224,6 +249,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Compares the currency with this value
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to compare this value from
      * @return boolean
+     * @since 2.0.0
      */
     public function isMore($value, $currency = null);
 
@@ -233,6 +259,7 @@ interface CurrencyInterface
      * @param float|integer|\Magento\Framework\CurrencyInterface $value    Compares the currency with this value
      * @param string|\Magento\Framework\CurrencyInterface        $currency The currency to compare this value from
      * @return boolean
+     * @since 2.0.0
      */
     public function isLess($value, $currency = null);
 
@@ -240,6 +267,7 @@ interface CurrencyInterface
      * Returns the set service class
      *
      * @return \Zend_Service
+     * @since 2.0.0
      */
     public function getService();
 
@@ -248,6 +276,7 @@ interface CurrencyInterface
      *
      * @param string|\Magento\Framework\Locale\CurrencyInterface $service Service class
      * @return \Magento\Framework\CurrencyInterface
+     * @since 2.0.0
      */
     public function setService($service);
 }

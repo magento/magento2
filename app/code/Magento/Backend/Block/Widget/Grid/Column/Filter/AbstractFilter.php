@@ -10,7 +10,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * Grid column filter block
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Backend\Block\Widget\Grid\Column\Filter\FilterInterface
@@ -19,11 +20,13 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * Column related to filter
      *
      * @var \Magento\Backend\Block\Widget\Grid\Column
+     * @since 2.0.0
      */
     protected $_column;
 
     /**
      * @var \Magento\Framework\DB\Helper
+     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -31,6 +34,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -46,6 +50,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
+     * @since 2.0.0
      */
     public function setColumn($column)
     {
@@ -57,6 +62,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * Retrieve column related to filter
      *
      * @return \Magento\Backend\Block\Widget\Grid\Column
+     * @since 2.0.0
      */
     public function getColumn()
     {
@@ -67,6 +73,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * Retrieve html name of filter
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getHtmlName()
     {
@@ -77,6 +84,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * Retrieve html id of filter
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getHtmlId()
     {
@@ -88,6 +96,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param mixed $index
      * @return string
+     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {
@@ -98,6 +107,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * Retrieve condition
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCondition()
     {
@@ -109,6 +119,7 @@ class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
      * Retrieve filter html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtml()
     {

@@ -13,26 +13,35 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Frontend\Product;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark
+ *
+ * @since 2.0.0
+ */
 class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Factory
+     * @since 2.0.0
      */
     protected $_elementFactory;
 
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field
+     * @since 2.0.0
      */
     protected $_formField;
 
     /**
      * @var \Magento\Catalog\Model\Config\Source\Watermark\Position
+     * @since 2.0.0
      */
     protected $_watermarkPosition;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_imageTypes;
 
@@ -43,6 +52,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $imageTypes
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -62,6 +72,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -127,6 +138,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _getHeaderHtml($element)
     {
@@ -151,6 +163,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getFooterHtml($element)
     {

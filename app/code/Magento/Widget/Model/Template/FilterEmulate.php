@@ -5,6 +5,11 @@
  */
 namespace Magento\Widget\Model\Template;
 
+/**
+ * Class \Magento\Widget\Model\Template\FilterEmulate
+ *
+ * @since 2.0.0
+ */
 class FilterEmulate extends Filter
 {
     /**
@@ -12,6 +17,7 @@ class FilterEmulate extends Filter
      *
      * @param string[] $construction
      * @return string
+     * @since 2.0.0
      */
     public function widgetDirective($construction)
     {

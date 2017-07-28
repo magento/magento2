@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Backend;
  * Quote address attribute backend child resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -17,6 +18,7 @@ class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {

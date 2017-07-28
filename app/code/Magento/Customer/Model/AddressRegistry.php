@@ -10,21 +10,25 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Registry for Address models
+ * @since 2.0.0
  */
 class AddressRegistry
 {
     /**
      * @var Address[]
+     * @since 2.0.0
      */
     protected $registry = [];
 
     /**
      * @var AddressFactory
+     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @param AddressFactory $addressFactory
+     * @since 2.0.0
      */
     public function __construct(AddressFactory $addressFactory)
     {
@@ -37,6 +41,7 @@ class AddressRegistry
      * @param int $addressId
      * @return Address
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function retrieve($addressId)
     {
@@ -57,6 +62,7 @@ class AddressRegistry
      *
      * @param int $addressId
      * @return void
+     * @since 2.0.0
      */
     public function remove($addressId)
     {
@@ -68,6 +74,7 @@ class AddressRegistry
      *
      * @param Address $address
      * @return $this
+     * @since 2.0.0
      */
     public function push(Address $address)
     {

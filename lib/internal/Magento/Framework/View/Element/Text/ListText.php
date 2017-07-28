@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Text;
  * Class ListText
  *
  * @api
+ * @since 2.0.0
  */
 class ListText extends \Magento\Framework\View\Element\Text
 {
@@ -18,6 +19,7 @@ class ListText extends \Magento\Framework\View\Element\Text
      * Render html output
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

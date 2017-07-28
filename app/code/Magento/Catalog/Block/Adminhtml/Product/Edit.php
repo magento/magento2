@@ -12,10 +12,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit.phtml';
 
@@ -23,21 +29,25 @@ class Edit extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @since 2.0.0
      */
     protected $_attributeSetFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $jsonEncoder;
 
     /**
      * @var \Magento\Catalog\Helper\Product
+     * @since 2.0.0
      */
     protected $_productHelper;
 
@@ -48,6 +58,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,6 +77,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -78,6 +90,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve currently edited product object
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -88,6 +101,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Add elements in layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -145,6 +159,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBackButtonHtml()
     {
@@ -153,6 +168,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCancelButtonHtml()
     {
@@ -161,6 +177,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -169,6 +186,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSaveAndEditButtonHtml()
     {
@@ -177,6 +195,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDeleteButtonHtml()
     {
@@ -187,6 +206,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Get Save Split Button html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveSplitButtonHtml()
     {
@@ -195,6 +215,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getValidationUrl()
     {
@@ -203,6 +224,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -211,6 +233,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSaveAndContinueUrl()
     {
@@ -222,6 +245,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -230,6 +254,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getProductSetId()
     {
@@ -242,6 +267,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDuplicateUrl()
     {
@@ -249,8 +275,9 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return string
+     * @since 2.0.0
      */
     public function getHeader()
     {
@@ -264,6 +291,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeSetName()
     {
@@ -276,6 +304,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSelectedTabId()
     {
@@ -286,6 +315,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Get fields masks from config
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFieldsAutogenerationMasks()
     {
@@ -296,6 +326,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve available placeholders
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesAllowedForAutogeneration()
     {
@@ -306,6 +337,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Get formed array with attribute codes and Apply To property
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAttributes()
     {
@@ -323,6 +355,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Get dropdown options for save split button
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getSaveSplitButtonOptions()
     {
@@ -374,6 +407,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Check whether new product is being created
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isProductNew()
     {

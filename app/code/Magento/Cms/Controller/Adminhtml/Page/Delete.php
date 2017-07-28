@@ -6,6 +6,11 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Page\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Backend\App\Action
 {
     /**
@@ -19,6 +24,7 @@ class Delete extends \Magento\Backend\App\Action
      * Delete action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

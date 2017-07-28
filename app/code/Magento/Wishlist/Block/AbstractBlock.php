@@ -8,6 +8,7 @@ namespace Magento\Wishlist\Block;
 
 /**
  * Wishlist Product Items abstract Block
+ * @since 2.0.0
  */
 abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -15,6 +16,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Wishlist Product Items Collection
      *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     protected $_collection;
 
@@ -22,11 +24,13 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Store wishlist Model
      *
      * @var \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     protected $_wishlist;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -34,6 +38,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -51,6 +56,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve Wishlist Data Helper
      *
      * @return \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected function _getHelper()
     {
@@ -61,6 +67,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve Wishlist model
      *
      * @return \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     protected function _getWishlist()
     {
@@ -73,6 +80,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return \Magento\Wishlist\Block\Customer\Wishlist
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _prepareCollection($collection)
     {
@@ -83,6 +91,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Create wishlist item collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     protected function _createWishlistItemCollection()
     {
@@ -93,6 +102,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve Wishlist Product Items collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     public function getWishlistItems()
     {
@@ -108,6 +118,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve wishlist instance
      *
      * @return \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     public function getWishlistInstance()
     {
@@ -120,6 +131,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      *
      * @return string
+     * @since 2.0.0
      */
     public function getItemRemoveParams($item)
     {
@@ -131,6 +143,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemAddToCartParams($item)
     {
@@ -142,6 +155,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getSharedItemAddToCartUrl($item)
     {
@@ -152,6 +166,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve URL for adding All items to shopping cart from shared wishlist
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSharedAddAllToCartUrl()
     {
@@ -163,6 +178,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getAddToWishlistParams($product)
     {
@@ -175,6 +191,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $product
      *
      * @return string
+     * @since 2.0.0
      */
     public function getItemConfigureUrl($product)
     {
@@ -186,6 +203,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param \Magento\Catalog\Model\Product $item
      * @return string
+     * @since 2.0.0
      */
     public function getEscapedDescription($item)
     {
@@ -200,6 +218,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param \Magento\Catalog\Model\Product $item
      * @return bool
+     * @since 2.0.0
      */
     public function hasDescription($item)
     {
@@ -211,6 +230,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param string $date
      * @return string
+     * @since 2.0.0
      */
     public function getFormatedDate($date)
     {
@@ -221,6 +241,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Check is the wishlist has a salable product(s)
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSaleable()
     {
@@ -237,6 +258,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve wishlist loaded items count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWishlistItemsCount()
     {
@@ -248,6 +270,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
      * @return float
+     * @since 2.0.0
      */
     public function getQty($item)
     {
@@ -262,6 +285,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Check is the wishlist has items
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasWishlistItems()
     {
@@ -274,6 +298,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
      * @param  array $additional
      * @return string
+     * @since 2.0.0
      */
     public function getProductUrl($item, $additional = [])
     {
@@ -285,6 +310,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getImageUrl($product)
     {
@@ -299,6 +325,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param string $renderZone
      * @param array $arguments
      * @return string|null
+     * @since 2.0.0
      */
     public function getItemPriceHtml(
         \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item,

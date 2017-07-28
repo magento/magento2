@@ -9,6 +9,7 @@ namespace Magento\Framework\Search\Request;
  * Query Interface
  *
  * @api
+ * @since 2.0.0
  */
 interface QueryInterface
 {
@@ -27,6 +28,7 @@ interface QueryInterface
      * Get Type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 
@@ -34,6 +36,7 @@ interface QueryInterface
      * Get Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -41,6 +44,7 @@ interface QueryInterface
      * Get Boost
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getBoost();
 }

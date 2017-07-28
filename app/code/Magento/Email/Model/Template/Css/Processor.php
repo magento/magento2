@@ -10,16 +10,19 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * Class for processing css placeholders
+ * @since 2.2.0
  */
 class Processor
 {
     /**
      * @var Repository
+     * @since 2.2.0
      */
     private $assetRepository;
 
     /**
      * @param Repository $assetRepository
+     * @since 2.2.0
      */
     public function __construct(Repository $assetRepository)
     {
@@ -31,6 +34,7 @@ class Processor
      *
      * @param string $css
      * @return string
+     * @since 2.2.0
      */
     public function process($css)
     {
@@ -52,6 +56,7 @@ class Processor
      *
      * @param string $placeholder
      * @return string
+     * @since 2.2.0
      */
     private function getPlaceholderValue($placeholder)
     {

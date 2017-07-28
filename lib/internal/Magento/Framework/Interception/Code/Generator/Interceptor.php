@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\Interception\Code\Generator;
 
+/**
+ * Class \Magento\Framework\Interception\Code\Generator\Interceptor
+ *
+ * @since 2.0.0
+ */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -16,6 +21,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * @param string $modelClassName
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultResultClassName($modelClassName)
     {
@@ -26,6 +32,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of properties for class generator
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -36,6 +43,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -62,6 +70,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -82,6 +91,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param \ReflectionMethod $method
      * @return bool
+     * @since 2.0.0
      */
     protected function isInterceptedMethod(\ReflectionMethod $method)
     {
@@ -94,6 +104,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param \ReflectionMethod $method
      * @return array
+     * @since 2.0.0
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
@@ -123,6 +134,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * @param array $parameters
      * @return string
+     * @since 2.0.0
      */
     protected function _getParameterList(array $parameters)
     {
@@ -141,6 +153,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Generate resulting class source code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _generateCode()
     {
@@ -161,6 +174,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _validateData()
     {

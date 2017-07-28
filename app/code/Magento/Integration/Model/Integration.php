@@ -27,6 +27,7 @@ namespace Magento\Integration\Model;
  * @method Integration setUpdatedAt(\string $createdAt)
  * @method \Magento\Integration\Model\ResourceModel\Integration getResource()
  * @api
+ * @since 2.0.0
  */
 class Integration extends \Magento\Framework\Model\AbstractModel
 {
@@ -77,6 +78,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -92,6 +94,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -104,6 +107,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $consumerId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByConsumerId($consumerId)
     {
@@ -115,6 +119,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $consumerId
      * @return $this
+     * @since 2.0.0
      */
     public function loadActiveIntegrationByConsumerId($consumerId)
     {
@@ -128,6 +133,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      *
      * @return int
      * @api
+     * @since 2.0.0
      */
     public function getStatus()
     {

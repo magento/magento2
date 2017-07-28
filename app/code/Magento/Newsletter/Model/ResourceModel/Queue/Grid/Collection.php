@@ -11,10 +11,16 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel\Queue\Grid;
 
+/**
+ * Class \Magento\Newsletter\Model\ResourceModel\Queue\Grid\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Queue\Collection
 {
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

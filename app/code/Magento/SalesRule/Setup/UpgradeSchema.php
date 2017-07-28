@@ -13,11 +13,13 @@ use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the SalesRule module DB scheme
+ * @since 2.1.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -34,6 +36,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Add default value of 0 for the discount step column
      * @param SchemaSetupInterface $setup
      * @return void
+     * @since 2.1.0
      */
     private function addDefaultValueForDiscountStep(SchemaSetupInterface $setup)
     {

@@ -10,10 +10,16 @@ use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 
+/**
+ * Class \Magento\Framework\Api\Search\SearchResult
+ *
+ * @since 2.0.0
+ */
 class SearchResult extends AbstractSimpleObject implements SearchResultInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAggregations()
     {
@@ -22,6 +28,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAggregations($aggregations)
     {
@@ -30,6 +37,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -38,6 +46,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {
@@ -48,6 +57,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      * Get search criteria.
      *
      * @return SearchCriteriaInterface
+     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -59,6 +69,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      *
      * @param BaseSearchCriteriaInterface $searchCriteria
      * @return $this
+     * @since 2.0.0
      */
     public function setSearchCriteria(BaseSearchCriteriaInterface $searchCriteria = null)
     {
@@ -69,6 +80,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      * Get total count.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTotalCount()
     {
@@ -80,6 +92,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      *
      * @param int $totalCount
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalCount($totalCount)
     {

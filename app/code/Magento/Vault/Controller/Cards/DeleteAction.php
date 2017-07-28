@@ -20,6 +20,7 @@ use Magento\Vault\Model\PaymentTokenManagement;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class DeleteAction extends CardsManagement
 {
@@ -31,26 +32,31 @@ class DeleteAction extends CardsManagement
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $errorsMap = [];
 
     /**
      * @var JsonFactory
+     * @since 2.1.0
      */
     private $jsonFactory;
 
     /**
      * @var Validator
+     * @since 2.1.0
      */
     private $fkValidator;
 
     /**
      * @var PaymentTokenRepositoryInterface
+     * @since 2.1.0
      */
     private $tokenRepository;
 
     /**
      * @var PaymentTokenManagement
+     * @since 2.1.0
      */
     private $paymentTokenManagement;
 
@@ -61,6 +67,7 @@ class DeleteAction extends CardsManagement
      * @param Validator $fkValidator
      * @param PaymentTokenRepositoryInterface $tokenRepository
      * @param PaymentTokenManagement $paymentTokenManagement
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -88,6 +95,7 @@ class DeleteAction extends CardsManagement
      *
      * @return ResultInterface|ResponseInterface
      * @throws NotFoundException
+     * @since 2.1.0
      */
     public function execute()
     {
@@ -117,6 +125,7 @@ class DeleteAction extends CardsManagement
     /**
      * @param int $errorCode
      * @return ResponseInterface
+     * @since 2.1.0
      */
     private function createErrorResponse($errorCode)
     {
@@ -129,6 +138,7 @@ class DeleteAction extends CardsManagement
 
     /**
      * @return ResponseInterface
+     * @since 2.1.0
      */
     private function createSuccessMessage()
     {
@@ -141,6 +151,7 @@ class DeleteAction extends CardsManagement
     /**
      * @param Http $request
      * @return PaymentTokenInterface|null
+     * @since 2.1.0
      */
     private function getPaymentToken(Http $request)
     {

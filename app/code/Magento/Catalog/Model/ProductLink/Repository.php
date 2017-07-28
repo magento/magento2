@@ -17,61 +17,73 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     * @since 2.1.0
      */
     protected $catalogProductRelation;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link
+     * @since 2.1.0
      */
     protected $linkResource;
 
     /**
      * @var LinkTypeProvider
+     * @since 2.1.0
      */
     protected $linkTypeProvider;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var CollectionProvider
+     * @since 2.0.0
      */
     protected $entityCollectionProvider;
 
     /**
      * @var LinksInitializer
+     * @since 2.0.0
      */
     protected $linkInitializer;
 
     /**
      * @var Management
+     * @since 2.0.0
      */
     protected $linkManagement;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var ProductLinkInterfaceFactory
+     * @since 2.1.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductLinkExtensionFactory
+     * @since 2.1.0
      */
     protected $productLinkExtensionFactory;
 
@@ -86,6 +98,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory|null $productLinkExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -109,6 +122,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -147,6 +161,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @since 2.1.0
      */
     public function getList(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -186,6 +201,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -219,6 +235,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($sku, $type, $linkedProductSku)
     {
@@ -243,6 +260,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link
+     * @since 2.1.0
      */
     private function getLinkResource()
     {
@@ -255,6 +273,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @return LinkTypeProvider
+     * @since 2.1.0
      */
     private function getLinkTypeProvider()
     {
@@ -267,6 +286,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

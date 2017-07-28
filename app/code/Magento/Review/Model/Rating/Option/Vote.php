@@ -12,11 +12,13 @@ namespace Magento\Review\Model\Rating\Option;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Vote extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

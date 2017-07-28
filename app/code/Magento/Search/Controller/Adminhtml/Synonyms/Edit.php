@@ -6,6 +6,11 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Synonyms\Edit
+ *
+ * @since 2.1.0
+ */
 class Edit extends \Magento\Backend\App\Action
 {
     /**
@@ -17,16 +22,19 @@ class Edit extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Registry $registry
+     * @since 2.1.0
      */
     private $registry;
 
     /**
      * @var \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
+     * @since 2.1.0
      */
     private $pageBuilder;
 
     /**
      * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @since 2.1.0
      */
     private $synGroupRepository;
 
@@ -38,6 +46,7 @@ class Edit extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
      * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -56,6 +65,7 @@ class Edit extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     public function execute()
     {

@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Report;
 /**
  * Bestsellers report resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Bestsellers extends AbstractReport
 {
@@ -19,11 +20,13 @@ class Bestsellers extends AbstractReport
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.0.0
      */
     protected $_productResource;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $_salesResourceHelper;
 
@@ -31,6 +34,7 @@ class Bestsellers extends AbstractReport
      * Ignored product types list
      *
      * @var array
+     * @since 2.0.0
      */
     protected $ignoredProductTypes = [
         \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,
@@ -48,6 +52,7 @@ class Bestsellers extends AbstractReport
      * @param array $ignoredProductTypes
      * @param string $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -79,6 +84,7 @@ class Bestsellers extends AbstractReport
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -93,6 +99,7 @@ class Bestsellers extends AbstractReport
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {
@@ -209,6 +216,7 @@ class Bestsellers extends AbstractReport
      *
      * @param string $aggregation
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateRatingPos($aggregation)
     {

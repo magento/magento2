@@ -9,27 +9,36 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Customer\Model\Config\Source\Group
+ *
+ * @since 2.0.0
+ */
 class Group implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_options;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @var GroupManagementInterface
+     * @since 2.0.0
      */
     protected $_groupManagement;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @var \Magento\Framework\Convert\DataObject
+     * @since 2.0.0
      */
     protected $_converter;
 
     /**
      * @var GroupSourceLoggedInOnlyInterface
+     * @since 2.2.0
      */
     private $groupSourceLoggedInOnly;
 
@@ -37,6 +46,7 @@ class Group implements \Magento\Framework\Option\ArrayInterface
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\DataObject $converter
      * @param GroupSourceLoggedInOnlyInterface $groupSourceForLoggedInCustomers
+     * @since 2.0.0
      */
     public function __construct(
         GroupManagementInterface $groupManagement,
@@ -51,6 +61,7 @@ class Group implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -24,6 +24,7 @@ use Magento\Store\Model\ScopeInterface;
  * Payflow Pro payment gateway model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInterface
 {
@@ -130,6 +131,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @see https://developer.paypal.com/docs/classic/payflow/integration-guide/#credit-card-transaction-responses
      *
      * @var array
+     * @since 2.2.0
      */
     private $ccTypeMap = [
         '0' => 'VI',
@@ -144,6 +146,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Payment method code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = \Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO;
 
@@ -151,6 +154,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isGateway = true;
 
@@ -158,6 +162,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canAuthorize = true;
 
@@ -165,6 +170,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canCapture = true;
 
@@ -172,6 +178,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canCapturePartial = true;
 
@@ -179,6 +186,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canRefund = true;
 
@@ -186,6 +194,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canRefundInvoicePartial = true;
 
@@ -193,6 +202,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canVoid = true;
 
@@ -200,6 +210,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canUseInternal = true;
 
@@ -207,6 +218,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canUseCheckout = true;
 
@@ -214,6 +226,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canSaveCc = false;
 
@@ -221,6 +234,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isProxy = false;
 
@@ -228,6 +242,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canFetchTransactionInfo = true;
 
@@ -235,6 +250,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canReviewPayment = true;
 
@@ -242,6 +258,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Gateway request timeout
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_clientTimeout = 45;
 
@@ -249,31 +266,37 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = ['user', 'pwd', 'acct', 'expdate', 'cvv2'];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var ConfigInterfaceFactory
+     * @since 2.0.0
      */
     protected $configFactory;
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var Gateway
+     * @since 2.0.0
      */
     private $gateway;
 
     /**
      * @var HandlerInterface
+     * @since 2.0.0
      */
     private $errorHandler;
 
@@ -295,6 +318,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -340,6 +364,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -351,6 +376,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param int|null $storeId
      * @return bool
+     * @since 2.0.0
      */
     public function isActive($storeId = null)
     {
@@ -365,6 +391,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Payment action getter compatible with payment model
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConfigPaymentAction()
     {
@@ -379,6 +406,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @since 2.0.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -396,6 +424,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param float $amount
      * @return float
+     * @since 2.0.0
      */
     protected function _getCaptureAmount($amount)
     {
@@ -413,6 +442,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @since 2.0.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -450,6 +480,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @since 2.0.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -476,6 +507,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Check void availability
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function canVoid()
     {
@@ -491,6 +523,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param InfoInterface|Object $payment
      * @return $this
+     * @since 2.0.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -509,6 +542,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @since 2.0.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -531,6 +565,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param InfoInterface $payment
      * @param string $transactionId
      * @return array
+     * @since 2.0.0
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
@@ -556,6 +591,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param string $status
      * @return bool
+     * @since 2.0.0
      */
     protected static function _isTransactionUnderReview($status)
     {
@@ -569,6 +605,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Get Config instance
      *
      * @return PayflowConfig
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -587,6 +624,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
@@ -606,6 +644,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param Object|Payment $payment
      * @param float $amount
      * @return DataObject
+     * @since 2.0.0
      */
     protected function _buildPlaceRequest(DataObject $payment, $amount)
     {
@@ -625,6 +664,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Return request object with basic information for gateway request
      *
      * @return DataObject
+     * @since 2.0.0
      */
     public function buildBasicRequest()
     {
@@ -651,6 +691,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @since 2.0.0
      */
     public function processErrors(DataObject $response)
     {
@@ -672,6 +713,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -683,6 +725,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public function denyPayment(InfoInterface $payment)
     {
@@ -695,6 +738,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param InfoInterface $payment
      * @param string $action
      * @return bool
+     * @since 2.0.0
      */
     public function reviewPayment(InfoInterface $payment, $action)
     {
@@ -725,6 +769,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $billing
      *
      * @return Object
+     * @since 2.0.0
      */
     public function setBilling(DataObject $request, $billing)
     {
@@ -751,6 +796,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $shipping
      *
      * @return Object
+     * @since 2.0.0
      */
     public function setShipping($request, $shipping)
     {
@@ -779,6 +825,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $response
      *
      * @return DataObject
+     * @since 2.0.0
      */
     public function mapGatewayResponse(array $postData, DataObject $response)
     {
@@ -822,6 +869,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @return Object
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function setTransStatus($payment, $response)
     {
@@ -853,6 +901,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $order
      * @param DataObject $request
      * @return DataObject
+     * @since 2.0.0
      */
     public function fillCustomerContacts(DataObject $order, DataObject $request)
     {
@@ -874,6 +923,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $request
      * @param Order $order
      * @return void
+     * @since 2.0.0
      */
     public function addRequestOrderInfo(DataObject $request, Order $order)
     {
@@ -894,6 +944,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param array|DataObject $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function assignData(DataObject $data)
     {
@@ -923,6 +974,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param string $transactionId
      * @return DataObject
      * @throws LocalizedException
+     * @since 2.1.0
      */
     protected function transactionInquiryRequest(InfoInterface $payment, $transactionId)
     {
@@ -941,6 +993,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param string|null $avsAddr
      * @param string|null $avsZip
      * @return string|null
+     * @since 2.2.0
      */
     private function mapResponseAvsData($avsAddr, $avsZip)
     {
@@ -953,6 +1006,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param string|null $billToFirstName
      * @param string|null $billToLastName
      * @return string|null
+     * @since 2.2.0
      */
     private function mapResponseBillToName($billToFirstName, $billToLastName)
     {
@@ -966,6 +1020,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param string|null $ccType
      * @return string|null
+     * @since 2.2.0
      */
     private function mapResponseCreditCardType($ccType)
     {

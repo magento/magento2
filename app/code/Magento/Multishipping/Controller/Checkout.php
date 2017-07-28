@@ -13,6 +13,7 @@ use Magento\Framework\App\RequestInterface;
  * Multishipping checkout controller
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
@@ -24,6 +25,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -43,6 +45,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Retrieve checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @since 2.0.0
      */
     protected function _getCheckout()
     {
@@ -53,6 +56,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Retrieve checkout state model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping\State
+     * @since 2.0.0
      */
     protected function _getState()
     {
@@ -63,6 +67,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Retrieve checkout url helper
      *
      * @return \Magento\Multishipping\Helper\Url
+     * @since 2.0.0
      */
     protected function _getHelper()
     {
@@ -73,6 +78,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Retrieve checkout session
      *
      * @return \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected function _getCheckoutSession()
     {
@@ -86,6 +92,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -165,6 +172,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Validate minimum amount
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _validateMinimumAmount()
     {
@@ -181,6 +189,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Returns before_auth_url redirect parameter for customer session
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomerBeforeAuthUrl()
     {
@@ -193,6 +202,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Returns a list of action flags [flag_key] => boolean
      *
      * @return array
+     * @since 2.0.0
      */
     public function getActionFlagList()
     {
@@ -203,6 +213,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Returns login url parameter for redirect
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLoginUrl()
     {
@@ -213,6 +224,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * Returns action name which requires redirect
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRedirectActionName()
     {

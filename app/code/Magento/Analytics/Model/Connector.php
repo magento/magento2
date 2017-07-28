@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  * A connector to external services.
  *
  * Aggregates and executes commands which perform requests to external services.
+ * @since 2.2.0
  */
 class Connector
 {
@@ -23,17 +24,20 @@ class Connector
      * The list may be configured in each module via '/etc/di.xml'.
      *
      * @var string[]
+     * @since 2.2.0
      */
     private $commands;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param array $commands
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(
         array $commands,
@@ -49,6 +53,7 @@ class Connector
      * @param string $commandName
      * @return bool
      * @throws NotFoundException if the command is not found.
+     * @since 2.2.0
      */
     public function execute($commandName)
     {

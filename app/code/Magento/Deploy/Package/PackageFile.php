@@ -10,37 +10,44 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * Deployment Package File class
+ * @since 2.2.0
  */
 class PackageFile extends Asset
 {
     /**
      * @var Package
+     * @since 2.2.0
      */
     private $package;
 
     /**
      * @var Package
+     * @since 2.2.0
      */
     private $origPackage;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $deployedFileName;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $deployedFilePath;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $content;
 
     /**
      * @param Package $package
      * @return bool
+     * @since 2.2.0
      */
     public function setPackage(Package $package)
     {
@@ -57,6 +64,7 @@ class PackageFile extends Asset
 
     /**
      * @return Package
+     * @since 2.2.0
      */
     public function getPackage()
     {
@@ -65,6 +73,7 @@ class PackageFile extends Asset
 
     /**
      * @return Package
+     * @since 2.2.0
      */
     public function getOrigPackage()
     {
@@ -74,6 +83,7 @@ class PackageFile extends Asset
     /**
      * @param string $name
      * @return bool
+     * @since 2.2.0
      */
     public function setDeployedFileName($name)
     {
@@ -83,6 +93,7 @@ class PackageFile extends Asset
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getDeployedFileName()
     {
@@ -92,6 +103,7 @@ class PackageFile extends Asset
     /**
      * @param string $name
      * @return bool
+     * @since 2.2.0
      */
     public function setDeployedFilePath($name)
     {
@@ -101,6 +113,7 @@ class PackageFile extends Asset
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getDeployedFilePath()
     {
@@ -109,6 +122,7 @@ class PackageFile extends Asset
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getDeployedFileId()
     {
@@ -120,6 +134,7 @@ class PackageFile extends Asset
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getContent()
     {
@@ -129,6 +144,7 @@ class PackageFile extends Asset
     /**
      * @param string $content
      * @return bool
+     * @since 2.2.0
      */
     public function setContent($content)
     {
@@ -139,6 +155,7 @@ class PackageFile extends Asset
     /**
      * @param string $area
      * @return bool
+     * @since 2.2.0
      */
     public function setArea($area)
     {
@@ -149,6 +166,7 @@ class PackageFile extends Asset
     /**
      * @param string $theme
      * @return bool
+     * @since 2.2.0
      */
     public function setTheme($theme)
     {
@@ -159,6 +177,7 @@ class PackageFile extends Asset
     /**
      * @param string $locale
      * @return bool
+     * @since 2.2.0
      */
     public function setLocale($locale)
     {
@@ -169,6 +188,7 @@ class PackageFile extends Asset
     /**
      * @param string $module
      * @return bool
+     * @since 2.2.0
      */
     public function setModule($module)
     {

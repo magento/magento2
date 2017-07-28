@@ -10,46 +10,55 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Persitor for Attribute Sets and Attributes based on the configuration.
+ * @since 2.2.0
  */
 class AttributeSetFixture
 {
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.2.0
      */
     private $attributeRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeManagementInterface
+     * @since 2.2.0
      */
     private $attributeManagement;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory
+     * @since 2.2.0
      */
     private $attributeFactory;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory
+     * @since 2.2.0
      */
     private $optionFactory;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeSetInterfaceFactory
+     * @since 2.2.0
      */
     private $attributeSetFactory;
 
     /**
      * @var \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory
+     * @since 2.2.0
      */
     private $attributeGroupFactory;
 
     /**
      * @var \Magento\Catalog\Api\AttributeSetManagementInterface
+     * @since 2.2.0
      */
     private $attributeSetManagement;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface
+     * @since 2.2.0
      */
     private $attributeGroupRepository;
 
@@ -64,6 +73,7 @@ class AttributeSetFixture
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionFactory
      * @param \Magento\Eav\Api\Data\AttributeSetInterfaceFactory $attributeSetFactory
      * @param \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory $attributeGroupFactory
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Api\AttributeSetManagementInterface $attributeSetManagement,
@@ -91,6 +101,7 @@ class AttributeSetFixture
      * @param array $attributeSetData
      * @param int $sortOrder
      * @return array
+     * @since 2.2.0
      */
     public function createAttributeSet(array $attributeSetData, $sortOrder = 3)
     {
@@ -145,6 +156,7 @@ class AttributeSetFixture
      *
      * @param array $attributeSetData
      * @return array
+     * @since 2.2.0
      */
     private function getFormattedAttributeSetData($attributeSetData)
     {

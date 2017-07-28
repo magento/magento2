@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Template\Drop
+ *
+ * @since 2.0.0
+ */
 class Drop extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
      * Drop Newsletter Template
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

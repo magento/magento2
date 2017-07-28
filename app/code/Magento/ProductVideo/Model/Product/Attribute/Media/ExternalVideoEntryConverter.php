@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Converter for External Video media gallery type
+ * @since 2.0.0
  */
 class ExternalVideoEntryConverter extends ImageEntryConverter
 {
@@ -23,11 +24,13 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
 
     /**
      * @var \Magento\Framework\Api\Data\VideoContentInterfaceFactory
+     * @since 2.0.0
      */
     protected $videoEntryFactory;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
+     * @since 2.0.0
      */
     protected $mediaGalleryEntryExtensionFactory;
 
@@ -36,6 +39,7 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
      * @param ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
@@ -50,6 +54,7 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getMediaEntryType()
     {
@@ -60,6 +65,7 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
      * @param Product $product
      * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface
+     * @since 2.0.0
      */
     public function convertTo(Product $product, array $rowData)
     {
@@ -78,6 +84,7 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convertFrom(ProductAttributeMediaGalleryEntryInterface $entry)
     {

@@ -11,18 +11,25 @@
  */
 namespace Magento\Framework\HTTP;
 
+/**
+ * Class \Magento\Framework\HTTP\ZendClient
+ *
+ * @since 2.0.0
+ */
 class ZendClient extends \Zend_Http_Client
 {
     /**
      * Internal flag to allow decoding of request body
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_urlEncodeBody = true;
 
     /**
      * @param null|\Zend_Uri_Http|string $uri
      * @param null|array $config
+     * @since 2.0.0
      */
     public function __construct($uri = null, $config = null)
     {
@@ -33,6 +40,7 @@ class ZendClient extends \Zend_Http_Client
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _trySetCurlAdapter()
     {
@@ -45,6 +53,7 @@ class ZendClient extends \Zend_Http_Client
     /**
      * @param null|string $method
      * @return \Zend_Http_Response
+     * @since 2.0.0
      */
     public function request($method = null)
     {
@@ -57,6 +66,7 @@ class ZendClient extends \Zend_Http_Client
      *
      * @param bool $flag
      * @return \Magento\Framework\HTTP\ZendClient
+     * @since 2.0.0
      */
     public function setUrlEncodeBody($flag)
     {
@@ -69,6 +79,7 @@ class ZendClient extends \Zend_Http_Client
      * standard prepare functionality
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _prepareBody()
     {

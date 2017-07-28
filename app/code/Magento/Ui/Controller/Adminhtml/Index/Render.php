@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Render
+ * @since 2.0.0
  */
 class Render extends AbstractAction
 {
@@ -19,6 +20,7 @@ class Render extends AbstractAction
      * Action for AJAX request
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -37,6 +39,7 @@ class Render extends AbstractAction
      *
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     protected function prepareComponent(UiComponentInterface $component)
     {

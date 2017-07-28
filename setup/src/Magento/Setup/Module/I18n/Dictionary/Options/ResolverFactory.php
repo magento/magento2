@@ -9,6 +9,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Options resolver factory
+ * @since 2.0.0
  */
 class ResolverFactory
 {
@@ -19,11 +20,13 @@ class ResolverFactory
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $resolverClass;
 
     /**
      * @param string $resolverClass
+     * @since 2.0.0
      */
     public function __construct($resolverClass = self::DEFAULT_RESOLVER)
     {
@@ -35,6 +38,7 @@ class ResolverFactory
      * @param bool $withContext
      * @return ResolverInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($directory, $withContext)
     {

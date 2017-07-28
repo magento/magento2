@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -33,6 +34,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Will be set only for not global scope attribute
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_entityAttributeValues = null;
 
@@ -40,6 +42,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Attribute data key that indicates whether it should be used for rules
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_isUsedForRuleProperty = 'is_used_for_promo_rules';
 
@@ -47,41 +50,49 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_backendData;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.0.0
      */
     protected $_productResource;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
+     * @since 2.0.0
      */
     protected $_attrSetCollection;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var ProductCategoryList
+     * @since 2.2.0
      */
     private $productCategoryList;
 
@@ -98,6 +109,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -126,6 +138,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Customize default operator input by type mapper for some types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getDefaultOperatorInputByType()
     {
@@ -144,6 +157,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve attribute object
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @since 2.0.0
      */
     public function getAttributeObject()
     {
@@ -161,6 +175,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param array &$attributes
      * @return void
+     * @since 2.0.0
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -172,6 +187,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Load attribute options
      *
      * @return $this
+     * @since 2.0.0
      */
     public function loadAttributeOptions()
     {
@@ -205,6 +221,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _prepareValueOptions()
     {
@@ -256,6 +273,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param array $selectReady
      * @param array $hashedReady
      * @return $this
+     * @since 2.0.0
      */
     protected function _setSelectOptions($selectOptions, $selectReady, $hashedReady)
     {
@@ -283,6 +301,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param string|null $option
      * @return string
+     * @since 2.0.0
      */
     public function getValueOption($option = null)
     {
@@ -294,6 +313,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve select option values
      *
      * @return array
+     * @since 2.0.0
      */
     public function getValueSelectOptions()
     {
@@ -305,6 +325,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve after element HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueAfterElementHtml()
     {
@@ -332,6 +353,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve attribute element
      *
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @since 2.0.0
      */
     public function getAttributeElement()
     {
@@ -345,6 +367,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
+     * @since 2.0.0
      */
     public function collectValidatedAttributes($productCollection)
     {
@@ -367,6 +390,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve input type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInputType()
     {
@@ -401,6 +425,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve value element type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueElementType()
     {
@@ -430,6 +455,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve value element chooser URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueElementChooserUrl()
     {
@@ -453,6 +479,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getExplicitApply()
     {
@@ -480,6 +507,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param array $arr
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function loadArray($arr)
     {
@@ -525,6 +553,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -588,6 +617,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Get argument value to bind
      *
      * @return array|float|int|mixed|string|\Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getBindArgumentValue()
     {
@@ -611,6 +641,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Get mapped sql field
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMappedSqlField()
     {
@@ -631,6 +662,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param int $productId
      * @return bool
+     * @since 2.0.0
      */
     public function validateByEntityId($productId)
     {
@@ -651,6 +683,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param int $productId
      * @return array
+     * @since 2.0.0
      */
     protected function _getAvailableInCategories($productId)
     {
@@ -674,6 +707,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param int $productId
      * @return string
+     * @since 2.0.0
      */
     protected function _getAttributeSetId($productId)
     {
@@ -697,6 +731,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Categories can't be equal because product is included categories selected by administrator and in their parents
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOperatorForValidate()
     {
@@ -716,6 +751,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Check is attribute set or category
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isAttributeSetOrCategory()
     {
@@ -726,6 +762,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Get eav attribute alias
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getEavAttributeTableAlias()
     {

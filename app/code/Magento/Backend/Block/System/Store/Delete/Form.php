@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\System\Store\Delete;
  * Adminhtml cms block edit form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Init form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -26,6 +28,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

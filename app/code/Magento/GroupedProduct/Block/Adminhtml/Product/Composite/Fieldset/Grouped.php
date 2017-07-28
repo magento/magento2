@@ -12,12 +12,14 @@ namespace Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 {
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
+     * @since 2.0.0
      */
     protected $pricingHelper;
 
@@ -26,6 +28,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -46,6 +49,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * Set current customer to tax calculation
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,6 +62,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -79,6 +84,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * Retrieve array of associated products
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAssociatedProducts()
     {
@@ -97,6 +103,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * Set preconfigured values to grouped associated products
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setPreconfiguredValue()
     {
@@ -120,6 +127,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCanShowProductPrice($product)
     {
@@ -132,6 +140,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * @return bool
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsLastFieldset()
     {
@@ -148,6 +157,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      *
      * @param float $price
      * @return float
+     * @since 2.0.0
      */
     public function getCurrencyPrice($price)
     {

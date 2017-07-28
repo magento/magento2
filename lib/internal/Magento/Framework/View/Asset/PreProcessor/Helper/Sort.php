@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset\PreProcessor\Helper;
 
 /**
  * Class Sort
+ * @since 2.0.0
  */
 class Sort implements SortInterface
 {
@@ -22,16 +23,19 @@ class Sort implements SortInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $result;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $array;
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function sort(array $array)
     {
@@ -57,6 +61,7 @@ class Sort implements SortInterface
     /**
      * @param array $structure
      * @return void
+     * @since 2.0.0
      */
     private function fillResult(array $structure)
     {

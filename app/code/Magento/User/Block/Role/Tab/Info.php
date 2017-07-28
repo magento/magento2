@@ -9,6 +9,7 @@ namespace Magento\User\Block\Role\Tab;
  * implementing now
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -19,6 +20,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -27,6 +29,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -35,6 +38,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -43,6 +47,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -51,6 +56,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function _beforeToHtml()
     {
@@ -61,6 +67,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _initForm()
     {
@@ -116,6 +123,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Get old Users Form Data
      *
      * @return null|string
+     * @since 2.1.0
      */
     protected function getOldUsers()
     {

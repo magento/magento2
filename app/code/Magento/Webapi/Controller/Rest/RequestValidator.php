@@ -13,26 +13,31 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * This class is responsible for validating the request
+ * @since 2.1.0
  */
 class RequestValidator
 {
     /**
      * @var RestRequest
+     * @since 2.1.0
      */
     private $request;
 
     /**
      * @var Router
+     * @since 2.1.0
      */
     private $router;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var Authorization
+     * @since 2.1.0
      */
     private $authorization;
 
@@ -43,6 +48,7 @@ class RequestValidator
      * @param Router $router
      * @param StoreManagerInterface $storeManager
      * @param Authorization $authorization
+     * @since 2.1.0
      */
     public function __construct(
         RestRequest $request,
@@ -62,6 +68,7 @@ class RequestValidator
      * @throws AuthorizationException
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
+     * @since 2.1.0
      */
     public function validate()
     {
@@ -77,6 +84,7 @@ class RequestValidator
      *
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return void
+     * @since 2.1.0
      */
     private function checkPermissions()
     {

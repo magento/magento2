@@ -11,6 +11,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * Class Redirect
+ * @since 2.0.0
  */
 class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
@@ -18,6 +19,7 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
      * Retrieve params and put javascript into iframe
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

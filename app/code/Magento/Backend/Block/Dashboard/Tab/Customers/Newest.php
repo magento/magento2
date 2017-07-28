@@ -10,11 +10,13 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
+ * @since 2.0.0
  */
 class Newest extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Customer\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -23,6 +25,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Customer\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,6 +39,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +49,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -71,6 +76,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -128,6 +134,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

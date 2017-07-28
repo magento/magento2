@@ -9,6 +9,7 @@ namespace Magento\Store\Model\Config;
 
 /**
  * Class Converter.
+ * @since 2.0.0
  */
 class Converter extends \Magento\Framework\App\Config\Scope\Converter
 {
@@ -18,6 +19,7 @@ class Converter extends \Magento\Framework\App\Config\Scope\Converter
      * @param array $source
      * @param array $initialConfig
      * @return array
+     * @since 2.0.0
      */
     public function convert($source, $initialConfig = [])
     {

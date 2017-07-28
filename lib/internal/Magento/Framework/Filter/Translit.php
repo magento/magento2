@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter;
  * Translit filter
  *
  * Process string based on convertation table
+ * @since 2.0.0
  */
 class Translit implements \Zend_Filter_Interface
 {
@@ -16,6 +17,7 @@ class Translit implements \Zend_Filter_Interface
      * Symbol convert table
      *
      * @var array
+     * @since 2.0.0
      */
     protected $convertTable = [
         '&amp;' => 'and',
@@ -403,6 +405,7 @@ class Translit implements \Zend_Filter_Interface
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
@@ -418,6 +421,7 @@ class Translit implements \Zend_Filter_Interface
      * Get chars convertation table
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getConvertTable()
     {
@@ -429,6 +433,7 @@ class Translit implements \Zend_Filter_Interface
      *
      * @param string $string
      * @return string
+     * @since 2.0.0
      */
     public function filter($string)
     {

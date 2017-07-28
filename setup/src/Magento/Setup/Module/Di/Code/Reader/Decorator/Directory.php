@@ -11,36 +11,43 @@ use Magento\Setup\Module\Di\Compiler\Log\Log;
  * Class Directory
  *
  * @package Magento\Setup\Module\Di\Code\Reader\Decorator
+ * @since 2.0.0
  */
 class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $current;
 
     /**
      * @var \Magento\Setup\Module\Di\Compiler\Log\Log
+     * @since 2.0.0
      */
     private $log;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $relations = [];
 
     /**
      * @var \Magento\Framework\Code\Validator
+     * @since 2.0.0
      */
     private $validator;
 
     /**
      * @var \Magento\Framework\Code\Reader\ClassReader
+     * @since 2.0.0
      */
     private $classReader;
 
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner
+     * @since 2.0.0
      */
     private $classesScanner;
 
@@ -50,6 +57,7 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
      * @param \Magento\Setup\Module\Di\Code\Reader\ClassesScanner $classesScanner
      * @param \Magento\Framework\Code\Validator $validator
      * @param string $generationDir directory where generated files is
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Module\Di\Compiler\Log\Log $log,
@@ -74,6 +82,7 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
      * @param string $msg
      *
      * @return void
+     * @since 2.0.0
      */
     public function errorHandler($errorNumber, $msg)
     {
@@ -86,6 +95,7 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
      * @param string $path path to dir with files
      *
      * @return array
+     * @since 2.0.0
      */
     public function getList($path)
     {
@@ -108,6 +118,7 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getRelations()
     {

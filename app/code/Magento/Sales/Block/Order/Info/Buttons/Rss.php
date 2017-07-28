@@ -9,21 +9,25 @@ namespace Magento\Sales\Block\Order\Info\Buttons;
  * Block of links in Order view page
  *
  * @api
+ * @since 2.0.0
  */
 class Rss extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/info/buttons/rss.phtml';
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
@@ -32,6 +36,7 @@ class Rss extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -46,6 +51,7 @@ class Rss extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getLink()
     {
@@ -54,6 +60,7 @@ class Rss extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -64,6 +71,7 @@ class Rss extends \Magento\Framework\View\Element\Template
      * Check whether status notification is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isRssAllowed()
     {
@@ -78,6 +86,7 @@ class Rss extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Sales\Model\Order $order
      * @return string
+     * @since 2.0.0
      */
     protected function getUrlKey($order)
     {
@@ -91,6 +100,7 @@ class Rss extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getLinkParams()
     {

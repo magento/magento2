@@ -7,6 +7,7 @@ namespace Magento\Ui\Component;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Container extends AbstractComponent
 {
@@ -16,6 +17,7 @@ class Container extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

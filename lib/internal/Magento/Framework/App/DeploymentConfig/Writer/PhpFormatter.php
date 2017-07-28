@@ -8,6 +8,7 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
 
 /**
  * A formatter for deployment configuration that presents it as a PHP-file that returns data
+ * @since 2.0.0
  */
 class PhpFormatter implements FormatterInterface
 {
@@ -17,6 +18,7 @@ class PhpFormatter implements FormatterInterface
      * as comment to the corresponding section
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function format($data, array $comments = [])
     {

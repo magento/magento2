@@ -10,16 +10,21 @@ use Magento\Authorization\Model\Role;
 
 /**
  * Plugin for authorization role model
+ * @since 2.0.0
  */
 class AuthorizationRole
 {
-    /** @var \Magento\User\Model\ResourceModel\User */
+    /**
+     * @var \Magento\User\Model\ResourceModel\User
+     * @since 2.0.0
+     */
     protected $userResourceModel;
 
     /**
      * Initialize dependencies
      *
      * @param \Magento\User\Model\ResourceModel\User $userResourceModel
+     * @since 2.0.0
      */
     public function __construct(\Magento\User\Model\ResourceModel\User $userResourceModel)
     {
@@ -33,6 +38,7 @@ class AuthorizationRole
      * @param Role $result
      * @return Role
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterSave(Role $subject, Role $result)
     {

@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml\Create;
  * Adminhtml shipment create form
  *
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -26,6 +28,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -36,6 +39,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -44,6 +48,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -53,6 +58,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentHtml()
     {
@@ -61,6 +67,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getItemsHtml()
     {
@@ -69,6 +76,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {

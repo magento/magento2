@@ -10,22 +10,26 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
 /**
  * Class Relation
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 class Refund implements RelationInterface
 {
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface
+     * @since 2.0.0
      */
     protected $invoiceRepository;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -33,6 +37,7 @@ class Refund implements RelationInterface
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -50,6 +55,7 @@ class Refund implements RelationInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @throws \Exception
      * @return void
+     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -70,6 +76,7 @@ class Refund implements RelationInterface
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
+     * @since 2.0.0
      */
     protected function prepareOrder(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -136,6 +143,7 @@ class Refund implements RelationInterface
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
+     * @since 2.0.0
      */
     protected function prepareInvoice(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -153,6 +161,7 @@ class Refund implements RelationInterface
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
+     * @since 2.0.0
      */
     protected function preparePayment(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

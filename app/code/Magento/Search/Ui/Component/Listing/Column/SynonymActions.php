@@ -13,6 +13,7 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class SynonymActions provides grid actions for synonyms
+ * @since 2.1.0
  */
 class SynonymActions extends Column
 {
@@ -20,7 +21,10 @@ class SynonymActions extends Column
     const SYNONYM_URL_PATH_DELETE = 'search/synonyms/delete';
     const SYNONYM_URL_PATH_EDIT = 'search/synonyms/edit';
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     * @since 2.1.0
+     */
     protected $urlBuilder;
 
     /**
@@ -29,6 +33,7 @@ class SynonymActions extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -46,6 +51,7 @@ class SynonymActions extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.1.0
      */
     public function prepareDataSource(array $dataSource)
     {

@@ -6,11 +6,17 @@
  */
 namespace Magento\Newsletter\Controller\Subscriber;
 
+/**
+ * Class \Magento\Newsletter\Controller\Subscriber\Confirm
+ *
+ * @since 2.0.0
+ */
 class Confirm extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
      * Subscription confirm action
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {
