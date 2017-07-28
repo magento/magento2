@@ -7,6 +7,7 @@ namespace Magento\AdvancedSearch\Model\ResourceModel\Search\Grid;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
 {
@@ -14,6 +15,7 @@ class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
      * Registry manager
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registryManager;
 
@@ -27,6 +29,7 @@ class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
      * @param \Magento\Framework\Registry $registry
      * @param mixed $connection
      * @param mixed $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -56,6 +59,7 @@ class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
      * Initialize select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -71,6 +75,7 @@ class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
      *  Retrieve a value from registry by a key
      *
      * @return \Magento\Search\Model\Query
+     * @since 2.0.0
      */
     public function getQuery()
     {

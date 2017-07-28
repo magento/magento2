@@ -10,25 +10,34 @@ use Magento\Search\Model\QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
+/**
+ * Class \Magento\AdvancedSearch\Block\SearchData
+ *
+ * @since 2.0.0
+ */
 abstract class SearchData extends Template implements SearchDataInterface
 {
     /**
      * @var QueryInterface
+     * @since 2.0.0
      */
     private $query;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $title;
 
     /**
      * @var SuggestedQueriesInterface
+     * @since 2.0.0
      */
     private $searchDataProvider;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'search_data.phtml';
 
@@ -38,6 +47,7 @@ abstract class SearchData extends Template implements SearchDataInterface
      * @param QueryFactoryInterface $queryFactory
      * @param string $title
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -54,6 +64,7 @@ abstract class SearchData extends Template implements SearchDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -62,6 +73,7 @@ abstract class SearchData extends Template implements SearchDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isShowResultsCount()
     {
@@ -70,6 +82,7 @@ abstract class SearchData extends Template implements SearchDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLink($queryText)
     {
@@ -78,6 +91,7 @@ abstract class SearchData extends Template implements SearchDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTitle()
     {

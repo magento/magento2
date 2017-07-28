@@ -9,6 +9,7 @@ use Magento\Search\Model\QueryInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface SuggestedQueriesInterface
 {
@@ -31,11 +32,13 @@ interface SuggestedQueriesInterface
     /**
      * @param QueryInterface $query
      * @return \Magento\Search\Model\QueryResult[]
+     * @since 2.0.0
      */
     public function getItems(QueryInterface $query);
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isResultsCountEnabled();
 }

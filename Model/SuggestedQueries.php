@@ -9,15 +9,22 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\EngineResolver;
 
+/**
+ * Class \Magento\AdvancedSearch\Model\SuggestedQueries
+ *
+ * @since 2.0.0
+ */
 class SuggestedQueries implements SuggestedQueriesInterface
 {
     /**
      * @var EngineResolver
+     * @since 2.1.0
      */
     private $engineResolver;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     private $objectManager;
 
@@ -25,11 +32,13 @@ class SuggestedQueries implements SuggestedQueriesInterface
      * Array of SuggestedQueriesInterface class names.
      *
      * @var array
+     * @since 2.1.0
      */
     private $data;
 
     /**
      * @var SuggestedQueriesInterface
+     * @since 2.1.0
      */
     private $dataProvider;
 
@@ -39,6 +48,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
      * @param EngineResolver $engineResolver
      * @param ObjectManagerInterface $objectManager
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(EngineResolver $engineResolver, ObjectManagerInterface $objectManager, array $data)
     {
@@ -49,6 +59,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isResultsCountEnabled()
     {
@@ -57,6 +68,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems(QueryInterface $query)
     {
@@ -68,6 +80,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
      *
      * @return SuggestedQueriesInterface|SuggestedQueriesInterface[]
      * @throws \Exception
+     * @since 2.1.0
      */
     private function getDataProvider()
     {

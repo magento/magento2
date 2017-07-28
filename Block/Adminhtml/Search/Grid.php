@@ -10,21 +10,25 @@ namespace Magento\AdvancedSearch\Block\Adminhtml\Search;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
      * @var \Magento\AdvancedSearch\Model\Adminhtml\Search\Grid\Options
+     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registryManager;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -35,6 +39,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,6 +60,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *  Retrieve a value from registry by a key
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getQuery()
     {
@@ -66,6 +72,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -90,6 +97,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Retrieve selected related queries from grid
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectedQueries()
     {
@@ -100,6 +108,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Get queries json
      *
      * @return string
+     * @since 2.0.0
      */
     public function getQueriesJson()
     {
