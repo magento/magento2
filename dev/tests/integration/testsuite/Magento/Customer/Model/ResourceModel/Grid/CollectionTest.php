@@ -64,9 +64,5 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
         $this->targetObject->clear();
         $item = $this->targetObject->getItemById($newCustomer->getId());
         $this->assertSame($newCustomer->getEmail(), $item->getEmail());
-
-        /** Rollback indexer to default state */
-        $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->setScheduled(false);
     }
 }
