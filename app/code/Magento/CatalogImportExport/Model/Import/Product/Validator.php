@@ -46,7 +46,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected $_rowData;
 
-    /*
+    /**
      * @var string|null
      * @since 2.1.0
      */

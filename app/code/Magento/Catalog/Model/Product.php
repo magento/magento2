@@ -309,25 +309,25 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $metadataService;
 
-    /*
+    /**
      * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
      * @since 2.0.0
      */
     protected $entityCollectionProvider;
 
-    /*
+    /**
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider
      * @since 2.0.0
      */
     protected $linkProvider;
 
-    /*
+    /**
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      * @since 2.0.0
      */
     protected $productLinkFactory;
 
-    /*
+    /**
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
      * @since 2.0.0
      */

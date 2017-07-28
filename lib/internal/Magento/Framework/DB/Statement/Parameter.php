@@ -37,28 +37,28 @@ class Parameter
      */
     protected $_isBlob = false;
 
-    /*
+    /**
      * Data type to set to DB driver during parameter bind
      * @var mixed
      * @since 2.0.0
      */
     protected $_dataType = null;
 
-    /*
+    /**
      * Length to set to DB driver during parameter bind
      * @var mixed
      * @since 2.0.0
      */
     protected $_length = null;
 
-    /*
+    /**
      * Specific driver options to set to DB driver during parameter bind
      * @var mixed
      * @since 2.0.0
      */
     protected $_driverOptions = null;
 
-    /*
+    /**
      * Additional information to be used by DB adapter internally
      * @var \Magento\Framework\DataObject
      * @since 2.0.0

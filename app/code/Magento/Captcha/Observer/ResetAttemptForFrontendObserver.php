@@ -14,7 +14,7 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class ResetAttemptForFrontendObserver implements ObserverInterface
 {
-    /*
+    /**
      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
      * @since 2.0.0
      */

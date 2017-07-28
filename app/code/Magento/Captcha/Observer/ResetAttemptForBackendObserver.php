@@ -14,10 +14,10 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class ResetAttemptForBackendObserver implements ObserverInterface
 {
-    /*
-      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
-     * @since 2.0.0
-      */
+    /**
+     * @var \Magento\Captcha\Model\ResourceModel\LogFactory
+     * @since 2.2.0
+     */
     public $resLogFactory;
 
     /**
