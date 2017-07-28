@@ -13,6 +13,7 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
 /**
  * Command for starting MessageQueue consumers.
+ * @since 2.0.0
  */
 class ConsumerListCommand extends Command
 {
@@ -20,6 +21,7 @@ class ConsumerListCommand extends Command
 
     /**
      * @var ConsumerConfig
+     * @since 2.2.0
      */
     private $consumerConfig;
 
@@ -30,6 +32,7 @@ class ConsumerListCommand extends Command
      * @param string|null $name
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(QueueConfig $queueConfig, $name = null)
     {
@@ -38,6 +41,7 @@ class ConsumerListCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -48,6 +52,7 @@ class ConsumerListCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -63,6 +68,7 @@ HELP
 
     /**
      * @return string[]
+     * @since 2.0.0
      */
     private function getConsumers()
     {
@@ -78,7 +84,8 @@ HELP
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConsumerConfig()
     {

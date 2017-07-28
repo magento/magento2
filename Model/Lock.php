@@ -7,6 +7,7 @@ namespace Magento\MessageQueue\Model;
 
 /**
  * Class Lock to handle message lock transactions.
+ * @since 2.1.0
  */
 class Lock extends \Magento\Framework\Model\AbstractModel
 {
@@ -14,6 +15,7 @@ class Lock extends \Magento\Framework\Model\AbstractModel
      * Class constructor
      *
      * @return void
+     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -24,6 +26,7 @@ class Lock extends \Magento\Framework\Model\AbstractModel
      * Get message code
      *
      * @return string
+     * @since 2.1.0
      */
     public function getMessageCode()
     {
@@ -35,6 +38,7 @@ class Lock extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $value
      * @return $this
+     * @since 2.1.0
      */
     public function setMessageCode($value)
     {
@@ -45,6 +49,7 @@ class Lock extends \Magento\Framework\Model\AbstractModel
      * Get lock date
      *
      * @return string
+     * @since 2.1.0
      */
     public function getCreatedAt()
     {
@@ -56,6 +61,7 @@ class Lock extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $value
      * @return $this
+     * @since 2.1.0
      */
     public function setCreatedAt($value)
     {

@@ -20,21 +20,25 @@ use Magento\Framework\App\ObjectManager;
  * Where <i>consumerName</i> should be a valid name of consumer registered in some queue.xml
  *
  * @api
+ * @since 2.0.0
  */
 class ConsumerRunner
 {
     /**
      * @var ConsumerFactory
+     * @since 2.0.0
      */
     private $consumerFactory;
 
     /**
      * @var MaintenanceMode
+     * @since 2.2.0
      */
     private $maintenanceMode;
 
     /**
      * @var integer
+     * @since 2.2.0
      */
     private $maintenanceSleepInterval;
 
@@ -44,6 +48,7 @@ class ConsumerRunner
      * @param ConsumerFactory $consumerFactory
      * @param MaintenanceMode $maintenanceMode
      * @param integer $maintenanceSleepInterval
+     * @since 2.0.0
      */
     public function __construct(
         ConsumerFactory $consumerFactory,
@@ -62,6 +67,7 @@ class ConsumerRunner
      * @param array $arguments
      * @throws LocalizedException
      * @return void
+     * @since 2.0.0
      */
     public function __call($name, $arguments)
     {
