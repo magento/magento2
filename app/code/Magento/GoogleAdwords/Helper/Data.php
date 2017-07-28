@@ -73,6 +73,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry;
 

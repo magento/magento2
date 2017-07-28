@@ -73,6 +73,7 @@ class Address extends AbstractCustomer
      * Default addresses column names to appropriate customer attribute code
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_DEFAULT_BILLING => 'default_billing',

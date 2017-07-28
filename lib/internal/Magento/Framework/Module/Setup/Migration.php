@@ -54,6 +54,7 @@ class Migration
      * Config key for path to aliases map file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_confPathToMapFile;
 

@@ -31,6 +31,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var \Magento\Webapi\Model\Soap\Server
+     * @since 2.0.0
      */
     protected $_soapServer;
 

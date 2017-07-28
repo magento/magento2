@@ -32,6 +32,7 @@ class Container implements Layout\ReaderInterface
 
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
+     * @since 2.0.0
      */
     protected $helper;
 

@@ -31,6 +31,7 @@ class Dir
      * Module registry
      *
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $componentRegistrar;
 

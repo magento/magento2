@@ -28,6 +28,7 @@ class Body implements Layout\ReaderInterface
 
     /**
      * @var Layout\ReaderPool
+     * @since 2.0.0
      */
     protected $readerPool;
 

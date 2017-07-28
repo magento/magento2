@@ -44,7 +44,10 @@ class Fault
     const NODE_DETAIL_WRAPPER = 'GenericFault';
     /**#@-*/
 
-    /** @var string */
+    /**
+     * @var 
+     * @since 2.0.0
+     */
     protected $_soapFaultCode;
 
     /**

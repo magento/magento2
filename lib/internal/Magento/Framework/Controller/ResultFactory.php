@@ -31,6 +31,7 @@ class ResultFactory
      * Map of types which are references to classes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $typeMap = [
         self::TYPE_JSON     => Result\Json::class,

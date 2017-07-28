@@ -22,6 +22,7 @@ class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_taxConfig;
 

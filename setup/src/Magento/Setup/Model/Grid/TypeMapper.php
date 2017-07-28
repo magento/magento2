@@ -26,7 +26,10 @@ class TypeMapper
     const LIBRARY_PACKAGE_TYPE = 'Library';
     /**#@-*/
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.2.0
+     */
     private $packageTypesMap = [
         ComposerInformation::THEME_PACKAGE_TYPE => self::THEME_PACKAGE_TYPE,
         ComposerInformation::LANGUAGE_PACKAGE_TYPE => self::LANGUAGE_PACKAGE_TYPE,

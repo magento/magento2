@@ -27,6 +27,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 2.1.0
      */
     protected $metadata;
 

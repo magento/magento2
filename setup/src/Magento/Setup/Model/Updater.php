@@ -25,6 +25,7 @@ class Updater
 
     /**
      * @var Queue
+     * @since 2.0.0
      */
     private $queue;
 

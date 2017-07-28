@@ -35,7 +35,10 @@ class Config
     const KEY_PARAMETERS = 'parameters';
     /*#@-*/
 
-    /** @var ModelConfig */
+    /**
+     * @var 
+     * @since 2.0.0
+     */
     protected $_config;
 
     /**

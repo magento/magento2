@@ -24,6 +24,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      * Config path for service timeout
      *
      * @var string
+     * @since 2.1.0
      */
     private $timeoutConfigPath = 'currency/yahoofinance/timeout';
 

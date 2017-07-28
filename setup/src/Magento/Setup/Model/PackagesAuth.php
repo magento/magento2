@@ -32,6 +32,7 @@ class PackagesAuth
 
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @since 2.1.0
      */
     protected $serviceLocator;
 

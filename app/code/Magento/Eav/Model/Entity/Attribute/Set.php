@@ -43,6 +43,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Resource instance
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
+     * @since 2.0.0
      */
     protected $_resource;
 

@@ -27,6 +27,7 @@ class AttributeDataFactory
      * Array of attribute data models by input type
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_dataModels = [];
 

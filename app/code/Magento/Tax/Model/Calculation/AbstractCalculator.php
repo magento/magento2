@@ -34,6 +34,7 @@ abstract class AbstractCalculator
      * Tax details item data object factory
      *
      * @var TaxDetailsItemInterfaceFactory
+     * @since 2.0.0
      */
     protected $taxDetailsItemDataObjectFactory;
 

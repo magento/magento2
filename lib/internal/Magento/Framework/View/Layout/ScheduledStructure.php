@@ -26,6 +26,7 @@ class ScheduledStructure
      * Map of class properties.
      *
      * @var array
+     * @since 2.2.0
      */
     private $serializableProperties = [
         'scheduledStructure',

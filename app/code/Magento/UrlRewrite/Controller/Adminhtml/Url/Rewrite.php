@@ -33,6 +33,7 @@ abstract class Rewrite extends Action
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $_product;
 

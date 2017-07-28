@@ -25,6 +25,7 @@ class DbVersionInfo
 
     /**
      * @var ModuleListInterface
+     * @since 2.0.0
      */
     private $moduleList;
 

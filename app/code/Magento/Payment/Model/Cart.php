@@ -29,6 +29,7 @@ class Cart
      * Sales model
      *
      * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
+     * @since 2.0.0
      */
     protected $_salesModel;
 

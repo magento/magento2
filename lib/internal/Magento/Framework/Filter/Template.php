@@ -35,6 +35,7 @@ class Template implements \Zend_Filter_Interface
      * Callbacks that will be applied after filtering
      *
      * @var array
+     * @since 2.0.0
      */
     private $afterFilterCallbacks = [];
 

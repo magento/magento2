@@ -96,6 +96,7 @@ class CustomOptions extends AbstractModifier
 
     /**
      * @var \Magento\Catalog\Model\Locator\LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 

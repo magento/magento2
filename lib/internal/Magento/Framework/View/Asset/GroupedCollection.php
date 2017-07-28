@@ -26,6 +26,7 @@ class GroupedCollection extends Collection
      * Property Factory
      *
      * @var \Magento\Framework\View\Asset\PropertyGroupFactory
+     * @since 2.0.0
      */
     protected $propertyFactory;
 

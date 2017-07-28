@@ -22,7 +22,10 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /** @var \Magento\Framework\App\CacheInterface */
+    /**
+     * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
+     */
     protected $cache;
 
     /**

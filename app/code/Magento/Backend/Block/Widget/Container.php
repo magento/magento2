@@ -29,6 +29,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
      * So called "container controller" to specify group of blocks participating in some action
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_controller = 'empty';
 

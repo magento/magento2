@@ -33,6 +33,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Prefix of model events object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'attribute';
 

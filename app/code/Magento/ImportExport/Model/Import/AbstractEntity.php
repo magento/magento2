@@ -86,6 +86,7 @@ abstract class AbstractEntity
      * DB connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $_connection;
 

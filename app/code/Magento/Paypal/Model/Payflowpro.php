@@ -90,6 +90,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Response params mappings
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_responseParamsMappings = [
         'firstname' => 'billtofirstname',

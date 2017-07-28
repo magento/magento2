@@ -30,6 +30,7 @@ class Config implements Bundle\ConfigInterface
 
     /**
      * @var ListInterface
+     * @since 2.0.0
      */
     protected $themeList;
 

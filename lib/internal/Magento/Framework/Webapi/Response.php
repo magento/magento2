@@ -42,6 +42,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
      * Messages.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messages = [];
 

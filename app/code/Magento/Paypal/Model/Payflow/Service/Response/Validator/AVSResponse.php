@@ -57,6 +57,7 @@ class AVSResponse implements ValidatorInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $avsCheck = [
         'avsaddr' => 'avs_street',

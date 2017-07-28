@@ -90,6 +90,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'catalog_category';
 

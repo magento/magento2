@@ -29,6 +29,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_addButtonLabel;
 

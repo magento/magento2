@@ -44,6 +44,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_values = [];
 

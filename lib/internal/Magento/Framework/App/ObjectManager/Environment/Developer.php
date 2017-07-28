@@ -27,6 +27,7 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 

@@ -57,6 +57,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * or just to deny this attribute processing.
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];

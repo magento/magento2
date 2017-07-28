@@ -34,6 +34,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 

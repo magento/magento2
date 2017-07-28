@@ -28,6 +28,7 @@ class Images extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 

@@ -33,6 +33,7 @@ class UrlRewrite extends AbstractSimpleObject
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $defaultValues = [
         self::REDIRECT_TYPE => 0,

@@ -49,6 +49,7 @@ class ServiceMetadata
      * API services
      *
      * @var array
+     * @since 2.0.0
      */
     protected $services;
 

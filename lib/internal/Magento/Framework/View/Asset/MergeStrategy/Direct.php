@@ -25,6 +25,7 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 

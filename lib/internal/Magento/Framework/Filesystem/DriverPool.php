@@ -25,6 +25,7 @@ class DriverPool
      * Supported types
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $types = [
         self::FILE => \Magento\Framework\Filesystem\Driver\File::class,

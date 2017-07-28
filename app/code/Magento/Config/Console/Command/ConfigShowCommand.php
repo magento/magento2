@@ -37,6 +37,7 @@ class ConfigShowCommand extends Command
      * Scope validator.
      *
      * @var ValidatorInterface
+     * @since 2.2.0
      */
     private $scopeValidator;
 

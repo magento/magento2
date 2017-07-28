@@ -29,6 +29,7 @@ class UpdaterTaskCreator
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.1.0
      */
     private $filesystem;
 

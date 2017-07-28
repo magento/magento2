@@ -47,6 +47,7 @@ class Cli extends Console\Application
      * Service Manager.
      *
      * @var ServiceManager
+     * @since 2.0.0
      */
     private $serviceManager;
 

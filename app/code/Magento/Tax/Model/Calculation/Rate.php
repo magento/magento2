@@ -43,6 +43,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * List of tax titles
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_titles = null;
 

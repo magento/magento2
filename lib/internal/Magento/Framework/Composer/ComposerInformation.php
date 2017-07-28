@@ -66,6 +66,7 @@ class ComposerInformation
 
     /**
      * @var \Composer\Composer
+     * @since 2.0.0
      */
     private $composer;
 

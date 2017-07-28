@@ -33,6 +33,7 @@ class Context
 
     /**
      * @var ComponentRegistrar
+     * @since 2.0.0
      */
     private $componentRegistrar;
 

@@ -38,6 +38,7 @@ class ReadinessCheck
 
     /**
      * @var \Magento\Setup\Validator\DbValidator
+     * @since 2.0.0
      */
     private $dbValidator;
 

@@ -92,6 +92,7 @@ class CommonTaxCollector extends AbstractTotal
      * Tax configuration object
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_config;
 

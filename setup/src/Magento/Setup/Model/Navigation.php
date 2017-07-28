@@ -25,6 +25,7 @@ class Navigation
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $navStates;
 

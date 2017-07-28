@@ -65,6 +65,7 @@ class EmailNotification implements EmailNotificationInterface
 
     /**
      * @var CustomerRegistry
+     * @since 2.1.0
      */
     private $customerRegistry;
 

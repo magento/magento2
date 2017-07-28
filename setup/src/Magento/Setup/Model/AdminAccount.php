@@ -34,6 +34,7 @@ class AdminAccount
      * Db connection
      *
      * @var AdapterInterface
+     * @since 2.2.0
      */
     private $connection;
 

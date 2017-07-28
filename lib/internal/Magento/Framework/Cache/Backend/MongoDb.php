@@ -33,6 +33,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
 
     /**
      * @var \MongoCollection|null
+     * @since 2.0.0
      */
     protected $_collection = null;
 

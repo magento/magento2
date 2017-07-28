@@ -24,6 +24,7 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 

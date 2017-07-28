@@ -21,6 +21,7 @@ class Queue
 
     /**
      * @var Queue\Reader
+     * @since 2.0.0
      */
     protected $reader;
 

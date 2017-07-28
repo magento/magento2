@@ -34,6 +34,7 @@ class Stat
      * Array of timers statistics data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_timers = [];
 

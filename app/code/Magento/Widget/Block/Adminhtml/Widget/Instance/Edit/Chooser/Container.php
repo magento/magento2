@@ -27,6 +27,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
 
     /**
      * @var \Magento\Framework\View\Layout\ProcessorFactory
+     * @since 2.0.0
      */
     protected $_layoutProcessorFactory;
 

@@ -41,6 +41,7 @@ class Render extends AbstractBlock
      * Default type renderer
      *
      * @var string
+     * @since 2.0.0
      */
     protected $defaultTypeRender = 'default';
 

@@ -43,6 +43,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_storeDisplayConfig = [];
 

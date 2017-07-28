@@ -45,6 +45,7 @@ class ErrorProcessor
 
     /**
      * @var \Magento\Framework\Json\Encoder
+     * @since 2.0.0
      */
     protected $encoder;
 

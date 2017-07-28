@@ -63,6 +63,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $product;
 

@@ -33,6 +33,7 @@ class Categories extends AbstractModifier
 
     /**
      * @var CategoryCollectionFactory
+     * @since 2.1.0
      */
     protected $categoryCollectionFactory;
 

@@ -25,6 +25,7 @@ class PluginList extends Interception\PluginList\PluginList
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $pluginList = [
        self::PLUGIN_TYPE_BEFORE => [],

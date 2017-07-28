@@ -108,6 +108,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Entity adapter.
      *
      * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity
+     * @since 2.0.0
      */
     protected $_entityAdapter;
 

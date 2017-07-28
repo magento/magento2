@@ -44,6 +44,7 @@ class PhpCookieManager implements CookieManagerInterface
 
     /**
      * @var CookieScopeInterface
+     * @since 2.0.0
      */
     private $scope;
 

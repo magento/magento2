@@ -36,6 +36,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 

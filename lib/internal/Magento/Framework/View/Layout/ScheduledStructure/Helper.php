@@ -29,6 +29,7 @@ class Helper
      * Anonymous block counter
      *
      * @var int
+     * @since 2.0.0
      */
     protected $counter = 0;
 

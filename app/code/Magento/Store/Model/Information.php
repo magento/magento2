@@ -45,6 +45,7 @@ class Information
 
     /**
      * @var Renderer
+     * @since 2.0.0
      */
     protected $renderer;
 

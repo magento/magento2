@@ -57,6 +57,7 @@ class Item extends AbstractModel implements OrderItemInterface
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_item';
 

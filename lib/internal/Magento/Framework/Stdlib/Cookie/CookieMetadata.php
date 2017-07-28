@@ -26,6 +26,7 @@ class CookieMetadata
      * Store the metadata in array format to distinguish between null values and no value set.
      *
      * @var array
+     * @since 2.0.0
      */
     private $metadata;
 

@@ -24,6 +24,7 @@ class MixinFactory
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $typeClassMap = [
         self::SPAN_MIXIN => SpanMixin::class,

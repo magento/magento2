@@ -32,6 +32,7 @@ class ConfigSetProcessorFactory
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 

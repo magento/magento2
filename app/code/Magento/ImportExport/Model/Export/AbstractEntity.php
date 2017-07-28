@@ -37,6 +37,7 @@ abstract class AbstractEntity
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 

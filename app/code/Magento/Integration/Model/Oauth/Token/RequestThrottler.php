@@ -25,6 +25,7 @@ class RequestThrottler
 
     /**
      * @var RequestLogReader
+     * @since 2.1.0
      */
     private $requestLogReader;
 

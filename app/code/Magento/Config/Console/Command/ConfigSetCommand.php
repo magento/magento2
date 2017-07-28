@@ -40,6 +40,7 @@ class ConfigSetCommand extends Command
      * Emulator adminhtml area for CLI command.
      *
      * @var EmulatedAdminhtmlAreaProcessor
+     * @since 2.2.0
      */
     private $emulatedAreaProcessor;
 

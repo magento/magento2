@@ -23,6 +23,7 @@ class PackagesData
 
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
+     * @since 2.1.0
      */
     private $composerInformation;
 

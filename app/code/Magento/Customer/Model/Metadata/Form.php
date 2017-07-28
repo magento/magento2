@@ -25,6 +25,7 @@ class Form
 
     /**
      * @var CustomerMetadataInterface
+     * @since 2.0.0
      */
     protected $_customerMetadataService;
 

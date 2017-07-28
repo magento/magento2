@@ -40,6 +40,7 @@ class StoreConfigurationDataMapper
      * Map of configuration paths to data keys
      *
      * @var array
+     * @since 2.0.0
      */
     private $pathDataMap = [
         Store::XML_PATH_USE_REWRITES => self::KEY_USE_SEF_URL,

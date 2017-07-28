@@ -36,6 +36,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'tax_rule';
 

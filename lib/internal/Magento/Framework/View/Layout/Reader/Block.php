@@ -44,6 +44,7 @@ class Block implements Layout\ReaderInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $attributes = [
         self::ATTRIBUTE_GROUP,

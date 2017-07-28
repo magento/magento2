@@ -47,6 +47,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Overridden attributes parameters.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributeOverrides = [
         'created_at' => ['backend_type' => 'datetime'],

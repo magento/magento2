@@ -33,6 +33,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Default selection object
      *
      * @var \Magento\Catalog\Model\Product|null
+     * @since 2.0.0
      */
     protected $defaultSelection = null;
 

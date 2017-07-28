@@ -28,6 +28,7 @@ class ProcessorFactory
      * The Object Manager.
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 

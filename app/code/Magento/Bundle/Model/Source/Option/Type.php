@@ -29,6 +29,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options = [];
 

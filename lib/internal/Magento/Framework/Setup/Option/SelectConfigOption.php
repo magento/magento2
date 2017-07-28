@@ -22,6 +22,7 @@ class SelectConfigOption extends AbstractConfigOption
      * Available options
      *
      * @var array
+     * @since 2.0.0
      */
     private $selectOptions;
 
