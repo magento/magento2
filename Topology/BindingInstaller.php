@@ -10,11 +10,13 @@ use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class BindingInstaller implements BindingInstallerInterface
 {
     /**
      * @var BindingInstallerInterface[]
+     * @since 2.2.0
      */
     private $installers;
 
@@ -22,6 +24,7 @@ class BindingInstaller implements BindingInstallerInterface
      * Initialize dependencies.
      *
      * @param BindingInstallerInterface[] $installers
+     * @since 2.2.0
      */
     public function __construct(array $installers)
     {
@@ -30,6 +33,7 @@ class BindingInstaller implements BindingInstallerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function install(AMQPChannel $channel, BindingInterface $binding, $exchangeName)
     {
@@ -41,6 +45,7 @@ class BindingInstaller implements BindingInstallerInterface
      *
      * @param string $type
      * @return BindingInstallerInterface
+     * @since 2.2.0
      */
     private function getInstaller($type)
     {

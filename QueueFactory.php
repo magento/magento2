@@ -9,6 +9,7 @@ namespace Magento\Framework\Amqp;
  * Factory class for @see \Magento\Framework\Amqp\Queue
  *
  * @api
+ * @since 2.2.0
  */
 class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterface
 {
@@ -16,6 +17,7 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -23,11 +25,13 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
      * Instance name to create
      *
      * @var string
+     * @since 2.2.0
      */
     private $instanceName = null;
 
     /**
      * @var ConfigPool
+     * @since 2.2.0
      */
     private $configPool;
 
@@ -37,6 +41,7 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigPool $configPool
      * @param string $instanceName
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -50,6 +55,7 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function create($queueName, $connectionName)
     {
