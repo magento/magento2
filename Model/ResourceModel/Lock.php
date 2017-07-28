@@ -22,6 +22,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.1.0
      */
     private $dateTime;
 
