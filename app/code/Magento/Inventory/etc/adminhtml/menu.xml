@@ -15,5 +15,13 @@
              parent="Magento_Backend::stores_settings"
              action="inventory/source/index"
              resource="Magento_Inventory::source"/>
+        <add id="Magento_Inventory::stock"
+             title="Manage Stocks"
+             translate="title"
+             module="Magento_Inventory"
+             sortOrder="70"
+             parent="Magento_Backend::stores_settings"
+             action="inventory/stock/index"
+             resource="Magento_Inventory::stock"/>
     </menu>
 </config>

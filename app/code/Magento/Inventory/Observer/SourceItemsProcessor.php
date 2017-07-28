@@ -16,7 +16,7 @@ use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemSaveInterface;
 
 /**
- * At the time of processing Product save form this class used to save source item correctly
+ * At the time of processing Product save form this class used to save source items correctly
  * Perform replace strategy of sources for the product
  */
 class SourceItemsProcessor
@@ -87,7 +87,7 @@ class SourceItemsProcessor
             if (isset($sourceItemsForDelete[$sourceId])) {
                 $sourceItem = $sourceItemsForDelete[$sourceId];
             } else {
-                /** @var SourceItemInterface $relation */
+                /** @var SourceItemInterface $sourceItem */
                 $sourceItem = $this->sourceItemFactory->create();
             }
 
@@ -97,8 +97,12 @@ class SourceItemsProcessor
             $sourceItemsForSave[] = $sourceItem;
             unset($sourceItemsForDelete[$sourceId]);
         }
-        $this->sourceItemSave->execute($sourceItemsForSave);
-        $this->deleteSourceItems($sourceItemsForDelete);
+        if ($sourceItemsForSave) {
+            $this->sourceItemSave->execute($sourceItemsForSave);
+        }
+        if ($sourceItemsForDelete) {
+            $this->deleteSourceItems($sourceItemsForDelete);
+        }
     }
 
     /**
@@ -144,7 +148,7 @@ class SourceItemsProcessor
     private function deleteSourceItems(array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
-            $this->sourceItemRepository->delete($sourceItem->getSourceItemId());
+            $this->sourceItemRepository->delete($sourceItem);
         }
     }
 }

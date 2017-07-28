@@ -6,9 +6,12 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\SourceExtensionInterface;
 
 /**
  * Represents physical storage, i.e. brick and mortar store or warehouse
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -39,14 +42,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**#@-*/
 
     /**
-     * Get source id.
+     * Get source id
      *
      * @return int|null
      */
     public function getSourceId();
 
     /**
-     * Set source id.
+     * Set source id
      *
      * @param int $sourceId
      * @return void
@@ -54,14 +57,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setSourceId($sourceId);
 
     /**
-     * Get source name.
+     * Get source name
      *
      * @return string
      */
     public function getName();
 
     /**
-     * Set source name.
+     * Set source name
      *
      * @param string $name
      * @return void
@@ -84,14 +87,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setEmail($email);
 
     /**
-     * Get source contact name.
+     * Get source contact name
      *
      * @return string|null
      */
     public function getContactName();
 
     /**
-     * Set source contact name.
+     * Set source contact name
      *
      * @param string|null $contactName
      * @return void
@@ -99,14 +102,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setContactName($contactName);
 
     /**
-     * Check if source is enabled.
+     * Check if source is enabled
      *
      * @return bool
      */
     public function isEnabled();
 
     /**
-     * Enable or disable source.
+     * Enable or disable source
      *
      * @param bool $enabled
      * @return void
@@ -114,14 +117,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setEnabled($enabled);
 
     /**
-     * Get source description.
+     * Get source description
      *
      * @return string|null
      */
     public function getDescription();
 
     /**
-     * Set source description.
+     * Set source description
      *
      * @param string|null $description
      * @return void
@@ -129,14 +132,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setDescription($description);
 
     /**
-     * Get source latitude.
+     * Get source latitude
      *
      * @return float|null
      */
     public function getLatitude();
 
     /**
-     * Set source latitude.
+     * Set source latitude
      *
      * @param float|null $latitude
      * @return void
@@ -144,14 +147,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setLatitude($latitude);
 
     /**
-     * Get source longitude.
+     * Get source longitude
      *
      * @return float|null
      */
     public function getLongitude();
 
     /**
-     * Set source longitude.
+     * Set source longitude
      *
      * @param float|null $longitude
      * @return void
@@ -159,14 +162,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setLongitude($longitude);
 
     /**
-     * Get source country id.
+     * Get source country id
      *
      * @return string
      */
     public function getCountryId();
 
     /**
-     * Set source country id.
+     * Set source country id
      *
      * @param string $countryId
      * @return void
@@ -196,7 +199,7 @@ interface SourceInterface extends ExtensibleDataInterface
     public function getRegion();
 
     /**
-     * Set source region title.
+     * Set source region title
      *
      * @param string|null $region
      * @return void
@@ -204,14 +207,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setRegion($region);
 
     /**
-     * Get source city.
+     * Get source city
      *
      * @return string|null
      */
     public function getCity();
 
     /**
-     * Set source city.
+     * Set source city
      *
      * @param string|null $city
      * @return void
@@ -219,14 +222,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setCity($city);
 
     /**
-     * Get source street name.
+     * Get source street name
      *
      * @return string|null
      */
     public function getStreet();
 
     /**
-     * Set source street name.
+     * Set source street name
      *
      * @param string|null $street
      * @return void
@@ -234,14 +237,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setStreet($street);
 
     /**
-     * Get source post code.
+     * Get source post code
      *
      * @return string
      */
     public function getPostcode();
 
     /**
-     * Set source post code.
+     * Set source post code
      *
      * @param string $postcode
      * @return void
@@ -249,14 +252,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setPostcode($postcode);
 
     /**
-     * Get source phone number.
+     * Get source phone number
      *
      * @return string|null
      */
     public function getPhone();
 
     /**
-     * Set source phone number.
+     * Set source phone number
      *
      * @param string|null $phone
      * @return void
@@ -264,14 +267,14 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setPhone($phone);
 
     /**
-     * Get source fax.
+     * Get source fax
      *
      * @return string|null
      */
     public function getFax();
 
     /**
-     * Set source fax.
+     * Set source fax
      *
      * @param string $fax
      * @return void|null
@@ -294,6 +297,8 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setPriority($priority);
 
     /**
+     * Check is need to use default config
+     *
      * @return bool
      */
     public function isUseDefaultCarrierConfig();
@@ -316,19 +321,17 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setCarrierLinks($carrierLinks);
 
     /**
-     * Retrieve existing extension attributes object.
+     * Retrieve existing extension attributes object
      *
      * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
-     * Set an extension attributes object.
+     * Set an extension attributes object
      *
      * @param \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
-    );
+    public function setExtensionAttributes(SourceExtensionInterface $extensionAttributes);
 }

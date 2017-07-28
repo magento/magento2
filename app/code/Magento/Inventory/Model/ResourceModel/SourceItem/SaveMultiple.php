@@ -6,11 +6,11 @@
 namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Setup\InstallSchema;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Implementation of Source Item save multiple operation for specific db layer
+ * Implementation of SourceItem save multiple operation for specific db layer
  * Save Multiple used here for performance efficient purposes over single save operation
  */
 class SaveMultiple
@@ -39,11 +39,8 @@ class SaveMultiple
      */
     public function execute(array $sourceItems)
     {
-        if (empty($sourceItems)) {
-            return;
-        }
         $connection = $this->connection->getConnection();
-        $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM);
+        $tableName = $connection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $columnsSql = $this->buildColumnsSqlPart([
             SourceItemInterface::SOURCE_ID,
@@ -99,12 +96,12 @@ class SaveMultiple
     {
         $bind = [];
         foreach ($sourceItems as $sourceItem) {
-            $bind[] = [
+            $bind = array_merge($bind, [
                 $sourceItem->getSourceId(),
                 $sourceItem->getSku(),
                 $sourceItem->getQuantity(),
                 $sourceItem->getStatus(),
-            ];
+            ]);
         }
         return $bind;
     }

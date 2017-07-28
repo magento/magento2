@@ -6,9 +6,13 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 
 /**
  * Represents amount of product on physical storage
+ * Entity id getter is missed because entity identifies by compound identifier (sku and source_id)
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -19,7 +23,6 @@ interface SourceItemInterface extends ExtensibleDataInterface
      */
     const SKU = 'sku';
     const SOURCE_ID = 'source_id';
-    const SOURCE_ITEM_ID = 'source_item_id';
     const QUANTITY = 'quantity';
     const STATUS = 'status';
     /**#@-*/
@@ -30,13 +33,6 @@ interface SourceItemInterface extends ExtensibleDataInterface
     const STATUS_OUT_OF_STOCK = 0;
     const STATUS_IN_STOCK = 1;
     /**#@-*/
-
-    /**
-     * Get source item id
-     *
-     * @return int
-     */
-    public function getSourceItemId();
 
     /**
      * Get source item sku
@@ -111,7 +107,5 @@ interface SourceItemInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
-    );
+    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes);
 }

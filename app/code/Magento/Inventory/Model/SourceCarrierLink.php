@@ -6,57 +6,59 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as SourceCarrierLinkResourceModel;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
+ *
+ * @codeCoverageIgnore
  */
 class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrierLinkInterface
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\ResourceModel\SourceCarrierLink::class);
+        $this->_init(SourceCarrierLinkResourceModel::class);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getCarrierCode()
     {
-        return $this->getData(SourceCarrierLinkInterface::CARRIER_CODE);
+        return $this->getData(self::CARRIER_CODE);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setCarrierCode($carrierCode)
     {
-        $this->setData(SourceCarrierLinkInterface::CARRIER_CODE, $carrierCode);
+        $this->setData(self::CARRIER_CODE, $carrierCode);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getPosition()
     {
-        return $this->getData(SourceCarrierLinkInterface::POSITION);
+        return $this->getData(self::POSITION);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setPosition($position)
     {
-        $this->setData(SourceCarrierLinkInterface::POSITION, $position);
+        $this->setData(self::POSITION, $position);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -69,11 +71,10 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
-    ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

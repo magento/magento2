@@ -12,6 +12,11 @@
             <argument name="saveTarget" xsi:type="string">inventory_source_form.inventory_source_form</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\Inventory\Ui\Component\Control\Stock\SaveSplitButton" type="Magento\Backend\Ui\Component\Control\SaveSplitButton">
+        <arguments>
+            <argument name="saveTarget" xsi:type="string">inventory_stock_form.inventory_stock_form</argument>
+        </arguments>
+    </virtualType>
     <!-- Product form configurations -->
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>

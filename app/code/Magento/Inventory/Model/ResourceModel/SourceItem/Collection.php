@@ -5,12 +5,12 @@
  */
 namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
-use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\SourceItem as SourceItemModel;
 
 /**
- * Resource Collection of Source Items entity
+ * Resource Collection of SourceItem entities
  *
  * @api
  */
@@ -21,6 +21,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(SourceItemModel::class, ResourceSource::class);
+        $this->_init(SourceItemModel::class, SourceItemResourceModel::class);
     }
 }

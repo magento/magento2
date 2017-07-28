@@ -8,17 +8,15 @@ namespace Magento\Inventory\Controller\Adminhtml\Source;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Class Save
+ * Save Controller
  */
 class Save extends Action
 {
@@ -38,38 +36,30 @@ class Save extends Action
     private $sourceRepository;
 
     /**
-     * @var DataObjectHelper
+     * @var SourceHydrator
      */
-    private $dataObjectHelper;
-
-    /**
-     * @var CarrierRequestDataHydrator
-     */
-    private $carrierRequestDataHydrator;
+    private $sourceHydrator;
 
     /**
      * @param Context $context
      * @param SourceInterfaceFactory $sourceFactory
      * @param SourceRepositoryInterface $sourceRepository
-     * @param DataObjectHelper $dataObjectHelper
-     * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
+     * @param SourceHydrator $sourceHydrator
      */
     public function __construct(
         Context $context,
         SourceInterfaceFactory $sourceFactory,
         SourceRepositoryInterface $sourceRepository,
-        DataObjectHelper $dataObjectHelper,
-        CarrierRequestDataHydrator $carrierRequestDataHydrator
+        SourceHydrator $sourceHydrator
     ) {
         parent::__construct($context);
         $this->sourceFactory = $sourceFactory;
         $this->sourceRepository = $sourceRepository;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->carrierRequestDataHydrator = $carrierRequestDataHydrator;
+        $this->sourceHydrator = $sourceHydrator;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -77,9 +67,7 @@ class Save extends Action
         $requestData = $this->getRequest()->getParams();
         if ($this->getRequest()->isPost() && !empty($requestData['general'])) {
             try {
-                $sourceId = !empty($requestData['general'][SourceInterface::SOURCE_ID])
-                    ? $requestData['general'][SourceInterface::SOURCE_ID] : null;
-
+                $sourceId = $requestData['general'][SourceInterface::SOURCE_ID] ?? null;
                 $sourceId = $this->processSave($sourceId, $requestData);
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
@@ -92,7 +80,7 @@ class Save extends Action
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (Exception $e) {
-                $this->messageManager->addErrorMessage(__('Could not save source'));
+                $this->messageManager->addErrorMessage(__('Could not save source.'));
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             }
         } else {
@@ -115,8 +103,7 @@ class Save extends Action
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         }
-        $this->dataObjectHelper->populateWithArray($source, $requestData['general'], SourceInterface::class);
-        $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
+        $source = $this->sourceHydrator->hydrate($source, $requestData);
 
         $sourceId = $this->sourceRepository->save($source);
         return $sourceId;

@@ -11,7 +11,7 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class NewAction
+ * NewAction Controller
  */
 class NewAction extends Action
 {
@@ -21,7 +21,7 @@ class NewAction extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::source';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
