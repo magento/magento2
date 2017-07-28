@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Composite reader for publisher config.
+ * @since 2.2.0
  */
 class CompositeReader implements ReaderInterface
 {
@@ -16,6 +17,7 @@ class CompositeReader implements ReaderInterface
      * Config validator.
      *
      * @var ValidatorInterface
+     * @since 2.2.0
      */
     private $validator;
 
@@ -23,11 +25,13 @@ class CompositeReader implements ReaderInterface
      * Config reade list.
      *
      * @var ReaderInterface[]
+     * @since 2.2.0
      */
     private $readers;
 
     /**
      * @var DefaultValueProvider
+     * @since 2.2.0
      */
     private $defaultValueProvider;
 
@@ -37,6 +41,7 @@ class CompositeReader implements ReaderInterface
      * @param ValidatorInterface $validator
      * @param DefaultValueProvider $defaultValueProvider
      * @param ReaderInterface[] $readers
+     * @since 2.2.0
      */
     public function __construct(
         ValidatorInterface $validator,
@@ -53,6 +58,7 @@ class CompositeReader implements ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @since 2.2.0
      */
     public function read($scope = null)
     {
@@ -86,6 +92,7 @@ class CompositeReader implements ReaderInterface
      *
      * @param array $config
      * @return array
+     * @since 2.2.0
      */
     private function addDefaultConnection(array $config)
     {

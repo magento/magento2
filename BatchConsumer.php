@@ -14,51 +14,61 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 /**
  * Class BatchConsumer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class BatchConsumer implements ConsumerInterface
 {
     /**
      * @var ConsumerConfigurationInterface
+     * @since 2.0.0
      */
     private $configuration;
 
     /**
      * @var MessageEncoder
+     * @since 2.0.0
      */
     private $messageEncoder;
 
     /**
      * @var QueueRepository
+     * @since 2.0.0
      */
     private $queueRepository;
 
     /**
      * @var MergerFactory
+     * @since 2.0.0
      */
     private $mergerFactory;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $interval;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $batchSize;
 
     /**
      * @var Resource
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var MessageController
+     * @since 2.1.0
      */
     private $messageController;
 
     /**
      * @var ConsumerConfig
+     * @since 2.2.0
      */
     private $consumerConfig;
 
@@ -67,7 +77,8 @@ class BatchConsumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getMessageController()
     {
@@ -91,6 +102,7 @@ class BatchConsumer implements ConsumerInterface
      * @param int $batchSize [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         MessageQueueConfig $messageQueueConfig,
@@ -113,6 +125,7 @@ class BatchConsumer implements ConsumerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function process($maxNumberOfMessages = null)
     {
@@ -136,6 +149,7 @@ class BatchConsumer implements ConsumerInterface
      * @param array $messageList
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     private function dispatchMessage(array $messageList)
     {
@@ -155,6 +169,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @param MergerInterface $merger
      * @return void
+     * @since 2.0.0
      */
     private function runDaemonMode(QueueInterface $queue, MergerInterface $merger)
     {
@@ -176,6 +191,7 @@ class BatchConsumer implements ConsumerInterface
      * @param MergerInterface $merger
      * @param int $maxNumberOfMessages
      * @return void
+     * @since 2.0.0
      */
     private function run(QueueInterface $queue, MergerInterface $merger, $maxNumberOfMessages)
     {
@@ -202,6 +218,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @param EnvelopeInterface[] $messages
      * @return void
+     * @since 2.0.0
      */
     private function acknowledgeAll(QueueInterface $queue, array $messages)
     {
@@ -215,6 +232,7 @@ class BatchConsumer implements ConsumerInterface
      *
      * @param QueueInterface $queue
      * @return EnvelopeInterface[]
+     * @since 2.0.0
      */
     private function getAllMessages(QueueInterface $queue)
     {
@@ -232,6 +250,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @param int $count
      * @return EnvelopeInterface[]
+     * @since 2.0.0
      */
     private function getMessages(QueueInterface $queue, $count)
     {
@@ -253,6 +272,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @param EnvelopeInterface[] $messages
      * @return void
+     * @since 2.0.0
      */
     private function rejectAll(QueueInterface $queue, array $messages)
     {
@@ -266,6 +286,7 @@ class BatchConsumer implements ConsumerInterface
      *
      * @param EnvelopeInterface[] $messages
      * @return object[]
+     * @since 2.0.0
      */
     private function decodeMessages(array $messages)
     {
@@ -285,6 +306,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @param MergerInterface $merger
      * @return \Closure
+     * @since 2.0.0
      */
     private function getTransactionCallback(QueueInterface $queue, MergerInterface $merger)
     {
@@ -312,6 +334,7 @@ class BatchConsumer implements ConsumerInterface
      *
      * @param array $messages
      * @return array
+     * @since 2.1.0
      */
     private function lockMessages(array $messages)
     {
@@ -333,7 +356,8 @@ class BatchConsumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConsumerConfig()
     {

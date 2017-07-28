@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem;
 
 /**
  * Factory class for @see \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding
+ * @since 2.2.0
  */
 class BindingFactory
 {
@@ -14,6 +15,7 @@ class BindingFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -21,6 +23,7 @@ class BindingFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.2.0
      */
     private $instanceName = null;
 
@@ -29,6 +32,7 @@ class BindingFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class BindingFactory
      *
      * @param array $data
      * @return Binding
+     * @since 2.2.0
      */
     public function create(array $data = [])
     {

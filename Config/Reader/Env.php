@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Communication configuration reader. Reads data from env.php.
+ * @since 2.1.0
  */
 class Env implements \Magento\Framework\Config\ReaderInterface
 {
@@ -23,17 +24,20 @@ class Env implements \Magento\Framework\Config\ReaderInterface
 
     /**
      * @var DeploymentConfig
+     * @since 2.1.0
      */
     private $deploymentConfig;
 
     /**
      * @var PublisherConverter
+     * @since 2.2.0
      */
     private $publisherConverter;
 
     /**
      * @param DeploymentConfig $deploymentConfig
      * @param PublisherConverter|null $publisherConverter
+     * @since 2.1.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -49,6 +53,7 @@ class Env implements \Magento\Framework\Config\ReaderInterface
      * @param string|null $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function read($scope = null)
     {

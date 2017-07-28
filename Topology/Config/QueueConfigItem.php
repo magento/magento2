@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Topology\Config;
 
 /**
  * Instances of this class represent queue config items.
+ * @since 2.2.0
  */
 class QueueConfigItem implements QueueConfigItemInterface
 {
@@ -14,6 +15,7 @@ class QueueConfigItem implements QueueConfigItemInterface
      * Queue name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $name;
 
@@ -21,6 +23,7 @@ class QueueConfigItem implements QueueConfigItemInterface
      * Connection name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $connection;
 
@@ -28,6 +31,7 @@ class QueueConfigItem implements QueueConfigItemInterface
      * Queue arguments.
      *
      * @var array
+     * @since 2.2.0
      */
     private $arguments;
 
@@ -35,6 +39,7 @@ class QueueConfigItem implements QueueConfigItemInterface
      * Flag. Is queue durable.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isDurable;
 
@@ -42,11 +47,13 @@ class QueueConfigItem implements QueueConfigItemInterface
      * Flag. Is auto-delete
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isAutoDelete;
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getName()
     {
@@ -55,6 +62,7 @@ class QueueConfigItem implements QueueConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -63,6 +71,7 @@ class QueueConfigItem implements QueueConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getArguments()
     {
@@ -71,6 +80,7 @@ class QueueConfigItem implements QueueConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isDurable()
     {
@@ -79,6 +89,7 @@ class QueueConfigItem implements QueueConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isAutoDelete()
     {
@@ -90,6 +101,7 @@ class QueueConfigItem implements QueueConfigItemInterface
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function setData(array $data)
     {

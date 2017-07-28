@@ -12,6 +12,7 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\Iterator as Q
 
 /**
  * Topology config provides access to data declared in etc/queue_topology.xml
+ * @since 2.2.0
  */
 class Config implements ConfigInterface
 {
@@ -19,6 +20,7 @@ class Config implements ConfigInterface
      * Exchange config data iterator.
      *
      * @var ExchangeIterator
+     * @since 2.2.0
      */
     private $exchangeIterator;
 
@@ -26,6 +28,7 @@ class Config implements ConfigInterface
      * Exchange config data iterator.
      *
      * @var ExchangeIterator
+     * @since 2.2.0
      */
     private $queueIterator;
 
@@ -34,6 +37,7 @@ class Config implements ConfigInterface
      *
      * @param ExchangeIterator $exchangeIterator
      * @param QueueIterator $queueIterator
+     * @since 2.2.0
      */
     public function __construct(ExchangeIterator $exchangeIterator, QueueIterator $queueIterator)
     {
@@ -43,6 +47,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getExchange($name, $connection)
     {
@@ -63,6 +68,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getExchanges()
     {
@@ -71,6 +77,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getQueues()
     {

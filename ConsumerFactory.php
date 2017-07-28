@@ -17,6 +17,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 /**
  * Class which creates Consumers
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ConsumerFactory
 {
@@ -24,16 +25,19 @@ class ConsumerFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager = null;
 
     /**
      * @var ConsumerConfig
+     * @since 2.2.0
      */
     private $consumerConfig;
 
     /**
      * @var CommunicationConfig
+     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -44,6 +48,7 @@ class ConsumerFactory
      * @param ObjectManagerInterface $objectManager
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         QueueConfig $queueConfig,
@@ -59,6 +64,7 @@ class ConsumerFactory
      * @param int $batchSize [optional]
      * @return ConsumerInterface
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function get($consumerName, $batchSize = 0)
     {
@@ -83,6 +89,7 @@ class ConsumerFactory
      *
      * @param ConsumerConfigItemInterface $consumerConfigItem
      * @return ConsumerConfigurationInterface
+     * @since 2.0.0
      */
     private function createConsumerConfiguration($consumerConfigItem)
     {
@@ -122,7 +129,8 @@ class ConsumerFactory
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConsumerConfig()
     {
@@ -137,7 +145,8 @@ class ConsumerFactory
      *
      * @return CommunicationConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getCommunicationConfig()
     {
@@ -153,6 +162,7 @@ class ConsumerFactory
      *
      * @param string $topicName
      * @return array
+     * @since 2.2.0
      */
     private function getHandlersFromCommunicationConfig($topicName)
     {

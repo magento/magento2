@@ -9,11 +9,13 @@ use Magento\Framework\MessageQueue\Topology\Config\ValidatorInterface;
 
 /**
  * Topology config data validator.
+ * @since 2.2.0
  */
 class DependentFields implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function validate($configData)
     {

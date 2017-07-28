@@ -11,6 +11,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Value class which stores the configuration
+ * @since 2.0.0
  */
 class ConsumerConfiguration implements ConsumerConfigurationInterface
 {
@@ -28,21 +29,25 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $data;
 
     /**
      * @var QueueRepository
+     * @since 2.1.0
      */
     private $queueRepository;
 
     /**
      * @var ConsumerConfig
+     * @since 2.2.0
      */
     private $consumerConfig;
 
     /**
      * @var CommunicationConfig
+     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -54,6 +59,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @param array $data configuration data
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(QueueRepository $queueRepository, MessageQueueConfig $messageQueueConfig, $data = [])
     {
@@ -63,6 +69,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConsumerName()
     {
@@ -71,6 +78,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMaxMessages()
     {
@@ -79,6 +87,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getQueueName()
     {
@@ -87,6 +96,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getType()
     {
@@ -109,6 +119,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getHandlers($topicName)
     {
@@ -117,6 +128,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getTopicNames()
     {
@@ -126,6 +138,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getQueue()
     {
@@ -135,6 +148,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getMessageSchemaType($topicName)
     {
@@ -146,6 +160,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @param string $topicName
      * @return array
      * @throws \LogicException
+     * @since 2.2.0
      */
     private function getTopicConfig($topicName)
     {
@@ -160,6 +175,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @param string $key
      * @return string|null
+     * @since 2.0.0
      */
     private function getData($key)
     {
@@ -174,7 +190,8 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConsumerConfig()
     {
@@ -189,7 +206,8 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getCommunicationConfig()
     {

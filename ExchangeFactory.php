@@ -9,16 +9,19 @@ namespace Magento\Framework\MessageQueue;
  * Factory class for @see \Magento\Framework\MessageQueue\ExchangeInterface
  *
  * @api
+ * @since 2.2.0
  */
 class ExchangeFactory implements ExchangeFactoryInterface
 {
     /**
      * @var ExchangeFactoryInterface[]
+     * @since 2.2.0
      */
     private $exchangeFactories;
 
     /**
      * @var ConnectionTypeResolver
+     * @since 2.2.0
      */
     private $connectionTypeResolver;
 
@@ -26,6 +29,7 @@ class ExchangeFactory implements ExchangeFactoryInterface
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     protected $objectManager = null;
 
@@ -35,6 +39,7 @@ class ExchangeFactory implements ExchangeFactoryInterface
      * @param ConnectionTypeResolver $connectionTypeResolver
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ExchangeFactoryInterface[] $exchangeFactories
+     * @since 2.2.0
      */
     public function __construct(
         ConnectionTypeResolver $connectionTypeResolver,
@@ -48,6 +53,7 @@ class ExchangeFactory implements ExchangeFactoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function create($connectionName, array $data = [])
     {
