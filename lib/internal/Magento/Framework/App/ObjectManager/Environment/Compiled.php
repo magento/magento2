@@ -23,9 +23,13 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * Mode name
      */
     const MODE = 'compiled';
-
-    protected $mode = self::MODE;
     /**#@- */
+
+    /**
+     * @var string
+     * @since 2.0.0
+     */
+    protected $mode = self::MODE;
 
     /**
      * @var string

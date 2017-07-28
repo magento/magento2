@@ -37,6 +37,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @var SearchCriteriaFactory
+     * @since 2.2.0
      */
     private $searchCriteriaFactory;
 

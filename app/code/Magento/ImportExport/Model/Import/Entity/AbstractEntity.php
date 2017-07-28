@@ -49,6 +49,7 @@ abstract class AbstractEntity
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',

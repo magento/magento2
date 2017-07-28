@@ -22,7 +22,10 @@ class AttributeRepository
 {
     const BILLING_ADDRESS_PREFIX = 'billing_';
 
-    /** @var [] */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $attributes;
 
     /**
