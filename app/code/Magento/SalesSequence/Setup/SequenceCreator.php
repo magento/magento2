@@ -6,17 +6,14 @@
 
 namespace Magento\SalesSequence\Setup;
 
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\SalesSequence\Model\Builder;
 use Magento\SalesSequence\Model\Config as SequenceConfig;
 use Magento\SalesSequence\Model\EntityPool;
 
 /**
- * Recurring data upgrade for SalesSequence module.
+ * Initial creating sequences.
  */
-class RecurringData implements InstallDataInterface
+class SequenceCreator
 {
     /**
      * Sales setup factory
@@ -51,9 +48,9 @@ class RecurringData implements InstallDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Creates sales sequences.
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function create()
     {
         $defaultStoreIds = [0, 1];
         foreach ($defaultStoreIds as $storeId) {
