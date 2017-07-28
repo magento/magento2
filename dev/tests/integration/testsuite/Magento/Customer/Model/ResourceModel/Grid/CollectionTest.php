@@ -38,7 +38,11 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * Customer Grid Indexer can't work in 'Update on Schedule' mode.
+     * Test updated data for customer grid indexer during save/update customer data(including address data)
+     * in 'Update on Schedule' mode.
+     *
+     * Customer Grid Indexer can't work in 'Update on Schedule' mode. All data for indexer must be updated in realtime
+     * during save/update customer data(including address data).
      *
      * @magentoDataFixture Magento/Customer/_files/customer_grid_indexer_enabled_update_on_schedule.php
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
