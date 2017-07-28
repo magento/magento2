@@ -41,6 +41,7 @@ class QueueManagement
 
     /**
      * @var \Magento\MysqlMq\Model\ResourceModel\Queue
+     * @since 2.0.0
      */
     private $messageResource;
 
