@@ -12,26 +12,31 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class ConnectionManager
 {
     /**
      * @var Elasticsearch
+     * @since 2.1.0
      */
     protected $client;
 
     /**
      * @var LoggerInterface
+     * @since 2.1.0
      */
     protected $logger;
 
     /**
      * @var ClientFactoryInterface
+     * @since 2.1.0
      */
     protected $clientFactory;
 
     /**
      * @var ClientOptionsInterface
+     * @since 2.1.0
      */
     protected $clientConfig;
 
@@ -39,6 +44,7 @@ class ConnectionManager
      * @param ClientFactoryInterface $clientFactory
      * @param ClientOptionsInterface $clientConfig
      * @param LoggerInterface $logger
+     * @since 2.1.0
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
@@ -56,6 +62,7 @@ class ConnectionManager
      * @param array $options
      * @throws \RuntimeException
      * @return Elasticsearch
+     * @since 2.1.0
      */
     public function getConnection($options = [])
     {
@@ -72,6 +79,7 @@ class ConnectionManager
      * @param array $options
      * @throws \RuntimeException
      * @return void
+     * @since 2.1.0
      */
     private function connect($options)
     {

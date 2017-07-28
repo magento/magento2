@@ -17,21 +17,25 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 /**
  * Mapper class
  * @api
+ * @since 2.1.0
  */
 class Mapper
 {
     /**
      * @var QueryBuilder
+     * @since 2.1.0
      */
     protected $queryBuilder;
 
     /**
      * @var MatchQueryBuilder
+     * @since 2.1.0
      */
     protected $matchQueryBuilder;
 
     /**
      * @var FilterBuilder
+     * @since 2.1.0
      */
     protected $filterBuilder;
 
@@ -39,6 +43,7 @@ class Mapper
      * @param QueryBuilder $queryBuilder
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param FilterBuilder $filterBuilder
+     * @since 2.1.0
      */
     public function __construct(
         QueryBuilder $queryBuilder,
@@ -55,6 +60,7 @@ class Mapper
      *
      * @param RequestInterface $request
      * @return array
+     * @since 2.1.0
      */
     public function buildQuery(RequestInterface $request)
     {
@@ -80,6 +86,7 @@ class Mapper
      * @param string $conditionType
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.1.0
      */
     protected function processQuery(
         RequestQueryInterface $requestQuery,
@@ -116,6 +123,7 @@ class Mapper
      * @param BoolQuery $query
      * @param array $selectQuery
      * @return array
+     * @since 2.1.0
      */
     protected function processBoolQuery(
         BoolQuery $query,
@@ -149,6 +157,7 @@ class Mapper
      * @param array $selectQuery
      * @param string $conditionType
      * @return array
+     * @since 2.1.0
      */
     protected function processBoolQueryCondition(
         array $subQueryList,
@@ -169,6 +178,7 @@ class Mapper
      * @param array $selectQuery
      * @param string $conditionType
      * @return array
+     * @since 2.1.0
      */
     private function processFilterQuery(
         FilterQuery $query,

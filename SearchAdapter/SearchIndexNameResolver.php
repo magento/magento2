@@ -11,16 +11,19 @@ use Magento\Elasticsearch\Model\Config;
 /**
  * Alias name resolver
  * @api
+ * @since 2.1.0
  */
 class SearchIndexNameResolver
 {
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $clientConfig;
 
     /**
      * @param Config $clientConfig
+     * @since 2.1.0
      */
     public function __construct(
         Config $clientConfig
@@ -34,6 +37,7 @@ class SearchIndexNameResolver
      * @param int $storeId
      * @param string $indexerId
      * @return string
+     * @since 2.1.0
      */
     public function getIndexName($storeId, $indexerId)
     {
@@ -46,6 +50,7 @@ class SearchIndexNameResolver
      *
      * @param string $indexerId
      * @return string
+     * @since 2.1.0
      */
     private function getIndexMapping($indexerId)
     {

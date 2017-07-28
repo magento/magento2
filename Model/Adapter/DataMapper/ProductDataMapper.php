@@ -16,8 +16,9 @@ use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 
 /**
- * @deprecated
+ * @deprecated 2.2.0
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
+ * @since 2.1.0
  */
 class ProductDataMapper implements DataMapperInterface
 {
@@ -43,31 +44,37 @@ class ProductDataMapper implements DataMapperInterface
 
     /**
      * @var Builder
+     * @since 2.1.0
      */
     private $builder;
 
     /**
      * @var AttributeContainer
+     * @since 2.1.0
      */
     private $attributeContainer;
 
     /**
      * @var Index
+     * @since 2.1.0
      */
     private $resourceIndex;
 
     /**
      * @var FieldMapperInterface
+     * @since 2.1.0
      */
     private $fieldMapper;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var DateFieldType
+     * @since 2.1.0
      */
     private $dateFieldType;
 
@@ -75,6 +82,7 @@ class ProductDataMapper implements DataMapperInterface
      * Media gallery roles
      *
      * @var array
+     * @since 2.1.0
      */
     protected $mediaGalleryRoles;
 
@@ -87,6 +95,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param FieldMapperInterface $fieldMapper
      * @param StoreManagerInterface $storeManager
      * @param DateFieldType $dateFieldType
+     * @since 2.1.0
      */
     public function __construct(
         Builder $builder,
@@ -119,6 +128,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param int $storeId
      * @param array $context
      * @return array|false
+     * @since 2.1.0
      */
     public function map($productId, array $indexData, $storeId, $context = [])
     {
@@ -171,6 +181,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $productIndexData
      * @param int $storeId
      * @return void
+     * @since 2.1.0
      */
     protected function processAdvancedAttributes($productId, array $productIndexData, $storeId)
     {
@@ -207,6 +218,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param Attribute $attribute
      * @param string $storeId
      * @return array|mixed|null|string
+     * @since 2.1.0
      */
     protected function checkValue($value, $attribute, $storeId)
     {
@@ -225,6 +237,7 @@ class ProductDataMapper implements DataMapperInterface
      *
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     protected function getProductTierPriceData($data)
     {
@@ -253,6 +266,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $media
      * @param array $roles
      * @return array
+     * @since 2.1.0
      */
     protected function getProductMediaGalleryData($media, $roles)
     {
@@ -296,6 +310,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param string $file
      * @param array $roles
      * @return string
+     * @since 2.1.0
      */
     protected function getMediaRoleImage($file, $roles)
     {
@@ -306,6 +321,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param string $file
      * @param array $roles
      * @return string
+     * @since 2.1.0
      */
     protected function getMediaRoleSmallImage($file, $roles)
     {
@@ -316,6 +332,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param string $file
      * @param array $roles
      * @return string
+     * @since 2.1.0
      */
     protected function getMediaRoleThumbnail($file, $roles)
     {
@@ -326,6 +343,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param string $file
      * @param array $roles
      * @return string
+     * @since 2.1.0
      */
     protected function getMediaRoleSwatchImage($file, $roles)
     {
@@ -337,6 +355,7 @@ class ProductDataMapper implements DataMapperInterface
      *
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     protected function getQtyAndStatus($data)
     {
@@ -358,6 +377,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param int $storeId
      * @param array $priceIndexData
      * @return array
+     * @since 2.1.0
      */
     protected function getProductPriceData($productId, $storeId, array $priceIndexData)
     {
@@ -379,6 +399,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param int $productId
      * @param array $categoryIndexData
      * @return array
+     * @since 2.1.0
      */
     protected function getProductCategoryData($productId, array $categoryIndexData)
     {

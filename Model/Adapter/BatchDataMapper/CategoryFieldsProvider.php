@@ -10,16 +10,19 @@ use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInte
 
 /**
  * Provide data mapping for categories fields
+ * @since 2.2.0
  */
 class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 {
     /**
      * @var Index
+     * @since 2.2.0
      */
     private $resourceIndex;
 
     /**
      * @param Index $resourceIndex
+     * @since 2.2.0
      */
     public function __construct(Index $resourceIndex)
     {
@@ -28,6 +31,7 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getFields(array $productIds, $storeId)
     {
@@ -47,6 +51,7 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
      * @param int $productId
      * @param array $categoryIndexData
      * @return array
+     * @since 2.2.0
      */
     private function getProductCategoryData($productId, array $categoryIndexData)
     {

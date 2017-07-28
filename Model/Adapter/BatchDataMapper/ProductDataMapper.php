@@ -15,41 +15,49 @@ use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInte
 
 /**
  * Map product index data to search engine metadata
+ * @since 2.2.0
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {
     /**
      * @var Builder
+     * @since 2.2.0
      */
     private $builder;
 
     /**
      * @var FieldMapperInterface
+     * @since 2.2.0
      */
     private $fieldMapper;
 
     /**
      * @var DateFieldType
+     * @since 2.2.0
      */
     private $dateFieldType;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $attributeData = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $excludedAttributes;
 
     /**
      * @var AdditionalFieldsProviderInterface
+     * @since 2.2.0
      */
     private $additionalFieldsProvider;
 
     /**
      * @var DataProvider
+     * @since 2.2.0
      */
     private $dataProvider;
 
@@ -57,6 +65,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * List of attributes which will be skipped during mapping
      *
      * @var string[]
+     * @since 2.2.0
      */
     private $defaultExcludedAttributes = [
         'price',
@@ -69,6 +78,7 @@ class ProductDataMapper implements BatchDataMapperInterface
 
     /**
      * @var string[]
+     * @since 2.2.0
      */
     private $attributesExcludedFromMerge = [
         'status',
@@ -85,6 +95,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param AdditionalFieldsProviderInterface $additionalFieldsProvider
      * @param DataProvider $dataProvider
      * @param array $excludedAttributes
+     * @since 2.2.0
      */
     public function __construct(
         Builder $builder,
@@ -104,6 +115,7 @@ class ProductDataMapper implements BatchDataMapperInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function map(array $documentData, $storeId, array $context = [])
     {
@@ -153,6 +165,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $indexData
      * @param int $storeId
      * @return array
+     * @since 2.2.0
      */
     private function convertToProductData($productId, array $indexData, $storeId)
     {
@@ -186,6 +199,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeData
      * @param int $storeId
      * @return array
+     * @since 2.2.0
      */
     private function convertAttribute($productId, $attributeId, $attributeValue, array $attributeData, $storeId)
     {
@@ -246,6 +260,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      *
      * @param int $attributeId
      * @return array
+     * @since 2.2.0
      */
     private function getAttributeData($attributeId)
     {
@@ -280,6 +295,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeData
      * @param string $storeId
      * @return string
+     * @since 2.2.0
      */
     private function formatProductAttributeValue($value, $attributeData, $storeId)
     {
@@ -301,6 +317,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeValue
      * @param bool $isSearchable
      * @return mixed
+     * @since 2.2.0
      */
     private function getValueForAttribute($productId, $attributeCode, array $attributeValue, $isSearchable)
     {
@@ -320,6 +337,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeData
      * @param array $attributeValue
      * @return string
+     * @since 2.2.0
      */
     private function getValueForAttributeOptions(array $attributeData, array $attributeValue)
     {

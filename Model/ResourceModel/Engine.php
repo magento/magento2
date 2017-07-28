@@ -11,6 +11,7 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 /**
  * Search engine resource model
+ * @since 2.1.0
  */
 class Engine implements EngineInterface
 {
@@ -18,11 +19,13 @@ class Engine implements EngineInterface
      * Catalog product visibility
      *
      * @var Visibility
+     * @since 2.1.0
      */
     protected $catalogProductVisibility;
 
     /**
      * @var IndexScopeResolver
+     * @since 2.1.0
      */
     private $indexScopeResolver;
 
@@ -31,6 +34,7 @@ class Engine implements EngineInterface
      *
      * @param Visibility $catalogProductVisibility
      * @param IndexScopeResolver $indexScopeResolver
+     * @since 2.1.0
      */
     public function __construct(
         Visibility $catalogProductVisibility,
@@ -44,6 +48,7 @@ class Engine implements EngineInterface
      * Retrieve allowed visibility values for current engine
      *
      * @return int[]
+     * @since 2.1.0
      */
     public function getAllowedVisibility()
     {
@@ -54,6 +59,7 @@ class Engine implements EngineInterface
      * Define if current search engine supports advanced index
      *
      * @return bool
+     * @since 2.1.0
      */
     public function allowAdvancedIndex()
     {
@@ -62,6 +68,7 @@ class Engine implements EngineInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function processAttributeValue($attribute, $value)
     {
@@ -76,6 +83,7 @@ class Engine implements EngineInterface
      * @param string $separator
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {
@@ -84,6 +92,7 @@ class Engine implements EngineInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function isAvailable()
     {

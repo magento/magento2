@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 /**
  * Class FieldType
  * @api
+ * @since 2.1.0
  */
 class FieldType
 {
@@ -28,6 +29,7 @@ class FieldType
     /**
      * @param AbstractAttribute $attribute
      * @return string
+     * @since 2.1.0
      */
     public function getFieldType($attribute)
     {

@@ -11,16 +11,19 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class Aggregation
 {
     /**
      * @var FieldMapperInterface
+     * @since 2.1.0
      */
     protected $fieldMapper;
 
     /**
      * @param FieldMapperInterface $fieldMapper
+     * @since 2.1.0
      */
     public function __construct(
         FieldMapperInterface $fieldMapper
@@ -34,6 +37,7 @@ class Aggregation
      * @param RequestInterface $request
      * @param array $searchQuery
      * @return array
+     * @since 2.1.0
      */
     public function build(
         RequestInterface $request,
@@ -52,6 +56,7 @@ class Aggregation
      * @param array $searchQuery
      * @param BucketInterface $bucket
      * @return array
+     * @since 2.1.0
      */
     protected function buildBucket(
         array $searchQuery,

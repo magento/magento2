@@ -7,10 +7,16 @@ namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
+/**
+ * Class \Magento\Elasticsearch\Model\Adapter\Index\Config\Converter
+ *
+ * @since 2.1.0
+ */
 class Converter implements ConverterInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function convert($source)
     {

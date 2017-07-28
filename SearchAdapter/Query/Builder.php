@@ -13,26 +13,31 @@ use Magento\Framework\App\ScopeResolverInterface;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class Builder
 {
     /**
      * @var Config
+     * @since 2.1.0
      */
     protected $clientConfig;
 
     /**
      * @var SearchIndexNameResolver
+     * @since 2.1.0
      */
     protected $searchIndexNameResolver;
 
     /**
      * @var AggregationBuilder
+     * @since 2.1.0
      */
     protected $aggregationBuilder;
 
     /**
      * @var ScopeResolverInterface
+     * @since 2.1.0
      */
     protected $scopeResolver;
 
@@ -41,6 +46,7 @@ class Builder
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param AggregationBuilder $aggregationBuilder
      * @param ScopeResolverInterface $scopeResolver
+     * @since 2.1.0
      */
     public function __construct(
         Config $clientConfig,
@@ -59,6 +65,7 @@ class Builder
      *
      * @param RequestInterface $request
      * @return array
+     * @since 2.1.0
      */
     public function initQuery(RequestInterface $request)
     {
@@ -83,6 +90,7 @@ class Builder
      * @param RequestInterface $request
      * @param array $searchQuery
      * @return array
+     * @since 2.1.0
      */
     public function initAggregations(
         RequestInterface $request,

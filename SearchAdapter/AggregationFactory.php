@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Aggregation Factory
  * @api
+ * @since 2.1.0
  */
 class AggregationFactory
 {
@@ -17,11 +18,13 @@ class AggregationFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.1.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -33,6 +36,7 @@ class AggregationFactory
      *
      * @param array $rawAggregation
      * @return \Magento\Framework\Search\Response\Aggregation
+     * @since 2.1.0
      */
     public function create(array $rawAggregation)
     {
@@ -58,6 +62,7 @@ class AggregationFactory
      *
      * @param array $values
      * @return \Magento\Framework\Search\Response\Aggregation\Value[]
+     * @since 2.1.0
      */
     private function prepareValues(array $values)
     {

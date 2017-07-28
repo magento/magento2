@@ -13,6 +13,7 @@ use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilde
 
 /**
  * Elasticsearch Search Adapter
+ * @since 2.1.0
  */
 class Adapter implements AdapterInterface
 {
@@ -20,6 +21,7 @@ class Adapter implements AdapterInterface
      * Mapper instance
      *
      * @var Mapper
+     * @since 2.1.0
      */
     protected $mapper;
 
@@ -27,21 +29,25 @@ class Adapter implements AdapterInterface
      * Response Factory
      *
      * @var ResponseFactory
+     * @since 2.1.0
      */
     protected $responseFactory;
 
     /**
      * @var ConnectionManager
+     * @since 2.1.0
      */
     protected $connectionManager;
 
     /**
      * @var AggregationBuilder
+     * @since 2.1.0
      */
     protected $aggregationBuilder;
 
     /**
      * @var QueryContainerFactory
+     * @since 2.2.0
      */
     private $queryContainerFactory;
 
@@ -51,6 +57,7 @@ class Adapter implements AdapterInterface
      * @param ResponseFactory $responseFactory
      * @param AggregationBuilder $aggregationBuilder
      * @param QueryContainerFactory $queryContainerFactory
+     * @since 2.1.0
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -70,6 +77,7 @@ class Adapter implements AdapterInterface
     /**
      * @param RequestInterface $request
      * @return QueryResponse
+     * @since 2.1.0
      */
     public function query(RequestInterface $request)
     {
