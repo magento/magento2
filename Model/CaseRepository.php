@@ -20,31 +20,37 @@ use Magento\Signifyd\Model\ResourceModel\CaseEntity\CollectionFactory;
  * Repository for Case interface
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class CaseRepository implements CaseRepositoryInterface
 {
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
     /**
      * @var CaseSearchResultsInterfaceFactory
+     * @since 2.2.0
      */
     private $searchResultsFactory;
 
     /**
      * @var CaseInterfaceFactory
+     * @since 2.2.0
      */
     private $caseFactory;
 
     /**
      * @var CaseResourceModel
+     * @since 2.2.0
      */
     private $resourceModel;
 
@@ -55,6 +61,7 @@ class CaseRepository implements CaseRepositoryInterface
      * @param CaseSearchResultsInterfaceFactory $searchResultsFactory
      * @param CaseInterfaceFactory $caseFactory
      * @param CaseResourceModel $resourceModel
+     * @since 2.2.0
      */
     public function __construct(
         CollectionProcessorInterface $collectionProcessor,
@@ -72,6 +79,7 @@ class CaseRepository implements CaseRepositoryInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function save(CaseInterface $case)
     {
@@ -83,6 +91,7 @@ class CaseRepository implements CaseRepositoryInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getById($id)
     {
@@ -95,6 +104,7 @@ class CaseRepository implements CaseRepositoryInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getByCaseId($caseId)
     {
@@ -107,6 +117,7 @@ class CaseRepository implements CaseRepositoryInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function delete(CaseInterface $case)
     {
@@ -117,6 +128,7 @@ class CaseRepository implements CaseRepositoryInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {

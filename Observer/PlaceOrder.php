@@ -17,21 +17,25 @@ use Psr\Log\LoggerInterface;
 /**
  * Observer should be triggered when new order is created and placed.
  * If Signifyd integration enabled in configuration then new case will be created.
+ * @since 2.2.0
  */
 class PlaceOrder implements ObserverInterface
 {
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $signifydIntegrationConfig;
 
     /**
      * @var CaseCreationServiceInterface
+     * @since 2.2.0
      */
     private $caseCreationService;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -39,6 +43,7 @@ class PlaceOrder implements ObserverInterface
      * @param Config $signifydIntegrationConfig
      * @param CaseCreationServiceInterface $caseCreationService
      * @param LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(
         Config $signifydIntegrationConfig,
@@ -52,6 +57,7 @@ class PlaceOrder implements ObserverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function execute(Observer $observer)
     {
@@ -77,6 +83,7 @@ class PlaceOrder implements ObserverInterface
      *
      * @param OrderInterface $order
      * @return void
+     * @since 2.2.0
      */
     private function createCaseForOrder($order)
     {
@@ -97,6 +104,7 @@ class PlaceOrder implements ObserverInterface
      *
      * @param Event $event
      * @return OrderInterface[]|null
+     * @since 2.2.0
      */
     private function extractOrders(Event $event)
     {

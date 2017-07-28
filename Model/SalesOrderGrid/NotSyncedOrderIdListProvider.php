@@ -11,16 +11,19 @@ use Magento\Signifyd\Model\ResourceModel\CaseEntity;
 
 /**
  * Provides order ids list which Signifyd Case guaranty status were changed
+ * @since 2.2.0
  */
 class NotSyncedOrderIdListProvider implements NotSyncedDataProviderInterface
 {
     /**
      * @var ResourceModel\CaseEntity
+     * @since 2.2.0
      */
     private $caseEntity;
 
     /**
      * @param ResourceModel\CaseEntity $caseEntity
+     * @since 2.2.0
      */
     public function __construct(
         CaseEntity $caseEntity
@@ -30,6 +33,7 @@ class NotSyncedOrderIdListProvider implements NotSyncedDataProviderInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getIds($mainTableName, $gridTableName)
     {

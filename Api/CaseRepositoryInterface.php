@@ -9,6 +9,7 @@ namespace Magento\Signifyd\Api;
  * Signifyd Case repository interface
  *
  * @api
+ * @since 2.2.0
  */
 interface CaseRepositoryInterface
 {
@@ -17,6 +18,7 @@ interface CaseRepositoryInterface
      *
      * @param \Magento\Signifyd\Api\Data\CaseInterface $case
      * @return \Magento\Signifyd\Api\Data\CaseInterface
+     * @since 2.2.0
      */
     public function save(\Magento\Signifyd\Api\Data\CaseInterface $case);
 
@@ -25,6 +27,7 @@ interface CaseRepositoryInterface
      *
      * @param int $id
      * @return \Magento\Signifyd\Api\Data\CaseInterface
+     * @since 2.2.0
      */
     public function getById($id);
 
@@ -33,6 +36,7 @@ interface CaseRepositoryInterface
      *
      * @param int $caseId
      * @return \Magento\Signifyd\Api\Data\CaseInterface|null
+     * @since 2.2.0
      */
     public function getByCaseId($caseId);
 
@@ -41,6 +45,7 @@ interface CaseRepositoryInterface
      *
      * @param \Magento\Signifyd\Api\Data\CaseInterface $case
      * @return bool
+     * @since 2.2.0
      */
     public function delete(\Magento\Signifyd\Api\Data\CaseInterface $case);
 
@@ -49,6 +54,7 @@ interface CaseRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Signifyd\Api\Data\CaseSearchResultsInterface
+     * @since 2.2.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

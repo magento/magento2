@@ -14,16 +14,19 @@ use Magento\Signifyd\Model\Config;
  * Configuration may be changed by
  *  - config.xml
  *  - at Admin panel (Stores > Configuration > Sales > Fraud Detection > Signifyd > Debug)
+ * @since 2.2.0
  */
 class DebuggerFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
@@ -32,6 +35,7 @@ class DebuggerFactory
      *
      * @param bjectManagerInterface $objectManager
      * @param Config $config
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -45,6 +49,7 @@ class DebuggerFactory
      * Create debugger instance
      *
      * @return DebuggerInterface
+     * @since 2.2.0
      */
     public function create()
     {

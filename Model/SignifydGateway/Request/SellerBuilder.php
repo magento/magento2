@@ -18,27 +18,32 @@ use Magento\Store\Model\ScopeInterface;
  *
  * This information is optional unless you are operating a marketplace,
  * listing goods on behalf of multiple sellers who each hold a seller account registered with your site.
+ * @since 2.2.0
  */
 class SellerBuilder
 {
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @var RegionFactory
+     * @since 2.2.0
      */
     private $regionFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $regionCodes = [];
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param RegionFactory $regionFactory
+     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -53,6 +58,7 @@ class SellerBuilder
      *
      * @param Order $order
      * @return array
+     * @since 2.2.0
      */
     public function build(Order $order)
     {
@@ -91,6 +97,7 @@ class SellerBuilder
      *
      * @param int $regionId
      * @return string
+     * @since 2.2.0
      */
     private function getRegionCodeById($regionId)
     {
@@ -107,6 +114,7 @@ class SellerBuilder
      * @param string $value
      * @param StoreInterface $store
      * @return mixed
+     * @since 2.2.0
      */
     private function getConfigValue($value, StoreInterface $store)
     {
@@ -122,6 +130,7 @@ class SellerBuilder
      *
      * @param StoreInterface $store
      * @return string|null null if no DNS records corresponding to a current host found
+     * @since 2.2.0
      */
     private function getPublicDomain(StoreInterface $store)
     {

@@ -14,16 +14,19 @@ namespace Magento\Signifyd\Model\MessageGenerators;
  * placeholders, for example:
  * Message is 'Case Update: New score for the order is %1. Previous score was %2.', then the required params order
  * should be ['new_score', 'prev_score'].
+ * @since 2.2.0
  */
 class PatternGenerator implements GeneratorInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $template;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $requiredParams;
 
@@ -32,6 +35,7 @@ class PatternGenerator implements GeneratorInterface
      *
      * @param string $template
      * @param array $requiredParams
+     * @since 2.2.0
      */
     public function __construct($template, array $requiredParams = [])
     {
@@ -41,6 +45,7 @@ class PatternGenerator implements GeneratorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function generate(array $data)
     {
