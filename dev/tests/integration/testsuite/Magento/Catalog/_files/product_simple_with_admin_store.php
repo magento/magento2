@@ -10,15 +10,15 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
 $store = $storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE);
 $storeManager->setCurrentStore($store->getCode());
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+$categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(1)
@@ -98,14 +98,14 @@ $oldOptions = [
         'sort_order' => 0,
         'values'    => [
             [
-                'option_type_id' => null,
+                'option_type_id' => -1,
                 'title'         => 'Option 1',
                 'price'         => 3,
                 'price_type'    => 'fixed',
                 'sku'           => '3-1-select',
             ],
             [
-                'option_type_id' => null,
+                'option_type_id' => -1,
                 'title'         => 'Option 2',
                 'price'         => 3,
                 'price_type'    => 'fixed',
@@ -121,14 +121,14 @@ $oldOptions = [
         'sort_order' => 0,
         'values'    => [
             [
-                'option_type_id' => null,
+                'option_type_id' => -1,
                 'title'         => 'Option 1',
                 'price'         => 3,
                 'price_type'    => 'fixed',
                 'sku'           => '4-1-radio',
             ],
             [
-                'option_type_id' => null,
+                'option_type_id' => -1,
                 'title'         => 'Option 2',
                 'price'         => 3,
                 'price_type'    => 'fixed',
@@ -141,7 +141,7 @@ $oldOptions = [
 $options = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
 
 foreach ($oldOptions as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
@@ -154,7 +154,7 @@ foreach ($oldOptions as $option) {
 $product->setOptions($options);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepositoryFactory = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepositoryFactory = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
 $productRepositoryFactory->save($product);
 
 $categoryLinkManagement->assignProductToCategories(

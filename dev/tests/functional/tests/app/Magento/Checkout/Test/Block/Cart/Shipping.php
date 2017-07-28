@@ -86,6 +86,7 @@ class Shipping extends Form
      */
     public function selectShippingMethod(array $shipping)
     {
+        $this->waitForUpdatedShippingMethods();
         $selector = sprintf($this->shippingMethod, $shipping['shipping_service'], $shipping['shipping_method']);
         if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
             $this->openEstimateShippingAndTax();

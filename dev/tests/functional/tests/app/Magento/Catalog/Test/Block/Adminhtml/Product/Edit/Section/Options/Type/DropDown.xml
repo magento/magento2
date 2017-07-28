@@ -10,11 +10,6 @@
         <title>
             <selector>[name$="[title]"]</selector>
         </title>
-        <use_default_title>
-            <selector>[name^="options_use_default"]</selector>
-            <strategy>css selector</strategy>
-            <input>checkbox</input>
-        </use_default_title>
         <price>
             <selector>[name$="[price]"]</selector>
         </price>

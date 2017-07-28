@@ -20,13 +20,6 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row;
  */
 class Options extends Section
 {
-    /**#@+
-     * Determines if we need update option or add new one.
-     */
-    const ACTION_ADD = 'add';
-    const ACTION_UPDATE = 'update';
-    /**#@-*/
-
     /**
      * Custom option row.
      *
@@ -98,7 +91,6 @@ class Options extends Section
      * @return $this
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function setFieldsData(array $fields, SimpleElement $element = null)
     {
@@ -113,16 +105,7 @@ class Options extends Section
                 continue;
             }
             $options = null;
-
-            $actionType = self::ACTION_ADD;
-            if (isset($field['action_type'])) {
-                $actionType = $field['action_type'];
-                unset($field['action_type']);
-            }
-            if ($actionType == self::ACTION_ADD) {
-                $this->_rootElement->find($this->buttonAddOption)->click();
-            }
-
+            $this->_rootElement->find($this->buttonAddOption)->click();
             if (!empty($field['options'])) {
                 $options = $field['options'];
                 unset($field['options']);
@@ -214,11 +197,6 @@ class Options extends Section
             } else {
                 $currentSortOrder = 0;
             }
-
-            if (!isset($option['action_type'])) {
-                $option['action_type'] = 'add';
-            }
-
             $optionsForm->fillOptions(
                 $option,
                 $element->find(sprintf($context, $key + 1))
@@ -281,10 +259,6 @@ class Options extends Section
             if (!empty($field['options'])) {
                 $options = $field['options'];
                 unset($field['options']);
-            }
-
-            if (isset($field['action_type'])) {
-                unset($field['action_type']);
             }
 
             $rootLocator = sprintf($this->customOptionRow, $field['title']);
