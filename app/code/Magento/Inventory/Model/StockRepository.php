@@ -61,7 +61,7 @@ class StockRepository implements StockRepositoryInterface
      */
     public function save(StockInterface $stock)
     {
-        $this->commandSave->execute($stock);
+        return $this->commandSave->execute($stock);
     }
 
     /**

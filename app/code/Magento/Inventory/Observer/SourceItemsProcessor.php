@@ -97,8 +97,12 @@ class SourceItemsProcessor
             $sourceItemsForSave[] = $sourceItem;
             unset($sourceItemsForDelete[$sourceId]);
         }
-        $this->sourceItemSave->execute($sourceItemsForSave);
-        $this->deleteSourceItems($sourceItemsForDelete);
+        if ($sourceItemsForSave) {
+            $this->sourceItemSave->execute($sourceItemsForSave);
+        }
+        if ($sourceItemsForDelete) {
+            $this->deleteSourceItems($sourceItemsForDelete);
+        }
     }
 
     /**

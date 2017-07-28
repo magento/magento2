@@ -35,8 +35,6 @@ class SourceCarrierHydrator
     private $shippingConfig;
 
     /**
-     * CarrierRequestDataHydrator constructor
-     *
      * @param SourceCarrierLinkInterfaceFactory $carrierLinkFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param Config $shippingConfig

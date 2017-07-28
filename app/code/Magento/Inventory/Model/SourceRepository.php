@@ -52,7 +52,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function save(SourceInterface $source)
     {
-        $this->commandSave->execute($source);
+        return $this->commandSave->execute($source);
     }
 
     /**
