@@ -48,7 +48,7 @@ interface StockRepositoryInterface
     /**
      * Find Stocks by given SearchCriteria
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null);

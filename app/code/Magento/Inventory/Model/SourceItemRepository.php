@@ -5,17 +5,12 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
-use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
-use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
+use Magento\Inventory\Model\SourceItem\Command\DeleteInterface;
+use Magento\Inventory\Model\SourceItem\Command\GetListInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -23,51 +18,25 @@ use Psr\Log\LoggerInterface;
 class SourceItemRepository implements SourceItemRepositoryInterface
 {
     /**
-     * @var SourceItemResourceModel
+     * @var DeleteInterface
      */
-    private $sourceItemResource;
+    private $commandDelete;
 
     /**
-     * @var CollectionProcessorInterface
+     * @var GetListInterface
      */
-    private $collectionProcessor;
+    private $commandGetList;
 
     /**
-     * @var CollectionFactory
-     */
-    private $sourceItemCollectionFactory;
-
-    /**
-     * @var SourceItemSearchResultsInterfaceFactory
-     */
-    private $sourceItemSearchResultsFactory;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * SourceRepository constructor
-     *
-     * @param SourceItemResourceModel $sourceItemResource
-     * @param CollectionProcessorInterface $collectionProcessor
-     * @param CollectionFactory $sourceItemCollectionFactory
-     * @param SourceItemSearchResultsInterfaceFactory $sourceItemSearchResultsFactory
-     * @param LoggerInterface $logger
+     * @param DeleteInterface $commandDelete
+     * @param GetListInterface $commandGetList
      */
     public function __construct(
-        SourceItemResourceModel $sourceItemResource,
-        CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $sourceItemCollectionFactory,
-        SourceItemSearchResultsInterfaceFactory $sourceItemSearchResultsFactory,
-        LoggerInterface $logger
+        DeleteInterface $commandDelete,
+        GetListInterface $commandGetList
     ) {
-        $this->sourceItemResource = $sourceItemResource;
-        $this->collectionProcessor = $collectionProcessor;
-        $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
-        $this->sourceItemSearchResultsFactory = $sourceItemSearchResultsFactory;
-        $this->logger = $logger;
+        $this->commandDelete = $commandDelete;
+        $this->commandGetList = $commandGetList;
     }
 
     /**
@@ -75,16 +44,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var Collection $collection */
-        $collection = $this->sourceItemCollectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection);
-
-        /** @var SourceItemSearchResultsInterface $searchResult */
-        $searchResult = $this->sourceItemSearchResultsFactory->create();
-        $searchResult->setItems($collection->getItems());
-        $searchResult->setTotalCount($collection->getSize());
-        $searchResult->setSearchCriteria($searchCriteria);
-        return $searchResult;
+        return $this->commandGetList->execute($searchCriteria);
     }
 
     /**
@@ -92,11 +52,6 @@ class SourceItemRepository implements SourceItemRepositoryInterface
      */
     public function delete(SourceItemInterface $sourceItem)
     {
-        try {
-            $this->sourceItemResource->delete($sourceItem);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete Source Item'), $e);
-        }
+        $this->commandDelete->execute($sourceItem);
     }
 }

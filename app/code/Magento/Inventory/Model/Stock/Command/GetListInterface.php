@@ -23,8 +23,8 @@ interface GetListInterface
     /**
      * Find Stocks by given SearchCriteria
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface|null $searchCriteria
      * @return StockSearchResultsInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria);
+    public function execute(SearchCriteriaInterface $searchCriteria = null);
 }

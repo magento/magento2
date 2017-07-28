@@ -51,7 +51,7 @@ interface SourceRepositoryInterface
     /**
      * Find Sources by SearchCriteria
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null);

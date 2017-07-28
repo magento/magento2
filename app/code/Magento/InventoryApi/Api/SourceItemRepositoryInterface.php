@@ -9,7 +9,16 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * This is Facade for basic operations with SourceItem
+ * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
+ * to a larger body of code responsible for Domain Entity management
+ *
+ * The main intention is to make API more readable and reduce dependencies of business logic code on the inner workings
+ * of a module, since most code uses the facade, thus allowing more flexibility in developing the system
+ *
+ * Along with this such approach helps to segregate two responsibilities:
+ * 1. Repository now could be considered as an API - Interface for usage (calling) in the business logic
+ * 2. Separate class-commands to which Repository proxies initial call (like, Get Save GetList Delete) could be
+ *    considered as SPI - Interfaces that you should extend and implement to customize current behaviour
  *
  * The method save is absent, due to different semantic (save multiple)
  * @see SourceItemSaveInterface
@@ -24,9 +33,9 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 interface SourceItemRepositoryInterface
 {
     /**
-     * Load Source Item data collection by given search criteria
+     * Find SourceItems by SearchCriteria
      *
-     * We need to have this method for direct work with Source Items because this object contains
+     * We need to have this method for direct work with SourceItems because this object contains
      * additional data like as qty, status (for example can de searchable by additional field)
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -35,9 +44,9 @@ interface SourceItemRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
-     * Delete Source Item data
+     * Delete SourceItem data
      *
-     * @param SourceItemInterface $sourceItem
+     * @param \Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */

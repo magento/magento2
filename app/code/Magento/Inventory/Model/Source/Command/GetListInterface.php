@@ -23,8 +23,8 @@ interface GetListInterface
     /**
      * Find Sources by given SearchCriteria
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface|null $searchCriteria
      * @return SourceSearchResultsInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria);
+    public function execute(SearchCriteriaInterface $searchCriteria = null);
 }
