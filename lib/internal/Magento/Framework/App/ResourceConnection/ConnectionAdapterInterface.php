@@ -9,11 +9,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\SelectFactory;
 
-/*
- * Connection adapter interface
- */
 /**
- * Interface \Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface
+ * Connection adapter interface
  *
  * @since 2.0.0
  */

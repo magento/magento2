@@ -123,7 +123,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return wishlist widget options
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
      * @since 2.0.0
      */
     public function getWishlistOptions()

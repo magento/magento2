@@ -12,11 +12,8 @@ use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\App\DeploymentConfig;
 use \Magento\Framework\Setup\BackendFrontnameGenerator;
 
-/*
- * Deployment configuration options needed for Backend module
- */
 /**
- * Class \Magento\Backend\Setup\ConfigOptionsList
+ * Deployment configuration options needed for Backend module
  *
  * @since 2.0.0
  */

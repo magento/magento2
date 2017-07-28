@@ -8,10 +8,6 @@ namespace Magento\User\Block\User\Edit;
 /**
  * Adminhtml permissions user edit form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
- */
-/**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 2.0.0
  */

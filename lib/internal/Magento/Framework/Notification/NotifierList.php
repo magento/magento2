@@ -6,12 +6,9 @@
 
 namespace Magento\Framework\Notification;
 
-/*
+/**
  * List of registered system notifiers
  * @api
- */
-/**
- * Class \Magento\Framework\Notification\NotifierList
  *
  * @since 2.0.0
  */

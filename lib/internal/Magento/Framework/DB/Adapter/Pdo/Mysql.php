@@ -27,6 +27,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 
 // @codingStandardsIgnoreStart
+
 /**
  * MySQL database adapter
  *
