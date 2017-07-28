@@ -10,11 +10,13 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
  * Class Actions
+ * @since 2.2.0
  */
 class NotificationActions extends Column
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function prepareDataSource(array $dataSource)
     {

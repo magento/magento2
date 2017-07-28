@@ -13,12 +13,14 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.2.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.2.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

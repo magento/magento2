@@ -13,26 +13,31 @@ use Magento\Framework\Data\Collection;
 
 /**
  * Class for bulk notification manager
+ * @since 2.2.0
  */
 class BulkNotificationManagement
 {
     /**
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var BulkCollectionFactory
+     * @since 2.2.0
      */
     private $bulkCollectionFactory;
 
@@ -43,6 +48,7 @@ class BulkNotificationManagement
      * @param ResourceConnection $resourceConnection
      * @param BulkCollectionFactory $bulkCollectionFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -62,6 +68,7 @@ class BulkNotificationManagement
      *
      * @param array $bulkUuids
      * @return bool true on success or false on failure
+     * @since 2.2.0
      */
     public function acknowledgeBulks(array $bulkUuids)
     {
@@ -87,6 +94,7 @@ class BulkNotificationManagement
      *
      * @param array $bulkUuids
      * @return bool true on success or false on failure
+     * @since 2.2.0
      */
     public function ignoreBulks(array $bulkUuids)
     {
@@ -110,6 +118,7 @@ class BulkNotificationManagement
      *
      * @param int $userId
      * @return BulkSummaryInterface[]
+     * @since 2.2.0
      */
     public function getAcknowledgedBulksByUser($userId)
     {
@@ -130,6 +139,7 @@ class BulkNotificationManagement
      *
      * @param int $userId
      * @return BulkSummaryInterface[]
+     * @since 2.2.0
      */
     public function getIgnoredBulksByUser($userId)
     {

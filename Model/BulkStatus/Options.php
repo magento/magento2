@@ -9,11 +9,13 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
 /**
  * Class Options
+ * @since 2.2.0
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array
+     * @since 2.2.0
      */
     public function toOptionArray()
     {

@@ -16,26 +16,31 @@ use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
 
 /**
  * Class SearchResult
+ * @since 2.2.0
  */
 class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**
      * @var UserContextInterface
+     * @since 2.2.0
      */
     private $userContext;
 
     /**
      * @var StatusMapper
+     * @since 2.2.0
      */
     private $statusMapper;
 
     /**
      * @var array|int
+     * @since 2.2.0
      */
     private $operationStatus;
 
     /**
      * @var CalculatedStatusSql
+     * @since 2.2.0
      */
     private $calculatedStatusSql;
 
@@ -52,6 +57,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param null $resourceModel
      * @param string $identifierName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.2.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -81,6 +87,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function _initSelect()
     {
@@ -99,6 +106,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function _afterLoad()
     {
@@ -111,6 +119,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -134,6 +143,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSelectCountSql()
     {

@@ -9,16 +9,19 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
  * Class for grid options
+ * @since 2.2.0
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory
+     * @since 2.2.0
      */
     private $bulkCollectionFactory;
 
     /**
      * @var \Magento\Authorization\Model\UserContextInterface
+     * @since 2.2.0
      */
     private $userContext;
 
@@ -26,6 +29,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      * Options constructor.
      * @param \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory $bulkCollection
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory $bulkCollection,
@@ -37,6 +41,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function toOptionArray()
     {

@@ -9,6 +9,11 @@ namespace Magento\AsynchronousOperations\Model\BulkStatus;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
+/**
+ * Class \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql
+ *
+ * @since 2.2.0
+ */
 class CalculatedStatusSql
 {
     /**
@@ -16,6 +21,7 @@ class CalculatedStatusSql
      *
      * @param string $operationTableName
      * @return \Zend_Db_Expr
+     * @since 2.2.0
      */
     public function get($operationTableName)
     {

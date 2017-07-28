@@ -10,11 +10,13 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
  * Class NotificationDismissActions
+ * @since 2.2.0
  */
 class NotificationDismissActions extends Column
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function prepareDataSource(array $dataSource)
     {

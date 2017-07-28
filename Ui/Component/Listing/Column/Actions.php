@@ -10,6 +10,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Actions
+ * @since 2.2.0
  */
 class Actions extends Column
 {
@@ -18,6 +19,7 @@ class Actions extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.2.0
      */
     public function prepareDataSource(array $dataSource)
     {
