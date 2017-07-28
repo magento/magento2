@@ -43,6 +43,7 @@ class Dependency
      */
     private $directoryReadFactory;
 
+    //@codingStandardsIgnoreStart
     /**
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
@@ -51,7 +52,6 @@ class Dependency
      * @param Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory
      * @throws \RuntimeException
      */
-    // @codingStandardsIgnoreStart
     public function __construct(
         ComposerInformation $composerInformation,
         // $filesystem kept for BC
@@ -61,7 +61,6 @@ class Dependency
         // $directoryReadFactory optional for BC
         Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
-    // @codingStandardsIgnoreEnd
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
@@ -70,6 +69,7 @@ class Dependency
         }
         $this->directoryReadFactory = $directoryReadFactory;
     }
+    //@codingStandardsIgnoreEnd
 
     /**
      * Retrieve list of sample data packages from suggests
