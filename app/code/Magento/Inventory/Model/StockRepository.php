@@ -6,15 +6,12 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
-use Magento\Inventory\Model\StockRepository\GetList;
+use Magento\Inventory\Model\Stock\Command\DeleteByIdInterface;
+use Magento\Inventory\Model\Stock\Command\GetInterface;
+use Magento\Inventory\Model\Stock\Command\GetListInterface;
+use Magento\Inventory\Model\Stock\Command\SaveInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -22,43 +19,41 @@ use Psr\Log\LoggerInterface;
 class StockRepository implements StockRepositoryInterface
 {
     /**
-     * @var StockResourceModel
+     * @var SaveInterface
      */
-    private $stockResource;
+    private $commandSave;
 
     /**
-     * @var StockInterfaceFactory
+     * @var GetInterface
      */
-    private $stockFactory;
+    private $commandGet;
 
     /**
-     * @var GetList
+     * @var DeleteByIdInterface
      */
-    private $getList;
+    private $commandDeleteById;
 
     /**
-     * @var LoggerInterface
+     * @var GetListInterface
      */
-    private $logger;
+    private $commandGetList;
 
     /**
-     * SourceRepository constructor
-     *
-     * @param StockResourceModel $stockResource
-     * @param StockInterfaceFactory $stockFactory
-     * @param GetList $getList
-     * @param LoggerInterface $logger
+     * @param SaveInterface $commandSave
+     * @param GetInterface $commandGet
+     * @param DeleteByIdInterface $commandDeleteById
+     * @param GetListInterface $commandGetList
      */
     public function __construct(
-        StockResourceModel $stockResource,
-        StockInterfaceFactory $stockFactory,
-        GetList $getList,
-        LoggerInterface $logger
+        SaveInterface $commandSave,
+        GetInterface $commandGet,
+        DeleteByIdInterface $commandDeleteById,
+        GetListInterface $commandGetList
     ) {
-        $this->stockResource = $stockResource;
-        $this->stockFactory = $stockFactory;
-        $this->getList = $getList;
-        $this->logger = $logger;
+        $this->commandSave = $commandSave;
+        $this->commandGet = $commandGet;
+        $this->commandDeleteById = $commandDeleteById;
+        $this->commandGetList = $commandGetList;
     }
 
     /**
@@ -66,13 +61,7 @@ class StockRepository implements StockRepositoryInterface
      */
     public function save(StockInterface $stock)
     {
-        try {
-            $this->stockResource->save($stock);
-            return $stock->getStockId();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Stock'), $e);
-        }
+        $this->commandSave->execute($stock);
     }
 
     /**
@@ -80,13 +69,7 @@ class StockRepository implements StockRepositoryInterface
      */
     public function get($stockId)
     {
-        $stock = $this->stockFactory->create();
-        $this->stockResource->load($stock, $stockId, StockInterface::STOCK_ID);
-
-        if (null === $stock->getStockId()) {
-            throw NoSuchEntityException::singleField(StockInterface::STOCK_ID, $stockId);
-        }
-        return $stock;
+        return $this->commandGet->execute($stockId);
     }
 
     /**
@@ -94,19 +77,7 @@ class StockRepository implements StockRepositoryInterface
      */
     public function deleteById($stockId)
     {
-        try {
-            $stock = $this->get($stockId);
-        } catch (NoSuchEntityException $e) {
-            return;
-        }
-
-        try {
-            $this->stockResource->delete($stock);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete Stock'), $e);
-        }
-
+        $this->commandDeleteById->execute($stockId);
     }
 
     /**
@@ -114,6 +85,6 @@ class StockRepository implements StockRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
-        return $this->getList->execute($searchCriteria);
+        return $this->commandGetList->execute($searchCriteria);
     }
 }

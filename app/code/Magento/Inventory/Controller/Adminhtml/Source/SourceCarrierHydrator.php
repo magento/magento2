@@ -15,7 +15,7 @@ use Magento\Shipping\Model\Config;
 /**
  * Populate Source by carrier code links
  */
-class CarrierRequestDataHydrator
+class SourceCarrierHydrator
 {
     /**
      * @var SourceCarrierLinkInterface

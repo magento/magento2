@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\StockRepository;
+namespace Magento\Inventory\Model\Stock\Command;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -13,7 +13,10 @@ use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
 
-class GetList
+/**
+ * @inheritdoc
+ */
+class GetList implements GetListInterface
 {
     /**
      * @var CollectionProcessorInterface
@@ -36,8 +39,6 @@ class GetList
     private $searchCriteriaBuilder;
 
     /**
-     * SourceRepository constructor
-     *
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $stockCollectionFactory
      * @param StockSearchResultsInterfaceFactory $stockSearchResultsFactory
@@ -56,8 +57,7 @@ class GetList
     }
 
     /**
-     * @param SearchCriteriaInterface|null $searchCriteria
-     * @return StockSearchResultsInterface
+     * @inheritdoc
      */
     public function execute(SearchCriteriaInterface $searchCriteria = null)
     {

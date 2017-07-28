@@ -8,6 +8,8 @@ namespace Magento\InventoryApi\Api;
 /**
  * Unassign source from stock command
  *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
+ *
  * @api
  */
 interface UnassignSourceFromStockInterface
@@ -19,7 +21,6 @@ interface UnassignSourceFromStockInterface
      * @param int $sourceId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function execute($stockId, $sourceId);
 }
