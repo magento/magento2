@@ -7,7 +7,7 @@
 <div class="shipping-address-item" data-bind="css: isSelected() ? 'selected-item' : 'not-selected-item'">
     <!-- ko text: address().prefix --><!-- /ko --> <!-- ko text: address().firstname --><!-- /ko --> <!-- ko text: address().middlename --><!-- /ko -->
     <!-- ko text: address().lastname --><!-- /ko --> <!-- ko text: address().suffix --><!-- /ko --><br/>
-    <!-- ko text: _.values(address().street).join(", ") --><!-- /ko -->
+    <!-- ko text: _.values(address().street).join(", ") --><!-- /ko --><br/>
     <!-- ko text: address().city --><!-- /ko -->, <span data-bind="html: address().region"></span> <!-- ko text: address().postcode --><!-- /ko --><br/>
     <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
     <!-- ko if: (address().telephone) -->
