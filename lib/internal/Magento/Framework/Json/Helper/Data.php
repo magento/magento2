@@ -14,11 +14,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Framework\Json\DecoderInterface
+     * @deprecated
      */
     protected $jsonDecoder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @deprecated
      */
     protected $jsonEncoder;
 
