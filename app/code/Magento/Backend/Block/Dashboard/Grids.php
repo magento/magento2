@@ -77,7 +77,7 @@ class Grids extends \Magento\Backend\Block\Widget\Tabs
         $this->addTab(
             'customers',
             [
-                'label' => __('Customers'),
+                'label' => __('Best Customers'),
                 'url' => $this->getUrl('adminhtml/*/customersMost', ['_current' => true]),
                 'class' => 'ajax'
             ]
