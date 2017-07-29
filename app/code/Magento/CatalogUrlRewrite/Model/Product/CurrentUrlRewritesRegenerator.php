@@ -220,17 +220,15 @@ class CurrentUrlRewritesRegenerator extends BaseUrlRewriteGenerator
      */
     protected function generateForCustom($url, $storeId, $category, $product = null)
     {
-        if ($url->getRedirectType()) {
+        $targetPath = $url->getTargetPath();
 
+        if ($url->getRedirectType()) {
             $paths = [
                 $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category),
                 $this->productUrlPathGenerator->getUrlPathWithIdAndSuffix($product, $storeId, $category)
             ];
 
             $targetPath = $this->checkRequestPaths($paths, $product->getId(), $storeId);
-
-        } else {
-            $targetPath = $url->getTargetPath();
         }
 
         if ($url->getRequestPath() !== $targetPath) {
