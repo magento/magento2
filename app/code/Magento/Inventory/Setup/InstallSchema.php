@@ -11,6 +11,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Inventory\Setup\Operation\CreateSourceCarrierLinkTable;
 use Magento\Inventory\Setup\Operation\CreateSourceItemTable;
 use Magento\Inventory\Setup\Operation\CreateSourceTable;
+use Magento\Inventory\Setup\Operation\CreateStockItemIndexTable;
 use Magento\Inventory\Setup\Operation\CreateStockSourceLinkTable;
 use Magento\Inventory\Setup\Operation\CreateStockTable;
 
@@ -42,6 +43,11 @@ class InstallSchema implements InstallSchemaInterface
     private $createStockSourceLinkTable;
 
     /**
+     * @var CreateStockItemIndexTable
+     */
+    private $createStockItemIndexTable;
+
+    /**
      * @param CreateSourceTable $createSourceTable
      * @param CreateSourceCarrierLinkTable $createSourceCarrierLinkTable
      * @param CreateSourceItemTable $createSourceItemTable
@@ -53,13 +59,15 @@ class InstallSchema implements InstallSchemaInterface
         CreateSourceCarrierLinkTable $createSourceCarrierLinkTable,
         CreateSourceItemTable $createSourceItemTable,
         CreateStockTable $createStockTable,
-        CreateStockSourceLinkTable $createStockSourceLinkTable
+        CreateStockSourceLinkTable $createStockSourceLinkTable,
+        CreateStockItemIndexTable $createStockItemIndexTable
     ) {
         $this->createSourceTable = $createSourceTable;
         $this->createSourceCarrierLinkTable = $createSourceCarrierLinkTable;
         $this->createSourceItemTable = $createSourceItemTable;
         $this->createStockTable = $createStockTable;
         $this->createStockSourceLinkTable = $createStockSourceLinkTable;
+        $this->createStockItemIndexTable = $createStockItemIndexTable;
     }
 
     /**
@@ -74,6 +82,7 @@ class InstallSchema implements InstallSchemaInterface
         $this->createSourceItemTable->execute($setup);
         $this->createStockTable->execute($setup);
         $this->createStockSourceLinkTable->execute($setup);
+        $this->createStockItemIndexTable->execute($setup);
 
         $setup->endSetup();
     }
