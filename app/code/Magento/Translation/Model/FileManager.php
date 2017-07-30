@@ -73,7 +73,7 @@ class FileManager
     /**
      * @return string
      */
-    protected function getTranslationFileFullPath()
+    public function getTranslationFileFullPath()
     {
         return $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
         \DIRECTORY_SEPARATOR .

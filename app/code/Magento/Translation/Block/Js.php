@@ -68,4 +68,12 @@ class Js extends Template
     {
         return $this->fileManager->getTranslationFilePath();
     }
+
+    /**
+     * @return string
+     */
+    public function getTranslationFileFullPath()
+    {
+        return $this->fileManager->getTranslationFileFullPath();
+    }
 }
