@@ -7,11 +7,14 @@ namespace Magento\Inventory\Setup\Operation;
 
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Inventory\Model\Indexer\StockItem;
+
 use Magento\InventoryApi\Api\Data\StockItemInterface;
 
 class CreateStockItemIndexTable
 {
+
+    const TABLE_NAME_STOCK_ITEM_INDEX = 'inventory_stock_item_index';
+
     /**
      * @param SchemaSetupInterface $setup
      * @return void
@@ -28,7 +31,7 @@ class CreateStockItemIndexTable
      */
     private function createStockItemIndexTable(SchemaSetupInterface $setup)
     {
-        $sourceItemTable = $setup->getTable(StockItem::TABLE_NAME_STOCK_ITEM_INDEX);
+        $sourceItemTable = $setup->getTable(self::TABLE_NAME_STOCK_ITEM_INDEX);
         return $setup->getConnection()->newTable(
             $sourceItemTable
         )->setComment(
