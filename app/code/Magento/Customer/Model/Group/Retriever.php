@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model;
+namespace Magento\Customer\Model\Group;
 
 use Magento\Customer\Model\Session;
 
 /**
  * Class for getting current customer group from customer session.
  */
-class Retriever implements \Magento\Customer\Model\Group\RetrieverInterface
+class Retriever implements RetrieverInterface
 {
     /**
      * @var Session
