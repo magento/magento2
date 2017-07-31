@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutOfflinePaymentMethodsTest" summary="OnePageCheckout within Offline Payment Methods" ticketId="MAGETWO-27485">
+        <variation name="OnePageCheckoutUsingLoginPopup" summary="Customer is redirected to checkout on login if guest is disabled, flow for existed Customer" ticketId="MAGETWO-49916">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, disable_guest_checkout, disable_customer_redirect_after_logging</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
+        <variation name="OnePageCheckoutUsingRegisterLink" summary="Customer is redirected to checkout on login if guest is disabled, flow with registration new Customer" ticketId="MAGETWO-49917">
+            <data name="issue" xsi:type="string">MAGETWO-59816: Redirect works improperly in a browser incognito mode</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">register_customer</data>
+            <data name="checkoutMethod" xsi:type="string">register_before_checkout</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, disable_guest_checkout, disable_customer_redirect_after_logging, enable_https_frontend_only</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation1" summary="Checkout as UK guest with virtual product and downloadable product using coupon for not logged in customers">
+            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
+            <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
+            <data name="customer/dataset" xsi:type="string">customer_UK_1_default_billing_address</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">16.21</item>
+            </data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="status" xsi:type="string">Pending</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Invoice, Edit</data>
+            <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation2" summary="US customer during checkout using coupon for all customer groups">
+            <data name="tag" xsi:type="string">stable:no, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">285.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">banktransfer</data>
+            <data name="status" xsi:type="string">Pending</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Ship, Invoice, Edit</data>
+            <data name="configData" xsi:type="string">banktransfer</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603, MAGETWO-43282, MAGETWO-43318">
+            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
+            <data name="expectedQty/0" xsi:type="string">0</data>
+            <data name="expectedStockStatus/0" xsi:type="string">out of stock</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">375.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">banktransfer</data>
+            <data name="status" xsi:type="string">Pending</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Ship, Invoice, Edit</data>
+            <data name="configData" xsi:type="string">banktransfer_specificcountry_gb, can_subtract_and_can_back_in_stock</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsQtyAndStockStatusInAdminPanel" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <data name="issue" xsi:type="string">MAGETWO-66737: Magento\Checkout\Test\TestCase\OnePageCheckoutTest with OnePageCheckoutTestVariation3 is not stable</data>
+        </variation>
+        <variation name="OnePageCheckoutTestVariation4" summary="One Page Checkout Products with Special Prices" ticketId="MAGETWO-12429">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_with_special_price</data>
+            <data name="products/1" xsi:type="string">configurableProduct::product_with_special_price</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">28.00</item>
+            </data>
+            <data name="cart/data/subtotal" xsi:type="string">18.00</data>
+            <data name="cart/data/shipping_amount" xsi:type="string">10.00</data>
+            <data name="cart/data/grand_total" xsi:type="string">28.00</data>
+            <data name="billingCheckboxState" xsi:type="string">Yes</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+        </variation>
+        <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
+            <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shipping/shipping_service" xsi:type="string">Free Shipping</data>
+            <data name="shipping/shipping_method" xsi:type="string">Free</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">130.98</item>
+            </data>
+            <data name="cart/data/subtotal" xsi:type="string">121.00</data>
+            <data name="cart/data/tax_amount" xsi:type="string">9.98</data>
+            <data name="cart/data/shipping_amount" xsi:type="string">0.00</data>
+            <data name="cart/data/grand_total" xsi:type="string">130.98</data>
+            <data name="billingCheckboxState" xsi:type="string">Yes</data>
+            <data name="editBillingInformation" xsi:type="boolean">false</data>
+            <data name="refresh" xsi:type="boolean">true</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, freeshipping_minimum_order_amount_100</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation6" summary="Checkout as UK guest with virtual product using coupon for not logged in customers with Zero Subtotal Checkout payment method">
+            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">0.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">free</data>
+            <data name="status" xsi:type="string">Pending</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Edit</data>
+            <data name="configData" xsi:type="string">zero_subtotal_checkout</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation7" summary="Checkout as UK guest with condition available product qty = ordered product qty">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">375</item>
+            </data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="status" xsi:type="string">Pending</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Invoice, Edit</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation8" summary="Checkout as UK customer with different shipping/billing address and register checkout method">
+            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">register</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_2</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with different shipping/billing address and Tier Prices" ticketId="MAGETWO-42604">
+            <data name="tag" xsi:type="string">stable:no, severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_order_qty_3</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_2_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">87.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">banktransfer</data>
+            <data name="configData" xsi:type="string">banktransfer_specificcountry_gb</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+    </testCase>
+</config>
