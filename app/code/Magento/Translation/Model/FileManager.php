@@ -110,6 +110,6 @@ class FileManager
      */
     public function getTranslationFileVersion()
     {
-        return sha1($this->getTranslationFileTimestamp() . $this->getTranslationFilePath());
+        return sha1(sha1_file($this->getTranslationFileFullPath()) . $this->getTranslationFilePath());
     }
 }
