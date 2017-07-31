@@ -5,14 +5,14 @@
  */
 namespace Magento\SalesSequence\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Recurring data upgrade for SalesSequence module.
  */
-class UpgradeData implements UpgradeDataInterface
+class RecurringData implements InstallDataInterface
 {
     /**
      * @var SequenceCreator
@@ -31,7 +31,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $this->sequenceCreator->create();
     }
