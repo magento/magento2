@@ -7,6 +7,9 @@ namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * @api
+ */
 class SynonymGroup extends AbstractDb
 {
     /**

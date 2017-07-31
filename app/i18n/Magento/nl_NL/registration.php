@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::LANGUAGE,
-    'magento_nl_nl',
-    __DIR__
-);
+use \Magento\Framework\Component\ComponentRegistrar;
+
+ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'magento_nl_nl', __DIR__);

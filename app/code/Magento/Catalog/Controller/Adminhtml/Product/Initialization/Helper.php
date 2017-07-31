@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Helper
@@ -179,7 +180,7 @@ class Helper
         } else {
             $productOptions = [];
         }
-
+        $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
         $product->addData($productData);
 
         if ($wasLockedMedia) {
