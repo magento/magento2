@@ -14,8 +14,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Json needed for the Ajax Edit Form
      *
-     * @return \Magento\Framework\Controller\Result\Json
-     * @throws \InvalidArgumentException
+     * @return void
      */
     public function execute()
     {

@@ -29,65 +29,24 @@ class Json extends AbstractResult
     protected $json;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
      */
-    private $serializer;
-
-    /**
-     * @param InlineInterface $translateInline
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
-     */
-    public function __construct(
-        InlineInterface $translateInline,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
-    ) {
+    public function __construct(InlineInterface $translateInline)
+    {
         $this->translateInline = $translateInline;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
      * Set json data
      *
-     * @param array|string|\Magento\Framework\DataObject $data
-     * @param bool $cycleCheck
-     * @param array $options
-     * @return Json
-     * @throws \InvalidArgumentException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated
-     * @see Json::setArrayData
-     * @see Json::setJsonData
+     * @param mixed $data
+     * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
+     * @param array $options Additional options used during encoding
+     * @return $this
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        if ($data instanceof \Magento\Framework\DataObject) {
-            return $this->setArrayData($data->toArray());
-        }
-
-        if (is_array($data)) {
-            return $this->setArrayData($data);
-        }
-
-        if (is_string($data)) {
-            return $this->setJsonData($data);
-        }
-
-        throw new \Magento\Framework\Exception\LocalizedException(
-            new \Magento\Framework\Phrase('Invalid argument type')
-        );
-    }
-
-    /**
-     * @param array $data
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function setArrayData(array $data)
-    {
-        $this->setJsonData($this->serializer->serialize($data));
+        $this->json = \Zend_Json::encode($data, $cycleCheck, $options);
         return $this;
     }
 
