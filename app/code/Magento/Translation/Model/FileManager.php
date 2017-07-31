@@ -110,6 +110,13 @@ class FileManager
      */
     public function getTranslationFileVersion()
     {
-        return sha1(sha1_file($this->getTranslationFileFullPath()) . $this->getTranslationFilePath());
+        $translationFile = $this->getTranslationFileFullPath();
+        $translationFileHash = '';
+
+        if ($this->driverFile->isExists($translationFile)) {
+            $translationFileHash = sha1_file($translationFile);
+        }
+
+        return sha1($translationFileHash . $this->getTranslationFilePath());
     }
 }
