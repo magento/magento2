@@ -82,7 +82,7 @@
     </labels>
     <manage_coupon_code>
         <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode</class>
-        <selector>[data-index="block_promo_sales_rule_edit_tab_coupons"]</selector>
+        <selector>[id="sales-rule-form-tab-coupons"]</selector>
         <strategy>css selector</strategy>
     </manage_coupon_code>
 </sections>
