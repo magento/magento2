@@ -72,8 +72,8 @@ class Js extends Template
     /**
      * @return string
      */
-    public function getTranslationFileFullPath()
+    public function getTranslationFileVersion()
     {
-        return $this->fileManager->getTranslationFileFullPath();
+        return $this->fileManager->getTranslationFileVersion();
     }
 }

@@ -73,7 +73,7 @@ class FileManager
     /**
      * @return string
      */
-    public function getTranslationFileFullPath()
+    protected function getTranslationFileFullPath()
     {
         return $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
         \DIRECTORY_SEPARATOR .
@@ -103,5 +103,13 @@ class FileManager
             $this->driverFile->createDirectory($translationDir);
         }
         $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        return sha1($this->getTranslationFileTimestamp() . $this->getTranslationFilePath());
     }
 }

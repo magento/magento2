@@ -26,7 +26,7 @@
                 $.initNamespaceStorage('mage-translation-file-version');
                 versionObj = $.localStorage.get('mage-translation-file-version');
 
-                <?php $version = sha1(sha1_file($block->getTranslationFileFullPath()) . $block->getTranslationFilePath()); ?>
+                <?php $version = $block->getTranslationFileVersion(); ?>
 
                 if (versionObj.version !== '<?= /* @noEscape */ $version ?>') {
                     dependencies.push(
