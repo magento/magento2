@@ -43,33 +43,29 @@ class Dependency
      */
     private $directoryReadFactory;
 
-    //@codingStandardsIgnoreStart
     /**
      * @param ComposerInformation $composerInformation
-     * @param Filesystem $filesystem
+     * @param Filesystem $filesystem @deprecated 2.3.0 $directoryReadFactory is used instead
      * @param PackageFactory $packageFactory
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        // $filesystem kept for BC
-        Filesystem $filesystem,
+        Filesystem $filesystem, // $filesystem kept for BC
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        // $directoryReadFactory optional for BC
         Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
-        if ($directoryReadFactory === null) {
-            $directoryReadFactory = ObjectManager::getInstance()->get(Filesystem\Directory\ReadInterfaceFactory::class);
-        }
-        $this->directoryReadFactory = $directoryReadFactory;
+        $this->directoryReadFactory = $directoryReadFactory ?: ObjectManager::getInstance()->get(
+            Filesystem\Directory\ReadInterfaceFactory::class
+        );
     }
-    //@codingStandardsIgnoreEnd
 
     /**
      * Retrieve list of sample data packages from suggests
