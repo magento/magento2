@@ -617,6 +617,7 @@ define([
             var videoSettings;
 
             videoSettings = this.options.videoSettings[0];
+            $image.find('.' + this.PV).remove();
             $image.append(
                 '<div class="' +
                 this.PV +
