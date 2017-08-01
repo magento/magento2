@@ -81,6 +81,6 @@ abstract class SearchData extends Template implements SearchDataInterface
      */
     public function getTitle()
     {
-        return $this->title;
+        return __($this->title);
     }
 }
