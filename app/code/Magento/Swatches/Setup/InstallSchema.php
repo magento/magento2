@@ -12,11 +12,13 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Class InstallSchema adds new table `eav_attribute_option_swatch`
+ * @since 2.0.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $contextInterface)
     {

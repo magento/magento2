@@ -12,16 +12,19 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Payment method management class for guest carts.
+ * @since 2.0.0
  */
 class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
+     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var PaymentMethodManagementInterface
+     * @since 2.0.0
      */
     protected $paymentMethodManagement;
 
@@ -30,6 +33,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
      *
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @since 2.0.0
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentMethodManagement,
@@ -41,6 +45,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
@@ -51,6 +56,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -61,6 +67,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList($cartId)
     {

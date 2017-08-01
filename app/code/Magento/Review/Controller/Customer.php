@@ -12,6 +12,7 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Customer reviews controller
+ * @since 2.0.0
  */
 abstract class Customer extends Action
 {
@@ -19,12 +20,14 @@ abstract class Customer extends Action
      * Customer session model
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -39,6 +42,7 @@ abstract class Customer extends Action
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {

@@ -9,17 +9,24 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows
+ *
+ * @since 2.0.0
+ */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
      * Limitation by products
      *
      * @var int[]
+     * @since 2.0.0
      */
     protected $limitationByProducts;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
+     * @since 2.1.0
      */
     private $cacheContext;
 
@@ -29,6 +36,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param int[] $entityIds
      * @param bool $useTempTable
      * @return $this
+     * @since 2.0.0
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
@@ -50,6 +58,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param array $entityIds
      * @return void
+     * @since 2.1.0
      */
     private function registerProducts($entityIds)
     {
@@ -61,6 +70,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param array $entityIds
      * @return void
+     * @since 2.1.0
      */
     private function registerCategories($entityIds)
     {
@@ -80,6 +90,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Remove index entries before reindexation
      *
      * @return void
+     * @since 2.0.0
      */
     protected function removeEntries()
     {
@@ -94,6 +105,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -106,6 +118,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -118,6 +131,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function getAllProducts(\Magento\Store\Model\Store $store)
     {
@@ -129,6 +143,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Check whether select ranging is needed
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isRangingNeeded()
     {
@@ -139,7 +154,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getCacheContext()
     {

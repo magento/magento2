@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractDataProvider implements DataProviderInterface
 {
@@ -17,6 +18,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Data Provider name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
@@ -24,6 +26,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Data Provider Primary Identifier name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $primaryFieldName;
 
@@ -31,11 +34,13 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Data Provider Request Parameter Identifier name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $requestFieldName;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $meta = [];
 
@@ -43,11 +48,13 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Provider configuration data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $data = [];
 
     /**
      * @var AbstractCollection
+     * @since 2.0.0
      */
     protected $collection;
 
@@ -57,6 +64,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param string $requestFieldName
      * @param array $meta
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -74,6 +82,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
 
     /**
      * @return AbstractCollection
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -84,6 +93,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Get Data Provider name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -94,6 +104,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Get primary field name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPrimaryFieldName()
     {
@@ -104,6 +115,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Get field name in request
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRequestFieldName()
     {
@@ -112,6 +124,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getMeta()
     {
@@ -123,6 +136,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      *
      * @param string $fieldSetName
      * @return array
+     * @since 2.0.0
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
@@ -132,6 +146,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * @param string $fieldSetName
      * @return array
+     * @since 2.0.0
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
@@ -142,6 +157,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
+     * @since 2.0.0
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
@@ -152,6 +168,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -165,6 +182,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Returns search criteria
      *
      * @return null
+     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -176,6 +194,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Returns SearchResult
      *
      * @return \Magento\Framework\Api\Search\SearchResultInterface
+     * @since 2.0.0
      */
     public function getSearchResult()
     {
@@ -189,6 +208,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param string|array $field
      * @param string|null $alias
      * @return void
+     * @since 2.0.0
      */
     public function addField($field, $alias = null)
     {
@@ -201,6 +221,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param string $field
      * @param string $direction
      * @return void
+     * @since 2.0.0
      */
     public function addOrder($field, $direction)
     {
@@ -213,6 +234,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param int $offset
      * @param int $size
      * @return void
+     * @since 2.0.0
      */
     public function setLimit($offset, $size)
     {
@@ -226,6 +248,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
+     * @since 2.0.0
      */
     public function removeField($field, $isAlias = false)
     {
@@ -236,6 +259,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Removes all fields from select
      *
      * @return void
+     * @since 2.0.0
      */
     public function removeAllFields()
     {
@@ -246,6 +270,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Get data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getData()
     {
@@ -256,6 +281,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Retrieve count of loaded items
      *
      * @return int
+     * @since 2.0.0
      */
     public function count()
     {
@@ -266,6 +292,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Get config data
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getConfigData()
     {
@@ -277,6 +304,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      *
      * @param mixed $config
      * @return void
+     * @since 2.0.0
      */
     public function setConfigData($config)
     {
@@ -287,6 +315,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Retrieve all ids from collection
      *
      * @return int[]
+     * @since 2.2.0
      */
     public function getAllIds()
     {

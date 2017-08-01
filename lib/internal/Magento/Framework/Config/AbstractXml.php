@@ -11,6 +11,7 @@ namespace Magento\Framework\Config;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractXml
 {
@@ -18,17 +19,20 @@ abstract class AbstractXml
      * Data extracted from the merged configuration files
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data;
 
     /**
      * Dom configuration model
      * @var \Magento\Framework\Config\Dom
+     * @since 2.0.0
      */
     protected $_domConfig = null;
 
     /**
      * @var \Magento\Framework\Config\DomFactory
+     * @since 2.0.0
      */
     protected $domFactory;
 
@@ -38,6 +42,7 @@ abstract class AbstractXml
      * @param array $configFiles
      * @param \Magento\Framework\Config\DomFactory $domFactory
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(
         $configFiles,
@@ -54,6 +59,7 @@ abstract class AbstractXml
      * Get absolute path to the XML-schema file
      *
      * @return string
+     * @since 2.0.0
      */
     abstract public function getSchemaFile();
 
@@ -61,6 +67,7 @@ abstract class AbstractXml
      * Get absolute path to per-file XML-schema file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPerFileSchemaFile()
     {
@@ -72,6 +79,7 @@ abstract class AbstractXml
      *
      * @param \DOMDocument $dom
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _extractData(\DOMDocument $dom);
 
@@ -81,6 +89,7 @@ abstract class AbstractXml
      * @param array $configFiles
      * @return \DOMDocument
      * @throws \Magento\Framework\Exception\LocalizedException If a non-existing or invalid XML-file passed
+     * @since 2.0.0
      */
     protected function _merge($configFiles)
     {
@@ -103,6 +112,7 @@ abstract class AbstractXml
      * @param string $file
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException If invalid XML-file passed
+     * @since 2.0.0
      */
     protected function _performValidate($file = null)
     {
@@ -123,6 +133,7 @@ abstract class AbstractXml
      *
      * @return \Magento\Framework\Config\Dom
      * @throws \Magento\Framework\Config\Dom\ValidationException
+     * @since 2.0.0
      */
     protected function _getDomConfigModel()
     {
@@ -142,6 +153,7 @@ abstract class AbstractXml
      * Get XML-contents, initial for merging
      *
      * @return string
+     * @since 2.0.0
      */
     abstract protected function _getInitialXml();
 
@@ -149,6 +161,7 @@ abstract class AbstractXml
      * Get list of paths to identifiable nodes
      *
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _getIdAttributes();
 }

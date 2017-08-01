@@ -12,6 +12,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * Application deployment configuration
  *
  * @api
+ * @since 2.0.0
  */
 class DeploymentConfig
 {
@@ -19,6 +20,7 @@ class DeploymentConfig
      * Configuration reader
      *
      * @var DeploymentConfig\Reader
+     * @since 2.0.0
      */
     private $reader;
 
@@ -26,6 +28,7 @@ class DeploymentConfig
      * Configuration data
      *
      * @var array
+     * @since 2.0.0
      */
     private $data;
 
@@ -33,6 +36,7 @@ class DeploymentConfig
      * Flattened data
      *
      * @var array
+     * @since 2.0.0
      */
     private $flatData;
 
@@ -40,6 +44,7 @@ class DeploymentConfig
      * Injected configuration data
      *
      * @var array
+     * @since 2.0.0
      */
     private $overrideData;
 
@@ -50,6 +55,7 @@ class DeploymentConfig
      *
      * @param DeploymentConfig\Reader $reader
      * @param array $overrideData
+     * @since 2.0.0
      */
     public function __construct(DeploymentConfig\Reader $reader, $overrideData = [])
     {
@@ -63,6 +69,7 @@ class DeploymentConfig
      * @param string $key
      * @param mixed $defaultValue
      * @return mixed|null
+     * @since 2.0.0
      */
     public function get($key = null, $defaultValue = null)
     {
@@ -77,6 +84,7 @@ class DeploymentConfig
      * Checks if data available
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable()
     {
@@ -90,6 +98,7 @@ class DeploymentConfig
      *
      * @param string $key
      * @return null|mixed
+     * @since 2.0.0
      */
     public function getConfigData($key = null)
     {
@@ -110,6 +119,7 @@ class DeploymentConfig
      * Resets config data
      *
      * @return void
+     * @since 2.0.0
      */
     public function resetData()
     {
@@ -120,6 +130,7 @@ class DeploymentConfig
      * Check if data from deploy files is avaiable
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isDbAvailable()
     {
@@ -131,6 +142,7 @@ class DeploymentConfig
      * Loads the configuration data
      *
      * @return void
+     * @since 2.0.0
      */
     private function load()
     {
@@ -152,6 +164,7 @@ class DeploymentConfig
      * @param string $path
      * @return array
      * @throws \Exception
+     * @since 2.0.0
      */
     private function flattenParams(array $params, $path = null)
     {

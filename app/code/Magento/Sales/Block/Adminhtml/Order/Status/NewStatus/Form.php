@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Status\NewStatus;
 
 /**
  * Create order status form
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -14,6 +15,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -25,6 +27,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form fields and structure
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -76,6 +79,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Sales\Model\Order\Status $model
      * @param \Magento\Framework\Data\Form $form
      * @return void
+     * @since 2.0.0
      */
     protected function _addStoresFieldset($model, $form)
     {

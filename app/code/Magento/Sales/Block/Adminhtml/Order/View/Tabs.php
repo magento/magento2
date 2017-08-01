@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
  * Order view tabs
  *
  * @api
+ * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
@@ -16,6 +17,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,6 +27,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +45,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      *
      * @return \Magento\Sales\Model\Order
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -61,6 +65,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Sales Collection
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -20,6 +21,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Totals data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_totals = ['lifetime' => 0, 'base_lifetime' => 0, 'base_avgsale' => 0, 'num_orders' => 0];
 
@@ -27,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Customer Id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_customerId;
 
@@ -34,6 +37,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Order state value
      *
      * @var null|string|array
+     * @since 2.0.0
      */
     protected $_state = null;
 
@@ -41,16 +45,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Order state condition
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_orderStateCondition = null;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @since 2.0.0
      */
     protected $_storeCollectionFactory;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -61,6 +68,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param ManagerInterface $eventManager
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      * @param StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -82,6 +90,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -94,6 +103,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerIdFilter($customerId)
     {
@@ -106,6 +116,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {
@@ -118,6 +129,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string|array $state
      * @param bool $exclude
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderStateFilter($state, $exclude = false)
     {
@@ -130,6 +142,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Before load action
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeLoad()
     {
@@ -173,6 +186,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -221,6 +235,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve totals data converted into \Magento\Framework\DataObject
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getTotals()
     {

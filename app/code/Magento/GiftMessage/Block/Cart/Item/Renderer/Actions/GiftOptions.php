@@ -11,26 +11,31 @@ use Magento\Framework\Json\Encoder;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class GiftOptions extends Generic
 {
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isScopePrivate = false;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $jsLayout;
 
     /**
      * @var array|LayoutProcessorInterface[]
+     * @since 2.0.0
      */
     protected $layoutProcessors;
 
     /**
      * @var Encoder
+     * @since 2.0.0
      */
     protected $jsonEncoder;
 
@@ -39,6 +44,7 @@ class GiftOptions extends Generic
      * @param Encoder $jsonEncoder
      * @param array $layoutProcessors
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -57,6 +63,7 @@ class GiftOptions extends Generic
      * Return JS layout
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsLayout()
     {

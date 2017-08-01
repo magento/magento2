@@ -5,6 +5,11 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import
+ *
+ * @since 2.0.0
+ */
 class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
 {
     /**
@@ -15,6 +20,7 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $result)
     {
@@ -28,6 +34,7 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      * Get price indexer
      *
      * @return \Magento\Framework\Indexer\IndexerInterface
+     * @since 2.0.0
      */
     protected function getPriceIndexer()
     {

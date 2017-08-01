@@ -12,6 +12,7 @@ use Magento\Framework\Profiler\DriverInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Profiler
 {
@@ -24,6 +25,7 @@ class Profiler
      * Whether profiling is active or not
      *
      * @var bool
+     * @since 2.0.0
      */
     private static $_enabled = false;
 
@@ -31,6 +33,7 @@ class Profiler
      * Nesting path that represents namespace to resolve timer names
      *
      * @var string[]
+     * @since 2.0.0
      */
     private static $_currentPath = [];
 
@@ -38,6 +41,7 @@ class Profiler
      * Count of elements in $_currentPath
      *
      * @var int
+     * @since 2.0.0
      */
     private static $_pathCount = 0;
 
@@ -45,6 +49,7 @@ class Profiler
      * Index for counting of $_pathCount for timer names
      *
      * @var array
+     * @since 2.0.0
      */
     private static $_pathIndex = [];
 
@@ -52,6 +57,7 @@ class Profiler
      * Collection for profiler drivers.
      *
      * @var DriverInterface[]
+     * @since 2.0.0
      */
     private static $_drivers = [];
 
@@ -59,6 +65,7 @@ class Profiler
      * List of default tags.
      *
      * @var array
+     * @since 2.0.0
      */
     private static $_defaultTags = [];
 
@@ -66,6 +73,7 @@ class Profiler
      * Collection of tag filters.
      *
      * @var array
+     * @since 2.0.0
      */
     private static $_tagFilters = [];
 
@@ -73,6 +81,7 @@ class Profiler
      * Has tag filters flag for faster checks of filters availability.
      *
      * @var bool
+     * @since 2.0.0
      */
     private static $_hasTagFilters = false;
 
@@ -81,6 +90,7 @@ class Profiler
      *
      * @param array $tags
      * @return void
+     * @since 2.0.0
      */
     public static function setDefaultTags(array $tags)
     {
@@ -93,6 +103,7 @@ class Profiler
      * @param string $tagName
      * @param string $tagValue
      * @return void
+     * @since 2.0.0
      */
     public static function addTagFilter($tagName, $tagValue)
     {
@@ -108,6 +119,7 @@ class Profiler
      *
      * @param array|null $tags
      * @return bool
+     * @since 2.0.0
      */
     private static function _checkTags(array $tags = null)
     {
@@ -132,6 +144,7 @@ class Profiler
      *
      * @param DriverInterface $driver
      * @return void
+     * @since 2.0.0
      */
     public static function add(DriverInterface $driver)
     {
@@ -144,6 +157,7 @@ class Profiler
      *
      * @param string|null $timerName Timer name
      * @return string
+     * @since 2.0.0
      */
     private static function _getTimerId($timerName = null)
     {
@@ -161,6 +175,7 @@ class Profiler
      *
      * @param array|null $tags
      * @return array|null
+     * @since 2.0.0
      */
     private static function _getTags(array $tags = null)
     {
@@ -177,6 +192,7 @@ class Profiler
      * Any call to profiler does nothing until profiler is enabled.
      *
      * @return void
+     * @since 2.0.0
      */
     public static function enable()
     {
@@ -189,6 +205,7 @@ class Profiler
      * Any call to profiler is silently ignored while profiler is disabled.
      *
      * @return void
+     * @since 2.0.0
      */
     public static function disable()
     {
@@ -199,6 +216,7 @@ class Profiler
      * Get profiler enable status.
      *
      * @return bool
+     * @since 2.0.0
      */
     public static function isEnabled()
     {
@@ -211,6 +229,7 @@ class Profiler
      * @param string|null $timerName
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public static function clear($timerName = null)
     {
@@ -228,6 +247,7 @@ class Profiler
      * Reset profiler to initial state
      *
      * @return void
+     * @since 2.0.0
      */
     public static function reset()
     {
@@ -249,6 +269,7 @@ class Profiler
      * @param array|null $tags
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public static function start($timerName, array $tags = null)
     {
@@ -285,6 +306,7 @@ class Profiler
      * @param string|null $timerName
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public static function stop($timerName = null)
     {
@@ -327,6 +349,7 @@ class Profiler
      * @param string $baseDir
      * @param bool $isAjax
      * @return void
+     * @since 2.0.0
      */
     public static function applyConfig($config, $baseDir, $isAjax = false)
     {
@@ -350,6 +373,7 @@ class Profiler
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
@@ -382,6 +406,7 @@ class Profiler
      * @param array $driverConfigs
      * @param string $baseDir
      * @return array
+     * @since 2.0.0
      */
     protected static function _parseDriverConfigs(array $driverConfigs, $baseDir)
     {
@@ -407,6 +432,7 @@ class Profiler
      *
      * @param mixed $driverConfig
      * @return array|false
+     * @since 2.0.0
      */
     protected static function _parseDriverConfig($driverConfig)
     {

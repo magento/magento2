@@ -7,6 +7,11 @@ namespace Magento\Framework\Locale;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Class \Magento\Framework\Locale\Resolver
+ *
+ * @since 2.0.0
+ */
 class Resolver implements ResolverInterface
 {
     /**
@@ -18,6 +23,7 @@ class Resolver implements ResolverInterface
      * Default locale code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $defaultLocale;
 
@@ -25,6 +31,7 @@ class Resolver implements ResolverInterface
      * Scope type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $scopeType;
 
@@ -32,11 +39,13 @@ class Resolver implements ResolverInterface
      * Locale code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $locale;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -44,6 +53,7 @@ class Resolver implements ResolverInterface
      * Emulated locales stack
      *
      * @var array
+     * @since 2.0.0
      */
     protected $emulatedLocales = [];
 
@@ -52,6 +62,7 @@ class Resolver implements ResolverInterface
      * @param string $defaultLocalePath
      * @param string $scopeType
      * @param mixed $locale
+     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -67,6 +78,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDefaultLocalePath()
     {
@@ -75,6 +87,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDefaultLocale($locale)
     {
@@ -84,6 +97,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDefaultLocale()
     {
@@ -99,6 +113,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setLocale($locale = null)
     {
@@ -112,6 +127,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -123,6 +139,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function emulate($scopeId)
     {
@@ -143,6 +160,7 @@ class Resolver implements ResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function revert()
     {

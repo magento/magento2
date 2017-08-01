@@ -20,6 +20,7 @@ namespace Magento\Reports\Model\Product\Index;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
@@ -27,6 +28,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Cache key name for Count of product index
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_countCacheKey = 'product_index_compared_count';
 
@@ -34,6 +36,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Catalog product compare
      *
      * @var \Magento\Catalog\Helper\Product\Compare
+     * @since 2.0.0
      */
     protected $_productCompare = null;
 
@@ -51,6 +54,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -86,6 +90,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,6 +101,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * Retrieve Exclude Product Ids List for Collection
      *
      * @return array
+     * @since 2.0.0
      */
     public function getExcludeProductIds()
     {

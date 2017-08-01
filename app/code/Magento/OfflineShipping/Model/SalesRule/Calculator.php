@@ -15,6 +15,7 @@ use Magento\SalesRule\Model\Validator;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Calculator extends Validator
 {
@@ -25,6 +26,7 @@ class Calculator extends Validator
      *
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  \Magento\OfflineShipping\Model\SalesRule\Calculator
+     * @since 2.0.0
      */
     public function processFreeShipping(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {

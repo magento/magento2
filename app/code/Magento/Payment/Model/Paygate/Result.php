@@ -5,6 +5,11 @@
  */
 namespace Magento\Payment\Model\Paygate;
 
+/**
+ * Class \Magento\Payment\Model\Paygate\Result
+ *
+ * @since 2.0.0
+ */
 class Result extends \Magento\Framework\DataObject
 {
 }

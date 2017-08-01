@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem\Glob;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @since 2.0.0
  */
 class Files
 {
@@ -67,36 +68,43 @@ class Files
 
     /**
      * @var ComponentRegistrar
+     * @since 2.0.0
      */
     protected $componentRegistrar;
 
     /**
      * @var \Magento\Framework\App\Utility\Files
+     * @since 2.0.0
      */
     protected static $_instance = null;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected static $_cache = [];
 
     /**
      * @var DirSearch
+     * @since 2.0.0
      */
     private $dirSearch;
 
     /**
      * @var ThemePackageList
+     * @since 2.0.0
      */
     private $themePackageList;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var RegexIteratorFactory
+     * @since 2.2.0
      */
     private $regexIteratorFactory;
 
@@ -108,6 +116,7 @@ class Files
      * @param ThemePackageList $themePackageList
      * @param Json|null $serializer
      * @param RegexIteratorFactory|null $regexIteratorFactory
+     * @since 2.0.0
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
@@ -132,6 +141,7 @@ class Files
      *
      * @param Files|null $instance
      * @return void
+     * @since 2.0.0
      */
     public static function setInstance(Files $instance = null)
     {
@@ -143,6 +153,7 @@ class Files
      *
      * @return \Magento\Framework\App\Utility\Files
      * @throws \Exception when there is no instance set
+     * @since 2.0.0
      */
     public static function init()
     {
@@ -157,6 +168,7 @@ class Files
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public static function composeDataSets(array $files)
     {
@@ -171,6 +183,7 @@ class Files
      * Get list of regular expressions for matching test directories in modules
      *
      * @return array
+     * @since 2.0.0
      */
     private function getModuleTestDirsRegex()
     {
@@ -185,6 +198,7 @@ class Files
      * Get base path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPathToSource()
     {
@@ -196,6 +210,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     public function getPhpFiles($flags = 0)
     {
@@ -231,6 +246,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     private function getTemplateFiles($flags)
     {
@@ -245,6 +261,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     private function getLibraryFiles($flags)
     {
@@ -271,6 +288,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     private function getPubFiles($flags)
     {
@@ -288,6 +306,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     private function getDevToolsFiles($flags)
     {
@@ -302,6 +321,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     private function getAppCodeFiles($flags)
     {
@@ -330,6 +350,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.0.0
      */
     private function getTestFiles($flags)
     {
@@ -357,6 +378,7 @@ class Files
      * Returns list of xml files, used by Magento application
      *
      * @return array
+     * @since 2.0.0
      */
     public function getXmlFiles()
     {
@@ -376,6 +398,7 @@ class Files
      *
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getMainConfigFiles($asDataSet = true)
     {
@@ -409,6 +432,7 @@ class Files
      * @param bool $asDataSet
      * @return array
      * @codingStandardsIgnoreStart
+     * @since 2.0.0
      */
     public function getConfigFiles(
         $fileNamePattern = '*.xml',
@@ -441,6 +465,7 @@ class Files
      * @param array $excludedFileNames
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getXmlCatalogFiles(
         $fileNamePattern = '*.xsd',
@@ -495,6 +520,7 @@ class Files
      * @param string $fileNamePattern
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getLayoutConfigFiles($fileNamePattern = '*.xml', $asDataSet = true)
     {
@@ -528,6 +554,7 @@ class Files
      * @param array $incomingParams
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getLayoutFiles($incomingParams = [], $asDataSet = true)
     {
@@ -551,6 +578,7 @@ class Files
      * @param array $incomingParams
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getPageLayoutFiles($incomingParams = [], $asDataSet = true)
     {
@@ -562,6 +590,7 @@ class Files
      * @param array $incomingParams
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     protected function getLayoutXmlFiles($location, $incomingParams = [], $asDataSet = true)
     {
@@ -605,6 +634,7 @@ class Files
      * @param array $params
      * @param string $location
      * @return array
+     * @since 2.0.0
      */
     private function collectModuleLayoutFiles(array $params, $location)
     {
@@ -649,6 +679,7 @@ class Files
      * @param array $params
      * @param string $location
      * @return array
+     * @since 2.0.0
      */
     private function collectThemeLayoutFiles(array $params, $location)
     {
@@ -684,6 +715,7 @@ class Files
      * @param string $currentThemePath
      * @param ThemePackage $theme
      * @return array
+     * @since 2.0.0
      */
     private function parseThemeFiles($themeFiles, $currentThemePath, $theme)
     {
@@ -721,6 +753,7 @@ class Files
      * @param array $incomingParams
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getPageTypeFiles($incomingParams = [], $asDataSet = true)
     {
@@ -752,6 +785,7 @@ class Files
      * @param string $module
      * @param string $area
      * @return array
+     * @since 2.0.0
      */
     private function getEtcAreaPaths($namespace, $module, $area)
     {
@@ -775,6 +809,7 @@ class Files
      * @param string $namespace
      * @param string $module
      * @return array
+     * @since 2.0.0
      */
     public function getJsFiles($area = '*', $themePath = '*/*', $namespace = '*', $module = '*')
     {
@@ -812,6 +847,7 @@ class Files
      * @param string $module
      * @param string $subFolder
      * @return array
+     * @since 2.0.0
      */
     private function getThemePaths($area, $module, $subFolder)
     {
@@ -833,6 +869,7 @@ class Files
      * @param string $namespace
      * @param string $module
      * @return array
+     * @since 2.0.0
      */
     public function getStaticHtmlFiles($area = '*', $themePath = '*/*', $namespace = '*', $module = '*')
     {
@@ -868,6 +905,7 @@ class Files
      *
      * @param string $filePattern
      * @return array
+     * @since 2.0.0
      */
     public function getStaticPreProcessingFiles($filePattern = '*')
     {
@@ -900,6 +938,7 @@ class Files
      * @param string $filePattern
      * @param array $result
      * @return void
+     * @since 2.0.0
      */
     private function accumulateThemeStaticFiles($area, $locale, $filePattern, &$result)
     {
@@ -950,6 +989,7 @@ class Files
      * Get all files from static library directory
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStaticLibraryFiles()
     {
@@ -964,6 +1004,7 @@ class Files
      * @param string $file
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     protected function _parseLibStatic($file, $path)
     {
@@ -979,6 +1020,7 @@ class Files
      * @param array $result
      * @param bool $subroutine
      * @return void
+     * @since 2.0.0
      */
     protected function _accumulateFilesByPatterns(array $patterns, $filePattern, array &$result, $subroutine = false)
     {
@@ -998,6 +1040,7 @@ class Files
      *
      * @param string $file
      * @return array
+     * @since 2.0.0
      */
     protected function _parseModuleStatic($file)
     {
@@ -1020,6 +1063,7 @@ class Files
      *
      * @param string $file
      * @return array
+     * @since 2.0.0
      */
     protected function _parseModuleLocaleStatic($file)
     {
@@ -1038,6 +1082,7 @@ class Files
      *
      * @param string $area
      * @return array
+     * @since 2.0.0
      */
     public function getJsFilesForArea($area)
     {
@@ -1082,6 +1127,7 @@ class Files
      * @param bool $withMetaInfo
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getPhtmlFiles($withMetaInfo = false, $asDataSet = true)
     {
@@ -1104,6 +1150,7 @@ class Files
      * @param bool $withMetaInfo
      * @param array $result
      * @return void
+     * @since 2.0.0
      */
     private function accumulateThemeTemplateFiles($withMetaInfo, array &$result)
     {
@@ -1143,6 +1190,7 @@ class Files
      * @param bool $withMetaInfo
      * @param array $result
      * @return void
+     * @since 2.0.0
      */
     private function accumulateModuleTemplateFiles($withMetaInfo, array &$result)
     {
@@ -1179,6 +1227,7 @@ class Files
      * Returns list of email template files
      *
      * @return array
+     * @since 2.0.0
      */
     public function getEmailTemplates()
     {
@@ -1201,6 +1250,7 @@ class Files
      * (e.g. Git, IDE) or temp files (e.g. in "var/").
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllFiles()
     {
@@ -1239,6 +1289,7 @@ class Files
      * @param string $fileNamePattern
      * @param bool $recursive
      * @return array
+     * @since 2.0.0
      */
     public static function getFiles(array $dirPatterns, $fileNamePattern, $recursive = true)
     {
@@ -1262,6 +1313,7 @@ class Files
      *
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getDiConfigs($asDataSet = false)
     {
@@ -1290,6 +1342,7 @@ class Files
      * Get module and library paths
      *
      * @return array
+     * @since 2.0.0
      */
     private function getPaths()
     {
@@ -1310,6 +1363,7 @@ class Files
      * @param string &$path
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function classFileExists($class, &$path = '')
     {
@@ -1376,6 +1430,7 @@ class Files
      * @param string $namespace
      * @param string $className
      * @return bool
+     * @since 2.0.0
      */
     private function classFileExistsCheckContent($fullPath, $namespace, $className)
     {
@@ -1404,6 +1459,7 @@ class Files
      * Return list of declared namespaces
      *
      * @return array
+     * @since 2.0.0
      */
     public function getNamespaces()
     {
@@ -1428,6 +1484,7 @@ class Files
      * @param string $module
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getModuleFile($namespace, $module, $file)
     {
@@ -1441,6 +1498,7 @@ class Files
      * @param string $module
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getModulePhpFiles($module, $asDataSet = true)
     {
@@ -1466,6 +1524,7 @@ class Files
      * @param string $componentType
      * @param bool $asDataSet
      * @return array
+     * @since 2.0.0
      */
     public function getComposerFiles($componentType, $asDataSet = true)
     {
@@ -1496,6 +1555,7 @@ class Files
      * @param string $globPattern
      * @return array
      * @throws \Exception if any of the patterns don't return any result
+     * @since 2.0.0
      */
     public function readLists($globPattern)
     {
@@ -1545,6 +1605,7 @@ class Files
      * @param string $componentName
      * @param string $pathPattern
      * @return array
+     * @since 2.0.0
      */
     private function getPathByComponentPattern($componentType, $componentName, $pathPattern)
     {
@@ -1577,6 +1638,7 @@ class Files
      *
      * @param string $moduleName
      * @return bool
+     * @since 2.0.0
      */
     public function isModuleExists($moduleName)
     {
@@ -1597,6 +1659,7 @@ class Files
      * @param string $fileNamePattern Pattern for filename
      * @param string|array $excludes Subdirectories to exlude, represented as regex
      * @return array Files in $dirPatterns but not in $excludes
+     * @since 2.0.0
      */
     protected function getFilesSubset(array $dirPatterns, $fileNamePattern, $excludes)
     {
@@ -1615,6 +1678,7 @@ class Files
      *
      * @param int $flags
      * @return array
+     * @since 2.2.0
      */
     private function getSetupPhpFiles($flags = null)
     {

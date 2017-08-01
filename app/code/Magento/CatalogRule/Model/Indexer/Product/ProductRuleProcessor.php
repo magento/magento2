@@ -7,6 +7,11 @@ namespace Magento\CatalogRule\Model\Indexer\Product;
 
 use Magento\Framework\Indexer\AbstractProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor
+ *
+ * @since 2.0.0
+ */
 class ProductRuleProcessor extends AbstractProcessor
 {
     /**

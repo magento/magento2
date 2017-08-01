@@ -6,10 +6,16 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Design\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

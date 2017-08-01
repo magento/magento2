@@ -9,6 +9,7 @@ use Magento\Framework\Notification\MessageInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class UnreadMessagePopup extends \Magento\Backend\Block\Template
 {
@@ -16,6 +17,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * List of item classes per severity
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_itemClasses = [
         MessageInterface::SEVERITY_CRITICAL => 'error',
@@ -26,6 +28,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * System Message list
      *
      * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
+     * @since 2.0.0
      */
     protected $_messages;
 
@@ -33,6 +36,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -47,6 +51,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * Render block
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -60,6 +65,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * Retrieve list of unread messages
      *
      * @return MessageInterface[]
+     * @since 2.0.0
      */
     public function getUnreadMessages()
     {
@@ -70,6 +76,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * Retrieve popup title
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getPopupTitle()
     {
@@ -86,6 +93,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      *
      * @param MessageInterface $message
      * @return string
+     * @since 2.0.0
      */
     public function getItemClass(MessageInterface $message)
     {

@@ -17,17 +17,25 @@ use Magento\Framework\Exception\SecurityViolationException;
 /**
  * ForgotPasswordPost controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $customerAccountManagement;
 
-    /** @var Escaper */
+    /**
+     * @var \Magento\Framework\Escaper
+     * @since 2.0.0
+     */
     protected $escaper;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
@@ -36,6 +44,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param Escaper $escaper
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -53,6 +62,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      * Forgot customer password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -96,6 +106,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @param string $email
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function getSuccessMessage($email)
     {

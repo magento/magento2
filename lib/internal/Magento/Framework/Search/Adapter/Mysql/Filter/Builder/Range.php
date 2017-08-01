@@ -9,6 +9,11 @@ use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\Filter\Range as RangeFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range
+ *
+ * @since 2.0.0
+ */
 class Range implements FilterInterface
 {
     const CONDITION_PART_GREATER_THAN = '>=';
@@ -18,11 +23,13 @@ class Range implements FilterInterface
 
     /**
      * @var ConditionManager
+     * @since 2.0.0
      */
     private $conditionManager;
 
     /**
      * @param ConditionManager $conditionManager
+     * @since 2.0.0
      */
     public function __construct(
         ConditionManager $conditionManager
@@ -32,6 +39,7 @@ class Range implements FilterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function buildFilter(
         RequestFilterInterface $filter,
@@ -51,6 +59,7 @@ class Range implements FilterInterface
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @param bool $isNegation
      * @return string
+     * @since 2.0.0
      */
     private function getLeftConditionPart(RequestFilterInterface $filter, $isNegation)
     {
@@ -65,6 +74,7 @@ class Range implements FilterInterface
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @param bool $isNegation
      * @return string
+     * @since 2.0.0
      */
     private function getRightConditionPart(RequestFilterInterface $filter, $isNegation)
     {
@@ -80,6 +90,7 @@ class Range implements FilterInterface
      * @param string $operator
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     private function getPart($field, $operator, $value)
     {
@@ -91,6 +102,7 @@ class Range implements FilterInterface
     /**
      * @param bool $isNegation
      * @return string
+     * @since 2.0.0
      */
     private function getConditionUnionOperator($isNegation)
     {

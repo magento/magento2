@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Layout;
  * Class Element
  *
  * @api
+ * @since 2.0.0
  */
 class Element extends \Magento\Framework\Simplexml\Element
 {
@@ -64,6 +65,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -99,6 +101,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Get block name
      *
      * @return bool|string
+     * @since 2.0.0
      */
     public function getBlockName()
     {
@@ -120,6 +123,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Advanced version of getBlockName() method: gets name for container as well as for block
      *
      * @return string|bool
+     * @since 2.0.0
      */
     public function getElementName()
     {
@@ -139,6 +143,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Extracts sibling from 'before' and 'after' attributes
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSibling()
     {
@@ -156,6 +161,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Add parent element name to parent attribute
      *
      * @return $this
+     * @since 2.0.0
      */
     public function prepareBlock()
     {
@@ -171,6 +177,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Prepare references
      *
      * @return $this
+     * @since 2.0.0
      */
     public function prepareReference()
     {
@@ -181,6 +188,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Add parent element name to block attribute
      *
      * @return $this
+     * @since 2.0.0
      */
     public function prepareAction()
     {
@@ -194,6 +202,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Prepare action argument
      *
      * @return $this
+     * @since 2.0.0
      */
     public function prepareActionArgument()
     {
@@ -204,6 +213,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * Returns information is this element allows caching
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCacheable()
     {

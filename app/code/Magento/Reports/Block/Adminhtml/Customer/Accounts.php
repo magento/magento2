@@ -10,16 +10,19 @@ namespace Magento\Reports\Block\Adminhtml\Customer;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Accounts extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Reports';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

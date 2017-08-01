@@ -13,6 +13,7 @@ use Magento\Framework\App\RequestInterface;
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class Form
 {
@@ -20,6 +21,7 @@ abstract class Form
      * Current module path name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_moduleName = '';
 
@@ -27,6 +29,7 @@ abstract class Form
      * Current EAV entity type code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityTypeCode = '';
 
@@ -34,6 +37,7 @@ abstract class Form
      * Current store instance
      *
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_store;
 
@@ -41,6 +45,7 @@ abstract class Form
      * Current entity type instance
      *
      * @var \Magento\Eav\Model\Entity\Type
+     * @since 2.0.0
      */
     protected $_entityType;
 
@@ -48,6 +53,7 @@ abstract class Form
      * Current entity instance
      *
      * @var \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     protected $_entity;
 
@@ -55,6 +61,7 @@ abstract class Form
      * Current form code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_formCode;
 
@@ -62,6 +69,7 @@ abstract class Form
      * Array of form attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -69,6 +77,7 @@ abstract class Form
      * Array of form system attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_systemAttributes;
 
@@ -76,6 +85,7 @@ abstract class Form
      * Array of form user defined attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_userAttributes;
 
@@ -83,6 +93,7 @@ abstract class Form
      * Array of form attributes that is not omitted
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allowedAttributes = null;
 
@@ -90,6 +101,7 @@ abstract class Form
      * Is AJAX request flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isAjax = false;
 
@@ -97,46 +109,55 @@ abstract class Form
      * Whether the invisible form fields need to be filtered/ignored
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_ignoreInvisible = true;
 
     /**
      * @var \Magento\Framework\Validator
+     * @since 2.0.0
      */
     protected $_validator = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_modulesReader;
 
     /**
      * @var \Magento\Eav\Model\AttributeDataFactory
+     * @since 2.0.0
      */
     protected $_attrDataFactory;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @since 2.0.0
      */
     protected $_universalFactory;
 
     /**
      * @var RequestInterface
+     * @since 2.0.0
      */
     protected $_httpRequest;
 
     /**
      * @var \Magento\Framework\Validator\ConfigFactory
+     * @since 2.0.0
      */
     protected $_validatorConfigFactory;
 
@@ -150,6 +171,7 @@ abstract class Form
      * @param \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -181,6 +203,7 @@ abstract class Form
      * Get EAV Entity Form Attribute Collection
      *
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getFormAttributeCollection()
     {
@@ -193,6 +216,7 @@ abstract class Form
      * Get EAV Entity Form Attribute Collection with applied filters
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Attribute\Collection
+     * @since 2.0.0
      */
     protected function _getFilteredFormAttributeCollection()
     {
@@ -211,6 +235,7 @@ abstract class Form
      * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -223,6 +248,7 @@ abstract class Form
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return $this
+     * @since 2.0.0
      */
     public function setEntity(\Magento\Framework\Model\AbstractModel $entity)
     {
@@ -238,6 +264,7 @@ abstract class Form
      *
      * @param \Magento\Eav\Model\Entity\Type|string|int $entityType
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityType($entityType)
     {
@@ -250,6 +277,7 @@ abstract class Form
      *
      * @param string $formCode
      * @return $this
+     * @since 2.0.0
      */
     public function setFormCode($formCode)
     {
@@ -261,6 +289,7 @@ abstract class Form
      * Return current store instance
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -275,6 +304,7 @@ abstract class Form
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
+     * @since 2.0.0
      */
     public function getFormCode()
     {
@@ -289,6 +319,7 @@ abstract class Form
      * Return EAV entity type if entity type is not defined
      *
      * @return \Magento\Eav\Model\Entity\Type
+     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -303,6 +334,7 @@ abstract class Form
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -316,6 +348,7 @@ abstract class Form
      * Return array of form attributes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -343,6 +376,7 @@ abstract class Form
      *
      * @param string $attributeCode
      * @return \Magento\Eav\Model\Entity\Attribute|bool
+     * @since 2.0.0
      */
     public function getAttribute($attributeCode)
     {
@@ -357,6 +391,7 @@ abstract class Form
      * Return array of form user defined attributes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getUserAttributes()
     {
@@ -371,6 +406,7 @@ abstract class Form
      * Return array of form system attributes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSystemAttributes()
     {
@@ -385,6 +421,7 @@ abstract class Form
      * Get not omitted attributes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedAttributes()
     {
@@ -400,6 +437,7 @@ abstract class Form
      *
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
+     * @since 2.0.0
      */
     protected function _getAttributeDataModel(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -414,6 +452,7 @@ abstract class Form
      *
      * @param array $data
      * @return RequestInterface
+     * @since 2.0.0
      */
     public function prepareRequest(array $data)
     {
@@ -430,6 +469,7 @@ abstract class Form
      * @param string $scope the request scope
      * @param bool $scopeOnly search value only in scope or search value in global too
      * @return array
+     * @since 2.0.0
      */
     public function extractData(RequestInterface $request, $scope = null, $scopeOnly = true)
     {
@@ -449,6 +489,7 @@ abstract class Form
      *
      * @param array $data
      * @return \Magento\Framework\Validator
+     * @since 2.0.0
      */
     protected function _getValidator(array $data)
     {
@@ -476,6 +517,7 @@ abstract class Form
      *
      * @param array $data
      * @return bool|array
+     * @since 2.0.0
      */
     public function validateData(array $data)
     {
@@ -495,6 +537,7 @@ abstract class Form
      *
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     public function compactData(array $data)
     {
@@ -516,6 +559,7 @@ abstract class Form
      *
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     public function restoreData(array $data)
     {
@@ -536,6 +580,7 @@ abstract class Form
      *
      * @param string $format
      * @return array
+     * @since 2.0.0
      */
     public function outputData($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
@@ -553,6 +598,7 @@ abstract class Form
      * Restore entity original data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function resetEntityData()
     {
@@ -569,6 +615,7 @@ abstract class Form
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setIsAjaxRequest($flag = true)
     {
@@ -581,6 +628,7 @@ abstract class Form
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsAjaxRequest()
     {
@@ -591,6 +639,7 @@ abstract class Form
      * Set default attribute values for new entity
      *
      * @return $this
+     * @since 2.0.0
      */
     public function initDefaultValues()
     {
@@ -611,6 +660,7 @@ abstract class Form
      *
      * @param mixed $setValue
      * @return bool|$this
+     * @since 2.0.0
      */
     public function ignoreInvisible($setValue = null)
     {
@@ -626,6 +676,7 @@ abstract class Form
      *
      * @param \Magento\Eav\Model\Attribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAttributeOmitted($attribute)
     {

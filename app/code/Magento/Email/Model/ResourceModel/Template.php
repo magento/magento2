@@ -11,12 +11,14 @@ use Magento\Framework\Model\AbstractModel;
  * Template db resource
  *
  * @api
+ * @since 2.0.0
  */
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -29,6 +31,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize email template resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,6 +43,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Email\Model\Template $template
      * @return bool
+     * @since 2.0.0
      */
     public function checkCodeUsage(\Magento\Email\Model\Template $template)
     {
@@ -71,6 +75,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -84,6 +89,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $paths
      * @param int|string $templateId
      * @return array
+     * @since 2.0.0
      */
     public function getSystemConfigByPathsAndTemplateId($paths, $templateId)
     {

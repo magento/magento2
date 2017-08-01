@@ -7,10 +7,16 @@ namespace Magento\Catalog\Model\Attribute\Source;
 
 use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Attribute\Source\Scopes
+ *
+ * @since 2.0.0
+ */
 class Scopes implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

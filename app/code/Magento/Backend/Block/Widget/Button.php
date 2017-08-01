@@ -11,6 +11,7 @@ namespace Magento\Backend\Block\Widget;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Button extends \Magento\Backend\Block\Widget
 {
@@ -18,6 +19,7 @@ class Button extends \Magento\Backend\Block\Widget
      * Define block template
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Button extends \Magento\Backend\Block\Widget
      * Retrieve button type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -42,6 +45,7 @@ class Button extends \Magento\Backend\Block\Widget
      * Retrieve onclick handler
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getOnClick()
     {
@@ -52,6 +56,7 @@ class Button extends \Magento\Backend\Block\Widget
      * Retrieve attributes html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributesHtml()
     {
@@ -80,6 +85,7 @@ class Button extends \Magento\Backend\Block\Widget
      * @param array $classes
      * @param string $disabled
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareAttributes($title, $classes, $disabled)
     {
@@ -107,6 +113,7 @@ class Button extends \Magento\Backend\Block\Widget
      *
      * @param array $attributes
      * @return string
+     * @since 2.0.0
      */
     protected function _attributesToHtml($attributes)
     {

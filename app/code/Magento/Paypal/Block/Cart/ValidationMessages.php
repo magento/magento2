@@ -12,11 +12,13 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
  * PayPal order review page validation messages block
  *
  * @api
+ * @since 2.0.0
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
     /**
      * @var \Magento\Checkout\Helper\Cart
+     * @since 2.0.0
      */
     protected $cartHelper;
 
@@ -28,6 +30,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * @param InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -51,6 +54,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -65,6 +69,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * Add quote messages
      *
      * @return void
+     * @since 2.0.0
      */
     protected function addQuoteMessages()
     {

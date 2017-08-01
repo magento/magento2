@@ -9,11 +9,13 @@ namespace Magento\Cms\Block\Widget;
  * Cms Static Block Widget
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Block extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
+     * @since 2.0.0
      */
     protected $_filterProvider;
 
@@ -21,6 +23,7 @@ class Block extends \Magento\Framework\View\Element\Template implements \Magento
      * Storage for used widgets
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_widgetUsageMap = [];
 
@@ -28,6 +31,7 @@ class Block extends \Magento\Framework\View\Element\Template implements \Magento
      * Block factory
      *
      * @var \Magento\Cms\Model\BlockFactory
+     * @since 2.0.0
      */
     protected $_blockFactory;
 
@@ -36,6 +40,7 @@ class Block extends \Magento\Framework\View\Element\Template implements \Magento
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,6 +58,7 @@ class Block extends \Magento\Framework\View\Element\Template implements \Magento
      * Prevent blocks recursion if needed
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

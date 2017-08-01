@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote;
  * Checks is order total in allowed range or not
  *
  * @api
+ * @since 2.0.0
  */
 class TotalMinMax implements SpecificationInterface
 {
@@ -31,6 +32,7 @@ class TotalMinMax implements SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {

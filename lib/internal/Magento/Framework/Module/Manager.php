@@ -12,6 +12,7 @@ namespace Magento\Framework\Module;
  * ```php
  *  $manager->isEnabled('Vendor_Module');
  * ```
+ * @since 2.0.0
  */
 class Manager
 {
@@ -19,8 +20,9 @@ class Manager
      * The checker of output modules.
      *
      * @var Output\ConfigInterface the config checker of output modules.
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
      * The property can be removed in a future major release
+     * @since 2.2.0
      */
     private $outputConfig;
 
@@ -28,6 +30,7 @@ class Manager
      * The list of all modules.
      *
      * @var ModuleListInterface the list of all modules.
+     * @since 2.2.0
      */
     private $moduleList;
 
@@ -35,8 +38,9 @@ class Manager
      * The list of config paths to ignore.
      *
      * @var array the list of config paths to ignore.
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
      * The property can be removed in a future major release
+     * @since 2.2.0
      */
     private $outputConfigPaths;
 
@@ -46,6 +50,7 @@ class Manager
      * @param Output\ConfigInterface $outputConfig the checker of output modules
      * @param ModuleListInterface $moduleList the list of all modules
      * @param array $outputConfigPaths the list of config paths to ignore
+     * @since 2.0.0
      */
     public function __construct(
         Output\ConfigInterface $outputConfig,
@@ -63,6 +68,7 @@ class Manager
      * @param string $moduleName the fully-qualified module name
      *
      * @return boolean true if module is enabled, false otherwise
+     * @since 2.0.0
      */
     public function isEnabled($moduleName)
     {
@@ -75,7 +81,8 @@ class Manager
      * @param string $moduleName the fully-qualified module name.
      *
      * @return boolean
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @since 2.0.0
      */
     public function isOutputEnabled($moduleName)
     {
@@ -88,9 +95,10 @@ class Manager
      * @param string $moduleName Fully-qualified module name
      *
      * @return boolean
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * @deprecated 2.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
      * The method can be removed in a future major release
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _isCustomOutputConfigEnabled($moduleName)
     {

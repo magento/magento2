@@ -11,35 +11,46 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByBasePrice
+ *
+ * @since 2.2.0
+ */
 class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.2.0
      */
     private $catalogHelper;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var BaseSelectProcessorInterface
+     * @since 2.2.0
      */
     private $baseSelectProcessor;
 
@@ -50,6 +61,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
      * @param \Magento\Catalog\Helper\Data $catalogHelper
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param BaseSelectProcessorInterface $baseSelectProcessor
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -70,6 +82,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function build($productId)
     {

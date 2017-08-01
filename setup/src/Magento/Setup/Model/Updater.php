@@ -11,6 +11,7 @@ use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Class Updater passes information to the updater application
+ * @since 2.0.0
  */
 class Updater
 {
@@ -24,6 +25,7 @@ class Updater
 
     /**
      * @var Queue
+     * @since 2.0.0
      */
     private $queue;
 
@@ -31,6 +33,7 @@ class Updater
      * Constructor
      *
      * @param Queue $queue
+     * @since 2.0.0
      */
     public function __construct(Queue $queue)
     {
@@ -44,6 +47,7 @@ class Updater
      * @param string $type
      * @param array $additionalOptions
      * @return string
+     * @since 2.0.0
      */
     public function createUpdaterTask(array $packages, $type, array $additionalOptions = [])
     {

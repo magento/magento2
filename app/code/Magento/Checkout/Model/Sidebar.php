@@ -13,27 +13,32 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Address\Total;
 
 /**
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Sidebar
 {
     /**
      * @var Cart
+     * @since 2.0.0
      */
     protected $cart;
 
     /**
      * @var HelperData
+     * @since 2.0.0
      */
     protected $helperData;
 
     /**
      * @var ResolverInterface
+     * @since 2.0.0
      */
     protected $resolver;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $summaryQty;
 
@@ -42,6 +47,7 @@ class Sidebar
      * @param HelperData $helperData
      * @param ResolverInterface $resolver
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         Cart $cart,
@@ -58,6 +64,7 @@ class Sidebar
      *
      * @param string $error
      * @return array
+     * @since 2.0.0
      */
     public function getResponseData($error = '')
     {
@@ -80,6 +87,7 @@ class Sidebar
      * @param int $itemId
      * @throws LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function checkQuoteItem($itemId)
     {
@@ -95,6 +103,7 @@ class Sidebar
      *
      * @param int $itemId
      * @return $this
+     * @since 2.0.0
      */
     public function removeQuoteItem($itemId)
     {
@@ -110,6 +119,7 @@ class Sidebar
      * @param int $itemQty
      * @throws LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function updateQuoteItem($itemId, $itemQty)
     {
@@ -123,6 +133,7 @@ class Sidebar
      *
      * @param int $itemQty
      * @return int|array
+     * @since 2.0.0
      */
     protected function normalize($itemQty)
     {
@@ -139,6 +150,7 @@ class Sidebar
      * Retrieve summary qty
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getSummaryQty()
     {
@@ -152,6 +164,7 @@ class Sidebar
      * Retrieve summary qty text
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSummaryText()
     {
@@ -162,6 +175,7 @@ class Sidebar
      * Retrieve subtotal block html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSubtotalHtml()
     {

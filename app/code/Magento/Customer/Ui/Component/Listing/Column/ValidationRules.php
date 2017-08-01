@@ -7,10 +7,16 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Column\ValidationRules
+ *
+ * @since 2.0.0
+ */
 class ValidationRules
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $inputValidationMap = [
         'alpha' => 'validate-alpha',
@@ -26,6 +32,7 @@ class ValidationRules
      * @param boolean $isRequired
      * @param array $validationRules
      * @return array
+     * @since 2.0.0
      */
     public function getValidationRules($isRequired, $validationRules)
     {
@@ -55,6 +62,7 @@ class ValidationRules
      *
      * @param ValidationRuleInterface $rule
      * @return string
+     * @since 2.0.0
      */
     protected function getValidationClass(ValidationRuleInterface $rule)
     {
@@ -69,6 +77,7 @@ class ValidationRules
      *
      * @param ValidationRuleInterface $rule
      * @return bool|string
+     * @since 2.0.0
      */
     protected function getRuleValue(ValidationRuleInterface $rule)
     {

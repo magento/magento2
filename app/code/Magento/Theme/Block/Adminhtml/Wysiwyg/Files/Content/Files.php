@@ -12,6 +12,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
  * @method
  *  \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files setStorage(\Magento\Theme\Model\Wysiwyg\Storage $storage)
  * @method \Magento\Theme\Model\Wysiwyg\Storage getStorage()
+ * @since 2.0.0
  */
 class Files extends \Magento\Backend\Block\Template
 {
@@ -19,6 +20,7 @@ class Files extends \Magento\Backend\Block\Template
      * Files list
      *
      * @var null|array
+     * @since 2.0.0
      */
     protected $_files;
 
@@ -26,6 +28,7 @@ class Files extends \Magento\Backend\Block\Template
      * Get files
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFiles()
     {
@@ -40,6 +43,7 @@ class Files extends \Magento\Backend\Block\Template
      * Get files count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getFilesCount()
     {

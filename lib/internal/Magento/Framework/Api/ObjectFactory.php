@@ -6,15 +6,22 @@
 
 namespace Magento\Framework\Api;
 
+/**
+ * Class \Magento\Framework\Api\ObjectFactory
+ *
+ * @since 2.0.0
+ */
 class ObjectFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -27,6 +34,7 @@ class ObjectFactory
      * @param string $className
      * @param array $arguments
      * @return object
+     * @since 2.0.0
      */
     public function create($className, array $arguments)
     {
@@ -38,6 +46,7 @@ class ObjectFactory
      *
      * @param string $className
      * @return object
+     * @since 2.0.0
      */
     public function get($className)
     {

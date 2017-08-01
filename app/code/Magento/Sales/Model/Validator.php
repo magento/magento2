@@ -12,16 +12,19 @@ use Magento\Framework\ObjectManagerInterface;
  * Class Validator
  *
  * @internal
+ * @since 2.2.0
  */
 class Validator
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var ValidatorResultInterfaceFactory
+     * @since 2.2.0
      */
     private $validatorResultFactory;
 
@@ -30,6 +33,7 @@ class Validator
      *
      * @param ObjectManagerInterface $objectManager
      * @param ValidatorResultInterfaceFactory $validatorResult
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -45,6 +49,7 @@ class Validator
      * @param object|null $context
      * @return ValidatorResultInterface
      * @throws ConfigurationMismatchException
+     * @since 2.2.0
      */
     public function validate($entity, array $validators, $context = null)
     {

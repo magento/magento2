@@ -19,16 +19,19 @@ use Magento\Framework\Event\ManagerInterface;
  * Class CreditmemoSender
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class CreditmemoSender extends Sender
 {
     /**
      * @var PaymentHelper
+     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var CreditmemoResource
+     * @since 2.0.0
      */
     protected $creditmemoResource;
 
@@ -36,11 +39,13 @@ class CreditmemoSender extends Sender
      * Global configuration storage.
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $globalConfig;
 
     /**
      * @var Renderer
+     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -48,6 +53,7 @@ class CreditmemoSender extends Sender
      * Application Event Dispatcher
      *
      * @var ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -61,6 +67,7 @@ class CreditmemoSender extends Sender
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
+     * @since 2.0.0
      */
     public function __construct(
         Template $templateContainer,
@@ -95,6 +102,7 @@ class CreditmemoSender extends Sender
      * @param Creditmemo $creditmemo
      * @param bool $forceSyncMode
      * @return bool
+     * @since 2.0.0
      */
     public function send(Creditmemo $creditmemo, $forceSyncMode = false)
     {
@@ -141,6 +149,7 @@ class CreditmemoSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @since 2.0.0
      */
     protected function getPaymentHtml(Order $order)
     {

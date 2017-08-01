@@ -10,15 +10,22 @@ namespace Magento\Framework\Code\Validator;
 use Magento\Framework\Code\ValidatorInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ConstructorIntegrity
+ *
+ * @since 2.0.0
+ */
 class ConstructorIntegrity implements ValidatorInterface
 {
     /**
      * @var \Magento\Framework\Code\Reader\ArgumentsReader
+     * @since 2.0.0
      */
     protected $_argumentsReader;
 
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
     {
@@ -33,6 +40,7 @@ class ConstructorIntegrity implements ValidatorInterface
      * @throws \Magento\Framework\Exception\ValidatorException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function validate($className)
     {

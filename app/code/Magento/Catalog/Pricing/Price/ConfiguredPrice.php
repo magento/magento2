@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
  * Configured price model
+ * @since 2.0.0
  */
 class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
 {
@@ -22,6 +23,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
 
     /**
      * @var null|ItemInterface
+     * @since 2.0.0
      */
     protected $item;
 
@@ -31,6 +33,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param ItemInterface $item
+     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -46,6 +49,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     /**
      * @param ItemInterface $item
      * @return $this
+     * @since 2.0.0
      */
     public function setItem(ItemInterface $item)
     {
@@ -57,6 +61,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      * Get value of configured options
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getOptionsValue()
     {
@@ -85,6 +90,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      * Price value of product with configured options
      *
      * @return bool|float
+     * @since 2.0.0
      */
     public function getValue()
     {

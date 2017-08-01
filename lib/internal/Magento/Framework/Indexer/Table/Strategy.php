@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Indexer\Table;
 
+/**
+ * Class \Magento\Framework\Indexer\Table\Strategy
+ *
+ * @since 2.0.0
+ */
 class Strategy implements StrategyInterface
 {
     /**
      * Application resource
      *
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $resource;
 
@@ -18,6 +24,7 @@ class Strategy implements StrategyInterface
      * Constructor
      *
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource
@@ -29,11 +36,13 @@ class Strategy implements StrategyInterface
      * Use index table directly
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $useIdxTable = false;
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUseIdxTable()
     {
@@ -42,6 +51,7 @@ class Strategy implements StrategyInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setUseIdxTable($value = false)
     {
@@ -51,6 +61,7 @@ class Strategy implements StrategyInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTableName($tablePrefix)
     {
@@ -63,6 +74,7 @@ class Strategy implements StrategyInterface
      * @param string $tablePrefix
      *
      * @return string
+     * @since 2.0.0
      */
     public function prepareTableName($tablePrefix)
     {

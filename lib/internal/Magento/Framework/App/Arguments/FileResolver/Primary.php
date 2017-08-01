@@ -9,21 +9,29 @@ namespace Magento\Framework\App\Arguments\FileResolver;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\App\Arguments\FileResolver\Primary
+ *
+ * @since 2.0.0
+ */
 class Primary implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $configDirectory;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
+     * @since 2.0.0
      */
     protected $iteratorFactory;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -36,6 +44,7 @@ class Primary implements \Magento\Framework\Config\FileResolverInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function get($filename, $scope)
     {

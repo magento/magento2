@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
  * Catalog product link resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Product Link Attributes Table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_attributesTable;
 
@@ -23,6 +25,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Catalog product relation
      *
      * @var Relation
+     * @since 2.0.0
      */
     protected $_catalogProductRelation;
 
@@ -32,6 +35,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param Relation $catalogProductRelation
      * @param string|null $connectionName
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -45,6 +49,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table name and attributes table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,6 +63,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $linkId
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function deleteProductLink($linkId)
     {
@@ -72,6 +78,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $typeId
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function getProductLinkId($parentId, $linkedProductId, $typeId)
     {
@@ -101,6 +108,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $parentId ID of product
      * @return bool
+     * @since 2.2.0
      */
     public function hasProductLinks($parentId)
     {
@@ -129,6 +137,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function saveProductLinks($parentId, $data, $typeId)
     {
@@ -199,6 +208,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $type
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     protected function _prepareAttributeValue($type, $value)
     {
@@ -215,6 +225,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $typeId
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesByType($typeId)
     {
@@ -234,6 +245,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeTypeTable($type)
     {
@@ -249,6 +261,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param int $typeId
      * @return array
+     * @since 2.0.0
      */
     public function getChildrenIds($parentId, $typeId)
     {
@@ -279,6 +292,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int|array $childId
      * @param int $typeId
      * @return string[]
+     * @since 2.0.0
      */
     public function getParentIdsByChild($childId, $typeId)
     {

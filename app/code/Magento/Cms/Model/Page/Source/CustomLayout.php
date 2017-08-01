@@ -7,11 +7,13 @@ namespace Magento\Cms\Model\Page\Source;
 
 /**
  * Custom layout source
+ * @since 2.0.0
  */
 class CustomLayout extends PageLayout
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

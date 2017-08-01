@@ -17,41 +17,49 @@ use Psr\Log\LoggerInterface;
 /**
  * Class UpdateCommand
  * Command executes in case change store url
+ * @since 2.2.0
  */
 class UpdateCommand implements CommandInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $updateUrlPath = 'analytics/url/update';
 
     /**
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
     /**
      * @var Http\ClientInterface
+     * @since 2.2.0
      */
     private $httpClient;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
     /**
      * @var ResponseResolver
+     * @since 2.2.0
      */
     private $responseResolver;
 
@@ -62,6 +70,7 @@ class UpdateCommand implements CommandInterface
      * @param LoggerInterface $logger
      * @param FlagManager $flagManager
      * @param ResponseResolver $responseResolver
+     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -83,6 +92,7 @@ class UpdateCommand implements CommandInterface
      * Executes update request to MBI api in case store url was changed
      *
      * @return bool
+     * @since 2.2.0
      */
     public function execute()
     {

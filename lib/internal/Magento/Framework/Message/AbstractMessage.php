@@ -9,31 +9,37 @@ namespace Magento\Framework\Message;
  * Abstract message model
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractMessage implements MessageInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $text;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $identifier;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $isSticky = false;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $data;
 
     /**
      * @param string $text
+     * @since 2.0.0
      */
     public function __construct(
         $text = null
@@ -45,6 +51,7 @@ abstract class AbstractMessage implements MessageInterface
      * Getter message type
      *
      * @return string
+     * @since 2.0.0
      */
     abstract public function getType();
 
@@ -52,6 +59,7 @@ abstract class AbstractMessage implements MessageInterface
      * Getter for text of message
      *
      * @return string
+     * @since 2.0.0
      */
     public function getText()
     {
@@ -63,6 +71,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $text
      * @return $this
+     * @since 2.0.0
      */
     public function setText($text)
     {
@@ -75,6 +84,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $identifier
      * @return $this
+     * @since 2.0.0
      */
     public function setIdentifier($identifier)
     {
@@ -86,6 +96,7 @@ abstract class AbstractMessage implements MessageInterface
      * Getter message identifier
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentifier()
     {
@@ -97,6 +108,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param bool $isSticky
      * @return $this
+     * @since 2.0.0
      */
     public function setIsSticky($isSticky = true)
     {
@@ -109,6 +121,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsSticky()
     {
@@ -119,6 +132,7 @@ abstract class AbstractMessage implements MessageInterface
      * Retrieve message as a string
      *
      * @return string
+     * @since 2.0.0
      */
     public function toString()
     {
@@ -132,6 +146,7 @@ abstract class AbstractMessage implements MessageInterface
      * @param array $data
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function setData(array $data = [])
     {
@@ -152,6 +167,7 @@ abstract class AbstractMessage implements MessageInterface
      * Returns message data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getData()
     {

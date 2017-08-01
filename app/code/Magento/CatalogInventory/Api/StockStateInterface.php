@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockStateInterface
  * @api
+ * @since 2.0.0
  */
 interface StockStateInterface
 {
@@ -15,6 +16,7 @@ interface StockStateInterface
      * @param int $productId
      * @param int $scopeId
      * @return bool
+     * @since 2.0.0
      */
     public function verifyStock($productId, $scopeId = null);
 
@@ -22,6 +24,7 @@ interface StockStateInterface
      * @param int $productId
      * @param int $scopeId
      * @return bool
+     * @since 2.0.0
      */
     public function verifyNotification($productId, $scopeId = null);
 
@@ -32,6 +35,7 @@ interface StockStateInterface
      * @param float $origQty
      * @param int $scopeId
      * @return int
+     * @since 2.0.0
      */
     public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null);
 
@@ -43,6 +47,7 @@ interface StockStateInterface
      * @param int $scopeId
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function checkQty($productId, $qty, $scopeId = null);
 
@@ -54,6 +59,7 @@ interface StockStateInterface
      * @param float $qty
      * @param int $scopeId
      * @return float
+     * @since 2.0.0
      */
     public function suggestQty($productId, $qty, $scopeId = null);
 
@@ -63,6 +69,7 @@ interface StockStateInterface
      * @param int $productId
      * @param int $scopeId
      * @return float
+     * @since 2.0.0
      */
     public function getStockQty($productId, $scopeId = null);
 }

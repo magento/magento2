@@ -9,6 +9,7 @@ use Composer\Package\Version\VersionParser;
 
 /**
  * Checks for conflicts between modules
+ * @since 2.0.0
  */
 class ConflictChecker
 {
@@ -16,6 +17,7 @@ class ConflictChecker
      * Enabled module list
      *
      * @var ModuleList
+     * @since 2.0.0
      */
     private $list;
 
@@ -23,6 +25,7 @@ class ConflictChecker
      * Composer package info
      *
      * @var PackageInfo
+     * @since 2.0.0
      */
     private $packageInfo;
 
@@ -31,6 +34,7 @@ class ConflictChecker
      *
      * @param ModuleList $list
      * @param PackageInfoFactory $packageInfoFactory
+     * @since 2.0.0
      */
     public function __construct(ModuleList $list, PackageInfoFactory $packageInfoFactory)
     {
@@ -45,6 +49,7 @@ class ConflictChecker
      * @param string[] $currentlyEnabledModules
      *
      * @return array
+     * @since 2.0.0
      */
     public function checkConflictsWhenEnableModules($moduleNames, $currentlyEnabledModules = null)
     {
@@ -71,6 +76,7 @@ class ConflictChecker
      * @param string $moduleA
      * @param string $moduleB
      * @return string[]
+     * @since 2.0.0
      */
     private function getConflictMessages($moduleA, $moduleB)
     {

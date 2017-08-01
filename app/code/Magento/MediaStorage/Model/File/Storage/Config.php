@@ -10,12 +10,18 @@ use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\MediaStorage\Model\File\Storage\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**
      * Config cache file path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $cacheFilePath;
 
@@ -23,6 +29,7 @@ class Config
      * Loaded config
      *
      * @var array
+     * @since 2.0.0
      */
     protected $config;
 
@@ -30,6 +37,7 @@ class Config
      * File stream handler
      *
      * @var DirectoryWrite
+     * @since 2.0.0
      */
     protected $rootDirectory;
 
@@ -37,6 +45,7 @@ class Config
      * @param \Magento\MediaStorage\Model\File\Storage $storage
      * @param \Magento\Framework\Filesystem $filesystem
      * @param string $cacheFile
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\MediaStorage\Model\File\Storage $storage,
@@ -52,6 +61,7 @@ class Config
      * Retrieve media directory
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaDirectory()
     {
@@ -62,6 +72,7 @@ class Config
      * Retrieve list of allowed resources
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedResources()
     {
@@ -72,6 +83,7 @@ class Config
      * Save config in cache file
      *
      * @return void
+     * @since 2.0.0
      */
     public function save()
     {

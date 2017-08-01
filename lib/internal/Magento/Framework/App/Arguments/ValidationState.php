@@ -7,15 +7,22 @@
  */
 namespace Magento\Framework\App\Arguments;
 
+/**
+ * Class \Magento\Framework\App\Arguments\ValidationState
+ *
+ * @since 2.0.0
+ */
 class ValidationState implements \Magento\Framework\Config\ValidationStateInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_appMode;
 
     /**
      * @param string $appMode
+     * @since 2.0.0
      */
     public function __construct($appMode)
     {
@@ -26,6 +33,7 @@ class ValidationState implements \Magento\Framework\Config\ValidationStateInterf
      * Retrieve current validation state
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isValidationRequired()
     {

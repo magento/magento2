@@ -14,10 +14,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Framework\Data\Form as DataForm;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends Generic
 {
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

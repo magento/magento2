@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Layout
+ * @since 2.0.0
  */
 class Layout extends AbstractComponent
 {
@@ -19,21 +20,25 @@ class Layout extends AbstractComponent
 
     /**
      * @var LayoutPool
+     * @since 2.0.0
      */
     protected $layoutPool;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $type;
 
     /**
      * @var LayoutInterface
+     * @since 2.0.0
      */
     protected $layoutTypeObject;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $structure = [];
 
@@ -45,6 +50,7 @@ class Layout extends AbstractComponent
      * @param string $type
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -62,6 +68,7 @@ class Layout extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -72,6 +79,7 @@ class Layout extends AbstractComponent
      * Register component and build layout structure
      *
      * @inheritdoc
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -82,6 +90,7 @@ class Layout extends AbstractComponent
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getStructure()
     {

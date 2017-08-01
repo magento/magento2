@@ -14,6 +14,7 @@ namespace Magento\Reports\Model\ResourceModel\Customer\Totals;
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {
@@ -23,6 +24,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      * @param string $fromDate
      * @param string $toDate
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
@@ -39,6 +41,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      * @param string $fromDate
      * @param string $toDate
      * @return $this
+     * @since 2.0.0
      */
     public function setDateRange($fromDate, $toDate)
     {
@@ -51,6 +54,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      *
      * @param array $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {

@@ -5,10 +5,16 @@
  */
 namespace Magento\Checkout\Block;
 
+/**
+ * Class \Magento\Checkout\Block\Success
+ *
+ * @since 2.0.0
+ */
 class Success extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $_orderFactory;
 
@@ -17,6 +23,7 @@ class Success extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -29,6 +36,7 @@ class Success extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getRealOrderId()
     {

@@ -11,6 +11,11 @@ use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search
+ *
+ * @since 2.0.0
+ */
 class Search extends \Magento\Catalog\Model\Layer
 {
     /**
@@ -22,6 +27,7 @@ class Search extends \Magento\Catalog\Model\Layer
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,

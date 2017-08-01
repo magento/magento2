@@ -9,6 +9,7 @@ use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Data\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * Column name for group by clause
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_columnGroupBy = null;
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * Collection resource
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @since 2.0.0
      */
     protected $_resourceCollection = null;
 
@@ -32,6 +35,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param string $column
      * @return $this
+     * @since 2.0.0
      */
     public function setColumnGroupBy($column)
     {
@@ -45,6 +49,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -69,6 +74,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param DbCollection $collection
      * @return $this
+     * @since 2.0.0
      */
     public function setResourceCollection($collection)
     {
@@ -80,6 +86,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * Merge empty data collection with resource collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _mergeWithEmptyData()
     {
@@ -106,6 +113,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * Group data in resource collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _groupResourceData()
     {

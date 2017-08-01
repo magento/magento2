@@ -9,6 +9,7 @@ namespace Magento\Config\Model\Config\Source\Admin;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Page implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,17 +17,20 @@ class Page implements \Magento\Framework\Option\ArrayInterface
      * Menu model
      *
      * @var \Magento\Backend\Model\Menu
+     * @since 2.0.0
      */
     protected $_menu;
 
     /**
      * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory
+     * @since 2.0.0
      */
     protected $_iteratorFactory;
 
     /**
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory,
@@ -38,6 +42,7 @@ class Page implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -51,6 +56,7 @@ class Page implements \Magento\Framework\Option\ArrayInterface
      *
      * @param \Magento\Backend\Model\Menu $menu menu model
      * @return \Magento\Backend\Model\Menu\Filter\Iterator
+     * @since 2.0.0
      */
     protected function _getMenuIterator(\Magento\Backend\Model\Menu $menu)
     {
@@ -64,6 +70,7 @@ class Page implements \Magento\Framework\Option\ArrayInterface
      * @param \Magento\Backend\Model\Menu $menu
      * @param int $level
      * @return void
+     * @since 2.0.0
      */
     protected function _createOptions(&$optionArray, \Magento\Backend\Model\Menu $menu, $level = 0)
     {

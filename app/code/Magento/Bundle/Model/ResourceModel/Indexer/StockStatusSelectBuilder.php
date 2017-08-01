@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * Is used to create Select object that is used for Bundle product stock status indexation
  *
  * @see \Magento\Bundle\Model\ResourceModel\Indexer\Stock::_getStockStatusSelect
+ * @since 2.2.0
  */
 class StockStatusSelectBuilder
 {
@@ -23,6 +24,7 @@ class StockStatusSelectBuilder
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -38,6 +40,7 @@ class StockStatusSelectBuilder
      * @param Select $select
      * @return Select
      * @throws \Exception
+     * @since 2.2.0
      */
     public function buildSelect(Select $select)
     {
@@ -91,6 +94,7 @@ class StockStatusSelectBuilder
      *
      * @param string $attributeCode
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @since 2.2.0
      */
     private function getAttribute($attributeCode)
     {

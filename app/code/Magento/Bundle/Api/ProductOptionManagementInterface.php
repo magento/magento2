@@ -10,6 +10,7 @@ namespace Magento\Bundle\Api;
  * Option manager for bundle products
  *
  * @api
+ * @since 2.0.0
  */
 interface ProductOptionManagementInterface
 {
@@ -20,6 +21,7 @@ interface ProductOptionManagementInterface
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function save(\Magento\Bundle\Api\Data\OptionInterface $option);
 }

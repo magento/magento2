@@ -7,16 +7,19 @@ namespace Magento\Framework\Data\Form\FormKey;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Validator
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     protected $_formKey;
 
     /**
      * @param \Magento\Framework\Data\Form\FormKey $formKey
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Data\Form\FormKey $formKey)
     {
@@ -28,6 +31,7 @@ class Validator
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\App\RequestInterface $request)
     {

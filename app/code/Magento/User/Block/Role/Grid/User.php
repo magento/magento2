@@ -11,6 +11,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * Acl role user grid.
  *
  * @api
+ * @since 2.0.0
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,6 +19,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,21 +27,25 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Factory for user role model
      *
      * @var \Magento\Authorization\Model\RoleFactory
+     * @since 2.0.0
      */
     protected $_roleFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
+     * @since 2.0.0
      */
     protected $_userRolesFactory;
 
     /**
      * @var bool|array
+     * @since 2.1.0
      */
     protected $restoredUsersFormData;
 
@@ -51,6 +57,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -72,6 +79,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,6 +93,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -108,6 +117,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -120,6 +130,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -176,6 +187,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -186,6 +198,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param bool $json
      * @return string|array
+     * @since 2.0.0
      */
     public function getUsers($json = false)
     {
@@ -227,6 +240,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get Form Data if exist
      *
      * @return array|bool
+     * @since 2.1.0
      */
     protected function getUsersFormData()
     {
@@ -241,6 +255,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Restore Users Form Data from the registry
      *
      * @return array|bool
+     * @since 2.1.0
      */
     protected function restoreUsersFormData()
     {

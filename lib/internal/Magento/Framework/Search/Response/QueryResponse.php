@@ -12,6 +12,7 @@ use Magento\Framework\Search\ResponseInterface;
 /**
  * Search Response
  * @api
+ * @since 2.0.0
  */
 class QueryResponse implements ResponseInterface
 {
@@ -19,6 +20,7 @@ class QueryResponse implements ResponseInterface
      * Document Collection
      *
      * @var Document[]
+     * @since 2.0.0
      */
     protected $documents;
 
@@ -26,12 +28,14 @@ class QueryResponse implements ResponseInterface
      * Aggregation Collection
      *
      * @var AggregationInterface
+     * @since 2.0.0
      */
     protected $aggregations;
 
     /**
      * @param Document[] $documents
      * @param AggregationInterface $aggregations
+     * @since 2.0.0
      */
     public function __construct(array $documents, AggregationInterface $aggregations)
     {
@@ -42,6 +46,7 @@ class QueryResponse implements ResponseInterface
     /**
      * Countable: return count of fields in document
      * @return int
+     * @since 2.0.0
      */
     public function count()
     {
@@ -52,6 +57,7 @@ class QueryResponse implements ResponseInterface
      * Implementation of \IteratorAggregate::getIterator()
      *
      * @return \ArrayIterator
+     * @since 2.0.0
      */
     public function getIterator()
     {
@@ -60,6 +66,7 @@ class QueryResponse implements ResponseInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAggregations()
     {

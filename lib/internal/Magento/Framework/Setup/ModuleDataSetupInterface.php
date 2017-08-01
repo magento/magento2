@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * DB data resource interface for a module
  *
  * @api
+ * @since 2.0.0
  */
 interface ModuleDataSetupInterface extends SetupInterface
 {
@@ -34,6 +35,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      * @param string|null $parentField
      * @param string|integer $parentId
      * @return mixed
+     * @since 2.0.0
      */
     public function getTableRow($table, $idField, $rowId, $field = null, $parentField = null, $parentId = 0);
 
@@ -46,6 +48,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      * @param null|string $parentField
      * @param int|string $parentId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteTableRow($table, $idField, $rowId, $parentField = null, $parentId = 0);
 
@@ -60,6 +63,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      * @param string $parentField
      * @param string|integer $parentId
      * @return $this
+     * @since 2.0.0
      */
     public function updateTableRow($table, $idField, $rowId, $field, $value = null, $parentField = null, $parentId = 0);
 
@@ -67,6 +71,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      * Gets event manager
      *
      * @return \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     public function getEventManager();
 
@@ -74,6 +79,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      * Gets filesystem
      *
      * @return \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     public function getFilesystem();
 
@@ -82,6 +88,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      *
      * @param array $data
      * @return \Magento\Framework\Module\Setup\Migration
+     * @since 2.0.0
      */
     public function createMigrationSetup(array $data = []);
 
@@ -89,6 +96,7 @@ interface ModuleDataSetupInterface extends SetupInterface
      * Gets setup cache
      *
      * @return DataCacheInterface
+     * @since 2.0.0
      */
     public function getSetupCache();
 }

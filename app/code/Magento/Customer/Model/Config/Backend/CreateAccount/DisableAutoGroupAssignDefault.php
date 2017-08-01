@@ -5,10 +5,16 @@
  */
 namespace Magento\Customer\Model\Config\Backend\CreateAccount;
 
+/**
+ * Class \Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault
+ *
+ * @since 2.0.0
+ */
 class DisableAutoGroupAssignDefault extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
@@ -21,6 +27,7 @@ class DisableAutoGroupAssignDefault extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -40,6 +47,7 @@ class DisableAutoGroupAssignDefault extends \Magento\Framework\App\Config\Value
      * Save EAV default value after save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

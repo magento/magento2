@@ -22,6 +22,7 @@ use Magento\Cms\Helper\Page as PageHelper;
  * @method Page setStoreId(array $storeId)
  * @method array getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 2.0.0
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
@@ -44,6 +45,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 
@@ -51,11 +53,13 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'cms_page';
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -63,6 +67,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,6 +80,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * @param int|null $id
      * @param string $field
      * @return $this
+     * @since 2.0.0
      */
     public function load($id, $field = null)
     {
@@ -88,6 +94,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Load No-Route Page
      *
      * @return \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     public function noRoutePage()
     {
@@ -98,6 +105,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Receive page store ids
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getStores()
     {
@@ -111,6 +119,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * @param string $identifier
      * @param int $storeId
      * @return int
+     * @since 2.0.0
      */
     public function checkIdentifier($identifier, $storeId)
     {
@@ -122,6 +131,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Available event cms_page_get_available_statuses to customize statuses.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAvailableStatuses()
     {
@@ -132,6 +142,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get identities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -142,6 +153,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get ID
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -152,6 +164,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get identifier
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentifier()
     {
@@ -162,6 +175,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -172,6 +186,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get page layout
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPageLayout()
     {
@@ -182,6 +197,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get meta title
      *
      * @return string|null
+     * @since 2.1.0
      */
     public function getMetaTitle()
     {
@@ -192,6 +208,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get meta keywords
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMetaKeywords()
     {
@@ -202,6 +219,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get meta description
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMetaDescription()
     {
@@ -212,6 +230,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get content heading
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContentHeading()
     {
@@ -222,6 +241,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -232,6 +252,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get creation time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreationTime()
     {
@@ -242,6 +263,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get update time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdateTime()
     {
@@ -252,6 +274,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get sort order
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -262,6 +285,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get layout update xml
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLayoutUpdateXml()
     {
@@ -272,6 +296,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get custom theme
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomTheme()
     {
@@ -282,6 +307,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get custom root template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomRootTemplate()
     {
@@ -292,6 +318,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get custom layout update xml
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomLayoutUpdateXml()
     {
@@ -302,6 +329,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get custom theme from
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomThemeFrom()
     {
@@ -312,6 +340,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get custom theme to
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomThemeTo()
     {
@@ -322,6 +351,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Is active
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isActive()
     {
@@ -333,6 +363,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param int $id
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -344,6 +375,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $identifier
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setIdentifier($identifier)
     {
@@ -355,6 +387,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $title
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -366,6 +399,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $pageLayout
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setPageLayout($pageLayout)
     {
@@ -377,6 +411,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.1.0
      */
     public function setMetaTitle($metaTitle)
     {
@@ -388,6 +423,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $metaKeywords
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setMetaKeywords($metaKeywords)
     {
@@ -399,6 +435,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $metaDescription
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setMetaDescription($metaDescription)
     {
@@ -410,6 +447,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $contentHeading
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setContentHeading($contentHeading)
     {
@@ -421,6 +459,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $content
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setContent($content)
     {
@@ -432,6 +471,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $creationTime
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCreationTime($creationTime)
     {
@@ -443,6 +483,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $updateTime
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setUpdateTime($updateTime)
     {
@@ -454,6 +495,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $sortOrder
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -465,6 +507,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $layoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setLayoutUpdateXml($layoutUpdateXml)
     {
@@ -476,6 +519,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $customTheme
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomTheme($customTheme)
     {
@@ -487,6 +531,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $customRootTemplate
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomRootTemplate($customRootTemplate)
     {
@@ -498,6 +543,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $customLayoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomLayoutUpdateXml($customLayoutUpdateXml)
     {
@@ -509,6 +555,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $customThemeFrom
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomThemeFrom($customThemeFrom)
     {
@@ -520,6 +567,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $customThemeTo
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setCustomThemeTo($customThemeTo)
     {
@@ -531,6 +579,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param int|bool $isActive
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 2.0.0
      */
     public function setIsActive($isActive)
     {
@@ -539,6 +588,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function beforeSave()
     {
@@ -567,6 +617,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * @return ScopeConfigInterface
+     * @since 2.1.0
      */
     private function getScopeConfig()
     {

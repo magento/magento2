@@ -11,41 +11,49 @@ use Magento\Store\Api\StoreResolverInterface;
 
 /**
  * Class LayoutProcessor
+ * @since 2.0.0
  */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
      * @var \Magento\Customer\Model\AttributeMetadataDataProvider
+     * @since 2.0.0
      */
     private $attributeMetadataDataProvider;
 
     /**
      * @var \Magento\Ui\Component\Form\AttributeMapper
+     * @since 2.0.0
      */
     protected $attributeMapper;
 
     /**
      * @var AttributeMerger
+     * @since 2.0.0
      */
     protected $merger;
 
     /**
      * @var \Magento\Customer\Model\Options
+     * @since 2.1.0
      */
     private $options;
 
     /**
      * @var Data
+     * @since 2.2.0
      */
     private $checkoutDataHelper;
 
     /**
      * @var StoreResolverInterface
+     * @since 2.2.0
      */
     private $storeResolver;
 
     /**
      * @var \Magento\Shipping\Model\Config
+     * @since 2.2.0
      */
     private $shippingConfig;
 
@@ -53,6 +61,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
@@ -65,8 +74,9 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Customer\Model\Options
+     * @since 2.1.0
      */
     private function getOptions()
     {
@@ -78,6 +88,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
     /**
      * @return array
+     * @since 2.1.0
      */
     private function getAddressAttributes()
     {
@@ -108,6 +119,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param array $elements address attributes
      * @param array $attributesToConvert fields and their callbacks
      * @return array
+     * @since 2.1.0
      */
     private function convertElementsToSelect($elements, $attributesToConvert)
     {
@@ -139,6 +151,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @param array $jsLayout
      * @return array
+     * @since 2.0.0
      */
     public function process($jsLayout)
     {
@@ -189,6 +202,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      *
      * @param array $shippingRatesLayout
      * @return array
+     * @since 2.2.0
      */
     private function processShippingChildrenComponents($shippingRatesLayout)
     {
@@ -209,6 +223,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param array $paymentLayout
      * @param array $elements
      * @return array
+     * @since 2.2.0
      */
     private function processPaymentChildrenComponents(array $paymentLayout, array $elements)
     {
@@ -248,6 +263,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param array $configuration list of payment components
      * @param array $elements attributes that must be displayed in address form
      * @return array
+     * @since 2.0.0
      */
     private function processPaymentConfiguration(array &$configuration, array $elements)
     {
@@ -271,6 +287,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param string $paymentCode
      * @param array $elements
      * @return array
+     * @since 2.2.0
      */
     private function getBillingAddressComponent($paymentCode, $elements)
     {
@@ -345,7 +362,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Get checkout data helper instance
      *
      * @return Data
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getCheckoutDataHelper()
     {
@@ -360,7 +378,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Retrieve Shipping Configuration.
      *
      * @return \Magento\Shipping\Model\Config
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getShippingConfig()
     {
@@ -375,7 +394,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Get store resolver.
      *
      * @return StoreResolverInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getStoreResolver()
     {

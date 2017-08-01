@@ -5,17 +5,24 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory
+ *
+ * @since 2.0.0
+ */
 class HandlerFactory
 {
     /**
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -29,6 +36,7 @@ class HandlerFactory
      * @param array $arguments
      * @return object
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($instance, array $arguments = [])
     {

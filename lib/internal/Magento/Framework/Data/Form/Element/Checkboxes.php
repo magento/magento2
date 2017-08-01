@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
  * Form select element
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Checkboxes extends AbstractElement
 {
@@ -19,6 +20,7 @@ class Checkboxes extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -35,6 +37,7 @@ class Checkboxes extends AbstractElement
      * Retrieve allow attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -56,6 +59,7 @@ class Checkboxes extends AbstractElement
      * Prepare value list
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareValues()
     {
@@ -91,6 +95,7 @@ class Checkboxes extends AbstractElement
      * Retrieve HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -112,6 +117,7 @@ class Checkboxes extends AbstractElement
     /**
      * @param mixed $value
      * @return string|void
+     * @since 2.0.0
      */
     public function getChecked($value)
     {
@@ -136,6 +142,7 @@ class Checkboxes extends AbstractElement
     /**
      * @param mixed $value
      * @return string
+     * @since 2.0.0
      */
     public function getDisabled($value)
     {
@@ -157,6 +164,7 @@ class Checkboxes extends AbstractElement
     /**
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     public function getOnclick($value)
     {
@@ -169,6 +177,7 @@ class Checkboxes extends AbstractElement
     /**
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     public function getOnchange($value)
     {
@@ -189,6 +198,7 @@ class Checkboxes extends AbstractElement
     /**
      * @param array $option
      * @return string
+     * @since 2.0.0
      */
     protected function _optionToHtml($option)
     {

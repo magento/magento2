@@ -8,21 +8,25 @@ namespace Magento\Checkout\Block\Cart;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
      * @var \Magento\Checkout\Model\CompositeConfigProvider
+     * @since 2.0.0
      */
     protected $configProvider;
 
     /**
      * @var array|\Magento\Checkout\Block\Checkout\LayoutProcessorInterface[]
+     * @since 2.0.0
      */
     protected $layoutProcessors;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -35,6 +39,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -58,6 +63,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCheckoutConfig()
     {
@@ -68,6 +74,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Retrieve serialized JS layout configuration ready to use in template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -82,6 +89,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -90,6 +98,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool|string
+     * @since 2.2.0
      */
     public function getSerializedCheckoutConfig()
     {

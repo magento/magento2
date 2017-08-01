@@ -14,6 +14,11 @@ namespace Magento\Tax\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rule
+ *
+ * @since 2.0.0
+ */
 abstract class Rule extends \Magento\Backend\App\Action
 {
     /**
@@ -27,13 +32,20 @@ abstract class Rule extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
-    /** @var \Magento\Tax\Api\TaxRuleRepositoryInterface */
+    /**
+     * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
+     * @since 2.0.0
+     */
     protected $ruleService;
 
-    /** @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory */
+    /**
+     * @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory
+     * @since 2.0.0
+     */
     protected $taxRuleDataObjectFactory;
 
     /**
@@ -41,6 +53,7 @@ abstract class Rule extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Tax\Api\TaxRuleRepositoryInterface $ruleService
      * @param \Magento\Tax\Api\Data\TaxRuleInterfaceFactory $taxRuleDataObjectFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -58,6 +71,7 @@ abstract class Rule extends \Magento\Backend\App\Action
      * Initialize action
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     protected function initResultPage()
     {
@@ -74,6 +88,7 @@ abstract class Rule extends \Magento\Backend\App\Action
      * @param array $postData
      * @return \Magento\Tax\Api\Data\TaxRuleInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function populateTaxRule($postData)
     {

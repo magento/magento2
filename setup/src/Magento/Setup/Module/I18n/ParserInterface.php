@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\I18n;
 
 /**
  * Parser Interface
+ * @since 2.0.0
  */
 interface ParserInterface
 {
@@ -15,6 +16,7 @@ interface ParserInterface
      *
      * @param array $parseOptions
      * @return array
+     * @since 2.0.0
      */
     public function parse(array $parseOptions);
 
@@ -22,6 +24,7 @@ interface ParserInterface
      * Get parsed phrases
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPhrases();
 }

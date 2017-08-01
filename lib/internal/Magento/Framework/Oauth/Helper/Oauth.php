@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Oauth\Helper;
 
+/**
+ * Class \Magento\Framework\Oauth\Helper\Oauth
+ *
+ * @since 2.0.0
+ */
 class Oauth
 {
     /**
@@ -43,11 +48,13 @@ class Oauth
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $_mathRandom;
 
     /**
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Math\Random $mathRandom)
     {
@@ -59,6 +66,7 @@ class Oauth
      *
      * @param int $length String length
      * @return string
+     * @since 2.0.0
      */
     public function generateRandomString($length)
     {
@@ -72,6 +80,7 @@ class Oauth
      * Generate random string for token
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateToken()
     {
@@ -82,6 +91,7 @@ class Oauth
      * Generate random string for token secret
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateTokenSecret()
     {
@@ -92,6 +102,7 @@ class Oauth
      * Generate random string for verifier
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateVerifier()
     {
@@ -102,6 +113,7 @@ class Oauth
      * Generate random string for consumer key
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateConsumerKey()
     {
@@ -112,6 +124,7 @@ class Oauth
      * Generate random string for consumer secret
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateConsumerSecret()
     {

@@ -13,6 +13,7 @@ namespace Magento\Wishlist\Model\ResourceModel;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,6 +21,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -34,6 +36,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param array $sharedStores
      * @return $this
+     * @since 2.0.0
      */
     public function loadByProductWishlist($object, $wishlistId, $productId, $sharedStores)
     {
@@ -56,6 +59,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

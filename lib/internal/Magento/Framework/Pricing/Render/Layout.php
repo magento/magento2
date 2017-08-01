@@ -11,6 +11,7 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Pricing render's layout model
+ * @since 2.0.0
  */
 class Layout
 {
@@ -18,6 +19,7 @@ class Layout
      * Layout Interface
      *
      * @var LayoutInterface
+     * @since 2.0.0
      */
     protected $layout;
 
@@ -26,6 +28,7 @@ class Layout
      *
      * @param LayoutFactory $layoutFactory
      * @param LayoutInterface $generalLayout
+     * @since 2.0.0
      */
     public function __construct(
         LayoutFactory $layoutFactory,
@@ -39,6 +42,7 @@ class Layout
      *
      * @param string|string[] $handle
      * @return void
+     * @since 2.0.0
      */
     public function addHandle($handle)
     {
@@ -49,6 +53,7 @@ class Layout
      * Load layout
      *
      * @return void
+     * @since 2.0.0
      */
     public function loadLayout()
     {
@@ -62,6 +67,7 @@ class Layout
      *
      * @param string $name
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     public function getBlock($name)
     {

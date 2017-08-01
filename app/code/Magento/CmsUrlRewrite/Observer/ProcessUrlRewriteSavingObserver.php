@@ -11,21 +11,29 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Class \Magento\CmsUrlRewrite\Observer\ProcessUrlRewriteSavingObserver
+ *
+ * @since 2.0.0
+ */
 class ProcessUrlRewriteSavingObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
+     * @since 2.0.0
      */
     protected $cmsPageUrlRewriteGenerator;
 
     /**
      * @var UrlPersistInterface
+     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
+     * @since 2.0.0
      */
     public function __construct(CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator, UrlPersistInterface $urlPersist)
     {
@@ -38,6 +46,7 @@ class ProcessUrlRewriteSavingObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

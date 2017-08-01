@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset;
 /**
  * Interface of an asset with locally accessible source file
  * @api
+ * @since 2.0.0
  */
 interface LocalInterface extends AssetInterface
 {
@@ -17,6 +18,7 @@ interface LocalInterface extends AssetInterface
      * Returns absolute path to file in local file system
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSourceFile();
 
@@ -24,6 +26,7 @@ interface LocalInterface extends AssetInterface
      * Get content of a local asset
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent();
 
@@ -31,6 +34,7 @@ interface LocalInterface extends AssetInterface
      * Get an invariant relative path to file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFilePath();
 
@@ -38,6 +42,7 @@ interface LocalInterface extends AssetInterface
      * Get context of the asset that contains data necessary to build an absolute path or URL to the file
      *
      * @return ContextInterface
+     * @since 2.0.0
      */
     public function getContext();
 
@@ -45,6 +50,7 @@ interface LocalInterface extends AssetInterface
      * Get the module context of file path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getModule();
 
@@ -54,6 +60,7 @@ interface LocalInterface extends AssetInterface
      * This path includes both invariant and context part that can serve as an identifier of the file in current context
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPath();
 }

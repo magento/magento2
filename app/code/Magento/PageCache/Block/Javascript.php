@@ -9,6 +9,7 @@ namespace Magento\PageCache\Block;
  * Class Form
  *
  * @api
+ * @since 2.0.0
  */
 class Javascript extends \Magento\Framework\View\Element\Template
 {
@@ -16,6 +17,7 @@ class Javascript extends \Magento\Framework\View\Element\Template
      * Retrieve script options encoded to json
      *
      * @return string
+     * @since 2.0.0
      */
     public function getScriptOptions()
     {

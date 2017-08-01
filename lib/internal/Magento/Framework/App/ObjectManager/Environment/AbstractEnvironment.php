@@ -13,35 +13,46 @@ use Magento\Framework\ObjectManager\Profiler\FactoryDecorator;
 use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\ObjectManager\Profiler\Log;
 
+/**
+ * Class \Magento\Framework\App\ObjectManager\Environment\AbstractEnvironment
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractEnvironment implements EnvironmentInterface
 {
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * Mode name
+     * @since 2.0.0
      */
     protected $mode = 'developer';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $configPreference = \Magento\Framework\ObjectManager\Factory\Dynamic\Developer::class;
 
     /**
      * @var FactoryInterface
+     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @var EnvironmentFactory
+     * @since 2.0.0
      */
     protected $envFactory;
 
     /**
      * @param EnvironmentFactory $envFactory
+     * @since 2.0.0
      */
     public function __construct(EnvironmentFactory $envFactory)
     {
@@ -53,6 +64,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
      *
      * @param array $arguments
      * @return FactoryInterface
+     * @since 2.0.0
      */
     public function getObjectManagerFactory($arguments)
     {
@@ -68,6 +80,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
      * Return name of running mode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMode()
     {
@@ -79,6 +92,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
      *
      * @param array $arguments
      * @return void
+     * @since 2.0.0
      */
     protected function decorate($arguments)
     {
@@ -97,6 +111,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
      * @param string $factoryClass
      *
      * @return FactoryInterface
+     * @since 2.0.0
      */
     protected function createFactory($arguments, $factoryClass)
     {

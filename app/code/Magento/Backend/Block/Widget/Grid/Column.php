@@ -11,7 +11,8 @@ use Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter;
  * Grid column block
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class Column extends \Magento\Backend\Block\Widget
 {
@@ -19,6 +20,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Parent grid
      *
      * @var \Magento\Backend\Block\Widget\Grid
+     * @since 2.0.0
      */
     protected $_grid;
 
@@ -26,6 +28,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Column renderer
      *
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+     * @since 2.0.0
      */
     protected $_renderer;
 
@@ -33,6 +36,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Column filter
      *
      * @var AbstractFilter
+     * @since 2.0.0
      */
     protected $_filter;
 
@@ -40,6 +44,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Column css classes
      *
      * @var string|null
+     * @since 2.0.0
      */
     protected $_cssClass = null;
 
@@ -47,6 +52,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Renderer types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_rendererTypes = [
         'action' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action::class,
@@ -75,6 +81,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Filter types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_filterTypes = [
         'datetime' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime::class,
@@ -97,11 +104,13 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * Column is grouped
      * @var bool
+     * @since 2.0.0
      */
     protected $_isGrouped = false;
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -116,6 +125,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Should column be displayed in grid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -127,6 +137,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Backend\Block\Widget\Grid $grid
      * @return $this
+     * @since 2.0.0
      */
     public function setGrid($grid)
     {
@@ -140,6 +151,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get grid block
      *
      * @return \Magento\Backend\Block\Widget\Grid
+     * @since 2.0.0
      */
     public function getGrid()
     {
@@ -150,6 +162,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Retrieve html id of filter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -160,6 +173,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get html code for column properties
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlProperty()
     {
@@ -169,6 +183,7 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * Get Header html
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderHtml()
     {
@@ -179,6 +194,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get column css classes
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCssClass()
     {
@@ -202,6 +218,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get column css property
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCssProperty()
     {
@@ -213,6 +230,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param bool $value
      * @return void
+     * @since 2.0.0
      */
     public function setSortable($value)
     {
@@ -222,6 +240,7 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * Get header css class name
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -234,6 +253,7 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getSortable()
     {
@@ -245,6 +265,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param string $className
      * @return void
+     * @since 2.0.0
      */
     public function addHeaderCssClass($className)
     {
@@ -255,6 +276,7 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * Get header class names
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderHtmlProperty()
     {
@@ -271,6 +293,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
+     * @since 2.0.0
      */
     public function getRowField(\Magento\Framework\DataObject $row)
     {
@@ -299,6 +322,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
+     * @since 2.0.0
      */
     public function getRowFieldExport(\Magento\Framework\DataObject $row)
     {
@@ -323,6 +347,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Retrieve Header Name for Export
      *
      * @return string
+     * @since 2.0.0
      */
     public function getExportHeader()
     {
@@ -338,6 +363,7 @@ class Column extends \Magento\Backend\Block\Widget
      * @param string $value
      * @param array|string $decorators
      * @return string
+     * @since 2.0.0
      */
     protected function &_applyDecorators($value, $decorators)
     {
@@ -365,6 +391,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer $renderer
      * @return $this
+     * @since 2.0.0
      */
     public function setRenderer($renderer)
     {
@@ -378,6 +405,7 @@ class Column extends \Magento\Backend\Block\Widget
      * @param string $type type of renderer
      * @param string $className renderer class name
      * @return void
+     * @since 2.0.0
      */
     public function setRendererType($type, $className)
     {
@@ -388,6 +416,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get renderer class name by renderer type
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getRendererByType()
     {
@@ -403,6 +432,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Retrieve column renderer
      *
      * @return \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+     * @since 2.0.0
      */
     public function getRenderer()
     {
@@ -421,6 +451,7 @@ class Column extends \Magento\Backend\Block\Widget
      *
      * @param string $filterClass filter class name
      * @return void
+     * @since 2.0.0
      */
     public function setFilter($filterClass)
     {
@@ -435,6 +466,7 @@ class Column extends \Magento\Backend\Block\Widget
      * @param string $type type of filter
      * @param string $className filter class name
      * @return void
+     * @since 2.0.0
      */
     public function setFilterType($type, $className)
     {
@@ -445,6 +477,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get column filter class name by filter type
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getFilterByType()
     {
@@ -458,6 +491,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get filter block
      *
      * @return AbstractFilter|false
+     * @since 2.0.0
      */
     public function getFilter()
     {
@@ -482,6 +516,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Get filter html code
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getFilterHtml()
     {
@@ -494,6 +529,7 @@ class Column extends \Magento\Backend\Block\Widget
      * Check if column is grouped
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isGrouped()
     {

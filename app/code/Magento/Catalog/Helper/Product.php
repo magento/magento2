@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Product extends \Magento\Framework\Url\Helper\Data
 {
@@ -27,21 +28,25 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_skipSaleableCheck = false;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_statuses;
 
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_priceBlock;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -49,11 +54,13 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
+     * @since 2.0.0
      */
     protected $_attributeConfig;
 
@@ -61,6 +68,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
+     * @since 2.0.0
      */
     protected $_catalogSession;
 
@@ -68,6 +76,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Invalidate product category indexer params
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_reindexProductCategoryIndexerData;
 
@@ -75,20 +84,26 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Invalidate price indexer params
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_reindexPriceIndexerData;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $_storeManager;
 
     /**
@@ -103,6 +118,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -133,6 +149,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param \Magento\Catalog\Model\Product|array $data
      * @return bool
+     * @since 2.0.0
      */
     public function isDataForPriceIndexerWasChanged($data)
     {
@@ -162,6 +179,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param \Magento\Catalog\Model\Product $data
      * @return bool
+     * @since 2.0.0
      */
     public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
     {
@@ -178,6 +196,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param int|ModelProduct $product
      * @return string|bool
+     * @since 2.0.0
      */
     public function getProductUrl($product)
     {
@@ -194,6 +213,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct $product
      * @return float
+     * @since 2.0.0
      */
     public function getPrice($product)
     {
@@ -205,6 +225,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct $product
      * @return float
+     * @since 2.0.0
      */
     public function getFinalPrice($product)
     {
@@ -216,6 +237,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
+     * @since 2.0.0
      */
     public function getImageUrl($product)
     {
@@ -234,6 +256,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
+     * @since 2.0.0
      */
     public function getSmallImageUrl($product)
     {
@@ -252,6 +275,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
+     * @since 2.0.0
      */
     public function getThumbnailUrl($product)
     {
@@ -268,6 +292,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * @param ModelProduct $product
      * @return string
+     * @since 2.0.0
      */
     public function getEmailToFriendUrl($product)
     {
@@ -281,6 +306,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getStatuses()
     {
@@ -298,6 +324,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param string $where
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function canShow($product, $where = 'catalog')
     {
@@ -320,6 +347,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function canUseCanonicalTag($store = null)
     {
@@ -337,6 +365,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param string $inputType
      * @return array
+     * @since 2.0.0
      */
     public function getAttributeInputTypes($inputType = null)
     {
@@ -363,6 +392,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param string $inputType
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttributeBackendModelByInputType($inputType)
     {
@@ -378,6 +408,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param string $inputType
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttributeSourceModelByInputType($inputType)
     {
@@ -401,6 +432,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @return bool|ModelProduct
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function initProduct($productId, $controller, $params = null)
     {
@@ -479,6 +511,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param ModelProduct $product
      * @param \Magento\Framework\DataObject $buyRequest
      * @return Product
+     * @since 2.0.0
      */
     public function prepareProductOptions($product, $buyRequest)
     {
@@ -502,6 +535,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Framework\DataObject|array $buyRequest
      * @param \Magento\Framework\DataObject|array $params
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function addParamsToBuyRequest($buyRequest, $params)
     {
@@ -543,6 +577,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param bool $skipSaleableCheck
      * @return Product
+     * @since 2.0.0
      */
     public function setSkipSaleableCheck($skipSaleableCheck = false)
     {
@@ -555,6 +590,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getSkipSaleableCheck()
     {
@@ -565,6 +601,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Get masks for auto generation of fields
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getFieldsAutogenerationMasks()
     {
@@ -575,6 +612,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve list of attributes that allowed for autogeneration
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesAllowedForAutogeneration()
     {

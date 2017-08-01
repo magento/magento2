@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\View;
  * Adminhtml sales item renderer
  *
  * @api
+ * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -16,6 +17,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -26,6 +28,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -36,6 +39,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order totals block settings
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalData()
     {
@@ -46,6 +50,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve creditmemo model instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -56,6 +61,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get order url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOrderUrl()
     {

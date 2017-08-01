@@ -10,6 +10,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Class \Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink
+ *
+ * @since 2.0.0
+ */
 class Symlink implements StrategyInterface
 {
     /**
@@ -20,6 +25,7 @@ class Symlink implements StrategyInterface
      * @param string $sourcePath
      * @param string $destinationPath
      * @return bool
+     * @since 2.0.0
      */
     public function publishFile(
         WriteInterface $sourceDir,
@@ -35,6 +41,7 @@ class Symlink implements StrategyInterface
      *
      * @param Asset\LocalInterface $asset
      * @return bool
+     * @since 2.0.0
      */
     public function isSupported(Asset\LocalInterface $asset)
     {

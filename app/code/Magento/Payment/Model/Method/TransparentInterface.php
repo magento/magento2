@@ -11,6 +11,7 @@ use Magento\Payment\Model\MethodInterface;
  * Interface TransparentInterface need to be implemented by Payment Method service
  * which supports transparent redirect feature
  * @package Magento\Payment\Model\Method
+ * @since 2.0.0
  */
 interface TransparentInterface extends MethodInterface
 {
@@ -18,6 +19,7 @@ interface TransparentInterface extends MethodInterface
      * Returns payment method configured config
      *
      * @return \Magento\Payment\Gateway\ConfigInterface
+     * @since 2.0.0
      */
     public function getConfigInterface();
 }

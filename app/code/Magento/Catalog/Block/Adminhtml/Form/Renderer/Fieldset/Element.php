@@ -11,10 +11,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
+ *
+ * @since 2.0.0
+ */
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
      * Initialize block template
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Catalog::catalog/form/renderer/fieldset/element.phtml';
 
@@ -22,6 +28,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Retrieve data object related with form
      *
      * @return \Magento\Catalog\Model\Product || \Magento\Catalog\Model\Category
+     * @since 2.0.0
      */
     public function getDataObject()
     {
@@ -32,6 +39,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Retireve associated with element attribute object
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -42,6 +50,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Retrieve associated attribute code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeCode()
     {
@@ -52,6 +61,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Check "Use default" checkbox display availability
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplayUseDefault()
     {
@@ -71,6 +81,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Check default value usage fact
      *
      * @return bool
+     * @since 2.0.0
      */
     public function usedDefault()
     {
@@ -94,6 +105,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Disable field in default value using case
      *
      * @return \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
+     * @since 2.0.0
      */
     public function checkFieldDisable()
     {
@@ -109,6 +121,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * GLOBAL | WEBSITE | STORE
      *
      * @return string
+     * @since 2.0.0
      */
     public function getScopeLabel()
     {
@@ -132,6 +145,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Retrieve element label html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementLabelHtml()
     {
@@ -147,6 +161,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Retrieve element html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -157,6 +172,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Default sore ID getter
      *
      * @return integer
+     * @since 2.0.0
      */
     protected function _getDefaultStoreId()
     {

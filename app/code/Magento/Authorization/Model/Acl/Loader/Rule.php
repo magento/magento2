@@ -8,6 +8,11 @@ namespace Magento\Authorization\Model\Acl\Loader;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Authorization\Model\Acl\Loader\Rule
+ *
+ * @since 2.0.0
+ */
 class Rule implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
@@ -17,26 +22,31 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Framework\Acl\RootResource
+     * @since 2.2.0
      */
     private $_rootResource;
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $cacheKey;
 
@@ -48,6 +58,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      * @param Json $serializer
      * @param string $cacheKey
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Acl\RootResource $rootResource,
@@ -71,6 +82,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      *
      * @param \Magento\Framework\Acl $acl
      * @return void
+     * @since 2.0.0
      */
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
@@ -96,6 +108,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      * Get application ACL rules array.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getRulesArray()
     {

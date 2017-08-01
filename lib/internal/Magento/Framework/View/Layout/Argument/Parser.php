@@ -11,11 +11,13 @@ use Magento\Framework\Config\Dom\NodePathMatcher;
 
 /**
  * Parser of a layout argument node that returns its array representation with no data loss
+ * @since 2.0.0
  */
 class Parser
 {
     /**
      * @var FlatConverter
+     * @since 2.0.0
      */
     private $converter;
 
@@ -24,6 +26,7 @@ class Parser
      *
      * @param \DOMNode $argumentNode
      * @return array|string
+     * @since 2.0.0
      */
     public function parse(\DOMNode $argumentNode)
     {
@@ -35,6 +38,7 @@ class Parser
      * Retrieve instance of XML converter, suitable for layout argument nodes
      *
      * @return FlatConverter
+     * @since 2.0.0
      */
     protected function getConverter()
     {

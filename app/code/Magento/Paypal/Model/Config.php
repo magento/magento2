@@ -16,6 +16,7 @@ use Magento\Payment\Helper\Formatter;
 
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 2.0.0
  */
 class Config extends AbstractConfig
 {
@@ -179,6 +180,7 @@ class Config extends AbstractConfig
      * Instructions for generating proper BN code
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_buildNotationPPMap = [
         'paypal_express' => 'EC',
@@ -190,6 +192,7 @@ class Config extends AbstractConfig
      * Style system config map (Express Checkout)
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_ecStyleConfigMap = [
         'page_style' => 'page_style',
@@ -203,6 +206,7 @@ class Config extends AbstractConfig
      * Currency codes supported by PayPal methods
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_supportedCurrencyCodes = [
         'AUD',
@@ -232,6 +236,7 @@ class Config extends AbstractConfig
      * Merchant country supported by PayPal
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_supportedCountryCodes = [
         'AE',
@@ -308,6 +313,7 @@ class Config extends AbstractConfig
      * Buyer country supported by PayPal
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_supportedBuyerCountryCodes = [
         'AF ',
@@ -560,6 +566,7 @@ class Config extends AbstractConfig
      *
      * @var string[]
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration#id089QD0O0TX4__id08AH904I0YK
+     * @since 2.0.0
      */
     protected $_supportedImageLocales = [
         'de_DE',
@@ -582,21 +589,25 @@ class Config extends AbstractConfig
      * Core data
      *
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Payment\Model\Source\CctypeFactory
+     * @since 2.0.0
      */
     protected $_cctypeFactory;
 
     /**
      * @var \Magento\Paypal\Model\CertFactory
+     * @since 2.0.0
      */
     protected $_certFactory;
 
@@ -607,6 +618,7 @@ class Config extends AbstractConfig
      * @param \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory
      * @param CertFactory $certFactory
      * @param array $params
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -638,6 +650,7 @@ class Config extends AbstractConfig
      * @param string|null $methodCode
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function isMethodAvailable($methodCode = null)
     {
@@ -688,6 +701,7 @@ class Config extends AbstractConfig
      * Return merchant country codes supported by PayPal
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedMerchantCountryCodes()
     {
@@ -698,6 +712,7 @@ class Config extends AbstractConfig
      * Return buyer country codes supported by PayPal
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedBuyerCountryCodes()
     {
@@ -708,6 +723,7 @@ class Config extends AbstractConfig
      * Return merchant country code, use default country if it not specified in General settings
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMerchantCountry()
     {
@@ -729,6 +745,7 @@ class Config extends AbstractConfig
      * @param string|null $method
      * @param string|null $countryCode
      * @return bool
+     * @since 2.0.0
      */
     public function isMethodSupportedForCountry($method = null, $countryCode = null)
     {
@@ -747,6 +764,7 @@ class Config extends AbstractConfig
      * @param string|null $countryCode 2-letters iso code
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getCountryMethods($countryCode = null)
     {
@@ -829,6 +847,7 @@ class Config extends AbstractConfig
      *
      * @param string $token
      * @return string
+     * @since 2.0.0
      */
     public function getPayPalBasicStartUrl($token)
     {
@@ -848,6 +867,7 @@ class Config extends AbstractConfig
      * Check whether order review step enabled in configuration
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isOrderReviewStepDisabled()
     {
@@ -863,6 +883,7 @@ class Config extends AbstractConfig
      *
      * @param string $token
      * @return string
+     * @since 2.0.0
      */
     public function getExpressCheckoutStartUrl($token)
     {
@@ -876,6 +897,7 @@ class Config extends AbstractConfig
      *
      * @param string $orderId
      * @return string
+     * @since 2.0.0
      */
     public function getExpressCheckoutOrderUrl($orderId)
     {
@@ -887,6 +909,7 @@ class Config extends AbstractConfig
      *
      * @param \Magento\Paypal\Controller\Express|string $token
      * @return string
+     * @since 2.0.0
      */
     public function getExpressCheckoutEditUrl($token)
     {
@@ -899,6 +922,7 @@ class Config extends AbstractConfig
      *
      * @param string $token
      * @return string
+     * @since 2.0.0
      */
     public function getExpressCheckoutCompleteUrl($token)
     {
@@ -910,6 +934,7 @@ class Config extends AbstractConfig
      *
      * @param string $token
      * @return string
+     * @since 2.0.0
      */
     public function getStartBillingAgreementUrl($token)
     {
@@ -921,6 +946,7 @@ class Config extends AbstractConfig
      *
      * @param array $params
      * @return string
+     * @since 2.0.0
      */
     public function getPaypalUrl(array $params = [])
     {
@@ -935,6 +961,7 @@ class Config extends AbstractConfig
      * PayPal web URL for IPN
      *
      * @return string
+     * @since 2.1.0
      */
     public function getPayPalIpnUrl()
     {
@@ -948,6 +975,7 @@ class Config extends AbstractConfig
      * Whether Express Checkout button should be rendered dynamically
      *
      * @return bool
+     * @since 2.0.0
      */
     public function areButtonsDynamic()
     {
@@ -963,6 +991,7 @@ class Config extends AbstractConfig
      * @param string|null $pal encrypted summary about merchant
      * @return string
      * @see Paypal_Model_Api_Nvp::callGetPalDetails()
+     * @since 2.0.0
      */
     public function getExpressCheckoutShortcutImageUrl($localeCode, $orderTotal = null, $pal = null)
     {
@@ -981,6 +1010,7 @@ class Config extends AbstractConfig
      *
      * @param string $localeCode
      * @return string
+     * @since 2.1.0
      */
     public function getExpressCheckoutInContextImageUrl($localeCode)
     {
@@ -1003,6 +1033,7 @@ class Config extends AbstractConfig
      * @param string|null $pal
      * @param string|null $staticSize
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentMarkImageUrl($localeCode, $orderTotal = null, $pal = null, $staticSize = null)
     {
@@ -1035,6 +1066,7 @@ class Config extends AbstractConfig
      *
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentMarkWhatIsPaypalUrl(\Magento\Framework\Locale\ResolverInterface $localeResolver = null)
     {
@@ -1062,6 +1094,7 @@ class Config extends AbstractConfig
      * @param bool $isVertical
      * @param bool $isEcheck
      * @return string
+     * @since 2.0.0
      */
     public function getSolutionImageUrl($localeCode, $isVertical = false, $isEcheck = false)
     {
@@ -1078,6 +1111,7 @@ class Config extends AbstractConfig
      *
      * @param string $localeCode
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentFormLogoUrl($localeCode)
     {
@@ -1120,6 +1154,7 @@ class Config extends AbstractConfig
      * Return supported types for PayPal logo
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAdditionalOptionsLogoTypes()
     {
@@ -1141,6 +1176,7 @@ class Config extends AbstractConfig
      * @param string $localeCode Supported locale code
      * @param bool|string $type One of supported logo types
      * @return string|bool Logo Image URL or false if logo disabled in configuration
+     * @since 2.0.0
      */
     public function getAdditionalOptionsLogoUrl($localeCode, $type = false)
     {
@@ -1165,6 +1201,7 @@ class Config extends AbstractConfig
      * Express Checkout button "flavors" source getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getExpressCheckoutButtonFlavors()
     {
@@ -1175,6 +1212,7 @@ class Config extends AbstractConfig
      * Express Checkout button types source getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getExpressCheckoutButtonTypes()
     {
@@ -1188,6 +1226,7 @@ class Config extends AbstractConfig
      * Payment actions source getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPaymentActions()
     {
@@ -1205,6 +1244,7 @@ class Config extends AbstractConfig
      * Require Billing Address source getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRequireBillingAddressOptions()
     {
@@ -1219,6 +1259,7 @@ class Config extends AbstractConfig
      * Mapper from PayPal-specific payment actions to Magento payment actions
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPaymentAction()
     {
@@ -1239,6 +1280,7 @@ class Config extends AbstractConfig
      * "mark" = "Normal Express Checkout" - PayPal requires to checkout with PayPal buyer account only
      *
      * @return array
+     * @since 2.0.0
      */
     public function getExpressCheckoutSolutionTypes()
     {
@@ -1249,6 +1291,7 @@ class Config extends AbstractConfig
      * Retrieve express checkout billing agreement signup options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getExpressCheckoutBASignupOptions()
     {
@@ -1264,6 +1307,7 @@ class Config extends AbstractConfig
      * Unilateral payments are incompatible with the billing agreements
      *
      * @return bool
+     * @since 2.0.0
      */
     public function shouldAskToCreateBillingAgreement()
     {
@@ -1275,6 +1319,7 @@ class Config extends AbstractConfig
      * Payment data delivery methods getter for PayPal Standard
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWpsPaymentDeliveryMethods()
     {
@@ -1285,6 +1330,7 @@ class Config extends AbstractConfig
      * Return list of supported credit card types by Paypal Direct gateway
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWppCcTypesAsOptionArray()
     {
@@ -1297,6 +1343,7 @@ class Config extends AbstractConfig
      * Return list of supported credit card types by Paypal Direct (Payflow Edition) gateway
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWppPeCcTypesAsOptionArray()
     {
@@ -1309,6 +1356,7 @@ class Config extends AbstractConfig
      * Return list of supported credit card types by Payflow Pro gateway
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPayflowproCcTypesAsOptionArray()
     {
@@ -1321,6 +1369,7 @@ class Config extends AbstractConfig
      * @param string $code
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public static function getIsCreditCardMethod($code)
     {
@@ -1339,6 +1388,7 @@ class Config extends AbstractConfig
      *
      * @param string $code
      * @return bool
+     * @since 2.0.0
      */
     public function isCurrencyCodeSupported($code)
     {
@@ -1362,6 +1412,7 @@ class Config extends AbstractConfig
      *
      * @param \Magento\Framework\DataObject $to
      * @return void
+     * @since 2.0.0
      */
     public function exportExpressCheckoutStyleSettings(\Magento\Framework\DataObject $to)
     {
@@ -1382,6 +1433,7 @@ class Config extends AbstractConfig
      * @param float $orderTotal
      * @param string $pal
      * @return string
+     * @since 2.0.0
      */
     protected function _getDynamicImageUrl($type, $localeCode, $orderTotal, $pal)
     {
@@ -1417,6 +1469,7 @@ class Config extends AbstractConfig
      *
      * @param string|null $localeCode
      * @return string
+     * @since 2.0.0
      */
     protected function _getSupportedLocaleCode($localeCode = null)
     {
@@ -1433,6 +1486,7 @@ class Config extends AbstractConfig
      * @return string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _getSpecificConfigPath($fieldName)
     {
@@ -1486,6 +1540,7 @@ class Config extends AbstractConfig
      * @param string $fieldName
      * @return string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _mapExpressFieldset($fieldName)
     {
@@ -1512,6 +1567,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @since 2.0.0
      */
     protected function _mapBmlFieldset($fieldName)
     {
@@ -1528,6 +1584,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @since 2.0.0
      */
     protected function _mapBmlPayflowFieldset($fieldName)
     {
@@ -1544,6 +1601,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @since 2.0.0
      */
     protected function _mapDirectFieldset($fieldName)
     {
@@ -1561,6 +1619,7 @@ class Config extends AbstractConfig
      * @param string $fieldName
      * @return string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _mapWppFieldset($fieldName)
     {
@@ -1588,6 +1647,7 @@ class Config extends AbstractConfig
      * @param string $fieldName
      * @return string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _mapWpukFieldset($fieldName)
     {
@@ -1625,6 +1685,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @since 2.0.0
      */
     protected function _mapGenericStyleFieldset($fieldName)
     {
@@ -1646,6 +1707,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @since 2.0.0
      */
     protected function _mapGeneralFieldset($fieldName)
     {
@@ -1664,6 +1726,7 @@ class Config extends AbstractConfig
      * @param string $fieldName
      * @return string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _mapMethodFieldset($fieldName)
     {
@@ -1691,6 +1754,7 @@ class Config extends AbstractConfig
      * Payment API authentication methods source getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getApiAuthenticationMethods()
     {
@@ -1701,6 +1765,7 @@ class Config extends AbstractConfig
      * Api certificate getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getApiCertificate()
     {
@@ -1712,6 +1777,7 @@ class Config extends AbstractConfig
      * Get PublisherId from stored config
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getBmlPublisherId()
     {
@@ -1727,6 +1793,7 @@ class Config extends AbstractConfig
      * @param string $section
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getBmlDisplay($section)
     {
@@ -1754,6 +1821,7 @@ class Config extends AbstractConfig
      * @param string $section
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getBmlPosition($section)
     {
@@ -1769,6 +1837,7 @@ class Config extends AbstractConfig
      * @param string $section
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getBmlSize($section)
     {

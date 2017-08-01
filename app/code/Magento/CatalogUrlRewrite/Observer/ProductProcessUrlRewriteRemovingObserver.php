@@ -10,15 +10,22 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteRemovingObserver
+ *
+ * @since 2.0.0
+ */
 class ProductProcessUrlRewriteRemovingObserver implements ObserverInterface
 {
     /**
      * @var UrlPersistInterface
+     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @param UrlPersistInterface $urlPersist
+     * @since 2.0.0
      */
     public function __construct(
         UrlPersistInterface $urlPersist
@@ -31,6 +38,7 @@ class ProductProcessUrlRewriteRemovingObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

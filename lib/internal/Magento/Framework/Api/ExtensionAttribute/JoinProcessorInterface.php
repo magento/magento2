@@ -12,6 +12,7 @@ use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
  * Join processor allows to join extension attributes during collections loading.
  *
  * @api
+ * @since 2.0.0
  */
 interface JoinProcessorInterface
 {
@@ -22,6 +23,7 @@ interface JoinProcessorInterface
      * @param string|null $extensibleEntityClass
      * @return void
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function process(DbCollection $collection, $extensibleEntityClass = null);
 
@@ -35,6 +37,7 @@ interface JoinProcessorInterface
      * @param array $data
      * @return array
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function extractExtensionAttributes($extensibleEntityClass, array $data);
 }

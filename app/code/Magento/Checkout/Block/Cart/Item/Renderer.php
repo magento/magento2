@@ -21,22 +21,26 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements
     \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var AbstractItem
+     * @since 2.0.0
      */
     protected $_item;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_productUrl;
 
@@ -44,6 +48,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Whether qty will be converted to number
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_strictQtyMode = true;
 
@@ -51,6 +56,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Check, whether product URL rendering should be ignored
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_ignoreProductUrl = false;
 
@@ -58,36 +64,43 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Catalog product configuration
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
+     * @since 2.0.0
      */
     protected $_productConfig = null;
 
     /**
      * @var \Magento\Framework\Url\Helper\Data
+     * @since 2.0.0
      */
     protected $_urlHelper;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Catalog\Block\Product\ImageBuilder
+     * @since 2.0.0
      */
     protected $imageBuilder;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     public $moduleManager;
 
     /**
      * @var InterpretationStrategyInterface
+     * @since 2.0.0
      */
     private $messageInterpretationStrategy;
 
@@ -104,6 +117,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -135,6 +149,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param AbstractItem $item
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setItem(AbstractItem $item)
     {
@@ -147,6 +162,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return AbstractItem
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItem()
     {
@@ -158,6 +174,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return \Magento\Catalog\Model\Product
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -169,6 +186,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return \Magento\Catalog\Model\Product
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getProductForThumbnail()
     {
@@ -179,6 +197,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param string $productUrl
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function overrideProductUrl($productUrl)
     {
@@ -190,6 +209,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Check Product has URL
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasProductUrl()
     {
@@ -224,6 +244,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Retrieve URL to item Product
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductUrl()
     {
@@ -247,6 +268,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get item product name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductName()
     {
@@ -260,6 +282,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get product customize options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getProductOptions()
     {
@@ -273,6 +296,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getOptionList()
     {
@@ -283,6 +307,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get quote item qty
      *
      * @return float|int
+     * @since 2.0.0
      */
     public function getQty()
     {
@@ -297,6 +322,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return \Magento\Checkout\Model\Session
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCheckoutSession()
     {
@@ -311,6 +337,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * type => type of a message
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMessages()
     {
@@ -361,6 +388,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *          )
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFormatedOptionValue($optionValue)
     {
@@ -378,6 +406,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isProductVisible()
     {
@@ -389,6 +418,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return AbstractBlock
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -401,6 +431,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param bool $strict
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setQtyMode($strict)
     {
@@ -414,6 +445,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param bool $ignore
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setIgnoreProductUrl($ignore = true)
     {
@@ -425,6 +457,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -440,6 +473,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getProductPriceHtml(\Magento\Catalog\Model\Product $product)
     {
@@ -465,6 +499,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     /**
      * @return \Magento\Framework\Pricing\Render
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function getPriceRender()
     {
@@ -477,6 +512,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param float $amount
      * @param bool $format
      * @return float
+     * @since 2.0.0
      */
     public function convertPrice($amount, $format = false)
     {
@@ -490,6 +526,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getUnitPriceHtml(AbstractItem $item)
     {
@@ -504,6 +541,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getRowTotalHtml(AbstractItem $item)
     {
@@ -518,6 +556,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getSidebarItemPriceHtml(AbstractItem $item)
     {
@@ -532,6 +571,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getUnitPriceExclTaxHtml(AbstractItem $item)
     {
@@ -546,6 +586,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getUnitPriceInclTaxHtml(AbstractItem $item)
     {
@@ -560,6 +601,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getRowTotalExclTaxHtml(AbstractItem $item)
     {
@@ -574,6 +616,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getRowTotalInclTaxHtml(AbstractItem $item)
     {
@@ -588,6 +631,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return string
+     * @since 2.0.0
      */
     public function getActions(AbstractItem $item)
     {
@@ -608,6 +652,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param string $imageId
      * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
+     * @since 2.0.0
      */
     public function getImage($product, $imageId, $attributes = [])
     {

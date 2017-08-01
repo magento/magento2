@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory as SearchResultFa
 
 /**
  * Class InvoiceRepository
+ * @since 2.0.0
  */
 class InvoiceRepository implements InvoiceRepositoryInterface
 {
@@ -21,20 +22,26 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      * \Magento\Sales\Api\Data\InvoiceInterface[]
      *
      * @var array
+     * @since 2.0.0
      */
     protected $registry = [];
 
     /**
      * @var Metadata
+     * @since 2.0.0
      */
     protected $metadata;
 
     /**
      * @var SearchResultFactory
+     * @since 2.0.0
      */
     protected $searchResultFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -42,6 +49,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      * @param Metadata $invoiceMetadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         Metadata $invoiceMetadata,
@@ -60,6 +68,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      * @return mixed
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function get($id)
     {
@@ -79,6 +88,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
     /**
      * @return \Magento\Sales\Api\Data\InvoiceInterface
+     * @since 2.0.0
      */
     public function create()
     {
@@ -90,6 +100,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\InvoiceInterface[]
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -105,6 +116,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceInterface $entity
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\InvoiceInterface $entity)
     {
@@ -118,6 +130,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      *
      * @param int $id
      * @return bool
+     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -130,6 +143,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceInterface $entity
      * @return \Magento\Sales\Api\Data\InvoiceInterface
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\InvoiceInterface $entity)
     {
@@ -141,8 +155,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

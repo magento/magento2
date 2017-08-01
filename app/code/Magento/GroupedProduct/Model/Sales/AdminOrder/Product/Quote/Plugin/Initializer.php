@@ -14,6 +14,11 @@ namespace Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer
+ *
+ * @since 2.0.0
+ */
 class Initializer
 {
     /**
@@ -25,6 +30,7 @@ class Initializer
      *
      * @return \Magento\Quote\Model\Quote\Item|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterInit(
         \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject,

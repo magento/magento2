@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Option;
 
 /**
  * Flag option in deployment config tool
+ * @since 2.0.0
  */
 class FlagConfigOption extends AbstractConfigOption
 {
@@ -22,6 +23,7 @@ class FlagConfigOption extends AbstractConfigOption
      * @param string $configPath
      * @param string $description
      * @param string|array|null $shortCut
+     * @since 2.0.0
      */
     public function __construct(
         $name,

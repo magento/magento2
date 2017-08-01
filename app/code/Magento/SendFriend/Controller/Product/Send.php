@@ -7,10 +7,16 @@ namespace Magento\SendFriend\Controller\Product;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\SendFriend\Controller\Product\Send
+ *
+ * @since 2.0.0
+ */
 class Send extends \Magento\SendFriend\Controller\Product
 {
     /**
      * @var \Magento\Catalog\Model\Session
+     * @since 2.0.0
      */
     protected $catalogSession;
 
@@ -21,6 +27,7 @@ class Send extends \Magento\SendFriend\Controller\Product
      * @param \Magento\SendFriend\Model\SendFriend $sendFriend
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\Session $catalogSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -44,6 +51,7 @@ class Send extends \Magento\SendFriend\Controller\Product
      * Show Send to a Friend Form
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

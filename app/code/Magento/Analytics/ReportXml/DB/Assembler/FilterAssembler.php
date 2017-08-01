@@ -14,16 +14,19 @@ use Magento\Analytics\ReportXml\DB\ConditionResolver;
  * Class FilterAssembler
  *
  * Assembles WHERE conditions
+ * @since 2.2.0
  */
 class FilterAssembler implements AssemblerInterface
 {
     /**
      * @var ConditionResolver
+     * @since 2.2.0
      */
     private $conditionResolver;
 
     /**
      * @var NameResolver
+     * @since 2.2.0
      */
     private $nameResolver;
 
@@ -32,6 +35,7 @@ class FilterAssembler implements AssemblerInterface
      *
      * @param ConditionResolver $conditionResolver
      * @param NameResolver $nameResolver
+     * @since 2.2.0
      */
     public function __construct(
         ConditionResolver $conditionResolver,
@@ -47,6 +51,7 @@ class FilterAssembler implements AssemblerInterface
      * @param SelectBuilder $selectBuilder
      * @param array $queryConfig
      * @return SelectBuilder
+     * @since 2.2.0
      */
     public function assemble(SelectBuilder $selectBuilder, $queryConfig)
     {

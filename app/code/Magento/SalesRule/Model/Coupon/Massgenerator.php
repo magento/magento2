@@ -11,6 +11,7 @@ namespace Magento\SalesRule\Model\Coupon;
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
@@ -28,11 +29,13 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Count of generated Coupons
      * @var int
+     * @since 2.0.0
      */
     protected $generatedCount = 0;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $generatedCodes = [];
 
@@ -40,21 +43,25 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Sales rule coupon
      *
      * @var \Magento\SalesRule\Helper\Coupon
+     * @since 2.0.0
      */
     protected $salesRuleCoupon;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $date;
 
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
+     * @since 2.0.0
      */
     protected $couponFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -68,6 +75,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -91,6 +99,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -101,6 +110,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Generate coupon code
      *
      * @return string
+     * @since 2.0.0
      */
     public function generateCode()
     {
@@ -131,6 +141,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Retrieve delimiter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDelimiter()
     {
@@ -146,6 +157,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function generatePool()
     {
@@ -196,6 +208,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Increase the length of Code if probability is low
      *
      * @return void
+     * @since 2.0.0
      */
     protected function increaseLength()
     {
@@ -221,6 +234,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      *
      * @param array $data
      * @return bool
+     * @since 2.0.0
      */
     public function validateData($data)
     {
@@ -238,6 +252,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Return the generated coupon codes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getGeneratedCodes()
     {
@@ -248,6 +263,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * Retrieve count of generated Coupons
      *
      * @return int
+     * @since 2.0.0
      */
     public function getGeneratedCount()
     {

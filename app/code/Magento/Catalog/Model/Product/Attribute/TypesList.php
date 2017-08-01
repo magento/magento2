@@ -6,20 +6,28 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\TypesList
+ *
+ * @since 2.0.0
+ */
 class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterface
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory
+     * @since 2.0.0
      */
     private $inputTypeFactory;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory
+     * @since 2.0.0
      */
     private $attributeTypeFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     private $dataObjectHelper;
 
@@ -27,6 +35,7 @@ class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterfa
      * @param Source\InputtypeFactory $inputTypeFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory $attributeTypeFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory $inputTypeFactory,
@@ -40,6 +49,7 @@ class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {

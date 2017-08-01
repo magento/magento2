@@ -9,6 +9,7 @@ namespace Magento\Store\Model\ResourceModel\Store;
  * Stores collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Name prefix of events that are dispatched by model
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'store_collection';
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Name of event parameter
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'store_collection';
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *  Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -42,6 +46,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $loadDefault
      * @return $this
+     * @since 2.0.0
      */
     public function setLoadDefault($loadDefault)
     {
@@ -54,6 +59,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLoadDefault()
     {
@@ -64,6 +70,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add disable default store filter to collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setWithoutDefaultFilter()
     {
@@ -77,6 +84,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $groupId
      * @return $this
+     * @since 2.0.0
      */
     public function addGroupFilter($groupId)
     {
@@ -88,6 +96,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $status
      * @return $this
+     * @since 2.1.0
      */
     public function addStatusFilter($status)
     {
@@ -99,6 +108,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $store
      * @return $this
+     * @since 2.0.0
      */
     public function addIdFilter($store)
     {
@@ -110,6 +120,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $website
      * @return $this
+     * @since 2.0.0
      */
     public function addWebsiteFilter($website)
     {
@@ -121,6 +132,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $category
      * @return $this
+     * @since 2.0.0
      */
     public function addCategoryFilter($category)
     {
@@ -134,6 +146,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert items array to array for select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -144,6 +157,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert items array to hash for select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHash()
     {
@@ -156,6 +170,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -183,6 +198,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $categories
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCategoryIds(array $categories)
     {
@@ -196,6 +212,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add store root category data to collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addRootCategoryIdAttribute()
     {

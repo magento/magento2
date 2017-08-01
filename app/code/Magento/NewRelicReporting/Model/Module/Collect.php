@@ -11,30 +11,40 @@ use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Module;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Module\Collect
+ *
+ * @since 2.0.0
+ */
 class Collect
 {
     /**
      * @var ModuleListInterface
+     * @since 2.0.0
      */
     protected $moduleList;
 
     /**
      * @var Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var fullModuleList
+     * @since 2.0.0
      */
     protected $fullModuleList;
 
     /**
      * @var \Magento\NewRelicReporting\Model\ModuleFactory
+     * @since 2.0.0
      */
     protected $moduleFactory;
 
     /**
      * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory
+     * @since 2.0.0
      */
     protected $moduleCollectionFactory;
 
@@ -46,6 +56,7 @@ class Collect
      * @param Manager $moduleManager
      * @param \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory
      * @param \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         ModuleListInterface $moduleList,
@@ -65,6 +76,7 @@ class Collect
      * Retrieve all disabled modules from the configuration
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getDisabledModules()
     {
@@ -79,6 +91,7 @@ class Collect
      * Retrieve all modules array
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getAllModules()
     {
@@ -94,6 +107,7 @@ class Collect
      * @param string $state
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getNewModuleChanges($moduleName, $active, $setupVersion, $state)
     {
@@ -122,6 +136,7 @@ class Collect
      *
      * @param array $moduleChanges
      * @return array
+     * @since 2.0.0
      */
     protected function getFinalCounts($moduleChanges)
     {
@@ -170,6 +185,7 @@ class Collect
      *
      * @param string $moduleName
      * @return string
+     * @since 2.0.0
      */
     protected function getState($moduleName)
     {
@@ -187,6 +203,7 @@ class Collect
      *
      * @param string $moduleName
      * @return string
+     * @since 2.0.0
      */
     protected function getActive($moduleName)
     {
@@ -204,6 +221,7 @@ class Collect
      *
      * @param array $changes
      * @return array mixed
+     * @since 2.0.0
      */
     protected function getCleanChangesArray($changes)
     {
@@ -223,6 +241,7 @@ class Collect
      * @param Module[] $dbModuleArray
      * @param string[] $arrayModuleNames
      * @return array|bool
+     * @since 2.0.0
      */
     protected function setUninstalledModuleChanges(array $dbModuleArray, array $arrayModuleNames)
     {
@@ -248,6 +267,7 @@ class Collect
      *
      * @param bool $refresh
      * @return array
+     * @since 2.0.0
      */
     public function getModuleData($refresh = true)
     {

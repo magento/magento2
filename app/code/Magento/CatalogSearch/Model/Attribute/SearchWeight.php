@@ -11,11 +11,13 @@ namespace Magento\CatalogSearch\Model\Attribute;
  * which is used to boost matches by specific attributes.
  *
  * This is part of search accuracy customization functionality.
+ * @since 2.2.0
  */
 class SearchWeight
 {
     /**
      * @param \Magento\Framework\Search\Request\Config $config
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Search\Request\Config $config
@@ -44,6 +46,7 @@ class SearchWeight
      * @return \Magento\Catalog\Model\ResourceModel\Attribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function aroundSave(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,

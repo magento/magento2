@@ -7,6 +7,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 
 /**
  * Newsletter subscribers controller
+ * @since 2.0.0
  */
 abstract class Problem extends \Magento\Backend\App\Action
 {

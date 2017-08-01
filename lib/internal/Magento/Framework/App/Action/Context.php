@@ -19,61 +19,73 @@ use Magento\Framework\Controller\ResultFactory;
  * the classes they were introduced for.
  *
  * @api
+ * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     protected $_redirect;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\App\ViewInterface
+     * @since 2.0.0
      */
     protected $_view;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
+     * @since 2.0.0
      */
     protected $resultRedirectFactory;
 
     /**
      * @var \Magento\Framework\Controller\ResultFactory
+     * @since 2.0.0
      */
     protected $resultFactory;
 
@@ -91,6 +103,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Controller\ResultFactory $resultFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -120,6 +133,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     public function getActionFlag()
     {
@@ -128,6 +142,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     public function getEventManager()
     {
@@ -136,6 +151,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\ViewInterface
+     * @since 2.0.0
      */
     public function getView()
     {
@@ -144,6 +160,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     public function getObjectManager()
     {
@@ -152,6 +169,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     public function getRedirect()
     {
@@ -160,6 +178,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -168,6 +187,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function getResponse()
     {
@@ -176,6 +196,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -184,6 +205,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     public function getMessageManager()
     {
@@ -192,6 +214,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Controller\Result\RedirectFactory
+     * @since 2.0.0
      */
     public function getResultRedirectFactory()
     {
@@ -200,6 +223,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Controller\ResultFactory
+     * @since 2.0.0
      */
     public function getResultFactory()
     {

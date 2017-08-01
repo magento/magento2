@@ -10,6 +10,7 @@ namespace Magento\Eav\Model;
  * EAV Entity Attribute Data Factory
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class AttributeDataFactory
 {
@@ -26,16 +27,19 @@ class AttributeDataFactory
      * Array of attribute data models by input type
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_dataModels = [];
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -43,6 +47,7 @@ class AttributeDataFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -59,6 +64,7 @@ class AttributeDataFactory
      * @param \Magento\Eav\Model\Attribute $attribute
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
+     * @since 2.0.0
      */
     public function create(\Magento\Eav\Model\Attribute $attribute, \Magento\Framework\Model\AbstractModel $entity)
     {

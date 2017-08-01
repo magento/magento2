@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Class RestoreCustomerGroupId
+ * @since 2.0.0
  */
 class RestoreCustomerGroupId implements ObserverInterface
 {
@@ -21,11 +22,13 @@ class RestoreCustomerGroupId implements ObserverInterface
      * Customer address
      *
      * @var CustomerAddress
+     * @since 2.0.0
      */
     protected $customerAddressHelper;
 
     /**
      * @param CustomerAddress $customerAddressHelper
+     * @since 2.0.0
      */
     public function __construct(CustomerAddress $customerAddressHelper)
     {
@@ -37,6 +40,7 @@ class RestoreCustomerGroupId implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

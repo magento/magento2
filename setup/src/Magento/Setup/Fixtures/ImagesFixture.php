@@ -29,81 +29,97 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class ImagesFixture extends Fixture
 {
     /**
      * @var int
+     * @since 2.2.0
      */
     protected $priority = 51;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory
+     * @since 2.2.0
      */
     private $imagesGeneratorFactory;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 2.2.0
      */
     private $mediaConfig;
 
     /**
      * @var \Magento\Eav\Model\AttributeRepository
+     * @since 2.2.0
      */
     private $attributeRepository;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private $dbConnection;
 
     /**
      * @var \Magento\Framework\DB\Sql\ColumnValueExpressionFactory
+     * @since 2.2.0
      */
     private $expressionFactory;
 
     /**
      * @var \Magento\Setup\Model\BatchInsertFactory
+     * @since 2.2.0
      */
     private $batchInsertFactory;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $attributeCodesCache = [];
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $imagesInsertBatchSize = 1000;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $productsSelectBatchSize = 1000;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $productsCountCache;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $tableCache = [];
 
@@ -117,6 +133,7 @@ class ImagesFixture extends Fixture
      * @param \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $expressionFactory
      * @param \Magento\Setup\Model\BatchInsertFactory $batchInsertFactory
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -144,6 +161,7 @@ class ImagesFixture extends Fixture
     /**
      * {@inheritdoc}
      * @throws \Exception
+     * @since 2.2.0
      */
     public function execute()
     {
@@ -155,6 +173,7 @@ class ImagesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getActionTitle()
     {
@@ -163,6 +182,7 @@ class ImagesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function introduceParamLabels()
     {
@@ -174,6 +194,7 @@ class ImagesFixture extends Fixture
     /**
      * {@inheritdoc}
      * @throws ValidatorException
+     * @since 2.2.0
      */
     public function printInfo(OutputInterface $output)
     {
@@ -207,6 +228,7 @@ class ImagesFixture extends Fixture
      * Check if DB already has any images
      *
      * @return bool
+     * @since 2.2.0
      */
     private function checkIfImagesExists()
     {
@@ -217,6 +239,7 @@ class ImagesFixture extends Fixture
      * Create image file and add it to media gallery table in DB
      *
      * @return void
+     * @since 2.2.0
      */
     private function createImageEntities()
     {
@@ -242,6 +265,7 @@ class ImagesFixture extends Fixture
      *
      * @return \Generator
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.2.0
      */
     private function generateImageFilesGenerator()
     {
@@ -276,6 +300,7 @@ class ImagesFixture extends Fixture
      *
      * @return void
      * @throws \Exception
+     * @since 2.2.0
      */
     private function assignImagesToProducts()
     {
@@ -341,6 +366,7 @@ class ImagesFixture extends Fixture
      *
      * @return \Generator
      * @throws \Exception
+     * @since 2.2.0
      */
     private function getProductGenerator()
     {
@@ -370,6 +396,7 @@ class ImagesFixture extends Fixture
      * @param int $offset
      * @return array
      * @throws \Exception
+     * @since 2.2.0
      */
     private function getProducts($limit, $offset)
     {
@@ -386,6 +413,7 @@ class ImagesFixture extends Fixture
      * Creates generator to iterate infinitely over all image entities
      *
      * @return \Generator
+     * @since 2.2.0
      */
     private function getImagesGenerator()
     {
@@ -412,6 +440,7 @@ class ImagesFixture extends Fixture
      * Return number of images to create
      *
      * @return null|int
+     * @since 2.2.0
      */
     private function getImagesToGenerate()
     {
@@ -424,6 +453,7 @@ class ImagesFixture extends Fixture
      * Return number of images to be assigned per each product
      *
      * @return null|int
+     * @since 2.2.0
      */
     private function getImagesPerProduct()
     {
@@ -436,6 +466,7 @@ class ImagesFixture extends Fixture
      * Get amount of existing products
      *
      * @return int
+     * @since 2.2.0
      */
     private function getProductsCount()
     {
@@ -459,6 +490,7 @@ class ImagesFixture extends Fixture
      * Get amount of existing images
      *
      * @return int
+     * @since 2.2.0
      */
     private function getImagesCount()
     {
@@ -480,6 +512,7 @@ class ImagesFixture extends Fixture
      * @param string $attributeCode
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.2.0
      */
     private function getAttributeId($attributeCode)
     {
@@ -501,6 +534,7 @@ class ImagesFixture extends Fixture
      * Method is required to eliminate multiple calls to ResourceConnection class
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private function getDbConnection()
     {
@@ -519,6 +553,7 @@ class ImagesFixture extends Fixture
      *
      * @param string $tableName
      * @return string
+     * @since 2.2.0
      */
     private function getTable($tableName)
     {
@@ -534,6 +569,7 @@ class ImagesFixture extends Fixture
      *
      * @return string
      * @throws \Exception
+     * @since 2.2.0
      */
     private function getProductLinkField()
     {

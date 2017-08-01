@@ -10,6 +10,7 @@ use Magento\Payment\Model\CcConfig;
 
 /**
  * Class Config
+ * @since 2.1.0
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -27,11 +28,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @var CcConfig
+     * @since 2.2.0
      */
     private $ccConfig;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $icon = [];
 
@@ -42,6 +45,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param CcConfig $ccConfig
      * @param null $methodCode
      * @param string $pathPattern
+     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -57,6 +61,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Payment configuration status
      *
      * @return bool
+     * @since 2.1.0
      */
     public function isActive()
     {
@@ -65,6 +70,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     public function isDisplayShoppingCart()
     {
@@ -75,6 +81,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Is shipping address can be editable on PayPal side
      *
      * @return bool
+     * @since 2.1.0
      */
     public function isAllowToEditShippingAddress()
     {
@@ -85,6 +92,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get merchant name to display in PayPal popup
      *
      * @return string
+     * @since 2.1.0
      */
     public function getMerchantName()
     {
@@ -95,6 +103,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Is billing address can be required
      *
      * @return string
+     * @since 2.1.0
      */
     public function isRequiredBillingAddress()
     {
@@ -105,6 +114,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get title of payment
      *
      * @return string
+     * @since 2.1.0
      */
     public function getTitle()
     {
@@ -114,6 +124,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Is need to skip order review
      * @return bool
+     * @since 2.2.0
      */
     public function isSkipOrderReview()
     {
@@ -123,6 +134,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get PayPal icon
      * @return array
+     * @since 2.2.0
      */
     public function getPayPalIcon()
     {

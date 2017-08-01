@@ -8,6 +8,11 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsCsv
+ *
+ * @since 2.0.0
+ */
 class ExportDownloadsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
@@ -21,6 +26,7 @@ class ExportDownloadsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Pr
      * Export products downloads report to CSV format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

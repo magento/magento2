@@ -10,11 +10,13 @@ use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
 /**
  * Class TransactionSubmitForSettlement
+ * @since 2.1.0
  */
 class TransactionSubmitForSettlement extends AbstractTransaction
 {
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     protected function process(array $data)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class for encrypting data.
+ * @since 2.2.0
  */
 class Cryptographer
 {
@@ -16,6 +17,7 @@ class Cryptographer
      * Resource for handling MBI token value.
      *
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
@@ -23,17 +25,20 @@ class Cryptographer
      * Cipher method for encryption.
      *
      * @var string
+     * @since 2.2.0
      */
     private $cipherMethod = 'AES-256-CBC';
 
     /**
      * @var EncodedContextFactory
+     * @since 2.2.0
      */
     private $encodedContextFactory;
 
     /**
      * @param AnalyticsToken $analyticsToken
      * @param EncodedContextFactory $encodedContextFactory
+     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -49,6 +54,7 @@ class Cryptographer
      * @param string $source
      * @return EncodedContext
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function encode($source)
     {
@@ -85,6 +91,7 @@ class Cryptographer
      *
      * @return string
      * @throws LocalizedException
+     * @since 2.2.0
      */
     private function getKey()
     {
@@ -99,6 +106,7 @@ class Cryptographer
      * Return established cipher method.
      *
      * @return string
+     * @since 2.2.0
      */
     private function getCipherMethod()
     {
@@ -109,6 +117,7 @@ class Cryptographer
      * Return each time generated random initialization vector which depends on the cipher method.
      *
      * @return string
+     * @since 2.2.0
      */
     private function getInitializationVector()
     {
@@ -121,6 +130,7 @@ class Cryptographer
      *
      * @param string $cipherMethod
      * @return bool
+     * @since 2.2.0
      */
     private function validateCipherMethod($cipherMethod)
     {

@@ -10,21 +10,25 @@ use Magento\Framework\Phrase;
 
 /**
  * {@inheritdoc}
+ * @since 2.0.0
  */
 class DateTimeFormatter implements DateTimeFormatterInterface
 {
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $useIntlFormatObject;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.1.0
      */
     private $localeResolver;
 
     /**
      * @param bool|null $useIntlFormatObject
+     * @since 2.0.0
      */
     public function __construct(
         $useIntlFormatObject = null
@@ -38,6 +42,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      * Get locale resolver
      *
      * @return \Magento\Framework\Locale\ResolverInterface|mixed
+     * @since 2.1.0
      */
     private function getLocaleResolver()
     {
@@ -51,6 +56,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function formatObject($object, $format = null, $locale = null)
     {
@@ -69,6 +75,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      * @param string|null $locale
      * @return string
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function doFormatObject($object, $format = null, $locale = null)
     {

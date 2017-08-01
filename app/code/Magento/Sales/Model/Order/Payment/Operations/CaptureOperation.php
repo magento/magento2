@@ -11,6 +11,11 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
+/**
+ * Class \Magento\Sales\Model\Order\Payment\Operations\CaptureOperation
+ *
+ * @since 2.0.0
+ */
 class CaptureOperation extends AbstractOperation
 {
     /**
@@ -20,6 +25,7 @@ class CaptureOperation extends AbstractOperation
      * @param InvoiceInterface|null $invoice
      * @return OrderPaymentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function capture(OrderPaymentInterface $payment, $invoice)
     {

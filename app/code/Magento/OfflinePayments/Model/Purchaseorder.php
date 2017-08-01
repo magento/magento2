@@ -11,6 +11,7 @@ namespace Magento\OfflinePayments\Model;
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @api
+ * @since 2.0.0
  */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -20,16 +21,19 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      * Payment method code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = self::PAYMENT_METHOD_PURCHASEORDER_CODE;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Purchaseorder::class;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Purchaseorder::class;
 
@@ -37,6 +41,7 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isOffline = true;
 
@@ -46,6 +51,7 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {

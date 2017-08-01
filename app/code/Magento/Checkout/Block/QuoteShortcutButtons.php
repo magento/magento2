@@ -9,11 +9,13 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -22,6 +24,7 @@ class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -36,6 +39,7 @@ class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
      * Dispatch shortcuts container event
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

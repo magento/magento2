@@ -14,16 +14,19 @@ use Magento\Framework\Json\EncoderInterface;
  * Downloadable Product Links part block
  *
  * @api
+ * @since 2.0.0
  */
 class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
+     * @since 2.0.0
      */
     protected $pricingHelper;
 
     /**
      * @var EncoderInterface
+     * @since 2.0.0
      */
     protected $encoder;
 
@@ -32,6 +35,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param EncoderInterface $encoder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -49,6 +53,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLinksPurchasedSeparately()
     {
@@ -58,6 +63,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLinkSelectionRequired()
     {
@@ -66,6 +72,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @return boolean
+     * @since 2.0.0
      */
     public function hasLinks()
     {
@@ -74,6 +81,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -85,6 +93,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param float $price
      * @return float
+     * @since 2.0.0
      */
     public function getCurrencyPrice($price)
     {
@@ -94,6 +103,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getJsonConfig()
     {
@@ -115,6 +125,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param Link $link
      * @return string
+     * @since 2.0.0
      */
     public function getLinkSampleUrl($link)
     {
@@ -126,6 +137,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * Return title of links section
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLinksTitle()
     {
@@ -143,6 +155,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsOpenInNewWindow()
     {
@@ -158,6 +171,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param Link $link
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsLinkChecked($link)
     {
@@ -174,6 +188,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param Link $link
      * @return string
+     * @since 2.0.0
      */
     public function getLinkCheckedValue($link)
     {
@@ -183,6 +198,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param Link $link
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected function getLinkAmount($link)
     {
@@ -192,6 +208,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param Link $link
      * @return string
+     * @since 2.0.0
      */
     public function getLinkPrice(Link $link)
     {
@@ -206,6 +223,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get LinkPrice Type
      *
      * @return \Magento\Framework\Pricing\Price\PriceInterface
+     * @since 2.0.0
      */
     protected function getPriceType()
     {

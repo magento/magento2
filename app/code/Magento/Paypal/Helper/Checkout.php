@@ -9,16 +9,19 @@ use Magento\Sales\Model\Order;
 
 /**
  * Checkout workflow helper
+ * @since 2.0.0
  */
 class Checkout
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @param \Magento\Checkout\Model\Session $session
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $session
@@ -31,6 +34,7 @@ class Checkout
      *
      * @param string $comment Comment appended to order history
      * @return bool True if order cancelled, false otherwise
+     * @since 2.0.0
      */
     public function cancelCurrentOrder($comment)
     {
@@ -46,6 +50,7 @@ class Checkout
      * Restores quote
      *
      * @return bool
+     * @since 2.0.0
      */
     public function restoreQuote()
     {

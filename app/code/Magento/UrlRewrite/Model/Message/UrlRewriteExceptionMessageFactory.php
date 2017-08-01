@@ -12,21 +12,31 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Factory;
 use Magento\Framework\Exception\RuntimeException;
 
+/**
+ * Class \Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory
+ *
+ * @since 2.2.0
+ */
 class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
     const URL_DUPLICATE_MESSAGE_MAP_ID = 'urlDuplicateMessageMapId';
 
-    /** @var Factory */
+    /**
+     * @var \Magento\Framework\Message\Factory
+     * @since 2.2.0
+     */
     private $messageFactory;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @param Factory $messageFactory
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @since 2.2.0
      */
     public function __construct(Factory $messageFactory, \Magento\Framework\UrlInterface $urlBuilder)
     {
@@ -36,6 +46,7 @@ class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterf
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR)
     {

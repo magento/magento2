@@ -11,6 +11,11 @@ namespace Magento\Framework\Webapi\Rest;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Request
+ *
+ * @since 2.0.0
+ */
 class Request extends \Magento\Framework\Webapi\Request
 {
     /**#@+
@@ -29,19 +34,34 @@ class Request extends \Magento\Framework\Webapi\Request
 
     const DEFAULT_ACCEPT = '*/*';
 
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.0.0
+     */
     protected $_serviceName;
 
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.0.0
+     */
     protected $_serviceType;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerInterface */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
+     * @since 2.0.0
+     */
     protected $_deserializer;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $_bodyParams;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory
+     * @since 2.0.0
+     */
     protected $_deserializerFactory;
 
     /**
@@ -53,6 +73,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Webapi\Rest\Request\DeserializerFactory $deserializerFactory
      * @param null|string $uri
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader,
@@ -70,6 +91,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * Get request deserializer.
      *
      * @return \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
+     * @since 2.0.0
      */
     protected function _getDeserializer()
     {
@@ -83,6 +105,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * Retrieve accept types understandable by requester in a form of array sorted by quality in descending order.
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getAcceptTypes()
     {
@@ -121,6 +144,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * Fetch data from HTTP Request body.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBodyParams()
     {
@@ -139,6 +163,7 @@ class Request extends \Magento\Framework\Webapi\Request
      *
      * @return string
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -163,6 +188,7 @@ class Request extends \Magento\Framework\Webapi\Request
      *
      * @return string
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function getHttpMethod()
     {
@@ -176,6 +202,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * Fetch and return parameter data from the request.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRequestData()
     {
@@ -207,8 +234,9 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param array $urlPathParams url path parameters as array
      * @return array
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::overrideRequestBodyIdWithPathParam
+     * @since 2.0.0
      */
     protected function overrideRequestBodyIdWithPathParam($urlPathParams)
     {
@@ -237,8 +265,9 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param string $key
      * @param string $value
      * @return void
-     * @deprecated
+     * @deprecated 2.1.0
      * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::substituteParameters
+     * @since 2.0.0
      */
     protected function substituteParameters(&$requestData, $key, $value)
     {

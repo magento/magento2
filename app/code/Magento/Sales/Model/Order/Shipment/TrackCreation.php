@@ -9,26 +9,31 @@ use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 
 /**
  * Class TrackCreation
+ * @since 2.2.0
  */
 class TrackCreation implements ShipmentTrackCreationInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $trackNumber;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $title;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $carrierCode;
 
     /**
      * @var \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface
+     * @since 2.2.0
      */
     private $extensionAttributes;
 
@@ -36,6 +41,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTrackNumber()
     {
@@ -44,6 +50,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setTrackNumber($trackNumber)
     {
@@ -53,6 +60,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTitle()
     {
@@ -61,6 +69,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setTitle($title)
     {
@@ -70,6 +79,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getCarrierCode()
     {
@@ -78,6 +88,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setCarrierCode($carrierCode)
     {
@@ -87,6 +98,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -95,6 +107,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes

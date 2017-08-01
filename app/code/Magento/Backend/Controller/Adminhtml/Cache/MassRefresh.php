@@ -9,12 +9,18 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache\MassRefresh
+ *
+ * @since 2.0.0
+ */
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * Mass action for cache refresh
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

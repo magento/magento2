@@ -11,12 +11,18 @@
  */
 namespace Magento\Config\Block\System\Config\Form\Field;
 
+/**
+ * Class \Magento\Config\Block\System\Config\Form\Field\File
+ *
+ * @since 2.0.0
+ */
 class File extends \Magento\Framework\Data\Form\Element\File
 {
     /**
      * Get element html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -29,6 +35,7 @@ class File extends \Magento\Framework\Data\Form\Element\File
      * Get html for additional delete checkbox field
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDeleteCheckbox()
     {

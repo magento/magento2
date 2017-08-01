@@ -14,11 +14,13 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
  * DataProvider for product edit form
  *
  * @api
+ * @since 2.1.0
  */
 class ProductDataProvider extends AbstractDataProvider
 {
     /**
      * @var PoolInterface
+     * @since 2.1.0
      */
     private $pool;
 
@@ -30,6 +32,7 @@ class ProductDataProvider extends AbstractDataProvider
      * @param PoolInterface $pool
      * @param array $meta
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -47,6 +50,7 @@ class ProductDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getData()
     {
@@ -60,6 +64,7 @@ class ProductDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getMeta()
     {

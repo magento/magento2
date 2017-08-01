@@ -10,16 +10,19 @@ namespace Magento\Backend\Block\Page;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Footer extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'page/footer.phtml';
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
+     * @since 2.1.0
      */
     protected $productMetadata;
 
@@ -27,6 +30,7 @@ class Footer extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,6 +43,7 @@ class Footer extends \Magento\Backend\Block\Template
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,6 +54,7 @@ class Footer extends \Magento\Backend\Block\Template
      * Get product version
      *
      * @return string
+     * @since 2.1.0
      */
     public function getMagentoVersion()
     {

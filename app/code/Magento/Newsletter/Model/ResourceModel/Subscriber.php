@@ -11,6 +11,7 @@ namespace Magento\Newsletter\Model\ResourceModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,6 +19,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * DB connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -25,6 +27,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Name of subscriber link DB table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_subscriberLinkTable;
 
@@ -32,6 +35,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Name of scope for error messages
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_messagesScope = 'newsletter/session';
 
@@ -39,11 +43,13 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
@@ -54,6 +60,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -71,6 +78,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get tablename from config
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -84,6 +92,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $scope
      * @return void
+     * @since 2.0.0
      */
     public function setMessagesScope($scope)
     {
@@ -95,6 +104,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $subscriberEmail
      * @return array
+     * @since 2.0.0
      */
     public function loadByEmail($subscriberEmail)
     {
@@ -114,6 +124,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return array
+     * @since 2.0.0
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
@@ -140,6 +151,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Generates random code for subscription confirmation
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _generateRandomCode()
     {
@@ -153,6 +165,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Newsletter\Model\Queue $queue
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function received(\Magento\Newsletter\Model\Subscriber $subscriber, \Magento\Newsletter\Model\Queue $queue)
     {

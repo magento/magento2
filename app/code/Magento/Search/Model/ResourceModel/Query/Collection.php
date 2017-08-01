@@ -11,6 +11,7 @@ use Magento\Store\Model\Store;
  * Search query collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -18,6 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store for filter
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -25,6 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -32,6 +35,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Search resource helper
      *
      * @var \Magento\Framework\DB\Helper
+     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -44,6 +48,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -64,6 +69,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Init model for collection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,6 +81,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param Store|int $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($store)
     {
@@ -89,6 +96,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve Store ID Filter
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -100,6 +108,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $query
      * @return $this
+     * @since 2.0.0
      */
     public function setQueryFilter($query)
     {
@@ -126,6 +135,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function setPopularQueryFilter($storeIds = null)
     {
@@ -156,6 +166,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Set Recent Queries Order
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setRecentQueryFilter()
     {
@@ -168,6 +179,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|int $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {

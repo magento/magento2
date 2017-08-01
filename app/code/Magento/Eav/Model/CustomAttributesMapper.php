@@ -14,26 +14,31 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class CustomAttributesMapper
+ * @since 2.2.0
  */
 class CustomAttributesMapper implements MapperInterface
 {
     /**
      * @var AttributeRepositoryInterface
+     * @since 2.2.0
      */
     private $attributeRepository;
 
     /**
      * @var MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $attributes;
 
@@ -41,6 +46,7 @@ class CustomAttributesMapper implements MapperInterface
      * @param AttributeRepositoryInterface $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @since 2.2.0
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
@@ -54,6 +60,7 @@ class CustomAttributesMapper implements MapperInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function entityToDatabase($entityType, $data)
     {
@@ -77,6 +84,7 @@ class CustomAttributesMapper implements MapperInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function databaseToEntity($entityType, $data)
     {
@@ -101,6 +109,7 @@ class CustomAttributesMapper implements MapperInterface
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception
+     * @since 2.2.0
      */
     private function getNonStaticAttributes($entityType)
     {

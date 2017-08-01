@@ -8,6 +8,7 @@ namespace Magento\Backup\Model\ResourceModel;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Helper extends \Magento\Framework\DB\Helper
 {
@@ -16,6 +17,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * [tbl_name] = array(create foreign key strings)
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_foreignKeys = [];
 
@@ -23,6 +25,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * Core Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_coreDate;
 
@@ -30,6 +33,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -45,6 +49,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableDropSql($tableName)
     {
@@ -57,6 +62,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string|null $tableName
      * @return string|bool
+     * @since 2.0.0
      */
     public function getTableForeignKeysSql($tableName = null)
     {
@@ -81,6 +87,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param string $tableName
      * @param array $foreignKeys
      * @return string
+     * @since 2.0.0
      */
     protected function _buildForeignKeysAlterTableSql($tableName, $foreignKeys)
     {
@@ -101,6 +108,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param string $tableName
      * @param boolean $addDropIfExists
      * @return string
+     * @since 2.0.0
      */
     public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
@@ -125,6 +133,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param bool $withForeignKeys
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getTableCreateSql($tableName, $withForeignKeys = false)
     {
@@ -171,6 +180,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * Returns SQL header data, move from original resource model
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeader()
     {
@@ -202,6 +212,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * Returns SQL footer data, move from original resource model
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFooter()
     {
@@ -224,6 +235,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableDataBeforeSql($tableName)
     {
@@ -240,6 +252,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getTableDataAfterSql($tableName)
     {
@@ -254,6 +267,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param int $count
      * @param int $offset
      * @return string
+     * @since 2.0.0
      */
     public function getPartInsertSql($tableName, $count = null, $offset = null)
     {
@@ -284,6 +298,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     public function getInsertSql($tableName)
     {
@@ -296,6 +311,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param string $tableName
      * @param array $row
      * @return string
+     * @since 2.0.0
      */
     protected function _quoteRow($tableName, array $row)
     {
@@ -321,6 +337,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * Prepare transaction isolation level for backup process
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepareTransactionIsolationLevel()
     {
@@ -331,6 +348,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * Restore transaction isolation level after backup
      *
      * @return void
+     * @since 2.0.0
      */
     public function restoreTransactionIsolationLevel()
     {

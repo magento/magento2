@@ -7,6 +7,7 @@ namespace Magento\Customer\Api;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface CustomerManagementInterface
 {
@@ -14,6 +15,7 @@ interface CustomerManagementInterface
      * Provide the number of customer count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCount();
 }

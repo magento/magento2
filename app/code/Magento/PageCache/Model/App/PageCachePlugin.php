@@ -6,6 +6,11 @@
 
 namespace Magento\PageCache\Model\App;
 
+/**
+ * Class \Magento\PageCache\Model\App\PageCachePlugin
+ *
+ * @since 2.0.0
+ */
 class PageCachePlugin
 {
     /**
@@ -24,6 +29,7 @@ class PageCachePlugin
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeSave(
         \Magento\Framework\App\PageCache\Cache $subject,
@@ -46,6 +52,7 @@ class PageCachePlugin
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterLoad(
         \Magento\Framework\App\PageCache\Cache $subject,
@@ -64,6 +71,7 @@ class PageCachePlugin
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     private function handleCompression($data)
     {

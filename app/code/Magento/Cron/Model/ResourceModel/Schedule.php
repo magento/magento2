@@ -9,6 +9,7 @@ namespace Magento\Cron\Model\ResourceModel;
  * Schedule resource
  *
  * @api
+ * @since 2.0.0
  */
 class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -32,6 +34,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $newStatus
      * @param string $currentStatus
      * @return bool
+     * @since 2.0.0
      */
     public function trySetJobStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {
@@ -59,6 +62,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $newStatus
      * @param string $currentStatus
      * @return bool
+     * @since 2.2.0
      */
     public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {

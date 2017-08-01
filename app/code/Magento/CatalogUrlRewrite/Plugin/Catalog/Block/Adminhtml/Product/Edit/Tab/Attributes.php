@@ -5,12 +5,18 @@
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
+ *
+ * @since 2.0.0
+ */
 class Attributes
 {
     /**
      * @param \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes $subject
      * @param \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes $result
      * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
+     * @since 2.0.0
      */
     public function afterSetForm(
         \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes $subject,

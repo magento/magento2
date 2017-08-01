@@ -24,28 +24,45 @@ use Zend\Code\Reflection\ClassReflection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
     const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @since 2.0.0
+     */
     protected $typeProcessor;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
+     */
     protected $objectManager;
 
-    /** @var AttributeValueFactory */
+    /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     * @since 2.0.0
+     */
     protected $attributeValueFactory;
 
-    /** @var  CustomAttributeTypeLocatorInterface */
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     * @since 2.0.0
+     */
     protected $customAttributeTypeLocator;
 
-    /** @var  MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     * @since 2.0.0
+     */
     protected $methodsMap;
 
     /**
      * @var \Magento\Framework\Reflection\NameFinder
+     * @since 2.1.0
      */
     private $nameFinder;
 
@@ -57,6 +74,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
+     * @since 2.0.0
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -77,7 +95,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @return \Magento\Framework\Reflection\NameFinder
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getNameFinder()
     {
@@ -103,6 +122,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return array list of parameters that can be used to call the service method
      * @throws InputException if no value is provided for required parameters
      * @throws WebapiException
+     * @since 2.0.0
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
@@ -142,6 +162,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return object the newly created and populated object
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _createFromArray($className, $data)
     {
@@ -199,6 +220,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $dataObjectClassName
      * @return AttributeValue[]
      * @throws SerializationException
+     * @since 2.0.0
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
@@ -245,6 +267,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @param string[] $customAttribute
      * @return string[]
+     * @since 2.1.0
      */
     private function processCustomAttribute($customAttribute)
     {
@@ -279,6 +302,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $type The type of data object to create
      * @param array $customAttributeValue The data object values
      * @return mixed
+     * @since 2.0.0
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
@@ -302,6 +326,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $type Convert given value to the this type
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function convertValue($data, $type)
     {
@@ -335,6 +360,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array|mixed $value
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _removeSoapItemNode($value)
     {
@@ -362,6 +388,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $inputError
      * @return void
      * @throws InputException
+     * @since 2.0.0
      */
     protected function processInputError($inputError)
     {

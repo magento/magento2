@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Reviews extends \Magento\Review\Block\Adminhtml\Grid
 {
@@ -14,6 +15,7 @@ class Reviews extends \Magento\Review\Block\Adminhtml\Grid
      * Hide grid mass action elements
      *
      * @return \Magento\Customer\Block\Adminhtml\Edit\Tab\Reviews
+     * @since 2.0.0
      */
     protected function _prepareMassaction()
     {
@@ -24,6 +26,7 @@ class Reviews extends \Magento\Review\Block\Adminhtml\Grid
      * Determine ajax url for grid refresh
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {

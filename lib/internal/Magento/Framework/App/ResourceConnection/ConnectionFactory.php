@@ -9,6 +9,7 @@ use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory as ModelConn
 
 /**
  * Connection adapter factory
+ * @since 2.0.0
  */
 class ConnectionFactory extends ModelConnectionFactory
 {
@@ -18,6 +19,7 @@ class ConnectionFactory extends ModelConnectionFactory
      * @param array $connectionConfig
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create(array $connectionConfig)
     {

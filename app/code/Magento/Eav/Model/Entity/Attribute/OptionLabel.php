@@ -12,11 +12,13 @@ use Magento\Framework\Model\AbstractModel;
  * Entity attribute option label model
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class OptionLabel extends AbstractModel implements AttributeOptionLabelInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -25,6 +27,7 @@ class OptionLabel extends AbstractModel implements AttributeOptionLabelInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -36,6 +39,7 @@ class OptionLabel extends AbstractModel implements AttributeOptionLabelInterface
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -47,6 +51,7 @@ class OptionLabel extends AbstractModel implements AttributeOptionLabelInterface
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {

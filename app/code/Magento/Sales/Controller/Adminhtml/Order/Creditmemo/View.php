@@ -7,6 +7,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Backend\App\Action
 {
     /**
@@ -18,16 +23,19 @@ class View extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
+     * @since 2.0.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -36,6 +44,7 @@ class View extends \Magento\Backend\App\Action
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -53,6 +62,7 @@ class View extends \Magento\Backend\App\Action
      * Creditmemo information page
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

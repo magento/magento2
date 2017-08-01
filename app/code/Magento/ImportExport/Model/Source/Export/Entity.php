@@ -9,16 +9,19 @@ namespace Magento\ImportExport\Model\Source\Export;
  * Source export entity model
  *
  * @api
+ * @since 2.0.0
  */
 class Entity implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface
+     * @since 2.0.0
      */
     protected $_exportConfig;
 
     /**
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig)
     {
@@ -27,6 +30,7 @@ class Entity implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

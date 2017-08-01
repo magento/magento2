@@ -8,21 +8,29 @@ namespace Magento\Quote\Observer\Webapi;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Quote\Observer\Webapi\SubmitObserver
+ *
+ * @since 2.0.0
+ */
 class SubmitObserver implements ObserverInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var OrderSender
+     * @since 2.0.0
      */
     protected $orderSender;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param OrderSender $orderSender
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -36,6 +44,7 @@ class SubmitObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

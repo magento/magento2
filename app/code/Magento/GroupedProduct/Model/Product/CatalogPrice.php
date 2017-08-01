@@ -7,22 +7,26 @@ namespace Magento\GroupedProduct\Model\Product;
 
 /**
  * Price model for external catalogs
+ * @since 2.0.0
  */
 class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Product\CatalogPrice
+     * @since 2.0.0
      */
     protected $commonPriceModel;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -35,6 +39,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,
@@ -72,6 +77,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
      * @param \Magento\Catalog\Model\Product $product
      * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product)
     {

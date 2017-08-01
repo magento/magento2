@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Config;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ScopeConfigInterface
 {
@@ -25,6 +26,7 @@ interface ScopeConfigInterface
      * @param string $scopeType The scope to use to determine config value, e.g., 'store' or 'default'
      * @param null|string $scopeCode
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null);
 
@@ -35,6 +37,7 @@ interface ScopeConfigInterface
      * @param string $scopeType The scope to use to determine config value, e.g., 'store' or 'default'
      * @param null|string $scopeCode
      * @return bool
+     * @since 2.0.0
      */
     public function isSetFlag($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null);
 }

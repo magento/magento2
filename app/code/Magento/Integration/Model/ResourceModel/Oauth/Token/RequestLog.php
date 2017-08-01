@@ -11,6 +11,7 @@ use Magento\Integration\Model\Oauth\Token\RequestLog\Config as RequestLogConfig;
 
 /**
  * Resource model for failed authentication attempts to retrieve admin/customer token.
+ * @since 2.1.0
  */
 class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     ReaderInterface,
@@ -18,11 +19,13 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.1.0
      */
     private $dateTime;
 
     /**
      * @var RequestLogConfig
+     * @since 2.1.0
      */
     private $requestLogConfig;
 
@@ -33,6 +36,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param RequestLogConfig $requestLogConfig
      * @param string|null $connectionName
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -47,6 +51,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -55,6 +60,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getFailuresCount($userName, $userType)
     {
@@ -67,6 +73,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function resetFailuresCount($userName, $userType)
     {
@@ -78,6 +85,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function incrementFailuresCount($userName, $userType)
     {
@@ -102,6 +110,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function clearExpiredFailures()
     {

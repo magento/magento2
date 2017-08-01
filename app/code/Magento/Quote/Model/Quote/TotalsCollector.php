@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 /**
  * Class TotalsCollector
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class TotalsCollector
 {
@@ -21,11 +22,13 @@ class TotalsCollector
      * Total models collector
      *
      * @var \Magento\Quote\Model\Quote\Address\Total\Collector
+     * @since 2.0.0
      */
     protected $totalCollector;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\Total\CollectorFactory
+     * @since 2.0.0
      */
     protected $totalCollectorFactory;
 
@@ -33,21 +36,25 @@ class TotalsCollector
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
+     * @since 2.0.0
      */
     protected $totalFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollectorList
+     * @since 2.0.0
      */
     protected $collectorList;
 
@@ -55,16 +62,19 @@ class TotalsCollector
      * Quote validator
      *
      * @var \Magento\Quote\Model\QuoteValidator
+     * @since 2.0.0
      */
     protected $quoteValidator;
 
     /**
      * @var \Magento\Quote\Model\ShippingFactory
+     * @since 2.0.0
      */
     protected $shippingFactory;
 
     /**
      * @var \Magento\Quote\Model\ShippingAssignmentFactory
+     * @since 2.0.0
      */
     protected $shippingAssignmentFactory;
 
@@ -79,6 +89,7 @@ class TotalsCollector
      * @param \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory
      * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         Collector $totalCollector,
@@ -105,6 +116,7 @@ class TotalsCollector
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return Address\Total
+     * @since 2.0.0
      */
     public function collectQuoteTotals(\Magento\Quote\Model\Quote $quote)
     {
@@ -117,6 +129,7 @@ class TotalsCollector
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote\Address\Total
+     * @since 2.0.0
      */
     public function collect(\Magento\Quote\Model\Quote $quote)
     {
@@ -174,6 +187,7 @@ class TotalsCollector
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @since 2.0.0
      */
     protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
     {
@@ -200,6 +214,7 @@ class TotalsCollector
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @since 2.0.0
      */
     protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)
     {
@@ -234,6 +249,7 @@ class TotalsCollector
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address $address
      * @return Address\Total
+     * @since 2.0.0
      */
     public function collectAddressTotals(
         \Magento\Quote\Model\Quote $quote,

@@ -11,6 +11,7 @@ use Magento\Setup\Model\BasePackageInfo;
 /**
  * This class is used by setup:cron:run command to check if this command can be run properly. It also checks if PHP
  * version, settings and extensions are correct.
+ * @since 2.0.0
  */
 class ReadinessCheck
 {
@@ -37,31 +38,37 @@ class ReadinessCheck
 
     /**
      * @var \Magento\Setup\Validator\DbValidator
+     * @since 2.0.0
      */
     private $dbValidator;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var \Magento\Setup\Model\PhpReadinessCheck
+     * @since 2.0.0
      */
     private $phpReadinessCheck;
 
     /**
      * @var BasePackageInfo
+     * @since 2.1.0
      */
     private $basePackageInfo;
 
     /**
      * @var Status
+     * @since 2.1.0
      */
     private $status;
 
@@ -74,6 +81,7 @@ class ReadinessCheck
      * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
      * @param BasePackageInfo $basePackageInfo
      * @param Status $status
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Validator\DbValidator $dbValidator,
@@ -95,6 +103,7 @@ class ReadinessCheck
      * Run the readiness check
      *
      * @return bool
+     * @since 2.0.0
      */
     public function runReadinessCheck()
     {
@@ -175,6 +184,7 @@ class ReadinessCheck
      *
      * @param array $phpVersionCheckResult
      * @return string
+     * @since 2.1.0
      */
     private function getPhpVersionCheckErrorLogMessage($phpVersionCheckResult)
     {
@@ -199,6 +209,7 @@ class ReadinessCheck
      *
      * @param array $phpExtensionsCheckResult
      * @return string
+     * @since 2.1.0
      */
     private function getPhpExtensionsCheckErrorLogMessage($phpExtensionsCheckResult)
     {
@@ -222,6 +233,7 @@ class ReadinessCheck
      *
      * @param array $phpSettingsCheckResult
      * @return string
+     * @since 2.1.0
      */
     private function getPhpSettingsCheckErrorLogMessage($phpSettingsCheckResult)
     {
@@ -241,6 +253,7 @@ class ReadinessCheck
      * A private function to check database access and return appropriate error message in case of error
      *
      * @return string
+     * @since 2.1.0
      */
     private function performDBCheck()
     {

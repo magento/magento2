@@ -8,10 +8,16 @@ namespace Magento\Backup\Controller\Adminhtml\Index;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Backup\Controller\Adminhtml\Index\Download
+ *
+ * @since 2.0.0
+ */
 class Download extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -23,6 +29,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
      * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
      * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -48,6 +55,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
      * Download backup action
      *
      * @return void|\Magento\Backend\App\Action
+     * @since 2.0.0
      */
     public function execute()
     {

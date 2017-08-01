@@ -15,32 +15,38 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * This class defines basic data structure of how custom attributes are stored in an ExtensibleModel.
  * Implementations may choose to process custom attributes as their persistence requires them to.
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractExtensibleModel extends AbstractModel implements
     \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
      * @var ExtensionAttributesFactory
+     * @since 2.0.0
      */
     protected $extensionAttributesFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesInterface
+     * @since 2.0.0
      */
     protected $extensionAttributes;
 
     /**
      * @var AttributeValueFactory
+     * @since 2.0.0
      */
     protected $customAttributeFactory;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $customAttributesCodes = null;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $customAttributesChanged = false;
 
@@ -52,6 +58,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -76,6 +83,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * @param array $data
      * @return array processed data
+     * @since 2.0.0
      */
     protected function filterCustomAttributes($data)
     {
@@ -101,6 +109,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * Initialize customAttributes based on existing data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function initializeCustomAttributes()
     {
@@ -129,6 +138,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
+     * @since 2.0.0
      */
     public function getCustomAttributes()
     {
@@ -142,6 +152,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * @param string $attributeCode
      * @return \Magento\Framework\Api\AttributeInterface|null null if the attribute has not been set
+     * @since 2.0.0
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -153,6 +164,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -161,6 +173,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -179,6 +192,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * {@inheritdoc}
      *
      * Added custom attributes support.
+     * @since 2.0.0
      */
     public function setData($key, $value = null)
     {
@@ -197,6 +211,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * {@inheritdoc}
      *
      * Unset customAttributesChanged flag
+     * @since 2.0.0
      */
     public function unsetData($key = null)
     {
@@ -211,6 +226,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * @param array $customAttributes
      * @return void
+     * @since 2.0.0
      */
     protected function convertCustomAttributeValues(array &$customAttributes)
     {
@@ -237,6 +253,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * @param string $key
      * @param string|int $index
      * @return mixed
+     * @since 2.0.0
      */
     public function getData($key = '', $index = null)
     {
@@ -275,6 +292,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * By default, entity can be extended only using extension attributes functionality.
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function getCustomAttributesCodes()
     {
@@ -288,6 +306,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @return string[]
+     * @since 2.0.0
      */
     protected function getEavAttributesCodes(\Magento\Framework\Api\MetadataServiceInterface $metadataService)
     {
@@ -307,6 +326,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setId($value)
     {
@@ -319,6 +339,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * @param \Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     protected function _setExtensionAttributes(\Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes)
     {
@@ -330,6 +351,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Framework\Api\ExtensionAttributesInterface
+     * @since 2.0.0
      */
     protected function _getExtensionAttributes()
     {
@@ -338,6 +360,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function __sleep()
     {
@@ -346,6 +369,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function __wakeup()
     {

@@ -17,22 +17,26 @@ use \Magento\Framework\File\Csv;
  *
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
+ * @since 2.0.0
  */
 class Context
 {
     /**
      * @var FixtureManager
+     * @since 2.0.0
      */
     private $fixtureManager;
 
     /**
      * @var Csv
+     * @since 2.0.0
      */
     private $csvReader;
 
     /**
      * @param FixtureManager $fixtureManager
      * @param Csv $csvReader
+     * @since 2.0.0
      */
     public function __construct(FixtureManager $fixtureManager, Csv $csvReader)
     {
@@ -42,6 +46,7 @@ class Context
 
     /**
      * @return FixtureManager
+     * @since 2.0.0
      */
     public function getFixtureManager()
     {
@@ -50,6 +55,7 @@ class Context
 
     /**
      * @return Csv
+     * @since 2.0.0
      */
     public function getCsvReader()
     {

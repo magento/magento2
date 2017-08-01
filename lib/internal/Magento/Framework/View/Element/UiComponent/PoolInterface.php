@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface PoolInterface
+ * @since 2.0.0
  */
 interface PoolInterface
 {
@@ -17,6 +18,7 @@ interface PoolInterface
      *
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     public function register(UiComponentInterface $component);
 
@@ -24,6 +26,7 @@ interface PoolInterface
      * Retrieve components pool
      *
      * @return UiComponentInterface[]
+     * @since 2.0.0
      */
     public function getComponents();
 }

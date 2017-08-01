@@ -22,6 +22,7 @@ use Magento\Sales\Api\Data\TransactionInterface;
 /**
  * Class CaptureStrategyCommand
  * @SuppressWarnings(PHPMD)
+ * @since 2.1.0
  */
 class CaptureStrategyCommand implements CommandInterface
 {
@@ -42,36 +43,43 @@ class CaptureStrategyCommand implements CommandInterface
 
     /**
      * @var CommandPoolInterface
+     * @since 2.1.0
      */
     private $commandPool;
 
     /**
      * @var TransactionRepositoryInterface
+     * @since 2.1.0
      */
     private $transactionRepository;
 
     /**
      * @var FilterBuilder
+     * @since 2.1.0
      */
     private $filterBuilder;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
     /**
      * @var BraintreeAdapter
+     * @since 2.1.0
      */
     private $braintreeAdapter;
 
     /**
      * @var BraintreeSearchAdapter
+     * @since 2.1.0
      */
     private $braintreeSearchAdapter;
 
@@ -85,6 +93,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param SubjectReader $subjectReader
      * @param BraintreeAdapter $braintreeAdapter
      * @param BraintreeSearchAdapter $braintreeSearchAdapter
+     * @since 2.1.0
      */
     public function __construct(
         CommandPoolInterface $commandPool,
@@ -106,6 +115,7 @@ class CaptureStrategyCommand implements CommandInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function execute(array $commandSubject)
     {
@@ -124,6 +134,7 @@ class CaptureStrategyCommand implements CommandInterface
      * Get execution command name
      * @param OrderPaymentInterface $payment
      * @return string
+     * @since 2.1.0
      */
     private function getCommand(OrderPaymentInterface $payment)
     {
@@ -145,6 +156,7 @@ class CaptureStrategyCommand implements CommandInterface
     /**
      * @param OrderPaymentInterface $payment
      * @return boolean
+     * @since 2.1.0
      */
     private function isExpiredAuthorization(OrderPaymentInterface $payment)
     {
@@ -163,6 +175,7 @@ class CaptureStrategyCommand implements CommandInterface
      *
      * @param OrderPaymentInterface $payment
      * @return bool
+     * @since 2.1.0
      */
     private function isExistsCaptureTransaction(OrderPaymentInterface $payment)
     {

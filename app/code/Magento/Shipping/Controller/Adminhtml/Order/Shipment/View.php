@@ -8,6 +8,11 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Backend\App\Action
 {
     /**
@@ -19,16 +24,19 @@ class View extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -37,6 +45,7 @@ class View extends \Magento\Backend\App\Action
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -54,6 +63,7 @@ class View extends \Magento\Backend\App\Action
      * Shipment information page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

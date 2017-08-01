@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model\ResourceModel\Billing;
 
 /**
  * Billing agreement resource model
+ * @since 2.0.0
  */
 class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -14,6 +15,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -26,6 +28,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $agreementId
      * @param int $orderId
      * @return $this
+     * @since 2.0.0
      */
     public function addOrderRelation($agreementId, $orderId)
     {
@@ -42,6 +45,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Data\Collection\AbstractDb $orderCollection
      * @param string|int|array $agreementIds
      * @return $this
+     * @since 2.0.0
      */
     public function addOrdersFilter(\Magento\Framework\Data\Collection\AbstractDb $orderCollection, $agreementIds)
     {

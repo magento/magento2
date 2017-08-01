@@ -10,6 +10,7 @@ use Magento\Tax\Api\Data\QuoteDetailsInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterface
 {
@@ -26,6 +27,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBillingAddress()
     {
@@ -34,6 +36,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getShippingAddress()
     {
@@ -42,6 +45,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCustomerTaxClassKey()
     {
@@ -50,6 +54,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -58,6 +63,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -66,6 +72,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCustomerTaxClassId()
     {
@@ -77,6 +84,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $billingAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setBillingAddress(\Magento\Customer\Api\Data\AddressInterface $billingAddress = null)
     {
@@ -88,6 +96,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $shippingAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingAddress(\Magento\Customer\Api\Data\AddressInterface $shippingAddress = null)
     {
@@ -99,6 +108,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null)
     {
@@ -110,6 +120,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {
@@ -121,6 +132,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {
@@ -132,6 +144,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param int $customerTaxClassId
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerTaxClassId($customerTaxClassId)
     {
@@ -142,6 +155,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -153,6 +167,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      *
      * @param \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes)
     {

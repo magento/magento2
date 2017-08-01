@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintPackage
+ *
+ * @since 2.0.0
+ */
 class PrintPackage extends \Magento\Backend\App\Action
 {
     /**
@@ -21,11 +26,13 @@ class PrintPackage extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
@@ -33,6 +40,7 @@ class PrintPackage extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -48,6 +56,7 @@ class PrintPackage extends \Magento\Backend\App\Action
      * Create pdf document with information about packages
      *
      * @return ResponseInterface|void
+     * @since 2.0.0
      */
     public function execute()
     {

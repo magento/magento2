@@ -8,21 +8,29 @@ namespace Magento\Framework\Composer;
 use Composer\IO\BufferIO;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\Composer\ComposerFactory
+ *
+ * @since 2.1.0
+ */
 class ComposerFactory
 {
     /**
      * @var DirectoryList
+     * @since 2.1.0
      */
     private $directoryList;
 
     /**
      * @var ComposerJsonFinder
+     * @since 2.1.0
      */
     private $composerJsonFinder;
 
     /**
      * @param DirectoryList $directoryList
      * @param ComposerJsonFinder $composerJsonFinder
+     * @since 2.1.0
      */
     public function __construct(
         DirectoryList $directoryList,
@@ -37,6 +45,7 @@ class ComposerFactory
      *
      * @return \Composer\Composer
      * @throws \Exception
+     * @since 2.1.0
      */
     public function create()
     {

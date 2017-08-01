@@ -10,21 +10,25 @@ namespace Magento\Multishipping\Block\Checkout;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Billing extends \Magento\Payment\Block\Form\Container
 {
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @since 2.0.0
      */
     protected $_multishipping;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Payment\Model\Method\SpecificationInterface
+     * @since 2.0.0
      */
     protected $paymentSpecification;
 
@@ -37,6 +41,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param array $data
      * @param array $additionalChecks
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -59,6 +64,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Prepare children blocks
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -74,6 +80,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      *
      * @param \Magento\Payment\Model\Method\AbstractMethod|null $method
      * @return bool
+     * @since 2.0.0
      */
     protected function _canUseMethod($method)
     {
@@ -88,6 +95,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Retrieve code of current payment method
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getSelectedMethodCode()
     {
@@ -102,6 +110,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Retrieve billing address
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -117,6 +126,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Retrieve quote model object
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -127,6 +137,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Getter
      *
      * @return float
+     * @since 2.0.0
      */
     public function getQuoteBaseGrandTotal()
     {
@@ -137,6 +148,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Retrieve url for select billing address
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSelectAddressUrl()
     {
@@ -147,6 +159,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Retrieve data post destination url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPostActionUrl()
     {
@@ -157,6 +170,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * Retrieve back url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {

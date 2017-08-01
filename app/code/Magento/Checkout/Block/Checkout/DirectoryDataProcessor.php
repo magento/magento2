@@ -15,36 +15,43 @@ use Magento\Framework\App\ObjectManager;
  *
  * This class adds various country and region dictionaries to checkout page.
  * This data can be used by other UI components during checkout flow.
+ * @since 2.2.0
  */
 class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $countryOptions;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $regionOptions;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     * @since 2.2.0
      */
     private $regionCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     * @since 2.2.0
      */
     private $countryCollectionFactory;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var DirectoryHelper
+     * @since 2.2.0
      */
     private $directoryHelper;
 
@@ -55,6 +62,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
      * @param DirectoryHelper $directoryHelper
      * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection,
@@ -74,6 +82,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
      *
      * @param array $jsLayout
      * @return array
+     * @since 2.2.0
      */
     public function process($jsLayout)
     {
@@ -91,6 +100,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
      * Get country options list.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getCountryOptions()
     {
@@ -108,6 +118,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
      * Get region options list.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getRegionOptions()
     {
@@ -125,6 +136,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
      *
      * @param array $countryOptions
      * @return array
+     * @since 2.2.0
      */
     private function orderCountryOptions(array $countryOptions)
     {

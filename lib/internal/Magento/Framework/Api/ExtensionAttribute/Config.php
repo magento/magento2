@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Extension attributes config
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data
 {
@@ -26,6 +27,7 @@ class Config extends \Magento\Framework\Config\Data
      * @param CacheInterface $cache
      * @param string $cacheId|null
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         Reader $reader,

@@ -17,16 +17,19 @@ use Magento\Framework\EntityManager\EntityManager;
  * Sitemap cms page collection model
  *
  * @api
+ * @since 2.0.0
  */
 class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var EntityManager
+     * @since 2.1.0
      */
     protected $entityManager;
 
@@ -35,6 +38,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param MetadataPool $metadataPool
      * @param EntityManager $entityManager
      * @param string $connectionName
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -51,6 +55,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Init resource model (catalog/category)
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,6 +64,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getConnection()
     {
@@ -70,6 +76,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $storeId
      * @return array
+     * @since 2.0.0
      */
     public function getCollection($storeId)
     {
@@ -108,6 +115,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $data
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _prepareObject(array $data)
     {
@@ -126,6 +134,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
+     * @since 2.1.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -156,6 +165,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function save(AbstractModel $object)
     {
@@ -195,6 +205,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function delete(AbstractModel $object)
     {

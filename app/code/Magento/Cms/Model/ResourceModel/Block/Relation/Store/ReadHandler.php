@@ -10,16 +10,19 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
+ * @since 2.1.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var Block
+     * @since 2.1.0
      */
     protected $resourceBlock;
 
     /**
      * @param Block $resourceBlock
+     * @since 2.1.0
      */
     public function __construct(
         Block $resourceBlock
@@ -32,6 +35,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

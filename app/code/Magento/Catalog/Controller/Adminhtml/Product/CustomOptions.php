@@ -9,17 +9,24 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\CustomOptions
+ *
+ * @since 2.0.0
+ */
 class CustomOptions extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
+     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
@@ -28,6 +35,7 @@ class CustomOptions extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Builder $productBuilder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -44,6 +52,7 @@ class CustomOptions extends \Magento\Catalog\Controller\Adminhtml\Product
      * Show custom options in JSON format for specified products
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

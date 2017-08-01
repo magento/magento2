@@ -9,12 +9,18 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportInvoicedExcel
+ *
+ * @since 2.0.0
+ */
 class ExportInvoicedExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Export invoiced report grid to Excel XML format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

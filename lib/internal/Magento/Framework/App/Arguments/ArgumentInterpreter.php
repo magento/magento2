@@ -10,16 +10,19 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter that returns value of an application argument, retrieving its name from a constant
+ * @since 2.0.0
  */
 class ArgumentInterpreter implements InterpreterInterface
 {
     /**
      * @var Constant
+     * @since 2.0.0
      */
     private $constInterpreter;
 
     /**
      * @param Constant $constInterpreter
+     * @since 2.0.0
      */
     public function __construct(Constant $constInterpreter)
     {
@@ -29,6 +32,7 @@ class ArgumentInterpreter implements InterpreterInterface
     /**
      * {@inheritdoc}
      * @return mixed
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

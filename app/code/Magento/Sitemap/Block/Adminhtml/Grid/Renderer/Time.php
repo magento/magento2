@@ -10,10 +10,16 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
+/**
+ * Class \Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Time
+ *
+ * @since 2.0.0
+ */
 class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
@@ -21,6 +27,7 @@ class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -36,6 +43,7 @@ class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

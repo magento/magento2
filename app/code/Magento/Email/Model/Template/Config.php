@@ -10,35 +10,46 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
+/**
+ * Class \Magento\Email\Model\Template\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**
      * @var \Magento\Email\Model\Template\Config\Data
+     * @since 2.0.0
      */
     protected $_dataStorage;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_moduleReader;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $fileSystem;
 
     /**
      * @var \Magento\Framework\View\FileSystem
+     * @since 2.0.0
      */
     protected $viewFileSystem;
 
     /**
      * @var ReadFactory
+     * @since 2.0.0
      */
     private $readDirFactory;
 
     /**
      * @var ThemePackageList
+     * @since 2.0.0
      */
     private $themePackages;
 
@@ -48,6 +59,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param ThemePackageList $themePackages
      * @param ReadFactory $readDirFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
@@ -67,6 +79,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      * Return list of all email templates, both default module and theme-specific templates
      *
      * @return array[]
+     * @since 2.0.0
      */
     public function getAvailableTemplates()
     {
@@ -88,6 +101,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @param string $templateId
      * @return array[]
+     * @since 2.0.0
      */
     public function getThemeTemplates($templateId)
     {
@@ -129,6 +143,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @param string $templateId
      * @return array an array of array('templateId' => '...', 'theme' => '...')
+     * @since 2.0.0
      */
     public function parseTemplateIdParts($templateId)
     {
@@ -149,6 +164,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @param string $templateId
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTemplateLabel($templateId)
     {
@@ -160,6 +176,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @param string $templateId
      * @return string
+     * @since 2.0.0
      */
     public function getTemplateType($templateId)
     {
@@ -171,6 +188,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @param string $templateId
      * @return string
+     * @since 2.0.0
      */
     public function getTemplateModule($templateId)
     {
@@ -182,6 +200,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      *
      * @param string $templateId
      * @return string
+     * @since 2.0.0
      */
     public function getTemplateArea($templateId)
     {
@@ -194,6 +213,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      * @param string $templateId
      * @param array|null $designParams
      * @return string
+     * @since 2.0.0
      */
     public function getTemplateFilename($templateId, $designParams = [])
     {
@@ -216,6 +236,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      * @param string $fieldName Name of a field value of which to return
      * @return string
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     protected function _getInfo($templateId, $fieldName)
     {

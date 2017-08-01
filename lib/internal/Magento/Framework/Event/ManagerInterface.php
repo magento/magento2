@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Interface \Magento\Framework\Event\ManagerInterface
+ *
+ * @since 2.0.0
+ */
 interface ManagerInterface
 {
     /**
@@ -16,6 +21,7 @@ interface ManagerInterface
      * @param string $eventName
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function dispatch($eventName, array $data = []);
 }

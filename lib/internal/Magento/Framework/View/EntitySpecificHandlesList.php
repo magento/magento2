@@ -7,6 +7,7 @@ namespace Magento\Framework\View;
 
 /**
  * Model which allows access to handles containing ID of the rendered entity
+ * @since 2.2.0
  */
 class EntitySpecificHandlesList
 {
@@ -14,6 +15,7 @@ class EntitySpecificHandlesList
      * The list of handles containing entity ID
      *
      * @var string[]
+     * @since 2.2.0
      */
     private $handles = [];
 
@@ -22,6 +24,7 @@ class EntitySpecificHandlesList
      *
      * @param string $handle
      * @return void
+     * @since 2.2.0
      */
     public function addHandle($handle)
     {
@@ -32,6 +35,7 @@ class EntitySpecificHandlesList
      * Get list of handles containing entity ID
      *
      * @return string[]
+     * @since 2.2.0
      */
     public function getHandles()
     {

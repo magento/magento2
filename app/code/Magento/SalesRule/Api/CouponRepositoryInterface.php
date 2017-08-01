@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api;
  * Coupon CRUD interface
  *
  * @api
+ * @since 2.0.0
  */
 interface CouponRepositoryInterface
 {
@@ -20,6 +21,7 @@ interface CouponRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      * @throws \Magento\Framework\Exception\NoSuchEntityException If a coupon ID is sent but the coupon does not exist
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function save(\Magento\SalesRule\Api\Data\CouponInterface $coupon);
 
@@ -30,6 +32,7 @@ interface CouponRepositoryInterface
      * @return \Magento\SalesRule\Api\Data\CouponInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $couponId is not found
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getById($couponId);
 
@@ -43,6 +46,7 @@ interface CouponRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\SalesRule\Api\Data\CouponSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -53,6 +57,7 @@ interface CouponRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteById($couponId);
 }

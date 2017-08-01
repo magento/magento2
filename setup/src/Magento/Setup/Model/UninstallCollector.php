@@ -12,6 +12,7 @@ use Magento\Setup\Module\DataSetupFactory;
 
 /**
  * Class for collecting all Uninstall interfaces in all modules
+ * @since 2.0.0
  */
 class UninstallCollector
 {
@@ -19,6 +20,7 @@ class UninstallCollector
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -26,6 +28,7 @@ class UninstallCollector
      * DataSetup Factory
      *
      * @var DataSetupFactory
+     * @since 2.0.0
      */
     private $dataSetupFactory;
 
@@ -34,6 +37,7 @@ class UninstallCollector
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DataSetupFactory $dataSetupFactory
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
@@ -48,6 +52,7 @@ class UninstallCollector
      *
      * @param array $filterModules
      * @return UninstallInterface[]
+     * @since 2.0.0
      */
     public function collectUninstall($filterModules = [])
     {

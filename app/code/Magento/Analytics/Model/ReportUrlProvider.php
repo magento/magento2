@@ -13,6 +13,7 @@ use Magento\Framework\FlagManager;
 
 /**
  * Provide URL on resource with reports.
+ * @since 2.2.0
  */
 class ReportUrlProvider
 {
@@ -20,6 +21,7 @@ class ReportUrlProvider
      * Resource for handling MBI token value.
      *
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
@@ -27,16 +29,19 @@ class ReportUrlProvider
      * Resource which provide OTP.
      *
      * @var OTPRequest
+     * @since 2.2.0
      */
     private $otpRequest;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
@@ -44,6 +49,7 @@ class ReportUrlProvider
      * Path to config value with URL which provide reports.
      *
      * @var string
+     * @since 2.2.0
      */
     private $urlReportConfigPath = 'analytics/url/report';
 
@@ -52,6 +58,7 @@ class ReportUrlProvider
      * @param OTPRequest $otpRequest
      * @param ScopeConfigInterface $config
      * @param FlagManager $flagManager
+     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -70,6 +77,7 @@ class ReportUrlProvider
      *
      * @return string
      * @throws SubscriptionUpdateException
+     * @since 2.2.0
      */
     public function getUrl()
     {

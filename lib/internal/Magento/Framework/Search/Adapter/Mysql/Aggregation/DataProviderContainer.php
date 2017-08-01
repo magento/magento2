@@ -7,16 +7,19 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class DataProviderContainer
 {
     /**
      * @var DataProviderInterface[]
+     * @since 2.0.0
      */
     private $dataProvider;
 
     /**
      * @param DataProviderInterface[] $dataProviders
+     * @since 2.0.0
      */
     public function __construct(array $dataProviders)
     {
@@ -26,6 +29,7 @@ class DataProviderContainer
     /**
      * @param string $indexName
      * @return DataProviderInterface
+     * @since 2.0.0
      */
     public function get($indexName)
     {

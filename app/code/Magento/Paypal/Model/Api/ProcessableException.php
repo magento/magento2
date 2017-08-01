@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ProcessableException extends LocalizedException
 {
@@ -38,6 +39,7 @@ class ProcessableException extends LocalizedException
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param int $code
+     * @since 2.0.0
      */
     public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
@@ -49,6 +51,7 @@ class ProcessableException extends LocalizedException
      * Get error message which can be displayed to website user
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getUserMessage()
     {

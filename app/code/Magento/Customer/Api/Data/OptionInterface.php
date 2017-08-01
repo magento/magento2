@@ -10,6 +10,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Option interface.
  * @api
+ * @since 2.0.0
  */
 interface OptionInterface
 {
@@ -25,6 +26,7 @@ interface OptionInterface
      * Get option label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel();
 
@@ -33,6 +35,7 @@ interface OptionInterface
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -40,6 +43,7 @@ interface OptionInterface
      * Get option value
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -48,6 +52,7 @@ interface OptionInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -55,6 +60,7 @@ interface OptionInterface
      * Get nested options
      *
      * @return \Magento\Customer\Api\Data\OptionInterface[]|null
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -63,6 +69,7 @@ interface OptionInterface
      *
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null);
 }

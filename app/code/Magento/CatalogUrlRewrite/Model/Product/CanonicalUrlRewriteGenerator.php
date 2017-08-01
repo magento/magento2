@@ -11,17 +11,29 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
+ *
+ * @since 2.0.0
+ */
 class CanonicalUrlRewriteGenerator
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     * @since 2.0.0
+     */
     protected $urlRewriteFactory;
 
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
+     * @since 2.0.0
      */
     public function __construct(ProductUrlPathGenerator $productUrlPathGenerator, UrlRewriteFactory $urlRewriteFactory)
     {
@@ -35,6 +47,7 @@ class CanonicalUrlRewriteGenerator
      * @param int $storeId
      * @param Product $product
      * @return UrlRewrite[]
+     * @since 2.0.0
      */
     public function generate($storeId, Product $product)
     {

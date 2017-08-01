@@ -8,21 +8,25 @@ namespace Magento\Backend\Block\Media;
 /**
  * Adminhtml media library uploader
  * @api
+ * @since 2.0.0
  */
 class Uploader extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::media/uploader.phtml';
 
     /**
      * @var \Magento\Framework\File\Size
+     * @since 2.0.0
      */
     protected $_fileSizeService;
 
@@ -30,6 +34,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +47,7 @@ class Uploader extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +78,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Get file size
      *
      * @return \Magento\Framework\File\Size
+     * @since 2.0.0
      */
     public function getFileSizeService()
     {
@@ -82,6 +89,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Prepares layout and set element renderer
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -93,6 +101,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Retrieve uploader js object name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -103,6 +112,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Retrieve config json
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConfigJson()
     {
@@ -113,6 +123,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Retrieve config object
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -130,6 +141,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      *
      * @param string $url url to uploader in current theme
      * @return string full URL
+     * @since 2.0.0
      */
     public function getUploaderUrl($url)
     {

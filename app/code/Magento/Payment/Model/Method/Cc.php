@@ -12,32 +12,38 @@ use Magento\Quote\Model\Quote\Payment;
 /**
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Payment\Block\Form\Cc::class;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Payment\Block\Info\Cc::class;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_canSaveCc = false;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
+     * @since 2.0.0
      */
     protected $_moduleList;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -55,6 +61,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -93,6 +100,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -191,6 +199,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function hasVerification()
     {
@@ -204,6 +213,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getVerificationRegEx()
     {
@@ -229,6 +239,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param string $expYear
      * @param string $expMonth
      * @return bool
+     * @since 2.0.0
      */
     protected function _validateExpDate($expYear, $expMonth)
     {
@@ -247,6 +258,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
@@ -279,6 +291,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param string $type
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function otherCcType($type)
     {
@@ -291,6 +304,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param   string $ccNumber
      * @return  bool
      * @api
+     * @since 2.0.0
      */
     public function validateCcNum($ccNumber)
     {
@@ -331,6 +345,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param string $ccNumber
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function validateCcNumOther($ccNumber)
     {
@@ -342,6 +357,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {

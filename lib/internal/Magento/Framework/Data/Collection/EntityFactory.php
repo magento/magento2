@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Data\Collection;
 
+/**
+ * Class \Magento\Framework\Data\Collection\EntityFactory
+ *
+ * @since 2.0.0
+ */
 class EntityFactory implements EntityFactoryInterface
 {
     /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -18,6 +24,7 @@ class EntityFactory implements EntityFactoryInterface
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -31,6 +38,7 @@ class EntityFactory implements EntityFactoryInterface
      * @param array $data
      * @throws \LogicException
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function create($className, array $data = [])
     {

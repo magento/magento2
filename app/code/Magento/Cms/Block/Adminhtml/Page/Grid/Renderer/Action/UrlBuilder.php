@@ -7,15 +7,22 @@ namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 
 use Magento\Store\Api\StoreResolverInterface;
 
+/**
+ * Class \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
+ *
+ * @since 2.0.0
+ */
 class UrlBuilder
 {
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $frontendUrlBuilder;
 
     /**
      * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\UrlInterface $frontendUrlBuilder)
     {
@@ -29,6 +36,7 @@ class UrlBuilder
      * @param string $scope
      * @param string $store
      * @return string
+     * @since 2.0.0
      */
     public function getUrl($routePath, $scope, $store)
     {

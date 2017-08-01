@@ -11,46 +11,55 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract class for jobs run by setup:cron:run command
+ * @since 2.0.0
  */
 abstract class AbstractJob
 {
     /**
      * @var \Magento\Setup\Console\Command\AbstractSetupCommand
+     * @since 2.0.0
      */
     protected $command;
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
+     * @since 2.0.0
      */
     protected $output;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $params;
 
     /**
      * @var \Magento\Framework\App\Cache
+     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var \Magento\Framework\App\State\CleanupFiles
+     * @since 2.0.0
      */
     protected $cleanupFiles;
 
     /**
      * @var Status
+     * @since 2.0.0
      */
     protected $status;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -62,6 +71,7 @@ abstract class AbstractJob
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param string $name
      * @param array $params
+     * @since 2.0.0
      */
     public function __construct(
         \Symfony\Component\Console\Output\OutputInterface $output,
@@ -84,6 +94,7 @@ abstract class AbstractJob
      * Get job name.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -94,6 +105,7 @@ abstract class AbstractJob
      * Get string representation of a job.
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -104,6 +116,7 @@ abstract class AbstractJob
      * Do the cleanup
      *
      * @return void
+     * @since 2.0.0
      */
     protected function performCleanup()
     {
@@ -119,6 +132,7 @@ abstract class AbstractJob
      * Execute job
      *
      * @return void
+     * @since 2.0.0
      */
     abstract public function execute();
 }

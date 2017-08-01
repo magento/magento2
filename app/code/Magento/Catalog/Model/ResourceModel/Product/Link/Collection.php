@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Link;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,6 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product object
      *
      * @var \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected $_product;
 
@@ -24,6 +26,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product Link model class
      *
      * @var \Magento\Catalog\Model\Product\Link
+     * @since 2.0.0
      */
     protected $_linkModel;
 
@@ -31,6 +34,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product Link Type identifier
      *
      * @var \Magento\Catalog\Model\Product\Type
+     * @since 2.0.0
      */
     protected $_linkTypeId;
 
@@ -38,6 +42,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,6 +57,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Catalog\Model\Product\Link $linkModel
      * @return $this
+     * @since 2.0.0
      */
     public function setLinkModel(\Magento\Catalog\Model\Product\Link $linkModel)
     {
@@ -66,6 +72,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve collection link model
      *
      * @return \Magento\Catalog\Model\Product\Link
+     * @since 2.0.0
      */
     public function getLinkModel()
     {
@@ -77,6 +84,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -88,6 +96,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve collection base product object
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -98,6 +107,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add link's type to filter
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addLinkTypeIdFilter()
     {
@@ -111,6 +121,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add product to filter
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addProductIdFilter()
     {
@@ -124,6 +135,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join attributes
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinAttributes()
     {

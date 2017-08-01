@@ -10,11 +10,13 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 /**
  * Class InvalidateTokenButton
  * @package Magento\Customer\Block\Adminhtml\Edit
+ * @since 2.0.0
  */
 class InvalidateTokenButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getButtonData()
     {
@@ -34,6 +36,7 @@ class InvalidateTokenButton extends GenericButton implements ButtonProviderInter
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getInvalidateTokenUrl()
     {

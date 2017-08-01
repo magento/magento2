@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\ResourceModel\Form\Attribute;
  * Customer Form Attribute Resource Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collect
      * Current module pathname
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_moduleName = 'Magento_Customer';
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collect
      * Current EAV entity type code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityTypeCode = 'customer';
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collect
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,6 +48,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collect
      * If realization doesn't demand this functionality, let this function just return null
      *
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getEavWebsiteTable()
     {

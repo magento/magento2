@@ -13,12 +13,18 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Button
+ *
+ * @since 2.0.0
+ */
 class Button extends AbstractElement
 {
     /**
      * Additional html attributes
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_htmlAttributes = ['data-mage-init'];
 
@@ -27,6 +33,7 @@ class Button extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -43,6 +50,7 @@ class Button extends AbstractElement
      * Html attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

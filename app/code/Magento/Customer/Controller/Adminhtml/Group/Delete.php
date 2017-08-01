@@ -8,12 +8,18 @@ namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Group\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**
      * Delete customer group.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

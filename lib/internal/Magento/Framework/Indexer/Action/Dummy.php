@@ -8,12 +8,18 @@ namespace Magento\Framework\Indexer\Action;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Action\Dummy
+ *
+ * @since 2.0.0
+ */
 class Dummy implements ActionInterface, MviewActionInterface
 {
     /**
      * Execute full indexation
      *
      * @return void
+     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -25,6 +31,7 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @param int[] $ids
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -36,6 +43,7 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @param int $id
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -47,6 +55,7 @@ class Dummy implements ActionInterface, MviewActionInterface
      * @param int[] $ids
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute($ids)
     {

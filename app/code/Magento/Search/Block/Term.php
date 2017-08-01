@@ -17,21 +17,25 @@ use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Term extends Template
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_terms;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_minPopularity;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_maxPopularity;
 
@@ -39,6 +43,7 @@ class Term extends Template
      * Url factory
      *
      * @var UrlFactory
+     * @since 2.0.0
      */
     protected $_urlFactory;
 
@@ -46,6 +51,7 @@ class Term extends Template
      * Query collection factory
      *
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $_queryCollectionFactory;
 
@@ -54,6 +60,7 @@ class Term extends Template
      * @param CollectionFactory $queryCollectionFactory
      * @param UrlFactory $urlFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -70,6 +77,7 @@ class Term extends Template
      * Load terms and try to sort it by names
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadTerms()
     {
@@ -108,6 +116,7 @@ class Term extends Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getTerms()
     {
@@ -118,6 +127,7 @@ class Term extends Template
     /**
      * @param \Magento\Framework\DataObject $obj
      * @return string
+     * @since 2.0.0
      */
     public function getSearchUrl($obj)
     {
@@ -133,6 +143,7 @@ class Term extends Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getMaxPopularity()
     {
@@ -141,6 +152,7 @@ class Term extends Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getMinPopularity()
     {

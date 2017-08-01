@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Asset;
  * Class SourceFileGeneratorFactory
  *
  * @package Magento\Framework\View\Asset
+ * @since 2.0.0
  */
 class SourceFileGeneratorPool
 {
@@ -17,6 +18,7 @@ class SourceFileGeneratorPool
      * Renderer Types
      *
      * @var array
+     * @since 2.0.0
      */
     private $fileGeneratorTypes;
 
@@ -24,6 +26,7 @@ class SourceFileGeneratorPool
      * Factory constructor
      *
      * @param SourceFileGeneratorInterface[] $fileGeneratorTypes
+     * @since 2.0.0
      */
     public function __construct(array $fileGeneratorTypes = [])
     {
@@ -36,6 +39,7 @@ class SourceFileGeneratorPool
      * @param string $generatorType
      *
      * @return SourceFileGeneratorInterface
+     * @since 2.0.0
      */
     public function create($generatorType)
     {

@@ -10,16 +10,19 @@ use Magento\Framework\Module\Dir;
 /**
  * Configuration for reports
  * @api
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_moduleReader;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -27,6 +30,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Module\Dir\Reader $moduleReader,
@@ -42,6 +46,7 @@ class Config extends \Magento\Framework\DataObject
      * Return reports global configuration
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGlobalConfig()
     {
@@ -60,6 +65,7 @@ class Config extends \Magento\Framework\DataObject
      * Return reports language
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLanguage()
     {
@@ -72,6 +78,7 @@ class Config extends \Magento\Framework\DataObject
      * Return reports dashboard
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDashboard()
     {

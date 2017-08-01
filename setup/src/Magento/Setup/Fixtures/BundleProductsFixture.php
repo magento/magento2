@@ -23,6 +23,7 @@ use Magento\Catalog\Model\Product\Visibility;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class BundleProductsFixture extends Fixture
 {
@@ -33,41 +34,49 @@ class BundleProductsFixture extends Fixture
 
     /**
      * @var int
+     * @since 2.2.0
      */
     protected $priority = 42;
 
     /**
      * @var \Magento\Setup\Model\FixtureGenerator\ProductGenerator
+     * @since 2.2.0
      */
     private $productGenerator;
 
     /**
      * @var \Magento\Setup\Model\FixtureGenerator\BundleProductGenerator
+     * @since 2.2.0
      */
     private $bundleProductGenerator;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.2.0
      */
     private $productCollectionFactory;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $productStartIndex;
 
     /**
      * @var ProductsAmountProvider
+     * @since 2.2.0
      */
     private $productsAmountProvider;
 
     /**
      * @var WebsiteCategoryProvider
+     * @since 2.2.0
      */
     private $websiteCategoryProvider;
 
     /**
      * @var PriceProvider
+     * @since 2.2.0
      */
     private $priceProvider;
 
@@ -79,6 +88,7 @@ class BundleProductsFixture extends Fixture
      * @param ProductsAmountProvider $productsAmountProvider
      * @param WebsiteCategoryProvider $websiteCategoryProvider
      * @param PriceProvider $priceProvider
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -101,6 +111,7 @@ class BundleProductsFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.2.0
      */
     public function execute()
     {
@@ -184,6 +195,7 @@ class BundleProductsFixture extends Fixture
      *
      * @param string $bundleOptionSuffix
      * @return string
+     * @since 2.2.0
      */
     private function getBundleOptionItemSkuPattern($bundleOptionSuffix)
     {
@@ -195,6 +207,7 @@ class BundleProductsFixture extends Fixture
      *
      * @param string $bundleOptionSuffix
      * @return string
+     * @since 2.2.0
      */
     private function getBundleSkuPattern($bundleOptionSuffix)
     {
@@ -205,6 +218,7 @@ class BundleProductsFixture extends Fixture
      * Get start index for product number generation
      *
      * @return int
+     * @since 2.2.0
      */
     private function getNewProductStartIndex()
     {
@@ -223,6 +237,7 @@ class BundleProductsFixture extends Fixture
      * @param int $entityNumber
      * @param int $variationCount
      * @return float
+     * @since 2.2.0
      */
     private function getBundleProductIndex($entityNumber, $variationCount)
     {
@@ -235,6 +250,7 @@ class BundleProductsFixture extends Fixture
      * @param int $entityNumber
      * @param int $variationCount
      * @return float
+     * @since 2.2.0
      */
     private function getBundleVariationIndex($entityNumber, $variationCount)
     {
@@ -243,6 +259,7 @@ class BundleProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getActionTitle()
     {
@@ -251,6 +268,7 @@ class BundleProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function introduceParamLabels()
     {

@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Save extends \Magento\Backend\App\Action
 {
@@ -24,21 +25,25 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelGenerator
+     * @since 2.0.0
      */
     protected $labelGenerator;
 
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
+     * @since 2.0.0
      */
     protected $shipmentSender;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
+     * @since 2.2.0
      */
     private $shipmentValidator;
 
@@ -47,6 +52,7 @@ class Save extends \Magento\Backend\App\Action
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
      * @param \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -65,6 +71,7 @@ class Save extends \Magento\Backend\App\Action
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
+     * @since 2.0.0
      */
     protected function _saveShipment($shipment)
     {
@@ -88,6 +95,7 @@ class Save extends \Magento\Backend\App\Action
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -190,7 +198,8 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getShipmentValidator()
     {

@@ -9,15 +9,22 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
 
+/**
+ * Class \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes
+ *
+ * @since 2.0.0
+ */
 class QuoteConfigProductAttributes
 {
     /**
      * @var RuleResource
+     * @since 2.0.0
      */
     protected $_ruleResource;
 
     /**
      * @param RuleResource $ruleResource
+     * @since 2.0.0
      */
     public function __construct(RuleResource $ruleResource)
     {
@@ -32,6 +39,7 @@ class QuoteConfigProductAttributes
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterGetProductAttributes(\Magento\Quote\Model\Quote\Config $subject, array $attributeKeys)
     {

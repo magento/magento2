@@ -10,6 +10,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Groups two or more filters together using a logical OR
+ * @since 2.0.0
  */
 class FilterGroup extends AbstractSimpleObject
 {
@@ -19,6 +20,7 @@ class FilterGroup extends AbstractSimpleObject
      * Returns a list of filters in this group
      *
      * @return \Magento\Framework\Api\Filter[]|null
+     * @since 2.0.0
      */
     public function getFilters()
     {
@@ -32,6 +34,7 @@ class FilterGroup extends AbstractSimpleObject
      * @param \Magento\Framework\Api\Filter[] $filters
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setFilters(array $filters = null)
     {

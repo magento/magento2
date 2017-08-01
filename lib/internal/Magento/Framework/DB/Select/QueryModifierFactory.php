@@ -9,16 +9,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Create instance of QueryModifierInterface
+ * @since 2.2.0
  */
 class QueryModifierFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $queryModifiers;
 
@@ -27,6 +30,7 @@ class QueryModifierFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $queryModifiers
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class QueryModifierFactory
      * @param array $data
      * @return QueryModifierInterface
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function create($type, array $data = [])
     {

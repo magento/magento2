@@ -9,6 +9,11 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rate;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -18,6 +23,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -29,6 +35,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -47,6 +54,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +68,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join country table to result
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinCountryTable()
     {
@@ -76,6 +85,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join Region Table
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinRegionTable()
     {
@@ -92,6 +102,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
+     * @since 2.0.0
      */
     public function joinTitle($store = null)
     {
@@ -112,6 +123,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Joins store titles for rates
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinStoreTitles()
     {
@@ -139,6 +151,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $rateId
      * @return $this
+     * @since 2.0.0
      */
     public function addRateFilter($rateId)
     {
@@ -153,6 +166,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -163,6 +177,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option hash
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHash()
     {
@@ -176,6 +191,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @see fetchItem()
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHashOptimized()
     {
@@ -190,6 +206,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get rates array without memory leak
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptionRates()
     {

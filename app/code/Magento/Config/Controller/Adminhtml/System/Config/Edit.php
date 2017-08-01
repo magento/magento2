@@ -6,10 +6,16 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
+/**
+ * Class \Magento\Config\Controller\Adminhtml\System\Config\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends AbstractScopeConfig
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -19,6 +25,7 @@ class Edit extends AbstractScopeConfig
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config $backendConfig
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -35,6 +42,7 @@ class Edit extends AbstractScopeConfig
      * Edit configuration section
      *
      * @return \Magento\Framework\App\ResponseInterface|void
+     * @since 2.0.0
      */
     public function execute()
     {

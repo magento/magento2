@@ -9,21 +9,25 @@ namespace Magento\Paypal\Block\Checkout\Onepage\Success;
  * Billing agreement information on Order success page
  *
  * @api
+ * @since 2.0.0
  */
 class BillingAgreement extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
+     * @since 2.0.0
      */
     protected $_agreementFactory;
 
@@ -33,6 +37,7 @@ class BillingAgreement extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -51,6 +56,7 @@ class BillingAgreement extends \Magento\Framework\View\Element\Template
      * Return billing agreement information
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

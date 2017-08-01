@@ -9,6 +9,7 @@ use Magento\Framework\Filesystem;
 
 /**
  * Class for searching files across all locations of certain component type
+ * @since 2.0.0
  */
 class DirSearch
 {
@@ -16,6 +17,7 @@ class DirSearch
      * Component registrar
      *
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $registrar;
 
@@ -23,6 +25,7 @@ class DirSearch
      * Read dir factory
      *
      * @var Filesystem\Directory\ReadFactory
+     * @since 2.0.0
      */
     private $readFactory;
 
@@ -31,6 +34,7 @@ class DirSearch
      *
      * @param ComponentRegistrarInterface $registrar
      * @param Filesystem\Directory\ReadFactory $readFactory
+     * @since 2.0.0
      */
     public function __construct(ComponentRegistrarInterface $registrar, Filesystem\Directory\ReadFactory $readFactory)
     {
@@ -44,6 +48,7 @@ class DirSearch
      * @param string $componentType
      * @param string $pattern
      * @return array
+     * @since 2.0.0
      */
     public function collectFiles($componentType, $pattern)
     {
@@ -56,6 +61,7 @@ class DirSearch
      * @param string $componentType
      * @param string $pattern
      * @return ComponentFile[]
+     * @since 2.0.0
      */
     public function collectFilesWithContext($componentType, $pattern)
     {
@@ -70,6 +76,7 @@ class DirSearch
      * @param string $pattern
      * @param bool|false $withContext
      * @return array
+     * @since 2.0.0
      */
     private function collect($componentType, $pattern, $withContext)
     {

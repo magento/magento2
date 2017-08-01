@@ -8,12 +8,18 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Persistent\Observer\SetQuotePersistentDataObserver
+ *
+ * @since 2.0.0
+ */
 class SetQuotePersistentDataObserver implements ObserverInterface
 {
     /**
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -21,6 +27,7 @@ class SetQuotePersistentDataObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession = null;
 
@@ -28,11 +35,13 @@ class SetQuotePersistentDataObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData = null;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager
+     * @since 2.0.0
      */
     protected $quoteManager;
 
@@ -41,6 +50,7 @@ class SetQuotePersistentDataObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -59,6 +69,7 @@ class SetQuotePersistentDataObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

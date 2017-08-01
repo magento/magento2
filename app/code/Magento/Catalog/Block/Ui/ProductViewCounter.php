@@ -24,46 +24,55 @@ use Magento\Store\Model\StoreManager;
  * by customer on frontend and data to synchornize this tracks with backend
  *
  * @api
+ * @since 2.2.0
  */
 class ProductViewCounter extends Template
 {
     /**
      * @var ProductRepository
+     * @since 2.2.0
      */
     private $productRepository;
 
     /**
      * @var ProductRenderCollectorComposite
+     * @since 2.2.0
      */
     private $productRenderCollectorComposite;
 
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var ProductRenderFactory
+     * @since 2.2.0
      */
     private $productRenderFactory;
 
     /**
      * @var Hydrator
+     * @since 2.2.0
      */
     private $hydrator;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serialize;
 
     /**
      * @var Url
+     * @since 2.2.0
      */
     private $url;
 
     /**
      * @var Registry
+     * @since 2.2.0
      */
     private $registry;
 
@@ -77,6 +86,7 @@ class ProductViewCounter extends Template
      * @param SerializerInterface $serialize
      * @param Url $url
      * @param Registry $registry
+     * @since 2.2.0
      */
     public function __construct(
         Template\Context $context,
@@ -107,6 +117,7 @@ class ProductViewCounter extends Template
      * requests and will be flushed with full page cache
      *
      * @return string {JSON encoded data}
+     * @since 2.2.0
      */
     public function getCurrentProductData()
     {

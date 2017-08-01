@@ -11,21 +11,25 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
 {
     /**
      * @var \Magento\Catalog\Model\Config\Source\Category
+     * @since 2.0.0
      */
     protected $_category;
 
     /**
      * @var \Magento\Store\Model\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
     /**
      * @var \Magento\Store\Model\WebsiteFactory
+     * @since 2.0.0
      */
     protected $_websiteFactory;
 
@@ -37,6 +41,7 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,6 +64,7 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
      * @param \Magento\Framework\Data\Form $form
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareStoreFieldset(\Magento\Framework\Data\Form $form)
     {

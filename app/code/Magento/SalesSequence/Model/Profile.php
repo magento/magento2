@@ -11,11 +11,13 @@ use Magento\Framework\Model\AbstractModel;
  * Class Profile
  *
  * @api
+ * @since 2.0.0
  */
 class Profile extends AbstractModel
 {
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function _construct()
     {

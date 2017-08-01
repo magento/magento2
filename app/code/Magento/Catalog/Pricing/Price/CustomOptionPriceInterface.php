@@ -9,6 +9,7 @@ namespace Magento\Catalog\Pricing\Price;
  * Option price interface
  *
  * @api
+ * @since 2.0.0
  */
 interface CustomOptionPriceInterface
 {
@@ -21,6 +22,7 @@ interface CustomOptionPriceInterface
      * Return calculated options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -29,6 +31,7 @@ interface CustomOptionPriceInterface
      *
      * @param bool $getMin
      * @return float
+     * @since 2.0.0
      */
     public function getCustomOptionRange($getMin);
 }

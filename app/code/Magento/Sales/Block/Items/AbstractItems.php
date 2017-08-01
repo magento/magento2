@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Items;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 class AbstractItems extends \Magento\Framework\View\Element\Template
 {
@@ -25,6 +26,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getItemRenderer($type)
     {
@@ -50,6 +52,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\AbstractBlock $renderer
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _prepareItem(\Magento\Framework\View\Element\AbstractBlock $renderer)
     {
@@ -61,6 +64,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return string
+     * @since 2.0.0
      */
     protected function _getItemType(\Magento\Framework\DataObject $item)
     {
@@ -79,6 +83,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      *
      * @param   \Magento\Framework\DataObject $item
      * @return  string
+     * @since 2.0.0
      */
     public function getItemHtml(\Magento\Framework\DataObject $item)
     {

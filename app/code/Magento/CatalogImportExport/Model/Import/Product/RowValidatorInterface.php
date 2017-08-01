@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Interface RowValidatorInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorInterface
 {
@@ -94,6 +95,7 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
      *
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
+     * @since 2.0.0
      */
     public function init($context);
 }

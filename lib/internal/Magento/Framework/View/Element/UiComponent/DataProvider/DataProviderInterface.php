@@ -11,6 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  * Interface DataProviderInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface DataProviderInterface
 {
@@ -18,6 +19,7 @@ interface DataProviderInterface
      * Get Data Provider name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -25,6 +27,7 @@ interface DataProviderInterface
      * Get config data
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getConfigData();
 
@@ -33,11 +36,13 @@ interface DataProviderInterface
      *
      * @param mixed $config
      * @return void
+     * @since 2.0.0
      */
     public function setConfigData($config);
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getMeta();
 
@@ -45,6 +50,7 @@ interface DataProviderInterface
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
+     * @since 2.0.0
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName);
 
@@ -53,12 +59,14 @@ interface DataProviderInterface
      *
      * @param string $fieldSetName
      * @return array
+     * @since 2.0.0
      */
     public function getFieldSetMetaInfo($fieldSetName);
 
     /**
      * @param string $fieldSetName
      * @return array
+     * @since 2.0.0
      */
     public function getFieldsMetaInfo($fieldSetName);
 
@@ -66,6 +74,7 @@ interface DataProviderInterface
      * Get primary field name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPrimaryFieldName();
 
@@ -73,6 +82,7 @@ interface DataProviderInterface
      * Get field name in request
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRequestFieldName();
 
@@ -80,6 +90,7 @@ interface DataProviderInterface
      * Get data
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getData();
 
@@ -88,6 +99,7 @@ interface DataProviderInterface
      *
      * @param \Magento\Framework\Api\Filter $filter
      * @return mixed
+     * @since 2.0.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter);
 
@@ -97,6 +109,7 @@ interface DataProviderInterface
      * @param string $field
      * @param string $direction
      * @return void
+     * @since 2.0.0
      */
     public function addOrder($field, $direction);
 
@@ -106,6 +119,7 @@ interface DataProviderInterface
      * @param int $offset
      * @param int $size
      * @return void
+     * @since 2.0.0
      */
     public function setLimit($offset, $size);
 
@@ -113,11 +127,13 @@ interface DataProviderInterface
      * Returns search criteria
      *
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
+     * @since 2.0.0
      */
     public function getSearchCriteria();
 
     /**
      * @return \Magento\Framework\Api\Search\SearchResultInterface
+     * @since 2.0.0
      */
     public function getSearchResult();
 }

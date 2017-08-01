@@ -9,20 +9,28 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as QuoteAddressToOrder;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
+/**
+ * Class \Magento\Tax\Model\Quote\ToOrderConverter
+ *
+ * @since 2.0.0
+ */
 class ToOrderConverter
 {
     /**
      * @var QuoteAddress
+     * @since 2.0.0
      */
     protected $quoteAddress;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderExtensionFactory
+     * @since 2.0.0
      */
     protected $orderExtensionFactory;
 
     /**
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
@@ -36,6 +44,7 @@ class ToOrderConverter
      * @param array $additional
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeConvert(QuoteAddressToOrder $subject, QuoteAddress $address, $additional = [])
     {
@@ -48,6 +57,7 @@ class ToOrderConverter
      * @param OrderInterface $order
      * @return OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterConvert(QuoteAddressToOrder $subject, OrderInterface $order)
     {

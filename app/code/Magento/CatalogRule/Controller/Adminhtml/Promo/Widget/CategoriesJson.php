@@ -10,18 +10,25 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\CategoriesJson
+ *
+ * @since 2.0.0
+ */
 class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
 {
     /**
      * Core registry
      *
      * @var Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param Context $context
      * @param Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(Context $context, Registry $coreRegistry)
     {
@@ -33,6 +40,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
      * Initialize category object in registry
      *
      * @return Category
+     * @since 2.0.0
      */
     protected function _initCategory()
     {
@@ -67,6 +75,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
      * Get tree node (Ajax version)
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

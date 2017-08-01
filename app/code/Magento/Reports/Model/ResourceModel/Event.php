@@ -8,6 +8,7 @@ namespace Magento\Reports\Model\ResourceModel;
 /**
  * Report events resource model
  * @api
+ * @since 2.0.0
  */
 class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,11 +16,13 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -28,6 +31,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -44,6 +48,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize main table and identifier field. Set main entity table name and primary key field name.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,6 +64,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $types
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function updateCustomerType(\Magento\Reports\Model\Event $model, $visitorId, $customerId, $types = [])
     {
@@ -83,6 +89,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $subtype
      * @param array $skipIds
      * @return $this
+     * @since 2.0.0
      */
     public function applyLogToCollection(
         \Magento\Framework\Data\Collection\AbstractDb $collection,
@@ -126,6 +133,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param null|array $predefinedStoreIds
      * @return array
+     * @since 2.0.0
      */
     public function getCurrentStoreIds(array $predefinedStoreIds = null)
     {
@@ -174,6 +182,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Reports\Model\Event $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function clean(\Magento\Reports\Model\Event $object)
     {

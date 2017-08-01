@@ -8,6 +8,11 @@ namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product
+ *
+ * @since 2.0.0
+ */
 class Product
 {
     /**
@@ -18,6 +23,7 @@ class Product
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,

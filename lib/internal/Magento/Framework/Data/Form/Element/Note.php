@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Note
+ *
+ * @since 2.0.0
+ */
 class Note extends AbstractElement
 {
     /**
@@ -20,6 +25,7 @@ class Note extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -33,6 +39,7 @@ class Note extends AbstractElement
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

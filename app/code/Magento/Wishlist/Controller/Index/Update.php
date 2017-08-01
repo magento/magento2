@@ -9,20 +9,28 @@ use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\Update
+ *
+ * @since 2.0.0
+ */
 class Update extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var \Magento\Wishlist\Model\LocaleQuantityProcessor
+     * @since 2.0.0
      */
     protected $quantityProcessor;
 
@@ -31,6 +39,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -51,6 +60,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,16 +11,19 @@ use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
 /**
  * Unified IPN controller for all supported PayPal methods
+ * @since 2.0.0
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Paypal\Model\IpnFactory
+     * @since 2.0.0
      */
     protected $_ipnFactory;
 
@@ -28,6 +31,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Paypal\Model\IpnFactory $ipnFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -44,6 +48,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function execute()
     {

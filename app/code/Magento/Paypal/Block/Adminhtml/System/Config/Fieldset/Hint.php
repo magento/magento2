@@ -12,18 +12,21 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 /**
  * Class Hint adds "Configuration Details" link to payment configuration.
  * `<comment>` node must be defined in `<group>` node and contain some link.
+ * @since 2.0.0
  */
 class Hint extends Template implements RendererInterface
 {
     /**
      * @var string
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Paypal::system/config/fieldset/hint.phtml';
 
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {

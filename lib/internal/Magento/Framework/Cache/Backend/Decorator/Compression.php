@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Backend\Decorator;
  * Decorator class for compressing data before storing in cache
  *
  * @todo re-implement as a cache frontend decorator similarly to \Magento\Framework\Cache\Frontend\Decorator\*
+ * @since 2.0.0
  */
 class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator
 {
@@ -21,6 +22,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
     /**
      * Array of specific options. Made in separate array to distinguish from parent options
      * @var array
+     * @since 2.0.0
      */
     protected $_decoratorOptions = ['compression_threshold' => 512];
 
@@ -32,6 +34,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      * @param  string  $cacheId                Cache id
      * @param  boolean $noTestCacheValidity    If set to true, the cache validity won't be tested
      * @return string|false cached datas
+     * @since 2.0.0
      */
     public function load($cacheId, $noTestCacheValidity = false)
     {
@@ -58,6 +61,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      * @param int $priority             integer between 0 (very low priority) and 10 (maximum priority) used by
      *                                  some particular backends
      * @return bool true if no problem
+     * @since 2.0.0
      */
     public function save($data, $cacheId, $tags = [], $specificLifetime = false, $priority = 8)
     {
@@ -73,6 +77,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     protected static function _compressData($data)
     {
@@ -84,6 +89,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      *
      * @param string $data
      * @return bool
+     * @since 2.0.0
      */
     protected function _isCompressionNeeded($data)
     {
@@ -95,6 +101,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     protected static function _decompressData($data)
     {
@@ -106,6 +113,7 @@ class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDec
      *
      * @param string $data
      * @return bool
+     * @since 2.0.0
      */
     protected function _isDecompressionNeeded($data)
     {

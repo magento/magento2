@@ -14,6 +14,7 @@ use Magento\Framework\Phrase;
 
 /**
  * UI Component configuration reader
+ * @since 2.2.0
  */
 class Reader implements ReaderInterface
 {
@@ -21,31 +22,37 @@ class Reader implements ReaderInterface
      * List of identifier attributes for merging
      *
      * @var array
+     * @since 2.2.0
      */
     private $idAttributes = ['/' => 'name'];
 
     /**
      * @var Reader\Definition
+     * @since 2.2.0
      */
     private $definitionReader;
 
     /**
      * @var ReaderFactory
+     * @since 2.2.0
      */
     private $readerFactory;
 
     /**
      * @var FileResolverInterface
+     * @since 2.2.0
      */
     private $fileResolver;
 
     /**
      * @var ConfigConverter
+     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @var Reader\DomFactory
+     * @since 2.2.0
      */
     private $readerDomFactory;
 
@@ -53,6 +60,7 @@ class Reader implements ReaderInterface
      * The name of file that stores Ui configuration
      *
      * @var string
+     * @since 2.2.0
      */
     private $fileName;
 
@@ -66,6 +74,7 @@ class Reader implements ReaderInterface
      * @param ReaderFactory $readerFactory
      * @param Reader\DomFactory $readerDomFactory
      * @param array $idAttributes
+     * @since 2.2.0
      */
     public function __construct(
         $fileName,
@@ -90,6 +99,7 @@ class Reader implements ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @since 2.2.0
      */
     public function read($scope = null)
     {
@@ -109,6 +119,7 @@ class Reader implements ReaderInterface
      * @param array $fileList
      * @return array
      * @throws LocalizedException
+     * @since 2.2.0
      */
     private function readFiles($fileList)
     {
@@ -155,6 +166,7 @@ class Reader implements ReaderInterface
      * @param array $component
      * @param array $definitions
      * @return array
+     * @since 2.2.0
      */
     private function mergeDefinition(array $component, array $definitions)
     {

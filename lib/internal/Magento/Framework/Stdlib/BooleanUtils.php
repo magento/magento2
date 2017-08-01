@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib;
  * Utility methods for the boolean data type
  *
  * @api
+ * @since 2.0.0
  */
 class BooleanUtils
 {
@@ -16,6 +17,7 @@ class BooleanUtils
      * Expressions that mean boolean TRUE
      *
      * @var array
+     * @since 2.0.0
      */
     private $trueValues;
 
@@ -23,6 +25,7 @@ class BooleanUtils
      * Expressions that mean boolean FALSE
      *
      * @var array
+     * @since 2.0.0
      */
     private $falseValues;
 
@@ -30,6 +33,7 @@ class BooleanUtils
      * @param array $trueValues
      * @param array $falseValues
      * @codingStandardsIgnoreStart
+     * @since 2.0.0
      */
     public function __construct(
         array $trueValues = [true, 1, 'true', '1'],
@@ -47,6 +51,7 @@ class BooleanUtils
      * @param mixed $value Boolean expression
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function toBoolean($value)
     {
@@ -71,6 +76,7 @@ class BooleanUtils
      *
      * @param mixed $value
      * @return mixed
+     * @since 2.2.0
      */
     public function convert($value)
     {

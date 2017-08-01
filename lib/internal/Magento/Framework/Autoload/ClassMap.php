@@ -7,12 +7,18 @@
  */
 namespace Magento\Framework\Autoload;
 
+/**
+ * Class \Magento\Framework\Autoload\ClassMap
+ *
+ * @since 2.0.0
+ */
 class ClassMap
 {
     /**
      * Absolute path to base directory that will be prepended as prefix to the included files
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_baseDir;
 
@@ -24,6 +30,7 @@ class ClassMap
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_map = [];
 
@@ -32,6 +39,7 @@ class ClassMap
      *
      * @param string $baseDir
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct($baseDir)
     {
@@ -46,6 +54,7 @@ class ClassMap
      *
      * @param string $class
      * @return string|bool
+     * @since 2.0.0
      */
     public function getFile($class)
     {
@@ -60,6 +69,7 @@ class ClassMap
      *
      * @param array $map
      * @return $this
+     * @since 2.0.0
      */
     public function addMap(array $map)
     {
@@ -72,6 +82,7 @@ class ClassMap
      *
      * @param string $class
      * @return void
+     * @since 2.0.0
      */
     public function load($class)
     {

@@ -12,26 +12,31 @@ use Magento\GiftMessage\Model\Message;
  * Gift message inline edit form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Inline extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var mixed
+     * @since 2.0.0
      */
     protected $_entity = null;
 
     /**
      * @var string|null
+     * @since 2.0.0
      */
     protected $_type = null;
 
     /**
      * @var Message|null
+     * @since 2.0.0
      */
     protected $_giftMessage = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'inline.phtml';
 
@@ -39,21 +44,25 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Gift message message
      *
      * @var \Magento\GiftMessage\Helper\Message|null
+     * @since 2.0.0
      */
     protected $_giftMessageMessage = null;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Catalog\Block\Product\ImageBuilder
+     * @since 2.0.0
      */
     protected $imageBuilder;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -61,6 +70,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Checkout type. 'onepage_checkout' and 'multishipping_address' are standard types
      *
      * @var string
+     * @since 2.0.0
      */
     protected $checkoutType;
 
@@ -71,6 +81,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -94,6 +105,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param mixed $entity
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setEntity($entity)
     {
@@ -106,6 +118,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -118,6 +131,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param string $type
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -130,6 +144,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -142,6 +157,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param $type string
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setCheckoutType($type)
     {
@@ -154,6 +170,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @return string|null
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCheckoutType()
     {
@@ -164,6 +181,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Check if entity has gift message
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasGiftMessage()
     {
@@ -174,6 +192,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Init message
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initMessage()
     {
@@ -185,6 +204,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get default value for From field
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultFrom()
     {
@@ -199,6 +219,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get default value for To field
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultTo()
     {
@@ -214,6 +235,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param mixed $entity
      * @return string
+     * @since 2.0.0
      */
     public function getMessage($entity = null)
     {
@@ -235,6 +257,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Retrieve items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -261,6 +284,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Check if gift messages for separate items are allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isItemsAvailable()
     {
@@ -271,6 +295,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Return items count
      *
      * @return int
+     * @since 2.0.0
      */
     public function countItems()
     {
@@ -282,6 +307,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getItemsHasMesssages()
     {
@@ -298,6 +324,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getEntityHasMessage()
     {
@@ -310,6 +337,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param string $value
      * @param string $defaultValue
      * @return string
+     * @since 2.0.0
      */
     public function getEscaped($value, $defaultValue = '')
     {
@@ -320,6 +348,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Check availability of giftmessages on order level
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMessagesAvailable()
     {
@@ -331,6 +360,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\DataObject $item
      * @return bool
+     * @since 2.0.0
      */
     public function isItemMessagesAvailable($item)
     {
@@ -342,6 +372,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Render HTML code referring to config settings
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -359,6 +390,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param string $imageId
      * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
+     * @since 2.0.0
      */
     public function getImage($product, $imageId, $attributes = [])
     {

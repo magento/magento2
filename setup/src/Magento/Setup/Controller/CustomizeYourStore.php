@@ -13,20 +13,28 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class \Magento\Setup\Controller\CustomizeYourStore
+ *
+ * @since 2.0.0
+ */
 class CustomizeYourStore extends AbstractActionController
 {
     /**
      * @var FullModuleList
+     * @since 2.0.0
      */
     protected $moduleList;
 
     /**
      * @var Lists
+     * @since 2.0.0
      */
     protected $list;
 
     /**
      * @var ObjectManagerProvider
+     * @since 2.0.0
      */
     protected $objectManagerProvider;
 
@@ -34,6 +42,7 @@ class CustomizeYourStore extends AbstractActionController
      * @param FullModuleList $moduleList
      * @param Lists $list
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(FullModuleList $moduleList, Lists $list, ObjectManagerProvider $objectManagerProvider)
     {
@@ -44,6 +53,7 @@ class CustomizeYourStore extends AbstractActionController
 
     /**
      * @return ViewModel
+     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -73,6 +83,7 @@ class CustomizeYourStore extends AbstractActionController
      * Getting default time zone from server settings
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function defaultTimeZoneAction()
     {

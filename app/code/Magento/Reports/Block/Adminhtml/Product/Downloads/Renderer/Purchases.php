@@ -9,6 +9,7 @@ namespace Magento\Reports\Block\Adminhtml\Product\Downloads\Renderer;
  * Adminhtml Product Downloads Purchases Renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Purchases extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,6 +18,7 @@ class Purchases extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
      *
      * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

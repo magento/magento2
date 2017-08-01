@@ -8,6 +8,11 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Message\Error;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\Validate
+ *
+ * @since 2.0.0
+ */
 class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
@@ -15,6 +20,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @param \Magento\Framework\DataObject $response
      * @return CustomerInterface|null
+     * @since 2.0.0
      */
     protected function _validateCustomer($response)
     {
@@ -74,6 +80,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @param \Magento\Framework\DataObject $response
      * @return void
+     * @since 2.0.0
      */
     protected function _validateCustomerAddress($response)
     {
@@ -107,6 +114,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      * AJAX customer validation action
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

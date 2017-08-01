@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Class Comment
+ * @since 2.0.0
  */
 class Comment implements CommentInterface
 {
@@ -18,6 +19,7 @@ class Comment implements CommentInterface
      * @param \DOMComment $node
      * @param DataObject $processedObject
      * @return void
+     * @since 2.0.0
      */
     public function compile(\DOMComment $node, DataObject $processedObject)
     {

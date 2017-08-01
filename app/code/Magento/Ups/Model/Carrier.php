@@ -21,6 +21,7 @@ use Magento\Framework\Xml\Security;
  * UPS shipping implementation
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Carrier extends AbstractCarrierOnline implements CarrierInterface
 {
@@ -42,6 +43,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Code of the carrier
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = self::CODE;
 
@@ -49,6 +51,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Rate request data
      *
      * @var RateRequest
+     * @since 2.0.0
      */
     protected $_request;
 
@@ -56,6 +59,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Rate result data
      *
      * @var Result
+     * @since 2.0.0
      */
     protected $_result;
 
@@ -63,6 +67,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Base currency rate
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_baseCurrencyRate;
 
@@ -70,6 +75,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Xml access request
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_xmlAccessRequest;
 
@@ -77,6 +83,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Default cgi gateway url
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultCgiGatewayUrl = 'http://www.ups.com:80/using/services/rave/qcostcgi.cgi';
 
@@ -84,6 +91,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Test urls for shipment
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_defaultUrls = [
         'ShipConfirm' => 'https://wwwcie.ups.com/ups.app/xml/ShipConfirm',
@@ -94,6 +102,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Live urls for shipment
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_liveUrls = [
         'ShipConfirm' => 'https://onlinetools.ups.com/ups.app/xml/ShipConfirm',
@@ -104,26 +113,31 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Container types that could be customized for UPS carrier
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_customizableContainerTypes = ['CP', 'CSP'];
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $configHelper;
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'UserId', 'Password'
@@ -150,6 +164,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -198,6 +213,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @param RateRequest $request
      * @return  Result|Error|bool
+     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -221,6 +237,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function setRequest(RateRequest $request)
     {
@@ -369,6 +386,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @param float|int $weight
      * @return float
+     * @since 2.0.0
      */
     protected function _getCorrectWeight($weight)
     {
@@ -388,6 +406,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Get result of request
      *
      * @return Result
+     * @since 2.0.0
      */
     public function getResult()
     {
@@ -398,6 +417,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Do remote request for  and handle errors
      *
      * @return Result|null
+     * @since 2.0.0
      */
     protected function _getQuotes()
     {
@@ -418,6 +438,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @param string $freeMethod
      * @return void
+     * @since 2.0.0
      */
     protected function _setFreeMethodRequest($freeMethod)
     {
@@ -434,6 +455,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * Get cgi rates
      *
      * @return Result
+     * @since 2.0.0
      */
     protected function _getCgiQuotes()
     {
@@ -494,6 +516,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param string $code
      * @param string $origin
      * @return array|bool
+     * @since 2.0.0
      */
     public function getShipmentByCode($code, $origin = null)
     {
@@ -514,6 +537,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param string $response
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _parseCgiResponse($response)
     {
@@ -586,6 +610,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _getXmlQuotes()
     {
@@ -757,6 +782,7 @@ XMLRequest;
      *
      * @param string $code
      * @return float
+     * @since 2.0.0
      */
     protected function _getBaseCurrencyRate($code)
     {
@@ -776,6 +802,7 @@ XMLRequest;
      *
      * @param string $code
      * @return string
+     * @since 2.1.0
      */
     private function mapCurrencyCode($code)
     {
@@ -793,6 +820,7 @@ XMLRequest;
      * @param mixed $xmlResponse
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _parseXmlResponse($xmlResponse)
     {
@@ -896,6 +924,7 @@ XMLRequest;
      *
      * @param string|string[] $trackings
      * @return Result
+     * @since 2.0.0
      */
     public function getTracking($trackings)
     {
@@ -917,6 +946,7 @@ XMLRequest;
      * Set xml access request
      *
      * @return void
+     * @since 2.0.0
      */
     protected function setXMLAccessRequest()
     {
@@ -939,6 +969,7 @@ XMLAuth;
      *
      * @param string[] $trackings
      * @return \Magento\Shipping\Model\Tracking\ResultFactory
+     * @since 2.0.0
      */
     protected function _getCgiTracking($trackings)
     {
@@ -969,6 +1000,7 @@ XMLAuth;
      *
      * @param string[] $trackings
      * @return Result
+     * @since 2.0.0
      */
     protected function _getXmlTracking($trackings)
     {
@@ -1024,6 +1056,7 @@ XMLAuth;
      * @return null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _parseXmlTrackingResponse($trackingValue, $xmlResponse)
     {
@@ -1140,6 +1173,7 @@ XMLAuth;
      * Get tracking response
      *
      * @return string
+     * @since 2.0.0
      */
     public function getResponse()
     {
@@ -1170,6 +1204,7 @@ XMLAuth;
      * Get allowed shipping methods
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedMethods()
     {
@@ -1191,6 +1226,7 @@ XMLAuth;
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _formShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1414,6 +1450,7 @@ XMLAuth;
      *
      * @param Element $shipmentConfirmResponse
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _sendShipmentAcceptRequest(Element $shipmentConfirmResponse)
     {
@@ -1468,6 +1505,7 @@ XMLAuth;
      * Get ship accept url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShipAcceptUrl()
     {
@@ -1486,6 +1524,7 @@ XMLAuth;
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1545,6 +1584,7 @@ XMLAuth;
      * Get ship confirm url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShipConfirmUrl()
     {
@@ -1570,6 +1610,7 @@ XMLAuth;
      * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -1625,6 +1666,7 @@ XMLAuth;
      * Return all container types of carrier
      *
      * @return array|bool
+     * @since 2.0.0
      */
     public function getContainerTypesAll()
     {
@@ -1642,6 +1684,7 @@ XMLAuth;
      * Return structured data of containers witch related with shipping methods
      *
      * @return array|bool
+     * @since 2.0.0
      */
     public function getContainerTypesFilter()
     {
@@ -1653,6 +1696,7 @@ XMLAuth;
      *
      * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
+     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -1681,6 +1725,7 @@ XMLAuth;
      * Get Container Types, that could be customized for UPS carrier
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCustomizableContainerTypes()
     {
@@ -1699,6 +1744,7 @@ XMLAuth;
      *
      * @param string|null $countyDestination
      * @return int|null
+     * @since 2.0.0
      */
     protected function _getDeliveryConfirmationLevel($countyDestination = null)
     {

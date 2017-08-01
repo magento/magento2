@@ -9,6 +9,7 @@ namespace Magento\Framework\Mail\Template;
  * Mail Template Factory interface
  *
  * @api
+ * @since 2.0.0
  */
 interface FactoryInterface
 {
@@ -18,6 +19,7 @@ interface FactoryInterface
      * @param string $identifier
      * @param null|string $namespace
      * @return \Magento\Framework\Mail\TemplateInterface
+     * @since 2.0.0
      */
     public function get($identifier, $namespace = null);
 }

@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\Available
+ *
+ * @since 2.0.0
+ */
 class Available extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
      * Returns js code that is used instead of default toggle code for "Use default config" checkbox
      *
      * @return string
+     * @since 2.0.0
      */
     public function getToggleCode()
     {
@@ -29,6 +35,7 @@ class Available extends \Magento\Framework\Data\Form\Element\Multiselect
      * Retrieve Element HTML fragment
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

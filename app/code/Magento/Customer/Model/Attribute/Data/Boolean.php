@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Boolean
+ *
+ * @since 2.0.0
+ */
 class Boolean extends \Magento\Eav\Model\Attribute\Data\Boolean
 {
 }

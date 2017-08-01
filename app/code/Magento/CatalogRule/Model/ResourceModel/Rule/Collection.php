@@ -8,17 +8,24 @@ namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**
      * Store associated with rule entities information map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_associatedEntitiesMap;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     protected $serializer;
 
@@ -31,6 +38,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param Json|null $serializer
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -51,6 +59,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -63,6 +72,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $attributeCode
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function addAttributeInConditionFilter($attributeCode)
     {
@@ -77,6 +87,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.1.0
      */
     protected function mapAssociatedEntities($entityType, $objectField)
     {
@@ -107,6 +118,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return $this
+     * @since 2.1.0
      */
     protected function _afterLoad()
     {
@@ -122,6 +134,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param int $customerGroupId
      * @return $this
+     * @since 2.1.0
      */
     public function addCustomerGroupFilter($customerGroupId)
     {
@@ -142,7 +155,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return array
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getAssociatedEntitiesMap()
     {

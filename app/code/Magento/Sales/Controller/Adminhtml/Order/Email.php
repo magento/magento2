@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Email
+ *
+ * @since 2.0.0
+ */
 class Email extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -18,6 +23,7 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
      * Notify user
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

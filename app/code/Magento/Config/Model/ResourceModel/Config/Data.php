@@ -10,6 +10,7 @@ namespace Magento\Config\Model\ResourceModel\Config;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,6 +18,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -47,6 +50,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -80,6 +84,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $scopeCode
      * @param int|array $scopeIds
      * @return void
+     * @since 2.0.0
      */
     public function clearScopeData($scopeCode, $scopeIds)
     {

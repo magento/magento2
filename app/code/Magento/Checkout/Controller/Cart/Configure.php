@@ -11,11 +11,13 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Configure extends \Magento\Checkout\Controller\Cart
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -27,6 +29,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         Framework\App\Action\Context $context,
@@ -50,6 +53,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * Action to reconfigure cart item
      *
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

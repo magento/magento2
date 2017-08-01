@@ -10,11 +10,13 @@ namespace Magento\Backend\Console\Command;
  * Command for cleaning cache
  *
  * @api
+ * @since 2.0.0
  */
 class CacheCleanCommand extends AbstractCacheTypeManageCommand
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -28,6 +30,7 @@ class CacheCleanCommand extends AbstractCacheTypeManageCommand
      *
      * @param array $cacheTypes
      * @return void
+     * @since 2.0.0
      */
     protected function performAction(array $cacheTypes)
     {
@@ -37,6 +40,7 @@ class CacheCleanCommand extends AbstractCacheTypeManageCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function getDisplayMessage()
     {

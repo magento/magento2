@@ -9,12 +9,14 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class Price
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Price extends \Magento\Checkout\Block\Shipping\Price
 {
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $taxHelper;
 
@@ -25,6 +27,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,6 +52,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      *
      * @param bool $flag
      * @return float
+     * @since 2.0.0
      */
     protected function getShippingPriceWithFlag($flag)
     {
@@ -71,6 +75,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      * Get shipping price excluding tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingPriceExclTax()
     {
@@ -81,6 +86,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      * Get shipping price including tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingPriceInclTax()
     {
@@ -91,6 +97,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      * Return flag whether to display shipping price including tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayShippingPriceInclTax()
     {
@@ -101,6 +108,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      * Return flag whether to display shipping price excluding tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayShippingPriceExclTax()
     {
@@ -111,6 +119,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      * Return flag whether to display shipping price including and excluding tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayShippingBothPrices()
     {

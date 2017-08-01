@@ -9,22 +9,26 @@ use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
 use Magento\Quote\Model\Quote\Item;
 
 /**
- * @deprecated No more used
+ * @deprecated 2.2.0 No more used
+ * @since 2.0.0
  */
 class QtyProcessor
 {
     /**
      * @var QuoteItemQtyList
+     * @since 2.0.0
      */
     protected $quoteItemQtyList;
 
     /**
      * @var Item
+     * @since 2.0.0
      */
     protected $item;
 
     /**
      * @param QuoteItemQtyList $quoteItemQtyList
+     * @since 2.0.0
      */
     public function __construct(QuoteItemQtyList $quoteItemQtyList)
     {
@@ -34,7 +38,8 @@ class QtyProcessor
     /**
      * @param Item $quoteItem
      * @return $this
-     * @deprecated No more used
+     * @deprecated 2.2.0 No more used
+     * @since 2.0.0
      */
     public function setItem(Item $quoteItem)
     {
@@ -45,7 +50,8 @@ class QtyProcessor
     /**
      * @param float $qty
      * @return float|int
-     * @deprecated No more used
+     * @deprecated 2.2.0 No more used
+     * @since 2.0.0
      */
     public function getRowQty($qty)
     {
@@ -59,7 +65,8 @@ class QtyProcessor
     /**
      * @param int $qty
      * @return int
-     * @deprecated No more used
+     * @deprecated 2.2.0 No more used
+     * @since 2.0.0
      */
     public function getQtyForCheck($qty)
     {

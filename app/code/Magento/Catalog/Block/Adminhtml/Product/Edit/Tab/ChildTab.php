@@ -9,16 +9,23 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab
+ *
+ * @since 2.0.0
+ */
 class ChildTab extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Backend\Block\Widget\Tab\TabInterface
+     * @since 2.0.0
      */
     protected $tab;
 
     /**
      * @param \Magento\Backend\Block\Widget\Tab\TabInterface $tab
      * @return $this
+     * @since 2.0.0
      */
     public function setTab(\Magento\Backend\Block\Widget\Tab\TabInterface $tab)
     {
@@ -28,6 +35,7 @@ class ChildTab extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -36,6 +44,7 @@ class ChildTab extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -44,6 +53,7 @@ class ChildTab extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTabId()
     {
@@ -52,6 +62,7 @@ class ChildTab extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isTabOpened()
     {

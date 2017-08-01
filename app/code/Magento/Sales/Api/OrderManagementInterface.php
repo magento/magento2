@@ -15,6 +15,7 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 2.0.0
  */
 interface OrderManagementInterface
 {
@@ -23,6 +24,7 @@ interface OrderManagementInterface
      *
      * @param int $id The order ID.
      * @return bool
+     * @since 2.0.0
      */
     public function cancel($id);
 
@@ -31,6 +33,7 @@ interface OrderManagementInterface
      *
      * @param int $id The order ID.
      * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search results interface.
+     * @since 2.0.0
      */
     public function getCommentsList($id);
 
@@ -40,6 +43,7 @@ interface OrderManagementInterface
      * @param int $id The order ID.
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory Status history comment.
      * @return bool
+     * @since 2.0.0
      */
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory);
 
@@ -48,6 +52,7 @@ interface OrderManagementInterface
      *
      * @param int $id The order ID.
      * @return bool
+     * @since 2.0.0
      */
     public function notify($id);
 
@@ -56,6 +61,7 @@ interface OrderManagementInterface
      *
      * @param int $id The order ID.
      * @return string Order status.
+     * @since 2.0.0
      */
     public function getStatus($id);
 
@@ -64,6 +70,7 @@ interface OrderManagementInterface
      *
      * @param int $id The order ID.
      * @return bool
+     * @since 2.0.0
      */
     public function hold($id);
 
@@ -72,12 +79,14 @@ interface OrderManagementInterface
      *
      * @param int $id The order ID.
      * @return bool
+     * @since 2.0.0
      */
     public function unHold($id);
 
     /**
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
+     * @since 2.0.0
      */
     public function place(\Magento\Sales\Api\Data\OrderInterface $order);
 }

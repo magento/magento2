@@ -12,6 +12,7 @@ use Magento\Framework\App\State;
  * An associative data structure, that features "nested set" parent-child relations
  *
  * @api
+ * @since 2.0.0
  */
 class Structure extends DataStructure
 {
@@ -19,16 +20,19 @@ class Structure extends DataStructure
      * Name increment counter
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_nameIncrement = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var State
+     * @since 2.0.0
      */
     protected $state;
 
@@ -38,6 +42,7 @@ class Structure extends DataStructure
      * @param \Psr\Log\LoggerInterface $logger
      * @param State $state
      * @param array $elements
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -58,6 +63,7 @@ class Structure extends DataStructure
      * @param string $type
      * @param string $class
      * @return string
+     * @since 2.0.0
      */
     public function createStructuralElement($name, $type, $class)
     {
@@ -73,6 +79,7 @@ class Structure extends DataStructure
      *
      * @param string $class
      * @return string
+     * @since 2.0.0
      */
     protected function _generateAnonymousName($class)
     {
@@ -103,6 +110,7 @@ class Structure extends DataStructure
      * @param string|int|null $offsetOrSibling
      * @param bool $after
      * @return void
+     * @since 2.0.0
      */
     public function reorderChildElement($parentName, $childName, $offsetOrSibling, $after = true)
     {
@@ -142,6 +150,7 @@ class Structure extends DataStructure
      * @param array $haystack
      * @param bool $isLast
      * @return string
+     * @since 2.0.0
      */
     protected function _filterSearchMinus($needle, array $haystack, $isLast)
     {

@@ -14,6 +14,7 @@ use Magento\Framework\DB\Select;
  * @method Condition setPkFieldName(string $fieldName)
  * @method string|array getTable()
  * @method Condition setTable($table)
+ * @since 2.0.0
  */
 class Condition extends \Magento\Framework\DataObject implements Condition\ConditionInterface
 {
@@ -21,6 +22,7 @@ class Condition extends \Magento\Framework\DataObject implements Condition\Condi
      * @param AbstractCollection $collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function applyToCollection($collection)
     {
@@ -38,6 +40,7 @@ class Condition extends \Magento\Framework\DataObject implements Condition\Condi
      * @param AdapterInterface $dbAdapter
      *
      * @return Select|string
+     * @since 2.0.0
      */
     public function getIdsSelect($dbAdapter)
     {

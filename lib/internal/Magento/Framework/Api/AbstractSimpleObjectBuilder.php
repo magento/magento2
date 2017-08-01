@@ -8,21 +8,25 @@ namespace Magento\Framework\Api;
 /**
  * Base Builder Class for simple data Objects
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $data;
 
     /**
      * @var ObjectFactory
+     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @param ObjectFactory $objectFactory
+     * @since 2.0.0
      */
     public function __construct(ObjectFactory $objectFactory)
     {
@@ -34,6 +38,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
      * Builds the Data Object
      *
      * @return AbstractSimpleObject
+     * @since 2.0.0
      */
     public function create()
     {
@@ -48,6 +53,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
      * @param mixed $value
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _set($key, $value)
     {
@@ -59,6 +65,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
      * Return the Data type class name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDataObjectType()
     {
@@ -72,6 +79,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
      * Return data Object data.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getData()
     {

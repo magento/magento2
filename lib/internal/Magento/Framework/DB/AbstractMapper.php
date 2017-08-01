@@ -16,6 +16,7 @@ use Magento\Framework\DataObject;
  * Class AbstractMapper
  * @package Magento\Framework\DB
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractMapper implements MapperInterface
 {
@@ -23,6 +24,7 @@ abstract class AbstractMapper implements MapperInterface
      * Resource model name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $resourceModel;
 
@@ -30,6 +32,7 @@ abstract class AbstractMapper implements MapperInterface
      * Resource instance
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     protected $resource;
 
@@ -37,6 +40,7 @@ abstract class AbstractMapper implements MapperInterface
      * Store joined tables here
      *
      * @var array
+     * @since 2.0.0
      */
     protected $joinedTables = [];
 
@@ -44,6 +48,7 @@ abstract class AbstractMapper implements MapperInterface
      * DB connection
      *
      * @var AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -51,26 +56,31 @@ abstract class AbstractMapper implements MapperInterface
      * Select object
      *
      * @var Select
+     * @since 2.0.0
      */
     protected $select;
 
     /**
      * @var Logger
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var FetchStrategyInterface
+     * @since 2.0.0
      */
     protected $fetchStrategy;
 
     /**
      * @var ObjectFactory
+     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var MapperFactory
+     * @since 2.0.0
      */
     protected $mapperFactory;
 
@@ -78,6 +88,7 @@ abstract class AbstractMapper implements MapperInterface
      * Fields and filters map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $map = [];
 
@@ -87,6 +98,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param ObjectFactory $objectFactory
      * @param MapperFactory $mapperFactory
      * @param Select $select
+     * @since 2.0.0
      */
     public function __construct(
         Logger $logger,
@@ -107,6 +119,7 @@ abstract class AbstractMapper implements MapperInterface
      * Set initial conditions
      *
      * @return void
+     * @since 2.0.0
      */
     abstract protected function init();
 
@@ -115,6 +128,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @param CriteriaInterface $criteria
      * @return Select
+     * @since 2.0.0
      */
     public function map(CriteriaInterface $criteria)
     {
@@ -142,6 +156,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param string $expression
      * @param array|string $fields
      * @return void
+     * @since 2.0.0
      */
     public function addExpressionFieldToSelect($alias, $expression, $fields)
     {
@@ -158,6 +173,7 @@ abstract class AbstractMapper implements MapperInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -176,6 +192,7 @@ abstract class AbstractMapper implements MapperInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -187,6 +204,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @param string $model
      * @return void
+     * @since 2.0.0
      */
     protected function setResourceModelName($model)
     {
@@ -197,6 +215,7 @@ abstract class AbstractMapper implements MapperInterface
      *  Retrieve resource model name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getResourceModelName()
     {
@@ -207,6 +226,7 @@ abstract class AbstractMapper implements MapperInterface
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     public function getResource()
     {
@@ -223,6 +243,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @param string $resourceInterface
      * @return void
+     * @since 2.0.0
      */
     protected function initResource($resourceInterface)
     {
@@ -238,6 +259,7 @@ abstract class AbstractMapper implements MapperInterface
      * Init collection select
      *
      * @return void
+     * @since 2.0.0
      */
     protected function initSelect()
     {
@@ -251,6 +273,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param string $condition
      * @param string $cols
      * @return void
+     * @since 2.0.0
      */
     protected function join($table, $condition, $cols = '*')
     {
@@ -273,6 +296,7 @@ abstract class AbstractMapper implements MapperInterface
      * Retrieve connection object
      *
      * @return AdapterInterface
+     * @since 2.0.0
      */
     protected function getConnection()
     {
@@ -285,6 +309,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param AdapterInterface $connection
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function setConnection($connection)
     {
@@ -304,6 +329,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param   string|array $field
      * @param   null|string|array $condition
      * @return  string
+     * @since 2.0.0
      */
     protected function translateCondition($field, $condition)
     {
@@ -316,6 +342,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @param   string $field
      * @return  string
+     * @since 2.0.0
      */
     protected function getMappedField($field)
     {
@@ -334,6 +361,7 @@ abstract class AbstractMapper implements MapperInterface
      * Retrieve mapper data
      *
      * @return array|bool|null
+     * @since 2.0.0
      */
     protected function getMapper()
     {
@@ -374,6 +402,7 @@ abstract class AbstractMapper implements MapperInterface
      * @param string $fieldName
      * @param integer|string|array $condition
      * @return string
+     * @since 2.0.0
      */
     protected function getConditionSql($fieldName, $condition)
     {
@@ -385,6 +414,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @param string $fieldName
      * @return string
+     * @since 2.0.0
      */
     protected function getConditionFieldName($fieldName)
     {
@@ -394,6 +424,7 @@ abstract class AbstractMapper implements MapperInterface
     /**
      * Hook for operations before rendering filters
      * @return void
+     * @since 2.0.0
      */
     protected function renderFiltersBefore()
     {
@@ -404,6 +435,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @param string $table
      * @return string
+     * @since 2.0.0
      */
     protected function getTable($table)
     {
@@ -414,6 +446,7 @@ abstract class AbstractMapper implements MapperInterface
      * Get \Magento\Framework\DB\Select object instance
      *
      * @return Select
+     * @since 2.0.0
      */
     protected function getSelect()
     {

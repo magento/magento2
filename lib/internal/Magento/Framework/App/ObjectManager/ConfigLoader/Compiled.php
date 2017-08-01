@@ -11,17 +11,24 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
+/**
+ * Class \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
+ *
+ * @since 2.0.0
+ */
 class Compiled implements ConfigLoaderInterface
 {
     /**
      * Global config
      *
      * @var array
+     * @since 2.0.0
      */
     private $configCache = [];
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     public function load($area)
     {
@@ -38,6 +45,7 @@ class Compiled implements ConfigLoaderInterface
      *
      * @param string $area
      * @return string
+     * @since 2.0.0
      */
     public static function getFilePath($area)
     {

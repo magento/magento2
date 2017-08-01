@@ -11,6 +11,7 @@ use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Webapi Config Model for Rest.
+ * @since 2.0.0
  */
 class Config
 {
@@ -34,15 +35,22 @@ class Config
     const KEY_PARAMETERS = 'parameters';
     /*#@-*/
 
-    /** @var ModelConfig */
+    /**
+     * @var 
+     * @since 2.0.0
+     */
     protected $_config;
 
-    /** @var \Magento\Framework\Controller\Router\Route\Factory */
+    /**
+     * @var \Magento\Framework\Controller\Router\Route\Factory
+     * @since 2.0.0
+     */
     protected $_routeFactory;
 
     /**
      * @param ModelConfig $config
      * @param \Magento\Framework\Controller\Router\Route\Factory $routeFactory
+     * @since 2.0.0
      */
     public function __construct(ModelConfig $config, \Magento\Framework\Controller\Router\Route\Factory $routeFactory)
     {
@@ -61,6 +69,7 @@ class Config
      *      'secure' => true
      *  );</pre>
      * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @since 2.0.0
      */
     protected function _createRoute($routeData)
     {
@@ -83,6 +92,7 @@ class Config
      *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getServiceBaseUrl($request)
     {
@@ -98,6 +108,7 @@ class Config
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return Route[] matched routes
      * @throws \Magento\Framework\Webapi\Exception
+     * @since 2.0.0
      */
     public function getRestRoutes(\Magento\Framework\Webapi\Rest\Request $request)
     {

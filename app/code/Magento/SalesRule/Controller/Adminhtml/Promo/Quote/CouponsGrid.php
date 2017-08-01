@@ -6,12 +6,18 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\CouponsGrid
+ *
+ * @since 2.0.0
+ */
 class CouponsGrid extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * Coupon codes grid
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

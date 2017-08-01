@@ -7,11 +7,13 @@ namespace Magento\Msrp\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Popup extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Msrp\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
@@ -19,6 +21,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Msrp\Model\Config $config
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -31,6 +34,7 @@ class Popup extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -39,6 +43,7 @@ class Popup extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getExplanationMessage()
     {
@@ -47,6 +52,7 @@ class Popup extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getExplanationMessageWhatsThis()
     {

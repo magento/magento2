@@ -9,6 +9,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Customer attribute metadata interface.
  * @api
+ * @since 2.0.0
  */
 interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObjectInterface
 {
@@ -42,6 +43,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Frontend HTML for input element.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrontendInput();
 
@@ -50,6 +52,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $frontendInput
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendInput($frontendInput);
 
@@ -57,6 +60,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get template used for input (e.g. "date")
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInputFilter();
 
@@ -65,6 +69,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $inputFilter
      * @return $this
+     * @since 2.0.0
      */
     public function setInputFilter($inputFilter);
 
@@ -72,6 +77,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get label of the store.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStoreLabel();
 
@@ -80,6 +86,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $storeLabel
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabel($storeLabel);
 
@@ -87,6 +94,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Retrieve validation rules.
      *
      * @return \Magento\Customer\Api\Data\ValidationRuleInterface[]
+     * @since 2.0.0
      */
     public function getValidationRules();
 
@@ -95,6 +103,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param \Magento\Customer\Api\Data\ValidationRuleInterface[] $validationRules
      * @return $this
+     * @since 2.0.0
      */
     public function setValidationRules(array $validationRules);
 
@@ -102,6 +111,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Number of lines of the attribute value.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getMultilineCount();
 
@@ -110,6 +120,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param int $multilineCount
      * @return $this
+     * @since 2.0.0
      */
     public function setMultilineCount($multilineCount);
 
@@ -117,6 +128,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether attribute is visible on frontend.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isVisible();
 
@@ -125,6 +137,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isVisible
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVisible($isVisible);
 
@@ -132,6 +145,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether attribute is required.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isRequired();
 
@@ -140,6 +154,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isRequired
      * @return $this
+     * @since 2.0.0
      */
     public function setIsRequired($isRequired);
 
@@ -147,6 +162,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get data model for attribute.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDataModel();
 
@@ -155,6 +171,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $dataModel
      * @return $this
+     * @since 2.0.0
      */
     public function setDataModel($dataModel);
 
@@ -162,6 +179,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Return options of the attribute (key => value pairs for select)
      *
      * @return \Magento\Customer\Api\Data\OptionInterface[]
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -170,6 +188,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null);
 
@@ -177,6 +196,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get class which is used to display the attribute on frontend.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrontendClass();
 
@@ -185,6 +205,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $frontendClass
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendClass($frontendClass);
 
@@ -192,6 +213,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether current attribute has been defined by a user.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isUserDefined();
 
@@ -200,6 +222,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isUserDefined
      * @return $this
+     * @since 2.0.0
      */
     public function setIsUserDefined($isUserDefined);
 
@@ -207,6 +230,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get attributes sort order.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -215,6 +239,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -222,6 +247,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get label which supposed to be displayed on frontend.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrontendLabel();
 
@@ -230,6 +256,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $frontendLabel
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendLabel($frontendLabel);
 
@@ -237,6 +264,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get the note attribute for the element.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNote();
 
@@ -245,6 +273,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $note
      * @return $this
+     * @since 2.0.0
      */
     public function setNote($note);
 
@@ -252,6 +281,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether this is a system attribute.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSystem();
 
@@ -260,6 +290,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isSystem
      * @return $this
+     * @since 2.0.0
      */
     public function setIsSystem($isSystem);
 
@@ -267,6 +298,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Get backend type.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackendType();
 
@@ -275,6 +307,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param string $backendType
      * @return $this
+     * @since 2.0.0
      */
     public function setBackendType($backendType);
 
@@ -282,6 +315,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether it is used in customer grid
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsUsedInGrid();
 
@@ -289,6 +323,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether it is visible in customer grid
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsVisibleInGrid();
 
@@ -296,6 +331,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether it is filterable in customer grid
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsFilterableInGrid();
 
@@ -303,6 +339,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Whether it is searchable in customer grid
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsSearchableInGrid();
 
@@ -311,6 +348,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isUsedInGrid
      * @return $this
+     * @since 2.0.0
      */
     public function setIsUsedInGrid($isUsedInGrid);
 
@@ -319,6 +357,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isVisibleInGrid
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid);
 
@@ -327,6 +366,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isFilterableInGrid
      * @return $this
+     * @since 2.0.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid);
 
@@ -335,6 +375,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      *
      * @param bool $isSearchableInGrid
      * @return $this
+     * @since 2.0.0
      */
     public function setIsSearchableInGrid($isSearchableInGrid);
 }

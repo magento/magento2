@@ -5,20 +5,28 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
+/**
+ * Class \Magento\Framework\Setup\SampleData\Executor
+ *
+ * @since 2.0.0
+ */
 class Executor
 {
     /**
      * @var State
+     * @since 2.0.0
      */
     private $state;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     private $logger;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     private $appState;
 
@@ -26,6 +34,7 @@ class Executor
      * @param \Psr\Log\LoggerInterface $logger
      * @param State $state
      * @param \Magento\Framework\App\State $appState
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -43,6 +52,7 @@ class Executor
      *
      * @param InstallerInterface $installer
      * @return void
+     * @since 2.0.0
      */
     public function exec(InstallerInterface $installer)
     {

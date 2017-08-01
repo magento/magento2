@@ -15,6 +15,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
  * Interface InvoiceOrderInterface
  *
  * @api
+ * @since 2.2.0
  */
 interface InvoiceOrderInterface
 {
@@ -28,6 +29,7 @@ interface InvoiceOrderInterface
      * @param InvoiceCommentCreationInterface|null $comment
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return ValidatorResultInterface
+     * @since 2.2.0
      */
     public function validate(
         OrderInterface $order,

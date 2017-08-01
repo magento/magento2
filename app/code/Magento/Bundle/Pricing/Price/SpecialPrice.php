@@ -10,11 +10,13 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
  * Special price model
+ * @since 2.0.0
  */
 class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implements DiscountProviderInterface
 {
     /**
      * @var float|false
+     * @since 2.0.0
      */
     protected $percent;
 
@@ -22,6 +24,7 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
      * Returns discount percent
      *
      * @return bool|float
+     * @since 2.0.0
      */
     public function getDiscountPercent()
     {
@@ -35,6 +38,7 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
      * Returns price value
      *
      * @return bool|float
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -56,6 +60,7 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
      * Returns regular price
      *
      * @return bool|float
+     * @since 2.0.0
      */
     protected function getRegularPrice()
     {
@@ -64,6 +69,7 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isPercentageDiscount()
     {

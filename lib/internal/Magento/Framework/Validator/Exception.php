@@ -16,11 +16,13 @@ use Magento\Framework\Message\Error;
  * Exception to be thrown when data validation fails
  *
  * @api
+ * @since 2.0.0
  */
 class Exception extends InputException
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $messages = [];
 
@@ -31,6 +33,7 @@ class Exception extends InputException
      * @param \Exception $cause
      * @param array $messages Validation error messages
      * @param int $code
+     * @since 2.0.0
      */
     public function __construct(
         Phrase $phrase = null,
@@ -59,6 +62,7 @@ class Exception extends InputException
      *
      * @param \Magento\Framework\Message\AbstractMessage $message
      * @return $this
+     * @since 2.0.0
      */
     public function addMessage(AbstractMessage $message)
     {
@@ -74,6 +78,7 @@ class Exception extends InputException
      *
      * @param string $type
      * @return array
+     * @since 2.0.0
      */
     public function getMessages($type = '')
     {

@@ -8,22 +8,30 @@ namespace Magento\Indexer\App;
 use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Indexer\App\Indexer
+ *
+ * @since 2.0.0
+ */
 class Indexer implements \Magento\Framework\AppInterface
 {
     /**
      * Report directory
      *
      * @var string
+     * @since 2.0.0
      */
     protected $reportDir;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var \Magento\Framework\App\Console\Response
+     * @since 2.0.0
      */
     protected $_response;
 
@@ -32,6 +40,7 @@ class Indexer implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Indexer\Model\Processor $processor
      * @param \Magento\Framework\App\Console\Response $response
+     * @since 2.0.0
      */
     public function __construct(
         $reportDir,
@@ -49,6 +58,7 @@ class Indexer implements \Magento\Framework\AppInterface
      * Run application
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function launch()
     {
@@ -68,6 +78,7 @@ class Indexer implements \Magento\Framework\AppInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {

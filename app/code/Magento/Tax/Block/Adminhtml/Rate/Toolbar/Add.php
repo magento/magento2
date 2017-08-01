@@ -15,21 +15,25 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'toolbar/rate/add.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
+     * @since 2.0.0
      */
     protected $buttonList;
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
+     * @since 2.0.0
      */
     protected $toolbar;
 
@@ -38,6 +42,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,6 +57,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
 
     /**
      * {$@inheritdoc}
+     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -61,6 +67,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
 
     /**
      * {$@inheritdoc}
+     * @since 2.0.0
      */
     public function removeButton($buttonId)
     {
@@ -70,6 +77,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -88,6 +96,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
 
     /**
      * {$@inheritdoc}
+     * @since 2.0.0
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -97,6 +106,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
 
     /**
      * {$@inheritdoc}
+     * @since 2.0.0
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {

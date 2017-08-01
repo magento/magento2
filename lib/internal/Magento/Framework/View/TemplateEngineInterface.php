@@ -7,6 +7,7 @@ namespace Magento\Framework\View;
 
 /**
  * Interface for Template Engine
+ * @since 2.0.0
  */
 interface TemplateEngineInterface
 {
@@ -20,6 +21,7 @@ interface TemplateEngineInterface
      * @param string $templateFile
      * @param array $dictionary
      * @return string rendered template
+     * @since 2.0.0
      */
     public function render(
         \Magento\Framework\View\Element\BlockInterface $block,

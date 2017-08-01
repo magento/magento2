@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api;
 /**
  * Interface for guest quote totals calculation
  * @api
+ * @since 2.0.0
  */
 interface GuestTotalsInformationManagementInterface
 {
@@ -17,6 +18,7 @@ interface GuestTotalsInformationManagementInterface
      * @param string $cartId
      * @param \Magento\Checkout\Api\Data\TotalsInformationInterface $addressInformation
      * @return \Magento\Quote\Api\Data\TotalsInterface
+     * @since 2.0.0
      */
     public function calculate(
         $cartId,

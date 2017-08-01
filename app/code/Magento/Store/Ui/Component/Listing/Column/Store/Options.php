@@ -11,6 +11,7 @@ use Magento\Store\Model\System\Store as SystemStore;
 
 /**
  * Class Options
+ * @since 2.0.0
  */
 class Options implements OptionSourceInterface
 {
@@ -18,6 +19,7 @@ class Options implements OptionSourceInterface
      * Escaper
      *
      * @var Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
@@ -25,16 +27,19 @@ class Options implements OptionSourceInterface
      * System store
      *
      * @var SystemStore
+     * @since 2.0.0
      */
     protected $systemStore;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $currentOptions = [];
 
@@ -43,6 +48,7 @@ class Options implements OptionSourceInterface
      *
      * @param SystemStore $systemStore
      * @param Escaper $escaper
+     * @since 2.0.0
      */
     public function __construct(SystemStore $systemStore, Escaper $escaper)
     {
@@ -54,6 +60,7 @@ class Options implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -72,6 +79,7 @@ class Options implements OptionSourceInterface
      * Generate current options
      *
      * @return void
+     * @since 2.0.0
      */
     protected function generateCurrentOptions()
     {

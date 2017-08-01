@@ -12,16 +12,19 @@ use Magento\Quote\Model\Quote\Item;
  * Abstract item
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractItem implements ItemInterface
 {
     /**
      * @var Item
+     * @since 2.0.0
      */
     protected $item;
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItemData(Item $item)
     {
@@ -36,6 +39,7 @@ abstract class AbstractItem implements ItemInterface
      * Get item data. Template method
      *
      * @return array
+     * @since 2.0.0
      */
     abstract protected function doGetItemData();
 }

@@ -10,11 +10,13 @@ use Magento\Authorizenet\Model\Request as AuthorizenetRequest;
 
 /**
  * Authorize.net request model for DirectPost model
+ * @since 2.0.0
  */
 class Request extends AuthorizenetRequest
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_transKey = null;
 
@@ -23,6 +25,7 @@ class Request extends AuthorizenetRequest
      * Needed to generate sign.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getTransactionKey()
     {
@@ -35,6 +38,7 @@ class Request extends AuthorizenetRequest
      *
      * @param string $transKey
      * @return $this
+     * @since 2.0.0
      */
     protected function _setTransactionKey($transKey)
     {
@@ -52,6 +56,7 @@ class Request extends AuthorizenetRequest
      * @param string $fpSequence An invoice number or random number.
      * @param string $fpTimestamp
      * @return string The fingerprint.
+     * @since 2.0.0
      */
     public function generateRequestSign(
         $merchantApiLoginId,
@@ -73,6 +78,7 @@ class Request extends AuthorizenetRequest
      *
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
      * @return $this
+     * @since 2.0.0
      */
     public function setConstantData(\Magento\Authorizenet\Model\Directpost $paymentMethod)
     {
@@ -94,6 +100,7 @@ class Request extends AuthorizenetRequest
      * @param \Magento\Sales\Model\Order $order
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
      * @return $this
+     * @since 2.0.0
      */
     public function setDataFromOrder(
         \Magento\Sales\Model\Order $order,
@@ -165,6 +172,7 @@ class Request extends AuthorizenetRequest
      * All needed fields should be placed in the object fist.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function signRequestData()
     {

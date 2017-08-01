@@ -12,6 +12,7 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * Class Csv create new CSV file and add Error data in additional column
+ * @since 2.0.0
  */
 class Csv implements ReportProcessorInterface
 {
@@ -23,21 +24,25 @@ class Csv implements ReportProcessorInterface
 
     /**
      * @var \Magento\ImportExport\Helper\Report
+     * @since 2.0.0
      */
     protected $reportHelper;
 
     /**
      * @var \Magento\ImportExport\Model\Import\Source\CsvFactory
+     * @since 2.0.0
      */
     protected $sourceCsvFactory;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory
+     * @since 2.0.0
      */
     protected $outputCsvFactory;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -46,6 +51,7 @@ class Csv implements ReportProcessorInterface
      * @param Import\Source\CsvFactory $sourceCsvFactory
      * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory $outputCsvFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\ImportExport\Helper\Report $reportHelper,
@@ -65,6 +71,7 @@ class Csv implements ReportProcessorInterface
      * @param bool $writeOnlyErrorItems
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function createReport(
         $originalFileName,
@@ -95,6 +102,7 @@ class Csv implements ReportProcessorInterface
      * @param int $rowNumber
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return string
+     * @since 2.0.0
      */
     public function retrieveErrorMessagesByRowNumber($rowNumber, ProcessingErrorAggregatorInterface $errorAggregator)
     {
@@ -114,6 +122,7 @@ class Csv implements ReportProcessorInterface
     /**
      * @param string $sourceFile
      * @return string
+     * @since 2.0.0
      */
     protected function generateOutputFileName($sourceFile)
     {
@@ -124,6 +133,7 @@ class Csv implements ReportProcessorInterface
     /**
      * @param string $sourceFile
      * @return \Magento\ImportExport\Model\Import\Source\Csv
+     * @since 2.0.0
      */
     protected function createSourceCsvModel($sourceFile)
     {
@@ -138,6 +148,7 @@ class Csv implements ReportProcessorInterface
     /**
      * @param string $outputFileName
      * @return \Magento\ImportExport\Model\Export\Adapter\Csv
+     * @since 2.0.0
      */
     protected function createOutputCsvModel($outputFileName)
     {

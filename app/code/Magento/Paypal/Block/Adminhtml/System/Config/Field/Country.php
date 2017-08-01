@@ -11,6 +11,11 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Field;
 
 use Magento\Paypal\Model\Config\StructurePlugin;
 
+/**
+ * Class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Country
+ *
+ * @since 2.0.0
+ */
 class Country extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
@@ -27,21 +32,25 @@ class Country extends \Magento\Config\Block\System\Config\Form\Field
      * Country of default scope
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultCountry;
 
     /**
      * @var \Magento\Backend\Model\Url
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Framework\View\Helper\Js
+     * @since 2.0.0
      */
     protected $_jsHelper;
 
     /**
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
@@ -51,6 +60,7 @@ class Country extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,6 +80,7 @@ class Country extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -101,6 +112,7 @@ class Country extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

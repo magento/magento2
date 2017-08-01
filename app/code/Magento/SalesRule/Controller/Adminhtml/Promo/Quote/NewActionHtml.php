@@ -6,12 +6,18 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\NewActionHtml
+ *
+ * @since 2.0.0
+ */
 class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * New action html action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

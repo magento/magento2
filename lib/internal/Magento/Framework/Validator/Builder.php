@@ -10,25 +10,34 @@ namespace Magento\Framework\Validator;
 
 use Magento\Framework\Validator\Constraint\OptionInterface;
 
+/**
+ * Class \Magento\Framework\Validator\Builder
+ *
+ * @since 2.0.0
+ */
 class Builder
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_constraints;
 
     /**
      * @var \Magento\Framework\Validator\ConstraintFactory
+     * @since 2.0.0
      */
     protected $_constraintFactory;
 
     /**
      * @var \Magento\Framework\ValidatorFactory
+     * @since 2.0.0
      */
     protected $_validatorFactory;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
+     * @since 2.0.0
      */
     protected $_oneValidatorFactory;
 
@@ -37,6 +46,7 @@ class Builder
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\Validator\UniversalFactory $oneValidatorFactory
      * @param array $constraints
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Validator\ConstraintFactory $constraintFactory,
@@ -63,6 +73,7 @@ class Builder
      * @param bool $argumentsIsArray
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _checkConfigurationArguments(array $configuration, $argumentsIsArray)
     {
@@ -94,6 +105,7 @@ class Builder
      * @param array $configuration
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _checkMethodArguments(array $configuration)
     {
@@ -112,6 +124,7 @@ class Builder
      * @param bool $callbackIsArray
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _checkConfigurationCallback(array $configuration, $callbackIsArray)
     {
@@ -135,6 +148,7 @@ class Builder
      * Create validator instance and configure it
      *
      * @return \Magento\Framework\Validator
+     * @since 2.0.0
      */
     public function createValidator()
     {
@@ -145,6 +159,7 @@ class Builder
      * Get validator instance
      *
      * @return \Magento\Framework\Validator
+     * @since 2.0.0
      */
     protected function _createValidatorInstance()
     {
@@ -164,6 +179,7 @@ class Builder
      * @param array $configuration
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function addConfiguration($alias, array $configuration)
     {
@@ -196,6 +212,7 @@ class Builder
      * @param array $constraint
      * @param \Magento\Framework\Validator\Constraint\Option\Callback $callback
      * @return array
+     * @since 2.0.0
      */
     protected function _addConstraintCallback(
         array $constraint,
@@ -214,6 +231,7 @@ class Builder
      * @param array $constraint
      * @param array $configuration
      * @return array
+     * @since 2.0.0
      */
     protected function _addConstraintMethod(array $constraint, array $configuration)
     {
@@ -229,6 +247,7 @@ class Builder
      *
      * @param array $configurations
      * @return $this
+     * @since 2.0.0
      */
     public function addConfigurations(array $configurations)
     {
@@ -245,6 +264,7 @@ class Builder
      *
      * @param array $data
      * @return \Magento\Framework\Validator\Constraint
+     * @since 2.0.0
      */
     protected function _createConstraint(array $data)
     {
@@ -273,6 +293,7 @@ class Builder
      * @param array $data
      * @return \Magento\Framework\Validator\ValidatorInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _createConstraintValidator(array $data)
     {
@@ -304,6 +325,7 @@ class Builder
      * @param \Magento\Framework\Validator\ValidatorInterface $validator
      * @param array $options
      * @return void
+     * @since 2.0.0
      */
     protected function _configureConstraintValidator(
         \Magento\Framework\Validator\ValidatorInterface $validator,
@@ -339,6 +361,7 @@ class Builder
      *
      * @param OptionInterface[] $arguments
      * @return OptionInterface[]
+     * @since 2.0.0
      */
     protected function _applyArgumentsCallback(array $arguments)
     {

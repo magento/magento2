@@ -8,10 +8,16 @@ namespace Magento\GroupedProduct\Model\Product\Link\ProductEntity;
 
 use Magento\Catalog\Model\ProductLink\Converter\ConverterInterface;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Product\Link\ProductEntity\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements ConverterInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convert(\Magento\Catalog\Model\Product $product)
     {

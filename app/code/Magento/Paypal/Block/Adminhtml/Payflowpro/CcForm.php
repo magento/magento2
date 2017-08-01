@@ -14,15 +14,22 @@ use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
+/**
+ * Class \Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm
+ *
+ * @since 2.1.0
+ */
 class CcForm extends \Magento\Payment\Block\Transparent\Form
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $_template = 'Magento_Paypal::transparent/form.phtml';
 
     /**
      * @var Data
+     * @since 2.1.0
      */
     private $paymentDataHelper;
 
@@ -31,6 +38,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
      * @param Config $paymentConfig
      * @param Session $checkoutSession
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -44,6 +52,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     /**
      * Check if vault enabled
      * @return bool
+     * @since 2.1.0
      */
     public function isVaultEnabled()
     {
@@ -56,6 +65,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
      * On backend this block does not have any conditional checks
      *
      * @return bool
+     * @since 2.1.0
      */
     protected function shouldRender()
     {
@@ -64,6 +74,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
 
     /**
      * {inheritdoc}
+     * @since 2.1.0
      */
     protected function initializeMethod()
     {
@@ -73,6 +84,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     /**
      * Get configured vault payment for PayflowPro
      * @return VaultPaymentInterface
+     * @since 2.1.0
      */
     private function getVaultPayment()
     {
@@ -82,7 +94,8 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getPaymentDataHelper()
     {

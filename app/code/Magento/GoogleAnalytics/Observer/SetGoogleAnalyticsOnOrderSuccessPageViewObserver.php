@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Google Analytics module observer
  *
+ * @since 2.0.0
  */
 class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterface
 {
@@ -18,16 +19,19 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterf
      * Google analytics data
      *
      * @var \Magento\GoogleAnalytics\Helper\Data
+     * @since 2.0.0
      */
     protected $_googleAnalyticsData = null;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $_layout;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -35,6 +39,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterf
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -51,6 +56,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterf
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

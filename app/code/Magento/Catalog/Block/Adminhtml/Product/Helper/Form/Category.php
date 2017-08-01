@@ -13,11 +13,13 @@ use Magento\Framework\AuthorizationInterface;
 
 /**
  * Product form category field helper
+ * @since 2.0.0
  */
 class Category extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $_layout;
 
@@ -25,21 +27,25 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * Backend data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_backendData;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var AuthorizationInterface
+     * @since 2.0.0
      */
     protected $authorization;
 
@@ -53,6 +59,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param AuthorizationInterface $authorization
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -81,6 +88,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * Get values for select
      *
      * @return array
+     * @since 2.0.0
      */
     public function getValues()
     {
@@ -104,6 +112,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * Get categories collection
      *
      * @return Collection
+     * @since 2.0.0
      */
     protected function _getCategoriesCollection()
     {
@@ -114,6 +123,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * Attach category suggest widget initialization
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAfterElementHtml()
     {
@@ -151,6 +161,7 @@ HTML;
      * Get selector options
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getSelectorOptions()
     {
@@ -167,6 +178,7 @@ HTML;
      * Whether permission is granted
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isAllowed()
     {

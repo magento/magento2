@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Time
+ *
+ * @since 2.0.0
+ */
 class Time extends AbstractElement
 {
     /**
@@ -20,6 +25,7 @@ class Time extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -33,6 +39,7 @@ class Time extends AbstractElement
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -47,6 +54,7 @@ class Time extends AbstractElement
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

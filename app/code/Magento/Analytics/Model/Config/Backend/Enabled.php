@@ -17,6 +17,7 @@ use Magento\Framework\Registry;
 
 /**
  * Config value backend model.
+ * @since 2.2.0
  */
 class Enabled extends Value
 {
@@ -29,6 +30,7 @@ class Enabled extends Value
      * Service for processing of activation/deactivation MBI subscription.
      *
      * @var SubscriptionHandler
+     * @since 2.2.0
      */
     private $subscriptionHandler;
 
@@ -41,6 +43,7 @@ class Enabled extends Value
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -61,6 +64,7 @@ class Enabled extends Value
      *
      * @return Value
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function afterSave()
     {

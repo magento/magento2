@@ -11,12 +11,18 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
 use Magento\Search\Model\Autocomplete\ItemFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Autocomplete\DataProvider
+ *
+ * @since 2.0.0
+ */
 class DataProvider implements DataProviderInterface
 {
     /**
      * Query factory
      *
      * @var QueryFactory
+     * @since 2.0.0
      */
     protected $queryFactory;
 
@@ -24,12 +30,14 @@ class DataProvider implements DataProviderInterface
      * Autocomplete result item factory
      *
      * @var ItemFactory
+     * @since 2.0.0
      */
     protected $itemFactory;
 
     /**
      * @param QueryFactory $queryFactory
      * @param ItemFactory $itemFactory
+     * @since 2.0.0
      */
     public function __construct(
         QueryFactory $queryFactory,
@@ -41,6 +49,7 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -65,6 +74,7 @@ class DataProvider implements DataProviderInterface
      * Retrieve suggest collection for query
      *
      * @return Collection
+     * @since 2.0.0
      */
     private function getSuggestCollection()
     {

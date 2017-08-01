@@ -9,6 +9,7 @@ namespace Magento\Framework\Authorization;
  * Responsible for internal authorization decision making based on provided role, resource and privilege
  *
  * @api
+ * @since 2.0.0
  */
 interface PolicyInterface
 {
@@ -20,6 +21,7 @@ interface PolicyInterface
      * @param string $resourceId
      * @param string|null $privilege
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed($roleId, $resourceId, $privilege = null);
 }

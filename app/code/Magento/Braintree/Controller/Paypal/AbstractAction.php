@@ -15,16 +15,19 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
  * Abstract class AbstractAction
+ * @since 2.1.0
  */
 abstract class AbstractAction extends Action
 {
     /**
      * @var Config
+     * @since 2.1.0
      */
     protected $config;
 
     /**
      * @var Session
+     * @since 2.1.0
      */
     protected $checkoutSession;
 
@@ -34,6 +37,7 @@ abstract class AbstractAction extends Action
      * @param Context $context
      * @param Config $config
      * @param Session $checkoutSession
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -49,6 +53,7 @@ abstract class AbstractAction extends Action
      * Check whether payment method is enabled
      *
      * @inheritdoc
+     * @since 2.1.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -69,6 +74,7 @@ abstract class AbstractAction extends Action
      * @param CartInterface $quote
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.1.0
      */
     protected function validateQuote($quote)
     {

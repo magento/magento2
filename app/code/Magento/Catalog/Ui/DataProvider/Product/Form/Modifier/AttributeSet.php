@@ -16,6 +16,7 @@ use Magento\Ui\Component\Form\Field;
  * Add "Attribute Set" to first fieldset
  *
  * @api
+ * @since 2.1.0
  */
 class AttributeSet extends AbstractModifier
 {
@@ -28,16 +29,19 @@ class AttributeSet extends AbstractModifier
      * Set collection factory
      *
      * @var CollectionFactory
+     * @since 2.1.0
      */
     protected $attributeSetCollectionFactory;
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
@@ -45,6 +49,7 @@ class AttributeSet extends AbstractModifier
      * @param LocatorInterface $locator
      * @param CollectionFactory $attributeSetCollectionFactory
      * @param UrlInterface $urlBuilder
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -60,6 +65,7 @@ class AttributeSet extends AbstractModifier
      * Return options for select
      *
      * @return array
+     * @since 2.1.0
      */
     public function getOptions()
     {
@@ -78,6 +84,7 @@ class AttributeSet extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -110,6 +117,7 @@ class AttributeSet extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

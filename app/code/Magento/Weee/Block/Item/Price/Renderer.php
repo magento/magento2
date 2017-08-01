@@ -16,11 +16,13 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
 {
     /**
      * @var \Magento\Weee\Helper\Data
+     * @since 2.0.0
      */
     protected $weeeHelper;
 
@@ -30,6 +32,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -47,6 +50,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Whether to display weee details together with price
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayPriceWithWeeeDetails()
     {
@@ -73,6 +77,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Return the flag whether to include weee in the price
      *
      * @return bool|int
+     * @since 2.0.0
      */
     public function getIncludeWeeeFlag()
     {
@@ -89,6 +94,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getUnitDisplayPriceInclTax()
     {
@@ -110,6 +116,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseUnitDisplayPriceInclTax()
     {
@@ -131,6 +138,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getRowDisplayPriceInclTax()
     {
@@ -152,6 +160,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseRowDisplayPriceInclTax()
     {
@@ -173,6 +182,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getUnitDisplayPriceExclTax()
     {
@@ -194,6 +204,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseUnitDisplayPriceExclTax()
     {
@@ -221,6 +232,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getRowDisplayPriceExclTax()
     {
@@ -242,6 +254,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * depending on Weee display setting
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseRowDisplayPriceExclTax()
     {
@@ -262,6 +275,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get final unit display price including tax, this will add Weee amount to unit price include tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getFinalUnitDisplayPriceInclTax()
     {
@@ -278,6 +292,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get base final unit display price including tax, this will add Weee amount to unit price include tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseFinalUnitDisplayPriceInclTax()
     {
@@ -294,6 +309,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get final row display price including tax, this will add weee amount to rowTotalInclTax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getFinalRowDisplayPriceInclTax()
     {
@@ -310,6 +326,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get base final row display price including tax, this will add weee amount to rowTotalInclTax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseFinalRowDisplayPriceInclTax()
     {
@@ -326,6 +343,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get final unit display price excluding tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getFinalUnitDisplayPriceExclTax()
     {
@@ -342,6 +360,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get base final unit display price excluding tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseFinalUnitDisplayPriceExclTax()
     {
@@ -364,6 +383,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get final row display price excluding tax, this will add Weee amount to rowTotal
      *
      * @return float
+     * @since 2.0.0
      */
     public function getFinalRowDisplayPriceExclTax()
     {
@@ -380,6 +400,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Get base final row display price excluding tax, this will add Weee amount to rowTotal
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseFinalRowDisplayPriceExclTax()
     {
@@ -396,6 +417,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * Whether to display final price that include Weee amounts
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayFinalPrice()
     {
@@ -420,6 +442,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      *
      * @param OrderItem|InvoiceItem|CreditMemoItem $item
      * @return mixed
+     * @since 2.0.0
      */
     public function getTotalAmount($item)
     {
@@ -437,6 +460,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      *
      * @param OrderItem|InvoiceItem|CreditMemoItem $item
      * @return mixed
+     * @since 2.0.0
      */
     public function getBaseTotalAmount($item)
     {

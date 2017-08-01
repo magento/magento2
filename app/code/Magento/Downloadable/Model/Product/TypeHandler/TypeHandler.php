@@ -9,17 +9,20 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Class TypeHandler
+ * @since 2.0.0
  */
 class TypeHandler implements TypeHandlerInterface
 {
 
     /**
      * @var \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface[]
+     * @since 2.0.0
      */
     private $handlers;
 
     /**
      * @param \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface[] $handlers
+     * @since 2.0.0
      */
     public function __construct(array $handlers)
     {
@@ -28,6 +31,7 @@ class TypeHandler implements TypeHandlerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(Product $product, array $data)
     {
@@ -38,6 +42,7 @@ class TypeHandler implements TypeHandlerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isCanHandle(array $data)
     {

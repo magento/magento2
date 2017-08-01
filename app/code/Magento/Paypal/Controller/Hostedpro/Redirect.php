@@ -6,12 +6,18 @@
  */
 namespace Magento\Paypal\Controller\Hostedpro;
 
+/**
+ * Class \Magento\Paypal\Controller\Hostedpro\Redirect
+ *
+ * @since 2.0.0
+ */
 class Redirect extends \Magento\Paypal\Controller\Payflow
 {
     /**
      * Redirect to HostedPro gateway into iframe
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -24,6 +30,7 @@ class Redirect extends \Magento\Paypal\Controller\Payflow
      * Get order object
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     protected function getOrder()
     {

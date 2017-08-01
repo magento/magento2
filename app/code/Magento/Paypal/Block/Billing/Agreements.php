@@ -9,6 +9,7 @@ namespace Magento\Paypal\Block\Billing;
  * Customer account billing agreements block
  *
  * @api
+ * @since 2.0.0
  */
 class Agreements extends \Magento\Framework\View\Element\Template
 {
@@ -16,6 +17,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Payment methods array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_paymentMethods = [];
 
@@ -23,21 +25,25 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Billing agreements collection
      *
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
+     * @since 2.0.0
      */
     protected $_billingAgreements = null;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
+     * @since 2.0.0
      */
     protected $_agreementCollection;
 
     /**
      * @var \Magento\Paypal\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
@@ -47,6 +53,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementCollection
      * @param \Magento\Paypal\Helper\Data $helper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -66,6 +73,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Set Billing Agreement instance
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -86,6 +94,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Retrieve billing agreements collection
      *
      * @return \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
+     * @since 2.0.0
      */
     public function getBillingAgreements()
     {
@@ -107,6 +116,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\DataObject|\Magento\Paypal\Model\Billing\Agreement $item
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     public function getItemValue(\Magento\Paypal\Model\Billing\Agreement $item, $key)
     {
@@ -138,6 +148,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Load available billing agreement methods
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _loadPaymentMethods()
     {
@@ -153,6 +164,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Retrieve wizard payment options array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWizardPaymentMethodOptions()
     {
@@ -169,6 +181,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * Set data to block
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

@@ -9,15 +9,22 @@ use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\NotEmptyFactory;
 use Zend_Validate_Exception;
 
+/**
+ * Class \Magento\Bundle\Model\Option\Validator
+ *
+ * @since 2.0.0
+ */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * @var NotEmpty
+     * @since 2.0.0
      */
     private $notEmpty;
 
     /**
      * @param NotEmptyFactory $notEmptyFactory
+     * @since 2.0.0
      */
     public function __construct(NotEmptyFactory $notEmptyFactory)
     {
@@ -28,6 +35,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @param \Magento\Bundle\Model\Option $value
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -41,6 +49,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @return void
      * @throws Zend_Validate_Exception
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function validateRequiredFields($value)
     {

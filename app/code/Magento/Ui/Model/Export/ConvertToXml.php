@@ -17,36 +17,43 @@ use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class ConvertToXml
+ * @since 2.0.0
  */
 class ConvertToXml
 {
     /**
      * @var WriteInterface
+     * @since 2.0.0
      */
     protected $directory;
 
     /**
      * @var MetadataProvider
+     * @since 2.0.0
      */
     protected $metadataProvider;
 
     /**
      * @var ExcelFactory
+     * @since 2.0.0
      */
     protected $excelFactory;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var SearchResultIteratorFactory
+     * @since 2.0.0
      */
     protected $iteratorFactory;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $fields;
 
@@ -56,6 +63,7 @@ class ConvertToXml
      * @param MetadataProvider $metadataProvider
      * @param ExcelFactory $excelFactory
      * @param SearchResultIteratorFactory $iteratorFactory
+     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -75,6 +83,7 @@ class ConvertToXml
      * Returns Filters with options
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getOptions()
     {
@@ -88,6 +97,7 @@ class ConvertToXml
      * Returns DB fields list
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getFields()
     {
@@ -103,6 +113,7 @@ class ConvertToXml
      *
      * @param DocumentInterface $document
      * @return array
+     * @since 2.0.0
      */
     public function getRowData(DocumentInterface $document)
     {
@@ -114,6 +125,7 @@ class ConvertToXml
      *
      * @return array
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function getXmlFile()
     {
@@ -167,6 +179,7 @@ class ConvertToXml
      * @param string $componentName
      * @param array $items
      * @return void
+     * @since 2.0.0
      */
     protected function prepareItems($componentName, array $items = [])
     {

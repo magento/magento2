@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Model\Import\ErrorProcessing;
  * Class describe Processing Error
  *
  * @api
+ * @since 2.0.0
  */
 class ProcessingError
 {
@@ -20,31 +21,37 @@ class ProcessingError
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $errorCode;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $errorMessage;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $errorDescription;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $rowNumber;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $columnName;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $errorLevel;
 
@@ -56,6 +63,7 @@ class ProcessingError
      * @param string|null $errorMessage
      * @param string|null $errorDescription
      * @return void
+     * @since 2.0.0
      */
     public function init(
         $errorCode,
@@ -75,6 +83,7 @@ class ProcessingError
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getErrorCode()
     {
@@ -83,6 +92,7 @@ class ProcessingError
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getErrorMessage()
     {
@@ -91,6 +101,7 @@ class ProcessingError
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getRowNumber()
     {
@@ -99,6 +110,7 @@ class ProcessingError
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getColumnName()
     {
@@ -107,6 +119,7 @@ class ProcessingError
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getErrorLevel()
     {
@@ -115,6 +128,7 @@ class ProcessingError
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getErrorDescription()
     {

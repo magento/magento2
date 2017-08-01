@@ -19,6 +19,7 @@ use Magento\Setup\Console\Command\MaintenanceEnableCommand;
  * Factory class to create jobs
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class JobFactory
 {
@@ -38,6 +39,7 @@ class JobFactory
 
     /**
      * @var ServiceLocatorInterface
+     * @since 2.0.0
      */
     private $serviceLocator;
 
@@ -45,6 +47,7 @@ class JobFactory
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
+     * @since 2.0.0
      */
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
@@ -60,6 +63,7 @@ class JobFactory
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function create($name, array $params = [])
     {

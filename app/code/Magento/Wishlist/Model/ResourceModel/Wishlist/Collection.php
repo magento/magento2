@@ -13,6 +13,7 @@ namespace Magento\Wishlist\Model\ResourceModel\Wishlist;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -20,6 +21,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function filterByCustomerId($customerId)
     {
@@ -43,6 +46,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $customerIds
      * @return $this
+     * @since 2.0.0
      */
     public function filterByCustomerIds(array $customerIds)
     {

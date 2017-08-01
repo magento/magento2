@@ -15,6 +15,7 @@ namespace Magento\Sales\Api\Data;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
  * @api
+ * @since 2.0.0
  */
 interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -226,6 +227,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo adjustment.
      *
      * @return float|null Credit memo adjustment.
+     * @since 2.0.0
      */
     public function getAdjustment();
 
@@ -233,6 +235,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo negative adjustment.
      *
      * @return float|null Credit memo negative adjustment.
+     * @since 2.0.0
      */
     public function getAdjustmentNegative();
 
@@ -240,6 +243,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo positive adjustment.
      *
      * @return float|null Credit memo positive adjustment.
+     * @since 2.0.0
      */
     public function getAdjustmentPositive();
 
@@ -247,6 +251,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base adjustment.
      *
      * @return float|null Credit memo base adjustment.
+     * @since 2.0.0
      */
     public function getBaseAdjustment();
 
@@ -254,6 +259,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo negative base adjustment.
      *
      * @return float|null Credit memo negative base adjustment.
+     * @since 2.0.0
      */
     public function getBaseAdjustmentNegative();
 
@@ -262,6 +268,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseAdjustmentNegative
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAdjustmentNegative($baseAdjustmentNegative);
 
@@ -269,6 +276,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo positive base adjustment.
      *
      * @return float|null Credit memo positive base adjustment.
+     * @since 2.0.0
      */
     public function getBaseAdjustmentPositive();
 
@@ -277,6 +285,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseAdjustmentPositive
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAdjustmentPositive($baseAdjustmentPositive);
 
@@ -284,6 +293,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base currency code.
      *
      * @return string|null Credit memo base currency code.
+     * @since 2.0.0
      */
     public function getBaseCurrencyCode();
 
@@ -291,6 +301,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base discount amount.
      *
      * @return float|null Credit memo base discount amount.
+     * @since 2.0.0
      */
     public function getBaseDiscountAmount();
 
@@ -298,6 +309,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base grand total.
      *
      * @return float|null Credit memo base grand total.
+     * @since 2.0.0
      */
     public function getBaseGrandTotal();
 
@@ -305,6 +317,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base discount tax compensation amount.
      *
      * @return float|null Credit memo base discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -312,6 +325,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base shipping amount.
      *
      * @return float|null Credit memo base shipping amount.
+     * @since 2.0.0
      */
     public function getBaseShippingAmount();
 
@@ -319,6 +333,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base shipping discount tax compensation amount.
      *
      * @return float|null Credit memo base shipping discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -326,6 +341,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base shipping including tax.
      *
      * @return float|null Credit memo base shipping including tax.
+     * @since 2.0.0
      */
     public function getBaseShippingInclTax();
 
@@ -333,6 +349,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base shipping tax amount.
      *
      * @return float|null Credit memo base shipping tax amount.
+     * @since 2.0.0
      */
     public function getBaseShippingTaxAmount();
 
@@ -340,6 +357,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base subtotal.
      *
      * @return float|null Credit memo base subtotal.
+     * @since 2.0.0
      */
     public function getBaseSubtotal();
 
@@ -347,6 +365,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base subtotal including tax.
      *
      * @return float|null Credit memo base subtotal including tax.
+     * @since 2.0.0
      */
     public function getBaseSubtotalInclTax();
 
@@ -354,6 +373,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base tax amount.
      *
      * @return float|null Credit memo base tax amount.
+     * @since 2.0.0
      */
     public function getBaseTaxAmount();
 
@@ -361,6 +381,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base-to-global rate.
      *
      * @return float|null Credit memo base-to-global rate.
+     * @since 2.0.0
      */
     public function getBaseToGlobalRate();
 
@@ -368,6 +389,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo base-to-order rate.
      *
      * @return float|null Credit memo base-to-order rate.
+     * @since 2.0.0
      */
     public function getBaseToOrderRate();
 
@@ -375,6 +397,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo billing address ID.
      *
      * @return int|null Credit memo billing address ID.
+     * @since 2.0.0
      */
     public function getBillingAddressId();
 
@@ -382,6 +405,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo created-at timestamp.
      *
      * @return string|null Credit memo created-at timestamp.
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -390,6 +414,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $createdAt timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -397,6 +422,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo status.
      *
      * @return int|null Credit memo status.
+     * @since 2.0.0
      */
     public function getCreditmemoStatus();
 
@@ -404,6 +430,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo discount amount.
      *
      * @return float|null Credit memo discount amount.
+     * @since 2.0.0
      */
     public function getDiscountAmount();
 
@@ -411,6 +438,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo discount description.
      *
      * @return string|null Credit memo discount description.
+     * @since 2.0.0
      */
     public function getDiscountDescription();
 
@@ -418,6 +446,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo email sent flag value.
      *
      * @return int|null Credit memo email sent flag value.
+     * @since 2.0.0
      */
     public function getEmailSent();
 
@@ -425,6 +454,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo ID.
      *
      * @return int|null Credit memo ID.
+     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -433,6 +463,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -440,6 +471,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo global currency code.
      *
      * @return string|null Credit memo global currency code.
+     * @since 2.0.0
      */
     public function getGlobalCurrencyCode();
 
@@ -447,6 +479,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo grand total.
      *
      * @return float|null Credit memo grand total.
+     * @since 2.0.0
      */
     public function getGrandTotal();
 
@@ -454,6 +487,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo discount tax compensation amount.
      *
      * @return float|null Credit memo discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -461,6 +495,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo increment ID.
      *
      * @return string|null Credit memo increment ID.
+     * @since 2.0.0
      */
     public function getIncrementId();
 
@@ -468,6 +503,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo invoice ID.
      *
      * @return int|null Credit memo invoice ID.
+     * @since 2.0.0
      */
     public function getInvoiceId();
 
@@ -475,6 +511,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo order currency code.
      *
      * @return string|null Credit memo order currency code.
+     * @since 2.0.0
      */
     public function getOrderCurrencyCode();
 
@@ -482,6 +519,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo order ID.
      *
      * @return int Credit memo order ID.
+     * @since 2.0.0
      */
     public function getOrderId();
 
@@ -489,6 +527,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo shipping address ID.
      *
      * @return int|null Credit memo shipping address ID.
+     * @since 2.0.0
      */
     public function getShippingAddressId();
 
@@ -496,6 +535,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo shipping amount.
      *
      * @return float|null Credit memo shipping amount.
+     * @since 2.0.0
      */
     public function getShippingAmount();
 
@@ -503,6 +543,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo shipping discount tax compensation amount.
      *
      * @return float|null Credit memo shipping discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getShippingDiscountTaxCompensationAmount();
 
@@ -510,6 +551,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo shipping including tax.
      *
      * @return float|null Credit memo shipping including tax.
+     * @since 2.0.0
      */
     public function getShippingInclTax();
 
@@ -517,6 +559,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo shipping tax amount.
      *
      * @return float|null Credit memo shipping tax amount.
+     * @since 2.0.0
      */
     public function getShippingTaxAmount();
 
@@ -524,6 +567,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo state.
      *
      * @return int|null Credit memo state.
+     * @since 2.0.0
      */
     public function getState();
 
@@ -531,6 +575,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo store currency code.
      *
      * @return string|null Credit memo store currency code.
+     * @since 2.0.0
      */
     public function getStoreCurrencyCode();
 
@@ -538,6 +583,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo store ID.
      *
      * @return int|null Credit memo store ID.
+     * @since 2.0.0
      */
     public function getStoreId();
 
@@ -545,6 +591,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo store-to-base rate.
      *
      * @return float|null Credit memo store-to-base rate.
+     * @since 2.0.0
      */
     public function getStoreToBaseRate();
 
@@ -552,6 +599,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo store-to-order rate.
      *
      * @return float|null Credit memo store-to-order rate.
+     * @since 2.0.0
      */
     public function getStoreToOrderRate();
 
@@ -559,6 +607,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo subtotal.
      *
      * @return float|null Credit memo subtotal.
+     * @since 2.0.0
      */
     public function getSubtotal();
 
@@ -566,6 +615,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo subtotal including tax.
      *
      * @return float|null Credit memo subtotal including tax.
+     * @since 2.0.0
      */
     public function getSubtotalInclTax();
 
@@ -573,6 +623,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo tax amount.
      *
      * @return float|null Credit memo tax amount.
+     * @since 2.0.0
      */
     public function getTaxAmount();
 
@@ -580,6 +631,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo transaction ID.
      *
      * @return string|null Credit memo transaction ID.
+     * @since 2.0.0
      */
     public function getTransactionId();
 
@@ -588,6 +640,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $transactionId
      * @return $this
+     * @since 2.0.0
      */
     public function setTransactionId($transactionId);
 
@@ -595,6 +648,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets the credit memo updated-at timestamp.
      *
      * @return string|null Credit memo updated-at timestamp.
+     * @since 2.0.0
      */
     public function getUpdatedAt();
 
@@ -602,6 +656,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets credit memo items.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[] Array of credit memo items.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -610,6 +665,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems($items);
 
@@ -617,6 +673,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Gets credit memo comments.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
+     * @since 2.0.0
      */
     public function getComments();
 
@@ -625,6 +682,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface[] $comments
      * @return $this
+     * @since 2.0.0
      */
     public function setComments($comments);
 
@@ -633,6 +691,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($id);
 
@@ -641,6 +700,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $adjustmentPositive
      * @return $this
+     * @since 2.0.0
      */
     public function setAdjustmentPositive($adjustmentPositive);
 
@@ -649,6 +709,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingTaxAmount($amount);
 
@@ -657,6 +718,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreToOrderRate($rate);
 
@@ -665,6 +727,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountAmount($amount);
 
@@ -673,6 +736,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseToOrderRate($rate);
 
@@ -681,6 +745,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setGrandTotal($amount);
 
@@ -689,6 +754,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotalInclTax($amount);
 
@@ -697,6 +763,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingAmount($amount);
 
@@ -705,6 +772,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotalInclTax($amount);
 
@@ -713,6 +781,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $adjustmentNegative
      * @return $this
+     * @since 2.0.0
      */
     public function setAdjustmentNegative($adjustmentNegative);
 
@@ -721,6 +790,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingAmount($amount);
 
@@ -729,6 +799,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreToBaseRate($rate);
 
@@ -737,6 +808,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseToGlobalRate($rate);
 
@@ -745,6 +817,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseAdjustment
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAdjustment($baseAdjustment);
 
@@ -753,6 +826,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotal($amount);
 
@@ -761,6 +835,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountAmount($amount);
 
@@ -769,6 +844,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotal($amount);
 
@@ -777,6 +853,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $adjustment
      * @return $this
+     * @since 2.0.0
      */
     public function setAdjustment($adjustment);
 
@@ -785,6 +862,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseGrandTotal($amount);
 
@@ -793,6 +871,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxAmount($amount);
 
@@ -801,6 +880,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingTaxAmount($amount);
 
@@ -809,6 +889,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxAmount($amount);
 
@@ -817,6 +898,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderId($id);
 
@@ -825,6 +907,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $emailSent
      * @return $this
+     * @since 2.0.0
      */
     public function setEmailSent($emailSent);
 
@@ -833,6 +916,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $creditmemoStatus
      * @return $this
+     * @since 2.0.0
      */
     public function setCreditmemoStatus($creditmemoStatus);
 
@@ -841,6 +925,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $state
      * @return $this
+     * @since 2.0.0
      */
     public function setState($state);
 
@@ -849,6 +934,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingAddressId($id);
 
@@ -857,6 +943,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setBillingAddressId($id);
 
@@ -865,6 +952,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setInvoiceId($id);
 
@@ -873,6 +961,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreCurrencyCode($code);
 
@@ -881,6 +970,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderCurrencyCode($code);
 
@@ -889,6 +979,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseCurrencyCode($code);
 
@@ -897,6 +988,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setGlobalCurrencyCode($code);
 
@@ -905,6 +997,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setIncrementId($id);
 
@@ -913,6 +1006,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($timestamp);
 
@@ -921,6 +1015,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($amount);
 
@@ -929,6 +1024,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationAmount($amount);
 
@@ -937,6 +1033,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingDiscountTaxCompensationAmount($amount);
 
@@ -945,6 +1042,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amnt
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingDiscountTaxCompensationAmnt($amnt);
 
@@ -953,6 +1051,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingInclTax($amount);
 
@@ -961,6 +1060,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingInclTax($amount);
 
@@ -969,6 +1069,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $description
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountDescription($description);
 
@@ -976,6 +1077,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -984,6 +1086,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes);
 }

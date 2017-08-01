@@ -14,13 +14,20 @@ use Magento\ImportExport\Model\Import;
  * ImportExport history reports helper
  *
  * @api
+ * @since 2.0.0
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Framework\Stdlib\DateTime\Timezone */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone
+     * @since 2.0.0
+     */
     protected $timeZone;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
+     */
     protected $varDirectory;
 
     /**
@@ -29,6 +36,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Timezone $timeZone
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -45,6 +53,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $time
      * @return string
+     * @since 2.0.0
      */
     public function getExecutionTime($time)
     {
@@ -58,6 +67,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\ImportExport\Model\Import $import
      * @return string
+     * @since 2.0.0
      */
     public function getSummaryStats(\Magento\ImportExport\Model\Import $import)
     {
@@ -75,6 +85,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return bool
+     * @since 2.0.0
      */
     public function importFileExists($filename)
     {
@@ -86,6 +97,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return string
+     * @since 2.0.0
      */
     public function getReportOutput($filename)
     {
@@ -95,6 +107,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $fileName
      * @return string
+     * @since 2.0.0
      */
     public function getReportAbsolutePath($fileName)
     {
@@ -106,6 +119,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return int|mixed
+     * @since 2.0.0
      */
     public function getReportSize($filename)
     {
@@ -117,6 +131,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return string
+     * @since 2.0.0
      */
     protected function getFilePath($filename)
     {

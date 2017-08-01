@@ -8,20 +8,28 @@ namespace Magento\Msrp\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
+/**
+ * Class \Magento\Msrp\Model\Msrp
+ *
+ * @since 2.0.0
+ */
 class Msrp
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $mapApplyToProductType = null;
 
     /**
      * @var AttributeFactory
+     * @since 2.0.0
      */
     protected $eavAttributeFactory;
 
     /**
      * @param AttributeFactory $eavAttributeFactory
+     * @since 2.0.0
      */
     public function __construct(
         AttributeFactory $eavAttributeFactory
@@ -35,6 +43,7 @@ class Msrp
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function canApplyToProduct($product)
     {

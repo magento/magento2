@@ -9,6 +9,7 @@ use Magento\Store\Model\Store;
 
 /**
  * WEEE config model
+ * @since 2.0.0
  */
 class Config
 {
@@ -35,12 +36,14 @@ class Config
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -55,6 +58,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getPriceDisplayType($store = null)
     {
@@ -70,6 +74,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getListPriceDisplayType($store = null)
     {
@@ -85,6 +90,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getSalesPriceDisplayType($store = null)
     {
@@ -100,6 +106,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getEmailPriceDisplayType($store = null)
     {
@@ -115,6 +122,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function includeInSubtotal($store = null)
     {
@@ -130,6 +138,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function isTaxable($store = null)
     {
@@ -145,6 +154,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function isEnabled($store = null)
     {

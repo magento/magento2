@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
  * Deployment Queue
  *
  * Deploy packages in parallel forks (if available)
+ * @since 2.2.0
  */
 class Queue
 {
@@ -31,66 +32,79 @@ class Queue
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $packages = [];
 
     /**
      * @var int[]
+     * @since 2.2.0
      */
     private $processIds = [];
 
     /**
      * @var Package[]
+     * @since 2.2.0
      */
     private $inProgress = [];
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $maxProcesses;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $maxExecTime;
 
     /**
      * @var AppState
+     * @since 2.2.0
      */
     private $appState;
 
     /**
      * @var LocaleResolver
+     * @since 2.2.0
      */
     private $localeResolver;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var DeployPackage
+     * @since 2.2.0
      */
     private $deployPackageService;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $options = [];
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $start = 0;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $lastJobStarted = 0;
 
@@ -103,6 +117,7 @@ class Queue
      * @param array $options
      * @param int $maxProcesses
      * @param int $maxExecTime
+     * @since 2.2.0
      */
     public function __construct(
         AppState $appState,
@@ -128,6 +143,7 @@ class Queue
      * @param Package $package
      * @param Package[] $dependencies
      * @return bool true on success
+     * @since 2.2.0
      */
     public function add(Package $package, array $dependencies = [])
     {
@@ -141,6 +157,7 @@ class Queue
 
     /**
      * @return Package[]
+     * @since 2.2.0
      */
     public function getPackages()
     {
@@ -151,6 +168,7 @@ class Queue
      * Process jobs
      *
      * @return int
+     * @since 2.2.0
      */
     public function process()
     {
@@ -182,6 +200,7 @@ class Queue
      * @param array $packages
      * @param array $packageJob
      * @return void
+     * @since 2.2.0
      */
     private function assertAndExecute($name, array & $packages, array $packageJob)
     {
@@ -205,6 +224,7 @@ class Queue
      * Need to wait till all processes finished
      *
      * @return void
+     * @since 2.2.0
      */
     private function awaitForAllProcesses()
     {
@@ -225,6 +245,7 @@ class Queue
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     private function isCanBeParalleled()
     {
@@ -235,6 +256,7 @@ class Queue
      * @param Package $package
      * @return bool true on success for main process and exit for child process
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.2.0
      */
     private function execute(Package $package)
     {
@@ -286,6 +308,7 @@ class Queue
     /**
      * @param Package $package
      * @return bool
+     * @since 2.2.0
      */
     private function isDeployed(Package $package)
     {
@@ -307,6 +330,7 @@ class Queue
     /**
      * @param Package $package
      * @return int|null
+     * @since 2.2.0
      */
     private function getPid(Package $package)
     {
@@ -317,6 +341,7 @@ class Queue
 
     /**
      * @return bool
+     * @since 2.2.0
      */
     private function checkTimeout()
     {
@@ -329,6 +354,7 @@ class Queue
      * Protect against zombie process
      *
      * @return void
+     * @since 2.2.0
      */
     public function __destruct()
     {

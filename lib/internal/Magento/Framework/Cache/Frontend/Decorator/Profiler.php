@@ -8,6 +8,7 @@ namespace Magento\Framework\Cache\Frontend\Decorator;
 
 /**
  * Cache frontend decorator that performs profiling of cache operations
+ * @since 2.0.0
  */
 class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {
@@ -15,12 +16,14 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Backend class prefixes to be striped from profiler tags
      *
      * @var string[]
+     * @since 2.0.0
      */
     private $_backendPrefixes = [];
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $frontend
      * @param string[] $backendPrefixes Backend class prefixes to be striped for profiling informativeness
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Cache\FrontendInterface $frontend, $backendPrefixes = [])
     {
@@ -33,6 +36,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      *
      * @param string $operation
      * @return array
+     * @since 2.0.0
      */
     protected function _getProfilerTags($operation)
     {
@@ -48,6 +52,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Get short cache backend type name by striping known backend class prefixes
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getBackendType()
     {
@@ -63,6 +68,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function test($identifier)
     {
@@ -74,6 +80,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load($identifier)
     {
@@ -87,6 +94,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Enforce marking with a tag
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -98,6 +106,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -109,6 +118,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {

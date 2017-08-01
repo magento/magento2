@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
  * Adminhtml invoice items grid
  *
  * @api
+ * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -16,6 +17,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Disable submit button
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_disableSubmitButton = false;
 
@@ -23,6 +25,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
+     * @since 2.0.0
      */
     protected $_salesData;
 
@@ -33,6 +36,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,6 +54,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Prepare child blocks
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -95,6 +100,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getDisableSubmitButton()
     {
@@ -105,6 +111,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -115,6 +122,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -125,6 +133,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -135,6 +144,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order totals block settings
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalData()
     {
@@ -145,6 +155,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order totalbar block data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalbarData()
     {
@@ -164,6 +175,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @param float $price
      * @return string
+     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -174,6 +186,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get update button html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdateButtonHtml()
     {
@@ -184,6 +197,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get update url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdateUrl()
     {
@@ -194,6 +208,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check shipment availability for current invoice
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCreateShipment()
     {
@@ -209,6 +224,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check if qty can be edited
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canEditQty()
     {
@@ -222,6 +238,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check if capture operation is allowed in ACL
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCaptureAllowed()
     {
@@ -232,6 +249,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check if invoice can be captured
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCapture()
     {
@@ -242,6 +260,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check if gateway is associated with invoice order
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isGatewayUsed()
     {
@@ -252,6 +271,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check if new invoice emails can be sent
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canSendInvoiceEmail()
     {

@@ -12,6 +12,7 @@ use Magento\Framework\Escaper;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Select extends AbstractElement
 {
@@ -20,6 +21,7 @@ class Select extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -37,6 +39,7 @@ class Select extends AbstractElement
      * Get the element Html.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -94,6 +97,7 @@ class Select extends AbstractElement
      * @param array $option
      * @param array $selected
      * @return string
+     * @since 2.0.0
      */
     protected function _optionToHtml($option, $selected)
     {
@@ -119,6 +123,7 @@ class Select extends AbstractElement
      * Prepare options.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareOptions()
     {
@@ -141,6 +146,7 @@ class Select extends AbstractElement
      * Get the Html attributes.
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

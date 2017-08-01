@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Product image attribute backend
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Image extends AbstractBackend
 {
@@ -19,6 +20,7 @@ class Image extends AbstractBackend
      * Filesystem facade
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -26,12 +28,14 @@ class Image extends AbstractBackend
      * File Uploader factory
      *
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @since 2.0.0
      */
     protected $_fileUploaderFactory;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -46,6 +50,7 @@ class Image extends AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this|void
+     * @since 2.0.0
      */
     public function afterSave($object)
     {

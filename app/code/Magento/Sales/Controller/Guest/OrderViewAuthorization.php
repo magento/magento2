@@ -8,15 +8,22 @@ namespace Magento\Sales\Controller\Guest;
 
 use Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Guest\OrderViewAuthorization
+ *
+ * @since 2.0.0
+ */
 class OrderViewAuthorization implements OrderViewAuthorizationInterface
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @param \Magento\Framework\Registry $registry
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Registry $registry)
     {
@@ -25,6 +32,7 @@ class OrderViewAuthorization implements OrderViewAuthorizationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canView(\Magento\Sales\Model\Order $order)
     {

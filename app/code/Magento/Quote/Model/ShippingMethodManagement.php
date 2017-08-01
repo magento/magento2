@@ -20,6 +20,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
  * Shipping method read service
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ShippingMethodManagement implements
     \Magento\Quote\Api\ShippingMethodManagementInterface,
@@ -30,6 +31,7 @@ class ShippingMethodManagement implements
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -37,6 +39,7 @@ class ShippingMethodManagement implements
      * Shipping method converter
      *
      * @var \Magento\Quote\Model\Cart\ShippingMethodConverter
+     * @since 2.0.0
      */
     protected $converter;
 
@@ -44,21 +47,25 @@ class ShippingMethodManagement implements
      * Customer Address repository
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var Quote\TotalsCollector
+     * @since 2.0.0
      */
     protected $totalsCollector;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
+     * @since 2.2.0
      */
     private $dataProcessor;
 
     /**
      * @var AddressInterfaceFactory $addressFactory
+     * @since 2.2.0
      */
     private $addressFactory;
 
@@ -70,6 +77,7 @@ class ShippingMethodManagement implements
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param Quote\TotalsCollector $totalsCollector
      * @param AddressInterfaceFactory|null $addressFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -88,6 +96,7 @@ class ShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -116,6 +125,7 @@ class ShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function getList($cartId)
     {
@@ -145,6 +155,7 @@ class ShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function set($cartId, $carrierCode, $methodCode)
     {
@@ -173,6 +184,7 @@ class ShippingMethodManagement implements
      * @throws CouldNotSaveException The shipping method could not be saved.
      * @throws NoSuchEntityException Cart contains only virtual products. Shipping method is not applicable.
      * @throws StateException The billing or shipping address is not set.
+     * @since 2.1.0
      */
     public function apply($cartId, $carrierCode, $methodCode)
     {
@@ -195,6 +207,7 @@ class ShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
     {
@@ -211,6 +224,7 @@ class ShippingMethodManagement implements
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address)
     {
@@ -226,6 +240,7 @@ class ShippingMethodManagement implements
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function estimateByAddressId($cartId, $addressId)
     {
@@ -251,7 +266,8 @@ class ShippingMethodManagement implements
      * @param string $region
      * @param \Magento\Framework\Api\ExtensibleDataInterface|null $address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected function getEstimatedRates(
         \Magento\Quote\Model\Quote $quote,
@@ -277,6 +293,7 @@ class ShippingMethodManagement implements
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Framework\Api\ExtensibleDataInterface $address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[]
+     * @since 2.1.0
      */
     private function getShippingMethods(Quote $quote, $address)
     {
@@ -300,6 +317,7 @@ class ShippingMethodManagement implements
      *
      * @param \Magento\Framework\Api\ExtensibleDataInterface  $address
      * @return array
+     * @since 2.2.0
      */
     private function extractAddressData($address)
     {
@@ -319,7 +337,8 @@ class ShippingMethodManagement implements
      * Gets the data object processor
      *
      * @return \Magento\Framework\Reflection\DataObjectProcessor
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getDataObjectProcessor()
     {

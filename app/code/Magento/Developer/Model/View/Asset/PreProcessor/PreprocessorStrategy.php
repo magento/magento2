@@ -17,26 +17,31 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
  * Selection of the strategy for assets pre-processing
  *
  * @api
+ * @since 2.0.0
  */
 class PreprocessorStrategy implements PreProcessorInterface
 {
     /**
      * @var FrontendCompilation
+     * @since 2.0.0
      */
     private $frontendCompilation;
 
     /**
      * @var AlternativeSourceInterface
+     * @since 2.0.0
      */
     private $alternativeSource;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
@@ -46,6 +51,7 @@ class PreprocessorStrategy implements PreProcessorInterface
      * @param AlternativeSourceInterface $alternativeSource
      * @param FrontendCompilation $frontendCompilation
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         AlternativeSourceInterface $alternativeSource,
@@ -62,6 +68,7 @@ class PreprocessorStrategy implements PreProcessorInterface
      *
      * @param PreProcessor\Chain $chain
      * @return void
+     * @since 2.0.0
      */
     public function process(PreProcessor\Chain $chain)
     {
@@ -78,7 +85,8 @@ class PreprocessorStrategy implements PreProcessorInterface
 
     /**
      * @return State
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getState()
     {

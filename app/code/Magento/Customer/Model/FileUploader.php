@@ -12,40 +12,52 @@ use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Customer\Model\FileUploader
+ *
+ * @since 2.2.0
+ */
 class FileUploader
 {
     /**
      * @var CustomerMetadataInterface
+     * @since 2.2.0
      */
     private $customerMetadataService;
 
     /**
      * @var AddressMetadataInterface
+     * @since 2.2.0
      */
     private $addressMetadataService;
 
     /**
      * @var ElementFactory
+     * @since 2.2.0
      */
     private $elementFactory;
 
     /**
      * @var FileProcessorFactory
+     * @since 2.2.0
      */
     private $fileProcessorFactory;
 
     /**
      * @var AttributeMetadataInterface
+     * @since 2.2.0
      */
     private $attributeMetadata;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $entityTypeCode;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $scope;
 
@@ -57,6 +69,7 @@ class FileUploader
      * @param AttributeMetadataInterface $attributeMetadata
      * @param string $entityTypeCode
      * @param string $scope
+     * @since 2.2.0
      */
     public function __construct(
         CustomerMetadataInterface $customerMetadataService,
@@ -80,6 +93,7 @@ class FileUploader
      * Validate uploaded file
      *
      * @return array|bool
+     * @since 2.2.0
      */
     public function validate()
     {
@@ -98,6 +112,7 @@ class FileUploader
      *
      * @return \string[]
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function upload()
     {
@@ -124,6 +139,7 @@ class FileUploader
      * Get attribute code
      *
      * @return string
+     * @since 2.2.0
      */
     private function getAttributeCode()
     {
@@ -134,6 +150,7 @@ class FileUploader
      * Retrieve data from global $_FILES array
      *
      * @return array
+     * @since 2.2.0
      */
     private function getData()
     {
@@ -151,6 +168,7 @@ class FileUploader
      * Get allowed extensions
      *
      * @return array
+     * @since 2.2.0
      */
     private function getAllowedExtensions()
     {

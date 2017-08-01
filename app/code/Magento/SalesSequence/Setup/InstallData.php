@@ -17,6 +17,7 @@ use Magento\SalesSequence\Model\EntityPool;
  * Class InstallData
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -24,16 +25,19 @@ class InstallData implements InstallDataInterface
      * Sales setup factory
      *
      * @var EntityPool
+     * @since 2.0.0
      */
     private $entityPool;
 
     /**
      * @var Builder
+     * @since 2.0.0
      */
     private $sequenceBuilder;
 
     /**
      * @var SequenceConfig
+     * @since 2.0.0
      */
     private $sequenceConfig;
 
@@ -41,6 +45,7 @@ class InstallData implements InstallDataInterface
      * @param EntityPool $entityPool
      * @param Builder $sequenceBuilder
      * @param SequenceConfig $sequenceConfig
+     * @since 2.0.0
      */
     public function __construct(
         EntityPool $entityPool,
@@ -55,6 +60,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

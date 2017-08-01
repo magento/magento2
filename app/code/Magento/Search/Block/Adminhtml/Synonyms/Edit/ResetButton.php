@@ -9,11 +9,13 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class ResetButton
+ * @since 2.1.0
  */
 class ResetButton implements ButtonProviderInterface
 {
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getButtonData()
     {

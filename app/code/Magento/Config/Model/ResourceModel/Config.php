@@ -10,6 +10,7 @@ namespace Magento\Config\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\App\Config\ConfigResource\ConfigInterface
@@ -18,6 +19,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,6 +34,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @param string $scope
      * @param int $scopeId
      * @return $this
+     * @since 2.0.0
      */
     public function saveConfig($path, $value, $scope, $scopeId)
     {
@@ -68,6 +71,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @param string $scope
      * @param int $scopeId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteConfig($path, $scope, $scopeId)
     {

@@ -9,6 +9,7 @@ namespace Magento\Framework\Indexer;
  * Indexer
  *
  * @api
+ * @since 2.0.0
  */
 interface IndexerInterface
 {
@@ -16,6 +17,7 @@ interface IndexerInterface
      * Return indexer ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId();
 
@@ -23,6 +25,7 @@ interface IndexerInterface
      * Return indexer's view ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getViewId();
 
@@ -30,6 +33,7 @@ interface IndexerInterface
      * Return indexer action class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getActionClass();
 
@@ -37,6 +41,7 @@ interface IndexerInterface
      * Return indexer title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle();
 
@@ -44,6 +49,7 @@ interface IndexerInterface
      * Return indexer description
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDescription();
 
@@ -51,6 +57,7 @@ interface IndexerInterface
      * Return indexer fields
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFields();
 
@@ -58,6 +65,7 @@ interface IndexerInterface
      * Return indexer sources
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSources();
 
@@ -65,6 +73,7 @@ interface IndexerInterface
      * Return indexer handlers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getHandlers();
 
@@ -74,6 +83,7 @@ interface IndexerInterface
      * @param string $indexerId
      * @return IndexerInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function load($indexerId);
 
@@ -81,6 +91,7 @@ interface IndexerInterface
      * Return related view object
      *
      * @return \Magento\Framework\Mview\ViewInterface
+     * @since 2.0.0
      */
     public function getView();
 
@@ -88,6 +99,7 @@ interface IndexerInterface
      * Return related state object
      *
      * @return StateInterface
+     * @since 2.0.0
      */
     public function getState();
 
@@ -96,6 +108,7 @@ interface IndexerInterface
      *
      * @param StateInterface $state
      * @return IndexerInterface
+     * @since 2.0.0
      */
     public function setState(StateInterface $state);
 
@@ -103,6 +116,7 @@ interface IndexerInterface
      * Check whether indexer is run by schedule
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isScheduled();
 
@@ -111,6 +125,7 @@ interface IndexerInterface
      *
      * @param bool $scheduled
      * @return void
+     * @since 2.0.0
      */
     public function setScheduled($scheduled);
 
@@ -118,6 +133,7 @@ interface IndexerInterface
      * Check whether indexer is valid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isValid();
 
@@ -125,6 +141,7 @@ interface IndexerInterface
      * Check whether indexer is invalid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isInvalid();
 
@@ -132,6 +149,7 @@ interface IndexerInterface
      * Check whether indexer is working
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isWorking();
 
@@ -139,6 +157,7 @@ interface IndexerInterface
      * Set indexer invalid
      *
      * @return void
+     * @since 2.0.0
      */
     public function invalidate();
 
@@ -146,6 +165,7 @@ interface IndexerInterface
      * Return indexer status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatus();
 
@@ -153,6 +173,7 @@ interface IndexerInterface
      * Return indexer or mview latest updated time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLatestUpdated();
 
@@ -161,6 +182,7 @@ interface IndexerInterface
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function reindexAll();
 
@@ -169,6 +191,7 @@ interface IndexerInterface
      *
      * @param int $id
      * @return void
+     * @since 2.0.0
      */
     public function reindexRow($id);
 
@@ -177,6 +200,7 @@ interface IndexerInterface
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     public function reindexList($ids);
 }

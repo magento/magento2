@@ -14,6 +14,7 @@ use Magento\Catalog\Helper\DefaultCategory;
 /**
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -21,17 +22,20 @@ class InstallData implements InstallDataInterface
      * Category setup factory
      *
      * @var CategorySetupFactory
+     * @since 2.0.0
      */
     private $categorySetupFactory;
 
     /**
      * @var DefaultCategory
+     * @since 2.1.0
      */
     private $defaultCategory;
 
     /**
-     * @deprecated
+     * @deprecated 2.1.0
      * @return DefaultCategory
+     * @since 2.1.0
      */
     private function getDefaultCategory()
     {
@@ -46,6 +50,7 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param CategorySetupFactory $categorySetupFactory
+     * @since 2.0.0
      */
     public function __construct(CategorySetupFactory $categorySetupFactory)
     {
@@ -57,6 +62,7 @@ class InstallData implements InstallDataInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

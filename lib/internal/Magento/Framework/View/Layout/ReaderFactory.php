@@ -7,16 +7,19 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Class ReaderFactory
+ * @since 2.0.0
  */
 class ReaderFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -30,6 +33,7 @@ class ReaderFactory
      * @param array $data
      * @return \Magento\Framework\View\Layout\ReaderInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($className, array $data = [])
     {

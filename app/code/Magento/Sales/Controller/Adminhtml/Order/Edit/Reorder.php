@@ -6,6 +6,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\Reorder
+ *
+ * @since 2.0.0
+ */
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create\Reorder
 {
     /**

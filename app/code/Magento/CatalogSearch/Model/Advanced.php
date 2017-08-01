@@ -43,6 +43,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
@@ -50,6 +51,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * User friendly search criteria list
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_searchCriterias = [];
 
@@ -57,6 +59,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Product collection
      *
      * @var ProductCollection
+     * @since 2.0.0
      */
     protected $_productCollection;
 
@@ -64,6 +67,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Initialize dependencies
      *
      * @var Config
+     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -71,6 +75,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Catalog product visibility
      *
      * @var Visibility
+     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -78,6 +83,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Attribute collection factory
      *
      * @var AttributeCollectionFactory
+     * @since 2.0.0
      */
     protected $_attributeCollectionFactory;
 
@@ -85,6 +91,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -92,6 +99,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Product factory
      *
      * @var ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -99,6 +107,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Currency factory
      *
      * @var CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
@@ -106,6 +115,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Advanced Collection Factory
      *
      * @var ProductCollectionFactory
+     * @since 2.0.0
      */
     protected $productCollectionFactory;
 
@@ -125,6 +135,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -163,6 +174,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function addFilters($values)
     {
@@ -236,6 +248,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Retrieve array of attributes used in advanced search
      *
      * @return array|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @since 2.0.0
      */
     public function getAttributes()
     {
@@ -261,6 +274,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Retrieve advanced search product collection
      *
      * @return Collection
+     * @since 2.0.0
      */
     public function getProductCollection()
     {
@@ -281,6 +295,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @param Collection $collection
      * @return $this
+     * @since 2.0.0
      */
     public function prepareProductCollection($collection)
     {
@@ -299,6 +314,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param EntityAttribute $attribute
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     protected function addSearchCriteria($attribute, $value)
     {
@@ -317,6 +333,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @return  string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
@@ -383,6 +400,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * Returns prepared search criterias in text
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSearchCriterias()
     {

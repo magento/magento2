@@ -17,6 +17,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method ResourceCmsBlock getResource()
  * @method Block setStoreId(array $storeId)
  * @method array getStoreId()
+ * @since 2.0.0
  */
 class Block extends AbstractModel implements BlockInterface, IdentityInterface
 {
@@ -35,6 +36,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 
@@ -42,11 +44,13 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'cms_block';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,6 +62,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @return AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -74,6 +79,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Get identities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -84,6 +90,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Retrieve block id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -94,6 +101,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Retrieve block identifier
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentifier()
     {
@@ -104,6 +112,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Retrieve block title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -114,6 +123,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Retrieve block content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -124,6 +134,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Retrieve block creation time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreationTime()
     {
@@ -134,6 +145,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Retrieve block update time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdateTime()
     {
@@ -144,6 +156,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Is active
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isActive()
     {
@@ -155,6 +168,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param int $id
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -166,6 +180,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param string $identifier
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setIdentifier($identifier)
     {
@@ -177,6 +192,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param string $title
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -188,6 +204,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param string $content
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setContent($content)
     {
@@ -199,6 +216,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param string $creationTime
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setCreationTime($creationTime)
     {
@@ -210,6 +228,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param string $updateTime
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setUpdateTime($updateTime)
     {
@@ -221,6 +240,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @param bool|int $isActive
      * @return BlockInterface
+     * @since 2.0.0
      */
     public function setIsActive($isActive)
     {
@@ -231,6 +251,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Receive page store ids
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getStores()
     {
@@ -241,6 +262,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Prepare block's statuses.
      *
      * @return array
+     * @since 2.1.0
      */
     public function getAvailableStatuses()
     {

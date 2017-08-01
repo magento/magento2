@@ -16,6 +16,7 @@ namespace Magento\Eav\Model\Form;
  * @method \Magento\Eav\Model\Form\Fieldset setCode(string $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Fieldset setSortOrder(int $value)
+ * @since 2.0.0
  */
 class Fieldset extends \Magento\Framework\Model\AbstractModel
 {
@@ -23,11 +24,13 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'eav_form_fieldset';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -39,6 +42,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -57,6 +61,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -68,6 +73,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Fieldset
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -79,6 +85,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Fieldset\Collection
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -90,6 +97,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -107,6 +115,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Retrieve fieldset labels for stores
      *
      * @return array
+     * @since 2.0.0
      */
     public function getLabels()
     {
@@ -123,6 +132,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * @param array $labels
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setLabels(array $labels)
     {
@@ -135,6 +145,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * @param int $storeId
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabel($storeId, $label)
     {
@@ -148,6 +159,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Retrieve label store scope
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {

@@ -12,22 +12,26 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private static $quoteConnectionName = 'checkout';
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private static $salesConnectionName = 'sales';
 
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

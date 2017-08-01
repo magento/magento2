@@ -22,6 +22,7 @@ use Magento\Shipping\Model\Rate\Result;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -50,6 +51,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Code of the carrier
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = self::CODE;
 
@@ -57,6 +59,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Types of rates, order is important
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_ratesOrder = [
         'RATED_ACCOUNT_PACKAGE',
@@ -73,6 +76,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Rate request data
      *
      * @var RateRequest|null
+     * @since 2.0.0
      */
     protected $_request = null;
 
@@ -80,6 +84,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Rate result data
      *
      * @var Result|null
+     * @since 2.0.0
      */
     protected $_result = null;
 
@@ -87,6 +92,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Path to wsdl file of rate service
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_rateServiceWsdl;
 
@@ -94,6 +100,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Path to wsdl file of ship service
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_shipServiceWsdl = null;
 
@@ -101,6 +108,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Path to wsdl file of track service
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_trackServiceWsdl = null;
 
@@ -108,21 +116,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Container types that could be customized for FedEx carrier
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_customizableContainerTypes = ['YOUR_PACKAGING'];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'Key', 'Password', 'MeterNumber',
@@ -131,17 +143,20 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Version of tracking service
      * @var int
+     * @since 2.2.0
      */
     private static $trackServiceVersion = 10;
 
     /**
      * List of TrackReply errors
      * @var array
+     * @since 2.2.0
      */
     private static $trackingErrors = ['FAILURE', 'ERROR'];
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -168,6 +183,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param Json|null $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -224,6 +240,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $wsdl
      * @param bool|int $trace
      * @return \SoapClient
+     * @since 2.0.0
      */
     protected function _createSoapClient($wsdl, $trace = false)
     {
@@ -241,6 +258,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Create rate soap client
      *
      * @return \SoapClient
+     * @since 2.0.0
      */
     protected function _createRateSoapClient()
     {
@@ -251,6 +269,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Create ship soap client
      *
      * @return \SoapClient
+     * @since 2.0.0
      */
     protected function _createShipSoapClient()
     {
@@ -261,6 +280,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Create track soap client
      *
      * @return \SoapClient
+     * @since 2.0.0
      */
     protected function _createTrackSoapClient()
     {
@@ -272,6 +292,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param RateRequest $request
      * @return Result|bool|null
+     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -293,6 +314,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function setRequest(RateRequest $request)
     {
@@ -390,6 +412,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get result of request
      *
      * @return Result|null
+     * @since 2.0.0
      */
     public function getResult()
     {
@@ -403,6 +426,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get version of rates request
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVersionInfo()
     {
@@ -414,6 +438,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $purpose
      * @return array
+     * @since 2.0.0
      */
     protected function _formRateRequest($purpose)
     {
@@ -488,6 +513,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $purpose
      * @return mixed
+     * @since 2.0.0
      */
     protected function _doRatesRequest($purpose)
     {
@@ -519,6 +545,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Do remote request for and handle errors
      *
      * @return Result
+     * @since 2.0.0
      */
     protected function _getQuotes()
     {
@@ -551,6 +578,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param mixed $response
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _prepareRateResponse($response)
     {
@@ -620,6 +648,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \stdClass $rate
      * @return null|float
+     * @since 2.0.0
      */
     protected function _getRateAmountOriginBased($rate)
     {
@@ -654,6 +683,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $freeMethod
      * @return void
+     * @since 2.0.0
      */
     protected function _setFreeMethodRequest($freeMethod)
     {
@@ -667,6 +697,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get xml quotes
      *
      * @return Result
+     * @since 2.0.0
      */
     protected function _getXmlQuotes()
     {
@@ -751,6 +782,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param mixed $response
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _parseXmlResponse($response)
     {
@@ -821,6 +853,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $code
      * @return array|false
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getCode($type, $code = '')
     {
@@ -980,6 +1013,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return FeDex currency ISO code by Magento Base Currency Code
      *
      * @return string 3-digit currency code
+     * @since 2.0.0
      */
     public function getCurrencyCode()
     {
@@ -1010,6 +1044,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string|string[] $trackings
      * @return Result|null
+     * @since 2.0.0
      */
     public function getTracking($trackings)
     {
@@ -1030,6 +1065,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Set tracking request
      *
      * @return void
+     * @since 2.0.0
      */
     protected function setTrackingReqeust()
     {
@@ -1046,6 +1082,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string[] $tracking
      * @return void
+     * @since 2.0.0
      */
     protected function _getXMLTracking($tracking)
     {
@@ -1098,6 +1135,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $trackingValue
      * @param \stdClass $response
      * @return void
+     * @since 2.0.0
      */
     protected function _parseTrackingResponse($trackingValue, $response)
     {
@@ -1144,6 +1182,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get tracking response
      *
      * @return string
+     * @since 2.0.0
      */
     public function getResponse()
     {
@@ -1172,6 +1211,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get allowed shipping methods
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedMethods()
     {
@@ -1188,6 +1228,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return array of authenticated information
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAuthDetails()
     {
@@ -1217,6 +1258,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _formShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1392,6 +1434,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1435,6 +1478,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * @param array|object $trackingIds
      * @return string
+     * @since 2.0.0
      */
     private function getTrackingNumber($trackingIds)
     {
@@ -1452,6 +1496,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param array $data
      * @return bool
+     * @since 2.0.0
      */
     public function rollBack($data)
     {
@@ -1472,6 +1517,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -1517,6 +1563,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return all container types of carrier
      *
      * @return array|bool
+     * @since 2.0.0
      */
     public function getContainerTypesAll()
     {
@@ -1527,6 +1574,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return structured data of containers witch related with shipping methods
      *
      * @return array|bool
+     * @since 2.0.0
      */
     public function getContainerTypesFilter()
     {
@@ -1539,6 +1587,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -1549,6 +1598,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Recursive replace sensitive fields in debug data by the mask
      * @param string $data
      * @return string
+     * @since 2.1.0
      */
     protected function filterDebugData($data)
     {
@@ -1568,6 +1618,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.2.0
      */
     private function processTrackingDetails(\stdClass $trackInfo)
     {
@@ -1636,6 +1687,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Parse delivery datetime from tracking details
      * @param \stdClass $trackInfo
      * @return \Datetime|null
+     * @since 2.2.0
      */
     private function getDeliveryDateTime(\stdClass $trackInfo)
     {
@@ -1655,6 +1707,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \stdClass $address
      * @return \Magento\Framework\Phrase|string
+     * @since 2.2.0
      */
     private function getDeliveryAddress(\stdClass $address)
     {
@@ -1682,6 +1735,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param array $events
      * @return array
+     * @since 2.2.0
      */
     private function processTrackDetailsEvents(array $events)
     {
@@ -1715,6 +1769,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Append error message to rate result instance
      * @param string $trackingValue
      * @param string $errorMessage
+     * @since 2.2.0
      */
     private function appendTrackingError($trackingValue, $errorMessage)
     {
@@ -1734,6 +1789,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $timestamp
      * @return bool|\DateTime
+     * @since 2.2.0
      */
     private function parseDate($timestamp)
     {

@@ -11,11 +11,13 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
  * Class AddQuantityFilterToCollection
+ * @since 2.0.0
  */
 class AddQuantityFilterToCollection implements AddFilterToCollectionInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {

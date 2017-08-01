@@ -12,16 +12,19 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Forward extends \Magento\Framework\Controller\Result\Forward
 {
     /**
      * @var \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $actionFlag;
 
@@ -29,6 +32,7 @@ class Forward extends \Magento\Framework\Controller\Result\Forward
      * @param RequestInterface $request
      * @param Session $session
      * @param ActionFlag $actionFlag
+     * @since 2.0.0
      */
     public function __construct(RequestInterface $request, Session $session, ActionFlag $actionFlag)
     {
@@ -40,6 +44,7 @@ class Forward extends \Magento\Framework\Controller\Result\Forward
     /**
      * @param string $action
      * @return $this
+     * @since 2.0.0
      */
     public function forward($action)
     {

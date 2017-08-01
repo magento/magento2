@@ -9,6 +9,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Interface for handling options in deployment configuration tool
+ * @since 2.0.0
  */
 interface ConfigOptionsListInterface
 {
@@ -17,6 +18,7 @@ interface ConfigOptionsListInterface
      * information that will be used in deployment config file
      *
      * @return Option\AbstractConfigOption[]
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -27,6 +29,7 @@ interface ConfigOptionsListInterface
      * @param array $options
      * @param DeploymentConfig $deploymentConfig
      * @return \Magento\Framework\Config\Data\ConfigData[]
+     * @since 2.0.0
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig);
 
@@ -36,6 +39,7 @@ interface ConfigOptionsListInterface
      * @param array $options
      * @param DeploymentConfig $deploymentConfig
      * @return string[]
+     * @since 2.0.0
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig);
 }

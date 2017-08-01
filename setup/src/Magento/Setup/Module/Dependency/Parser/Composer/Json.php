@@ -10,11 +10,13 @@ use Magento\Setup\Module\Dependency\ParserInterface;
 
 /**
  * Composer Json parser
+ * @since 2.0.0
  */
 class Json implements ParserInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function parse(array $options)
     {
@@ -37,6 +39,7 @@ class Json implements ParserInterface
      * @param array $options
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function checkOptions($options)
     {
@@ -55,6 +58,7 @@ class Json implements ParserInterface
      *
      * @param Package $package
      * @return string
+     * @since 2.0.0
      */
     protected function extractModuleName($package)
     {
@@ -66,6 +70,7 @@ class Json implements ParserInterface
      *
      * @param Package $package
      * @return array
+     * @since 2.0.0
      */
     protected function extractDependencies($package)
     {
@@ -98,6 +103,7 @@ class Json implements ParserInterface
      *
      * @param string $file
      * @return Package
+     * @since 2.0.0
      */
     protected function getModuleComposerPackage($file)
     {
@@ -109,6 +115,7 @@ class Json implements ParserInterface
      *
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     protected function prepareModuleName($name)
     {

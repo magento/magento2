@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav;
 
 /**
  * Abstract action reindex class
+ * @since 2.0.0
  */
 abstract class AbstractAction
 {
@@ -14,16 +15,19 @@ abstract class AbstractAction
      * EAV Indexers by type
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_types;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory
+     * @since 2.0.0
      */
     protected $_eavSourceFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory
+     * @since 2.0.0
      */
     protected $_eavDecimalFactory;
 
@@ -31,6 +35,7 @@ abstract class AbstractAction
      * AbstractAction constructor.
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
@@ -45,6 +50,7 @@ abstract class AbstractAction
      *
      * @param array|int $ids
      * @return void
+     * @since 2.0.0
      */
     abstract public function execute($ids);
 
@@ -52,6 +58,7 @@ abstract class AbstractAction
      * Retrieve array of EAV type indexers
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav[]
+     * @since 2.0.0
      */
     public function getIndexers()
     {
@@ -71,6 +78,7 @@ abstract class AbstractAction
      * @param string $type
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getIndexer($type)
     {
@@ -87,6 +95,7 @@ abstract class AbstractAction
      * @param null|array|int $ids
      * @throws \Exception
      * @return void
+     * @since 2.0.0
      */
     public function reindex($ids = null)
     {
@@ -113,6 +122,7 @@ abstract class AbstractAction
      * @param array $ids
      * @throws \Exception
      * @return void
+     * @since 2.2.0
      */
     protected function syncData($indexer, $destinationTable, $ids)
     {
@@ -139,6 +149,7 @@ abstract class AbstractAction
      *
      * @param bool $onlyParents
      * @return array $ids
+     * @since 2.2.0
      */
     protected function processRelations($indexer, $ids, $onlyParents = false)
     {

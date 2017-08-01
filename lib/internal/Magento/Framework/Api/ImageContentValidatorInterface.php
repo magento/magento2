@@ -13,6 +13,7 @@ use Magento\Framework\Exception\InputException;
  * Image content validation interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ImageContentValidatorInterface
 {
@@ -22,6 +23,7 @@ interface ImageContentValidatorInterface
      * @param ImageContentInterface $imageContent
      * @return bool
      * @throws InputException
+     * @since 2.0.0
      */
     public function isValid(ImageContentInterface $imageContent);
 }

@@ -6,17 +6,24 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Widget\Model\Widget\Config
+     * @since 2.0.0
      */
     protected $_widgetConfig;
 
@@ -24,6 +31,7 @@ class Index extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -39,6 +47,7 @@ class Index extends \Magento\Backend\App\Action
      * Wisywyg widget plugin main page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

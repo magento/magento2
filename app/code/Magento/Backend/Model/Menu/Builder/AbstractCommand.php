@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\Menu\Builder;
 /**
  * Menu builder command
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractCommand
 {
@@ -15,6 +16,7 @@ abstract class AbstractCommand
      * List of required params
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_requiredParams = ["id"];
 
@@ -22,6 +24,7 @@ abstract class AbstractCommand
      * Command params array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data = [];
 
@@ -29,12 +32,14 @@ abstract class AbstractCommand
      * Next command in the chain
      *
      * @var \Magento\Backend\Model\Menu\Builder\AbstractCommand
+     * @since 2.0.0
      */
     protected $_next = null;
 
     /**
      * @param array $data
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(array $data = [])
     {
@@ -50,6 +55,7 @@ abstract class AbstractCommand
      * Retrieve id of element to apply command to
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -62,6 +68,7 @@ abstract class AbstractCommand
      * @param \Magento\Backend\Model\Menu\Builder\AbstractCommand $command
      * @return $this
      * @throws \InvalidArgumentException if invalid chaining command is supplied
+     * @since 2.0.0
      */
     public function chain(\Magento\Backend\Model\Menu\Builder\AbstractCommand $command)
     {
@@ -78,6 +85,7 @@ abstract class AbstractCommand
      *
      * @param array $itemParams
      * @return array
+     * @since 2.0.0
      */
     public function execute(array $itemParams = [])
     {
@@ -93,6 +101,7 @@ abstract class AbstractCommand
      *
      * @param array $itemParams
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _execute(array $itemParams);
 }

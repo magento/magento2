@@ -10,6 +10,7 @@ namespace Magento\Catalog\Helper\Product\Configuration;
  * Interface for product configuration helpers
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigurationInterface
 {
@@ -18,6 +19,7 @@ interface ConfigurationInterface
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
+     * @since 2.0.0
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item);
 }

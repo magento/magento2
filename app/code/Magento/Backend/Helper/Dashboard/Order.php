@@ -11,22 +11,26 @@ use Magento\Framework\App\ObjectManager;
  * Adminhtml dashboard helper for orders
  *
  * @api
+ * @since 2.0.0
  */
 class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\Collection
+     * @since 2.0.0
      */
     protected $_orderCollection;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -41,7 +45,8 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
      *
      * @return \Magento\Store\Model\StoreManagerInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStoreManager()
     {
@@ -53,6 +58,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _initCollection()
     {

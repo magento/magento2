@@ -6,20 +6,28 @@
 
 namespace Magento\Paypal\Helper\Shortcut;
 
+/**
+ * Class \Magento\Paypal\Helper\Shortcut\CheckoutValidator
+ *
+ * @since 2.0.0
+ */
 class CheckoutValidator implements ValidatorInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     private $_checkoutSession;
 
     /**
      * @var \Magento\Payment\Helper\Data
+     * @since 2.0.0
      */
     private $_paymentData;
 
     /**
      * @var ShortcutCheckoutValidator
+     * @since 2.0.0
      */
     private $_shortcutValidator;
 
@@ -27,6 +35,7 @@ class CheckoutValidator implements ValidatorInterface
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param Validator $shortcutValidator
      * @param \Magento\Payment\Helper\Data $paymentData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -44,6 +53,7 @@ class CheckoutValidator implements ValidatorInterface
      * @param string $code
      * @param bool $isInCatalog
      * @return bool
+     * @since 2.0.0
      */
     public function validate($code, $isInCatalog)
     {
@@ -59,6 +69,7 @@ class CheckoutValidator implements ValidatorInterface
      * @param string $paymentCode
      * @param bool $isInCatalog
      * @return bool
+     * @since 2.0.0
      */
     public function isMethodQuoteAvailable($paymentCode, $isInCatalog)
     {
@@ -77,6 +88,7 @@ class CheckoutValidator implements ValidatorInterface
      *
      * @param bool $isInCatalog
      * @return bool
+     * @since 2.0.0
      */
     public function isQuoteSummaryValid($isInCatalog)
     {

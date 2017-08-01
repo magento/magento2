@@ -7,10 +7,16 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\SuggestedAttributeList
+ *
+ * @since 2.0.0
+ */
 class SuggestedAttributeList
 {
     /**
      * @var ConfigurableAttributeHandler
+     * @since 2.0.0
      */
     protected $configurableAttributeHandler;
 
@@ -18,12 +24,14 @@ class SuggestedAttributeList
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @param ConfigurableAttributeHandler $configurableAttributeHandler
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler,
@@ -38,6 +46,7 @@ class SuggestedAttributeList
      *
      * @param string $labelPart
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @since 2.0.0
      */
     public function getSuggestedAttributes($labelPart)
     {

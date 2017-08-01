@@ -10,6 +10,7 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterface
 {
@@ -17,6 +18,7 @@ class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRequestName()
     {
@@ -25,6 +27,7 @@ class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRequestName($requestName)
     {

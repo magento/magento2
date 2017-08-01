@@ -27,6 +27,7 @@ use Magento\Framework\Filesystem;
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Template extends AbstractBlock
 {
@@ -39,6 +40,7 @@ class Template extends AbstractBlock
      * Assigned variables for view
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_viewVars = [];
 
@@ -46,6 +48,7 @@ class Template extends AbstractBlock
      * Base URL
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_baseUrl;
 
@@ -53,6 +56,7 @@ class Template extends AbstractBlock
      * JS URL
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_jsUrl;
 
@@ -60,6 +64,7 @@ class Template extends AbstractBlock
      * Is allowed symlinks flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_allowSymlinks;
 
@@ -67,6 +72,7 @@ class Template extends AbstractBlock
      * Filesystem instance
      *
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -74,6 +80,7 @@ class Template extends AbstractBlock
      * Path to template file in theme.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template;
 
@@ -81,6 +88,7 @@ class Template extends AbstractBlock
      * Template engine pool
      *
      * @var \Magento\Framework\View\TemplateEnginePool
+     * @since 2.0.0
      */
     protected $templateEnginePool;
 
@@ -88,6 +96,7 @@ class Template extends AbstractBlock
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -95,6 +104,7 @@ class Template extends AbstractBlock
      * Application state
      *
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
@@ -102,6 +112,7 @@ class Template extends AbstractBlock
      * Root directory instance
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $directory;
 
@@ -109,6 +120,7 @@ class Template extends AbstractBlock
      * Media directory instance
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     private $mediaDirectory;
 
@@ -116,21 +128,25 @@ class Template extends AbstractBlock
      * Template context
      *
      * @var \Magento\Framework\View\Element\BlockInterface
+     * @since 2.0.0
      */
     protected $templateContext;
 
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var \Magento\Framework\View\Element\Template\File\Resolver
+     * @since 2.0.0
      */
     protected $resolver;
 
     /**
      * @var \Magento\Framework\View\Element\Template\File\Validator
+     * @since 2.0.0
      */
     protected $validator;
 
@@ -139,6 +155,7 @@ class Template extends AbstractBlock
      *
      * @param Template\Context $context
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(Template\Context $context, array $data = [])
     {
@@ -158,6 +175,7 @@ class Template extends AbstractBlock
      *
      * @param \Magento\Framework\View\Element\BlockInterface $templateContext
      * @return void
+     * @since 2.0.0
      */
     public function setTemplateContext($templateContext)
     {
@@ -167,6 +185,7 @@ class Template extends AbstractBlock
     /**
      * Internal constructor, that is called from real constructor
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -187,6 +206,7 @@ class Template extends AbstractBlock
      * Get relevant path to template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemplate()
     {
@@ -198,6 +218,7 @@ class Template extends AbstractBlock
      *
      * @param string $template
      * @return $this
+     * @since 2.0.0
      */
     public function setTemplate($template)
     {
@@ -210,6 +231,7 @@ class Template extends AbstractBlock
      *
      * @param string|null $template
      * @return string|bool
+     * @since 2.0.0
      */
     public function getTemplateFile($template = null)
     {
@@ -225,6 +247,7 @@ class Template extends AbstractBlock
      * Get design area
      *
      * @return string
+     * @since 2.0.0
      */
     public function getArea()
     {
@@ -237,6 +260,7 @@ class Template extends AbstractBlock
      * @param   string|array $key
      * @param   mixed $value
      * @return  $this
+     * @since 2.0.0
      */
     public function assign($key, $value = null)
     {
@@ -255,6 +279,7 @@ class Template extends AbstractBlock
      *
      * @param string $fileName
      * @return string
+     * @since 2.0.0
      */
     public function fetchView($fileName)
     {
@@ -291,6 +316,7 @@ class Template extends AbstractBlock
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -304,6 +330,7 @@ class Template extends AbstractBlock
      * Get base url of the application
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -319,6 +346,7 @@ class Template extends AbstractBlock
      * @param \Magento\Framework\DataObject $object
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     public function getObjectData(\Magento\Framework\DataObject $object, $key)
     {
@@ -329,6 +357,7 @@ class Template extends AbstractBlock
      * Get cache key informative items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -345,6 +374,7 @@ class Template extends AbstractBlock
      * Instantiates filesystem directory
      *
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected function getRootDirectory()
     {
@@ -359,6 +389,7 @@ class Template extends AbstractBlock
      * Get media directory
      *
      * @return \Magento\Framework\Filesystem\Directory\Read
+     * @since 2.0.0
      */
     protected function getMediaDirectory()
     {

@@ -5,6 +5,11 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
+/**
+ * Interface \Magento\Shipping\Model\Carrier\CarrierInterface
+ *
+ * @since 2.0.0
+ */
 interface CarrierInterface
 {
     /**
@@ -12,6 +17,7 @@ interface CarrierInterface
      *
      * @return boolean
      * @api
+     * @since 2.0.0
      */
     public function isTrackingAvailable();
 
@@ -20,6 +26,7 @@ interface CarrierInterface
      *
      * @return array
      * @api
+     * @since 2.0.0
      */
     public function getAllowedMethods();
 }

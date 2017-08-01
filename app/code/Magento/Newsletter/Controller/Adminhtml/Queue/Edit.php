@@ -6,18 +6,25 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -29,6 +36,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
      * Edit Newsletter queue
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

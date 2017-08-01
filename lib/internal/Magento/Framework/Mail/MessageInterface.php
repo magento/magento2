@@ -9,6 +9,7 @@ namespace Magento\Framework\Mail;
  * Mail Message interface
  *
  * @api
+ * @since 2.0.0
  */
 interface MessageInterface
 {
@@ -24,6 +25,7 @@ interface MessageInterface
      *
      * @param string $subject
      * @return $this
+     * @since 2.0.0
      */
     public function setSubject($subject);
 
@@ -31,6 +33,7 @@ interface MessageInterface
      * Get message subject
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSubject();
 
@@ -39,6 +42,7 @@ interface MessageInterface
      *
      * @param mixed $body
      * @return $this
+     * @since 2.0.0
      */
     public function setBody($body);
 
@@ -46,6 +50,7 @@ interface MessageInterface
      * Get message body
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getBody();
 
@@ -54,6 +59,7 @@ interface MessageInterface
      *
      * @param string|array $fromAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setFrom($fromAddress);
 
@@ -62,6 +68,7 @@ interface MessageInterface
      *
      * @param string|array $toAddress
      * @return $this
+     * @since 2.0.0
      */
     public function addTo($toAddress);
 
@@ -70,6 +77,7 @@ interface MessageInterface
      *
      * @param string|array $ccAddress
      * @return $this
+     * @since 2.0.0
      */
     public function addCc($ccAddress);
 
@@ -78,6 +86,7 @@ interface MessageInterface
      *
      * @param string|array $bccAddress
      * @return $this
+     * @since 2.0.0
      */
     public function addBcc($bccAddress);
 
@@ -86,6 +95,7 @@ interface MessageInterface
      *
      * @param string|array $replyToAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setReplyTo($replyToAddress);
 
@@ -94,6 +104,7 @@ interface MessageInterface
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setMessageType($type);
 }

@@ -6,6 +6,11 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
 {
 }

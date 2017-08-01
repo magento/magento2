@@ -10,17 +10,20 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Skip validate attributes used for create configurable product
+ * @since 2.2.0
  */
 class AttributeValidation
 {
     /**
      * @var Configurable
+     * @since 2.2.0
      */
     private $configurableProductType;
 
     /**
      * AttributeValidation constructor.
      * @param Configurable $configurableProductType
+     * @since 2.2.0
      */
     public function __construct(
         Configurable $configurableProductType
@@ -33,6 +36,7 @@ class AttributeValidation
      * @param \Closure $proceed
      * @param \Magento\Framework\DataObject $entity
      * @return bool
+     * @since 2.2.0
      */
     public function aroundValidate(
         \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject,

@@ -9,6 +9,7 @@ use Magento\Framework\View\Asset\Minification;
 
 /**
  * Class MinificationFilenameResolver
+ * @since 2.0.0
  */
 class MinificationFilenameResolver implements FilenameResolverInterface
 {
@@ -19,6 +20,7 @@ class MinificationFilenameResolver implements FilenameResolverInterface
 
     /**
      * @var Minification
+     * @since 2.0.0
      */
     private $minification;
 
@@ -26,6 +28,7 @@ class MinificationFilenameResolver implements FilenameResolverInterface
      * Constructor
      *
      * @param Minification $minification
+     * @since 2.0.0
      */
     public function __construct(Minification $minification)
     {
@@ -37,6 +40,7 @@ class MinificationFilenameResolver implements FilenameResolverInterface
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function resolve($path)
     {

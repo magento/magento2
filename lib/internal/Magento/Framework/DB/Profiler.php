@@ -7,12 +7,18 @@
  */
 namespace Magento\Framework\DB;
 
+/**
+ * Class \Magento\Framework\DB\Profiler
+ *
+ * @since 2.0.0
+ */
 class Profiler extends \Zend_Db_Profiler
 {
     /**
      * Host IP whereto a request is sent
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_host = '';
 
@@ -20,6 +26,7 @@ class Profiler extends \Zend_Db_Profiler
      * Database connection type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_type = '';
 
@@ -27,6 +34,7 @@ class Profiler extends \Zend_Db_Profiler
      * Last query Id
      *
      * @var string|null
+     * @since 2.0.0
      */
     private $_lastQueryId = null;
 
@@ -35,6 +43,7 @@ class Profiler extends \Zend_Db_Profiler
      *
      * @param string $host
      * @return \Magento\Framework\DB\Profiler
+     * @since 2.0.0
      */
     public function setHost($host)
     {
@@ -47,6 +56,7 @@ class Profiler extends \Zend_Db_Profiler
      *
      * @param string $type
      * @return \Magento\Framework\DB\Profiler
+     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -60,6 +70,7 @@ class Profiler extends \Zend_Db_Profiler
      * @param string $queryText SQL statement
      * @param integer|null $queryType OPTIONAL Type of query, one of the \Zend_Db_Profiler::* constants
      * @return integer|null
+     * @since 2.0.0
      */
     public function queryStart($queryText, $queryType = null)
     {
@@ -72,6 +83,7 @@ class Profiler extends \Zend_Db_Profiler
      *
      * @param int $queryId
      * @return string|void
+     * @since 2.0.0
      */
     public function queryEnd($queryId)
     {
@@ -83,6 +95,7 @@ class Profiler extends \Zend_Db_Profiler
      * Ends the last query if exists. Used for finalize broken queries.
      *
      * @return string|void
+     * @since 2.0.0
      */
     public function queryEndLast()
     {

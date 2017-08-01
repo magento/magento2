@@ -7,6 +7,7 @@ namespace Magento\Framework\Filter\Template\Tokenizer;
 
 /**
  * Template constructions parameters tokenizer
+ * @since 2.0.0
  */
 class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTokenizer
 {
@@ -14,6 +15,7 @@ class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTok
      * Tokenize string and return getted parameters
      *
      * @return array
+     * @since 2.0.0
      */
     public function tokenize()
     {
@@ -37,6 +39,7 @@ class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTok
      *
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getValue()
     {

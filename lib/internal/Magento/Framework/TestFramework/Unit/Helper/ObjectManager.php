@@ -11,6 +11,7 @@ namespace Magento\Framework\TestFramework\Unit\Helper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ObjectManager
 {
@@ -18,6 +19,7 @@ class ObjectManager
      * Special cases configuration
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_specialCases = [
         \Magento\Framework\Model\ResourceModel\AbstractResource::class => '_getResourceModelMock',
@@ -28,6 +30,7 @@ class ObjectManager
      * Test object
      *
      * @var \PHPUnit_Framework_TestCase
+     * @since 2.0.0
      */
     protected $_testObject;
 
@@ -35,6 +38,7 @@ class ObjectManager
      * Class constructor
      *
      * @param \PHPUnit_Framework_TestCase $testObject
+     * @since 2.0.0
      */
     public function __construct(\PHPUnit_Framework_TestCase $testObject)
     {
@@ -47,6 +51,7 @@ class ObjectManager
      * @param string $argClassName
      * @param array $originalArguments
      * @return null|object|\PHPUnit_Framework_MockObject_MockObject
+     * @since 2.0.0
      */
     protected function _createArgumentMock($argClassName, array $originalArguments)
     {
@@ -66,6 +71,7 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return null|object
+     * @since 2.0.0
      */
     protected function _processSpecialCases($className, $arguments)
     {
@@ -85,6 +91,7 @@ class ObjectManager
      * Retrieve specific mock of core resource model
      *
      * @return \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @since 2.0.0
      */
     protected function _getResourceModelMock()
     {
@@ -111,6 +118,7 @@ class ObjectManager
      *
      * @param string $className
      * @return \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @since 2.0.0
      */
     protected function _getTranslatorMock($className)
     {
@@ -133,6 +141,7 @@ class ObjectManager
      *
      * @param string $className
      * @return \PHPUnit_Framework_MockObject_MockObject
+     * @since 2.0.0
      */
     protected function _getMockWithoutConstructorCall($className)
     {
@@ -152,6 +161,7 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return object
+     * @since 2.0.0
      */
     public function getObject($className, array $arguments = [])
     {
@@ -185,6 +195,7 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return object
+     * @since 2.0.0
      */
     protected function getBuilder($className, array $arguments)
     {
@@ -237,6 +248,7 @@ class ObjectManager
      * @param string $className
      * @param array $arguments
      * @return array
+     * @since 2.0.0
      */
     public function getConstructArguments($className, array $arguments = [])
     {
@@ -287,6 +299,7 @@ class ObjectManager
      * @param array $data
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getCollectionMock($className, array $data)
     {
@@ -315,6 +328,7 @@ class ObjectManager
      * @param string $argClassName
      * @param array $arguments
      * @return null|object|\PHPUnit_Framework_MockObject_MockObject
+     * @since 2.0.0
      */
     private function _getMockObject($argClassName, array $arguments)
     {
@@ -335,6 +349,7 @@ class ObjectManager
      * @param object $propertyValue
      * @param string $className The namespace of parent class for injection private property into this class
      * @return void
+     * @since 2.1.0
      */
     public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue, $className = '')
     {

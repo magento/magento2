@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Tier price factory.
+ * @since 2.2.0
  */
 class TierPriceFactory
 {
@@ -18,6 +19,7 @@ class TierPriceFactory
      * Tier price factory.
      *
      * @var \Magento\Catalog\Api\Data\TierPriceInterfaceFactory
+     * @since 2.2.0
      */
     private $tierPriceFactory;
 
@@ -25,6 +27,7 @@ class TierPriceFactory
      * Tier price persistence.
      *
      * @var TierPricePersistence
+     * @since 2.2.0
      */
     private $tierPricePersistence;
 
@@ -32,6 +35,7 @@ class TierPriceFactory
      * Customer group repository.
      *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
+     * @since 2.2.0
      */
     private $customerGroupRepository;
 
@@ -39,6 +43,7 @@ class TierPriceFactory
      * All groups value.
      *
      * @var string
+     * @since 2.2.0
      */
     private $allGroupsValue = 'all groups';
 
@@ -46,6 +51,7 @@ class TierPriceFactory
      * All groups ID.
      *
      * @var int
+     * @since 2.2.0
      */
     private $allGroupsId = 1;
 
@@ -53,6 +59,7 @@ class TierPriceFactory
      * Customer groups by code.
      *
      * @var array
+     * @since 2.2.0
      */
     private $customerGroupsByCode = [];
 
@@ -64,6 +71,7 @@ class TierPriceFactory
      * @param \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\TierPriceInterfaceFactory $tierPriceFactory,
@@ -85,6 +93,7 @@ class TierPriceFactory
      * @param array $rawPrice
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\TierPriceInterface
+     * @since 2.2.0
      */
     public function create(array $rawPrice, $sku)
     {
@@ -113,6 +122,7 @@ class TierPriceFactory
      * @param TierPriceInterface $price
      * @param int $id
      * @return array
+     * @since 2.2.0
      */
     public function createSkeleton(TierPriceInterface $price, $id)
     {
@@ -138,6 +148,7 @@ class TierPriceFactory
      *
      * @param TierPriceInterface $price
      * @return int
+     * @since 2.2.0
      */
     private function retrievePriceForAllGroupsValue(TierPriceInterface $price)
     {
@@ -150,6 +161,7 @@ class TierPriceFactory
      * @param string $code
      * @return int
      * @throws NoSuchEntityException
+     * @since 2.2.0
      */
     private function retrieveGroupValue($code)
     {

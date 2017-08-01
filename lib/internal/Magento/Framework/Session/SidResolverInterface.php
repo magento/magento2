@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Session;
 
+/**
+ * Interface \Magento\Framework\Session\SidResolverInterface
+ *
+ * @since 2.0.0
+ */
 interface SidResolverInterface
 {
     /**
@@ -19,6 +24,7 @@ interface SidResolverInterface
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @return string
+     * @since 2.0.0
      */
     public function getSid(\Magento\Framework\Session\SessionManagerInterface $session);
 
@@ -27,6 +33,7 @@ interface SidResolverInterface
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @return string
+     * @since 2.0.0
      */
     public function getSessionIdQueryParam(\Magento\Framework\Session\SessionManagerInterface $session);
 
@@ -35,6 +42,7 @@ interface SidResolverInterface
      *
      * @param bool $var
      * @return $this
+     * @since 2.0.0
      */
     public function setUseSessionVar($var);
 
@@ -43,6 +51,7 @@ interface SidResolverInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseSessionVar();
 
@@ -51,6 +60,7 @@ interface SidResolverInterface
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setUseSessionInUrl($flag = true);
 
@@ -59,6 +69,7 @@ interface SidResolverInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseSessionInUrl();
 }

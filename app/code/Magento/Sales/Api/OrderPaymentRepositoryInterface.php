@@ -12,6 +12,7 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 2.0.0
  */
 interface OrderPaymentRepositoryInterface
 {
@@ -20,6 +21,7 @@ interface OrderPaymentRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\OrderPaymentSearchResultInterface Order payment search result interface.
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -28,6 +30,7 @@ interface OrderPaymentRepositoryInterface
      *
      * @param int $id The order payment ID.
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Order payment interface.
+     * @since 2.0.0
      */
     public function get($id);
 
@@ -36,6 +39,7 @@ interface OrderPaymentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface $entity The order payment ID.
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\OrderPaymentInterface $entity);
 
@@ -44,6 +48,7 @@ interface OrderPaymentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface $entity The order payment ID.
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Order payment interface.
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\OrderPaymentInterface $entity);
 
@@ -51,6 +56,7 @@ interface OrderPaymentRepositoryInterface
      * Creates new Order Payment instance.
      *
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Transaction interface.
+     * @since 2.0.0
      */
     public function create();
 }

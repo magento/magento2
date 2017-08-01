@@ -14,22 +14,26 @@ use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
     /**
      * @var SalesSetupFactory
+     * @since 2.0.0
      */
     protected $salesSetupFactory;
 
     /**
      * @var QuoteSetupFactory
+     * @since 2.0.0
      */
     protected $quoteSetupFactory;
 
     /**
      * @param SalesSetupFactory $salesSetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory
+     * @since 2.0.0
      */
     public function __construct(SalesSetupFactory $salesSetupFactory, QuoteSetupFactory $quoteSetupFactory)
     {
@@ -39,6 +43,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -12,6 +12,7 @@ use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -19,6 +20,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Collection quote instance
      *
      * @var \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     protected $_quote;
 
@@ -26,21 +28,25 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Product Ids array
      *
      * @var int[]
+     * @since 2.0.0
      */
     protected $_productIds = [];
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\Option\CollectionFactory
+     * @since 2.0.0
      */
     protected $_itemOptionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Config
+     * @since 2.0.0
      */
     protected $_quoteConfig;
 
@@ -56,6 +62,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -87,6 +94,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -97,6 +105,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Retrieve store Id (From Quote)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -108,6 +117,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @since 2.0.0
      */
     public function setQuote($quote)
     {
@@ -129,6 +139,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param string $quotesTableName
      * @param int $productId
      * @return $this
+     * @since 2.0.0
      */
     public function resetJoinQuotes($quotesTableName, $productId = null)
     {
@@ -150,6 +161,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * After load processing
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -181,6 +193,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Add options to items
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _assignOptions()
     {
@@ -200,6 +213,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _assignProducts()
     {
@@ -284,6 +298,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @return void
      *
      * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
+     * @since 2.2.0
      */
     private function skipStockStatusFilter(ProductCollection $productCollection)
     {
@@ -295,6 +310,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param ProductCollection $productCollection
      * @return void
+     * @since 2.2.0
      */
     private function addTierPriceData(ProductCollection $productCollection)
     {

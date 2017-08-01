@@ -9,21 +9,29 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\CollectionProvider
+ *
+ * @since 2.0.0
+ */
 class CollectionProvider
 {
     /**
      * @var CollectionProviderInterface[]
+     * @since 2.0.0
      */
     protected $providers;
 
     /**
      * @var ConverterPool
+     * @since 2.0.0
      */
     protected $converterPool;
 
     /**
      * @param ConverterPool $converterPool
      * @param CollectionProviderInterface[] $providers
+     * @since 2.0.0
      */
     public function __construct(ConverterPool $converterPool, array $providers = [])
     {
@@ -38,6 +46,7 @@ class CollectionProvider
      * @param string $type
      * @return array
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function getCollection(\Magento\Catalog\Model\Product $product, $type)
     {

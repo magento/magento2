@@ -16,21 +16,25 @@ namespace Magento\Catalog\Model\Layer;
  *
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with their
  * corresponding abstract classes.
+ * @since 2.0.0
  */
 interface ContextInterface
 {
     /**
      * @return ItemCollectionProviderInterface
+     * @since 2.0.0
      */
     public function getCollectionProvider();
 
     /**
      * @return StateKeyInterface
+     * @since 2.0.0
      */
     public function getStateKey();
 
     /**
      * @return CollectionFilterInterface
+     * @since 2.0.0
      */
     public function getCollectionFilter();
 }

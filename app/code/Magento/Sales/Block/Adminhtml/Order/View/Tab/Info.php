@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -18,6 +19,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Retrieve order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -28,6 +30,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Retrieve source model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -38,6 +41,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Retrieve order totals block settings
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalData()
     {
@@ -52,6 +56,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Get order info data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderInfoData()
     {
@@ -62,6 +67,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Get tracking html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTrackingHtml()
     {
@@ -72,6 +78,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Get items html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getItemsHtml()
     {
@@ -82,6 +89,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Retrieve gift options container block html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGiftOptionsHtml()
     {
@@ -92,6 +100,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      * Get payment html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentHtml()
     {
@@ -103,6 +112,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      *
      * @param int $orderId
      * @return string
+     * @since 2.0.0
      */
     public function getViewUrl($orderId)
     {
@@ -115,6 +125,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -123,6 +134,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -131,6 +143,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -139,6 +152,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {

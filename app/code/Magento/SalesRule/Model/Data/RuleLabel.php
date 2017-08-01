@@ -11,6 +11,7 @@ namespace Magento\SalesRule\Model\Data;
  * Class Rule label
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\RuleLabelInterface
@@ -22,6 +23,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Get storeId
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -33,6 +35,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -43,6 +46,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Return the label for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStoreLabel()
     {
@@ -54,6 +58,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param string $storeLabel
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabel($storeLabel)
     {
@@ -64,6 +69,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * {@inheritdoc}
      *
      * @return \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -75,6 +81,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes

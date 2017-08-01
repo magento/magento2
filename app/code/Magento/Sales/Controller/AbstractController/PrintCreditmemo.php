@@ -10,25 +10,34 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\PrintCreditmemo
+ *
+ * @since 2.0.0
+ */
 abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var OrderViewAuthorizationInterface
+     * @since 2.0.0
      */
     protected $orderAuthorization;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var CreditmemoRepositoryInterface
+     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
@@ -38,6 +47,7 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
      * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -57,6 +67,7 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
      * Print Creditmemo Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -15,6 +15,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Data upgrade script
+ * @since 2.0.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -22,16 +23,19 @@ class UpgradeData implements UpgradeDataInterface
      * Sales setup factory
      *
      * @var SalesSetupFactory
+     * @since 2.0.0
      */
     private $salesSetupFactory;
 
     /**
      * @var Config
+     * @since 2.0.0
      */
     private $eavConfig;
 
     /**
      * @var AggregatedFieldDataConverter
+     * @since 2.2.0
      */
     private $aggregatedFieldConverter;
 
@@ -41,6 +45,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @since 2.0.0
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
@@ -54,6 +59,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -73,6 +79,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param string $setupVersion
      * @param SalesSetup $salesSetup
      * @return void
+     * @since 2.2.0
      */
     private function convertSerializedDataToJson($setupVersion, SalesSetup $salesSetup)
     {

@@ -17,31 +17,37 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class ScopeOverriddenValue
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class ScopeOverriddenValue
 {
     /**
      * @var AttributeRepository
+     * @since 2.1.0
      */
     private $attributeRepository;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $attributesValues;
 
     /**
      * @var ResourceConnection
+     * @since 2.1.0
      */
     private $resourceConnection;
 
@@ -52,6 +58,7 @@ class ScopeOverriddenValue
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param ResourceConnection $resourceConnection
+     * @since 2.1.0
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -75,6 +82,7 @@ class ScopeOverriddenValue
      * @param string $attributeCode
      * @param int|string $storeId
      * @return bool
+     * @since 2.1.0
      */
     public function containsValue($entityType, $entity, $attributeCode, $storeId)
     {
@@ -96,7 +104,8 @@ class ScopeOverriddenValue
      * @param \Magento\Catalog\Model\AbstractModel $entity
      * @return array
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     public function getDefaultValues($entityType, $entity)
     {
@@ -115,6 +124,7 @@ class ScopeOverriddenValue
      * @param int $storeId
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.1.0
      */
     private function initAttributeValues($entityType, $entity, $storeId)
     {
@@ -160,6 +170,7 @@ class ScopeOverriddenValue
     /**
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @since 2.1.0
      */
     private function getAttributes($entityType)
     {

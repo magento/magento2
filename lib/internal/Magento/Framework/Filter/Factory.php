@@ -7,6 +7,7 @@ namespace Magento\Framework\Filter;
 
 /**
  * Magento filter factory
+ * @since 2.0.0
  */
 class Factory extends AbstractFactory
 {
@@ -14,6 +15,7 @@ class Factory extends AbstractFactory
      * Set of filters
      *
      * @var array
+     * @since 2.0.0
      */
     protected $invokableClasses = [
         'email' => \Magento\Framework\Filter\Email::class,
@@ -38,6 +40,7 @@ class Factory extends AbstractFactory
      * Shared instances, by default is shared
      *
      * @var array
+     * @since 2.0.0
      */
     protected $shared = [
         \Magento\Framework\Filter\Sprintf::class => false,

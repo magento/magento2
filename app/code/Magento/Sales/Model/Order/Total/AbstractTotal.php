@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\Order\Total;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class AbstractTotal extends \Magento\Framework\DataObject
 {
@@ -19,6 +20,7 @@ abstract class AbstractTotal extends \Magento\Framework\DataObject
      *
      * @param   array $config
      * @return  array
+     * @since 2.0.0
      */
     public function processConfigArray($config)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Class Item
+ * @since 2.0.0
  */
 class Item extends DataObject
 {

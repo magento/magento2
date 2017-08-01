@@ -7,15 +7,22 @@
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Definition\Runtime
+ *
+ * @since 2.0.0
+ */
 class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_definitions = [];
 
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
     {
@@ -37,6 +44,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
      *
      * @param string $className
      * @return array|null
+     * @since 2.0.0
      */
     public function getParameters($className)
     {
@@ -50,6 +58,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
      * Retrieve list of all classes covered with definitions
      *
      * @return array
+     * @since 2.0.0
      */
     public function getClasses()
     {

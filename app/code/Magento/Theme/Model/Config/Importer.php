@@ -24,6 +24,7 @@ use Magento\Theme\Model\Theme\Registration;
  * If a theme is presented in the configuration files and in the filesystem, but is not presented in the DB -
  * register the theme in the DB.
  * In other cases - do nothing.
+ * @since 2.2.0
  */
 class Importer implements ImporterInterface
 {
@@ -31,6 +32,7 @@ class Importer implements ImporterInterface
      * Collection of themes from the filesystem.
      *
      * @var ThemeFilesystemCollection
+     * @since 2.2.0
      */
     private $themeFilesystemCollection;
 
@@ -38,6 +40,7 @@ class Importer implements ImporterInterface
      * Factory of themes collection from the DB.
      *
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $themeCollectionFactory;
 
@@ -45,6 +48,7 @@ class Importer implements ImporterInterface
      * Registrar of themes registers themes in the DB.
      *
      * @var Registration
+     * @since 2.2.0
      */
     private $themeRegistration;
 
@@ -52,6 +56,7 @@ class Importer implements ImporterInterface
      * Resource model of theme.
      *
      * @var ThemeResourceModel
+     * @since 2.2.0
      */
     private $themeResourceModel;
 
@@ -60,6 +65,7 @@ class Importer implements ImporterInterface
      * @param CollectionFactory $collectionFactory The factory of themes collection from the DB
      * @param Registration $registration The registrar of themes registers themes in the DB
      * @param ThemeResourceModel $themeResourceModel The resource model of theme
+     * @since 2.2.0
      */
     public function __construct(
         ThemeFilesystemCollection $themeFilesystemCollection,
@@ -75,6 +81,7 @@ class Importer implements ImporterInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function import(array $data)
     {
@@ -115,6 +122,7 @@ class Importer implements ImporterInterface
      *
      * @param array $data The data that should be imported, used for creating warning messages
      * @return array
+     * @since 2.2.0
      */
     public function getWarningMessages(array $data)
     {

@@ -10,27 +10,32 @@ namespace Magento\Framework\Pricing\Adjustment;
  * Adjustment collection model
  *
  * @api
+ * @since 2.0.0
  */
 class Collection
 {
     /**
      * @var Pool
+     * @since 2.0.0
      */
     protected $adjustmentPool;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $adjustments;
 
     /**
      * @var AdjustmentInterface[]
+     * @since 2.0.0
      */
     protected $adjustmentInstances;
 
     /**
      * @param Pool $adjustmentPool
      * @param string[] $adjustments
+     * @since 2.0.0
      */
     public function __construct(
         Pool $adjustmentPool,
@@ -42,6 +47,7 @@ class Collection
 
     /**
      * @return AdjustmentInterface[]
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -57,6 +63,7 @@ class Collection
      * @param string $adjustmentCode
      * @throws \InvalidArgumentException
      * @return AdjustmentInterface
+     * @since 2.0.0
      */
     public function getItemByCode($adjustmentCode)
     {
@@ -73,6 +80,7 @@ class Collection
     /**
      * @param string[] $adjustments
      * @return AdjustmentInterface[]
+     * @since 2.0.0
      */
     protected function fetchAdjustments($adjustments)
     {
@@ -92,6 +100,7 @@ class Collection
      * @param AdjustmentInterface $firstAdjustment
      * @param AdjustmentInterface $secondAdjustment
      * @return int
+     * @since 2.0.0
      */
     protected function sortAdjustments(AdjustmentInterface $firstAdjustment, AdjustmentInterface $secondAdjustment)
     {

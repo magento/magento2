@@ -6,12 +6,18 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\Backup\Controller\Adminhtml\Index\MassDelete
+ *
+ * @since 2.0.0
+ */
 class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
      * Delete backups mass action
      *
      * @return \Magento\Backend\App\Action
+     * @since 2.0.0
      */
     public function execute()
     {

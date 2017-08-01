@@ -9,26 +9,31 @@ namespace Magento\Sales\Model\Order;
  * Class CreditmemoDocumentFactory
  *
  * @api
+ * @since 2.2.0
  */
 class CreditmemoDocumentFactory
 {
     /**
      * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @since 2.2.0
      */
     private $creditmemoFactory;
 
     /**
      * @var \Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory
+     * @since 2.2.0
      */
     private $commentFactory;
 
     /**
      * @var \Magento\Framework\EntityManager\HydratorPool
+     * @since 2.2.0
      */
     private $hydratorPool;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @since 2.2.0
      */
     private $orderRepository;
 
@@ -39,6 +44,7 @@ class CreditmemoDocumentFactory
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory $commentFactory
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
@@ -58,6 +64,7 @@ class CreditmemoDocumentFactory
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return array
+     * @since 2.2.0
      */
     private function getCreditmemoCreationData(
         array $items = [],
@@ -83,6 +90,7 @@ class CreditmemoDocumentFactory
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment
      * @param bool $appendComment
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 2.2.0
      */
     private function attachComment(
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
@@ -109,6 +117,7 @@ class CreditmemoDocumentFactory
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 2.2.0
      */
     public function createFromOrder(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -132,6 +141,7 @@ class CreditmemoDocumentFactory
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 2.2.0
      */
     public function createFromInvoice(
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,

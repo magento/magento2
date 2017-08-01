@@ -9,6 +9,7 @@ namespace Magento\Captcha\Model\ResourceModel;
  * Log Attempts resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -26,11 +27,13 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_coreDate;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     * @since 2.0.0
      */
     protected $_remoteAddress;
 
@@ -39,6 +42,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -55,6 +59,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,6 +72,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string|null $login
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function logAttempt($login)
     {
@@ -104,6 +110,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $login
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteUserAttempts($login)
     {
@@ -129,6 +136,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return null|int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function countAttemptsByRemoteAddress()
     {
@@ -156,6 +164,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $login
      * @return null|int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function countAttemptsByUserLogin($login)
     {
@@ -181,6 +190,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteOldAttempts()
     {

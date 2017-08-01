@@ -10,6 +10,7 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
  * Create new variable form
  *
  * @api
+ * @since 2.0.0
  */
 class NewAction extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
@@ -17,6 +18,7 @@ class NewAction extends \Magento\Variable\Controller\Adminhtml\System\Variable
      * New Action (forward to edit action)
      *
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

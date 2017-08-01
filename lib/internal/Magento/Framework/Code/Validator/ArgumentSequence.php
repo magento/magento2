@@ -9,6 +9,11 @@ namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ArgumentSequence
+ *
+ * @since 2.0.0
+ */
 class ArgumentSequence implements ValidatorInterface
 {
     const REQUIRED = 'required';
@@ -17,16 +22,19 @@ class ArgumentSequence implements ValidatorInterface
 
     /**
      * @var \Magento\Framework\Code\Reader\ArgumentsReader
+     * @since 2.0.0
      */
     protected $_argumentsReader;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
     {
@@ -40,6 +48,7 @@ class ArgumentSequence implements ValidatorInterface
      * @return bool
      * @throws \Magento\Framework\Exception\ValidatorException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function validate($className)
     {
@@ -102,6 +111,7 @@ class ArgumentSequence implements ValidatorInterface
      * @param array $actualSequence
      * @param array $requiredSequence
      * @return bool
+     * @since 2.0.0
      */
     protected function _checkArgumentSequence(array $actualSequence, array $requiredSequence)
     {
@@ -136,6 +146,7 @@ class ArgumentSequence implements ValidatorInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _buildsSequence(array $classArguments, array $parentArguments = [])
     {
@@ -193,6 +204,7 @@ class ArgumentSequence implements ValidatorInterface
      *
      * @param array $arguments
      * @return array
+     * @since 2.0.0
      */
     protected function _sortArguments($arguments)
     {
@@ -215,6 +227,7 @@ class ArgumentSequence implements ValidatorInterface
      *
      * @param array $arguments
      * @return bool
+     * @since 2.0.0
      */
     protected function _isContextOnly(array $arguments)
     {
@@ -230,6 +243,7 @@ class ArgumentSequence implements ValidatorInterface
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     protected function _isContextType($type)
     {

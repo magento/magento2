@@ -10,17 +10,20 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getId();
 
     /**
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id);
 
@@ -28,6 +31,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Get parent category ID
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getParentId();
 
@@ -36,6 +40,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @param int $parentId
      * @return $this
+     * @since 2.0.0
      */
     public function setParentId($parentId);
 
@@ -43,6 +48,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Get category name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -51,6 +57,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -58,6 +65,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Check whether category is active
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsActive();
 
@@ -66,6 +74,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @param bool $isActive
      * @return $this
+     * @since 2.0.0
      */
     public function setIsActive($isActive);
 
@@ -73,6 +82,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Get category position
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getPosition();
 
@@ -81,6 +91,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @param int $position
      * @return $this
+     * @since 2.0.0
      */
     public function setPosition($position);
 
@@ -88,6 +99,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Get category level
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getLevel();
 
@@ -96,66 +108,78 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @param int $level
      * @return $this
+     * @since 2.0.0
      */
     public function setLevel($level);
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getChildren();
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
     /**
      * @param string $createdAt
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getUpdatedAt();
 
     /**
      * @param string $updatedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt);
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getPath();
 
     /**
      * @param string $path
      * @return $this
+     * @since 2.0.0
      */
     public function setPath($path);
 
     /**
      * @return string[]|null
+     * @since 2.0.0
      */
     public function getAvailableSortBy();
 
     /**
      * @param string[]|string $availableSortBy
      * @return $this
+     * @since 2.0.0
      */
     public function setAvailableSortBy($availableSortBy);
 
     /**
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIncludeInMenu();
 
     /**
      * @param bool $includeInMenu
      * @return $this
+     * @since 2.0.0
      */
     public function setIncludeInMenu($includeInMenu);
 
@@ -163,6 +187,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\CategoryExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -171,6 +196,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      *
      * @param \Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes);
 }

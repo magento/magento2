@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class RedirectFactory
 {
@@ -16,6 +17,7 @@ class RedirectFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -23,12 +25,14 @@ class RedirectFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class RedirectFactory
      *
      * @param array $data
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

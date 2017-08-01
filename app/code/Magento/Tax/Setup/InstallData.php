@@ -13,6 +13,7 @@ use Magento\Directory\Model\RegionFactory;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -20,17 +21,20 @@ class InstallData implements InstallDataInterface
      * Tax setup factory
      *
      * @var TaxSetupFactory
+     * @since 2.0.0
      */
     private $taxSetupFactory;
 
     /**
      * @var RegionFactory
+     * @since 2.2.0
      */
     private $directoryRegionFactory;
 
     /**
      * @param TaxSetupFactory $taxSetupFactory
      * @param RegionFactory $directoryRegionFactory
+     * @since 2.0.0
      */
     public function __construct(
         TaxSetupFactory $taxSetupFactory,
@@ -42,6 +46,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

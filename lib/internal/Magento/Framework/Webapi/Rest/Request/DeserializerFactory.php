@@ -9,21 +9,29 @@ namespace Magento\Framework\Webapi\Rest\Request;
 
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Request\DeserializerFactory
+ *
+ * @since 2.0.0
+ */
 class DeserializerFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_deserializers;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $deserializers
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -39,6 +47,7 @@ class DeserializerFactory
      * @param string $contentType
      * @return \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
      * @throws \LogicException|\Magento\Framework\Webapi\Exception
+     * @since 2.0.0
      */
     public function get($contentType)
     {

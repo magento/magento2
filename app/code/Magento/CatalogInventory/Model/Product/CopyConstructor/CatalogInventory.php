@@ -5,15 +5,22 @@
  */
 namespace Magento\CatalogInventory\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory
+ *
+ * @since 2.0.0
+ */
 class CatalogInventory implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -27,6 +34,7 @@ class CatalogInventory implements \Magento\Catalog\Model\Product\CopyConstructor
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
      * @return void
+     * @since 2.0.0
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {

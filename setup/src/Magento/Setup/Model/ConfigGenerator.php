@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManagerFactory;
 /**
  * Creates deployment config data based on user input array
  * this class introduced to break down Magento\Setup\Model\ConfigOptionsList::createConfig
+ * @since 2.0.0
  */
 class ConfigGenerator
 {
@@ -24,6 +25,7 @@ class ConfigGenerator
      * Maps configuration parameters to array keys in deployment config file
      *
      * @var array
+     * @since 2.0.0
      */
     private static $paramMap = [
         ConfigOptionsListConstants::INPUT_KEY_DB_HOST => ConfigOptionsListConstants::KEY_HOST,
@@ -41,11 +43,13 @@ class ConfigGenerator
 
     /**
      * @var Random
+     * @since 2.0.0
      */
     protected $random;
 
     /**
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     protected $deploymentConfig;
 
@@ -54,6 +58,7 @@ class ConfigGenerator
      *
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     public function __construct(Random $random, DeploymentConfig $deploymentConfig)
     {
@@ -65,6 +70,7 @@ class ConfigGenerator
      * Creates encryption key config data
      * @param array $data
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createCryptConfig(array $data)
     {
@@ -96,6 +102,7 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createSessionConfig(array $data)
     {
@@ -116,8 +123,9 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData
-     * @deprecated
+     * @deprecated 2.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function createDefinitionsConfig(array $data)
     {
@@ -129,6 +137,7 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createDbConfig(array $data)
     {
@@ -179,6 +188,7 @@ class ConfigGenerator
      * Creates resource config data
      *
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createResourceConfig()
     {
@@ -195,6 +205,7 @@ class ConfigGenerator
      * Creates x-frame-options header config data
      *
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createXFrameConfig()
     {
@@ -209,6 +220,7 @@ class ConfigGenerator
      * Create default entry for mode config option
      *
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createModeConfig()
     {
@@ -224,6 +236,7 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData
+     * @since 2.0.0
      */
     public function createCacheHostsConfig(array $data)
     {

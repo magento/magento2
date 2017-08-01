@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
      * Queue list action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

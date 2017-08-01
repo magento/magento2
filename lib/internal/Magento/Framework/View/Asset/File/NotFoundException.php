@@ -12,6 +12,7 @@ namespace Magento\Framework\View\Asset\File;
  * Use this exception when file has not been found
  *
  * @api
+ * @since 2.0.0
  */
 class NotFoundException extends \LogicException
 {

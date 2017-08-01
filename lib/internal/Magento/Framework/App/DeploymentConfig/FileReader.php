@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * Allows to read configurations from different config files.
  *
  * @see Reader The reader for merged configurations
+ * @since 2.2.0
  */
 class FileReader
 {
@@ -21,6 +22,7 @@ class FileReader
      * The list of directories.
      *
      * @var DirectoryList
+     * @since 2.2.0
      */
     private $dirList;
 
@@ -28,6 +30,7 @@ class FileReader
      * The pool of config files.
      *
      * @var ConfigFilePool
+     * @since 2.2.0
      */
     private $configFilePool;
 
@@ -35,6 +38,7 @@ class FileReader
      * The pool of stream drivers.
      *
      * @var DriverPool
+     * @since 2.2.0
      */
     private $driverPool;
 
@@ -42,6 +46,7 @@ class FileReader
      * @param DirectoryList $dirList The list of directories
      * @param DriverPool $driverPool The pool of config files
      * @param ConfigFilePool $configFilePool The pool of stream drivers
+     * @since 2.2.0
      */
     public function __construct(
         DirectoryList $dirList,
@@ -60,6 +65,7 @@ class FileReader
      * @return array The configurations array
      * @throws FileSystemException If file can not be read
      * @throws \Exception If file key is not correct
+     * @since 2.2.0
      */
     public function load($fileKey)
     {

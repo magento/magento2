@@ -11,42 +11,50 @@ use Magento\Framework\App\Config;
 
 /**
  * Information Expert in stores handling
+ * @since 2.0.0
  */
 class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 {
     /**
      * @var StoreFactory
+     * @since 2.0.0
      */
     protected $storeFactory;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @since 2.0.0
      */
     protected $storeCollectionFactory;
 
     /**
      * @var \Magento\Store\Api\Data\StoreInterface[]
+     * @since 2.0.0
      */
     protected $entities = [];
 
     /**
      * @var \Magento\Store\Api\Data\StoreInterface[]
+     * @since 2.0.0
      */
     protected $entitiesById = [];
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $allLoaded = false;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $appConfig;
 
     /**
      * @param StoreFactory $storeFactory
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         StoreFactory $storeFactory,
@@ -58,6 +66,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($code)
     {
@@ -80,6 +89,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActiveStoreByCode($code)
     {
@@ -93,6 +103,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getById($id)
     {
@@ -116,6 +127,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActiveStoreById($id)
     {
@@ -129,6 +141,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList()
     {
@@ -150,8 +163,9 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return Config
+     * @since 2.2.0
      */
     private function getAppConfig()
     {
@@ -163,6 +177,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function clean()
     {

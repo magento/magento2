@@ -15,6 +15,11 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Backend\Sku
+ *
+ * @since 2.0.0
+ */
 class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -28,11 +33,13 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Stdlib\StringUtils $string)
     {
@@ -46,6 +53,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -68,6 +76,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param Product $object
      * @return void
+     * @since 2.0.0
      */
     protected function _generateUniqueSku($object)
     {
@@ -93,6 +102,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param Product $object
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -106,6 +116,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param Product $object
      * @return int
+     * @since 2.0.0
      */
     protected function _getLastSimilarAttributeValueIncrement($attribute, $object)
     {

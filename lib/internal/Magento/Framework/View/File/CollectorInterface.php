@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\ThemeInterface;
  * Interface of locating view files in the file system
  *
  * @api
+ * @since 2.0.0
  */
 interface CollectorInterface
 {
@@ -26,6 +27,7 @@ interface CollectorInterface
      * @param ThemeInterface $theme Theme that defines the design context
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
+     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath);
 }

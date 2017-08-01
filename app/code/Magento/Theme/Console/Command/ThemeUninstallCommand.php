@@ -29,6 +29,7 @@ use Magento\Theme\Model\ThemeValidator;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @since 2.0.0
  */
 class ThemeUninstallCommand extends Command
 {
@@ -43,6 +44,7 @@ class ThemeUninstallCommand extends Command
      * Maintenance Mode
      *
      * @var MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -50,6 +52,7 @@ class ThemeUninstallCommand extends Command
      * Composer general dependency checker
      *
      * @var DependencyChecker
+     * @since 2.0.0
      */
     private $dependencyChecker;
 
@@ -57,6 +60,7 @@ class ThemeUninstallCommand extends Command
      * Root composer.json information
      *
      * @var ComposerInformation
+     * @since 2.0.0
      */
     private $composer;
 
@@ -64,6 +68,7 @@ class ThemeUninstallCommand extends Command
      * Theme collection in filesystem
      *
      * @var Collection
+     * @since 2.0.0
      */
     private $themeCollection;
 
@@ -71,6 +76,7 @@ class ThemeUninstallCommand extends Command
      * System cache model
      *
      * @var Cache
+     * @since 2.0.0
      */
     private $cache;
 
@@ -78,6 +84,7 @@ class ThemeUninstallCommand extends Command
      * Cleaning up application state service
      *
      * @var CleanupFiles
+     * @since 2.0.0
      */
     private $cleanupFiles;
 
@@ -85,6 +92,7 @@ class ThemeUninstallCommand extends Command
      * BackupRollback factory
      *
      * @var BackupRollbackFactory
+     * @since 2.0.0
      */
     private $backupRollbackFactory;
 
@@ -92,6 +100,7 @@ class ThemeUninstallCommand extends Command
      * Theme Validator
      *
      * @var ThemeValidator
+     * @since 2.0.0
      */
     private $themeValidator;
 
@@ -99,6 +108,7 @@ class ThemeUninstallCommand extends Command
      * Package name finder
      *
      * @var ThemePackageInfo
+     * @since 2.0.0
      */
     private $themePackageInfo;
 
@@ -106,6 +116,7 @@ class ThemeUninstallCommand extends Command
      * Theme Uninstaller
      *
      * @var ThemeUninstaller
+     * @since 2.0.0
      */
     private $themeUninstaller;
 
@@ -113,6 +124,7 @@ class ThemeUninstallCommand extends Command
      * Theme Dependency Checker
      *
      * @var ThemeDependencyChecker
+     * @since 2.0.0
      */
     private $themeDependencyChecker;
 
@@ -130,6 +142,7 @@ class ThemeUninstallCommand extends Command
      * @param ThemePackageInfo $themePackageInfo
      * @param ThemeUninstaller $themeUninstaller
      * @param ThemeDependencyChecker $themeDependencyChecker
+     * @since 2.0.0
      */
     public function __construct(
         Cache $cache,
@@ -160,6 +173,7 @@ class ThemeUninstallCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -188,6 +202,7 @@ class ThemeUninstallCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -242,6 +257,7 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
+     * @since 2.0.0
      */
     private function validate($themePaths)
     {
@@ -277,6 +293,7 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
+     * @since 2.1.0
      */
     protected function getIncorrectThemes($themePaths)
     {
@@ -295,6 +312,7 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
+     * @since 2.1.0
      */
     protected function getUnknownPackages($themePaths)
     {
@@ -314,6 +332,7 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
+     * @since 2.1.0
      */
     protected function getUnknownThemes($themePaths)
     {
@@ -331,6 +350,7 @@ class ThemeUninstallCommand extends Command
      *
      * @param string[] $themePaths
      * @return string[]
+     * @since 2.0.0
      */
     private function checkDependencies($themePaths)
     {
@@ -358,6 +378,7 @@ class ThemeUninstallCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
+     * @since 2.0.0
      */
     private function cleanup(InputInterface $input, OutputInterface $output)
     {

@@ -10,11 +10,13 @@ use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
  * Class AddQuantityFieldToCollection
+ * @since 2.0.0
  */
 class AddQuantityFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function addField(Collection $collection, $field, $alias = null)
     {

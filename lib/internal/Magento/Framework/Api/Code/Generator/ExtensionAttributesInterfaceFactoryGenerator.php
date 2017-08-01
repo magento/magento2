@@ -11,6 +11,11 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Code\Generator\CodeGeneratorInterface;
 
+/**
+ * Class \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator
+ *
+ * @since 2.2.0
+ */
 class ExtensionAttributesInterfaceFactoryGenerator extends Factory
 {
     /**
@@ -20,6 +25,7 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private static $suffix = 'InterfaceFactory';
 
@@ -31,6 +37,7 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
      * @param Io $ioObject
      * @param CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
+     * @since 2.2.0
      */
     public function __construct(
         $sourceClassName = null,
@@ -51,6 +58,7 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function _validateData()
     {

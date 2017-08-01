@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib\DateTime;
  * Date conversion model
  *
  * @api
+ * @since 2.0.0
  */
 class DateTime
 {
@@ -17,16 +18,19 @@ class DateTime
      * Current config offset in seconds
      *
      * @var int
+     * @since 2.0.0
      */
     private $_offset = 0;
 
     /**
      * @var TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @param TimezoneInterface $localeDate
+     * @since 2.0.0
      */
     public function __construct(TimezoneInterface $localeDate)
     {
@@ -39,6 +43,7 @@ class DateTime
      *
      * @param  string|null $timezone
      * @return int offset between timezone and gmt
+     * @since 2.0.0
      */
     public function calculateOffset($timezone = null)
     {
@@ -63,6 +68,7 @@ class DateTime
      * @param  string $format
      * @param  int|string $input date in current timezone
      * @return string
+     * @since 2.0.0
      */
     public function gmtDate($format = null, $input = null)
     {
@@ -84,6 +90,7 @@ class DateTime
      * @param  string $format
      * @param  int|string $input date in GMT timezone
      * @return string
+     * @since 2.0.0
      */
     public function date($format = null, $input = null)
     {
@@ -99,6 +106,7 @@ class DateTime
      *
      * @param  int|string|\DateTimeInterface $input date in current timezone
      * @return int
+     * @since 2.0.0
      */
     public function gmtTimestamp($input = null)
     {
@@ -127,6 +135,7 @@ class DateTime
      *
      * @param  int|string $input date in GMT timezone
      * @return int
+     * @since 2.0.0
      */
     public function timestamp($input = null)
     {
@@ -154,6 +163,7 @@ class DateTime
      *
      * @param  string $type
      * @return int
+     * @since 2.0.0
      */
     public function getGmtOffset($type = 'seconds')
     {

@@ -9,21 +9,25 @@ namespace Magento\Theme\Model\PageLayout\Config;
 
 /**
  * Page layout config builder
+ * @since 2.0.0
  */
 class Builder implements \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
 {
     /**
      * @var \Magento\Framework\View\PageLayout\ConfigFactory
+     * @since 2.0.0
      */
     protected $configFactory;
 
     /**
      * @var \Magento\Framework\View\PageLayout\File\Collector\Aggregated
+     * @since 2.0.0
      */
     protected $fileCollector;
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @since 2.0.0
      */
     protected $themeCollection;
 
@@ -31,6 +35,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
      * @param \Magento\Framework\View\PageLayout\ConfigFactory $configFactory
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\PageLayout\ConfigFactory $configFactory,
@@ -45,6 +50,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
 
     /**
      * @return \Magento\Framework\View\PageLayout\Config
+     * @since 2.0.0
      */
     public function getPageLayoutsConfig()
     {
@@ -53,6 +59,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function getConfigFiles()
     {

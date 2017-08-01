@@ -11,11 +11,13 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
  * Generic block that uses customer metatdata attributes.
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
@@ -25,6 +27,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,6 +47,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param array $exclude attributes that should be skipped
      * @return void
+     * @since 2.0.0
      */
     protected function _setFieldset($attributes, $fieldset, $exclude = [])
     {
@@ -83,6 +87,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param AttributeMetadataInterface $attribute
      * @return void
+     * @since 2.0.0
      */
     protected function _applyTypeSpecificConfigCustomer(
         $inputType,
@@ -111,6 +116,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @param AttributeMetadataInterface $attribute
      * @return array
+     * @since 2.0.0
      */
     protected function _getAttributeOptionsArray(AttributeMetadataInterface $attribute)
     {

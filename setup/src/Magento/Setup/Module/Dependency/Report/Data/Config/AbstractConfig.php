@@ -9,6 +9,7 @@ use Magento\Setup\Module\Dependency\Report\Data\ConfigInterface;
 
 /**
  * Config
+ * @since 2.0.0
  */
 abstract class AbstractConfig implements ConfigInterface
 {
@@ -16,6 +17,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Modules
      *
      * @var array
+     * @since 2.0.0
      */
     private $modules;
 
@@ -23,6 +25,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Config construct
      *
      * @param array $modules
+     * @since 2.0.0
      */
     public function __construct(array $modules = [])
     {
@@ -31,6 +34,7 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getModules()
     {
@@ -39,6 +43,7 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     abstract public function getDependenciesCount();
 }

@@ -10,6 +10,11 @@ namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
+ *
+ * @since 2.0.0
+ */
 class Grouped extends DefaultPrice implements GroupedInterface
 {
     /**
@@ -19,6 +24,7 @@ class Grouped extends DefaultPrice implements GroupedInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function reindex($entityIds = null)
     {
@@ -31,6 +37,7 @@ class Grouped extends DefaultPrice implements GroupedInterface
      *
      * @param int|array $entityIds  the parent entity ids limitation
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareGroupedProductPriceData($entityIds = null)
     {
@@ -72,6 +79,7 @@ class Grouped extends DefaultPrice implements GroupedInterface
      *
      * @param int|array $entityIds  the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
+     * @since 2.2.0
      */
     protected function _prepareGroupedProductPriceDataSelect($entityIds = null)
     {

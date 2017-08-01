@@ -14,36 +14,43 @@ use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 
 /**
  * Command notifies MBI about that data collection was finished.
+ * @since 2.2.0
  */
 class NotifyDataChangedCommand implements CommandInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $notifyDataChangedUrlPath = 'analytics/url/notify_data_changed';
 
     /**
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
     /**
      * @var Http\ClientInterface
+     * @since 2.2.0
      */
     private $httpClient;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ResponseResolver
+     * @since 2.2.0
      */
     private $responseResolver;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -54,6 +61,7 @@ class NotifyDataChangedCommand implements CommandInterface
      * @param ScopeConfigInterface $config
      * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -73,6 +81,7 @@ class NotifyDataChangedCommand implements CommandInterface
      * Notify MBI about that data collection was finished
      *
      * @return bool
+     * @since 2.2.0
      */
     public function execute()
     {

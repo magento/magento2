@@ -10,12 +10,18 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 
+/**
+ * Class \Magento\Setup\Controller\Maintenance
+ *
+ * @since 2.0.0
+ */
 class Maintenance extends AbstractActionController
 {
     /**
      * Handler for maintenance mode
      *
      * @var MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -23,6 +29,7 @@ class Maintenance extends AbstractActionController
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
+     * @since 2.0.0
      */
     public function __construct(MaintenanceMode $maintenanceMode)
     {
@@ -33,6 +40,7 @@ class Maintenance extends AbstractActionController
      * Puts store in maintenance mode
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function indexAction()
     {

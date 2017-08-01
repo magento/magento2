@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\Catalog\Model\Product\CopyConstructor\Related
+ *
+ * @since 2.0.0
+ */
 class Related implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
@@ -13,6 +18,7 @@ class Related implements \Magento\Catalog\Model\Product\CopyConstructorInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
      * @return void
+     * @since 2.0.0
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {

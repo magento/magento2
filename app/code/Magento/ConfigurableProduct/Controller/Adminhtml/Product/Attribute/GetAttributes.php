@@ -9,6 +9,11 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 use Magento\Backend\App\Action;
 use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\GetAttributes
+ *
+ * @since 2.0.0
+ */
 class GetAttributes extends Action
 {
     /**
@@ -22,11 +27,13 @@ class GetAttributes extends Action
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -35,6 +42,7 @@ class GetAttributes extends Action
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param AttributesListInterface $attributesList
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -52,6 +60,7 @@ class GetAttributes extends Action
      * Get attributes
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

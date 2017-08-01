@@ -9,6 +9,7 @@ use Magento\Setup\Module\I18n\Dictionary\Phrase;
 
 /**
  *  Dictionary
+ * @since 2.0.0
  */
 class Dictionary
 {
@@ -16,6 +17,7 @@ class Dictionary
      * Phrases
      *
      * @var array
+     * @since 2.0.0
      */
     private $_phrases = [];
 
@@ -23,6 +25,7 @@ class Dictionary
      * List of phrases where array key is vo key
      *
      * @var array
+     * @since 2.0.0
      */
     private $_phrasesByKey = [];
 
@@ -31,6 +34,7 @@ class Dictionary
      *
      * @param Phrase $phrase
      * @return void
+     * @since 2.0.0
      */
     public function addPhrase(Phrase $phrase)
     {
@@ -42,6 +46,7 @@ class Dictionary
      * Get phrases
      *
      * @return Phrase[]
+     * @since 2.0.0
      */
     public function getPhrases()
     {
@@ -52,6 +57,7 @@ class Dictionary
      * Get duplicates in container
      *
      * @return array
+     * @since 2.0.0
      */
     public function getDuplicates()
     {

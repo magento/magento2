@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductCustomOptionRepositoryInterface
 {
@@ -16,6 +17,7 @@ interface ProductCustomOptionRepositoryInterface
      *
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 2.0.0
      */
     public function getList($sku);
 
@@ -23,6 +25,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 2.1.0
      */
     public function getProductOptions(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -35,6 +38,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param string $sku
      * @param int $optionId
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface
+     * @since 2.0.0
      */
     public function get($sku, $optionId);
 
@@ -43,6 +47,7 @@ interface ProductCustomOptionRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option);
 
@@ -52,6 +57,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Catalog\Api\Data\ProductInterface $duplicate
      * @return mixed
+     * @since 2.1.0
      */
     public function duplicate(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -63,6 +69,7 @@ interface ProductCustomOptionRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface
+     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option);
 
@@ -70,6 +77,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param string $sku
      * @param int $optionId
      * @return bool
+     * @since 2.0.0
      */
     public function deleteByIdentifier($sku, $optionId);
 }

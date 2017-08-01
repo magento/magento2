@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\DataObject;
 
+/**
+ * Interface \Magento\Framework\DataObject\KeyValueObjectInterface
+ *
+ * @since 2.0.0
+ */
 interface KeyValueObjectInterface
 {
     const KEY = 'key';
@@ -15,6 +20,7 @@ interface KeyValueObjectInterface
      * Get object key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getKey();
 
@@ -23,6 +29,7 @@ interface KeyValueObjectInterface
      *
      * @param string $key
      * @return $this
+     * @since 2.0.0
      */
     public function setKey($key);
 
@@ -30,6 +37,7 @@ interface KeyValueObjectInterface
      * Get object value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -38,6 +46,7 @@ interface KeyValueObjectInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value);
 }

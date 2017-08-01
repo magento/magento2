@@ -5,6 +5,11 @@
  */
 namespace Magento\Setup\Module\Di\App\Task;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\OperationException
+ *
+ * @since 2.0.0
+ */
 class OperationException extends \Exception
 {
     /**

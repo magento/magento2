@@ -9,7 +9,8 @@ namespace Magento\Integration\Model\Config\Integration;
  * Service config data reader.
  *
  * @codeCoverageIgnore
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -17,6 +18,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/integrations/integration' => 'name',
@@ -32,6 +34,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

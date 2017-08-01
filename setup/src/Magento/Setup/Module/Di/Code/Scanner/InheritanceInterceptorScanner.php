@@ -7,15 +7,22 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\ObjectManager\InterceptableValidator;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\InheritanceInterceptorScanner
+ *
+ * @since 2.0.0
+ */
 class InheritanceInterceptorScanner implements ScannerInterface
 {
     /**
      * @var InterceptableValidator
+     * @since 2.1.0
      */
     private $interceptableValidator;
 
     /**
      * @param InterceptableValidator $interceptableValidator
+     * @since 2.1.0
      */
     public function __construct(InterceptableValidator $interceptableValidator)
     {
@@ -28,6 +35,7 @@ class InheritanceInterceptorScanner implements ScannerInterface
      * @param array $classes
      * @param array $interceptedEntities
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $classes, array $interceptedEntities = [])
     {
@@ -53,6 +61,7 @@ class InheritanceInterceptorScanner implements ScannerInterface
      *
      * @param string[] $interceptedEntities
      * @return string[]
+     * @since 2.0.0
      */
     private function filterOutAbstractClasses($interceptedEntities)
     {

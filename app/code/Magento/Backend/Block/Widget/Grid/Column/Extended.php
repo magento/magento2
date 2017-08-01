@@ -7,13 +7,15 @@ namespace Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
     {

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 /**
  * Estimate index memory size for simple product.
  * Size depends on websites and customer groups count.
+ * @since 2.2.0
  */
 class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface
 {
@@ -19,11 +20,13 @@ class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTabl
 
     /**
      * @var \Magento\Store\Api\WebsiteManagementInterface
+     * @since 2.2.0
      */
     private $websiteManagement;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Group\CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -31,6 +34,7 @@ class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTabl
      * CompositeProductBatchSizeCalculator constructor.
      * @param \Magento\Store\Api\WebsiteManagementInterface $websiteManagement
      * @param \Magento\Customer\Model\ResourceModel\Group\CollectionFactory $collectionFactory
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Api\WebsiteManagementInterface $websiteManagement,
@@ -42,6 +46,7 @@ class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTabl
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function estimateRowSize()
     {

@@ -13,6 +13,7 @@ use Magento\SalesRule\Api\Data\ConditionInterface;
  * Class Condition
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\ConditionInterface
@@ -28,6 +29,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Get condition type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConditionType()
     {
@@ -37,6 +39,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     /**
      * @param string $conditionType
      * @return $this
+     * @since 2.0.0
      */
     public function setConditionType($conditionType)
     {
@@ -47,6 +50,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Return list of conditions
      *
      * @return ConditionInterface[]|null
+     * @since 2.0.0
      */
     public function getConditions()
     {
@@ -58,6 +62,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param ConditionInterface[]|null $conditions
      * @return $this
+     * @since 2.0.0
      */
     public function setConditions(array $conditions = null)
     {
@@ -68,6 +73,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Return the aggregator type
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAggregatorType()
     {
@@ -79,6 +85,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param string $aggregatorType
      * @return $this
+     * @since 2.0.0
      */
     public function setAggregatorType($aggregatorType)
     {
@@ -89,6 +96,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Return the operator of the condition
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOperator()
     {
@@ -100,6 +108,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param string $operator
      * @return $this
+     * @since 2.0.0
      */
     public function setOperator($operator)
     {
@@ -110,6 +119,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Return the attribute name of the condition
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttributeName()
     {
@@ -121,6 +131,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param string $attributeName
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeName($attributeName)
     {
@@ -131,6 +142,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * Return the value of the condition
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -142,6 +154,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -152,6 +165,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * {@inheritdoc}
      *
      * @return \Magento\SalesRule\Api\Data\ConditionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -163,6 +177,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      *
      * @param \Magento\SalesRule\Api\Data\ConditionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\ConditionExtensionInterface $extensionAttributes

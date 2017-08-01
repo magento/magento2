@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Description\Mixin;
 
 /**
  * Create mixin instance based on type
+ * @since 2.2.0
  */
 class MixinFactory
 {
@@ -23,6 +24,7 @@ class MixinFactory
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $typeClassMap = [
         self::SPAN_MIXIN => SpanMixin::class,
@@ -35,12 +37,14 @@ class MixinFactory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @throws \Magento\Setup\Exception
+     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -53,6 +57,7 @@ class MixinFactory
      * @param string $mixinType
      * @return \Magento\Setup\Model\Description\Mixin\DescriptionMixinInterface
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function create($mixinType)
     {

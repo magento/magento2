@@ -9,15 +9,22 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+/**
+ * Class \Magento\Theme\Model\Theme\SingleFile
+ *
+ * @since 2.0.0
+ */
 class SingleFile
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\Customization\FileInterface
+     * @since 2.0.0
      */
     protected $_fileService;
 
     /**
      * @param \Magento\Framework\View\Design\Theme\Customization\FileInterface $fileService
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\View\Design\Theme\Customization\FileInterface $fileService)
     {
@@ -30,6 +37,7 @@ class SingleFile
      * @param \Magento\Framework\View\Design\ThemeInterface $themeModel
      * @param string $fileContent
      * @return \Magento\Framework\View\Design\Theme\FileInterface
+     * @since 2.0.0
      */
     public function update(\Magento\Framework\View\Design\ThemeInterface $themeModel, $fileContent)
     {

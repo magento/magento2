@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\FileResolver;
 /**
  * Utility class for populating an autoloader with application-specific information for PSR-0 and PSR-4 mappings
  * and include-path contents
+ * @since 2.0.0
  */
 class Populator
 {
@@ -18,6 +19,7 @@ class Populator
      * @param AutoloaderInterface $autoloader
      * @param DirectoryList $dirList
      * @return void
+     * @since 2.0.0
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {

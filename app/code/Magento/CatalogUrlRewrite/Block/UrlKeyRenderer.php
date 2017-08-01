@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Renderer for URL key input
  * Allows to manage and overwrite URL Rewrites History save settings
+ * @since 2.0.0
  */
 class UrlKeyRenderer extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
@@ -17,6 +18,7 @@ class UrlKeyRenderer extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fiel
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Factory
+     * @since 2.0.0
      */
     protected $_elementFactory;
 
@@ -24,6 +26,7 @@ class UrlKeyRenderer extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fiel
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,6 +39,7 @@ class UrlKeyRenderer extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fiel
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

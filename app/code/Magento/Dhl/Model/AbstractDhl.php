@@ -7,6 +7,11 @@ namespace Magento\Dhl\Model;
 
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 
+/**
+ * Class \Magento\Dhl\Model\AbstractDhl
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractDhl extends AbstractCarrierOnline
 {
     /**
@@ -28,6 +33,7 @@ abstract class AbstractDhl extends AbstractCarrierOnline
      * Get shipping date
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getShipDate()
     {
@@ -40,6 +46,7 @@ abstract class AbstractDhl extends AbstractCarrierOnline
      * @param string[] $shippingDays
      * @param string $date
      * @return string
+     * @since 2.0.0
      */
     protected function _determineShippingDay($shippingDays, $date)
     {

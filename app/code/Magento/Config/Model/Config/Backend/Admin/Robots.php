@@ -13,17 +13,20 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * @deprecated robots.txt file is no longer stored in filesystem. It generates as response on request.
+ * @deprecated 2.2.0 robots.txt file is no longer stored in filesystem. It generates as response on request.
+ * @since 2.0.0
  */
 class Robots extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
+     * @since 2.0.0
      */
     protected $_directory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_file;
 
@@ -37,6 +40,7 @@ class Robots extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param DocumentRoot $documentRoot
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -60,6 +64,7 @@ class Robots extends \Magento\Framework\App\Config\Value
      * Return content of default robot.txt
      *
      * @return bool|string
+     * @since 2.0.0
      */
     protected function _getDefaultValue()
     {
@@ -73,6 +78,7 @@ class Robots extends \Magento\Framework\App\Config\Value
      * Load default content from robots.txt if customer does not define own
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -87,6 +93,7 @@ class Robots extends \Magento\Framework\App\Config\Value
      * Check and process robots file
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

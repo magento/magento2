@@ -10,11 +10,13 @@ namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory
+     * @since 2.0.0
      */
     protected $_lowstocksFactory;
 
@@ -23,6 +25,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,6 +39,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {

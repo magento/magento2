@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\ProductOptionInterface;
 
 /**
  * Product option entity
+ * @since 2.0.0
  */
 class ProductOption extends AbstractExtensibleModel implements ProductOptionInterface
 {
@@ -17,6 +18,7 @@ class ProductOption extends AbstractExtensibleModel implements ProductOptionInte
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\ProductOptionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -28,6 +30,7 @@ class ProductOption extends AbstractExtensibleModel implements ProductOptionInte
      *
      * @param \Magento\Quote\Api\Data\ProductOptionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\ProductOptionExtensionInterface $extensionAttributes

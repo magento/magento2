@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Frontend\Decorator;
  * Cache frontend decorator that limits the cleaning scope within a tag
  *
  * @api
+ * @since 2.0.0
  */
 class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {
@@ -17,12 +18,14 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Tag to associate cache entries with
      *
      * @var string
+     * @since 2.0.0
      */
     private $_tag;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $frontend
      * @param string $tag Cache tag name
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Cache\FrontendInterface $frontend, $tag)
     {
@@ -34,6 +37,7 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Retrieve cache tag name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTag()
     {
@@ -44,6 +48,7 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Enforce marking with a tag
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -55,6 +60,7 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      * Limit the cleaning scope within a tag
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {

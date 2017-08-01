@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface CdataInterface
+ * @since 2.0.0
  */
 interface CdataInterface
 {
@@ -18,6 +19,7 @@ interface CdataInterface
      * @param \DOMCdataSection $node
      * @param DataObject $processedObject
      * @return void
+     * @since 2.0.0
      */
     public function compile(\DOMCdataSection $node, DataObject $processedObject);
 }

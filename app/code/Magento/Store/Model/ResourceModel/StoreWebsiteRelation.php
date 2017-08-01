@@ -9,15 +9,20 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Store Website Relation Resource Model
+ * @since 2.2.0
  */
 class StoreWebsiteRelation
 {
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
+     */
     private $resource;
 
     /**
      * StoreWebsiteRelation constructor.
      * @param ResourceConnection $resource
+     * @since 2.2.0
      */
     public function __construct(ResourceConnection $resource)
     {
@@ -27,6 +32,7 @@ class StoreWebsiteRelation
     /**
      * @param int $websiteId
      * @return array
+     * @since 2.2.0
      */
     public function getStoreByWebsiteId($websiteId)
     {

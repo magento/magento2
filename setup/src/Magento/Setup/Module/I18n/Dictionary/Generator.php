@@ -10,6 +10,7 @@ use Magento\Setup\Module\I18n\ParserInterface;
 
 /**
  * Dictionary generator
+ * @since 2.0.0
  */
 class Generator
 {
@@ -17,6 +18,7 @@ class Generator
      * Parser
      *
      * @var \Magento\Setup\Module\I18n\ParserInterface
+     * @since 2.0.0
      */
     protected $parser;
 
@@ -24,6 +26,7 @@ class Generator
      * Contextual parser
      *
      * @var \Magento\Setup\Module\I18n\ParserInterface
+     * @since 2.0.0
      */
     protected $contextualParser;
 
@@ -31,6 +34,7 @@ class Generator
      * Domain abstract factory
      *
      * @var \Magento\Setup\Module\I18n\Factory
+     * @since 2.0.0
      */
     protected $factory;
 
@@ -38,11 +42,13 @@ class Generator
      * Generator options resolver
      *
      * @var Options\ResolverFactory
+     * @since 2.0.0
      */
     protected $optionResolverFactory;
 
     /**
      * @var WriterInterface
+     * @since 2.0.0
      */
     protected $writer;
 
@@ -53,6 +59,7 @@ class Generator
      * @param ParserInterface $contextualParser
      * @param Factory $factory
      * @param Options\ResolverFactory $optionsResolver
+     * @since 2.0.0
      */
     public function __construct(
         ParserInterface $parser,
@@ -74,6 +81,7 @@ class Generator
      * @param bool $withContext
      * @throws \UnexpectedValueException
      * @return void
+     * @since 2.0.0
      */
     public function generate($directory, $outputFilename, $withContext = false)
     {
@@ -95,6 +103,7 @@ class Generator
     /**
      * @param string $outputFilename
      * @return WriterInterface
+     * @since 2.0.0
      */
     protected function getDictionaryWriter($outputFilename)
     {
@@ -109,6 +118,7 @@ class Generator
      *
      * @param bool $withContext
      * @return \Magento\Setup\Module\I18n\ParserInterface
+     * @since 2.0.0
      */
     protected function getActualParser($withContext)
     {

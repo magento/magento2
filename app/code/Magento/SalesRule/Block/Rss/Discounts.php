@@ -10,21 +10,25 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 
 /**
  * Review form block
+ * @since 2.0.0
  */
 class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\SalesRule\Model\Rss\Discounts
+     * @since 2.0.0
      */
     protected $rssModel;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -34,6 +38,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
      * @param \Magento\SalesRule\Model\Rss\Discounts $rssModel
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -51,6 +56,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +66,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -113,6 +120,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
      * Get customer group id
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getCustomerGroupId()
     {
@@ -125,6 +133,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * @return int
+     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -137,6 +146,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -145,6 +155,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -156,6 +167,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -173,6 +185,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAuthRequired()
     {

@@ -11,21 +11,29 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
+ *
+ * @since 2.0.0
+ */
 class IndexScopeResolver implements IndexScopeResolverInterface
 {
     /**
      * @var Resource
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var ScopeResolverInterface
+     * @since 2.0.0
      */
     private $scopeResolver;
 
     /**
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -39,6 +47,7 @@ class IndexScopeResolver implements IndexScopeResolverInterface
      * @param string $index
      * @param Dimension[] $dimensions
      * @return string
+     * @since 2.0.0
      */
     public function resolve($index, array $dimensions)
     {
@@ -61,6 +70,7 @@ class IndexScopeResolver implements IndexScopeResolverInterface
      *
      * @param Dimension $dimension
      * @return int
+     * @since 2.0.0
      */
     private function getScopeId($dimension)
     {

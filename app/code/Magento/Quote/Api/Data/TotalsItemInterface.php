@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface TotalsItemInterface
  * @api
+ * @since 2.0.0
  */
 interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -127,6 +128,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setItemId($id);
 
@@ -134,6 +136,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get totals item id
      *
      * @return int Item id
+     * @since 2.0.0
      */
     public function getItemId();
 
@@ -141,6 +144,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the item price in quote currency.
      *
      * @return float Item price in quote currency.
+     * @since 2.0.0
      */
     public function getPrice();
 
@@ -149,6 +153,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -156,6 +161,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the item price in base currency.
      *
      * @return float Item price in base currency.
+     * @since 2.0.0
      */
     public function getBasePrice();
 
@@ -164,6 +170,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $basePrice
      * @return $this
+     * @since 2.0.0
      */
     public function setBasePrice($basePrice);
 
@@ -171,6 +178,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the item quantity.
      *
      * @return float Item quantity.
+     * @since 2.0.0
      */
     public function getQty();
 
@@ -179,6 +187,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -186,6 +195,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the row total in quote currency.
      *
      * @return float Row total in quote currency.
+     * @since 2.0.0
      */
     public function getRowTotal();
 
@@ -194,6 +204,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rowTotal
      * @return $this
+     * @since 2.0.0
      */
     public function setRowTotal($rowTotal);
 
@@ -201,6 +212,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the row total in base currency.
      *
      * @return float Row total in base currency.
+     * @since 2.0.0
      */
     public function getBaseRowTotal();
 
@@ -209,6 +221,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseRowTotal
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseRowTotal($baseRowTotal);
 
@@ -216,6 +229,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the row total with discount in quote currency.
      *
      * @return float|null Row total with discount in quote currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getRowTotalWithDiscount();
 
@@ -224,6 +238,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rowTotalWithDiscount
      * @return $this
+     * @since 2.0.0
      */
     public function setRowTotalWithDiscount($rowTotalWithDiscount);
 
@@ -231,6 +246,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the tax amount in quote currency.
      *
      * @return float|null Tax amount in quote currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getTaxAmount();
 
@@ -239,6 +255,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $taxAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxAmount($taxAmount);
 
@@ -246,6 +263,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the tax amount in base currency.
      *
      * @return float|null Tax amount in base currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getBaseTaxAmount();
 
@@ -254,6 +272,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseTaxAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxAmount($baseTaxAmount);
 
@@ -261,6 +280,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the tax percent.
      *
      * @return float|null Tax percent. Otherwise, null.
+     * @since 2.0.0
      */
     public function getTaxPercent();
 
@@ -269,6 +289,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $taxPercent
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxPercent($taxPercent);
 
@@ -276,6 +297,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the discount amount in quote currency.
      *
      * @return float|null Discount amount in quote currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getDiscountAmount();
 
@@ -284,6 +306,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $discountAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountAmount($discountAmount);
 
@@ -291,6 +314,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the discount amount in base currency.
      *
      * @return float|null Discount amount in base currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getBaseDiscountAmount();
 
@@ -299,6 +323,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseDiscountAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountAmount($baseDiscountAmount);
 
@@ -306,6 +331,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the discount percent.
      *
      * @return float|null Discount percent. Otherwise, null.
+     * @since 2.0.0
      */
     public function getDiscountPercent();
 
@@ -314,6 +340,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $discountPercent
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountPercent($discountPercent);
 
@@ -321,6 +348,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the price including tax in quote currency.
      *
      * @return float|null Price including tax in quote currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getPriceInclTax();
 
@@ -329,6 +357,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $priceInclTax
      * @return $this
+     * @since 2.0.0
      */
     public function setPriceInclTax($priceInclTax);
 
@@ -336,6 +365,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the price including tax in base currency.
      *
      * @return float|null Price including tax in base currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getBasePriceInclTax();
 
@@ -344,6 +374,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $basePriceInclTax
      * @return $this
+     * @since 2.0.0
      */
     public function setBasePriceInclTax($basePriceInclTax);
 
@@ -351,6 +382,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the row total including tax in quote currency.
      *
      * @return float|null Row total including tax in quote currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getRowTotalInclTax();
 
@@ -359,6 +391,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $rowTotalInclTax
      * @return $this
+     * @since 2.0.0
      */
     public function setRowTotalInclTax($rowTotalInclTax);
 
@@ -366,6 +399,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the row total including tax in base currency.
      *
      * @return float|null Row total including tax in base currency. Otherwise, null.
+     * @since 2.0.0
      */
     public function getBaseRowTotalInclTax();
 
@@ -374,6 +408,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $baseRowTotalInclTax
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseRowTotalInclTax($baseRowTotalInclTax);
 
@@ -381,6 +416,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the item options data.
      *
      * @return string Item price in quote currency.
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -389,6 +425,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions($options);
 
@@ -396,6 +433,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the item weee tax applied amount in quote currency.
      *
      * @return float Item weee tax applied amount in quote currency.
+     * @since 2.0.0
      */
     public function getWeeeTaxAppliedAmount();
 
@@ -404,6 +442,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $weeeTaxAppliedAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
 
@@ -411,6 +450,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the item weee tax applied in quote currency.
      *
      * @return string Item weee tax applied in quote currency.
+     * @since 2.0.0
      */
     public function getWeeeTaxApplied();
 
@@ -419,6 +459,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $weeeTaxApplied
      * @return $this
+     * @since 2.0.0
      */
     public function setWeeeTaxApplied($weeeTaxApplied);
 
@@ -426,6 +467,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\TotalsItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -433,6 +475,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Returns the product name.
      *
      * @return string|null Product name. Otherwise, null.
+     * @since 2.0.0
      */
     public function getName();
 
@@ -441,6 +484,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -449,6 +493,7 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Quote\Api\Data\TotalsItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\TotalsItemExtensionInterface $extensionAttributes);
 }

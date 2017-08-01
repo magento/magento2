@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -19,6 +20,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Shipping rates
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_rates;
 
@@ -26,11 +28,13 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxData = null;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -41,6 +45,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,6 +63,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,6 +75,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve quote shipping address model
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -79,6 +86,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve array of shipping rates groups
      *
      * @return array
+     * @since 2.0.0
      */
     public function getShippingRates()
     {
@@ -93,6 +101,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param string $carrierCode
      * @return string
+     * @since 2.0.0
      */
     public function getCarrierName($carrierCode)
     {
@@ -111,6 +120,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve current selected shipping method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShippingMethod()
     {
@@ -122,6 +132,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param string $code
      * @return bool
+     * @since 2.0.0
      */
     public function isMethodActive($code)
     {
@@ -132,6 +143,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve rate of active shipping method
      *
      * @return \Magento\Quote\Model\Quote\Address\Rate|false
+     * @since 2.0.0
      */
     public function getActiveMethodRate()
     {
@@ -152,6 +164,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get rate request
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getIsRateRequest()
     {
@@ -164,6 +177,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param float $price
      * @param bool $flag
      * @return float
+     * @since 2.0.0
      */
     public function getShippingPrice($price, $flag)
     {

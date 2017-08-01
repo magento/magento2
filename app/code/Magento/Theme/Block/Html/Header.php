@@ -10,6 +10,7 @@ namespace Magento\Theme\Block\Html;
  * Html page header block
  *
  * @api
+ * @since 2.0.0
  */
 class Header extends \Magento\Framework\View\Element\Template
 {
@@ -17,6 +18,7 @@ class Header extends \Magento\Framework\View\Element\Template
      * Current template name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'html/header.phtml';
 
@@ -24,6 +26,7 @@ class Header extends \Magento\Framework\View\Element\Template
      * Retrieve welcome text
      *
      * @return string
+     * @since 2.0.0
      */
     public function getWelcome()
     {

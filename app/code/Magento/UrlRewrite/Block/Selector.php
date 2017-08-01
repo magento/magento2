@@ -5,6 +5,11 @@
  */
 namespace Magento\UrlRewrite\Block;
 
+/**
+ * Class \Magento\UrlRewrite\Block\Selector
+ *
+ * @since 2.0.0
+ */
 class Selector extends \Magento\Backend\Block\Template
 {
     /**
@@ -12,11 +17,13 @@ class Selector extends \Magento\Backend\Block\Template
      * key => label
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_modes;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'selector.phtml';
 
@@ -24,6 +31,7 @@ class Selector extends \Magento\Backend\Block\Template
      * Set block template and get available modes
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,6 +47,7 @@ class Selector extends \Magento\Backend\Block\Template
      * Available modes getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getModes()
     {
@@ -49,6 +58,7 @@ class Selector extends \Magento\Backend\Block\Template
      * Label getter
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getSelectorLabel()
     {
@@ -60,6 +70,7 @@ class Selector extends \Magento\Backend\Block\Template
      *
      * @param string $mode
      * @return bool
+     * @since 2.0.0
      */
     public function isMode($mode)
     {
@@ -70,6 +81,7 @@ class Selector extends \Magento\Backend\Block\Template
      * Get default mode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultMode()
     {
@@ -82,6 +94,7 @@ class Selector extends \Magento\Backend\Block\Template
      *
      * @param string $mode
      * @return string
+     * @since 2.2.0
      */
     public function getModeUrl($mode)
     {

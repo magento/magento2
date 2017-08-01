@@ -14,51 +14,61 @@ use Magento\Framework\DB\Select;
  *
  * Responsible for Select object creation, works as a builder. Returns Select as result;
  * Used in SQL assemblers.
+ * @since 2.2.0
  */
 class SelectBuilder
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $connectionName;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $from;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $group = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $columns = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $filters = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $joins = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $params = [];
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $having = [];
 
@@ -66,6 +76,7 @@ class SelectBuilder
      * SelectBuilder constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection
@@ -77,6 +88,7 @@ class SelectBuilder
      * Get join condition
      *
      * @return array
+     * @since 2.2.0
      */
     public function getJoins()
     {
@@ -88,6 +100,7 @@ class SelectBuilder
      *
      * @param array $joins
      * @return void
+     * @since 2.2.0
      */
     public function setJoins($joins)
     {
@@ -98,6 +111,7 @@ class SelectBuilder
      * Get connection name
      *
      * @return string
+     * @since 2.2.0
      */
     public function getConnectionName()
     {
@@ -109,6 +123,7 @@ class SelectBuilder
      *
      * @param string $connectionName
      * @return void
+     * @since 2.2.0
      */
     public function setConnectionName($connectionName)
     {
@@ -119,6 +134,7 @@ class SelectBuilder
      * Get columns
      *
      * @return array
+     * @since 2.2.0
      */
     public function getColumns()
     {
@@ -130,6 +146,7 @@ class SelectBuilder
      *
      * @param array $columns
      * @return void
+     * @since 2.2.0
      */
     public function setColumns($columns)
     {
@@ -140,6 +157,7 @@ class SelectBuilder
      * Get filters
      *
      * @return array
+     * @since 2.2.0
      */
     public function getFilters()
     {
@@ -151,6 +169,7 @@ class SelectBuilder
      *
      * @param array $filters
      * @return void
+     * @since 2.2.0
      */
     public function setFilters($filters)
     {
@@ -161,6 +180,7 @@ class SelectBuilder
      * Get from condition
      *
      * @return array
+     * @since 2.2.0
      */
     public function getFrom()
     {
@@ -172,6 +192,7 @@ class SelectBuilder
      *
      * @param array $from
      * @return void
+     * @since 2.2.0
      */
     public function setFrom($from)
     {
@@ -184,6 +205,7 @@ class SelectBuilder
      * @param Select $select
      * @param array $joinConfig
      * @return Select
+     * @since 2.2.0
      */
     private function processJoin(Select $select, $joinConfig)
     {
@@ -205,6 +227,7 @@ class SelectBuilder
      * Creates Select object
      *
      * @return Select
+     * @since 2.2.0
      */
     public function create()
     {
@@ -228,6 +251,7 @@ class SelectBuilder
      * Returns group
      *
      * @return array
+     * @since 2.2.0
      */
     public function getGroup()
     {
@@ -239,6 +263,7 @@ class SelectBuilder
      *
      * @param array $group
      * @return void
+     * @since 2.2.0
      */
     public function setGroup($group)
     {
@@ -249,6 +274,7 @@ class SelectBuilder
      * Get parameters
      *
      * @return array
+     * @since 2.2.0
      */
     public function getParams()
     {
@@ -260,6 +286,7 @@ class SelectBuilder
      *
      * @param array $params
      * @return void
+     * @since 2.2.0
      */
     public function setParams($params)
     {
@@ -270,6 +297,7 @@ class SelectBuilder
      * Get having condition
      *
      * @return array
+     * @since 2.2.0
      */
     public function getHaving()
     {
@@ -281,6 +309,7 @@ class SelectBuilder
      *
      * @param array $having
      * @return void
+     * @since 2.2.0
      */
     public function setHaving($having)
     {

@@ -10,6 +10,7 @@ namespace Magento\Eav\Model\ResourceModel\Form\Attribute;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,6 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Current module pathname
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_moduleName = '';
 
@@ -24,6 +26,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Current EAV entity type code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityTypeCode = '';
 
@@ -31,6 +34,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Current store instance
      *
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_store;
 
@@ -38,16 +42,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Eav Entity Type instance
      *
      * @var \Magento\Eav\Model\Entity\Type
+     * @since 2.0.0
      */
     protected $_entityType;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -61,6 +68,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -82,6 +90,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -103,6 +112,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return string|null
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _getEavWebsiteTable()
     {
@@ -115,6 +125,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -126,6 +137,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return current store instance
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -141,6 +153,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Eav\Model\Entity\Type|string|int $entityType
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setEntityType($entityType)
     {
@@ -152,6 +165,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return current entity type instance
      *
      * @return \Magento\Eav\Model\Entity\Type
+     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -167,6 +181,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $code
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function addFormCodeFilter($code)
     {
@@ -178,6 +193,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $direction
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($direction = self::SORT_ORDER_ASC)
     {
@@ -189,6 +205,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add joins to select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeLoad()
     {

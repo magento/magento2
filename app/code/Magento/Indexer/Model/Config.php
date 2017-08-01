@@ -7,15 +7,22 @@ namespace Magento\Indexer\Model;
 
 use Magento\Framework\Indexer\ConfigInterface;
 
+/**
+ * Class \Magento\Indexer\Model\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements ConfigInterface
 {
     /**
      * @var Config\Data
+     * @since 2.0.0
      */
     protected $configData;
 
     /**
      * @param Config\Data $configData
+     * @since 2.0.0
      */
     public function __construct(Config\Data $configData)
     {
@@ -26,6 +33,7 @@ class Config implements ConfigInterface
      * Get indexers list
      *
      * @return array[]
+     * @since 2.0.0
      */
     public function getIndexers()
     {
@@ -37,6 +45,7 @@ class Config implements ConfigInterface
      *
      * @param string $indexerId
      * @return array
+     * @since 2.0.0
      */
     public function getIndexer($indexerId)
     {

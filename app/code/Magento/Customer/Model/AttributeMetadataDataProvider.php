@@ -10,21 +10,25 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Attribute Metadata data provider class
+ * @since 2.0.0
  */
 class AttributeMetadataDataProvider
 {
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     private $eavConfig;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Form\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     private $attrFormCollectionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManager
+     * @since 2.0.0
      */
     private $storeManager;
 
@@ -34,6 +38,7 @@ class AttributeMetadataDataProvider
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\ResourceModel\Form\Attribute\CollectionFactory $attrFormCollectionFactory
      * @param \Magento\Store\Model\StoreManager $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
@@ -51,6 +56,7 @@ class AttributeMetadataDataProvider
      * @param string $entityType
      * @param string $attributeCode
      * @return false|AbstractAttribute
+     * @since 2.0.0
      */
     public function getAttribute($entityType, $attributeCode)
     {
@@ -64,6 +70,7 @@ class AttributeMetadataDataProvider
      * @param int $attributeSetId
      * @param string|null $storeId
      * @return array Attribute codes
+     * @since 2.0.0
      */
     public function getAllAttributeCodes($entityType, $attributeSetId = 0, $storeId = null)
     {
@@ -85,6 +92,7 @@ class AttributeMetadataDataProvider
      * @param string $entityType
      * @param string $formCode
      * @return \Magento\Customer\Model\ResourceModel\Form\Attribute\Collection
+     * @since 2.0.0
      */
     public function loadAttributesCollection($entityType, $formCode)
     {

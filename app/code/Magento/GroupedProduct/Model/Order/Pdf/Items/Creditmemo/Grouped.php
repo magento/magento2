@@ -7,12 +7,18 @@
  */
 namespace Magento\GroupedProduct\Model\Order\Pdf\Items\Creditmemo;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Order\Pdf\Items\Creditmemo\Grouped
+ *
+ * @since 2.0.0
+ */
 class Grouped extends \Magento\Sales\Model\Order\Pdf\Items\Creditmemo\DefaultCreditmemo
 {
     /**
      * Draw process
      *
      * @return void
+     * @since 2.0.0
      */
     public function draw()
     {

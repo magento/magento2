@@ -7,11 +7,13 @@ namespace Magento\LayeredNavigation\Model\Attribute\Source;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class FilterableOptions implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

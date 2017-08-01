@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Theme customization interface
+ * @since 2.0.0
  */
 interface CustomizationInterface
 {
@@ -14,6 +15,7 @@ interface CustomizationInterface
      * Retrieve list of files which belong to a theme
      *
      * @return \Magento\Framework\View\Design\Theme\Customization\FileInterface[]
+     * @since 2.0.0
      */
     public function getFiles();
 
@@ -22,6 +24,7 @@ interface CustomizationInterface
      *
      * @param string $type
      * @return \Magento\Framework\View\Design\Theme\Customization\FileInterface[]
+     * @since 2.0.0
      */
     public function getFilesByType($type);
 
@@ -29,6 +32,7 @@ interface CustomizationInterface
      * Returns customization absolute path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomizationPath();
 
@@ -36,6 +40,7 @@ interface CustomizationInterface
      * Get directory where themes files are stored
      *
      * @return string
+     * @since 2.0.0
      */
     public function getThemeFilesPath();
 
@@ -43,6 +48,7 @@ interface CustomizationInterface
      * Get path to custom view configuration file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomViewConfigPath();
 
@@ -52,6 +58,7 @@ interface CustomizationInterface
      * @param string $type
      * @param array $sequence
      * @return CustomizationInterface
+     * @since 2.0.0
      */
     public function reorder($type, array $sequence);
 
@@ -60,6 +67,7 @@ interface CustomizationInterface
      *
      * @param array $fileIds
      * @return $this
+     * @since 2.0.0
      */
     public function delete(array $fileIds);
 }

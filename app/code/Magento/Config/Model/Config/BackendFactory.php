@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class BackendFactory
 {
@@ -14,11 +15,13 @@ class BackendFactory
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectmanager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectmanager)
     {
@@ -32,6 +35,7 @@ class BackendFactory
      * @param array $arguments The object arguments
      * @return \Magento\Framework\App\Config\ValueInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($modelName, array $arguments = [])
     {

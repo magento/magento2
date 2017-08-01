@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Radios
+ *
+ * @since 2.0.0
+ */
 class Radios extends AbstractElement
 {
     /**
@@ -20,6 +25,7 @@ class Radios extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -33,6 +39,7 @@ class Radios extends AbstractElement
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -51,6 +58,7 @@ class Radios extends AbstractElement
      * @param array $option
      * @param array $selected
      * @return string
+     * @since 2.0.0
      */
     protected function _optionToHtml($option, $selected)
     {
@@ -91,6 +99,7 @@ class Radios extends AbstractElement
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -100,6 +109,7 @@ class Radios extends AbstractElement
     /**
      * @param array $option
      * @return string
+     * @since 2.0.0
      */
     protected function getRadioButtonAttributes($option)
     {

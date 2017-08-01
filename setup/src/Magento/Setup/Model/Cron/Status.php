@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem;
  * Current status can be seen on the update app web page.
  *
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @since 2.0.0
  */
 class Status
 {
@@ -24,6 +25,7 @@ class Status
      * Path to a file, which content is displayed on the update web page.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $statusFilePath;
 
@@ -33,6 +35,7 @@ class Status
      * Note that it can be cleared only manually, it is not cleared by clear() method.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $logFilePath;
 
@@ -40,6 +43,7 @@ class Status
      * Path to a flag, which exists when update app is running.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $updateInProgressFlagFilePath;
 
@@ -47,16 +51,19 @@ class Status
      * Path to a flag, which exists when error occurred during update app execution.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $updateErrorFlagFilePath;
 
     /**
      * @var Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $varReaderWriter;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.1.0
      */
     private $logger;
 
@@ -69,6 +76,7 @@ class Status
      * @param string $logFilePath
      * @param string $updateInProgressFlagFilePath
      * @param string $updateErrorFlagFilePath
+     * @since 2.0.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -94,6 +102,7 @@ class Status
      * Get status file path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatusFilePath()
     {
@@ -104,6 +113,7 @@ class Status
      * Get log file path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLogFilePath()
     {
@@ -121,6 +131,7 @@ class Status
      *
      * @return $this
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function add($text, $severity = \Psr\Log\LogLevel::INFO, $writeToStatusFile = true)
     {
@@ -140,6 +151,7 @@ class Status
      * @param string $filePath
      * @return $this
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function writeMessageToFile($text, $filePath)
     {
@@ -162,6 +174,7 @@ class Status
      * Check if update application is running.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isUpdateInProgress()
     {
@@ -173,6 +186,7 @@ class Status
      *
      * @param bool $isInProgress
      * @return $this
+     * @since 2.0.0
      */
     public function toggleUpdateInProgress($isInProgress = true)
     {
@@ -183,6 +197,7 @@ class Status
      * Check if error has occurred during update application execution.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isUpdateError()
     {
@@ -194,6 +209,7 @@ class Status
      *
      * @param bool $isErrorOccurred
      * @return $this
+     * @since 2.0.0
      */
     public function toggleUpdateError($isErrorOccurred = true)
     {
@@ -206,6 +222,7 @@ class Status
      * @param string $pathToFlagFile
      * @param bool $value
      * @return $this
+     * @since 2.0.0
      */
     protected function setFlagValue($pathToFlagFile, $value)
     {

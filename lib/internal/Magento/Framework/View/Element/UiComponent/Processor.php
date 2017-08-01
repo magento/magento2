@@ -9,11 +9,13 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Processor
+ * @since 2.0.0
  */
 class Processor implements PoolInterface, SubjectInterface
 {
     /**
      * @var UiComponentInterface[]
+     * @since 2.0.0
      */
     protected $components = [];
 
@@ -26,11 +28,13 @@ class Processor implements PoolInterface, SubjectInterface
      * ]
      *
      * @var array
+     * @since 2.0.0
      */
     protected $observers = [];
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function register(UiComponentInterface $component)
     {
@@ -39,6 +43,7 @@ class Processor implements PoolInterface, SubjectInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getComponents()
     {
@@ -47,6 +52,7 @@ class Processor implements PoolInterface, SubjectInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function attach($type, ObserverInterface $observer)
     {
@@ -55,6 +61,7 @@ class Processor implements PoolInterface, SubjectInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function detach($type, ObserverInterface $observer)
     {
@@ -70,6 +77,7 @@ class Processor implements PoolInterface, SubjectInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function notify($type)
     {
@@ -96,6 +104,7 @@ class Processor implements PoolInterface, SubjectInterface
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     protected function normalizeType($type)
     {

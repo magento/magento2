@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Coupons;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -17,6 +18,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get coupon code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCouponCode()
     {

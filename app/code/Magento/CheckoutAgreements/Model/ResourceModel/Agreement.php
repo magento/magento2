@@ -7,11 +7,13 @@ namespace Magento\CheckoutAgreements\Model\ResourceModel;
 
 /**
  * Resource Model for Checkout Agreement
+ * @since 2.0.0
  */
 class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
      */
     protected $filterManager;
 
@@ -20,6 +22,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param string $connectionName
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -35,6 +38,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,6 +50,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -67,6 +72,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -91,6 +97,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -115,6 +122,7 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {

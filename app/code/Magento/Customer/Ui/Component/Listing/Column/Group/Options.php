@@ -10,16 +10,19 @@ use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Class Options
+ * @since 2.0.0
  */
 class Options implements OptionSourceInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -27,6 +30,7 @@ class Options implements OptionSourceInterface
      * Constructor
      *
      * @param CollectionFactory $collectionFactory
+     * @since 2.0.0
      */
     public function __construct(CollectionFactory $collectionFactory)
     {
@@ -37,6 +41,7 @@ class Options implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

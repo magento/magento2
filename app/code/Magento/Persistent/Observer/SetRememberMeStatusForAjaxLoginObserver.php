@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Persistent Session Observer
+ * @since 2.0.0
  */
 class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
 {
@@ -18,6 +19,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession;
 
@@ -25,11 +27,13 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData = null;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -40,6 +44,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
@@ -57,6 +62,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

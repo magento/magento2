@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template\Context as TemplateContext;
  * Class UiComponent
  *
  * Encapsulate UI Component to represent it as standard Layout Block
+ * @since 2.0.0
  */
 class UiComponent extends Template implements ContainerInterface
 {
@@ -21,11 +22,13 @@ class UiComponent extends Template implements ContainerInterface
      * Ui component
      *
      * @var UiComponentInterface
+     * @since 2.0.0
      */
     protected $component;
 
     /**
      * @var BlockFactory
+     * @since 2.0.0
      */
     protected $blockWrapperFactory;
 
@@ -36,6 +39,7 @@ class UiComponent extends Template implements ContainerInterface
      * @param UiComponentInterface $component
      * @param BlockFactory $blockWrapperFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         TemplateContext $context,
@@ -53,6 +57,7 @@ class UiComponent extends Template implements ContainerInterface
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

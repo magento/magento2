@@ -9,6 +9,7 @@ use Magento\Composer\MagentoComposerApplication;
 
 /**
  * Class to run composer remove command
+ * @since 2.0.0
  */
 class Remove
 {
@@ -16,6 +17,7 @@ class Remove
      * Composer application factory
      *
      * @var MagentoComposerApplicationFactory
+     * @since 2.0.0
      */
     private $composerApplicationFactory;
 
@@ -23,6 +25,7 @@ class Remove
      * Constructor
      *
      * @param MagentoComposerApplicationFactory $composerApplicationFactory
+     * @since 2.0.0
      */
     public function __construct(
         MagentoComposerApplicationFactory $composerApplicationFactory
@@ -37,6 +40,7 @@ class Remove
      * @throws \Exception
      *
      * @return string
+     * @since 2.0.0
      */
     public function remove(array $packages)
     {

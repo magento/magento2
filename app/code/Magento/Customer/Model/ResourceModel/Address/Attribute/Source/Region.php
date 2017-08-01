@@ -11,10 +11,16 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region
+ *
+ * @since 2.0.0
+ */
 class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     * @since 2.0.0
      */
     protected $_regionsFactory;
 
@@ -22,6 +28,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -36,6 +43,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * Retrieve all region options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -47,6 +55,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
+     * @since 2.0.0
      */
     protected function _createRegionsCollection()
     {

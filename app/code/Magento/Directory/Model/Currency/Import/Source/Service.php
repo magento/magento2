@@ -5,20 +5,28 @@
  */
 namespace Magento\Directory\Model\Currency\Import\Source;
 
+/**
+ * Class \Magento\Directory\Model\Currency\Import\Source\Service
+ *
+ * @since 2.0.0
+ */
 class Service implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\Config
+     * @since 2.0.0
      */
     private $_importConfig;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $_options;
 
     /**
      * @param \Magento\Directory\Model\Currency\Import\Config $importConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\Currency\Import\Config $importConfig)
     {
@@ -27,6 +35,7 @@ class Service implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

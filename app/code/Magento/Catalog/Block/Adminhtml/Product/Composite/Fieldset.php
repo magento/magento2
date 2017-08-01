@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
  * Adminhtml block for showing product options fieldsets
  *
  * @api
+ * @since 2.0.0
  */
 class Fieldset extends \Magento\Framework\View\Element\Text\ListText
 {
@@ -17,6 +18,7 @@ class Fieldset extends \Magento\Framework\View\Element\Text\ListText
      * Iterates through fieldsets and fetches complete html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

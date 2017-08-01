@@ -5,20 +5,28 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Class \Magento\Framework\Locale\Format
+ *
+ * @since 2.0.0
+ */
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.0.0
      */
     protected $_scopeResolver;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $currencyFactory;
 
@@ -26,6 +34,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
@@ -53,6 +62,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      *
      * @param string|float|int $value
      * @return float|null
+     * @since 2.0.0
      */
     public function getNumber($value)
     {
@@ -89,6 +99,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      * @param string $localeCode Locale code.
      * @param string $currencyCode Currency code.
      * @return array
+     * @since 2.0.0
      */
     public function getPriceFormat($localeCode = null, $currencyCode = null)
     {

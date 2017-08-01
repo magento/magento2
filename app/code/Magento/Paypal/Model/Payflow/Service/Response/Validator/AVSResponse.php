@@ -11,6 +11,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class AVSResponse
+ * @since 2.0.0
  */
 class AVSResponse implements ValidatorInterface
 {
@@ -56,6 +57,7 @@ class AVSResponse implements ValidatorInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $avsCheck = [
         'avsaddr' => 'avs_street',
@@ -64,6 +66,7 @@ class AVSResponse implements ValidatorInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $errorsMessages = [
         'avs_street' => 'AVS address does not match.',
@@ -76,6 +79,7 @@ class AVSResponse implements ValidatorInterface
      * @param DataObject|Object $response
      * @param Transparent $transparentModel
      * @return bool
+     * @since 2.0.0
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {

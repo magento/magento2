@@ -9,11 +9,13 @@ namespace Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelec
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Catalog\Helper\Product
+     * @since 2.0.0
      */
     protected $_productHelper;
 
@@ -21,6 +23,7 @@ class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -36,6 +39,7 @@ class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

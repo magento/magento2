@@ -9,6 +9,7 @@ namespace Magento\Framework\Message;
  * Messages collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection
 {
@@ -16,11 +17,13 @@ class Collection
      * All messages by type array
      *
      * @var MessageInterface[]
+     * @since 2.0.0
      */
     protected $messages = [];
 
     /**
      * @var MessageInterface
+     * @since 2.0.0
      */
     protected $lastAddedMessage;
 
@@ -29,6 +32,7 @@ class Collection
      *
      * @param MessageInterface $message
      * @return $this
+     * @since 2.0.0
      */
     public function addMessage(MessageInterface $message)
     {
@@ -44,6 +48,7 @@ class Collection
      * Clear all messages except sticky
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clear()
     {
@@ -68,6 +73,7 @@ class Collection
      * Get last added message if any
      *
      * @return MessageInterface|null
+     * @since 2.0.0
      */
     public function getLastAddedMessage()
     {
@@ -79,6 +85,7 @@ class Collection
      *
      * @param string $identifier
      * @return MessageInterface|void
+     * @since 2.0.0
      */
     public function getMessageByIdentifier($identifier)
     {
@@ -97,6 +104,7 @@ class Collection
      *
      * @param string $identifier
      * @return void
+     * @since 2.0.0
      */
     public function deleteMessageByIdentifier($identifier)
     {
@@ -117,6 +125,7 @@ class Collection
      * Retrieve messages collection items
      *
      * @return MessageInterface[]
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -133,6 +142,7 @@ class Collection
      *
      * @param string $type
      * @return MessageInterface[]
+     * @since 2.0.0
      */
     public function getItemsByType($type)
     {
@@ -143,6 +153,7 @@ class Collection
      * Retrieve all error messages
      *
      * @return MessageInterface[]
+     * @since 2.0.0
      */
     public function getErrors()
     {
@@ -154,6 +165,7 @@ class Collection
      *
      * @param string $type
      * @return int
+     * @since 2.0.0
      */
     public function getCountByType($type)
     {
@@ -168,6 +180,7 @@ class Collection
      * Retrieve messages count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCount()
     {
