@@ -5,6 +5,14 @@
  */
 namespace Magento\Variable\Model;
 
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Escaper;
+use Magento\Variable\Model\ResourceModel\Variable as VariableResource;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * Custom variable model
  *
@@ -17,7 +25,7 @@ namespace Magento\Variable\Model;
  *
  * @api
  */
-class Variable extends \Magento\Framework\Model\AbstractModel
+class Variable extends AbstractModel
 {
     const TYPE_TEXT = 'text';
 
@@ -26,30 +34,39 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     /**
      * @var int
      */
-    protected $_storeId = 0;
+    protected $storeId = 0;
 
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $escaper = null;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * Variable constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Variable\Model\ResourceModel\Variable $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Variable\Model\ResourceModel\Variable $resource,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        Escaper $escaper,
+        VariableResource $resource,
+        StoreManagerInterface $storeManager,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_escaper = $escaper;
+        $this->escaper = $escaper;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -61,7 +78,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\Variable\Model\ResourceModel\Variable::class);
+        $this->_init(VariableResource::class);
     }
 
     /**
@@ -73,7 +90,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = $storeId;
+        $this->storeId = $storeId;
         return $this;
     }
 
@@ -85,7 +102,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      */
     public function getStoreId()
     {
-        return $this->_storeId;
+        return $this->storeId;
     }
 
     /**
@@ -116,7 +133,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
             $value = $this->getData('plain_value');
             //escape html if type is html, but html value is not defined
             if ($type == self::TYPE_HTML) {
-                $value = nl2br($this->_escaper->escapeHtml($value));
+                $value = nl2br($this->escaper->escapeHtml($value));
             }
             return $value;
         }
@@ -161,5 +178,40 @@ class Variable extends \Magento\Framework\Model\AbstractModel
             $variables = ['label' => __('Custom Variables'), 'value' => $variables];
         }
         return $variables;
+    }
+
+    /**
+     * Check if the given store (or the current one) has the given
+     * variable set with the given text value
+     *
+     * @param string $variableCode
+     * @param string $expectedValue
+     * @param string $type
+     * @param int $storeId
+     *
+     * @return boolean
+     */
+    public function customVariableHasValue(
+        $variableCode,
+        $expectedValue,
+        $type = self::TYPE_TEXT,
+        $storeId = null
+    ) {
+        $status = false;
+
+        if ($storeId === null) {
+            $storeId = $this->storeManager->getStore()->getId();
+        }
+
+        $this->setStoreId($storeId)
+            ->loadByCode($variableCode);
+
+        $value = $this->getValue($type);
+
+        if ($value && $value === (string) $expectedValue) {
+            $status = true;
+        }
+
+        return $status;
     }
 }
