@@ -16,6 +16,13 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class PromoForm extends FormSections
 {
     /**
+     * Magento form loader.
+     *
+     * @var string
+     */
+    protected $spinner = '[data-role="spinner"]';
+    
+    /**
      * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
@@ -25,6 +32,7 @@ class PromoForm extends FormSections
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
+        $this->waitPageToLoad();
         $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
             $sections = $this->prepareData($sections, $replace);
@@ -54,5 +62,16 @@ class PromoForm extends FormSections
         }
 
         return $tabs;
+    }
+
+    /**
+     * Wait page to load.
+     *
+     * @return void
+     */
+    protected function waitPageToLoad()
+    {
+        $this->waitForElementVisible($this->header);
+        $this->waitForElementNotVisible($this->spinner);
     }
 }
