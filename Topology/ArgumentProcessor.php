@@ -17,7 +17,7 @@ trait ArgumentProcessor
      * @param array $arguments
      * @return array
      */
-    function processArguments($arguments)
+    public function processArguments($arguments)
     {
         $output = [];
         foreach ($arguments as $key => $value) {
