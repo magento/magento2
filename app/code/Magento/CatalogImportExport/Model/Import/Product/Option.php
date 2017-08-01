@@ -12,6 +12,8 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as ProductOptionValueCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory as ProductOptionValueCollectionFactory;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -360,6 +362,16 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productEntityIdentifierField;
 
     /**
+     * @var ProductOptionValueCollectionFactory
+     */
+    private $productOptionValueCollectionFactory;
+
+    /**
+     * @var array
+     */
+    private $optionValueTitles;
+
+    /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
@@ -371,6 +383,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param ProductOptionValueCollectionFactory $productOptionValueCollectionFactory
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -389,6 +402,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
+        ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
         array $data = []
     ) {
         $this->_resource = $resource;
@@ -400,6 +414,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_colIteratorFactory = $colIteratorFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
+        $this->productOptionValueCollectionFactory = $productOptionValueCollectionFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ProductOptionValueCollectionFactory::class);
 
         if (isset($data['connection'])) {
             $this->_connection = $data['connection'];
@@ -1187,7 +1203,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($optionRow['price'])) {
             $percent_suffix = '';
             if (isset($optionRow['price_type']) && $optionRow['price_type'] == 'percent') {
-                $percent_suffix =  '%';
+                $percent_suffix = '%';
             }
             $result[self::COLUMN_ROW_PRICE] = $optionRow['price'] . $percent_suffix;
         }
@@ -1298,6 +1314,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($this->_isReadyForSaving($options, $titles, $typeValues)) {
                 if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
                     $this->_compareOptionsWithExisting($options, $titles, $prices, $typeValues);
+                    $this->restoreOriginalOptionValueIds($typeValues, $typePrices, $typeTitles);
                 }
 
                 $this->_saveOptions(
@@ -1366,12 +1383,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $optionData = $this->_getOptionData($rowData, $this->_rowProductId, $nextOptionId, $this->_rowType);
 
             if (!$this->_isRowHasSpecificType(
-                $this->_rowType
-            ) && ($priceData = $this->_getPriceData(
-                $rowData,
-                $nextOptionId,
-                $this->_rowType
-            ))
+                    $this->_rowType
+                ) && ($priceData = $this->_getPriceData(
+                    $rowData,
+                    $nextOptionId,
+                    $this->_rowType
+                ))
             ) {
                 $prices[$nextOptionId] = $priceData;
             }
@@ -1505,6 +1522,68 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * Restore original IDs for existing option values.
+     *
+     * Warning: arguments are modified by reference
+     *
+     * @param array $typeValues
+     * @param array $typePrices
+     * @param array $typeTitles
+     * @return void
+     */
+    private function restoreOriginalOptionValueIds(array &$typeValues, array &$typePrices, array &$typeTitles)
+    {
+        foreach ($typeValues as $optionId => &$optionValues) {
+            foreach ($optionValues as &$optionValue) {
+                $optionValueId = $optionValue['option_type_id'];
+                foreach ($typeTitles[$optionValueId] as $storeId => $optionValueTitle) {
+                    $existingOptionValueId = $this->getExistingOptionValueId($optionId, $storeId, $optionValueTitle);
+                    if ($existingOptionValueId) {
+                        $optionValue['option_type_id'] = $existingOptionValueId;
+                        $typeTitles[$existingOptionValueId] = $typeTitles[$optionValueId];
+                        unset($typeTitles[$optionValueId]);
+                        $typePrices[$existingOptionValueId] = $typePrices[$optionValueId];
+                        unset($typePrices[$optionValueId]);
+                        // If option value titles match at least in one store, consider current option value as existing
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Identify ID of the provided option value by its title in the specified store.
+     *
+     * @param int $optionId
+     * @param int $storeId
+     * @param string $optionValueTitle
+     * @return int|null
+     */
+    private function getExistingOptionValueId($optionId, $storeId, $optionValueTitle)
+    {
+        if (!isset($this->optionValueTitles[$storeId])) {
+            /** @var ProductOptionValueCollection $valueCollection */
+            $valueCollection = $this->productOptionValueCollectionFactory->create();
+            $valueCollection->addTitleToResult($storeId);
+            /** @var \Magento\Catalog\Model\Product\Option\Value $value */
+            foreach ($valueCollection as $value) {
+                $this->optionValueTitles[$storeId][$value->getOptionId()][$value->getId()] = $value->getTitle();
+            }
+        }
+        if (isset($this->optionValueTitles[$storeId][$optionId])
+            && is_array($this->optionValueTitles[$storeId][$optionId])
+        ) {
+            foreach ($this->optionValueTitles[$storeId][$optionId] as $optionValueId => $currentValueTitle) {
+                if ($optionValueTitle === $currentValueTitle) {
+                    return $optionValueId;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -1643,13 +1722,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getPriceData(array $rowData, $optionId, $type)
     {
         if (in_array(
-            'price',
-            $this->_specificTypes[$type]
-        ) && isset(
-            $rowData[self::COLUMN_PREFIX . 'price']
-        ) && strlen(
-            $rowData[self::COLUMN_PREFIX . 'price']
-        ) > 0
+                'price',
+                $this->_specificTypes[$type]
+            ) && isset(
+                $rowData[self::COLUMN_PREFIX . 'price']
+            ) && strlen(
+                $rowData[self::COLUMN_PREFIX . 'price']
+            ) > 0
         ) {
             $priceData = [
                 'option_id' => $optionId,
@@ -1910,13 +1989,17 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 2.0.0
      */
-     protected function _parseCustomOptions($rowData)
+    protected function _parseCustomOptions($rowData)
     {
         $beforeOptionValueSkuDelimiter = ';';
         if (empty($rowData['custom_options'])) {
             return $rowData;
         }
-        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
+        $rowData['custom_options'] = str_replace(
+            $beforeOptionValueSkuDelimiter,
+            $this->_productEntity->getMultipleValueSeparator(),
+            $rowData['custom_options']
+        );
         $options = [];
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
         $k = 0;
@@ -1928,7 +2011,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
                     $value = trim($value);
-                    $fieldName  = trim($nameAndValue[0]);
+                    $fieldName = trim($nameAndValue[0]);
                     if ($value && ($fieldName == 'name')) {
                         if ($name != $value) {
                             $name = $value;
@@ -1969,7 +2052,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (!$this->productEntityLinkField) {
             $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getMetadata(ProductInterface::class)
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
@@ -1985,7 +2068,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (!$this->productEntityIdentifierField) {
             $this->productEntityIdentifierField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getMetadata(ProductInterface::class)
                 ->getIdentifierField();
         }
         return $this->productEntityIdentifierField;
