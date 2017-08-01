@@ -6,11 +6,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_Tax" setup_version="2.0.1">
+    <module name="Magento_Tax" setup_version="2.0.2">
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Checkout"/>
             <module name="Magento_Customer"/>
+            <module name="Magento_Directory"/>
             <module name="Magento_User"/>
         </sequence>
     </module>

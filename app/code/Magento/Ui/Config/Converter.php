@@ -257,8 +257,7 @@ class Converter implements ConfigConverterInterface
             }
             if ($itemNode->localName === static::ARGUMENT_KEY) {
                 $arguments += $this->toArray($itemNode);
-            } elseif (
-                $this->converterUtils->isUiComponent($itemNode)
+            } elseif ($this->converterUtils->isUiComponent($itemNode)
                 && isset($this->schemaMap[$itemNode->localName])
             ) {
                 $itemNodeName = $this->converterUtils->getComponentName($itemNode);

@@ -8,10 +8,9 @@ namespace Magento\Store\App\Config\Source;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\DataObjectFactory;
 
 /**
- * Config source to retrieve configuration from files.
+ * Config source. Retrieve all configuration data from files for specified config type
  */
 class InitialConfigSource implements ConfigSourceInterface
 {
@@ -37,53 +36,39 @@ class InitialConfigSource implements ConfigSourceInterface
     private $configType;
 
     /**
-     * The DataObject factory.
-     *
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
      * @param Reader $reader The file reader
      * @param DeploymentConfig $deploymentConfig The deployment config reader
-     * @param DataObjectFactory $dataObjectFactory The DataObject factory
      * @param string $configType The config type
      */
     public function __construct(
         Reader $reader,
         DeploymentConfig $deploymentConfig,
-        DataObjectFactory $dataObjectFactory,
         $configType
     ) {
         $this->reader = $reader;
         $this->deploymentConfig = $deploymentConfig;
-        $this->dataObjectFactory = $dataObjectFactory;
         $this->configType = $configType;
     }
 
     /**
-     * @inheritdoc
+     * Return whole config data from config file for specified config type.
+     * Ignore $path argument due to config source must return all config data
+     *
+     * @param string $path
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function get($path = '')
     {
         /**
-         * Magento store configuration should not be read from file source
-         * on not installed instance.
+         * Magento store configuration should not be read from file source if database is available
          *
          * @see \Magento\Store\Model\Config\Importer To import store configs
          */
-        if (!$this->deploymentConfig->isAvailable()) {
+        if ($this->deploymentConfig->isAvailable()) {
             return [];
         }
 
-        $data = $this->dataObjectFactory->create([
-            'data' => $this->reader->load()
-        ]);
-
-        if ($path !== '' && $path !== null) {
-            $path = '/' . ltrim($path, '/');
-        }
-
-        return $data->getData($this->configType . $path) ?: [];
+        return $this->reader->load()[$this->configType] ?? [];
     }
 }

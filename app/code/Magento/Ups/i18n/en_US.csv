@@ -59,8 +59,8 @@ Residential,Residential
 Commercial,Commercial
 Pounds,Pounds
 Kilograms,Kilograms
-"Sorry, something went wrong. Please try again or contact us and we\'ll try to help.","Sorry, something went wrong. Please try again or contact us and we\'ll try to help."
-"We can\'t convert a rate from ""%1-%2"".","We can\'t convert a rate from ""%1-%2""."
+"Sorry, something went wrong. Please try again or contact us and we'll try to help.","Sorry, something went wrong. Please try again or contact us and we'll try to help."
+"We can't convert a rate from ""%1-%2"".","We can't convert a rate from ""%1-%2""."
 "Cannot retrieve shipping rates","Cannot retrieve shipping rates"
 status,status
 error_message,error_message
@@ -81,6 +81,7 @@ UPS,UPS
 "Allowed Methods","Allowed Methods"
 "Packages Request Type","Packages Request Type"
 Container,Container
+"Enable Free Shipping Threshold","Enable Free Shipping Threshold"
 "Free Shipping Amount Threshold","Free Shipping Amount Threshold"
 "Destination Type","Destination Type"
 "Free Method","Free Method"
