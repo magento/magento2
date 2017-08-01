@@ -85,10 +85,10 @@ class Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefaultLocale()
+    public function getDefaultLocale($store = null)
     {
         if (!$this->defaultLocale) {
-            $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
+            $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType, $store);
             if (!$locale) {
                 $locale = self::DEFAULT_LOCALE;
             }
