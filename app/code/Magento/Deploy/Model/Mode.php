@@ -14,6 +14,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A class to manage Magento modes
@@ -82,14 +83,24 @@ class Mode
     /**
      * Enable production mode
      *
+     * @throws LocalizedException
      * @return void
      * @since 2.0.0
      */
     public function enableProductionMode()
     {
         $this->enableMaintenanceMode($this->output);
-        $this->filesystem->regenerateStatic($this->output);
-        $this->setStoreMode(State::MODE_PRODUCTION);
+        $previousMode = $this->getMode();
+        try {
+            // We have to turn on production mode before generation.
+            // We need this to enable generation of the "min" files.
+            $this->setStoreMode(State::MODE_PRODUCTION);
+            $this->filesystem->regenerateStatic($this->output);
+        } catch (LocalizedException $e) {
+            // We have to return store mode to previous state in case of error.
+            $this->setStoreMode($previousMode);
+            throw $e;
+        }
         $this->disableMaintenanceMode($this->output);
     }
 
