@@ -12,6 +12,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterfaceFactory;
 
 /**
  * Sample Data dependency
@@ -39,32 +40,32 @@ class Dependency
     private $componentRegistrar;
 
     /**
-     * @var Filesystem\Directory\ReadInterfaceFactory
+     * @var ReadInterfaceFactory
      */
     private $directoryReadFactory;
 
     /**
+     * Initialize dependencies.
+     *
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem @deprecated 2.3.0 $directoryReadFactory is used instead
      * @param PackageFactory $packageFactory
      * @param ComponentRegistrarInterface $componentRegistrar
-     * @param Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory
-     * @throws \RuntimeException
+     * @param Filesystem\Directory\ReadInterfaceFactory|null $directoryReadFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        Filesystem $filesystem, // $filesystem kept for BC
+        Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
+        \Magento\Framework\Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
-        $this->directoryReadFactory = $directoryReadFactory ?: ObjectManager::getInstance()->get(
-            Filesystem\Directory\ReadInterfaceFactory::class
-        );
+        $this->directoryReadFactory = $directoryReadFactory ?:
+            ObjectManager::getInstance()->get(ReadInterfaceFactory::class);
     }
 
     /**
