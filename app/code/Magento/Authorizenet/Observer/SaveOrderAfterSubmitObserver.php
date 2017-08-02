@@ -8,16 +8,23 @@ namespace Magento\Authorizenet\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Authorizenet\Observer\SaveOrderAfterSubmitObserver
+ *
+ * @since 2.0.0
+ */
 class SaveOrderAfterSubmitObserver implements ObserverInterface
 {
     /**
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry
@@ -30,6 +37,7 @@ class SaveOrderAfterSubmitObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework;
 
 /**
  * Factory class for \Magento\Framework\Validator
+ * @since 2.0.0
  */
 class ValidatorFactory
 {
@@ -16,6 +17,7 @@ class ValidatorFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -23,6 +25,7 @@ class ValidatorFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -31,6 +34,7 @@ class ValidatorFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -46,6 +50,7 @@ class ValidatorFactory
      * @param array $data
      * @param string $instanceName
      * @return \Magento\Framework\Validator
+     * @since 2.0.0
      */
     public function create(array $data = [], $instanceName = null)
     {

@@ -7,11 +7,13 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class FlyweightFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -19,6 +21,7 @@ class FlyweightFactory
      * Map of flyweight types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_flyweightMap = [
         'section' => \Magento\Config\Model\Config\Structure\Element\Section::class,
@@ -28,6 +31,7 @@ class FlyweightFactory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -39,6 +43,7 @@ class FlyweightFactory
      *
      * @param string $type
      * @return \Magento\Config\Model\Config\Structure\ElementInterface
+     * @since 2.0.0
      */
     public function create($type)
     {

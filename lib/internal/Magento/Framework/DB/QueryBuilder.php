@@ -7,6 +7,7 @@ namespace Magento\Framework\DB;
 
 /**
  * Class QueryBuilder
+ * @since 2.0.0
  */
 class QueryBuilder
 {
@@ -14,11 +15,13 @@ class QueryBuilder
      * Select object
      *
      * @var \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected $select;
 
     /**
      * @var \Magento\Framework\Api\CriteriaInterface
+     * @since 2.0.0
      */
     protected $criteria;
 
@@ -26,22 +29,26 @@ class QueryBuilder
      * Resource instance
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\DB\MapperFactory
+     * @since 2.0.0
      */
     protected $mapperFactory;
 
     /**
      * @var \Magento\Framework\DB\QueryFactory
+     * @since 2.0.0
      */
     protected $queryFactory;
 
     /**
      * @param \Magento\Framework\DB\MapperFactory $mapperFactory
      * @param \Magento\Framework\DB\QueryFactory $queryFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\DB\MapperFactory $mapperFactory,
@@ -56,6 +63,7 @@ class QueryBuilder
      *
      * @param \Magento\Framework\Api\CriteriaInterface $criteria
      * @return void
+     * @since 2.0.0
      */
     public function setCriteria(\Magento\Framework\Api\CriteriaInterface $criteria)
     {
@@ -67,6 +75,7 @@ class QueryBuilder
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @return void
+     * @since 2.0.0
      */
     public function setResource(\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource)
     {
@@ -76,6 +85,7 @@ class QueryBuilder
     /**
      * @return \Magento\Framework\DB\QueryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function create()
     {

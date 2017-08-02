@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  *
  * @method int getSortOrder()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Attribute extends \Magento\Eav\Model\Attribute
 {
@@ -26,6 +27,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'customer_entity_attribute';
 
@@ -33,16 +35,19 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Prefix of model events object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'attribute';
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Customer\Model\Metadata\AttributeMetadataCache
+     * @since 2.2.0
      */
     private $attributeMetadataCache;
 
@@ -71,6 +76,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param array|null $data
      * @param \Magento\Customer\Model\Metadata\AttributeMetadataCache|null $attributeMetadataCache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -125,6 +131,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Init resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -133,6 +140,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -147,6 +155,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function afterDelete()
     {
@@ -158,6 +167,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Init indexing process after customer delete
      *
      * @return \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -171,6 +181,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Init indexing process after customer save
      *
      * @return void
+     * @since 2.0.0
      */
     public function invalidate()
     {
@@ -183,6 +194,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Check whether attribute is searchable in admin grid and it is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canBeSearchableInGrid()
     {
@@ -193,6 +205,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * Check whether attribute is filterable in admin grid and it is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canBeFilterableInGrid()
     {
@@ -202,6 +215,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function __sleep()
     {
@@ -214,6 +228,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function __wakeup()
     {

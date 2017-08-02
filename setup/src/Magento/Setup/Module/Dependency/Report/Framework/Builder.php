@@ -11,6 +11,7 @@ use Magento\Setup\Module\Dependency\Report\WriterInterface;
 
 /**
  *  Framework dependencies report builder
+ * @since 2.0.0
  */
 class Builder extends AbstractBuilder
 {
@@ -18,6 +19,7 @@ class Builder extends AbstractBuilder
      * Config parser
      *
      * @var \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     protected $configParser;
 
@@ -27,6 +29,7 @@ class Builder extends AbstractBuilder
      * @param ParserInterface $dependenciesParser
      * @param WriterInterface $reportWriter
      * @param ParserInterface $configParser
+     * @since 2.0.0
      */
     public function __construct(
         ParserInterface $dependenciesParser,
@@ -44,6 +47,7 @@ class Builder extends AbstractBuilder
      * @param array $options
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function checkOptions($options)
     {
@@ -59,6 +63,7 @@ class Builder extends AbstractBuilder
      *
      * @param array $modulesData
      * @return \Magento\Setup\Module\Dependency\Report\Framework\Data\Config
+     * @since 2.0.0
      */
     protected function buildData($modulesData)
     {
@@ -81,6 +86,7 @@ class Builder extends AbstractBuilder
      * Get allowed modules
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getAllowedModules()
     {

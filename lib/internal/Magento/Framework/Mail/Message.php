@@ -7,10 +7,16 @@
  */
 namespace Magento\Framework\Mail;
 
+/**
+ * Class \Magento\Framework\Mail\Message
+ *
+ * @since 2.0.0
+ */
 class Message extends \Zend_Mail implements MessageInterface
 {
     /**
      * @param string $charset
+     * @since 2.0.0
      */
     public function __construct($charset = 'utf-8')
     {
@@ -21,6 +27,7 @@ class Message extends \Zend_Mail implements MessageInterface
      * Message type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $messageType = self::TYPE_TEXT;
 
@@ -29,6 +36,7 @@ class Message extends \Zend_Mail implements MessageInterface
      *
      * @param string $body
      * @return $this
+     * @since 2.0.0
      */
     public function setBody($body)
     {
@@ -39,6 +47,7 @@ class Message extends \Zend_Mail implements MessageInterface
      * Set message body
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBody()
     {
@@ -50,6 +59,7 @@ class Message extends \Zend_Mail implements MessageInterface
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setMessageType($type)
     {

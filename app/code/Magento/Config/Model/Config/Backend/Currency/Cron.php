@@ -11,12 +11,16 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
 
-    /** @var \Magento\Framework\App\Config\ValueFactory */
+    /**
+     * @var \Magento\Framework\App\Config\ValueFactory
+     * @since 2.0.0
+     */
     protected $_configValueFactory;
 
     /**
@@ -28,6 +32,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -46,6 +51,7 @@ class Cron extends \Magento\Framework\App\Config\Value
     /**
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function afterSave()
     {

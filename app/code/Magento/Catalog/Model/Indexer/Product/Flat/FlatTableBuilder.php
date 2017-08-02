@@ -12,11 +12,13 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Class FlatTableBuilder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class FlatTableBuilder
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -27,31 +29,37 @@ class FlatTableBuilder
 
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
+     * @since 2.0.0
      */
     protected $_productIndexerHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $_connection;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var TableDataInterface
+     * @since 2.0.0
      */
     protected $_tableData;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.1.0
      */
     protected $resource;
 
@@ -61,6 +69,7 @@ class FlatTableBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
@@ -86,6 +95,7 @@ class FlatTableBuilder
      * @param string $tableDropSuffix
      * @param bool $fillTmpTables
      * @return void
+     * @since 2.0.0
      */
     public function build($storeId, $changedIds, $valueFieldSuffix, $tableDropSuffix, $fillTmpTables)
     {
@@ -116,6 +126,7 @@ class FlatTableBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _createTemporaryFlatTable($storeId)
     {
@@ -205,6 +216,7 @@ class FlatTableBuilder
      * @param int|string $storeId
      * @param string $valueFieldSuffix
      * @return void
+     * @since 2.0.0
      */
     protected function _fillTemporaryFlatTable(array $tables, $storeId, $valueFieldSuffix)
     {
@@ -299,6 +311,7 @@ class FlatTableBuilder
      * @param int|string $storeId
      * @param string $valueFieldSuffix
      * @return void
+     * @since 2.0.0
      */
     protected function _updateTemporaryTableByStoreValues(
         array $tables,
@@ -362,6 +375,7 @@ class FlatTableBuilder
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     protected function _getTemporaryTableName($tableName)
     {
@@ -370,6 +384,7 @@ class FlatTableBuilder
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -8,40 +8,52 @@ namespace Magento\Framework\ObjectManager\Profiler;
 
 use Magento\Framework\ObjectManager\Profiler\Tree\Item as Item;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Profiler\Log
+ *
+ * @since 2.0.0
+ */
 class Log
 {
     /**
      * @var $this
+     * @since 2.0.0
      */
     protected static $instance;
 
     /**
      * @var Item
+     * @since 2.0.0
      */
     protected $currentItem = null;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $data = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $roots = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $used = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $stats = ['total' => 0, 'used' => 0, 'unused' => 0];
 
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -52,6 +64,7 @@ class Log
      * Retrieve instance
      *
      * @return Log
+     * @since 2.0.0
      */
     public static function getInstance()
     {
@@ -66,6 +79,7 @@ class Log
      *
      * @param string $class
      * @return void
+     * @since 2.0.0
      */
     public function startCreating($class)
     {
@@ -85,6 +99,7 @@ class Log
      *
      * @param mixed $object
      * @return void
+     * @since 2.0.0
      */
     public function stopCreating($object)
     {
@@ -97,6 +112,7 @@ class Log
      *
      * @param mixed $object
      * @return void
+     * @since 2.0.0
      */
     public function add($object)
     {
@@ -116,6 +132,7 @@ class Log
      *
      * @param mixed $object
      * @return void
+     * @since 2.0.0
      */
     public function invoked($object)
     {
@@ -126,6 +143,7 @@ class Log
      * Display results
      *
      * @return void
+     * @since 2.0.0
      */
     public function display()
     {
@@ -150,6 +168,7 @@ class Log
      * @param Item $item
      * @param int $level
      * @return void
+     * @since 2.0.0
      */
     protected function displayItem(Item $item, $level = 0)
     {

@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Persistent Session Observer
+ * @since 2.0.0
  */
 class SetRememberMeCheckedStatusObserver implements ObserverInterface
 {
@@ -18,6 +19,7 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession;
 
@@ -25,6 +27,7 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -32,6 +35,7 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -41,6 +45,7 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
@@ -57,6 +62,7 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

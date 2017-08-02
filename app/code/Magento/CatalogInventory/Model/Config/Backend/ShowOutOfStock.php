@@ -9,6 +9,11 @@
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock
+ *
+ * @since 2.0.0
+ */
 class ShowOutOfStock extends AbstractValue
 {
 }

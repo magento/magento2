@@ -10,6 +10,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ObjectRelationProcessor
 {
@@ -24,6 +25,7 @@ class ObjectRelationProcessor
      * @return void
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function delete(
         TransactionManagerInterface $transactionManager,
@@ -42,6 +44,7 @@ class ObjectRelationProcessor
      * @param array $involvedData
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function validateDataIntegrity($table, array $involvedData)
     {

@@ -10,11 +10,13 @@ use Magento\Catalog\Api\Data\CostInterface;
 
 /**
  * Product Cost DTO.
+ * @since 2.2.0
  */
 class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements CostInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setCost($cost)
     {
@@ -23,6 +25,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getCost()
     {
@@ -31,6 +34,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setStoreId($storeId)
     {
@@ -39,6 +43,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getStoreId()
     {
@@ -47,6 +52,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setSku($sku)
     {
@@ -55,6 +61,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSku()
     {
@@ -63,6 +70,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -71,6 +79,7 @@ class Cost extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\CostExtensionInterface $extensionAttributes)
     {

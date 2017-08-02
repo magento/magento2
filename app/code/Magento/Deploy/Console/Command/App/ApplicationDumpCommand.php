@@ -17,21 +17,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for dump application state
+ * @since 2.2.0
  */
 class ApplicationDumpCommand extends Command
 {
     /**
      * @var Writer
+     * @since 2.2.0
      */
     private $writer;
 
     /**
      * @var ConfigSourceInterface[]
+     * @since 2.2.0
      */
     private $sources;
 
     /**
      * @var Hash
+     * @since 2.2.0
      */
     private $configHash;
 
@@ -41,6 +45,7 @@ class ApplicationDumpCommand extends Command
      * @param Writer $writer
      * @param array $sources
      * @param Hash $configHash
+     * @since 2.2.0
      */
     public function __construct(
         Writer $writer,
@@ -55,6 +60,7 @@ class ApplicationDumpCommand extends Command
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -70,6 +76,7 @@ class ApplicationDumpCommand extends Command
      * @param OutputInterface $output
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -113,6 +120,7 @@ class ApplicationDumpCommand extends Command
      * If source doesn't have pool option puts him into APP_CONFIG pool.
      *
      * @return void
+     * @since 2.2.0
      */
     private function groupSourcesByPool()
     {

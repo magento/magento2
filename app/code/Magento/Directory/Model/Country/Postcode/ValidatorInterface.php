@@ -5,6 +5,11 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
+/**
+ * Interface \Magento\Directory\Model\Country\Postcode\ValidatorInterface
+ *
+ * @since 2.0.0
+ */
 interface ValidatorInterface
 {
     /**
@@ -14,6 +19,7 @@ interface ValidatorInterface
      * @param string $countryId
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function validate($postcode, $countryId);
 }

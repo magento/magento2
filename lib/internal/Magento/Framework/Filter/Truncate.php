@@ -10,31 +10,37 @@ namespace Magento\Framework\Filter;
  *
  * Truncate a string to a certain length if necessary, appending the $etc string.
  * $remainder will contain the string that has been replaced with $etc.
+ * @since 2.0.0
  */
 class Truncate implements \Zend_Filter_Interface
 {
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $length;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $etc;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $remainder;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $breakWords;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -44,6 +50,7 @@ class Truncate implements \Zend_Filter_Interface
      * @param string $etc
      * @param string &$remainder
      * @param bool $breakWords
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -64,6 +71,7 @@ class Truncate implements \Zend_Filter_Interface
      *
      * @param string $string
      * @return string
+     * @since 2.0.0
      */
     public function filter($string)
     {

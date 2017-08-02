@@ -9,21 +9,25 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class Validator
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\File\Size
+     * @since 2.0.0
      */
     protected $fileSize;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $rootDirectory;
 
@@ -31,6 +35,7 @@ abstract class Validator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -47,6 +52,7 @@ abstract class Validator
      *
      * @param string $key Config value key
      * @return string
+     * @since 2.0.0
      */
     protected function getConfigData($key)
     {
@@ -64,6 +70,7 @@ abstract class Validator
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return string[] Array of error messages
      * @see \Magento\Catalog\Model\Product\Option\Type\File::_getValidatorErrors
+     * @since 2.0.0
      */
     protected function getValidatorErrors($errors, $fileInfo, $option)
     {
@@ -122,6 +129,7 @@ abstract class Validator
      * @param string $extensions String to parse
      * @return array|null
      * @see \Magento\Catalog\Model\Product\Option\Type\File::_parseExtensionsString
+     * @since 2.0.0
      */
     protected function parseExtensionsString($extensions)
     {
@@ -137,6 +145,7 @@ abstract class Validator
      * @param array $fileFullPath
      * @return \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     protected function buildImageValidator($object, $option, $fileFullPath = null)
     {
@@ -180,6 +189,7 @@ abstract class Validator
      * @param array|string $fileInfo - either file data from \Zend_File_Transfer or file path
      * @return boolean
      * @see \Magento\Catalog\Model\Product\Option\Type\File::_isImage
+     * @since 2.0.0
      */
     protected function isImage($fileInfo)
     {

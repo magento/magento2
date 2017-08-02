@@ -8,10 +8,16 @@ namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\Locale\Resolver;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -8,6 +8,11 @@ namespace Magento\Framework\Code;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 
+/**
+ * Class \Magento\Framework\Code\Generator
+ *
+ * @since 2.0.0
+ */
 class Generator
 {
     const GENERATION_SUCCESS = 'success';
@@ -18,21 +23,25 @@ class Generator
 
     /**
      * @var \Magento\Framework\Code\Generator\Io
+     * @since 2.0.0
      */
     protected $_ioObject;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_generatedEntities;
 
     /**
      * @var DefinedClasses
+     * @since 2.0.0
      */
     protected $definedClasses;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -40,6 +49,7 @@ class Generator
      * @param Generator\Io   $ioObject
      * @param array          $generatedEntities
      * @param DefinedClasses $definedClasses
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Code\Generator\Io $ioObject = null,
@@ -58,6 +68,7 @@ class Generator
      * Get generated entities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getGeneratedEntities()
     {
@@ -69,6 +80,7 @@ class Generator
      *
      * @param array $generatedEntities
      * @return $this
+     * @since 2.1.0
      */
     public function setGeneratedEntities($generatedEntities)
     {
@@ -83,6 +95,7 @@ class Generator
      * @return string | void
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function generateClass($className)
     {
@@ -128,6 +141,7 @@ class Generator
      * @param string $entityName
      * @param string $className
      * @return \Magento\Framework\Code\Generator\EntityAbstract
+     * @since 2.0.0
      */
     protected function createGeneratorInstance($generatorClass, $entityName, $className)
     {
@@ -142,6 +156,7 @@ class Generator
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @return $this
+     * @since 2.0.0
      */
     public function setObjectManager(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -153,6 +168,7 @@ class Generator
      * Get object manager instance.
      *
      * @return \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     public function getObjectManager()
     {
@@ -172,6 +188,7 @@ class Generator
      * @param \Magento\Framework\Code\Generator\EntityAbstract $generator
      * @return void
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function tryToLoadSourceClass($className, $generator)
     {
@@ -194,6 +211,7 @@ class Generator
      * @param string $sourceClassName
      * @param string $resultClass
      * @return string|bool
+     * @since 2.0.0
      */
     protected function shouldSkipGeneration($resultEntityType, $sourceClassName, $resultClass)
     {

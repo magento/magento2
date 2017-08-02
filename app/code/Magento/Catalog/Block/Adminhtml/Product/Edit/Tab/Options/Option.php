@@ -17,26 +17,31 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Option extends Widget
 {
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $_productInstance;
 
     /**
      * @var \Magento\Framework\DataObject[]
+     * @since 2.0.0
      */
     protected $_values;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_itemCount = 1;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit/options/option.phtml';
 
@@ -44,26 +49,31 @@ class Option extends Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface
+     * @since 2.0.0
      */
     protected $_productOptionConfig;
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $_product;
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
+     * @since 2.0.0
      */
     protected $_configYesNo;
 
     /**
      * @var \Magento\Catalog\Model\Config\Source\Product\Options\Type
+     * @since 2.0.0
      */
     protected $_optionType;
 
@@ -75,6 +85,7 @@ class Option extends Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -97,6 +108,7 @@ class Option extends Widget
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -108,6 +120,7 @@ class Option extends Widget
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getItemCount()
     {
@@ -117,6 +130,7 @@ class Option extends Widget
     /**
      * @param int $itemCount
      * @return $this
+     * @since 2.0.0
      */
     public function setItemCount($itemCount)
     {
@@ -128,6 +142,7 @@ class Option extends Widget
      * Get Product
      *
      * @return Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -146,6 +161,7 @@ class Option extends Widget
     /**
      * @param Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -157,6 +173,7 @@ class Option extends Widget
      * Retrieve options field name prefix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFieldName()
     {
@@ -167,6 +184,7 @@ class Option extends Widget
      * Retrieve options field id prefix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFieldId()
     {
@@ -177,6 +195,7 @@ class Option extends Widget
      * Check block is readonly
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -185,6 +204,7 @@ class Option extends Widget
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -197,6 +217,7 @@ class Option extends Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getAddButtonId()
     {
@@ -206,6 +227,7 @@ class Option extends Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getTypeSelectHtml()
     {
@@ -227,6 +249,7 @@ class Option extends Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getRequireSelectHtml()
     {
@@ -247,6 +270,7 @@ class Option extends Widget
      * Retrieve html templates for different types of product custom options
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemplatesHtml()
     {
@@ -278,6 +302,7 @@ class Option extends Widget
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getOptionValues()
     {
@@ -401,6 +426,7 @@ class Option extends Widget
      * @param string $select_id
      * @param array $containers
      * @return string
+     * @since 2.0.0
      */
     public function getCheckboxScopeHtml($id, $name, $checked = true, $select_id = '-1', array $containers = [])
     {
@@ -436,6 +462,7 @@ class Option extends Widget
      * @param float $value
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function getPriceValue($value, $type)
     {
@@ -450,6 +477,7 @@ class Option extends Widget
      * Return product grid url for custom options import popup
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductGridUrl()
     {
@@ -460,6 +488,7 @@ class Option extends Widget
      * Return custom options getter URL for ajax queries
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomOptionsUrl()
     {
@@ -470,6 +499,7 @@ class Option extends Widget
      * Return current product id
      *
      * @return null|int
+     * @since 2.0.0
      */
     public function getCurrentProductId()
     {

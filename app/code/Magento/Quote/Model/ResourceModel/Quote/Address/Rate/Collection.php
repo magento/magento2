@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Rate;
  * Quote addresses shipping rates collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Whether to load fixed items only
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_allowFixedOnly = false;
 
@@ -28,6 +30,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -55,6 +58,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,6 +73,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param int $addressId
      * @return $this
+     * @since 2.0.0
      */
     public function setAddressFilter($addressId)
     {
@@ -86,6 +91,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param bool $value
      * @return $this
+     * @since 2.0.0
      */
     public function setFixedOnlyFilter($value)
     {
@@ -98,6 +104,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return $this
+     * @since 2.0.0
      */
     public function addItem(\Magento\Framework\DataObject $rate)
     {

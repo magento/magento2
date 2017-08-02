@@ -14,6 +14,7 @@ namespace Magento\SendFriend\Helper;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -40,6 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled($store = null)
     {
@@ -51,6 +53,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowForGuest($store = null)
     {
@@ -62,6 +65,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return int
+     * @since 2.0.0
      */
     public function getMaxRecipients($store = null)
     {
@@ -73,6 +77,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return int
+     * @since 2.0.0
      */
     public function getMaxEmailPerPeriod($store = null)
     {
@@ -83,6 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Limitation Period in seconds (1 hour)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPeriod()
     {
@@ -94,6 +100,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return int
+     * @since 2.0.0
      */
     public function getLimitBy($store = null)
     {
@@ -105,6 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return mixed
+     * @since 2.0.0
      */
     public function getEmailTemplate($store = null)
     {
@@ -116,6 +124,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @see self::COOKIE_NAME
      * @return string
+     * @since 2.0.0
      */
     public function getCookieName()
     {

@@ -23,6 +23,7 @@ use Magento\Search\Model\QueryFactory;
  * @method \Magento\CatalogSearch\Model\Fulltext setStoreId(int $value)
  * @method string getDataIndex()
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
+ * @since 2.0.0
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {
@@ -30,6 +31,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * Catalog search data
      *
      * @var QueryFactory
+     * @since 2.0.0
      */
     protected $queryFactory = null;
 
@@ -37,6 +39,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * Core store config
      *
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -48,6 +51,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * @param AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -65,6 +69,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,6 +80,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * Reset search results cache
      *
      * @return $this
+     * @since 2.0.0
      */
     public function resetSearchResults()
     {

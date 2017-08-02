@@ -15,6 +15,7 @@ use Magento\Framework\TranslateInterface;
 
 /**
  * PreProcessor responsible for providing js translation dictionary
+ * @since 2.0.0
  */
 class PreProcessor implements PreProcessorInterface
 {
@@ -22,6 +23,7 @@ class PreProcessor implements PreProcessorInterface
      * Js translation configuration
      *
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
@@ -29,16 +31,19 @@ class PreProcessor implements PreProcessorInterface
      * Translation data provider
      *
      * @var DataProviderInterface
+     * @since 2.0.0
      */
     protected $dataProvider;
 
     /**
      * @var AreaList
+     * @since 2.0.0
      */
     protected $areaList;
 
     /**
      * @var TranslateInterface
+     * @since 2.0.0
      */
     protected $translate;
 
@@ -47,6 +52,7 @@ class PreProcessor implements PreProcessorInterface
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
      * @param TranslateInterface $translate
+     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -65,6 +71,7 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param Chain $chain
      * @return void
+     * @since 2.0.0
      */
     public function process(Chain $chain)
     {
@@ -93,6 +100,7 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param string $path
      * @return bool
+     * @since 2.0.0
      */
     protected function isDictionaryPath($path)
     {

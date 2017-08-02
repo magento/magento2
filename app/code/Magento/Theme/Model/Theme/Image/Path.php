@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Theme Image Path
+ * @since 2.0.0
  */
 class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
 {
@@ -23,16 +24,19 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      * Media Directory
      *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -42,6 +46,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -58,6 +63,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      *
      * @param ThemeInterface $theme
      * @return string
+     * @since 2.0.0
      */
     public function getPreviewImageUrl(ThemeInterface $theme)
     {
@@ -70,6 +76,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      *
      * @param ThemeInterface $theme
      * @return string
+     * @since 2.0.0
      */
     public function getPreviewImagePath(ThemeInterface $theme)
     {
@@ -80,6 +87,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      * Return default themes preview image url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPreviewImageDefaultUrl()
     {
@@ -90,6 +98,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      * Get directory path for preview image
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImagePreviewDirectory()
     {
@@ -100,6 +109,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      * Temporary directory path to store images
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemporaryDirectory()
     {

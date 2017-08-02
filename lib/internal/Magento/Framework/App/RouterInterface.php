@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Interface \Magento\Framework\App\RouterInterface
+ *
+ * @since 2.0.0
+ */
 interface RouterInterface
 {
     /**
@@ -14,6 +19,7 @@ interface RouterInterface
      *
      * @param RequestInterface $request
      * @return ActionInterface
+     * @since 2.0.0
      */
     public function match(RequestInterface $request);
 }

@@ -9,6 +9,7 @@ namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
  * Tax rule collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Process loaded collection data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoadData()
     {
@@ -44,6 +47,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $alias table alias
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
+     * @since 2.0.0
      */
     public function joinCalculationData($alias)
     {
@@ -67,6 +71,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $dataField
      * @param string $dataTitleField
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
+     * @since 2.0.0
      */
     protected function _add(
         $itemTable,
@@ -118,6 +123,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add product tax classes to result
      *
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
+     * @since 2.0.0
      */
     public function addProductTaxClassesToResult()
     {
@@ -128,6 +134,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add customer tax classes to result
      *
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
+     * @since 2.0.0
      */
     public function addCustomerTaxClassesToResult()
     {
@@ -138,6 +145,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add rates to result
      *
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
+     * @since 2.0.0
      */
     public function addRatesToResult()
     {
@@ -158,6 +166,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $id
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function setClassTypeFilter($type, $id)
     {

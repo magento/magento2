@@ -10,24 +10,35 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor
+ *
+ * @since 2.2.0
+ */
 class JoinProcessor implements CollectionProcessorInterface
 {
     /**
      * @var CustomJoinInterface[]
+     * @since 2.2.0
      */
     private $joins;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $fieldMapping;
 
-    /** @var array  */
+    /**
+     * @var array
+     * @since 2.2.0
+     */
     private $appliedFields = [];
 
     /**
      * @param CustomJoinInterface[] $customFilters
      * @param array $fieldMapping
+     * @since 2.2.0
      */
     public function __construct(
         array $customJoins = [],
@@ -43,6 +54,7 @@ class JoinProcessor implements CollectionProcessorInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param AbstractDb $collection
      * @return void
+     * @since 2.2.0
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection)
     {
@@ -75,6 +87,7 @@ class JoinProcessor implements CollectionProcessorInterface
      * @param string $field
      * @param AbstractDb $collection
      * @return void
+     * @since 2.2.0
      */
     private function applyCustomJoin($field, AbstractDb $collection)
     {
@@ -92,6 +105,7 @@ class JoinProcessor implements CollectionProcessorInterface
      * @param string $field
      * @return CustomJoinInterface|null
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     private function getCustomJoin($field)
     {
@@ -116,6 +130,7 @@ class JoinProcessor implements CollectionProcessorInterface
      *
      * @param string $field
      * @return string
+     * @since 2.2.0
      */
     private function getFieldMapping($field)
     {

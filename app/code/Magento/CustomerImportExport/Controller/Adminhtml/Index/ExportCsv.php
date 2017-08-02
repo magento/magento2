@@ -10,11 +10,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Index
+ * @since 2.0.0
  */
 class ExportCsv extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
@@ -23,6 +25,7 @@ class ExportCsv extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,6 +39,7 @@ class ExportCsv extends \Magento\Backend\App\Action
      * Export customer grid to CSV format
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

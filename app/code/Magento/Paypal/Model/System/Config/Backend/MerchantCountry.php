@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model\System\Config\Backend;
 
 /**
  * Backend model for merchant country. Default country used instead of empty value.
+ * @since 2.0.0
  */
 class MerchantCountry extends \Magento\Framework\App\Config\Value
 {
@@ -14,11 +15,13 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
      * Core data
      *
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -32,6 +35,7 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -53,6 +57,7 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
      * Substitute empty value with Default country.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {

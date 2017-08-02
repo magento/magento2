@@ -5,10 +5,16 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Packaging;
 
+/**
+ * Class \Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid
+ *
+ * @since 2.0.0
+ */
 class Grid extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/packaging/grid.phtml';
 
@@ -16,11 +22,13 @@ class Grid extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\ItemFactory
+     * @since 2.0.0
      */
     protected $_shipmentItemFactory;
 
@@ -29,6 +37,7 @@ class Grid extends \Magento\Backend\Block\Template
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -45,6 +54,7 @@ class Grid extends \Magento\Backend\Block\Template
      * Return collection of shipment items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -62,6 +72,7 @@ class Grid extends \Magento\Backend\Block\Template
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -72,6 +83,7 @@ class Grid extends \Magento\Backend\Block\Template
      * Can display customs value
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayCustomsValue()
     {
@@ -95,6 +107,7 @@ class Grid extends \Magento\Backend\Block\Template
      *
      * @param   float $value
      * @return  string
+     * @since 2.0.0
      */
     public function formatPrice($value)
     {

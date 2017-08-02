@@ -7,6 +7,7 @@ namespace Magento\Paypal\Block\Payment\Info\Billing;
 
 /**
  * Billing Agreement info block
+ * @since 2.0.0
  */
 class Agreement extends \Magento\Payment\Block\Info
 {
@@ -15,6 +16,7 @@ class Agreement extends \Magento\Payment\Block\Info
      *
      * @param \Magento\Framework\DataObject|array|null $transport
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _prepareSpecificInformation($transport = null)
     {

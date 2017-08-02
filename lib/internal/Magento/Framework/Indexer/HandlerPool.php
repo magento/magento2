@@ -10,22 +10,26 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api Instantiate save handler when implementing custom Indexer\Action
+ * @since 2.0.0
  */
 class HandlerPool
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var HandlerInterface
+     * @since 2.0.0
      */
     protected $defaultHandler;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param DefaultHandler $defaultHandler
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -41,6 +45,7 @@ class HandlerPool
      * @param string $handlerClass
      * @throws \InvalidArgumentException
      * @return HandlerInterface
+     * @since 2.0.0
      */
     public function get($handlerClass = null)
     {

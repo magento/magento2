@@ -30,11 +30,13 @@ use Magento\AdminNotification\Model\InboxInterface;
  * @method \Magento\AdminNotification\Model\Inbox setIsRemove(int $value)
  *
  * @api
+ * @since 2.0.0
  */
 class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -43,6 +45,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSeverities($severity = null)
     {
@@ -65,6 +68,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadLatestNotice()
     {
@@ -75,6 +79,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getNoticeStatus()
     {
@@ -86,6 +91,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      *
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     public function parse(array $data)
     {
@@ -103,6 +109,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param bool $isInternal
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function add($severity, $title, $description, $url = '', $isInternal = true)
     {
@@ -136,6 +143,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @since 2.0.0
      */
     public function addCritical($title, $description, $url = '', $isInternal = true)
     {
@@ -151,6 +159,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @since 2.0.0
      */
     public function addMajor($title, $description, $url = '', $isInternal = true)
     {
@@ -166,6 +175,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @since 2.0.0
      */
     public function addMinor($title, $description, $url = '', $isInternal = true)
     {
@@ -181,6 +191,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @since 2.0.0
      */
     public function addNotice($title, $description, $url = '', $isInternal = true)
     {

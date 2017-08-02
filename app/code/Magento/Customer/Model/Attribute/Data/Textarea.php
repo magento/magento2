@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Textarea
+ *
+ * @since 2.0.0
+ */
 class Textarea extends \Magento\Eav\Model\Attribute\Data\Textarea
 {
 }

@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * User backend observer model for passwords
+ * @since 2.0.0
  */
 class ForceAdminPasswordChangeObserver implements ObserverInterface
 {
@@ -18,6 +19,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Backend configuration interface
      *
      * @var \Magento\User\Model\Backend\Config\ObserverConfig
+     * @since 2.0.0
      */
     protected $observerConfig;
 
@@ -25,6 +27,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Authorization interface
      *
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     protected $authorization;
 
@@ -32,6 +35,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Backend url interface
      *
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $url;
 
@@ -39,6 +43,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Backend session
      *
      * @var \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     protected $session;
 
@@ -46,6 +51,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Backend authorization session
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $authSession;
 
@@ -53,6 +59,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Action flag
      *
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $actionFlag;
 
@@ -60,6 +67,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * Message manager interface
      *
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -71,6 +79,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\AuthorizationInterface $authorization,
@@ -95,6 +104,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

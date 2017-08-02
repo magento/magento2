@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * A service for cleaning up application state
+ * @since 2.0.0
  */
 class CleanupFiles
 {
@@ -19,6 +20,7 @@ class CleanupFiles
      * File system
      *
      * @var Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
@@ -26,6 +28,7 @@ class CleanupFiles
      * Constructor
      *
      * @param Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -36,6 +39,7 @@ class CleanupFiles
      * Clears all files that are subject of code generation
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function clearCodeGeneratedFiles()
     {
@@ -49,6 +53,7 @@ class CleanupFiles
      * Clears code-generated classes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function clearCodeGeneratedClasses()
     {
@@ -62,6 +67,7 @@ class CleanupFiles
      * Clears materialized static view files
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function clearMaterializedViewFiles()
     {
@@ -75,6 +81,7 @@ class CleanupFiles
      * Clears all files
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function clearAllFiles()
     {
@@ -90,6 +97,7 @@ class CleanupFiles
      * @param string $code
      * @param string|null $subPath
      * @return string[]
+     * @since 2.0.0
      */
     private function emptyDir($code, $subPath = null)
     {

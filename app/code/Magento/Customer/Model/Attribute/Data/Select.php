@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Select
+ *
+ * @since 2.0.0
+ */
 class Select extends \Magento\Eav\Model\Attribute\Data\Select
 {
 }

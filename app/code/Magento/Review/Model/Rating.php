@@ -21,6 +21,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @method string getRatingCode()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
@@ -35,11 +36,13 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
 
     /**
      * @var \Magento\Review\Model\Rating\OptionFactory
+     * @since 2.0.0
      */
     protected $_ratingOptionFactory;
 
     /**
      * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
+     * @since 2.0.0
      */
     protected $_ratingCollectionF;
 
@@ -51,6 +54,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -70,6 +74,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,6 +85,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param int $optionId
      * @param int $entityPkValue
      * @return $this
+     * @since 2.0.0
      */
     public function addOptionVote($optionId, $entityPkValue)
     {
@@ -98,6 +104,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * @param int $optionId
      * @return $this
+     * @since 2.0.0
      */
     public function updateOptionVote($optionId)
     {
@@ -117,6 +124,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * retrieve rating options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -137,6 +145,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param int $entityPkValue
      * @param bool $onlyForCurrentStore
      * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @since 2.0.0
      */
     public function getEntitySummary($entityPkValue, $onlyForCurrentStore = true)
     {
@@ -148,6 +157,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param int $reviewId
      * @param bool $onlyForCurrentStore
      * @return array
+     * @since 2.0.0
      */
     public function getReviewSummary($reviewId, $onlyForCurrentStore = true)
     {
@@ -160,6 +170,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @param string $entityCode
      * @return int
+     * @since 2.0.0
      */
     public function getEntityIdByCode($entityCode)
     {
@@ -170,6 +181,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Return unique ID(s) for each object in system
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

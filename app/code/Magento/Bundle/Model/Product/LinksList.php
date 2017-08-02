@@ -6,20 +6,28 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+/**
+ * Class \Magento\Bundle\Model\Product\LinksList
+ *
+ * @since 2.0.0
+ */
 class LinksList
 {
     /**
      * @var \Magento\Bundle\Api\Data\LinkInterfaceFactory
+     * @since 2.0.0
      */
     protected $linkFactory;
 
     /**
      * @var Type
+     * @since 2.0.0
      */
     protected $type;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -27,6 +35,7 @@ class LinksList
      * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
      * @param Type $type
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory,
@@ -42,6 +51,7 @@ class LinksList
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param int $optionId
      * @return \Magento\Bundle\Api\Data\LinkInterface[]
+     * @since 2.0.0
      */
     public function getItems(\Magento\Catalog\Api\Data\ProductInterface $product, $optionId)
     {

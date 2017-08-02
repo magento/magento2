@@ -31,6 +31,7 @@ namespace Magento\Downloadable\Model\Link;
  * @method \Magento\Downloadable\Model\Link\Purchased setLinkSectionTitle(string $value)
  *
  * @api
+ * @since 2.0.0
  */
 class Purchased extends \Magento\Framework\Model\AbstractModel
 {
@@ -38,6 +39,7 @@ class Purchased extends \Magento\Framework\Model\AbstractModel
      * Enter description here...
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,6 +51,7 @@ class Purchased extends \Magento\Framework\Model\AbstractModel
      * Check order id
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {

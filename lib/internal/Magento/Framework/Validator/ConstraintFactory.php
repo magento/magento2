@@ -9,12 +9,18 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * Class \Magento\Framework\Validator\ConstraintFactory
+ *
+ * @since 2.0.0
+ */
 class ConstraintFactory
 {
     /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -22,6 +28,7 @@ class ConstraintFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -30,6 +37,7 @@ class ConstraintFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -45,6 +53,7 @@ class ConstraintFactory
      * @param array $data
      * @return \Magento\Framework\Validator\Constraint
      * @api
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

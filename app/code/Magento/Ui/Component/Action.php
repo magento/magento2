@@ -10,6 +10,7 @@ use Zend\Stdlib\JsonSerializable;
 
 /**
  * Class Action
+ * @since 2.0.0
  */
 class Action extends AbstractComponent
 {
@@ -17,6 +18,7 @@ class Action extends AbstractComponent
 
     /**
      * @var array|JsonSerializable
+     * @since 2.0.0
      */
     protected $actions;
 
@@ -25,6 +27,7 @@ class Action extends AbstractComponent
      * @param array $components
      * @param array $data
      * @param array|JsonSerializable $actions
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -38,6 +41,7 @@ class Action extends AbstractComponent
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -52,6 +56,7 @@ class Action extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

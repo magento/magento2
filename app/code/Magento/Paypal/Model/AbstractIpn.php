@@ -8,10 +8,16 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
+/**
+ * Class \Magento\Paypal\Model\AbstractIpn
+ *
+ * @since 2.0.0
+ */
 class AbstractIpn
 {
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -19,6 +25,7 @@ class AbstractIpn
      * IPN request data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_ipnRequest;
 
@@ -26,16 +33,19 @@ class AbstractIpn
      * Collected debug information
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_debugData = [];
 
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
+     * @since 2.0.0
      */
     protected $_configFactory;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @since 2.0.0
      */
     protected $_curlFactory;
 
@@ -44,6 +54,7 @@ class AbstractIpn
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
@@ -62,6 +73,7 @@ class AbstractIpn
      *
      * @param string $key
      * @return array|string
+     * @since 2.0.0
      */
     public function getRequestData($key = null)
     {
@@ -77,6 +89,7 @@ class AbstractIpn
      * @return void
      * @throws RemoteServiceUnavailableException
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _postBack()
     {
@@ -123,6 +136,7 @@ class AbstractIpn
      * @param string $ipnPaymentStatus
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _filterPaymentStatus($ipnPaymentStatus)
     {
@@ -162,6 +176,7 @@ class AbstractIpn
      * Log debug data to file
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _debug()
     {
@@ -174,6 +189,7 @@ class AbstractIpn
      * @param string $key
      * @param array|string $value
      * @return $this
+     * @since 2.0.0
      */
     protected function _addDebugData($key, $value)
     {

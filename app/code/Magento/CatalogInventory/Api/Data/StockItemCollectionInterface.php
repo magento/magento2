@@ -14,6 +14,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Interface StockItemCollectionInterface
  * @api
+ * @since 2.0.0
  */
 interface StockItemCollectionInterface extends SearchResultsInterface
 {
@@ -21,6 +22,7 @@ interface StockItemCollectionInterface extends SearchResultsInterface
      * Get items
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -29,6 +31,7 @@ interface StockItemCollectionInterface extends SearchResultsInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 
@@ -36,6 +39,7 @@ interface StockItemCollectionInterface extends SearchResultsInterface
      * Get search criteria.
      *
      * @return \Magento\CatalogInventory\Api\StockItemCriteriaInterface
+     * @since 2.0.0
      */
     public function getSearchCriteria();
 }

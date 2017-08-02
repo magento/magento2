@@ -10,6 +10,11 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Email\Model\Mail\TransportInterfacePlugin
+ *
+ * @since 2.2.0
+ */
 class TransportInterfacePlugin
 {
     /**
@@ -19,11 +24,13 @@ class TransportInterfacePlugin
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.2.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig
@@ -39,6 +46,7 @@ class TransportInterfacePlugin
      * @return void
      * @throws MailException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function aroundSendMessage(
         TransportInterface $subject,

@@ -7,6 +7,7 @@ namespace Magento\Usps\Model\Source;
 
 /**
  * Size source
+ * @since 2.0.0
  */
 class Size extends Generic
 {
@@ -14,6 +15,7 @@ class Size extends Generic
      * Carrier code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $code = 'size';
 }

@@ -10,6 +10,7 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class OauthInputException extends InputException
 {
@@ -17,6 +18,7 @@ class OauthInputException extends InputException
      * Get error messages as a single comma separated string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAggregatedErrorMessage()
     {

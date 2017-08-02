@@ -9,12 +9,18 @@
  */
 namespace Magento\Setup\Model;
 
+/**
+ * Class \Magento\Setup\Model\DataGenerator
+ *
+ * @since 2.2.0
+ */
 class DataGenerator
 {
     /**
      * Location for dictionary file.
      *
      * @var string
+     * @since 2.2.0
      */
     private $dictionaryFile;
 
@@ -22,6 +28,7 @@ class DataGenerator
      * Dictionary data.
      *
      * @var array
+     * @since 2.2.0
      */
     private $dictionaryData;
 
@@ -29,6 +36,7 @@ class DataGenerator
      * Map of generated values
      *
      * @var array
+     * @since 2.2.0
      */
     private $generatedValues;
 
@@ -36,6 +44,7 @@ class DataGenerator
      * DataGenerator constructor.
      *
      * @param string $dictionaryFile
+     * @since 2.2.0
      */
     public function __construct($dictionaryFile)
     {
@@ -48,6 +57,7 @@ class DataGenerator
      * Read data from file.
      *
      * @return void
+     * @since 2.2.0
      */
     protected function readData()
     {
@@ -64,6 +74,7 @@ class DataGenerator
      * @param int $maxAmountOfWords
      * @param string|null $key
      * @return string
+     * @since 2.2.0
      */
     public function generate($minAmountOfWords, $maxAmountOfWords, $key = null)
     {

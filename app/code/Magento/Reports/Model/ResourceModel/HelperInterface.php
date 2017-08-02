@@ -11,6 +11,7 @@ namespace Magento\Reports\Model\ResourceModel;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface HelperInterface
 {
@@ -21,6 +22,7 @@ interface HelperInterface
      * @param array $data
      * @param mixed $matchFields
      * @return string
+     * @since 2.0.0
      */
     public function mergeVisitorProductIndex($mainTable, $data, $matchFields);
 
@@ -33,6 +35,7 @@ interface HelperInterface
      * @param string $mainTable
      * @param string $aggregationTable
      * @return $this
+     * @since 2.0.0
      */
     public function updateReportRatingPos($connection, $type, $column, $mainTable, $aggregationTable);
 }

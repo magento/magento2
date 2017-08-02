@@ -8,6 +8,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class FieldFactory
 {
@@ -15,6 +16,7 @@ class FieldFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -22,6 +24,7 @@ class FieldFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -30,6 +33,7 @@ class FieldFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -44,6 +48,7 @@ class FieldFactory
      *
      * @param array $data
      * @return \Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

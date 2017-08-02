@@ -8,6 +8,7 @@ namespace Magento\Framework\View;
 /**
  * Interface LayoutInterface
  * @api
+ * @since 2.0.0
  */
 interface LayoutInterface
 {
@@ -15,6 +16,7 @@ interface LayoutInterface
      * Retrieve the layout processor
      *
      * @return Layout\ProcessorInterface
+     * @since 2.0.0
      */
     public function getUpdate();
 
@@ -22,6 +24,7 @@ interface LayoutInterface
      * Layout xml generation
      *
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function generateXml();
 
@@ -29,6 +32,7 @@ interface LayoutInterface
      * Create structure of elements from the loaded XML configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function generateElements();
 
@@ -38,6 +42,7 @@ interface LayoutInterface
      * @param string $name
      * @param bool $useCache
      * @return string
+     * @since 2.0.0
      */
     public function renderElement($name, $useCache = true);
 
@@ -46,6 +51,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function addOutputElement($name);
 
@@ -53,6 +59,7 @@ interface LayoutInterface
      * Get all blocks marked for output
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOutput();
 
@@ -61,6 +68,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return bool
+     * @since 2.0.0
      */
     public function hasElement($name);
 
@@ -69,6 +77,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function unsetElement($name);
 
@@ -76,6 +85,7 @@ interface LayoutInterface
      * Retrieve all blocks from registry as array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllBlocks();
 
@@ -84,6 +94,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return Element\BlockInterface|bool
+     * @since 2.0.0
      */
     public function getBlock($name);
 
@@ -93,6 +104,7 @@ interface LayoutInterface
      * @param string $parentName
      * @param string $alias
      * @return null
+     * @since 2.0.0
      */
     public function getChildBlock($parentName, $alias);
 
@@ -103,6 +115,7 @@ interface LayoutInterface
      * @param string $elementName
      * @param string $alias
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function setChild($parentName, $elementName, $alias);
 
@@ -118,6 +131,7 @@ interface LayoutInterface
      * @param string|int|null $offsetOrSibling
      * @param bool $after
      * @return void
+     * @since 2.0.0
      */
     public function reorderChild($parentName, $childName, $offsetOrSibling, $after = true);
 
@@ -127,6 +141,7 @@ interface LayoutInterface
      * @param string $parentName
      * @param string $alias
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function unsetChild($parentName, $alias);
 
@@ -135,6 +150,7 @@ interface LayoutInterface
      *
      * @param string $parentName
      * @return array
+     * @since 2.0.0
      */
     public function getChildNames($parentName);
 
@@ -145,6 +161,7 @@ interface LayoutInterface
      *
      * @param string $parentName
      * @return array
+     * @since 2.0.0
      */
     public function getChildBlocks($parentName);
 
@@ -154,6 +171,7 @@ interface LayoutInterface
      * @param string $parentName
      * @param string $alias
      * @return bool|string
+     * @since 2.0.0
      */
     public function getChildName($parentName, $alias);
 
@@ -163,6 +181,7 @@ interface LayoutInterface
      * @param string $blockName
      * @param string $parentGroupName
      * @return bool
+     * @since 2.0.0
      */
     public function addToParentGroup($blockName, $parentGroupName);
 
@@ -172,6 +191,7 @@ interface LayoutInterface
      * @param string $blockName
      * @param string $groupName
      * @return array
+     * @since 2.0.0
      */
     public function getGroupChildNames($blockName, $groupName);
 
@@ -180,6 +200,7 @@ interface LayoutInterface
      *
      * @param string $childName
      * @return bool|string
+     * @since 2.0.0
      */
     public function getParentName($childName);
 
@@ -190,6 +211,7 @@ interface LayoutInterface
      * @param  string $name
      * @param  array $arguments
      * @return Element\BlockInterface
+     * @since 2.0.0
      */
     public function createBlock($type, $name = '', array $arguments = []);
 
@@ -201,6 +223,7 @@ interface LayoutInterface
      * @param string $parent
      * @param string $alias
      * @return Element\BlockInterface
+     * @since 2.0.0
      */
     public function addBlock($block, $name = '', $parent = '', $alias = '');
 
@@ -213,6 +236,7 @@ interface LayoutInterface
      * @param string $parent
      * @param string $alias
      * @return void
+     * @since 2.0.0
      */
     public function addContainer($name, $label, array $options = [], $parent = '', $alias = '');
 
@@ -222,6 +246,7 @@ interface LayoutInterface
      * @param string $oldName
      * @param string $newName
      * @return bool
+     * @since 2.0.0
      */
     public function renameElement($oldName, $newName);
 
@@ -230,6 +255,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return bool|string
+     * @since 2.0.0
      */
     public function getElementAlias($name);
 
@@ -238,6 +264,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function removeOutputElement($name);
 
@@ -245,6 +272,7 @@ interface LayoutInterface
      * Retrieve messages block
      *
      * @return \Magento\Framework\View\Element\Messages
+     * @since 2.0.0
      */
     public function getMessagesBlock();
 
@@ -253,6 +281,7 @@ interface LayoutInterface
      *
      * @param string $type
      * @return Element\BlockInterface
+     * @since 2.0.0
      */
     public function getBlockSingleton($type);
 
@@ -262,6 +291,7 @@ interface LayoutInterface
      * @param string $name
      * @param string $attribute
      * @return mixed
+     * @since 2.0.0
      */
     public function getElementProperty($name, $attribute);
 
@@ -270,6 +300,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return bool
+     * @since 2.0.0
      */
     public function isBlock($name);
 
@@ -278,6 +309,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return bool
+     * @since 2.0.0
      */
     public function isContainer($name);
 
@@ -286,6 +318,7 @@ interface LayoutInterface
      *
      * @param string $name
      * @return bool
+     * @since 2.0.0
      */
     public function isManipulationAllowed($name);
 
@@ -295,6 +328,7 @@ interface LayoutInterface
      * @param string $name
      * @param  Element\BlockInterface $block
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function setBlock($name, $block);
 
@@ -302,6 +336,7 @@ interface LayoutInterface
      * Check is exists non-cacheable layout elements
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCacheable();
 }

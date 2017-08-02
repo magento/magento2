@@ -9,12 +9,18 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rate\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Save Rate and Data
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

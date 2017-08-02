@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Edit\WeightResolver;
 
 /**
  * Plugin for product type transition manager
+ * @since 2.0.0
  */
 class Downloadable
 {
@@ -18,17 +19,20 @@ class Downloadable
      * Request instance
      *
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Catalog\Model\Product\Edit\WeightResolver
+     * @since 2.0.0
      */
     protected $weightResolver;
 
     /**
      * @param RequestInterface $request
      * @param WeightResolver $weightResolver
+     * @since 2.0.0
      */
     public function __construct(RequestInterface $request, WeightResolver $weightResolver)
     {
@@ -44,6 +48,7 @@ class Downloadable
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundProcessProduct(
         \Magento\Catalog\Model\Product\TypeTransitionManager $subject,

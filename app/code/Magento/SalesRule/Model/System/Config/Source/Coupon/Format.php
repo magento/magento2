@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Model\System\Config\Source\Coupon;
  * Options for Code Format Field in Auto Generated Specific Coupon Codes configuration section
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Format implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,11 +17,13 @@ class Format implements \Magento\Framework\Option\ArrayInterface
      * Sales rule coupon
      *
      * @var \Magento\SalesRule\Helper\Coupon
+     * @since 2.0.0
      */
     protected $_salesRuleCoupon = null;
 
     /**
      * @param \Magento\SalesRule\Helper\Coupon $salesRuleCoupon
+     * @since 2.0.0
      */
     public function __construct(\Magento\SalesRule\Helper\Coupon $salesRuleCoupon)
     {
@@ -29,6 +32,7 @@ class Format implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

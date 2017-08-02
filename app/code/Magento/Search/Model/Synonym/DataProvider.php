@@ -10,21 +10,25 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
+ * @since 2.1.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var \Magento\Search\Model\ResourceModel\SynonymGroup\Collection
+     * @since 2.1.0
      */
     protected $collection;
 
     /**
      * @var FilterPool
+     * @since 2.1.0
      */
     protected $filterPool;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $loadedData;
 
@@ -38,6 +42,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -57,6 +62,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get data
      *
      * @return array
+     * @since 2.1.0
      */
     public function getData()
     {

@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  * Edit order address form container block
  *
  * @api
+ * @since 2.0.0
  */
 class Address extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -16,6 +17,7 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -23,6 +25,7 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -37,6 +40,7 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -52,6 +56,7 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve text for header element depending on loaded page
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -69,6 +74,7 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
      * Back button url getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {

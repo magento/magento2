@@ -11,23 +11,31 @@
  */
 namespace Magento\Shipping\Helper;
 
+/**
+ * Class \Magento\Shipping\Helper\Data
+ *
+ * @since 2.0.0
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Allowed hash keys
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allowedHashKeys = ['ship_id', 'order_id', 'track_id'];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -42,6 +50,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  string $hash
      * @return array
+     * @since 2.0.0
      */
     public function decodeTrackingHash($hash)
     {
@@ -59,6 +68,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
      * @param  string $method Optional - method of a model to get id
      * @return string
+     * @since 2.0.0
      */
     protected function _getTrackingUrl($key, $model, $method = 'getId')
     {
@@ -77,6 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Sales\Model\AbstractModel $model
      * @return string
+     * @since 2.0.0
      */
     public function getTrackingPopupUrlBySalesModel($model)
     {

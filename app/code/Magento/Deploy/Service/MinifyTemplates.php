@@ -10,22 +10,26 @@ use Magento\Framework\App\Utility\Files;
 
 /**
  * Minify PHTML templates service
+ * @since 2.2.0
  */
 class MinifyTemplates
 {
     /**
      * @var Files
+     * @since 2.2.0
      */
     private $filesUtils;
 
     /**
      * @var MinifierInterface
+     * @since 2.2.0
      */
     private $htmlMinifier;
 
     /**
      * @param Files $filesUtils
      * @param MinifierInterface $htmlMinifier
+     * @since 2.2.0
      */
     public function __construct(
         Files $filesUtils,
@@ -39,6 +43,7 @@ class MinifyTemplates
      * Minify template files
      *
      * @return int
+     * @since 2.2.0
      */
     public function minifyTemplates()
     {

@@ -7,11 +7,13 @@ namespace Magento\Tax\Block\Checkout;
 
 /**
  * Subtotal Total Row Renderer
+ * @since 2.0.0
  */
 class Discount extends \Magento\Checkout\Block\Total\DefaultTotal
 {
     /**
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -23,6 +25,7 @@ class Discount extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $layoutProcessors
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,6 +43,7 @@ class Discount extends \Magento\Checkout\Block\Total\DefaultTotal
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function displayBoth()
     {

@@ -13,26 +13,31 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class CheckIfExists
+ * @since 2.1.0
  */
 class CheckIfExists implements CheckIfExistsInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.1.0
      */
     private $resourceConnection;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var HydratorPool
+     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var TypeResolver
+     * @since 2.1.0
      */
     private $typeResolver;
 
@@ -41,6 +46,7 @@ class CheckIfExists implements CheckIfExistsInterface
      * @param HydratorPool $hydratorPool
      * @param TypeResolver $typeResolver
      * @param ResourceConnection $resourceConnection
+     * @since 2.1.0
      */
     public function __construct(
         TypeResolver $typeResolver,
@@ -60,6 +66,7 @@ class CheckIfExists implements CheckIfExistsInterface
      * @return bool
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

@@ -8,11 +8,13 @@ namespace Magento\Eav\Model\Entity\Collection\VersionControl;
 /**
  * Class Abstract Collection
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
+     * @since 2.0.0
      */
     protected $entitySnapshot;
 
@@ -30,6 +32,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
      * @param mixed $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -62,6 +65,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function fetchItem()
     {
@@ -75,6 +79,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
     /**
      * @inheritdoc
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {

@@ -6,11 +6,17 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

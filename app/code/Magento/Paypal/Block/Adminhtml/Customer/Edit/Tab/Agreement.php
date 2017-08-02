@@ -13,6 +13,7 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements TabInterface
 {
@@ -20,6 +21,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Columns, that should be removed from grid
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_columnsToRemove = ['customer_email', 'customer_firstname', 'customer_lastname'];
 
@@ -27,6 +29,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -38,6 +41,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * @param \Magento\Paypal\Model\Billing\Agreement $agreementModel
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,6 +60,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Disable filters and paging
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -65,6 +70,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -73,6 +79,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -81,6 +88,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -89,6 +97,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -99,6 +108,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Get grid url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -109,6 +119,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Tab class getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -119,6 +130,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Return URL link to Tab content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -129,6 +141,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Tab should be loaded trough Ajax call
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAjaxLoaded()
     {
@@ -139,6 +152,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Defines after which tab, this tab should be rendered
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAfter()
     {
@@ -149,6 +163,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Prepare collection for grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -168,6 +183,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

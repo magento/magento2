@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Transactions\Fetch
+ *
+ * @since 2.0.0
+ */
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
@@ -23,6 +28,7 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
      * Fetch transaction details action
      *
      * @return Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

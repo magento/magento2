@@ -10,6 +10,7 @@ namespace Magento\Setup\Model;
  * Class PhpInformation
  *
  * Provides information and checks about the current and required PHP settings.
+ * @since 2.0.0
  */
 class PhpInformation
 {
@@ -23,12 +24,14 @@ class PhpInformation
      * List of currently installed extensions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $current = [];
 
     /**
      * Returns minimum required XDebug nested level
      * @return int
+     * @since 2.0.0
      */
     public function getRequiredMinimumXDebugNestedLevel()
     {
@@ -39,6 +42,7 @@ class PhpInformation
      * Retrieve list of currently installed extensions
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCurrent()
     {

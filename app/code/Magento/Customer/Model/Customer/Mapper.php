@@ -14,16 +14,19 @@ use Magento\Framework\Convert\ConvertArray;
 
 /**
  * Class Mapper converts Address Service Data Object to an array
+ * @since 2.0.0
  */
 class Mapper
 {
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @since 2.0.0
      */
     private $extensibleDataObjectConverter;
 
     /**
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @since 2.0.0
      */
     public function __construct(ExtensibleDataObjectConverter $extensibleDataObjectConverter)
     {
@@ -35,6 +38,7 @@ class Mapper
      *
      * @param CustomerInterface $customer
      * @return array
+     * @since 2.0.0
      */
     public function toFlatArray(CustomerInterface $customer)
     {

@@ -17,31 +17,37 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Item extends AbstractModel implements ShipmentItemInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_shipment_item';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'shipment_item';
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment|null
+     * @since 2.0.0
      */
     protected $_shipment = null;
 
     /**
      * @var \Magento\Sales\Model\Order\Item|null
+     * @since 2.0.0
      */
     protected $_orderItem = null;
 
     /**
      * @var \Magento\Sales\Model\Order\ItemFactory
+     * @since 2.0.0
      */
     protected $_orderItemFactory;
 
@@ -54,6 +60,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -81,6 +88,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -94,6 +102,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
+     * @since 2.0.0
      */
     public function setShipment(\Magento\Sales\Model\Order\Shipment $shipment)
     {
@@ -107,6 +116,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -118,6 +128,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -130,6 +141,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Retrieve order item instance
      *
      * @return \Magento\Sales\Model\Order\Item
+     * @since 2.0.0
      */
     public function getOrderItem()
     {
@@ -149,6 +161,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Invoice\Item
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -161,6 +174,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function register()
     {
@@ -174,6 +188,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns additional_data
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalData()
     {
@@ -184,6 +199,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns description
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -194,6 +210,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -204,6 +221,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns order_item_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getOrderItemId()
     {
@@ -214,6 +232,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns parent_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -224,6 +243,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -234,6 +254,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns product_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -244,6 +265,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns qty
      *
      * @return float
+     * @since 2.0.0
      */
     public function getQty()
     {
@@ -254,6 +276,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns row_total
      *
      * @return float
+     * @since 2.0.0
      */
     public function getRowTotal()
     {
@@ -264,6 +287,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns sku
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSku()
     {
@@ -274,6 +298,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Returns weight
      *
      * @return float
+     * @since 2.0.0
      */
     public function getWeight()
     {
@@ -282,6 +307,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -290,6 +316,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRowTotal($amount)
     {
@@ -298,6 +325,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -306,6 +334,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setWeight($weight)
     {
@@ -314,6 +343,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setProductId($id)
     {
@@ -322,6 +352,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setOrderItemId($id)
     {
@@ -330,6 +361,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAdditionalData($additionalData)
     {
@@ -338,6 +370,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDescription($description)
     {
@@ -346,6 +379,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -354,6 +388,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -364,6 +399,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -375,6 +411,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes)
     {

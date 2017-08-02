@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 2.0.0
  */
 interface OrderItemSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -19,6 +20,7 @@ interface OrderItemSearchResultInterface extends \Magento\Framework\Api\SearchRe
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\OrderItemInterface[] Array of collection items.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -27,6 +29,7 @@ interface OrderItemSearchResultInterface extends \Magento\Framework\Api\SearchRe
      *
      * @param \Magento\Sales\Api\Data\OrderItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

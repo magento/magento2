@@ -10,6 +10,7 @@ namespace Magento\Sales\Api;
  *
  * An invoice is a record of the receipt of payment for an order.
  * @api
+ * @since 2.0.0
  */
 interface InvoiceManagementInterface
 {
@@ -18,6 +19,7 @@ interface InvoiceManagementInterface
      *
      * @param int $id
      * @return string
+     * @since 2.0.0
      */
     public function setCapture($id);
 
@@ -26,6 +28,7 @@ interface InvoiceManagementInterface
      *
      * @param int $id The invoice ID.
      * @return \Magento\Sales\Api\Data\InvoiceCommentSearchResultInterface Invoice comment search result interface.
+     * @since 2.0.0
      */
     public function getCommentsList($id);
 
@@ -34,6 +37,7 @@ interface InvoiceManagementInterface
      *
      * @param int $id The invoice ID.
      * @return bool
+     * @since 2.0.0
      */
     public function notify($id);
 
@@ -42,6 +46,7 @@ interface InvoiceManagementInterface
      *
      * @param int $id The invoice ID.
      * @return bool
+     * @since 2.0.0
      */
     public function setVoid($id);
 }

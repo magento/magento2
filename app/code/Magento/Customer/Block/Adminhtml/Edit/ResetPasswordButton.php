@@ -9,11 +9,13 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class ResetPasswordButton
+ * @since 2.0.0
  */
 class ResetPasswordButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getButtonData()
     {
@@ -32,6 +34,7 @@ class ResetPasswordButton extends GenericButton implements ButtonProviderInterfa
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getResetPasswordUrl()
     {

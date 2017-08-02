@@ -9,12 +9,19 @@ use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class CmsPageUrlPathGenerator
 {
-    /** @var \Magento\Framework\Filter\FilterManager */
+    /**
+     * @var \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
+     */
     protected $filterManager;
 
+    /**
+     * @since 2.0.0
+     */
     public function __construct(
         \Magento\Framework\Filter\FilterManager $filterManager
     ) {
@@ -25,6 +32,7 @@ class CmsPageUrlPathGenerator
      * @param PageInterface $cmsPage
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUrlPath(PageInterface $cmsPage)
     {
@@ -36,6 +44,7 @@ class CmsPageUrlPathGenerator
      *
      * @param PageInterface $cmsPage
      * @return string
+     * @since 2.0.0
      */
     public function getCanonicalUrlPath(PageInterface $cmsPage)
     {
@@ -47,6 +56,7 @@ class CmsPageUrlPathGenerator
      *
      * @param PageInterface $cmsPage
      * @return string
+     * @since 2.0.0
      */
     public function generateUrlKey(PageInterface $cmsPage)
     {

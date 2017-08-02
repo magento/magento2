@@ -11,10 +11,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Apply
+ *
+ * @since 2.0.0
+ */
 class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -43,6 +49,7 @@ class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
      * @param bool $readonly
      * @param bool $useDisabled
      * @return $this
+     * @since 2.0.0
      */
     public function setReadonly($readonly, $useDisabled = false)
     {

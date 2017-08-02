@@ -6,11 +6,17 @@
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 
+/**
+ * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\DataHashGenerator
+ *
+ * @since 2.1.0
+ */
 class DataHashGenerator
 {
     /**
      * @param array $data
      * @return string
+     * @since 2.1.0
      */
     public function getHash(array $data)
     {

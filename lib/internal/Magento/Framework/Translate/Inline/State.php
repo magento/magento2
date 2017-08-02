@@ -6,17 +6,24 @@
 
 namespace Magento\Framework\Translate\Inline;
 
+/**
+ * Class \Magento\Framework\Translate\Inline\State
+ *
+ * @since 2.0.0
+ */
 class State implements StateInterface
 {
     /**
      * Flag to enable/disable inine translation
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $isEnabled = true;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $storedStatus;
 
@@ -24,6 +31,7 @@ class State implements StateInterface
      * Disable inline translation
      *
      * @return void
+     * @since 2.0.0
      */
     public function disable()
     {
@@ -34,6 +42,7 @@ class State implements StateInterface
      * Enable inline translation
      *
      * @return void
+     * @since 2.0.0
      */
     public function enable()
     {
@@ -44,6 +53,7 @@ class State implements StateInterface
      * Check if inline translation enabled/disabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -58,6 +68,7 @@ class State implements StateInterface
      *
      * @param bool $status
      * @return void
+     * @since 2.0.0
      */
     public function suspend($status = false)
     {
@@ -75,6 +86,7 @@ class State implements StateInterface
      *
      * @param bool $status
      * @return void
+     * @since 2.0.0
      */
     public function resume($status = true)
     {

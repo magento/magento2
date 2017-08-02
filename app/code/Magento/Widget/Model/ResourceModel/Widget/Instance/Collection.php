@@ -10,6 +10,7 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance;
  * Widget Instance Collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,6 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Fields map for corellation names & real selected fields
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_map = ['fields' => ['type' => 'instance_type']];
 
@@ -24,6 +26,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,6 +43,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param array|int $storeIds
      * @param bool $withDefaultStore if TRUE also filter by store id '0'
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeIds = [], $withDefaultStore = true)
     {

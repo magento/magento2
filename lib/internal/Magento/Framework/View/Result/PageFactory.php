@@ -14,22 +14,26 @@ use Magento\Framework\ObjectManagerInterface;
  * which is by convention is determined from the controller action class
  *
  * @api
+ * @since 2.0.0
  */
 class PageFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -48,6 +52,7 @@ class PageFactory
      * @param bool $isView
      * @param array $arguments
      * @return \Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function create($isView = false, array $arguments = [])
     {

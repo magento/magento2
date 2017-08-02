@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface PriceModifierInterface
 {
@@ -21,6 +22,7 @@ interface PriceModifierInterface
      * @param Product $product
      * @return mixed
      * @api
+     * @since 2.0.0
      */
     public function modifyPrice($price, Product $product);
 }

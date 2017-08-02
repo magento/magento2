@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Model\Rule\Condition;
  * Product rule condition data model
  *
  * @author Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -17,6 +18,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @param array $attributes
      * @return void
+     * @since 2.0.0
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -31,6 +33,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -62,6 +65,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Retrieve value element chooser URL
      *
      * @return string
+     * @since 2.2.0
      */
     public function getValueElementChooserUrl()
     {

@@ -11,6 +11,11 @@
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer;
 
+/**
+ * Class \Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer\Country
+ *
+ * @since 2.0.0
+ */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country
 {
     /**
@@ -18,6 +23,7 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function renderExport(\Magento\Framework\DataObject $row)
     {

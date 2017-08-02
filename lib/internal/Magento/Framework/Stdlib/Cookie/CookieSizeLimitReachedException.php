@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
  * set for the domain.
  *
  * @api
+ * @since 2.0.0
  */
 class CookieSizeLimitReachedException extends LocalizedException
 {

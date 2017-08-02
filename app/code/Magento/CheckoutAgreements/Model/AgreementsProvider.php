@@ -10,6 +10,7 @@ use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory a
 
 /**
  * Provide Agreements stored in db
+ * @since 2.0.0
  */
 class AgreementsProvider implements AgreementsProviderInterface
 {
@@ -20,16 +21,19 @@ class AgreementsProvider implements AgreementsProviderInterface
 
     /**
      * @var AgreementCollectionFactory
+     * @since 2.0.0
      */
     protected $agreementCollectionFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -38,6 +42,7 @@ class AgreementsProvider implements AgreementsProviderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         AgreementCollectionFactory $agreementCollectionFactory,
@@ -53,6 +58,7 @@ class AgreementsProvider implements AgreementsProviderInterface
      * Get list of required Agreement Ids
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getRequiredAgreementIds()
     {

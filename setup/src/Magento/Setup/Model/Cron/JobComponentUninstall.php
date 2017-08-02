@@ -13,6 +13,7 @@ use Magento\Framework\Composer\ComposerInformation;
  * Job to remove a component. Run by Setup Cron Task
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @since 2.0.0
  */
 class JobComponentUninstall extends AbstractJob
 {
@@ -28,31 +29,37 @@ class JobComponentUninstall extends AbstractJob
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Magento\Setup\Model\Updater
+     * @since 2.0.0
      */
     private $updater;
 
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
+     * @since 2.0.0
      */
     private $composerInformation;
 
     /**
      * @var Helper\ModuleUninstall
+     * @since 2.0.0
      */
     private $moduleUninstall;
 
     /**
      * @var Helper\ThemeUninstall
+     * @since 2.0.0
      */
     private $themeUninstall;
 
     /**
      * @var \Magento\Setup\Model\Cron\Queue
+     * @since 2.0.0
      */
     private $queue;
 
@@ -69,6 +76,7 @@ class JobComponentUninstall extends AbstractJob
      * @param \Magento\Setup\Model\Updater $updater
      * @param string $name
      * @param array $params
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
@@ -96,6 +104,7 @@ class JobComponentUninstall extends AbstractJob
      *
      * @return void
      * @throw \RuntimeException
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -123,6 +132,7 @@ class JobComponentUninstall extends AbstractJob
      * @param array $component
      * @return void
      * @throw \RuntimeException
+     * @since 2.0.0
      */
     private function executeComponent(array $component)
     {

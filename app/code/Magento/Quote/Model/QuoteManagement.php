@@ -27,121 +27,145 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 {
     /**
      * @var EventManager
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var QuoteValidator
+     * @since 2.0.0
      */
     protected $quoteValidator;
 
     /**
      * @var OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var OrderManagement
+     * @since 2.0.0
      */
     protected $orderManagement;
 
     /**
      * @var CustomerManagement
+     * @since 2.0.0
      */
     protected $customerManagement;
 
     /**
      * @var ToOrderConverter
+     * @since 2.0.0
      */
     protected $quoteAddressToOrder;
 
     /**
      * @var ToOrderAddressConverter
+     * @since 2.0.0
      */
     protected $quoteAddressToOrderAddress;
 
     /**
      * @var ToOrderItemConverter
+     * @since 2.0.0
      */
     protected $quoteItemToOrderItem;
 
     /**
      * @var ToOrderPaymentConverter
+     * @since 2.0.0
      */
     protected $quotePaymentToOrderPayment;
 
     /**
      * @var UserContextInterface
+     * @since 2.0.0
      */
     protected $userContext;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
+     * @since 2.0.0
      */
     protected $customerModelFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\AddressFactory
+     * @since 2.0.0
      */
     protected $quoteAddressFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var QuoteFactory
+     * @since 2.0.0
      */
     protected $quoteFactory;
 
     /**
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     * @since 2.1.0
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.2.0
      */
     private $addressRepository;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $addressesToSync = [];
 
@@ -169,6 +193,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Quote\Model\QuoteIdMaskFactory|null $quoteIdMaskFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface|null $addressRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         EventManager $eventManager,
@@ -222,6 +247,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function createEmptyCart()
     {
@@ -241,6 +267,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function createEmptyCartForCustomer($customerId)
     {
@@ -257,6 +284,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function assignCustomer($cartId, $customerId, $storeId)
     {
@@ -298,6 +326,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      *
      * @param int $storeId
      * @return \Magento\Quote\Model\Quote Cart object.
+     * @since 2.0.0
      */
     protected function createAnonymousCart($storeId)
     {
@@ -314,6 +343,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param int $storeId
      * @return \Magento\Quote\Model\Quote Cart object.
      * @throws CouldNotSaveException The cart could not be created.
+     * @since 2.0.0
      */
     protected function createCustomerCart($customerId, $storeId)
     {
@@ -332,6 +362,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
@@ -379,6 +410,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCartForCustomer($customerId)
     {
@@ -393,6 +425,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|null
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function submit(QuoteEntity $quote, $orderData = [])
     {
@@ -407,6 +440,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * @param Quote $quote
      * @return array
+     * @since 2.0.0
      */
     protected function resolveItems(QuoteEntity $quote)
     {
@@ -433,6 +467,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
@@ -535,6 +570,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _prepareCustomerQuote($quote)
     {

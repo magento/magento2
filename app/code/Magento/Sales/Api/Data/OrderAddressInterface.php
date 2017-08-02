@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 2.0.0
  */
 interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -149,6 +150,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the address type for the order address.
      *
      * @return string Address type.
+     * @since 2.0.0
      */
     public function getAddressType();
 
@@ -156,6 +158,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the city for the order address.
      *
      * @return string City.
+     * @since 2.0.0
      */
     public function getCity();
 
@@ -163,6 +166,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the company for the order address.
      *
      * @return string|null Company.
+     * @since 2.0.0
      */
     public function getCompany();
 
@@ -170,6 +174,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the country ID for the order address.
      *
      * @return string Country ID.
+     * @since 2.0.0
      */
     public function getCountryId();
 
@@ -177,6 +182,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the country address ID for the order address.
      *
      * @return int|null Country address ID.
+     * @since 2.0.0
      */
     public function getCustomerAddressId();
 
@@ -184,6 +190,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the customer ID for the order address.
      *
      * @return int|null Customer ID.
+     * @since 2.0.0
      */
     public function getCustomerId();
 
@@ -191,6 +198,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the email address for the order address.
      *
      * @return string|null Email address.
+     * @since 2.0.0
      */
     public function getEmail();
 
@@ -198,6 +206,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the ID for the order address.
      *
      * @return int|null Order address ID.
+     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -206,6 +215,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -213,6 +223,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the fax number for the order address.
      *
      * @return string|null Fax number.
+     * @since 2.0.0
      */
     public function getFax();
 
@@ -220,6 +231,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the first name for the order address.
      *
      * @return string First name.
+     * @since 2.0.0
      */
     public function getFirstname();
 
@@ -227,6 +239,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the last name for the order address.
      *
      * @return string Last name.
+     * @since 2.0.0
      */
     public function getLastname();
 
@@ -234,6 +247,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the middle name for the order address.
      *
      * @return string|null Middle name.
+     * @since 2.0.0
      */
     public function getMiddlename();
 
@@ -241,6 +255,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the parent ID for the order address.
      *
      * @return int|null Parent ID.
+     * @since 2.0.0
      */
     public function getParentId();
 
@@ -248,6 +263,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the postal code for the order address.
      *
      * @return string Postal code.
+     * @since 2.0.0
      */
     public function getPostcode();
 
@@ -255,6 +271,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the prefix for the order address.
      *
      * @return string|null Prefix.
+     * @since 2.0.0
      */
     public function getPrefix();
 
@@ -262,6 +279,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the region for the order address.
      *
      * @return string|null Region.
+     * @since 2.0.0
      */
     public function getRegion();
 
@@ -269,6 +287,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the region code for the order address
      *
      * @return string|null Region code.
+     * @since 2.0.0
      */
     public function getRegionCode();
 
@@ -276,6 +295,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the region ID for the order address.
      *
      * @return int|null Region ID.
+     * @since 2.0.0
      */
     public function getRegionId();
 
@@ -283,6 +303,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the street values, if any, for the order address.
      *
      * @return string[]|null Array of any street values. Otherwise, null.
+     * @since 2.0.0
      */
     public function getStreet();
 
@@ -290,6 +311,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the suffix for the order address.
      *
      * @return string|null Suffix.
+     * @since 2.0.0
      */
     public function getSuffix();
 
@@ -297,6 +319,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the telephone number for the order address.
      *
      * @return string Telephone number.
+     * @since 2.0.0
      */
     public function getTelephone();
 
@@ -304,6 +327,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the VAT ID for the order address.
      *
      * @return string|null VAT ID.
+     * @since 2.0.0
      */
     public function getVatId();
 
@@ -311,6 +335,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the VAT-is-valid flag value for the order address.
      *
      * @return int|null VAT-is-valid flag value.
+     * @since 2.0.0
      */
     public function getVatIsValid();
 
@@ -318,6 +343,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the VAT request date for the order address.
      *
      * @return string|null VAT request date.
+     * @since 2.0.0
      */
     public function getVatRequestDate();
 
@@ -325,6 +351,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the VAT request ID for the order address.
      *
      * @return string|null VAT request ID.
+     * @since 2.0.0
      */
     public function getVatRequestId();
 
@@ -332,6 +359,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the VAT-request-success flag value for the order address.
      *
      * @return int|null VAT-request-success flag value.
+     * @since 2.0.0
      */
     public function getVatRequestSuccess();
 
@@ -340,6 +368,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -348,6 +377,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerAddressId($id);
 
@@ -356,6 +386,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setRegionId($id);
 
@@ -364,6 +395,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerId($id);
 
@@ -372,6 +404,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $fax
      * @return $this
+     * @since 2.0.0
      */
     public function setFax($fax);
 
@@ -380,6 +413,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $region
      * @return $this
+     * @since 2.0.0
      */
     public function setRegion($region);
 
@@ -388,6 +422,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $postcode
      * @return $this
+     * @since 2.0.0
      */
     public function setPostcode($postcode);
 
@@ -396,6 +431,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $lastname
      * @return $this
+     * @since 2.0.0
      */
     public function setLastname($lastname);
 
@@ -404,6 +440,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string|string[] $street
      * @return $this
+     * @since 2.0.0
      */
     public function setStreet($street);
 
@@ -412,6 +449,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $city
      * @return $this
+     * @since 2.0.0
      */
     public function setCity($city);
 
@@ -420,6 +458,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $email
      * @return $this
+     * @since 2.0.0
      */
     public function setEmail($email);
 
@@ -428,6 +467,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $telephone
      * @return $this
+     * @since 2.0.0
      */
     public function setTelephone($telephone);
 
@@ -436,6 +476,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCountryId($id);
 
@@ -444,6 +485,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $firstname
      * @return $this
+     * @since 2.0.0
      */
     public function setFirstname($firstname);
 
@@ -452,6 +494,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $addressType
      * @return $this
+     * @since 2.0.0
      */
     public function setAddressType($addressType);
 
@@ -460,6 +503,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $prefix
      * @return $this
+     * @since 2.0.0
      */
     public function setPrefix($prefix);
 
@@ -468,6 +512,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $middlename
      * @return $this
+     * @since 2.0.0
      */
     public function setMiddlename($middlename);
 
@@ -476,6 +521,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function setSuffix($suffix);
 
@@ -484,6 +530,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $company
      * @return $this
+     * @since 2.0.0
      */
     public function setCompany($company);
 
@@ -492,6 +539,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setVatId($id);
 
@@ -500,6 +548,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $vatIsValid
      * @return $this
+     * @since 2.0.0
      */
     public function setVatIsValid($vatIsValid);
 
@@ -508,6 +557,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setVatRequestId($id);
 
@@ -516,6 +566,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $regionCode
      * @return $this
+     * @since 2.0.0
      */
     public function setRegionCode($regionCode);
 
@@ -524,6 +575,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $vatRequestDate
      * @return $this
+     * @since 2.0.0
      */
     public function setVatRequestDate($vatRequestDate);
 
@@ -532,6 +584,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $vatRequestSuccess
      * @return $this
+     * @since 2.0.0
      */
     public function setVatRequestSuccess($vatRequestSuccess);
 
@@ -539,6 +592,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\OrderAddressExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -547,6 +601,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes);
 }

@@ -7,6 +7,11 @@ namespace Magento\GiftMessage\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * Class \Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor
+ *
+ * @since 2.0.0
+ */
 class ItemIdProcessor implements LayoutProcessorInterface
 {
     /**
@@ -15,6 +20,7 @@ class ItemIdProcessor implements LayoutProcessorInterface
      * @param array $jsLayout
      * @param AbstractItem $item
      * @return array
+     * @since 2.0.0
      */
     public function process($jsLayout, AbstractItem $item)
     {

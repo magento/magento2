@@ -10,12 +10,18 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Downloadable\Controller\Download\Link
+ *
+ * @since 2.0.0
+ */
 class Link extends \Magento\Downloadable\Controller\Download
 {
     /**
      * Return customer session object
      *
      * @return \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected function _getCustomerSession()
     {
@@ -30,6 +36,7 @@ class Link extends \Magento\Downloadable\Controller\Download
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function execute()
     {

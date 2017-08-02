@@ -14,31 +14,37 @@ use Magento\Customer\Model\Address\Mapper;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Book extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var AddressRepositoryInterface
+     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
+     * @since 2.0.0
      */
     protected $_addressConfig;
 
     /**
      * @var Mapper
+     * @since 2.0.0
      */
     protected $addressMapper;
 
@@ -50,6 +56,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param Mapper $addressMapper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -70,6 +77,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -79,6 +87,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAddAddressUrl()
     {
@@ -87,6 +96,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -98,6 +108,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getDeleteUrl()
     {
@@ -107,6 +118,7 @@ class Book extends \Magento\Framework\View\Element\Template
     /**
      * @param int $addressId
      * @return string
+     * @since 2.0.0
      */
     public function getAddressEditUrl($addressId)
     {
@@ -115,6 +127,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function hasPrimaryAddress()
     {
@@ -123,6 +136,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
+     * @since 2.0.0
      */
     public function getAdditionalAddresses()
     {
@@ -145,6 +159,7 @@ class Book extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
+     * @since 2.0.0
      */
     public function getAddressHtml(\Magento\Customer\Api\Data\AddressInterface $address = null)
     {
@@ -158,6 +173,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -175,6 +191,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getDefaultBilling()
     {
@@ -189,6 +206,7 @@ class Book extends \Magento\Framework\View\Element\Template
     /**
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface|null
+     * @since 2.0.0
      */
     public function getAddressById($addressId)
     {
@@ -201,6 +219,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getDefaultShipping()
     {

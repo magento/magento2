@@ -8,6 +8,11 @@ namespace Magento\Bundle\Model\Product\CopyConstructor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 
+/**
+ * Class \Magento\Bundle\Model\Product\CopyConstructor\Bundle
+ *
+ * @since 2.0.0
+ */
 class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
@@ -16,6 +21,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
      * @param Product $product
      * @param Product $duplicate
      * @return void
+     * @since 2.0.0
      */
     public function build(Product $product, Product $duplicate)
     {

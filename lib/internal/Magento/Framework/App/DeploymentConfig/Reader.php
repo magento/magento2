@@ -16,21 +16,25 @@ use Magento\Framework\Filesystem\DriverPool;
  * Loads the merged configuration from config files.
  *
  * @see FileReader The reader for specific configuration file
+ * @since 2.0.0
  */
 class Reader
 {
     /**
      * @var DirectoryList
+     * @since 2.0.0
      */
     private $dirList;
 
     /**
      * @var ConfigFilePool
+     * @since 2.0.0
      */
     private $configFilePool;
 
     /**
      * @var DriverPool
+     * @since 2.0.0
      */
     private $driverPool;
 
@@ -38,6 +42,7 @@ class Reader
      * Configuration file names
      *
      * @var array
+     * @since 2.0.0
      */
     private $files;
 
@@ -49,6 +54,7 @@ class Reader
      * @param ConfigFilePool $configFilePool
      * @param null|string $file
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(
         DirectoryList $dirList,
@@ -73,6 +79,7 @@ class Reader
      * Gets the file name
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFiles()
     {
@@ -89,6 +96,7 @@ class Reader
      * @throws FileSystemException If file can not be read
      * @throws \Exception If file key is not correct
      * @see FileReader
+     * @since 2.0.0
      */
     public function load($fileKey = null)
     {
@@ -127,8 +135,9 @@ class Reader
      * @param string $pathConfig The path config
      * @param bool $ignoreInitialConfigFiles Whether ignore custom pools
      * @return array
-     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 2.2.0 Magento does not support custom config file pools since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
     {

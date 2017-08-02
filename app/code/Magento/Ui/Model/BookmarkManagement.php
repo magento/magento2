@@ -6,25 +6,34 @@
 
 namespace Magento\Ui\Model;
 
+/**
+ * Class \Magento\Ui\Model\BookmarkManagement
+ *
+ * @since 2.0.0
+ */
 class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
 {
     /**
      * @var \Magento\Ui\Api\BookmarkRepositoryInterface
+     * @since 2.0.0
      */
     protected $bookmarkRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Authorization\Model\UserContextInterface
+     * @since 2.0.0
      */
     protected $userContext;
 
@@ -33,6 +42,7 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Ui\Api\BookmarkRepositoryInterface $bookmarkRepository,
@@ -48,6 +58,7 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadByNamespace($namespace)
     {
@@ -73,6 +84,7 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getByIdentifierNamespace($identifier, $namespace)
     {

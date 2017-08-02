@@ -7,6 +7,7 @@ namespace Magento\AdminNotification\Model\ResourceModel\System\Message\Collectio
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
 {
@@ -14,6 +15,7 @@ class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System
      * Unread message list
      *
      * @var \Magento\Framework\Notification\MessageInterface[]
+     * @since 2.0.0
      */
     protected $_unreadMessages = [];
 
@@ -21,6 +23,7 @@ class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System
      * Store new messages in database and remove outdated messages
      *
      * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     public function _afterLoad()
     {
@@ -60,6 +63,7 @@ class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System
      * Retrieve list of unread messages
      *
      * @return \Magento\Framework\Notification\MessageInterface[]
+     * @since 2.0.0
      */
     public function getUnread()
     {

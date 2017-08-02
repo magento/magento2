@@ -6,15 +6,22 @@
  */
 namespace Magento\Integration\Controller\Token;
 
+/**
+ * Class \Magento\Integration\Controller\Token\Request
+ *
+ * @since 2.0.0
+ */
 class Request extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var  \Magento\Framework\Oauth\OauthInterface
+     * @since 2.0.0
      */
     protected $oauthService;
 
     /**
      * @var  \Magento\Framework\Oauth\Helper\Request
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -22,6 +29,7 @@ class Request extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Oauth\OauthInterface $oauthService
      * @param \Magento\Framework\Oauth\Helper\Request $helper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -37,6 +45,7 @@ class Request extends \Magento\Framework\App\Action\Action
      *  Initiate RequestToken request operation
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

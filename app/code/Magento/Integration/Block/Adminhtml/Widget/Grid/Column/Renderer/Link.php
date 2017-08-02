@@ -10,13 +10,22 @@ namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link
+ *
+ * @since 2.0.0
+ */
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Framework\DataObject */
+    /**
+     * @var \Magento\Framework\DataObject
+     * @since 2.0.0
+     */
     protected $_row;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -24,6 +33,7 @@ class Link extends AbstractRenderer
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -39,6 +49,7 @@ class Link extends AbstractRenderer
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(DataObject $row)
     {
@@ -62,6 +73,7 @@ class Link extends AbstractRenderer
      * Decide whether anything should be rendered.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isVisible()
     {
@@ -72,6 +84,7 @@ class Link extends AbstractRenderer
      * Decide whether action associated with the link is not available.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisabled()
     {
@@ -83,6 +96,7 @@ class Link extends AbstractRenderer
      * will be translated to http://.../admin/integration/activate/id/X
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUrlPattern()
     {
@@ -93,6 +107,7 @@ class Link extends AbstractRenderer
      * Caption for the link.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCaption()
     {
@@ -109,6 +124,7 @@ class Link extends AbstractRenderer
      * Return additional HTML parameters for tag, e.g. 'style'
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getAttributesHtml()
     {
@@ -128,6 +144,7 @@ class Link extends AbstractRenderer
      * Return additional HTML attributes for the tag.
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAttributes()
     {
@@ -148,6 +165,7 @@ class Link extends AbstractRenderer
      * - JSON-encoded if necessary
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDataAttributes()
     {
@@ -159,6 +177,7 @@ class Link extends AbstractRenderer
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     protected function _getUrl(DataObject $row)
     {

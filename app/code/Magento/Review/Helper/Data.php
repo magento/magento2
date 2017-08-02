@@ -12,6 +12,7 @@ namespace Magento\Review\Helper;
  * Default review helper
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -21,6 +22,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Filter manager
      *
      * @var \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
      */
     protected $filter;
 
@@ -28,6 +30,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Escaper
      *
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -35,6 +38,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Filter\FilterManager $filter
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -51,6 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $origDetail
      * @return string
+     * @since 2.0.0
      */
     public function getDetail($origDetail)
     {
@@ -62,6 +67,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $origDetail Full detail info
      * @return string
+     * @since 2.0.0
      */
     public function getDetailHtml($origDetail)
     {
@@ -73,6 +79,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsGuestAllowToWrite()
     {
@@ -83,6 +90,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get review statuses with their codes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getReviewStatuses()
     {
@@ -97,6 +105,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get review statuses as option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getReviewStatusesOptionArray()
     {

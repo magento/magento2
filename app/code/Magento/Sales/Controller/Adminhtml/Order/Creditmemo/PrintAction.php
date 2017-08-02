@@ -9,15 +9,22 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Backend\App\Action;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction
+ *
+ * @since 2.0.0
+ */
 class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\PrintAction
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
+     * @since 2.0.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var CreditmemoRepositoryInterface
+     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
@@ -27,6 +34,7 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -48,6 +56,7 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
      * Create pdf for current creditmemo
      *
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

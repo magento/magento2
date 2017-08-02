@@ -9,22 +9,30 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Payment\Gateway\Data\PaymentDataObjectFactory
+ *
+ * @since 2.0.0
+ */
 class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var Order\OrderAdapterFactory
+     * @since 2.0.0
      */
     private $orderAdapterFactory;
 
     /**
      * @var Quote\QuoteAdapterFactory
+     * @since 2.0.0
      */
     private $quoteAdapterFactory;
 
@@ -34,6 +42,7 @@ class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
      * @param ObjectManagerInterface $objectManager
      * @param Order\OrderAdapterFactory $orderAdapterFactory
      * @param Quote\QuoteAdapterFactory $quoteAdapterFactory
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -50,6 +59,7 @@ class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
      *
      * @param InfoInterface $paymentInfo
      * @return PaymentDataObjectInterface
+     * @since 2.0.0
      */
     public function create(InfoInterface $paymentInfo)
     {

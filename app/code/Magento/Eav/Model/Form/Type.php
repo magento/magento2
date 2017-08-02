@@ -21,6 +21,7 @@ namespace Magento\Eav\Model\Form;
  * @method \Magento\Eav\Model\Form\Type setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {
@@ -28,16 +29,19 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'eav_form_type';
 
     /**
      * @var \Magento\Eav\Model\Form\FieldsetFactory
+     * @since 2.0.0
      */
     protected $_fieldsetFactory;
 
     /**
      * @var \Magento\Eav\Model\Form\ElementFactory
+     * @since 2.0.0
      */
     protected $_elementFactory;
 
@@ -50,6 +54,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -70,6 +75,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,6 +87,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Type
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -92,6 +99,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Type\Collection
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -102,6 +110,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve assigned Eav Entity types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getEntityTypes()
     {
@@ -116,6 +125,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $entityTypes
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityTypes(array $entityTypes)
     {
@@ -128,6 +138,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $entityTypeId
      * @return $this
+     * @since 2.0.0
      */
     public function addEntityType($entityTypeId)
     {
@@ -144,6 +155,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Eav\Model\Form\Type $skeleton
      * @return $this
+     * @since 2.0.0
      */
     public function createFromSkeleton(\Magento\Eav\Model\Form\Type $skeleton)
     {

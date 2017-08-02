@@ -7,21 +7,29 @@ namespace Magento\Framework\Convert;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\Convert\ExcelFactory
+ *
+ * @since 2.0.0
+ */
 class ExcelFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -36,6 +44,7 @@ class ExcelFactory
      *
      * @param array $data
      * @return \Magento\Framework\Convert\Excel
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

@@ -8,16 +8,14 @@ namespace Magento\User\Block\User\Edit;
 /**
  * Adminhtml permissions user edit form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
- */
-/**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

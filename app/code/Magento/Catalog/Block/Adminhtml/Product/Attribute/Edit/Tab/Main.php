@@ -16,6 +16,7 @@ use Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain;
 /**
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Main extends AbstractMain
 {
@@ -24,6 +25,7 @@ class Main extends AbstractMain
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -83,6 +85,7 @@ class Main extends AbstractMain
      * Retrieve additional element types for product attributes
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {

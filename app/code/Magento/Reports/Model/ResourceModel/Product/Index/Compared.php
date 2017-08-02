@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Compared extends \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
 {
@@ -20,6 +21,7 @@ class Compared extends \Magento\Reports\Model\ResourceModel\Product\Index\Abstra
      * Initialize connection and main resource table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

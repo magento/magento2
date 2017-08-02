@@ -8,12 +8,18 @@ namespace Magento\Tax\Controller\Adminhtml\Tax;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Tax\AjaxSave
+ *
+ * @since 2.0.0
+ */
 class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**
      * Save Tax Class via AJAX
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

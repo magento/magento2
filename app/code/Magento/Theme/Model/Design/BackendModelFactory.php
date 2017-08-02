@@ -11,30 +11,40 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 
+/**
+ * Class \Magento\Theme\Model\Design\BackendModelFactory
+ *
+ * @since 2.1.0
+ */
 class BackendModelFactory extends ValueFactory
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $storedData = [];
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $metadata = [];
 
     /**
      * @var MetadataProvider
+     * @since 2.1.0
      */
     protected $metadataProvider;
 
     /**
      * @var CollectionFactory
+     * @since 2.1.0
      */
     protected $collectionFactory;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $backendTypes = [];
 
@@ -42,6 +52,7 @@ class BackendModelFactory extends ValueFactory
      * @param ObjectManagerInterface $objectManager
      * @param MetadataProvider $metadataProvider
      * @param CollectionFactory $collectionFactory
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -55,6 +66,7 @@ class BackendModelFactory extends ValueFactory
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function create(array $data = [])
     {
@@ -85,6 +97,7 @@ class BackendModelFactory extends ValueFactory
      * @param string $backendType
      * @param array $data
      * @return Value
+     * @since 2.1.0
      */
     protected function getNewBackendModel($backendType, array $data = [])
     {
@@ -97,6 +110,7 @@ class BackendModelFactory extends ValueFactory
      * @param string $path
      * @param array $data
      * @return Value
+     * @since 2.1.0
      */
     public function createByPath($path, array $data = [])
     {
@@ -108,6 +122,7 @@ class BackendModelFactory extends ValueFactory
      *
      * @param string $path
      * @return string
+     * @since 2.1.0
      */
     protected function getBackendTypeByPath($path)
     {
@@ -130,6 +145,7 @@ class BackendModelFactory extends ValueFactory
      * @param string $scopeId
      * @param string $path
      * @return array
+     * @since 2.1.0
      */
     protected function getStoredData($scope, $scopeId, $path)
     {
@@ -144,6 +160,7 @@ class BackendModelFactory extends ValueFactory
      * @param string $scope
      * @param string $scopeId
      * @return array
+     * @since 2.1.0
      */
     protected function getScopeData($scope, $scopeId)
     {
@@ -161,6 +178,7 @@ class BackendModelFactory extends ValueFactory
      * Retrieve metadata
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getMetadata()
     {

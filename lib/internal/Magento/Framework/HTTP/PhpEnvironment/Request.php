@@ -15,6 +15,7 @@ use Zend\Uri\UriInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 2.0.0
  */
 class Request extends \Zend\Http\PhpEnvironment\Request
 {
@@ -30,16 +31,19 @@ class Request extends \Zend\Http\PhpEnvironment\Request
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $module;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $controller;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $action;
 
@@ -47,11 +51,13 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * PATH_INFO
      *
      * @var string
+     * @since 2.0.0
      */
     protected $pathInfo = '';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $requestString = '';
 
@@ -59,11 +65,13 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Request parameters
      *
      * @var array
+     * @since 2.0.0
      */
     protected $params = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $aliases = [];
 
@@ -71,6 +79,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Has the action been dispatched?
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $dispatched = false;
 
@@ -78,21 +87,25 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Flag for whether the request is forwarded or not
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $forwarded;
 
     /**
      * @var CookieReaderInterface
+     * @since 2.0.0
      */
     protected $cookieReader;
 
     /**
      * @var StringUtils
+     * @since 2.0.0
      */
     protected $converter;
 
     /**
      * @var \Magento\Framework\App\Config
+     * @since 2.1.0
      */
     protected $appConfig;
 
@@ -100,6 +113,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
      *
      * @var string
+     * @since 2.1.0
      */
     protected $sslOffloadHeader;
 
@@ -107,6 +121,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
      * @param UriInterface|string|null $uri
+     * @since 2.0.0
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
@@ -137,6 +152,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Retrieve the module name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getModuleName()
     {
@@ -148,6 +164,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setModuleName($value)
     {
@@ -159,6 +176,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Retrieve the controller name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getControllerName()
     {
@@ -170,6 +188,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setControllerName($value)
     {
@@ -181,6 +200,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Retrieve the action name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getActionName()
     {
@@ -192,6 +212,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setActionName($value)
     {
@@ -205,6 +226,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * directly from $_SERVER due to cross-platform differences.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPathInfo()
     {
@@ -219,6 +241,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string|null $pathInfo
      * @return $this
+     * @since 2.0.0
      */
     public function setPathInfo($pathInfo = null)
     {
@@ -251,6 +274,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Get request string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRequestString()
     {
@@ -264,6 +288,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $name
      * @return string|null Returns null when no alias exists
+     * @since 2.0.0
      */
     public function getAlias($name)
     {
@@ -282,6 +307,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $name
      * @param string $target
      * @return $this
+     * @since 2.0.0
      */
     public function setAlias($name, $target)
     {
@@ -295,6 +321,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $key
      * @param mixed $default Default value to use if key not found
      * @return mixed
+     * @since 2.0.0
      */
     public function getParam($key, $default = null)
     {
@@ -318,6 +345,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $key
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setParam($key, $value)
     {
@@ -335,6 +363,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Get all action parameters
      *
      * @return array
+     * @since 2.0.0
      */
     public function getParams()
     {
@@ -355,6 +384,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param array $array
      * @return $this
+     * @since 2.0.0
      */
     public function setParams(array $array)
     {
@@ -368,6 +398,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Unset all user parameters
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clearParams()
     {
@@ -379,6 +410,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Get the request URI scheme
      *
      * @return string
+     * @since 2.0.0
      */
     public function getScheme()
     {
@@ -390,6 +422,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param boolean $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setDispatched($flag = true)
     {
@@ -401,6 +434,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Determine if the request has been dispatched
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isDispatched()
     {
@@ -411,6 +445,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Is https secure request
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSecure()
     {
@@ -425,6 +460,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
+     * @since 2.2.0
      */
     private function getSslOffloadHeader()
     {
@@ -448,7 +484,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Create an instance of Magento\Framework\App\Config
      *
      * @return \Magento\Framework\App\Config
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getAppConfig()
     {
@@ -463,6 +500,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Checks if the immediate request is delivered over HTTPS
      *
      * @return bool
+     * @since 2.1.0
      */
     protected function immediateRequestSecure()
     {
@@ -476,6 +514,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $offLoaderHeader
      * @return bool
+     * @since 2.1.0
      */
     protected function initialRequestSecure($offLoaderHeader)
     {
@@ -494,6 +533,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string|null $name
      * @param string|null $default The default value to return if no value could be found for the given $name.
      * @return string|null
+     * @since 2.0.0
      */
     public function getCookie($name = null, $default = null)
     {
@@ -506,6 +546,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $name
      * @param mixed $default
      * @return mixed|ParametersInterface
+     * @since 2.0.0
      */
     public function getServerValue($name = null, $default = null)
     {
@@ -522,6 +563,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $name
      * @param mixed $default
      * @return mixed|ParametersInterface
+     * @since 2.0.0
      */
     public function getQueryValue($name = null, $default = null)
     {
@@ -538,6 +580,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $name
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setQueryValue($name, $value = null)
     {
@@ -557,6 +600,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $name
      * @param mixed $default
      * @return mixed|ParametersInterface
+     * @since 2.0.0
      */
     public function getPostValue($name = null, $default = null)
     {
@@ -573,6 +617,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string|array $name
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setPostValue($name, $value = null)
     {
@@ -591,6 +636,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     public function __get($key)
     {
@@ -629,6 +675,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     public function get($key)
     {
@@ -640,6 +687,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $key
      * @return boolean
+     * @since 2.0.0
      */
     public function __isset($key)
     {
@@ -672,6 +720,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $key
      * @return boolean
+     * @since 2.0.0
      */
     public function has($key)
     {
@@ -684,6 +733,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $name Header name to retrieve.
      * @param mixed|null $default Default value to use when the requested header is missing.
      * @return bool|HeaderInterface
+     * @since 2.0.0
      */
     public function getHeader($name, $default = false)
     {
@@ -701,6 +751,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @return string
      *
      * @todo getHttpHost should return only string (currently method return boolean value too)
+     * @since 2.0.0
      */
     public function getHttpHost($trimPort = true)
     {
@@ -721,6 +772,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param  boolean $checkProxy
      * @return string
+     * @since 2.0.0
      */
     public function getClientIp($checkProxy = true)
     {
@@ -738,6 +790,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Retrieve only user params
      *
      * @return array
+     * @since 2.0.0
      */
     public function getUserParams()
     {
@@ -750,6 +803,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param string $key
      * @param string $default Default value to use if key not found
      * @return mixed
+     * @since 2.0.0
      */
     public function getUserParam($key, $default = null)
     {
@@ -764,6 +818,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $requestUri
      * @return $this
+     * @since 2.0.0
      */
     public function setRequestUri($requestUri = null)
     {
@@ -786,6 +841,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Get base url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -797,6 +853,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     /**
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isForwarded()
     {
@@ -807,6 +864,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @param bool $forwarded
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setForwarded($forwarded)
     {

@@ -5,12 +5,18 @@
  */
 namespace Magento\Widget\Model\Config;
 
+/**
+ * Class \Magento\Widget\Model\Config\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -90,6 +96,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $source
      * @return array
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _convertContainer($source)
     {
@@ -125,6 +132,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _convertParameter($source)
     {
@@ -217,6 +225,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $source
      * @return array
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _convertDepends($source)
     {
@@ -246,6 +255,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $source
      * @return array
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _convertBlock($source)
     {
@@ -270,6 +280,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMElement $source
      * @return array
+     * @since 2.0.0
      */
     protected function _convertData($source)
     {
@@ -295,6 +306,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNode $source
      * @return array
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _convertOption($source)
     {

@@ -26,11 +26,13 @@ namespace Magento\Authorization\Model;
  * @method string getRoleName()
  * @method \Magento\Authorization\Model\Role setRoleName(string $value)
  * @api
+ * @since 2.0.0
  */
 class Role extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'authorization_roles';
 
@@ -40,6 +42,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Authorization\Model\ResourceModel\Role $resource
      * @param \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -53,6 +56,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -62,6 +66,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -77,6 +82,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -87,6 +93,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * Update object into database
      *
      * @return $this
+     * @since 2.0.0
      */
     public function update()
     {
@@ -98,6 +105,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * Return users for role
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRoleUsers()
     {

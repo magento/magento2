@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Calculates difference between current configuration and new one.
+ * @since 2.2.0
  */
 class DataDifferenceCalculator
 {
@@ -17,11 +18,13 @@ class DataDifferenceCalculator
      * The config source to retrieve current config.
      *
      * @var ConfigSourceInterface
+     * @since 2.2.0
      */
     private $runtimeConfigSource;
 
     /**
      * @param ConfigSourceInterface $runtimeConfigSource The config source to retrieve current config
+     * @since 2.2.0
      */
     public function __construct(ConfigSourceInterface $runtimeConfigSource)
     {
@@ -34,6 +37,7 @@ class DataDifferenceCalculator
      * @param string $scope The data scope
      * @param array $data The new data
      * @return array
+     * @since 2.2.0
      */
     public function getItemsToDelete($scope, array $data)
     {
@@ -51,6 +55,7 @@ class DataDifferenceCalculator
      * @param string $scope The data scope
      * @param array $data The new data
      * @return array
+     * @since 2.2.0
      */
     public function getItemsToCreate($scope, array $data)
     {
@@ -68,6 +73,7 @@ class DataDifferenceCalculator
      * @param string $scope The data scope
      * @param array $data The new data
      * @return array
+     * @since 2.2.0
      */
     public function getItemsToUpdate($scope, array $data)
     {
@@ -93,6 +99,7 @@ class DataDifferenceCalculator
      * @param string $scope The data scope
      * @param array $data The data of scopes (websites, groups, stores)
      * @return array
+     * @since 2.2.0
      */
     private function setDefaultValues($scope, array $data)
     {
@@ -125,6 +132,7 @@ class DataDifferenceCalculator
      *
      * @param string $scope The scope of config data
      * @return array
+     * @since 2.2.0
      */
     private function getRuntimeData($scope)
     {
@@ -138,6 +146,7 @@ class DataDifferenceCalculator
      *
      * @param array $data The data
      * @return array
+     * @since 2.2.0
      */
     private function changeDataKeyToCode(array $data)
     {

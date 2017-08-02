@@ -17,6 +17,7 @@ use Magento\Ui\Model\Config as UiConfig;
  * Model Class to Install User Configuration Data
  *
  * @package Magento\Setup\Model
+ * @since 2.0.0
  */
 class StoreConfigurationDataMapper
 {
@@ -39,6 +40,7 @@ class StoreConfigurationDataMapper
      * Map of configuration paths to data keys
      *
      * @var array
+     * @since 2.0.0
      */
     private $pathDataMap = [
         Store::XML_PATH_USE_REWRITES => self::KEY_USE_SEF_URL,
@@ -60,6 +62,7 @@ class StoreConfigurationDataMapper
      *
      * @param array $installParamData
      * @return array
+     * @since 2.0.0
      */
     public function getConfigData($installParamData)
     {
@@ -79,6 +82,7 @@ class StoreConfigurationDataMapper
      * @param string $key
      * @param string $path
      * @return array
+     * @since 2.0.0
      */
     private function addParamToConfigData($configData, $installParamData, $key, $path)
     {

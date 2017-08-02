@@ -8,6 +8,11 @@ namespace Magento\Downloadable\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver
+ *
+ * @since 2.0.0
+ */
 class IsAllowedGuestCheckoutObserver implements ObserverInterface
 {
     /**
@@ -19,11 +24,13 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -36,6 +43,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

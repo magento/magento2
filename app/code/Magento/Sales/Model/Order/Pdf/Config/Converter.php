@@ -7,6 +7,11 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;
 
+/**
+ * Class \Magento\Sales\Model\Order\Pdf\Config\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -14,6 +19,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
+     * @since 2.0.0
      */
     public function convert($source)
     {

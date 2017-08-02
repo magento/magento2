@@ -13,36 +13,43 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Tax\Model\Rate\Source
+     * @since 2.0.0
      */
     protected $rateSource;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
+     * @since 2.0.0
      */
     protected $ruleService;
 
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
+     * @since 2.0.0
      */
     protected $taxClassService;
 
     /**
      * @var \Magento\Tax\Model\TaxClass\Source\Customer
+     * @since 2.0.0
      */
     protected $customerTaxClassSource;
 
     /**
      * @var \Magento\Tax\Model\TaxClass\Source\Product
+     * @since 2.0.0
      */
     protected $productTaxClassSource;
 
@@ -56,6 +63,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Model\TaxClass\Source\Customer $customerTaxClassSource
      * @param \Magento\Tax\Model\TaxClass\Source\Product $productTaxClassSource
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -81,6 +89,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Init class
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,6 +105,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -263,6 +273,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param array $formValues
      * @return array
+     * @since 2.2.0
      */
     public function getTaxRatesSelectConfig($formValues)
     {
@@ -279,6 +290,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $classType
      * @return array
+     * @since 2.0.0
      */
     public function getTaxClassSelectConfig($classType)
     {
@@ -301,6 +313,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve Tax Rate delete URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTaxRateDeleteUrl()
     {
@@ -311,6 +324,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve Tax Rate save URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTaxRateSaveUrl()
     {
@@ -321,6 +335,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve Tax Rate load URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTaxRateLoadUrl()
     {
@@ -331,6 +346,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve next Tax Rates page URL
      *
      * @return string
+     * @since 2.2.0
      */
     public function getTaxRatesPageUrl()
     {
@@ -342,6 +358,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Tax\Api\Data\TaxRuleInterface $taxRule
      * @return array
+     * @since 2.0.0
      */
     protected function extractTaxRuleData($taxRule)
     {

@@ -14,6 +14,7 @@ use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
  * Fallback Factory
  *
  * Factory that produces all sorts of fallback rules
+ * @since 2.0.0
  */
 class RulePool
 {
@@ -31,6 +32,7 @@ class RulePool
      * File system
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -38,6 +40,7 @@ class RulePool
      * Rules
      *
      * @var array
+     * @since 2.0.0
      */
     private $rules = [];
 
@@ -45,6 +48,7 @@ class RulePool
      * Factory for simple rule
      *
      * @var \Magento\Framework\View\Design\Fallback\Rule\SimpleFactory
+     * @since 2.0.0
      */
     private $simpleFactory;
 
@@ -52,6 +56,7 @@ class RulePool
      * Factory for theme rule
      *
      * @var Rule\ThemeFactory
+     * @since 2.0.0
      */
     private $themeFactory;
 
@@ -59,6 +64,7 @@ class RulePool
      * Factory for modular switcher
      *
      * @var Rule\ModularSwitchFactory
+     * @since 2.0.0
      */
     private $modularSwitchFactory;
 
@@ -66,6 +72,7 @@ class RulePool
      * Factory for module rule
      *
      * @var Rule\ModuleFactory
+     * @since 2.0.0
      */
     private $moduleFactory;
 
@@ -77,6 +84,7 @@ class RulePool
      * @param Rule\ThemeFactory $themeFactory
      * @param Rule\ModuleFactory $moduleFactory
      * @param Rule\ModularSwitchFactory $modularSwitchFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -96,6 +104,7 @@ class RulePool
      * Retrieve newly created fallback rule for locale files, such as CSV translation maps
      *
      * @return RuleInterface
+     * @since 2.0.0
      */
     protected function createLocaleFileRule()
     {
@@ -108,6 +117,7 @@ class RulePool
      * Retrieve newly created fallback rule for template files
      *
      * @return RuleInterface
+     * @since 2.0.0
      */
     protected function createTemplateFileRule()
     {
@@ -136,6 +146,7 @@ class RulePool
      * Retrieve newly created fallback rule for dynamic view files
      *
      * @return RuleInterface
+     * @since 2.0.0
      */
     protected function createFileRule()
     {
@@ -163,6 +174,7 @@ class RulePool
      * Retrieve newly created fallback rule for static view files, such as CSS, JavaScript, images, etc.
      *
      * @return RuleInterface
+     * @since 2.0.0
      */
     protected function createViewFileRule()
     {
@@ -243,6 +255,7 @@ class RulePool
      * Emails are only loaded in a modular context, so a non-modular rule is not specified.
      *
      * @return RuleInterface
+     * @since 2.0.0
      */
     protected function createEmailTemplateFileRule()
     {
@@ -267,6 +280,7 @@ class RulePool
      * @param string $type
      * @return RuleInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getRule($type)
     {

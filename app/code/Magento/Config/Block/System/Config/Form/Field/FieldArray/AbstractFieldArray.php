@@ -13,6 +13,7 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -20,6 +21,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Grid columns
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_columns = [];
 
@@ -27,6 +29,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Enable the "Add after" button or not
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_addAfter = true;
 
@@ -34,6 +37,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Label of add button
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_addButtonLabel;
 
@@ -41,6 +45,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Rows cache
      *
      * @var array|null
+     * @since 2.0.0
      */
     private $_arrayRowsCache;
 
@@ -48,11 +53,13 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Indication whether block is prepared to render or no
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isPreparedToRender = false;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Config::system/config/form/field/array.phtml';
 
@@ -60,6 +67,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Check if columns are defined, set template
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,6 +83,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * @param string $name
      * @param array $params
      * @return void
+     * @since 2.0.0
      */
     public function addColumn($name, $params)
     {
@@ -97,6 +106,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * @param string $paramName
      * @param string|bool $defaultValue
      * @return string|bool
+     * @since 2.0.0
      */
     protected function _getParam($params, $paramName, $defaultValue = null)
     {
@@ -108,6 +118,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -124,6 +135,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * @param \Magento\Framework\DataObject $row
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
     {
@@ -136,6 +148,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Each row will be instance of \Magento\Framework\DataObject
      *
      * @return array
+     * @since 2.0.0
      */
     public function getArrayRows()
     {
@@ -168,6 +181,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * @param string $rowId
      * @param string $columnName
      * @return string
+     * @since 2.0.0
      */
     protected function _getCellInputElementId($rowId, $columnName)
     {
@@ -179,6 +193,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      *
      * @param string $columnName
      * @return string
+     * @since 2.0.0
      */
     protected function _getCellInputElementName($columnName)
     {
@@ -191,6 +206,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * @param string $columnName
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     public function renderCellTemplate($columnName)
     {
@@ -237,6 +253,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Prepare to render
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareToRender()
     {
@@ -248,6 +265,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      *
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -265,6 +283,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Returns true if the addAfter directive is set
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAddAfter()
     {
@@ -275,6 +294,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * Returns columns array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getColumns()
     {
@@ -283,6 +303,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getAddButtonLabel()
     {

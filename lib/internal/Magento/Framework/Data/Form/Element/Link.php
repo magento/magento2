@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Link
+ *
+ * @since 2.0.0
+ */
 class Link extends AbstractElement
 {
     /**
@@ -20,6 +25,7 @@ class Link extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -35,6 +41,7 @@ class Link extends AbstractElement
      * Generates element html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -48,6 +55,7 @@ class Link extends AbstractElement
      * Prepare array of anchor attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

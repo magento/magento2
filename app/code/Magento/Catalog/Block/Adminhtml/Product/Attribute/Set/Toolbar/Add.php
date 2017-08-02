@@ -13,15 +13,22 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 use Magento\Framework\View\Element\AbstractBlock;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add
+ *
+ * @since 2.0.0
+ */
 class Add extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/attribute/set/toolbar/add.phtml';
 
     /**
      * @return AbstractBlock
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -54,6 +61,7 @@ class Add extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _getHeader()
     {
@@ -62,6 +70,7 @@ class Add extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFormHtml()
     {
@@ -72,6 +81,7 @@ class Add extends \Magento\Backend\Block\Template
      * Return id of form, used by this block
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormId()
     {

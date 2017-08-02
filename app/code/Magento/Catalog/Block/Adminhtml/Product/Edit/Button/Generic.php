@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class Generic
+ * @since 2.1.0
  */
 class Generic implements ButtonProviderInterface
 {
@@ -19,6 +20,7 @@ class Generic implements ButtonProviderInterface
      * Url Builder
      *
      * @var Context
+     * @since 2.1.0
      */
     protected $context;
 
@@ -26,6 +28,7 @@ class Generic implements ButtonProviderInterface
      * Registry
      *
      * @var Registry
+     * @since 2.1.0
      */
     protected $registry;
 
@@ -34,6 +37,7 @@ class Generic implements ButtonProviderInterface
      *
      * @param Context $context
      * @param Registry $registry
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -49,6 +53,7 @@ class Generic implements ButtonProviderInterface
      * @param string $route
      * @param array $params
      * @return string
+     * @since 2.1.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -59,6 +64,7 @@ class Generic implements ButtonProviderInterface
      * Get product
      *
      * @return ProductInterface
+     * @since 2.1.0
      */
     public function getProduct()
     {
@@ -67,6 +73,7 @@ class Generic implements ButtonProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getButtonData()
     {

@@ -10,11 +10,13 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Cms block content block
+ * @since 2.0.0
  */
 class Block extends AbstractBlock implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
+     * @since 2.0.0
      */
     protected $_filterProvider;
 
@@ -22,6 +24,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -29,6 +32,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
      * Block factory
      *
      * @var \Magento\Cms\Model\BlockFactory
+     * @since 2.0.0
      */
     protected $_blockFactory;
 
@@ -40,6 +44,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -58,6 +63,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
      * Prepare Content HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -79,6 +85,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

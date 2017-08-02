@@ -7,6 +7,7 @@ namespace Magento\Swatches\Model\Plugin;
 
 /**
  * Class Product for changing image roles list
+ * @since 2.0.0
  */
 class Product
 {
@@ -16,6 +17,7 @@ class Product
      * @param \Magento\Catalog\Model\Product $product
      * @param array|string $imageRoles
      * @return array
+     * @since 2.0.0
      */
     public function afterGetMediaAttributes(\Magento\Catalog\Model\Product $product, $imageRoles)
     {

@@ -18,11 +18,13 @@ namespace Magento\Eav\Model\Entity\Setup;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Context extends \Magento\Framework\Module\Setup\Context
 {
     /**
      * @var PropertyMapperInterface
+     * @since 2.0.0
      */
     protected $attributeMapper;
 
@@ -38,6 +40,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
      * @param \Magento\Framework\Filesystem $filesystem
      * @param PropertyMapperInterface $attributeMapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -67,6 +70,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
 
     /**
      * @return PropertyMapperInterface
+     * @since 2.0.0
      */
     public function getAttributeMapper()
     {

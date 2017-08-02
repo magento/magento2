@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Collection;
  * Class ProductLimitation
  *
  * @api
+ * @since 2.1.0
  */
 class ProductLimitation implements \ArrayAccess
 {
@@ -26,12 +27,14 @@ class ProductLimitation implements \ArrayAccess
      *  website_id              int;    required for price; website limitation for price
      *
      * @var array
+     * @since 2.1.0
      */
     private $productLimitationFilters = [];
 
     /**
      * @param string $offset
      * @return bool
+     * @since 2.1.0
      */
     public function offsetExists($offset)
     {
@@ -41,6 +44,7 @@ class ProductLimitation implements \ArrayAccess
     /**
      * @param string $offset
      * @return mixed
+     * @since 2.1.0
      */
     public function offsetGet($offset)
     {
@@ -51,6 +55,7 @@ class ProductLimitation implements \ArrayAccess
      * @param string $offset
      * @param mixed $value
      * @return void
+     * @since 2.1.0
      */
     public function offsetSet($offset, $value)
     {
@@ -60,6 +65,7 @@ class ProductLimitation implements \ArrayAccess
     /**
      * @param string $offset
      * @return void
+     * @since 2.1.0
      */
     public function offsetUnset($offset)
     {
@@ -68,6 +74,7 @@ class ProductLimitation implements \ArrayAccess
 
     /**
      * @return int|null
+     * @since 2.1.0
      */
     public function getStoreId()
     {
@@ -76,6 +83,7 @@ class ProductLimitation implements \ArrayAccess
 
     /**
      * @return int|null
+     * @since 2.1.0
      */
     public function getCategoryId()
     {
@@ -84,6 +92,7 @@ class ProductLimitation implements \ArrayAccess
 
     /**
      * @return int|null
+     * @since 2.1.0
      */
     public function getCategoryIsAnchor()
     {
@@ -92,6 +101,7 @@ class ProductLimitation implements \ArrayAccess
 
     /**
      * @return array|int|null
+     * @since 2.1.0
      */
     public function getVisibility()
     {
@@ -100,6 +110,7 @@ class ProductLimitation implements \ArrayAccess
 
     /**
      * @return array|int|null
+     * @since 2.1.0
      */
     public function getWebsiteIds()
     {
@@ -108,6 +119,7 @@ class ProductLimitation implements \ArrayAccess
 
     /**
      * @return string|null
+     * @since 2.1.0
      */
     public function getStoreTable()
     {
@@ -118,6 +130,7 @@ class ProductLimitation implements \ArrayAccess
      * Join price index table flag
      *
      * @return bool
+     * @since 2.1.0
      */
     public function isUsingPriceIndex()
     {
@@ -127,6 +140,7 @@ class ProductLimitation implements \ArrayAccess
     /**
      * @param bool $value
      * @return void
+     * @since 2.1.0
      */
     public function setUsePriceIndex($value)
     {
@@ -137,6 +151,7 @@ class ProductLimitation implements \ArrayAccess
      * Required for price; customer group limitation for price
      *
      * @return int|null
+     * @since 2.1.0
      */
     public function getCustomerGroupId()
     {
@@ -147,6 +162,7 @@ class ProductLimitation implements \ArrayAccess
      * Required for price; website limitation for price
      *
      * @return int|null
+     * @since 2.1.0
      */
     public function getWebsiteId()
     {

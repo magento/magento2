@@ -9,6 +9,11 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Theme
+ *
+ * @since 2.0.0
+ */
 abstract class Theme extends \Magento\Backend\App\Action
 {
     /**
@@ -22,21 +27,25 @@ abstract class Theme extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_appFileSystem;
 
@@ -46,6 +55,7 @@ abstract class Theme extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $appFileSystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

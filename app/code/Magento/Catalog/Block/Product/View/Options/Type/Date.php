@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
  * Product options text type block
  *
  * @api
+ * @since 2.0.0
  */
 class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
@@ -16,6 +17,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Fill date and time options with leading zeros or not
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_fillLeadingZeros = true;
 
@@ -23,6 +25,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Catalog product option type date
      *
      * @var \Magento\Catalog\Model\Product\Option\Type\Date
+     * @since 2.0.0
      */
     protected $_catalogProductOptionTypeDate;
 
@@ -32,6 +35,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Model\Product\Option\Type\Date $catalogProductOptionTypeDate
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -48,6 +52,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Use JS calendar settings
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function useCalendar()
     {
@@ -58,6 +63,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Date input
      *
      * @return string Formatted Html
+     * @since 2.0.0
      */
     public function getDateHtml()
     {
@@ -72,6 +78,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * JS Calendar html
      *
      * @return string Formatted Html
+     * @since 2.0.0
      */
     public function getCalendarDateHtml()
     {
@@ -109,6 +116,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Date (dd/mm/yyyy) html drop-downs
      *
      * @return string Formatted Html
+     * @since 2.0.0
      */
     public function getDropDownsDateHtml()
     {
@@ -131,6 +139,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Time (hh:mm am/pm) html drop-downs
      *
      * @return string Formatted Html
+     * @since 2.0.0
      */
     public function getTimeHtml()
     {
@@ -161,6 +170,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * @param int $to    End position
      * @param int|null $value Value selected
      * @return string Formatted Html
+     * @since 2.0.0
      */
     protected function _getSelectFromToHtml($name, $from, $to, $value = null)
     {
@@ -177,6 +187,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * @param string $name Id/name of html select element
      * @param int|null $value
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getHtmlSelect($name, $value = null)
     {
@@ -224,6 +235,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      *
      * @param int $value
      * @return string|int
+     * @since 2.0.0
      */
     protected function _getValueWithLeadingZeros($value)
     {

@@ -7,41 +7,53 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckUserCreateObserver
+ *
+ * @since 2.0.0
+ */
 class CheckUserCreateObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_urlManager;
 
     /**
      * @var CaptchaStringResolver
+     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     protected $redirect;
 
@@ -53,6 +65,7 @@ class CheckUserCreateObserver implements ObserverInterface
      * @param \Magento\Framework\UrlInterface $urlManager
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param CaptchaStringResolver $captchaStringResolver
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -77,6 +90,7 @@ class CheckUserCreateObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

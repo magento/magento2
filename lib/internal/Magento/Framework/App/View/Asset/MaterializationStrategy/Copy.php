@@ -9,6 +9,11 @@ namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Class \Magento\Framework\App\View\Asset\MaterializationStrategy\Copy
+ *
+ * @since 2.0.0
+ */
 class Copy implements StrategyInterface
 {
     /**
@@ -19,6 +24,7 @@ class Copy implements StrategyInterface
      * @param string $sourcePath
      * @param string $destinationPath
      * @return bool
+     * @since 2.0.0
      */
     public function publishFile(
         WriteInterface $sourceDir,
@@ -36,6 +42,7 @@ class Copy implements StrategyInterface
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function isSupported(Asset\LocalInterface $asset)
     {

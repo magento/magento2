@@ -17,31 +17,39 @@ use Magento\Framework\Exception\InputException;
  * Repository class for @see \Magento\Sales\Api\Data\ShipmentInterface
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterface
 {
     /**
      * @var Metadata
+     * @since 2.0.0
      */
     protected $metadata;
 
     /**
      * @var SearchResultFactory
+     * @since 2.0.0
      */
     protected $searchResultFactory = null;
 
     /**
      * @var \Magento\Sales\Api\Data\ShipmentInterface[]
+     * @since 2.0.0
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         Metadata $metadata,
@@ -60,6 +68,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      * @return \Magento\Sales\Api\Data\ShipmentInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($id)
     {
@@ -85,6 +94,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\ShipmentInterface[]
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -102,6 +112,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      * @param \Magento\Sales\Api\Data\ShipmentInterface $entity
      * @return bool
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentInterface $entity)
     {
@@ -121,6 +132,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      *
      * @param int $id
      * @return bool
+     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -135,6 +147,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      * @param \Magento\Sales\Api\Data\ShipmentInterface $entity
      * @return \Magento\Sales\Api\Data\ShipmentInterface
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\ShipmentInterface $entity)
     {
@@ -152,6 +165,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      * Creates new shipment instance.
      *
      * @return \Magento\Sales\Api\Data\ShipmentInterface
+     * @since 2.0.0
      */
     public function create()
     {
@@ -161,8 +175,9 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

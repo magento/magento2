@@ -9,6 +9,7 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
  * Directory contents block for Wysiwyg Images
  *
  * @api
+ * @since 2.0.0
  */
 class Files extends \Magento\Backend\Block\Template
 {
@@ -16,16 +17,19 @@ class Files extends \Magento\Backend\Block\Template
      * Files collection object
      *
      * @var \Magento\Framework\Data\Collection\Filesystem
+     * @since 2.0.0
      */
     protected $_filesCollection;
 
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Images\Storage
+     * @since 2.0.0
      */
     protected $_imageStorage;
 
     /**
      * @var \Magento\Cms\Helper\Wysiwyg\Images
+     * @since 2.0.0
      */
     protected $_imageHelper;
 
@@ -34,6 +38,7 @@ class Files extends \Magento\Backend\Block\Template
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imageStorage
      * @param \Magento\Cms\Helper\Wysiwyg\Images $imageHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,6 +55,7 @@ class Files extends \Magento\Backend\Block\Template
      * Prepared Files collection for current directory
      *
      * @return \Magento\Framework\Data\Collection\Filesystem
+     * @since 2.0.0
      */
     public function getFiles()
     {
@@ -67,6 +73,7 @@ class Files extends \Magento\Backend\Block\Template
      * Files collection count getter
      *
      * @return int
+     * @since 2.0.0
      */
     public function getFilesCount()
     {
@@ -78,6 +85,7 @@ class Files extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string
+     * @since 2.0.0
      */
     public function getFileId(\Magento\Framework\DataObject $file)
     {
@@ -89,6 +97,7 @@ class Files extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string
+     * @since 2.0.0
      */
     public function getFileThumbUrl(\Magento\Framework\DataObject $file)
     {
@@ -100,6 +109,7 @@ class Files extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string
+     * @since 2.0.0
      */
     public function getFileName(\Magento\Framework\DataObject $file)
     {
@@ -111,6 +121,7 @@ class Files extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string
+     * @since 2.0.0
      */
     public function getFileWidth(\Magento\Framework\DataObject $file)
     {
@@ -122,6 +133,7 @@ class Files extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string
+     * @since 2.0.0
      */
     public function getFileHeight(\Magento\Framework\DataObject $file)
     {
@@ -133,6 +145,7 @@ class Files extends \Magento\Backend\Block\Template
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string
+     * @since 2.0.0
      */
     public function getFileShortName(\Magento\Framework\DataObject $file)
     {
@@ -143,6 +156,7 @@ class Files extends \Magento\Backend\Block\Template
      * Get image width
      *
      * @return int
+     * @since 2.0.0
      */
     public function getImagesWidth()
     {
@@ -153,6 +167,7 @@ class Files extends \Magento\Backend\Block\Template
      * Get image height
      *
      * @return int
+     * @since 2.0.0
      */
     public function getImagesHeight()
     {
@@ -162,6 +177,7 @@ class Files extends \Magento\Backend\Block\Template
     /**
      * Return current media type based on request or data
      * @return string
+     * @since 2.0.0
      */
     protected function _getMediaType()
     {

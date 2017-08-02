@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model;
  * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Design extends \Magento\Framework\Model\AbstractModel
 {
@@ -22,11 +23,13 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
+     * @since 2.0.0
      */
     protected $_design = null;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -38,6 +41,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -58,6 +62,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $design
      * @return $this
+     * @since 2.0.0
      */
     public function applyCustomDesign($design)
     {
@@ -70,6 +75,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Catalog\Model\Category|\Magento\Catalog\Model\Product $object
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getDesignSettings($object)
     {
@@ -100,6 +106,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Catalog\Model\Category|\Magento\Catalog\Model\Product $object
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _extractSettings($object)
     {
@@ -137,6 +144,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\DataObject $categorySettings
      * @param \Magento\Framework\DataObject $productSettings
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _mergeSettings($categorySettings, $productSettings)
     {

@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Filters\Type;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Range extends AbstractFilter
 {
@@ -16,6 +17,7 @@ class Range extends AbstractFilter
      * Prepare component configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -28,6 +30,7 @@ class Range extends AbstractFilter
      * Apply filter
      *
      * @return void
+     * @since 2.0.0
      */
     protected function applyFilter()
     {
@@ -50,6 +53,7 @@ class Range extends AbstractFilter
      * @param string $type
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     protected function applyFilterByType($type, $value)
     {

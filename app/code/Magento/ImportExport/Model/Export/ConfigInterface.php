@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\Export;
  * Provides export configuration
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -16,6 +17,7 @@ interface ConfigInterface
      * Retrieve import entities configuration
      *
      * @return array
+     * @since 2.0.0
      */
     public function getEntities();
 
@@ -23,6 +25,7 @@ interface ConfigInterface
      * Retrieve export file formats configuration
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFileFormats();
 
@@ -31,6 +34,7 @@ interface ConfigInterface
      *
      * @param string $entity
      * @return array
+     * @since 2.0.0
      */
     public function getEntityTypes($entity);
 }

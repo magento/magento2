@@ -8,26 +8,31 @@ namespace Magento\Framework\DB\Tree;
 /**
  * TODO implements iterators
  *
+ * @since 2.0.0
  */
 class NodeSet implements \Iterator
 {
     /**
      * @var Node[]
+     * @since 2.0.0
      */
     private $_nodes = [];
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $_currentNode = 0;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $_current = 0;
 
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -40,6 +45,7 @@ class NodeSet implements \Iterator
     /**
      * @param Node $node
      * @return int
+     * @since 2.0.0
      */
     public function addNode(Node $node)
     {
@@ -50,6 +56,7 @@ class NodeSet implements \Iterator
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function count()
     {
@@ -58,6 +65,7 @@ class NodeSet implements \Iterator
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function valid()
     {
@@ -66,6 +74,7 @@ class NodeSet implements \Iterator
 
     /**
      * @return false|int
+     * @since 2.0.0
      */
     public function next()
     {
@@ -78,6 +87,7 @@ class NodeSet implements \Iterator
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function key()
     {
@@ -86,6 +96,7 @@ class NodeSet implements \Iterator
 
     /**
      * @return Node
+     * @since 2.0.0
      */
     public function current()
     {
@@ -94,6 +105,7 @@ class NodeSet implements \Iterator
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function rewind()
     {

@@ -7,12 +7,18 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Config;
 
+/**
+ * Class \Magento\Eav\Model\Entity\Attribute\Config\Reader
+ *
+ * @since 2.0.0
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * Xml merging attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/config/entity' => 'type',
@@ -26,6 +32,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

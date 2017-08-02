@@ -9,6 +9,7 @@ namespace Magento\Quote\Api;
 /**
  * Cart totals repository interface for guest carts.
  * @api
+ * @since 2.0.0
  */
 interface GuestCartTotalRepositoryInterface
 {
@@ -18,6 +19,7 @@ interface GuestCartTotalRepositoryInterface
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\TotalsInterface Quote totals data.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @since 2.0.0
      */
     public function get($cartId);
 }

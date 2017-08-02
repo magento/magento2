@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -17,6 +18,7 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Get header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -39,6 +42,7 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      * Retrieve item collection
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -73,6 +77,7 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
+     * @since 2.0.0
      */
     public function getItemId($item)
     {

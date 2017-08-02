@@ -9,6 +9,7 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Read implements ReadInterface
 {
@@ -16,6 +17,7 @@ class Read implements ReadInterface
      * Directory path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $path;
 
@@ -23,6 +25,7 @@ class Read implements ReadInterface
      * File factory
      *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
@@ -30,6 +33,7 @@ class Read implements ReadInterface
      * Filesystem driver
      *
      * @var \Magento\Framework\Filesystem\DriverInterface
+     * @since 2.0.0
      */
     protected $driver;
 
@@ -39,6 +43,7 @@ class Read implements ReadInterface
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Framework\Filesystem\DriverInterface $driver
      * @param string $path
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem\File\ReadFactory $fileFactory,
@@ -55,6 +60,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return void
+     * @since 2.0.0
      */
     protected function setPath($path)
     {
@@ -70,6 +76,7 @@ class Read implements ReadInterface
      * @param string $path
      * @param string $scheme
      * @return string
+     * @since 2.0.0
      */
     public function getAbsolutePath($path = null, $scheme = null)
     {
@@ -81,6 +88,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function getRelativePath($path = null)
     {
@@ -92,6 +100,7 @@ class Read implements ReadInterface
      *
      * @param string|null $path
      * @return string[]
+     * @since 2.0.0
      */
     public function read($path = null)
     {
@@ -108,6 +117,7 @@ class Read implements ReadInterface
      *
      * @param null $path
      * @return string[]
+     * @since 2.0.0
      */
     public function readRecursively($path = null)
     {
@@ -127,6 +137,7 @@ class Read implements ReadInterface
      * @param string $pattern
      * @param string $path [optional]
      * @return string[]
+     * @since 2.0.0
      */
     public function search($pattern, $path = null)
     {
@@ -150,6 +161,7 @@ class Read implements ReadInterface
      * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function isExist($path = null)
     {
@@ -162,6 +174,7 @@ class Read implements ReadInterface
      * @param string $path
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function stat($path)
     {
@@ -174,6 +187,7 @@ class Read implements ReadInterface
      * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function isReadable($path = null)
     {
@@ -186,6 +200,7 @@ class Read implements ReadInterface
      * @param string $path
      *
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @since 2.0.0
      */
     public function openFile($path)
     {
@@ -203,6 +218,7 @@ class Read implements ReadInterface
      * @param resource|null $context
      * @return string
      * @throws FileSystemException
+     * @since 2.0.0
      */
     public function readFile($path, $flag = null, $context = null)
     {
@@ -215,6 +231,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return bool
+     * @since 2.0.0
      */
     public function isFile($path)
     {
@@ -226,6 +243,7 @@ class Read implements ReadInterface
      *
      * @param string $path [optional]
      * @return bool
+     * @since 2.0.0
      */
     public function isDirectory($path = null)
     {

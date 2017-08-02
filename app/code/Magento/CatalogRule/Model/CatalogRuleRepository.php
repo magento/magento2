@@ -11,26 +11,35 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 
+/**
+ * Class \Magento\CatalogRule\Model\CatalogRuleRepository
+ *
+ * @since 2.1.0
+ */
 class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface
 {
     /**
      * @var ResourceModel\Rule
+     * @since 2.1.0
      */
     protected $ruleResource;
 
     /**
      * @var RuleFactory
+     * @since 2.1.0
      */
     protected $ruleFactory;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $rules = [];
 
     /**
      * @param ResourceModel\Rule $ruleResource
      * @param RuleFactory $ruleFactory
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\CatalogRule\Model\ResourceModel\Rule $ruleResource,
@@ -42,6 +51,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function save(Data\RuleInterface $rule)
     {
@@ -62,6 +72,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function get($ruleId)
     {
@@ -81,6 +92,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function delete(Data\RuleInterface $rule)
     {
@@ -97,6 +109,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function deleteById($ruleId)
     {

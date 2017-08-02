@@ -29,6 +29,7 @@ use Magento\Setup\Model\SearchTermDescriptionGeneratorFactory;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class SimpleProductsFixture extends Fixture
 {
@@ -39,61 +40,73 @@ class SimpleProductsFixture extends Fixture
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $priority = 31;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $descriptionConfig;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $shortDescriptionConfig;
 
     /**
      * @var ProductFactory
+     * @since 2.2.0
      */
     private $productFactory;
 
     /**
      * @var ProductGenerator
+     * @since 2.2.0
      */
     private $productGenerator;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $defaultAttributeSetId;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @since 2.2.0
      */
     private $attributeCollectionFactory;
 
     /**
      * @var AttributeSetCollectionFactory
+     * @since 2.2.0
      */
     private $attributeSetCollectionFactory;
 
     /**
      * @var SearchTermDescriptionGeneratorFactory
+     * @since 2.2.0
      */
     private $descriptionGeneratorFactory;
 
     /**
      * @var ProductsAmountProvider
+     * @since 2.2.0
      */
     private $productsAmountProvider;
 
     /**
      * @var WebsiteCategoryProvider
+     * @since 2.2.0
      */
     private $websiteCategoryProvider;
 
     /**
      * @var PriceProvider
+     * @since 2.2.0
      */
     private $priceProvider;
 
@@ -108,6 +121,7 @@ class SimpleProductsFixture extends Fixture
      * @param ProductsAmountProvider $productsAmountProvider
      * @param PriceProvider $priceProvider
      * @internal param FixtureConfig $fixtureConfig
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -133,6 +147,7 @@ class SimpleProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -141,6 +156,7 @@ class SimpleProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function introduceParamLabels()
     {
@@ -152,6 +168,7 @@ class SimpleProductsFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -253,6 +270,7 @@ class SimpleProductsFixture extends Fixture
      * Get simple product sku pattern
      *
      * @return string
+     * @since 2.2.0
      */
     private function getSkuPattern()
     {
@@ -263,6 +281,7 @@ class SimpleProductsFixture extends Fixture
      * Get default attribute set id
      *
      * @return int
+     * @since 2.2.0
      */
     private function getDefaultAttributeSetId()
     {
@@ -278,6 +297,7 @@ class SimpleProductsFixture extends Fixture
      *
      * @see config/attributeSets.xml
      * @return array
+     * @since 2.2.0
      */
     private function getDefaultAttributeSets()
     {
@@ -318,6 +338,7 @@ class SimpleProductsFixture extends Fixture
      * Get search terms config which used for product description generation
      *
      * @return array
+     * @since 2.2.0
      */
     private function getSearchTerms()
     {
@@ -334,6 +355,7 @@ class SimpleProductsFixture extends Fixture
      * Get description config
      *
      * @return array
+     * @since 2.2.0
      */
     private function getDescriptionConfig()
     {
@@ -348,6 +370,7 @@ class SimpleProductsFixture extends Fixture
      * Get short description config
      *
      * @return array
+     * @since 2.2.0
      */
     private function getShortDescriptionConfig()
     {
@@ -363,6 +386,7 @@ class SimpleProductsFixture extends Fixture
      *
      * @param string $configSrc
      * @return array
+     * @since 2.2.0
      */
     private function readDescriptionConfig($configSrc)
     {
@@ -379,6 +403,7 @@ class SimpleProductsFixture extends Fixture
      * Get additional attribute sets
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection[]
+     * @since 2.2.0
      */
     private function getAdditionalAttributeSets()
     {

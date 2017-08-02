@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 /**
  * Class Price
+ * @since 2.0.0
  */
 class Price extends AbstractDataType
 {
@@ -16,6 +17,7 @@ class Price extends AbstractDataType
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

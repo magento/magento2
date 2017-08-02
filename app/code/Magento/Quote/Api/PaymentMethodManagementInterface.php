@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface PaymentMethodManagementInterface
  * @api
+ * @since 2.0.0
  */
 interface PaymentMethodManagementInterface
 {
@@ -20,6 +21,7 @@ interface PaymentMethodManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException The billing or shipping address
      * is not set, or the specified payment method is not available.
+     * @since 2.0.0
      */
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method);
 
@@ -29,6 +31,7 @@ interface PaymentMethodManagementInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\PaymentInterface  Payment method object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @since 2.0.0
      */
     public function get($cartId);
 
@@ -42,6 +45,7 @@ interface PaymentMethodManagementInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\PaymentMethodInterface[] Array of payment methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @since 2.0.0
      */
     public function getList($cartId);
 }

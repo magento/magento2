@@ -10,12 +10,18 @@ use Magento\Backend\Block\Widget\Grid\ExportInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportTotalsExcel
+ *
+ * @since 2.0.0
+ */
 class ExportTotalsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**
      * Export customers biggest totals report to Excel XML format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

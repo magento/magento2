@@ -7,11 +7,13 @@ namespace Magento\Backend\Block\System;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Design extends \Magento\Backend\Block\Template
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

@@ -12,11 +12,13 @@ use Magento\Catalog\Model\Product\Condition\ConditionInterface;
  * Wee tax resource model
  *
  * @api
+ * @since 2.0.0
  */
 class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -24,6 +26,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -38,6 +41,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,6 +53,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DB\Select|string $select
      * @return string
+     * @since 2.0.0
      */
     public function fetchOne($select)
     {
@@ -60,6 +65,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $regionId
      * @param int $websiteId
      * @return boolean
+     * @since 2.0.0
      */
     public function isWeeeInLocation($countryId, $regionId, $websiteId)
     {
@@ -96,6 +102,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param int $entityId
      * @return array[]
+     * @since 2.0.0
      */
     public function fetchWeeeTaxCalculationsByEntity($countryId, $regionId, $websiteId, $storeId, $entityId)
     {

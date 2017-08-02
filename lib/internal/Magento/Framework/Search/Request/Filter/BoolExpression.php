@@ -10,11 +10,13 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Bool Filter
  * @api
+ * @since 2.0.0
  */
 class BoolExpression implements FilterInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
@@ -22,6 +24,7 @@ class BoolExpression implements FilterInterface
      * Filter names to which result set MUST satisfy
      *
      * @var array
+     * @since 2.0.0
      */
     protected $must = [];
 
@@ -29,6 +32,7 @@ class BoolExpression implements FilterInterface
      * Filter names to which result set SHOULD satisfy
      *
      * @var array
+     * @since 2.0.0
      */
     protected $should = [];
 
@@ -36,6 +40,7 @@ class BoolExpression implements FilterInterface
      * Filter names to which result set MUST NOT satisfy
      *
      * @var array
+     * @since 2.0.0
      */
     protected $mustNot = [];
 
@@ -45,6 +50,7 @@ class BoolExpression implements FilterInterface
      * @param array $should
      * @param array $not
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($name, array $must = [], array $should = [], array $not = [])
     {
@@ -56,6 +62,7 @@ class BoolExpression implements FilterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -65,6 +72,7 @@ class BoolExpression implements FilterInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -76,6 +84,7 @@ class BoolExpression implements FilterInterface
      *
      * @return \Magento\Framework\Search\Request\FilterInterface[]
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getMust()
     {
@@ -87,6 +96,7 @@ class BoolExpression implements FilterInterface
      *
      * @return \Magento\Framework\Search\Request\FilterInterface[]
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getShould()
     {
@@ -98,6 +108,7 @@ class BoolExpression implements FilterInterface
      *
      * @return \Magento\Framework\Search\Request\FilterInterface[]
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getMustNot()
     {

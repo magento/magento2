@@ -9,21 +9,25 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Read handler for catalog product link.
+ * @since 2.2.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory
+     * @since 2.2.0
      */
     private $categoryLinkFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     * @since 2.2.0
      */
     private $productCategoryLink;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.2.0
      */
     private $dataObjectHelper;
 
@@ -33,6 +37,7 @@ class ReadHandler implements ExtensionInterface
      * @param \Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory $categoryLinkFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory $categoryLinkFactory,
@@ -49,6 +54,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function execute($entity, $arguments = [])
     {

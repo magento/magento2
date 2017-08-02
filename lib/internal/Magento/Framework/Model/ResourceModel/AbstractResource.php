@@ -14,16 +14,19 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Abstract resource model
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractResource
 {
     /**
      * @var Json
+     * @since 2.2.0
      */
     protected $serializer;
 
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -37,6 +40,7 @@ abstract class AbstractResource
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     abstract protected function _construct();
 
@@ -44,6 +48,7 @@ abstract class AbstractResource
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     abstract public function getConnection();
 
@@ -52,6 +57,7 @@ abstract class AbstractResource
      *
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function beginTransaction()
     {
@@ -65,6 +71,7 @@ abstract class AbstractResource
      * @param callable|array $callback
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function addCommitCallback($callback)
     {
@@ -77,6 +84,7 @@ abstract class AbstractResource
      *
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function commit()
     {
@@ -102,6 +110,7 @@ abstract class AbstractResource
      *
      * @return $this
      * @api
+     * @since 2.0.0
      */
     public function rollBack()
     {
@@ -118,6 +127,7 @@ abstract class AbstractResource
      * @param mixed $defaultValue
      * @param bool $unsetEmpty
      * @return $this
+     * @since 2.0.0
      */
     protected function _serializeField(DataObject $object, $field, $defaultValue = null, $unsetEmpty = false)
     {
@@ -138,6 +148,7 @@ abstract class AbstractResource
      * @param string $field
      * @param mixed $defaultValue
      * @return void
+     * @since 2.0.0
      */
     protected function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
@@ -160,6 +171,7 @@ abstract class AbstractResource
      * @param DataObject $object
      * @param string $table
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareDataForTable(DataObject $object, $table)
     {
@@ -189,6 +201,7 @@ abstract class AbstractResource
      * @param mixed $value
      * @param string $type
      * @return mixed
+     * @since 2.0.0
      */
     protected function _prepareTableValueForSave($value, $type)
     {
@@ -207,6 +220,7 @@ abstract class AbstractResource
      * Template method to return validate rules to be executed before entity is saved
      *
      * @return null
+     * @since 2.0.0
      */
     public function getValidationRulesBeforeSave()
     {
@@ -219,6 +233,7 @@ abstract class AbstractResource
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $tableName
      * @return array|string
+     * @since 2.0.0
      */
     protected function _getColumnsForEntityLoad(\Magento\Framework\Model\AbstractModel $object, $tableName)
     {
@@ -241,7 +256,8 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     protected function getSerializer()
     {

@@ -5,23 +5,31 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
+/**
+ * Class \Magento\Shipping\Model\Config\Source\Allmethods
+ *
+ * @since 2.0.0
+ */
 class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Shipping\Model\Config
+     * @since 2.0.0
      */
     protected $_shippingConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -37,6 +45,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
      *
      * @param bool $isActiveOnlyFlag
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray($isActiveOnlyFlag = false)
     {

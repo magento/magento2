@@ -8,32 +8,42 @@ namespace Magento\Framework\App\Cache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\Cache\TypeList
+ *
+ * @since 2.0.0
+ */
 class TypeList implements TypeListInterface
 {
     const INVALIDATED_TYPES = 'core_cache_invalidate';
 
     /**
      * @var \Magento\Framework\Cache\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var InstanceFactory
+     * @since 2.0.0
      */
     protected $_factory;
 
     /**
      * @var StateInterface
+     * @since 2.0.0
      */
     protected $_cacheState;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -43,6 +53,7 @@ class TypeList implements TypeListInterface
      * @param InstanceFactory $factory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param SerializerInterface $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Cache\ConfigInterface $config,
@@ -64,6 +75,7 @@ class TypeList implements TypeListInterface
      * @param string $type
      * @return \Magento\Framework\Cache\FrontendInterface
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     protected function _getTypeInstance($type)
     {
@@ -78,6 +90,7 @@ class TypeList implements TypeListInterface
      * Get invalidate types codes
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getInvalidatedTypes()
     {
@@ -95,6 +108,7 @@ class TypeList implements TypeListInterface
      *
      * @param array $types
      * @return void
+     * @since 2.0.0
      */
     protected function _saveInvalidatedTypes($types)
     {
@@ -105,6 +119,7 @@ class TypeList implements TypeListInterface
      * Get information about all declared cache types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTypes()
     {
@@ -133,6 +148,7 @@ class TypeList implements TypeListInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTypeLabels()
     {
@@ -149,6 +165,7 @@ class TypeList implements TypeListInterface
      * Get array of all invalidated cache types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getInvalidated()
     {
@@ -170,6 +187,7 @@ class TypeList implements TypeListInterface
      *
      * @param string|array $typeCode
      * @return void
+     * @since 2.0.0
      */
     public function invalidate($typeCode)
     {
@@ -188,6 +206,7 @@ class TypeList implements TypeListInterface
      *
      * @param string $typeCode
      * @return void
+     * @since 2.0.0
      */
     public function cleanType($typeCode)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
 /**
  * @api Implement custom Handler
+ * @since 2.0.0
  */
 interface HandlerInterface
 {
@@ -19,6 +20,7 @@ interface HandlerInterface
      * @param string $alias
      * @param array $fieldInfo
      * @return void
+     * @since 2.0.0
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo);
 }

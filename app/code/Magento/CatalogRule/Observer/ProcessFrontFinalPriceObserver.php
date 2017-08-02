@@ -17,29 +17,41 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
 
+/**
+ * Class \Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver
+ *
+ * @since 2.0.0
+ */
 class ProcessFrontFinalPriceObserver implements ObserverInterface
 {
     /**
      * @var CustomerModelSession
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
+     * @since 2.0.0
      */
     protected $resourceRuleFactory;
 
-    /** @var RulePricesStorage  */
+    /**
+     * @var \Magento\CatalogRule\Observer\RulePricesStorage
+     * @since 2.0.0
+     */
     protected $rulePricesStorage;
 
     /**
@@ -48,6 +60,7 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
@@ -68,6 +81,7 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class to show swatch image and save it on disk
+ * @since 2.0.0
  */
 class Show extends \Magento\Backend\App\Action
 {
@@ -23,26 +24,31 @@ class Show extends \Magento\Backend\App\Action
      * Helper to move image from tmp to catalog
      *
      * @var \Magento\Swatches\Helper\Media
+     * @since 2.0.0
      */
     protected $swatchHelper;
 
     /**
      * @var \Magento\Framework\Image\AdapterFactory
+     * @since 2.0.0
      */
     protected $adapterFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @since 2.0.0
      */
     protected $uploaderFactory;
 
@@ -53,6 +59,7 @@ class Show extends \Magento\Backend\App\Action
      * @param \Magento\Catalog\Model\Product\Media\Config $config
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -74,6 +81,7 @@ class Show extends \Magento\Backend\App\Action
      * Image upload action in iframe
      *
      * @return string
+     * @since 2.0.0
      */
     public function execute()
     {

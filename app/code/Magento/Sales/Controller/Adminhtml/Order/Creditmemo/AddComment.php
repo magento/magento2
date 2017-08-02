@@ -8,6 +8,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\AddComment
+ *
+ * @since 2.0.0
+ */
 class AddComment extends \Magento\Backend\App\Action
 {
     /**
@@ -19,26 +24,31 @@ class AddComment extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
+     * @since 2.0.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var CreditmemoCommentSender
+     * @since 2.0.0
      */
     protected $creditmemoCommentSender;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $pagePageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -49,6 +59,7 @@ class AddComment extends \Magento\Backend\App\Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -70,6 +81,7 @@ class AddComment extends \Magento\Backend\App\Action
      * Add comment to creditmemo history
      *
      * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

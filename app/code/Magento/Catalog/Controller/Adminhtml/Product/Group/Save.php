@@ -6,6 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Group;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Group\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -17,6 +22,7 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class FixtureModel
 {
@@ -32,11 +33,13 @@ class FixtureModel
      * Application object
      *
      * @var \Magento\Framework\AppInterface
+     * @since 2.0.0
      */
     protected $application;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -44,6 +47,7 @@ class FixtureModel
      * List of fixtures applied to the application
      *
      * @var \Magento\Setup\Fixtures\Fixture[]
+     * @since 2.0.0
      */
     protected $fixtures = [];
 
@@ -51,17 +55,20 @@ class FixtureModel
      * Parameters labels
      *
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $paramLabels = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $initArguments;
 
     /**
      * @var FixtureConfig
+     * @since 2.0.0
      */
     private $config;
 
@@ -70,6 +77,7 @@ class FixtureModel
      *
      * @param IndexerReindexCommand $reindexCommand
      * @param array $initArguments
+     * @since 2.0.0
      */
     public function __construct(IndexerReindexCommand $reindexCommand, $initArguments = [])
     {
@@ -82,6 +90,7 @@ class FixtureModel
      *
      * @param OutputInterface $output
      * @return void
+     * @since 2.0.0
      */
     public function reindex(OutputInterface $output)
     {
@@ -94,6 +103,7 @@ class FixtureModel
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function loadFixtures()
     {
@@ -125,7 +135,8 @@ class FixtureModel
      * Get param labels
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function getParamLabels()
     {
@@ -136,6 +147,7 @@ class FixtureModel
      * Get fixtures
      *
      * @return Fixture[]
+     * @since 2.0.0
      */
     public function getFixtures()
     {
@@ -146,6 +158,7 @@ class FixtureModel
      * Get object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     public function getObjectManager()
     {
@@ -166,6 +179,7 @@ class FixtureModel
      *
      * @param string $area
      * @return FixtureModel
+     * @since 2.0.0
      */
     public function initObjectManager($area = self::AREA_CODE)
     {
@@ -196,7 +210,8 @@ class FixtureModel
      * Reset object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function resetObjectManager()
     {
@@ -205,6 +220,7 @@ class FixtureModel
 
     /**
      * @return FixtureConfig
+     * @since 2.2.0
      */
     private function getConfig()
     {
@@ -222,6 +238,7 @@ class FixtureModel
      * @throws \Exception
      *
      * @return void
+     * @since 2.0.0
      */
     public function loadConfig($filename)
     {
@@ -235,6 +252,7 @@ class FixtureModel
      * @param null|mixed $default
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue($key, $default = null)
     {

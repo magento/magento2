@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -22,21 +23,25 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @var \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     private $layer;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     private $session;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     private $storeManager;
 
@@ -47,6 +52,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Customer\Model\Session $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param null $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -68,6 +74,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $range
      * @return array
+     * @since 2.0.0
      */
     public function getCount($range)
     {
@@ -94,6 +101,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve clean select with joined price index table
      *
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getSelect()
     {
@@ -162,6 +170,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string|null $conditionString
      * @return string|null
+     * @since 2.0.0
      */
     protected function _replaceTableAlias($conditionString)
     {
@@ -190,6 +199,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\DB\Select $select
      * @param bool $replaceAlias
      * @return string
+     * @since 2.0.0
      */
     protected function _getPriceExpression($select, $replaceAlias = true)
     {
@@ -212,6 +222,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DB\Select $select
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     protected function _getFullPriceExpression($select)
     {
@@ -227,6 +238,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param float $price
      * @param bool $decrease
      * @return float
+     * @since 2.0.0
      */
     protected function _getComparingValue($price, $decrease = true)
     {
@@ -244,6 +256,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $index
      * @param null|int $lowerPrice
      * @return array|false
+     * @since 2.0.0
      */
     public function loadPreviousPrices($price, $index, $lowerPrice = null)
     {
@@ -269,6 +282,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param null|int $lowerPrice
      * @param null|int $upperPrice
      * @return array
+     * @since 2.0.0
      */
     public function loadPrices($limit, $offset = null, $lowerPrice = null, $upperPrice = null)
     {
@@ -293,6 +307,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $rightIndex
      * @param null|int $upperPrice
      * @return array|false
+     * @since 2.0.0
      */
     public function loadNextPrices($price, $rightIndex, $upperPrice = null)
     {
@@ -333,6 +348,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @param mixed $interval
      * @return $this
+     * @since 2.0.0
      */
     public function applyPriceRange(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $interval)
     {
@@ -369,6 +385,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -379,6 +396,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve joined price index table alias
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getIndexTableAlias()
     {

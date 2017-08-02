@@ -5,10 +5,16 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Reorder
+ *
+ * @since 2.0.0
+ */
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

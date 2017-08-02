@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Runs process of importing config data from deployment configuration files.
+ * @since 2.2.0
  */
 class Processor
 {
@@ -27,6 +28,7 @@ class Processor
      * Configuration data changes detector.
      *
      * @var ChangeDetector
+     * @since 2.2.0
      */
     private $changeDetector;
 
@@ -34,6 +36,7 @@ class Processor
      * Pool of all deployment configuration importers.
      *
      * @var ImporterPool
+     * @since 2.2.0
      */
     private $configImporterPool;
 
@@ -41,6 +44,7 @@ class Processor
      * Application deployment configuration.
      *
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 
@@ -48,6 +52,7 @@ class Processor
      * Hash updater of config data.
      *
      * @var Hash
+     * @since 2.2.0
      */
     private $configHash;
 
@@ -55,6 +60,7 @@ class Processor
      * Factory for creation of importer instance.
      *
      * @var ImporterFactory
+     * @since 2.2.0
      */
     private $importerFactory;
 
@@ -62,6 +68,7 @@ class Processor
      * Logger.
      *
      * @var Logger
+     * @since 2.2.0
      */
     private $logger;
 
@@ -69,6 +76,7 @@ class Processor
      * Asks questions in interactive mode of cli commands.
      *
      * @var YesNo
+     * @since 2.2.0
      */
     private $questionPerformer;
 
@@ -80,6 +88,7 @@ class Processor
      * @param Hash $configHash the hash updater of config data
      * @param Logger $logger the logger
      * @param YesNo $questionPerformer The question performer for cli command
+     * @since 2.2.0
      */
     public function __construct(
         ChangeDetector $changeDetector,
@@ -106,6 +115,7 @@ class Processor
      * @param OutputInterface $output The CLI output
      * @return void
      * @throws RuntimeException is thrown when import has failed
+     * @since 2.2.0
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -160,6 +170,7 @@ class Processor
      * @param array $data Configuration data for given section
      * @return void
      * @throws ValidatorException If current section has wrong data
+     * @since 2.2.0
      */
     private function validateSectionData($section, array $data)
     {

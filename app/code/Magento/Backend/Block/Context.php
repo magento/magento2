@@ -18,11 +18,13 @@ namespace Magento\Backend\Block;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Context extends \Magento\Framework\View\Element\Context
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     protected $_authorization;
 
@@ -47,6 +49,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -94,6 +97,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * Retrieve Authorization
      *
      * @return \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     public function getAuthorization()
     {

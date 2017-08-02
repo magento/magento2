@@ -15,16 +15,19 @@ use Magento\Framework\View\Design\Theme\Label;
 /**
  * Design
  *
+ * @since 2.0.0
  */
 class Theme extends AbstractSource
 {
     /**
      * @var Label
+     * @since 2.0.0
      */
     protected $themeLabel;
 
     /**
      * @param Label $themeLabel
+     * @since 2.0.0
      */
     public function __construct(Label $themeLabel)
     {
@@ -36,6 +39,7 @@ class Theme extends AbstractSource
      *
      * @param bool $withEmpty add empty (please select) values to result
      * @return Label[]
+     * @since 2.0.0
      */
     public function getAllOptions($withEmpty = true)
     {

@@ -5,15 +5,22 @@
  */
 namespace Magento\Msrp\Model\Quote\Address;
 
+/**
+ * Class \Magento\Msrp\Model\Quote\Address\CanApplyMsrp
+ *
+ * @since 2.0.0
+ */
 class CanApplyMsrp
 {
     /**
      * @var \Magento\Msrp\Helper\Data
+     * @since 2.0.0
      */
     protected $msrpHelper;
 
     /**
      * @param \Magento\Msrp\Helper\Data $msrpHelper
+     * @since 2.0.0
      */
     public function __construct(\Magento\Msrp\Helper\Data $msrpHelper)
     {
@@ -23,6 +30,7 @@ class CanApplyMsrp
     /**
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return bool
+     * @since 2.0.0
      */
     public function isCanApplyMsrp($address)
     {

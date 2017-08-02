@@ -11,27 +11,32 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Pickup shipping model
  *
  * @api
+ * @since 2.0.0
  */
 class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_code = 'pickup';
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isFixed = true;
 
     /**
      * @var \Magento\Shipping\Model\Rate\ResultFactory
+     * @since 2.0.0
      */
     protected $_rateResultFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
+     * @since 2.0.0
      */
     protected $_rateMethodFactory;
 
@@ -42,6 +47,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -60,6 +66,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -71,6 +78,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      * Get allowed shipping methods
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedMethods()
     {

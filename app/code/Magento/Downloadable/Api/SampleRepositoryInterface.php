@@ -10,6 +10,7 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Interface SampleRepositoryInterface
  * @api
+ * @since 2.0.0
  */
 interface SampleRepositoryInterface
 {
@@ -18,6 +19,7 @@ interface SampleRepositoryInterface
      *
      * @param string $sku
      * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     * @since 2.0.0
      */
     public function getList($sku);
 
@@ -26,6 +28,7 @@ interface SampleRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     * @since 2.0.0
      */
     public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product);
 
@@ -36,6 +39,7 @@ interface SampleRepositoryInterface
      * @param \Magento\Downloadable\Api\Data\SampleInterface $sample
      * @param bool $isGlobalScopeContent
      * @return int
+     * @since 2.0.0
      */
     public function save(
         $sku,
@@ -48,6 +52,7 @@ interface SampleRepositoryInterface
      *
      * @param int $id
      * @return bool
+     * @since 2.0.0
      */
     public function delete($id);
 }

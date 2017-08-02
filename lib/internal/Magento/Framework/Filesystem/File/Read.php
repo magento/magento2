@@ -8,12 +8,18 @@ namespace Magento\Framework\Filesystem\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\Framework\Filesystem\File\Read
+ *
+ * @since 2.0.0
+ */
 class Read implements ReadInterface
 {
     /**
      * Full path to file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $path;
 
@@ -21,6 +27,7 @@ class Read implements ReadInterface
      * Mode to open the file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $mode = 'r';
 
@@ -28,11 +35,13 @@ class Read implements ReadInterface
      * Opened file resource
      *
      * @var resource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Framework\Filesystem\DriverInterface
+     * @since 2.0.0
      */
     protected $driver;
 
@@ -41,6 +50,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @param DriverInterface $driver
+     * @since 2.0.0
      */
     public function __construct($path, DriverInterface $driver)
     {
@@ -55,6 +65,7 @@ class Read implements ReadInterface
      * Open file
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function open()
     {
@@ -68,6 +79,7 @@ class Read implements ReadInterface
      *
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     protected function assertValid()
     {
@@ -82,6 +94,7 @@ class Read implements ReadInterface
      *
      * @param int $length The number of bytes to read
      * @return string
+     * @since 2.0.0
      */
     public function read($length)
     {
@@ -94,6 +107,7 @@ class Read implements ReadInterface
      * @param string|null $flag
      * @param resource|null $context
      * @return string
+     * @since 2.0.0
      */
     public function readAll($flag = null, $context = null)
     {
@@ -106,6 +120,7 @@ class Read implements ReadInterface
      * @param int $length The number of bytes to read
      * @param string $ending [optional]
      * @return string
+     * @since 2.0.0
      */
     public function readLine($length, $ending = null)
     {
@@ -120,6 +135,7 @@ class Read implements ReadInterface
      * @param string $enclosure [optional]
      * @param string $escape [optional]
      * @return array|bool|null
+     * @since 2.0.0
      */
     public function readCsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\')
     {
@@ -130,6 +146,7 @@ class Read implements ReadInterface
      * Returns the current cursor position
      *
      * @return int
+     * @since 2.0.0
      */
     public function tell()
     {
@@ -142,6 +159,7 @@ class Read implements ReadInterface
      * @param int $offset
      * @param int $whence
      * @return int
+     * @since 2.0.0
      */
     public function seek($offset, $whence = SEEK_SET)
     {
@@ -152,6 +170,7 @@ class Read implements ReadInterface
      * Checks if the current position is the end-of-file
      *
      * @return bool
+     * @since 2.0.0
      */
     public function eof()
     {
@@ -162,6 +181,7 @@ class Read implements ReadInterface
      * Closes the file.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function close()
     {
@@ -172,6 +192,7 @@ class Read implements ReadInterface
      * {@inheritDoc}
      *
      * @return array
+     * @since 2.0.0
      */
     public function stat()
     {

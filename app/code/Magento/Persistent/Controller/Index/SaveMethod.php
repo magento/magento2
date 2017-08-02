@@ -8,12 +8,18 @@ namespace Magento\Persistent\Controller\Index;
 use Magento\Persistent\Controller\Index;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Persistent\Controller\Index\SaveMethod
+ *
+ * @since 2.0.0
+ */
 class SaveMethod extends Index
 {
     /**
      * Save onepage checkout method to be register
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

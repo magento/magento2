@@ -11,6 +11,7 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
 {
@@ -19,6 +20,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Curren
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

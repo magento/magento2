@@ -11,15 +11,22 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export\Edit;
 
+/**
+ * Class \Magento\ImportExport\Block\Adminhtml\Export\Edit\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\ImportExport\Model\Source\Export\EntityFactory
+     * @since 2.0.0
      */
     protected $_entityFactory;
 
     /**
      * @var \Magento\ImportExport\Model\Source\Export\FormatFactory
+     * @since 2.0.0
      */
     protected $_formatFactory;
 
@@ -30,6 +37,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\ImportExport\Model\Source\Export\EntityFactory $entityFactory
      * @param \Magento\ImportExport\Model\Source\Export\FormatFactory $formatFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,6 +56,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form before rendering HTML.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -7,6 +7,7 @@ namespace Magento\Webapi\Model\Config;
 
 /**
  * Service config data reader.
+ * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -14,6 +15,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/routes/route' => ['url', 'method'],
@@ -30,6 +32,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

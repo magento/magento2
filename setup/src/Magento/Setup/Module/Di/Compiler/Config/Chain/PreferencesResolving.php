@@ -8,6 +8,11 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving
+ *
+ * @since 2.0.0
+ */
 class PreferencesResolving implements ModificationInterface
 {
     /**
@@ -15,6 +20,7 @@ class PreferencesResolving implements ModificationInterface
      *
      * @param array $config
      * @return array
+     * @since 2.0.0
      */
     public function modify(array $config)
     {
@@ -33,6 +39,7 @@ class PreferencesResolving implements ModificationInterface
      * @param array $argument
      * @param array $preferences
      * @return array
+     * @since 2.0.0
      */
     private function resolvePreferences(&$argument, &$preferences)
     {
@@ -59,6 +66,7 @@ class PreferencesResolving implements ModificationInterface
      * @param array $preferences
      *
      * @return string
+     * @since 2.0.0
      */
     private function resolvePreferenceRecursive(&$value, &$preferences)
     {

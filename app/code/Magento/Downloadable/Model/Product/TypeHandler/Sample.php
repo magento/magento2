@@ -12,6 +12,7 @@ use Magento\Downloadable\Model\ComponentInterface;
 /**
  * Class Sample
  * @api
+ * @since 2.0.0
  */
 class Sample extends AbstractTypeHandler
 {
@@ -20,11 +21,13 @@ class Sample extends AbstractTypeHandler
 
     /**
      * @var \Magento\Downloadable\Model\SampleFactory
+     * @since 2.0.0
      */
     private $sampleFactory;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\SampleFactory
+     * @since 2.0.0
      */
     private $sampleResourceFactory;
 
@@ -33,6 +36,7 @@ class Sample extends AbstractTypeHandler
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -47,6 +51,7 @@ class Sample extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataKey()
     {
@@ -55,6 +60,7 @@ class Sample extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIdentifierKey()
     {
@@ -63,6 +69,7 @@ class Sample extends AbstractTypeHandler
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function processDelete()
     {
@@ -73,6 +80,7 @@ class Sample extends AbstractTypeHandler
 
     /**
      * @return ComponentInterface
+     * @since 2.0.0
      */
     protected function createItem()
     {
@@ -84,6 +92,7 @@ class Sample extends AbstractTypeHandler
      * @param array $data
      * @param Product $product
      * @return void
+     * @since 2.0.0
      */
     protected function setDataToModel(ComponentInterface $model, array $data, Product $product)
     {
@@ -106,6 +115,7 @@ class Sample extends AbstractTypeHandler
      * @param array $files
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function setFiles(ComponentInterface $model, array $files)
     {
@@ -124,6 +134,7 @@ class Sample extends AbstractTypeHandler
      * @param ComponentInterface $model
      * @param Product $product
      * @return void
+     * @since 2.0.0
      */
     protected function linkToProduct(ComponentInterface $model, Product $product)
     {

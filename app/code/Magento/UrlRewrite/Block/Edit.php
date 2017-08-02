@@ -7,11 +7,13 @@ namespace Magento\UrlRewrite\Block;
 
 /**
  * Block for URL rewrites edit page
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * @var \Magento\UrlRewrite\Block\Selector
+     * @since 2.0.0
      */
     private $_selectorBlock;
 
@@ -19,6 +21,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Part for building some blocks names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_controller = 'url_rewrite';
 
@@ -26,6 +29,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Generated buttons html cache
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_buttonsHtml;
 
@@ -33,11 +37,13 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewriteFactory
+     * @since 2.0.0
      */
     protected $_rewriteFactory;
 
@@ -46,6 +52,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -62,6 +69,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Prepare URL rewrite editing layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -77,6 +85,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Prepare featured blocks for layout of URL rewrite editing
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayoutFeatures()
     {
@@ -94,6 +103,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Add child edit form block
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addEditFormBlock()
     {
@@ -111,6 +121,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Add reset button
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addResetButton()
     {
@@ -129,6 +140,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Add back button
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addBackButton()
     {
@@ -148,6 +160,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      *
      * @param string $link
      * @return void
+     * @since 2.0.0
      */
     protected function _updateBackButtonLink($link)
     {
@@ -158,6 +171,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Add delete button
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addDeleteButton()
     {
@@ -184,6 +198,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Add save button
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addSaveButton()
     {
@@ -204,6 +219,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Creates edit form block
      *
      * @return \Magento\UrlRewrite\Block\Edit\Form
+     * @since 2.0.0
      */
     protected function _createEditFormBlock()
     {
@@ -218,6 +234,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Add child URL rewrite selector block
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addUrlRewriteSelectorBlock()
     {
@@ -228,6 +245,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Get selector block
      *
      * @return \Magento\UrlRewrite\Block\Selector
+     * @since 2.0.0
      */
     private function _getSelectorBlock()
     {
@@ -246,6 +264,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * @param null $area
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getButtonsHtml($area = null)
     {
@@ -266,6 +285,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Get or create new instance of URL rewrite
      *
      * @return \Magento\UrlRewrite\Model\UrlRewrite
+     * @since 2.0.0
      */
     protected function _getUrlRewrite()
     {

@@ -15,21 +15,25 @@ use Magento\Framework\Translate\InlineInterface;
  * Actual for controller actions that serve ajax requests
  *
  * @api
+ * @since 2.0.0
  */
 class Json extends AbstractResult
 {
     /**
      * @var \Magento\Framework\Translate\InlineInterface
+     * @since 2.0.0
      */
     protected $translateInline;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $json;
 
     /**
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @since 2.0.0
      */
     public function __construct(InlineInterface $translateInline)
     {
@@ -43,6 +47,7 @@ class Json extends AbstractResult
      * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
      * @param array $options Additional options used during encoding
      * @return $this
+     * @since 2.0.0
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
@@ -53,6 +58,7 @@ class Json extends AbstractResult
     /**
      * @param string $jsonData
      * @return $this
+     * @since 2.0.0
      */
     public function setJsonData($jsonData)
     {
@@ -62,6 +68,7 @@ class Json extends AbstractResult
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function render(HttpResponseInterface $response)
     {

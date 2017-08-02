@@ -7,11 +7,13 @@ namespace Magento\Rule\Model\Action;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends AbstractAction
 {
     /**
      * @var \Magento\Rule\Model\ActionFactory
+     * @since 2.0.0
      */
     protected $_actionFactory;
 
@@ -20,6 +22,7 @@ class Collection extends AbstractAction
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ActionFactory $actionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -48,6 +51,7 @@ class Collection extends AbstractAction
      * @param array $arrAttributes
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function asArray(array $arrAttributes = [])
     {
@@ -62,6 +66,7 @@ class Collection extends AbstractAction
     /**
      * @param array $arr
      * @return $this
+     * @since 2.0.0
      */
     public function loadArray(array $arr)
     {
@@ -81,6 +86,7 @@ class Collection extends AbstractAction
     /**
      * @param ActionInterface $action
      * @return $this
+     * @since 2.0.0
      */
     public function addAction(ActionInterface $action)
     {
@@ -99,6 +105,7 @@ class Collection extends AbstractAction
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function asHtml()
     {
@@ -111,6 +118,7 @@ class Collection extends AbstractAction
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function getNewChildElement()
     {
@@ -129,6 +137,7 @@ class Collection extends AbstractAction
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function asHtmlRecursive()
     {
@@ -144,6 +153,7 @@ class Collection extends AbstractAction
      * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function asString($format = '')
     {
@@ -154,6 +164,7 @@ class Collection extends AbstractAction
     /**
      * @param int $level
      * @return string
+     * @since 2.0.0
      */
     public function asStringRecursive($level = 0)
     {
@@ -166,6 +177,7 @@ class Collection extends AbstractAction
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function process()
     {

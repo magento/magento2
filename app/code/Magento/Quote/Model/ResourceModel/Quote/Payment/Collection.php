@@ -7,6 +7,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Payment;
 
 /**
  * Quote payments collection
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -18,6 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -43,6 +45,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -57,6 +60,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param int $quoteId
      * @return $this
+     * @since 2.0.0
      */
     public function setQuoteFilter($quoteId)
     {
@@ -67,6 +71,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Unserialize additional_information in each item
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {

@@ -8,6 +8,7 @@ namespace Magento\Framework\Api;
 
 /**
  * Base data object for custom attribute metadata
+ * @since 2.0.0
  */
 class AttributeMetadata extends AbstractSimpleObject implements MetadataObjectInterface
 {
@@ -17,6 +18,7 @@ class AttributeMetadata extends AbstractSimpleObject implements MetadataObjectIn
      * Retrieve code of the attribute.
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttributeCode()
     {
@@ -28,6 +30,7 @@ class AttributeMetadata extends AbstractSimpleObject implements MetadataObjectIn
      *
      * @param string $attributeCode
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode)
     {

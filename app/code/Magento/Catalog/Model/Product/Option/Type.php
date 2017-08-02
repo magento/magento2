@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Option;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface
@@ -24,6 +25,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get option type label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -34,6 +36,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get option type code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -44,6 +47,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get option type group
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGroup()
     {
@@ -55,6 +59,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -66,6 +71,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -77,6 +83,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $group
      * @return $this
+     * @since 2.0.0
      */
     public function setGroup($group)
     {
@@ -87,6 +94,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -98,6 +106,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes

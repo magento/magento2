@@ -79,15 +79,22 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * Class \Magento\Framework\Filter\Input
+ *
+ * @since 2.0.0
+ */
 class Input implements \Zend_Filter_Interface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -98,6 +105,7 @@ class Input implements \Zend_Filter_Interface
      * Filters data collectors
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_filters = [];
 
@@ -108,6 +116,7 @@ class Input implements \Zend_Filter_Interface
      * @param array|\Zend_Filter_Interface $filter
      * @param string $placement
      * @return $this
+     * @since 2.0.0
      */
     public function addFilter($name, $filter, $placement = \Zend_Filter::CHAIN_APPEND)
     {
@@ -124,6 +133,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param  array|\Zend_Filter_Interface $filter
      * @return $this
+     * @since 2.0.0
      */
     public function appendFilter(\Zend_Filter_Interface $filter)
     {
@@ -135,6 +145,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param  array|\Zend_Filter_Interface $filter
      * @return $this
+     * @since 2.0.0
      */
     public function prependFilter($filter)
     {
@@ -153,6 +164,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param array $filters
      * @return $this
+     * @since 2.0.0
      */
     public function addFilters(array $filters)
     {
@@ -165,6 +177,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param array $filters
      * @return $this
+     * @since 2.0.0
      */
     public function setFilters(array $filters)
     {
@@ -177,6 +190,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param string|null $name Get filter for selected name
      * @return array|\Zend_Filter_Interface
+     * @since 2.0.0
      */
     public function getFilters($name = null)
     {
@@ -192,6 +206,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param array $data
      * @return array Return filtered data
+     * @since 2.0.0
      */
     public function filter($data)
     {
@@ -207,6 +222,7 @@ class Input implements \Zend_Filter_Interface
      * @return array
      * @throws \Exception when filter is not found or not instance of defined instances
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _filter(array $data, &$filters = null, $isFilterListSimple = false)
     {
@@ -247,6 +263,7 @@ class Input implements \Zend_Filter_Interface
      * @param array $filterData
      * @return mixed
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _applyFiltrationWithHelper(
         $value,
@@ -271,6 +288,7 @@ class Input implements \Zend_Filter_Interface
      * @param \Zend_Filter_Interface|array $filterData
      * @return false|\Magento\Framework\App\Helper\AbstractHelper
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _getFiltrationHelper($filterData)
     {
@@ -291,6 +309,7 @@ class Input implements \Zend_Filter_Interface
      *
      * @param \Zend_Filter_Interface|array $filterData
      * @return false|\Zend_Filter_Interface
+     * @since 2.0.0
      */
     protected function _getZendFilter($filterData)
     {
@@ -312,6 +331,7 @@ class Input implements \Zend_Filter_Interface
      * @param array $filterData
      * @return \Zend_Filter_Interface
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _createCustomZendFilter($filterData)
     {
@@ -337,6 +357,7 @@ class Input implements \Zend_Filter_Interface
      * @param array $filterData
      * @return \Zend_Filter_Interface
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _createNativeZendFilter($filterData)
     {

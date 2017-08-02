@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Class \Magento\Framework\Mview\View\AbstractFactory
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -19,6 +25,7 @@ abstract class AbstractFactory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -30,6 +37,7 @@ abstract class AbstractFactory
      *
      * @param array $data
      * @return CollectionInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

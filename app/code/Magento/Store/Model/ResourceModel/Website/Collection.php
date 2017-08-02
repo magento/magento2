@@ -9,6 +9,7 @@ namespace Magento\Store\Model\ResourceModel\Website;
  * Websites collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Map field to alias
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_map = ['fields' => ['website_id' => 'main_table.website_id']];
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -34,6 +37,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Apply custom filtering
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {
@@ -48,6 +52,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $loadDefault
      * @return $this
+     * @since 2.0.0
      */
     public function setLoadDefault($loadDefault)
     {
@@ -60,6 +65,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLoadDefault()
     {
@@ -70,6 +76,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert items array to array for select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -80,6 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert items array to hash for select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHash()
     {
@@ -91,6 +99,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $ids|array
      * @return $this
+     * @since 2.0.0
      */
     public function addIdFilter($ids)
     {
@@ -112,6 +121,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param boolean $printQuery
      * @param boolean $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -129,6 +139,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * sort ordering and store's name.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinGroupAndStore()
     {
@@ -161,6 +172,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $groupIds
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByGroupIds($groupIds)
     {

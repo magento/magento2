@@ -6,12 +6,18 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Review\Customer
+ *
+ * @since 2.0.0
+ */
 class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
     /**
      * Customer Reviews Report action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

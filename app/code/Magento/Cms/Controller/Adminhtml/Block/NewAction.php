@@ -6,10 +6,16 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Block\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -17,6 +23,7 @@ class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -31,6 +38,7 @@ class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
      * Create new CMS block
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

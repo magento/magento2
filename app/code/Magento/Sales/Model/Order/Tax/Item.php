@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Tax;
 
 /**
  * Sales Order Tax Item model
+ * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
@@ -22,6 +23,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,6 +32,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -38,6 +41,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItemId()
     {
@@ -46,6 +50,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAssociatedItemId()
     {
@@ -54,6 +59,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAppliedTaxes()
     {
@@ -65,6 +71,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -76,6 +83,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $itemId
      * @return $this
+     * @since 2.0.0
      */
     public function setItemId($itemId)
     {
@@ -87,6 +95,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $associatedItemId
      * @return $this
+     * @since 2.0.0
      */
     public function setAssociatedItemId($associatedItemId)
     {
@@ -98,6 +107,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
+     * @since 2.0.0
      */
     public function setAppliedTaxes(array $appliedTaxes = null)
     {
@@ -108,6 +118,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -119,6 +130,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Tax\Api\Data\OrderTaxDetailsItemExtensionInterface $extensionAttributes

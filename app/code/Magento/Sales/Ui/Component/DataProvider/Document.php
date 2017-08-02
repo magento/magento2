@@ -12,21 +12,25 @@ use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Document
+ * @since 2.1.0
  */
 class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\Document
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $stateAttributeCode = 'state';
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $customerGroupAttributeCode = 'customer_group_id';
 
     /**
      * @var GroupRepositoryInterface
+     * @since 2.1.0
      */
     private $groupRepository;
 
@@ -34,6 +38,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Document constructor.
      * @param AttributeValueFactory $attributeValueFactory
      * @param GroupRepositoryInterface $groupRepository
+     * @since 2.1.0
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
@@ -45,6 +50,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -63,6 +69,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Update invoice state value
      * Method set text label instead id value
      * @return void
+     * @since 2.1.0
      */
     private function setStateValue()
     {
@@ -77,6 +84,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Update customer group value
      * Method set group code instead id value
      * @return void
+     * @since 2.1.0
      */
     private function setCustomerGroupValue()
     {

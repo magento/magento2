@@ -12,22 +12,26 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment as InvoiceCommentRes
 
 /**
  * Class Relation
+ * @since 2.0.0
  */
 class Relation implements RelationInterface
 {
     /**
      * @var InvoiceItemResource
+     * @since 2.0.0
      */
     protected $invoiceItemResource;
 
     /**
      * @var InvoiceCommentResource
+     * @since 2.0.0
      */
     protected $invoiceCommentResource;
 
     /**
      * @param InvoiceItemResource $invoiceItemResource
      * @param InvoiceCommentResource $invoiceCommentResource
+     * @since 2.0.0
      */
     public function __construct(
         InvoiceItemResource $invoiceItemResource,
@@ -43,6 +47,7 @@ class Relation implements RelationInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -11,12 +11,18 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat
+ *
+ * @since 2.0.0
+ */
 class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +35,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
      * @param mixed $from
      * @param mixed $to
      * @return $this
+     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {
@@ -43,6 +50,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
      * @param mixed $to
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {

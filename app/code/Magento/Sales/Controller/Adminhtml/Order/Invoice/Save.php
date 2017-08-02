@@ -17,6 +17,7 @@ use Magento\Sales\Model\Service\InvoiceService;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Save extends \Magento\Backend\App\Action
 {
@@ -29,26 +30,31 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @var InvoiceSender
+     * @since 2.0.0
      */
     protected $invoiceSender;
 
     /**
      * @var ShipmentSender
+     * @since 2.0.0
      */
     protected $shipmentSender;
 
     /**
      * @var ShipmentFactory
+     * @since 2.0.0
      */
     protected $shipmentFactory;
 
     /**
      * @var Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var InvoiceService
+     * @since 2.0.0
      */
     private $invoiceService;
 
@@ -59,6 +65,7 @@ class Save extends \Magento\Backend\App\Action
      * @param ShipmentSender $shipmentSender
      * @param ShipmentFactory $shipmentFactory
      * @param InvoiceService $invoiceService
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -81,6 +88,7 @@ class Save extends \Magento\Backend\App\Action
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return \Magento\Sales\Model\Order\Shipment|false
+     * @since 2.0.0
      */
     protected function _prepareShipment($invoice)
     {
@@ -108,6 +116,7 @@ class Save extends \Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function execute()
     {

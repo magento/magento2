@@ -7,6 +7,7 @@ namespace Magento\Framework\Autoload;
 
 /**
  * Interface for an autoloader class that allows the dynamic modification of PSR-0 and PSR-4 mappings
+ * @since 2.0.0
  */
 interface AutoloaderInterface
 {
@@ -17,6 +18,7 @@ interface AutoloaderInterface
      * @param string|array $paths The path or paths to look in for the given prefix
      * @param bool $prepend Whether to append the given path or paths to the paths already associated with the prefix
      * @return void
+     * @since 2.0.0
      */
     public function addPsr4($nsPrefix, $paths, $prepend = false);
 
@@ -27,6 +29,7 @@ interface AutoloaderInterface
      * @param string|array $paths The path or paths to look in for the given prefix
      * @param bool $prepend Whether to append the given path or paths to the paths already associated with the prefix
      * @return void
+     * @since 2.0.0
      */
     public function addPsr0($nsPrefix, $paths, $prepend = false);
 
@@ -36,6 +39,7 @@ interface AutoloaderInterface
      * @param string $nsPrefix The namespace prefix of the PSR-0 mapping
      * @param string|array $paths The path or paths to look in for the given prefix
      * @return void
+     * @since 2.0.0
      */
     public function setPsr0($nsPrefix, $paths);
 
@@ -45,6 +49,7 @@ interface AutoloaderInterface
      * @param string $nsPrefix The namespace prefix of the PSR-0 mapping
      * @param string|array $paths The path or paths to look in for the given prefix
      * @return void
+     * @since 2.0.0
      */
     public function setPsr4($nsPrefix, $paths);
 
@@ -53,6 +58,7 @@ interface AutoloaderInterface
      *
      * @param string $className
      * @return bool
+     * @since 2.0.0
      */
     public function loadClass($className);
 
@@ -61,6 +67,7 @@ interface AutoloaderInterface
      *
      * @param string $className
      * @return string|bool
+     * @since 2.0.0
      */
     public function findFile($className);
 }

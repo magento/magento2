@@ -14,16 +14,19 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Controller for selecting version
+ * @since 2.0.0
  */
 class SelectVersion extends AbstractActionController
 {
     /**
      * @var SystemPackage
+     * @since 2.0.0
      */
     protected $systemPackage;
 
     /**
      * @param SystemPackage $systemPackage
+     * @since 2.0.0
      */
     public function __construct(
         SystemPackage $systemPackage
@@ -33,6 +36,7 @@ class SelectVersion extends AbstractActionController
 
     /**
      * @return ViewModel|\Zend\Http\Response
+     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -46,6 +50,7 @@ class SelectVersion extends AbstractActionController
      * Gets system package and versions
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function systemPackageAction()
     {
@@ -66,6 +71,7 @@ class SelectVersion extends AbstractActionController
      * Gets installed system package
      *
      * @return JsonModel
+     * @since 2.1.0
      */
     public function installedSystemPackageAction()
     {

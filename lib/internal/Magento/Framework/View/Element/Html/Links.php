@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Element\Html;
  * Links list block
  *
  * @api
+ * @since 2.0.0
  */
 class Links extends \Magento\Framework\View\Element\Template
 {
@@ -16,6 +17,7 @@ class Links extends \Magento\Framework\View\Element\Template
      * Get links
      *
      * @return \Magento\Framework\View\Element\Html\Link[]
+     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -27,6 +29,7 @@ class Links extends \Magento\Framework\View\Element\Template
      *
      * @param string $path
      * @return \Magento\Framework\View\Element\Html\Link
+     * @since 2.0.0
      */
     protected function getLinkByPath($path)
     {
@@ -42,6 +45,7 @@ class Links extends \Magento\Framework\View\Element\Template
      *
      * @param string $path
      * @return void
+     * @since 2.0.0
      */
     public function setActive($path)
     {
@@ -56,6 +60,7 @@ class Links extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $link
      * @return string
+     * @since 2.0.0
      */
     public function renderLink(\Magento\Framework\View\Element\AbstractBlock $link)
     {
@@ -66,6 +71,7 @@ class Links extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

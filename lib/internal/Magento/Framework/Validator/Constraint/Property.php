@@ -8,12 +8,18 @@
 
 namespace Magento\Framework\Validator\Constraint;
 
+/**
+ * Class \Magento\Framework\Validator\Constraint\Property
+ *
+ * @since 2.0.0
+ */
 class Property extends \Magento\Framework\Validator\Constraint
 {
     /**
      * Property name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_property;
 
@@ -23,6 +29,7 @@ class Property extends \Magento\Framework\Validator\Constraint
      * @param \Magento\Framework\Validator\ValidatorInterface $validator
      * @param string $property
      * @param string $alias
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Validator\ValidatorInterface $validator, $property, $alias = null)
     {
@@ -36,6 +43,7 @@ class Property extends \Magento\Framework\Validator\Constraint
      *
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getValidatorValue($value)
     {
@@ -55,6 +63,7 @@ class Property extends \Magento\Framework\Validator\Constraint
      *
      * @param array $messages
      * @return void
+     * @since 2.0.0
      */
     protected function _addMessages(array $messages)
     {

@@ -9,6 +9,11 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\PrintAction
+ *
+ * @since 2.0.0
+ */
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
     /**
@@ -20,11 +25,13 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -32,6 +39,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,6 +53,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @return ResponseInterface|void
+     * @since 2.0.0
      */
     public function execute()
     {

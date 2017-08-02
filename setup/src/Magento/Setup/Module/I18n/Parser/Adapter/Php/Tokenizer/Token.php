@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 /**
  * Token
+ * @since 2.0.0
  */
 class Token
 {
@@ -14,6 +15,7 @@ class Token
      * Value
      *
      * @var int|string
+     * @since 2.0.0
      */
     private $_value;
 
@@ -21,6 +23,7 @@ class Token
      * Name
      *
      * @var int|string
+     * @since 2.0.0
      */
     private $_name;
 
@@ -28,6 +31,7 @@ class Token
      * Line
      *
      * @var int
+     * @since 2.0.0
      */
     private $_line;
 
@@ -37,6 +41,7 @@ class Token
      * @param int|string $name
      * @param int|string $value
      * @param int $line
+     * @since 2.0.0
      */
     public function __construct($name, $value, $line = 0)
     {
@@ -49,6 +54,7 @@ class Token
      * Get token name
      *
      * @return int|string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -59,6 +65,7 @@ class Token
      * Get token value
      *
      * @return int|string
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -69,6 +76,7 @@ class Token
      * Get line of token beginning
      *
      * @return int
+     * @since 2.0.0
      */
     public function getLine()
     {
@@ -79,6 +87,7 @@ class Token
      * Is "new" operator
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isNew()
     {
@@ -90,6 +99,7 @@ class Token
      *
      * @param string $functionName
      * @return bool
+     * @since 2.0.0
      */
     public function isEqualFunction($functionName)
     {
@@ -100,6 +110,7 @@ class Token
      * Is object operator
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isObjectOperator()
     {
@@ -110,6 +121,7 @@ class Token
      * Is whitespace
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isWhitespace()
     {
@@ -120,6 +132,7 @@ class Token
      * Is constant encapsed string
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isConstantEncapsedString()
     {
@@ -130,6 +143,7 @@ class Token
      * Is open brace
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isOpenBrace()
     {
@@ -140,6 +154,7 @@ class Token
      * Is close brace
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isCloseBrace()
     {
@@ -150,6 +165,7 @@ class Token
      * Is comma
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isComma()
     {
@@ -160,6 +176,7 @@ class Token
      * Is semicolon
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSemicolon()
     {
@@ -168,6 +185,7 @@ class Token
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isConcatenateOperator()
     {
@@ -178,6 +196,7 @@ class Token
      * Is namespace separator
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isNamespaceSeparator()
     {
@@ -188,6 +207,7 @@ class Token
      * Is identifier
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIdentifier()
     {

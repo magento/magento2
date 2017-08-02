@@ -6,21 +6,29 @@
 
 namespace Magento\Catalog\Model\ProductOptions;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptions\TypeList
+ *
+ * @since 2.0.0
+ */
 class TypeList implements \Magento\Catalog\Api\ProductCustomOptionTypeListInterface
 {
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterfaceFactory
+     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @param Config $config
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterfaceFactory $factory
+     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -32,6 +40,7 @@ class TypeList implements \Magento\Catalog\Api\ProductCustomOptionTypeListInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {

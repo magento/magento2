@@ -12,6 +12,7 @@ use Magento\Framework\View\Layout;
 /**
  * Class Block
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Block implements Layout\GeneratorInterface
 {
@@ -22,41 +23,49 @@ class Block implements Layout\GeneratorInterface
 
     /**
      * @var \Magento\Framework\View\Element\BlockFactory
+     * @since 2.0.0
      */
     protected $blockFactory;
 
     /**
      * @var \Magento\Framework\Data\Argument\InterpreterInterface
+     * @since 2.0.0
      */
     protected $argumentInterpreter;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.0.0
      */
     protected $scopeResolver;
 
     /**
      * @var State
+     * @since 2.0.0
      */
     protected $appState;
 
     /**
      * @var \Magento\Framework\View\Element\ExceptionHandlerBlock
+     * @since 2.0.0
      */
     protected $exceptionHandlerBlockFactory;
 
@@ -69,6 +78,7 @@ class Block implements Layout\GeneratorInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\View\Element\ExceptionHandlerBlockFactory $exceptionHandlerBlockFactory
      * @param State $appState
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
@@ -94,6 +104,7 @@ class Block implements Layout\GeneratorInterface
      * {@inheritdoc}
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -107,6 +118,7 @@ class Block implements Layout\GeneratorInterface
      * @param Context $generatorContext
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function process(Layout\Reader\Context $readerContext, Layout\Generator\Context $generatorContext)
     {
@@ -176,6 +188,7 @@ class Block implements Layout\GeneratorInterface
      * @param \Exception $cause
      * @throws \Exception
      * @return void
+     * @since 2.0.0
      */
     protected function handleRenderException(\Exception $cause)
     {
@@ -193,6 +206,7 @@ class Block implements Layout\GeneratorInterface
      * @param \Magento\Framework\View\Layout\Data\Structure $structure
      * @param string $elementName
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function generateBlock(
         Layout\ScheduledStructure $scheduledStructure,
@@ -231,6 +245,7 @@ class Block implements Layout\GeneratorInterface
      * @param string $name
      * @param array $arguments
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     public function createBlock($block, $name, array $arguments = [])
     {
@@ -248,6 +263,7 @@ class Block implements Layout\GeneratorInterface
      * @param array $arguments
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function getBlockInstance($block, array $arguments = [])
     {
@@ -278,6 +294,7 @@ class Block implements Layout\GeneratorInterface
      * @param string $methodName
      * @param array $actionArguments
      * @return void
+     * @since 2.0.0
      */
     protected function generateAction($block, $methodName, $actionArguments)
     {
@@ -293,6 +310,7 @@ class Block implements Layout\GeneratorInterface
      *
      * @param array $arguments
      * @return array
+     * @since 2.0.0
      */
     protected function evaluateArguments(array $arguments)
     {

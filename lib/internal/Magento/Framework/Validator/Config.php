@@ -11,6 +11,11 @@ use Magento\Framework\Validator\Constraint\Option;
 use Magento\Framework\Validator\Constraint\Option\Callback;
 use Magento\Framework\Validator\Constraint\OptionInterface;
 
+/**
+ * Class \Magento\Framework\Validator\Config
+ *
+ * @since 2.0.0
+ */
 class Config extends \Magento\Framework\Config\AbstractXml
 {
     /**#@+
@@ -23,11 +28,13 @@ class Config extends \Magento\Framework\Config\AbstractXml
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultBuilderClass = \Magento\Framework\Validator\Builder::class;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
+     * @since 2.0.0
      */
     protected $_builderFactory;
 
@@ -35,6 +42,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @param array $configFiles
      * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param \Magento\Framework\Validator\UniversalFactory $builderFactory
+     * @since 2.0.0
      */
     public function __construct(
         $configFiles,
@@ -53,6 +61,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @param array|null $builderConfig
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\Validator\Builder
+     * @since 2.0.0
      */
     public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
     {
@@ -96,6 +105,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @param string $groupName
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator
+     * @since 2.0.0
      */
     public function createValidator($entityName, $groupName, array $builderConfig = null)
     {
@@ -107,6 +117,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMDocument $dom
      * @return array
+     * @since 2.0.0
      */
     protected function _extractData(\DOMDocument $dom)
     {
@@ -124,6 +135,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMElement $entity
      * @return array
+     * @since 2.0.0
      */
     protected function _extractEntityGroupsConstraintsData(\DOMElement $entity)
     {
@@ -159,6 +171,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMElement $entity
      * @return array
+     * @since 2.0.0
      */
     protected function _extractRulesConstraintsData(\DOMElement $entity)
     {
@@ -206,6 +219,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMElement $constraint
      * @return array|null
+     * @since 2.0.0
      */
     protected function _extractConstraintOptions(\DOMElement $constraint)
     {
@@ -261,6 +275,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMElement $element
      * @return array
+     * @since 2.0.0
      */
     protected function _collectChildren($element)
     {
@@ -284,6 +299,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param array $children
      * @return OptionInterface[]|null
+     * @since 2.0.0
      */
     protected function _readArguments($children)
     {
@@ -313,6 +329,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param array $children
      * @return Callback[]|null
+     * @since 2.0.0
      */
     protected function _readCallback($children)
     {
@@ -336,6 +353,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param array $children
      * @return Option|null
+     * @since 2.0.0
      */
     protected function _readOptions($children)
     {
@@ -374,6 +392,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      *
      * @param array $children
      * @return array|null
+     * @since 2.0.0
      */
     protected function _readMethods($children)
     {
@@ -399,6 +418,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Get absolute path to validation.xsd
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSchemaFile()
     {
@@ -409,6 +429,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Get initial XML of a valid document.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getInitialXml()
     {
@@ -420,6 +441,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * Define id attributes for entities
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getIdAttributes()
     {

@@ -8,7 +8,8 @@ namespace Magento\SalesRule\Model\Plugin\ResourceModel;
 /**
  * Class Rule
  * @package Magento\SalesRule\Model\Plugin\ResourceModel
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Rule
 {
@@ -18,6 +19,7 @@ class Rule
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundLoadCustomerGroupIds(
         \Magento\SalesRule\Model\ResourceModel\Rule $subject,
@@ -33,6 +35,7 @@ class Rule
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundLoadWebsiteIds(
         \Magento\SalesRule\Model\ResourceModel\Rule $subject,

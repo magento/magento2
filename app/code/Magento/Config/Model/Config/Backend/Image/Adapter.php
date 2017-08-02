@@ -13,11 +13,13 @@ namespace Magento\Config\Model\Config\Backend\Image;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Adapter extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\Image\AdapterFactory
+     * @since 2.0.0
      */
     protected $_imageFactory;
 
@@ -30,6 +32,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -50,6 +53,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
      *
      * @throws \Magento\Framework\Exception\LocalizedException If some of adapter dependencies was not loaded
      * @return \Magento\Config\Model\Config\Backend\File
+     * @since 2.0.0
      */
     public function beforeSave()
     {

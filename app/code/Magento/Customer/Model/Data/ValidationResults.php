@@ -9,12 +9,14 @@ namespace Magento\Customer\Model\Data;
 
 /**
  * Validation results data model.
+ * @since 2.0.0
  */
 class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\ValidationResultsInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isValid()
     {
@@ -23,6 +25,7 @@ class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMessages()
     {
@@ -34,6 +37,7 @@ class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param bool $isValid
      * @return $this
+     * @since 2.0.0
      */
     public function setIsValid($isValid)
     {
@@ -45,6 +49,7 @@ class ValidationResults extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string[] $messages
      * @return string[]
+     * @since 2.0.0
      */
     public function setMessages(array $messages)
     {

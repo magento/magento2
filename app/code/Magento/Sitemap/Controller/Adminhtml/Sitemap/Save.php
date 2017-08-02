@@ -9,6 +9,11 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
 
+/**
+ * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**
@@ -17,6 +22,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * @param array $data
      * @return bool
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function validatePath(array $data)
     {
@@ -46,6 +52,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @param \Magento\Sitemap\Model\Sitemap $model
      * @return void
+     * @since 2.0.0
      */
     protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
@@ -69,6 +76,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @param array $data
      * @return string|bool
+     * @since 2.0.0
      */
     protected function saveData($data)
     {
@@ -101,6 +109,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @param string|bool $id
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     protected function getResult($id)
     {
@@ -132,6 +141,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * Save action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

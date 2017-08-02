@@ -14,10 +14,16 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\Session\SaveHandler\Redis
+ *
+ * @since 2.1.0
+ */
 class Redis extends \Cm\RedisSession\Handler
 {
     /**
      * @var Filesystem
+     * @since 2.1.0
      */
     private $filesystem;
 
@@ -26,6 +32,7 @@ class Redis extends \Cm\RedisSession\Handler
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @throws SessionException
+     * @since 2.1.0
      */
     public function __construct(ConfigInterface $config, LoggerInterface $logger, Filesystem $filesystem)
     {
@@ -39,6 +46,7 @@ class Redis extends \Cm\RedisSession\Handler
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function read($sessionId)
     {

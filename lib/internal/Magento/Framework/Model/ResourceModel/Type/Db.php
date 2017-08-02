@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Type;
 
+/**
+ * Class \Magento\Framework\Model\ResourceModel\Type\Db
+ *
+ * @since 2.0.0
+ */
 abstract class Db extends \Magento\Framework\Model\ResourceModel\Type\AbstractType
 {
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {

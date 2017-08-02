@@ -9,10 +9,16 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Model\CouponGenerator;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate
+ *
+ * @since 2.0.0
+ */
 class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * @var CouponGenerator
+     * @since 2.2.0
      */
     private $couponGenerator;
 
@@ -23,6 +29,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param CouponGenerator|null $couponGenerator
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -40,6 +47,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * Generate Coupons action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

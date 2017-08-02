@@ -10,16 +10,19 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Context
 {
     /**
      * @var Layout\Data\Structure
+     * @since 2.0.0
      */
     protected $structure;
 
     /**
      * @var LayoutInterface
+     * @since 2.0.0
      */
     protected $layout;
 
@@ -28,6 +31,7 @@ class Context
      *
      * @param Layout\Data\Structure $structure
      * @param LayoutInterface $layout
+     * @since 2.0.0
      */
     public function __construct(
         Layout\Data\Structure $structure,
@@ -39,6 +43,7 @@ class Context
 
     /**
      * @return \Magento\Framework\View\Layout\Data\Structure
+     * @since 2.0.0
      */
     public function getStructure()
     {
@@ -47,6 +52,7 @@ class Context
 
     /**
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function getLayout()
     {

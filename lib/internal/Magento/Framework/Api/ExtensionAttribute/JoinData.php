@@ -10,41 +10,49 @@ namespace Magento\Framework\Api\ExtensionAttribute;
  * Data holder for extension attribute joins.
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class JoinData implements JoinDataInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $attributeCode;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $referenceTable;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $referenceTableAlias;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $referenceField;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $joinField;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $selectFields;
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAttributeCode()
     {
@@ -53,6 +61,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode)
     {
@@ -62,6 +71,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getReferenceTable()
     {
@@ -70,6 +80,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setReferenceTable($referenceTable)
     {
@@ -79,6 +90,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getReferenceTableAlias()
     {
@@ -87,6 +99,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setReferenceTableAlias($referenceTableAlias)
     {
@@ -96,6 +109,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getReferenceField()
     {
@@ -104,6 +118,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setReferenceField($referenceField)
     {
@@ -113,6 +128,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getJoinField()
     {
@@ -121,6 +137,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setJoinField($joinField)
     {
@@ -130,6 +147,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSelectFields()
     {
@@ -138,6 +156,7 @@ class JoinData implements JoinDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setSelectFields(array $selectFields)
     {

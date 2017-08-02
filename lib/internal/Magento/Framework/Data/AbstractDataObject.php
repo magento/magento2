@@ -8,11 +8,13 @@ namespace Magento\Framework\Data;
 /**
  * Base Class for simple data Objects
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractDataObject
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $data;
 
@@ -20,6 +22,7 @@ abstract class AbstractDataObject
      * Return Data Object data in array format.
      *
      * @return array
+     * @since 2.0.0
      */
     public function toArray()
     {
@@ -47,6 +50,7 @@ abstract class AbstractDataObject
      *
      * @param string $key
      * @return mixed|null
+     * @since 2.0.0
      */
     protected function get($key)
     {

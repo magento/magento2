@@ -10,11 +10,13 @@ use Magento\Framework\Setup\Lists;
 
 /**
  * Locale validator model
+ * @since 2.0.0
  */
 class Locale
 {
     /**
      * @var Lists
+     * @since 2.0.0
      */
     protected $lists;
 
@@ -22,6 +24,7 @@ class Locale
      * Constructor
      *
      * @param Lists $lists
+     * @since 2.0.0
      */
     public function __construct(Lists $lists)
     {
@@ -35,6 +38,7 @@ class Locale
      * @return bool
      *
      * @api
+     * @since 2.0.0
      */
     public function isValid($localeCode)
     {

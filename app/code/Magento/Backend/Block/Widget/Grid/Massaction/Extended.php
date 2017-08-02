@@ -9,11 +9,12 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
  * Grid widget massaction block
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
  * @TODO MAGETWO-31510: Remove deprecated class
+ * @since 2.0.0
  */
 class Extended extends \Magento\Backend\Block\Widget
 {
@@ -21,6 +22,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Massaction items
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_items = [];
 
@@ -28,6 +30,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Path to template file in theme
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/grid/massaction_extended.phtml';
 
@@ -35,11 +38,13 @@ class Extended extends \Magento\Backend\Block\Widget
      * Backend data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_backendData = null;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -48,6 +53,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -64,6 +70,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Sets Massaction template
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -86,6 +93,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * @param string $itemId
      * @param array $item
      * @return $this
+     * @since 2.0.0
      */
     public function addItem($itemId, array $item)
     {
@@ -112,6 +120,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *
      * @param string $itemId
      * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item|null
+     * @since 2.0.0
      */
     public function getItem($itemId)
     {
@@ -126,6 +135,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve massaction items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -136,6 +146,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve massaction items JSON
      *
      * @return string
+     * @since 2.0.0
      */
     public function getItemsJson()
     {
@@ -151,6 +162,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve massaction items count
      *
      * @return integer
+     * @since 2.0.0
      */
     public function getCount()
     {
@@ -161,6 +173,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Checks are massactions available
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isAvailable()
     {
@@ -171,6 +184,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve global form field name for all massaction items
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormFieldName()
     {
@@ -181,6 +195,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve form field name for internal use. Based on $this->getFormFieldName()
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormFieldNameInternal()
     {
@@ -191,6 +206,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve massaction block js object name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -201,6 +217,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve grid block js object name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridJsObjectName()
     {
@@ -211,6 +228,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve JSON string of selected checkboxes
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSelectedJson()
     {
@@ -226,6 +244,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve array of selected checkboxes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSelected()
     {
@@ -241,6 +260,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve apply button html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getApplyButtonHtml()
     {
@@ -249,6 +269,7 @@ class Extended extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getJavaScript()
     {
@@ -265,6 +286,7 @@ class Extended extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getGridIdsJson()
     {
@@ -291,6 +313,7 @@ class Extended extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -302,6 +325,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *
      * @param string $itemId
      * @return $this
+     * @since 2.0.0
      */
     public function removeItem($itemId)
     {
@@ -317,6 +341,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseSelectAll()
     {
@@ -328,6 +353,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *
      * @param boolean $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setUseSelectAll($flag)
     {

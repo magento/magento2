@@ -9,16 +9,19 @@ namespace Magento\Framework\Validator;
  * Abstract validator class.
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractValidator implements \Magento\Framework\Validator\ValidatorInterface
 {
     /**
      * @var \Magento\Framework\Translate\AdapterInterface|null
+     * @since 2.0.0
      */
     protected static $_defaultTranslator = null;
 
     /**
      * @var \Magento\Framework\Translate\AdapterInterface|null
+     * @since 2.0.0
      */
     protected $_translator = null;
 
@@ -26,6 +29,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      * Array of validation failure messages
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messages = [];
 
@@ -35,6 +39,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      * @param \Magento\Framework\Translate\AdapterInterface|null $translator
      * @return void
      * @api
+     * @since 2.0.0
      */
     public static function setDefaultTranslator(\Magento\Framework\Translate\AdapterInterface $translator = null)
     {
@@ -46,6 +51,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      *
      * @return \Magento\Framework\Translate\AdapterInterface|null
      * @api
+     * @since 2.0.0
      */
     public static function getDefaultTranslator()
     {
@@ -57,6 +63,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      *
      * @param \Magento\Framework\Translate\AdapterInterface|null $translator
      * @return \Magento\Framework\Validator\AbstractValidator
+     * @since 2.0.0
      */
     public function setTranslator($translator = null)
     {
@@ -68,6 +75,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      * Get translator
      *
      * @return \Magento\Framework\Translate\AdapterInterface|null
+     * @since 2.0.0
      */
     public function getTranslator()
     {
@@ -81,6 +89,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      * Check that translator is set.
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function hasTranslator()
     {
@@ -92,6 +101,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      *
      * @return string[]
      * @api
+     * @since 2.0.0
      */
     public function getMessages()
     {
@@ -103,6 +113,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      *
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function hasMessages()
     {
@@ -113,6 +124,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      * Clear messages
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _clearMessages()
     {
@@ -124,6 +136,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      *
      * @param array $messages
      * @return void
+     * @since 2.0.0
      */
     protected function _addMessages(array $messages)
     {

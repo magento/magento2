@@ -7,20 +7,28 @@
  */
 namespace Magento\Framework\Validator\Constraint\Option;
 
+/**
+ * Class \Magento\Framework\Validator\Constraint\Option\Callback
+ *
+ * @since 2.0.0
+ */
 class Callback implements \Magento\Framework\Validator\Constraint\OptionInterface
 {
     /**
      * @var callable
+     * @since 2.0.0
      */
     protected $_callable;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_arguments;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_createInstance;
 
@@ -30,6 +38,7 @@ class Callback implements \Magento\Framework\Validator\Constraint\OptionInterfac
      * @param callable $callable
      * @param mixed $arguments
      * @param bool $createInstance If true than $callable[0] will be evaluated to new instance of class when get value
+     * @since 2.0.0
      */
     public function __construct($callable, $arguments = null, $createInstance = false)
     {
@@ -43,6 +52,7 @@ class Callback implements \Magento\Framework\Validator\Constraint\OptionInterfac
      *
      * @param mixed $arguments
      * @return void
+     * @since 2.0.0
      */
     public function setArguments($arguments = null)
     {
@@ -60,6 +70,7 @@ class Callback implements \Magento\Framework\Validator\Constraint\OptionInterfac
      *
      * @return mixed
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getValue()
     {

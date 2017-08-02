@@ -10,15 +10,22 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\OfflineShipping\Controller\Adminhtml\System\Config\ExportTablerates
+ *
+ * @since 2.0.0
+ */
 class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\AbstractConfig
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -28,6 +35,7 @@ class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\Abstr
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,6 +53,7 @@ class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\Abstr
      * Export shipping table rates in csv format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

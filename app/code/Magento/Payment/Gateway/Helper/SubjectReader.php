@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
  * This class was introduced for backward compatibility with legacy implementation.
  *
  * @api
+ * @since 2.0.0
  */
 class SubjectReader
 {
@@ -21,6 +22,7 @@ class SubjectReader
      *
      * @param array $subject
      * @return PaymentDataObjectInterface
+     * @since 2.0.0
      */
     public static function readPayment(array $subject)
     {
@@ -38,6 +40,7 @@ class SubjectReader
      *
      * @param array $subject
      * @return mixed
+     * @since 2.0.0
      */
     public static function readAmount(array $subject)
     {
@@ -53,6 +56,7 @@ class SubjectReader
      *
      * @param array $subject
      * @return string
+     * @since 2.0.0
      */
     public static function readField(array $subject)
     {
@@ -68,6 +72,7 @@ class SubjectReader
      *
      * @param array $subject
      * @return array
+     * @since 2.0.0
      */
     public static function readResponse(array $subject)
     {
@@ -83,6 +88,7 @@ class SubjectReader
      *
      * @param array $subject
      * @return DataObject
+     * @since 2.0.0
      */
     public static function readStateObject(array $subject)
     {

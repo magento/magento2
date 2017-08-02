@@ -9,11 +9,13 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\Product
+     * @since 2.0.0
      */
     protected $_ruleConditionProd;
 
@@ -21,6 +23,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -36,6 +39,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * Get new child select options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getNewChildSelectOptions()
     {
@@ -76,6 +80,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      *
      * @param Collection $productCollection
      * @return $this
+     * @since 2.0.0
      */
     public function collectValidatedAttributes($productCollection)
     {

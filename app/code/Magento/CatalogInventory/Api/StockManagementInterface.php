@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockManagementInterface
  * @api
+ * @since 2.0.0
  */
 interface StockManagementInterface
 {
@@ -18,6 +19,7 @@ interface StockManagementInterface
      * @param float $qty
      * @param int $scopeId
      * @return bool
+     * @since 2.0.0
      */
     public function backItemQty($productId, $qty, $scopeId = null);
 }

@@ -12,16 +12,19 @@ use Magento\Framework\DataObject;
 
 /**
  * Class Renderer used for formatting a store address
+ * @since 2.0.0
  */
 class Renderer
 {
     /**
      * @var EventManager
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var FilterManager
+     * @since 2.0.0
      */
     protected $filterManager;
 
@@ -30,6 +33,7 @@ class Renderer
      *
      * @param EventManager $eventManager
      * @param FilterManager $filterManager
+     * @since 2.0.0
      */
     public function __construct(
         EventManager $eventManager,
@@ -45,6 +49,7 @@ class Renderer
      * @param DataObject $storeInfo
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function format(DataObject $storeInfo, $type = 'html')
     {

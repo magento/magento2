@@ -13,6 +13,7 @@ namespace Magento\ImportExport\Block\Adminhtml\Import;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -20,6 +21,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Internal constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -41,6 +43,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Get header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {

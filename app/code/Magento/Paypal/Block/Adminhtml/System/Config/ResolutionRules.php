@@ -13,11 +13,13 @@ use Magento\Paypal\Model\Config\Rules\Reader;
  * Class ResolutionRules
  *
  * @api
+ * @since 2.0.0
  */
 class ResolutionRules extends Template
 {
     /**
      * @var Reader
+     * @since 2.0.0
      */
     private $rulesReader;
 
@@ -27,6 +29,7 @@ class ResolutionRules extends Template
      * @param Context $context
      * @param Reader $rulesReader
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -41,6 +44,7 @@ class ResolutionRules extends Template
      * Getting data for generating rules (JSON)
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJson()
     {

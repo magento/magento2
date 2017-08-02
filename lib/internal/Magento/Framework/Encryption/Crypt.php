@@ -10,21 +10,25 @@ namespace Magento\Framework\Encryption;
  * Class encapsulates cryptographic algorithm
  *
  * @api
+ * @since 2.0.0
  */
 class Crypt
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_cipher;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_mode;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_initVector;
 
@@ -32,6 +36,7 @@ class Crypt
      * Encryption algorithm module handle
      *
      * @var resource
+     * @since 2.0.0
      */
     protected $_handle;
 
@@ -46,6 +51,7 @@ class Crypt
      *                                 TRUE generates a random initial vector.
      *                                 FALSE fills initial vector with zero bytes to not use it.
      * @throws \Exception
+     * @since 2.0.0
      */
     public function __construct(
         $key,
@@ -102,6 +108,7 @@ class Crypt
 
     /**
      * Destructor frees allocated resources
+     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -117,6 +124,7 @@ class Crypt
      * Retrieve a name of currently used cryptographic algorithm
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCipher()
     {
@@ -127,6 +135,7 @@ class Crypt
      * Mode in which cryptographic algorithm is running
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMode()
     {
@@ -137,6 +146,7 @@ class Crypt
      * Retrieve an actual value of initial vector that has been used to initialize a cipher
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInitVector()
     {
@@ -148,6 +158,7 @@ class Crypt
      *
      * @param  string $data String to encrypt
      * @return string
+     * @since 2.0.0
      */
     public function encrypt($data)
     {
@@ -164,6 +175,7 @@ class Crypt
      *
      * @param  string $data String to decrypt
      * @return string
+     * @since 2.0.0
      */
     public function decrypt($data)
     {

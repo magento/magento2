@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides product types configuration
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
 {
@@ -19,6 +20,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductTypes\Config\Reader $reader,
@@ -34,6 +36,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\
      *
      * @param string $name
      * @return array
+     * @since 2.0.0
      */
     public function getType($name)
     {
@@ -44,6 +47,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\
      * Get configuration of all registered product types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAll()
     {
@@ -55,6 +59,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\
      *
      * @param string $typeId
      * @return bool
+     * @since 2.0.0
      */
     public function isProductSet($typeId)
     {
@@ -65,6 +70,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\
      * Get composable types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getComposableTypes()
     {
@@ -77,6 +83,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\
      * @param string $attributeName
      * @param string $value
      * @return array
+     * @since 2.0.0
      */
     public function filter($attributeName, $value = 'true')
     {

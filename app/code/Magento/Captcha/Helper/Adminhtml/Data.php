@@ -11,10 +11,16 @@
  */
 namespace Magento\Captcha\Helper\Adminhtml;
 
+/**
+ * Class \Magento\Captcha\Helper\Adminhtml\Data
+ *
+ * @since 2.0.0
+ */
 class Data extends \Magento\Captcha\Helper\Data
 {
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $_backendConfig;
 
@@ -24,6 +30,7 @@ class Data extends \Magento\Captcha\Helper\Data
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -42,6 +49,7 @@ class Data extends \Magento\Captcha\Helper\Data
      * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\App\Config\Element
+     * @since 2.0.0
      */
     public function getConfig($key, $store = null)
     {
@@ -53,6 +61,7 @@ class Data extends \Magento\Captcha\Helper\Data
      *
      * @param mixed $website
      * @return string
+     * @since 2.0.0
      */
     protected function _getWebsiteCode($website = null)
     {

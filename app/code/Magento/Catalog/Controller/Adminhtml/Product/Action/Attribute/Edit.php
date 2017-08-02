@@ -9,10 +9,16 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -20,11 +26,13 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * MassActions filter
      *
      * @var Filter
+     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -34,6 +42,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -50,6 +59,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\View\Element\Message\Renderer\BlockRenderer;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template
+ *
+ * @since 2.0.0
+ */
 class Template extends \Magento\Framework\View\Element\Template
 {
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {

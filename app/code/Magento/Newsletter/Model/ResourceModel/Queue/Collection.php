@@ -11,6 +11,7 @@ namespace Magento\Newsletter\Model\ResourceModel\Queue;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -18,6 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * True when subscribers info joined
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_addSubscribersFlag = false;
 
@@ -25,6 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * True when filtered by store
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isStoreFilter = false;
 
@@ -32,6 +35,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
@@ -43,6 +47,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -61,6 +66,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initializes collection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +78,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Joines templates information
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addTemplateInfo()
     {
@@ -88,6 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Adds subscribers info to selelect
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _addSubscriberInfoToSelect()
     {
@@ -119,6 +127,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -132,6 +141,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Joines subscribers information
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addSubscribersInfo()
     {
@@ -146,6 +156,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $field
      * @param null|string|array $condition
      * @return $this
+     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -163,6 +174,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $field
      * @param null|string|array $condition
      * @return array
+     * @since 2.0.0
      */
     protected function _getIdsFromLink($field, $condition)
     {
@@ -193,6 +205,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $subscriberId
      * @return $this
+     * @since 2.0.0
      */
     public function addSubscriberFilter($subscriberId)
     {
@@ -212,6 +225,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add filter by only ready fot sending item
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addOnlyForSendingFilter()
     {
@@ -232,6 +246,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add filter by only not sent items
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addOnlyUnsentFilter()
     {
@@ -244,6 +259,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Returns options array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -255,6 +271,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int[]|int $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {

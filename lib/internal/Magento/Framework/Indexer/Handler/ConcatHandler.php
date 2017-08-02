@@ -8,15 +8,22 @@ namespace Magento\Framework\Indexer\Handler;
 use Magento\Framework\Indexer\HandlerInterface;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Handler\ConcatHandler
+ *
+ * @since 2.0.0
+ */
 class ConcatHandler implements HandlerInterface
 {
     /**
      * @var \Magento\Framework\DB\ConcatExpression
+     * @since 2.0.0
      */
     protected $concatExpression;
 
     /**
      * @param \Zend_Db_Expr $concatExpression
+     * @since 2.0.0
      */
     public function __construct(
         \Zend_Db_Expr $concatExpression
@@ -31,6 +38,7 @@ class ConcatHandler implements HandlerInterface
      * @param string $alias
      * @param array $fieldInfo
      * @return void
+     * @since 2.0.0
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {

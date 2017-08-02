@@ -18,6 +18,7 @@ namespace Magento\Catalog\Model\Template;
  * Work with catalog(store, website) urls
  *
  * @package Magento\Catalog\Model\Template
+ * @since 2.0.0
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -25,6 +26,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Use absolute links flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_useAbsoluteLinks = false;
 
@@ -32,11 +34,13 @@ class Filter extends \Magento\Framework\Filter\Template
      * Whether to allow SID in store directive: NO
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_useSessionInUrl = false;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -44,6 +48,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -52,6 +57,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param array $variables
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -69,6 +75,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $flag
      * @return \Magento\Email\Model\Template\Filter
+     * @since 2.0.0
      */
     public function setUseAbsoluteLinks($flag)
     {
@@ -82,6 +89,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $flag
      * @return \Magento\Email\Model\Template\Filter
+     * @since 2.0.0
      */
     public function setUseSessionInUrl($flag)
     {
@@ -95,6 +103,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param array $construction
      * @return string
      * @see \Magento\Email\Model\Template\Filter::viewDirective() method has been copypasted
+     * @since 2.0.0
      */
     public function viewDirective($construction)
     {
@@ -124,6 +133,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param array $construction
      * @return string
      * @see \Magento\Email\Model\Template\Filter::mediaDirective() method has been copypasted
+     * @since 2.0.0
      */
     public function mediaDirective($construction)
     {
@@ -138,6 +148,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param array $construction
      * @return string
      * @see \Magento\Email\Model\Template\Filter::storeDirective() method has been copypasted
+     * @since 2.0.0
      */
     public function storeDirective($construction)
     {

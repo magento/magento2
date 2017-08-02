@@ -14,21 +14,25 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Class ToOrderItem
+ * @since 2.0.0
  */
 class ToOrderItem
 {
     /**
      * @var Copy
+     * @since 2.0.0
      */
     protected $objectCopyService;
 
     /**
      * @var OrderItemFactory
+     * @since 2.0.0
      */
     protected $orderItemFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -36,6 +40,7 @@ class ToOrderItem
      * @param OrderItemFactory $orderItemFactory
      * @param Copy $objectCopyService
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         OrderItemFactory $orderItemFactory,
@@ -51,6 +56,7 @@ class ToOrderItem
      * @param Item|AddressItem $item
      * @param array $data
      * @return OrderItemInterface
+     * @since 2.0.0
      */
     public function convert($item, $data = [])
     {

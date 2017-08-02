@@ -5,12 +5,18 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Shipments
+ *
+ * @since 2.0.0
+ */
 class Shipments extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Generate shipments grid for ajax request
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

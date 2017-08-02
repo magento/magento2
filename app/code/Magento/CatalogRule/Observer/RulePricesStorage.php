@@ -6,6 +6,11 @@
 
 namespace Magento\CatalogRule\Observer;
 
+/**
+ * Class \Magento\CatalogRule\Observer\RulePricesStorage
+ *
+ * @since 2.0.0
+ */
 class RulePricesStorage
 {
     /**
@@ -13,12 +18,14 @@ class RulePricesStorage
      * Prices collected per website, customer group, date and product
      *
      * @var array
+     * @since 2.0.0
      */
     private $rulePrices = [];
 
     /**
      * @param string $id
      * @return false|float
+     * @since 2.0.0
      */
     public function getRulePrice($id)
     {
@@ -28,6 +35,7 @@ class RulePricesStorage
     /**
      * @param string $id
      * @return bool
+     * @since 2.0.0
      */
     public function hasRulePrice($id)
     {
@@ -38,6 +46,7 @@ class RulePricesStorage
      * @param string $id
      * @param float $price
      * @return void
+     * @since 2.0.0
      */
     public function setRulePrice($id, $price)
     {

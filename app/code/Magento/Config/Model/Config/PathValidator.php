@@ -10,6 +10,7 @@ use Magento\Framework\Exception\ValidatorException;
 /**
  * Validates the config path by config structure schema.
  * @api
+ * @since 2.2.0
  */
 class PathValidator
 {
@@ -17,11 +18,13 @@ class PathValidator
      * The config structure.
      *
      * @var Structure
+     * @since 2.2.0
      */
     private $structure;
 
     /**
      * @param Structure $structure The config structure
+     * @since 2.2.0
      */
     public function __construct(Structure $structure)
     {
@@ -34,6 +37,7 @@ class PathValidator
      * @param string $path The config path
      * @return true The result of validation
      * @throws ValidatorException If provided path is not valid
+     * @since 2.2.0
      */
     public function validate($path)
     {

@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @SuppressWarnings(PMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class XmlCatalogGenerateCommand extends Command
 {
@@ -34,16 +35,19 @@ class XmlCatalogGenerateCommand extends Command
 
     /**
      * @var \Magento\Framework\App\Utility\Files
+     * @since 2.0.0
      */
     private $filesUtility;
 
     /**
      * @var \Magento\Framework\Config\Dom\UrnResolver
+     * @since 2.0.0
      */
     private $urnResolver;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     * @since 2.1.0
      */
     private $readFactory;
 
@@ -51,6 +55,7 @@ class XmlCatalogGenerateCommand extends Command
      * Supported formats
      *
      * @var \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[]
+     * @since 2.0.0
      */
     private $formats;
 
@@ -59,6 +64,7 @@ class XmlCatalogGenerateCommand extends Command
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[] $formats
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Utility\Files $filesUtility,
@@ -75,6 +81,7 @@ class XmlCatalogGenerateCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -104,6 +111,7 @@ class XmlCatalogGenerateCommand extends Command
      *
      * @param OutputInterface $output
      * @return array
+     * @since 2.0.0
      */
     private function getUrnDictionary(OutputInterface $output)
     {
@@ -140,6 +148,7 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -159,6 +168,7 @@ class XmlCatalogGenerateCommand extends Command
      *
      * @param string $format
      * @return \Magento\Developer\Model\XmlCatalog\Format\FormatInterface|false
+     * @since 2.0.0
      */
     private function getFormatters($format)
     {
@@ -173,6 +183,7 @@ class XmlCatalogGenerateCommand extends Command
      * Get registered formatter aliases
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedFormats()
     {

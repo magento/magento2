@@ -11,6 +11,11 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 
+/**
+ * Class \Magento\Store\Model\StoreCookieManager
+ *
+ * @since 2.0.0
+ */
 class StoreCookieManager implements StoreCookieManagerInterface
 {
     /**
@@ -20,17 +25,20 @@ class StoreCookieManager implements StoreCookieManagerInterface
 
     /**
      * @var CookieMetadataFactory
+     * @since 2.0.0
      */
     protected $cookieMetadataFactory;
 
     /**
      * @var CookieManagerInterface
+     * @since 2.0.0
      */
     protected $cookieManager;
 
     /**
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param CookieManagerInterface $cookieManager
+     * @since 2.0.0
      */
     public function __construct(
         CookieMetadataFactory $cookieMetadataFactory,
@@ -42,6 +50,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreCodeFromCookie()
     {
@@ -50,6 +59,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setStoreCookie(StoreInterface $store)
     {
@@ -63,6 +73,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteStoreCookie(StoreInterface $store)
     {

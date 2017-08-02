@@ -19,41 +19,49 @@ use Magento\Framework\Data\CollectionModifierInterface;
  * Provide product render information (this information should be enough for rendering product on front)
  * for one or few products
  *
+ * @since 2.2.0
  */
 class ProductRenderList implements ProductRenderListInterface
 {
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
     /**
      * @var ProductRenderCollectorInterface
+     * @since 2.2.0
      */
     private $productRenderCollectorComposite;
 
     /**
      * @var SearchResultFactory
+     * @since 2.2.0
      */
     private $searchResultFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductRenderFactory
+     * @since 2.2.0
      */
     private $productRenderFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $productAttributes;
 
     /**
      * @var CollectionModifierInterface
+     * @since 2.2.0
      */
     private $collectionModifier;
 
@@ -67,6 +75,7 @@ class ProductRenderList implements ProductRenderListInterface
      * @param Product\Visibility $productVisibility
      * @param CollectionModifier $collectionModifier
      * @param array $productAttributes
+     * @since 2.2.0
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -89,6 +98,7 @@ class ProductRenderList implements ProductRenderListInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode)
     {

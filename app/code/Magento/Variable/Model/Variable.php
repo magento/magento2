@@ -16,6 +16,7 @@ namespace Magento\Variable\Model;
  * @method \Magento\Variable\Model\Variable setName(string $value)
  *
  * @api
+ * @since 2.0.0
  */
 class Variable extends \Magento\Framework\Model\AbstractModel
 {
@@ -25,11 +26,13 @@ class Variable extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId = 0;
 
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $_escaper = null;
 
@@ -40,6 +43,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Variable\Model\ResourceModel\Variable $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -57,6 +61,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * Internal Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,6 +75,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * @param integer $storeId
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -82,6 +88,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      *
      * @return integer
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -94,6 +101,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * @param string $code
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function loadByCode($code)
     {
@@ -106,6 +114,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function getValue($type = null)
     {
@@ -127,6 +136,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * Validation of object data. Checking for unique variable code
      *
      * @return \Magento\Framework\Phrase|bool
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -145,6 +155,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * @todo: extract method as separate class
      * @param bool $withGroup
      * @return array
+     * @since 2.0.0
      */
     public function getVariablesOptionArray($withGroup = false)
     {

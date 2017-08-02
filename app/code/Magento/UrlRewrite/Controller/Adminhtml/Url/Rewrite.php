@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * URL rewrite adminhtml controller
+ * @since 2.0.0
  */
 abstract class Rewrite extends Action
 {
@@ -32,21 +33,25 @@ abstract class Rewrite extends Action
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $_product;
 
     /**
      * @var Category
+     * @since 2.0.0
      */
     protected $_category;
 
     /**
      * @var \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected $_cmsPage;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewrite
+     * @since 2.0.0
      */
     protected $_urlRewrite;
 
@@ -54,6 +59,7 @@ abstract class Rewrite extends Action
      * Get Category from request
      *
      * @return Category
+     * @since 2.0.0
      */
     protected function _getCategory()
     {
@@ -80,6 +86,7 @@ abstract class Rewrite extends Action
      * Get Product from request
      *
      * @return Product
+     * @since 2.0.0
      */
     protected function _getProduct()
     {
@@ -101,6 +108,7 @@ abstract class Rewrite extends Action
      * Get CMS page from request
      *
      * @return \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected function _getCmsPage()
     {
@@ -122,6 +130,7 @@ abstract class Rewrite extends Action
      * Get URL rewrite from request
      *
      * @return \Magento\UrlRewrite\Model\UrlRewrite
+     * @since 2.0.0
      */
     protected function _getUrlRewrite()
     {

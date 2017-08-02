@@ -9,6 +9,11 @@ namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\View
+ *
+ * @since 2.0.0
+ */
 abstract class View extends \Magento\Backend\App\Action
 {
     /**
@@ -20,12 +25,14 @@ abstract class View extends \Magento\Backend\App\Action
 
     /**
      * @var ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -39,6 +46,7 @@ abstract class View extends \Magento\Backend\App\Action
      * Shipment information page
      *
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,6 +9,7 @@ use Magento\Framework\Module\Dir;
 
 /**
  * Persistent Config Model
+ * @since 2.0.0
  */
 class Config
 {
@@ -16,21 +17,25 @@ class Config
      * Path to config file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_configFilePath;
 
     /**
      * @var \Magento\Framework\Config\DomFactory
+     * @since 2.0.0
      */
     protected $_domFactory;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_moduleReader;
 
     /**
      * @var \DOMXPath
+     * @since 2.0.0
      */
     protected $_configDomXPath = null;
 
@@ -38,6 +43,7 @@ class Config
      * Layout model
      *
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $_layout;
 
@@ -45,6 +51,7 @@ class Config
      * App state model
      *
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
@@ -52,11 +59,13 @@ class Config
      * Model factory
      *
      * @var \Magento\Persistent\Model\Factory
+     * @since 2.0.0
      */
     protected $_persistentFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     * @since 2.0.0
      */
     protected $readFactory;
 
@@ -67,6 +76,7 @@ class Config
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\DomFactory $domFactory,
@@ -90,6 +100,7 @@ class Config
      * @param string $path
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setConfigFilePath($path)
     {
@@ -102,6 +113,7 @@ class Config
      *
      * @return \DOMXPath
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getConfigDomXPath()
     {
@@ -139,6 +151,7 @@ class Config
      * @param string $block
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getBlockConfigInfo($block)
     {
@@ -152,6 +165,7 @@ class Config
      *
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function collectInstancesToEmulate()
     {
@@ -166,6 +180,7 @@ class Config
      *
      * @param /DomNodeList $blocks
      * @return array
+     * @since 2.0.0
      */
     protected function _convertBlocksToArray($blocks)
     {
@@ -194,6 +209,7 @@ class Config
      * Run all methods declared in persistent configuration
      *
      * @return $this
+     * @since 2.0.0
      */
     public function fire()
     {
@@ -219,6 +235,7 @@ class Config
      * @param bool $instance
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function fireOne($info, $instance = false)
     {

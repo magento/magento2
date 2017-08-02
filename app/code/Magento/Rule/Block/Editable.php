@@ -10,11 +10,13 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Editable extends AbstractBlock implements RendererInterface
 {
     /**
      * @var \Magento\Framework\Translate\InlineInterface
+     * @since 2.0.0
      */
     protected $inlineTranslate;
 
@@ -22,6 +24,7 @@ class Editable extends AbstractBlock implements RendererInterface
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $inlineTranslate
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -39,6 +42,7 @@ class Editable extends AbstractBlock implements RendererInterface
      * @return string
      *
      * @see RendererInterface::render()
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

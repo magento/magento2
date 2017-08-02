@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Request;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface PathInfoProcessorInterface
 {
@@ -18,6 +19,7 @@ interface PathInfoProcessorInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $pathInfo
      * @return string
+     * @since 2.0.0
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo);
 }

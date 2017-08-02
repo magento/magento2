@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\UiComponent\Config;
 
 /**
  * Interface DomMergerInterface
+ * @since 2.0.0
  */
 interface DomMergerInterface
 {
@@ -15,6 +16,7 @@ interface DomMergerInterface
      *
      * @param string $xml
      * @return void
+     * @since 2.0.0
      */
     public function merge($xml);
 
@@ -29,6 +31,7 @@ interface DomMergerInterface
      * @param \DOMElement $node
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     public function mergeNode(\DOMElement $node);
 
@@ -36,6 +39,7 @@ interface DomMergerInterface
      * Get DOM document
      *
      * @return \DOMDocument
+     * @since 2.0.0
      */
     public function getDom();
 
@@ -44,6 +48,7 @@ interface DomMergerInterface
      *
      * @param \DOMDocument $domDocument
      * @return void
+     * @since 2.0.0
      */
     public function setDom(\DOMDocument $domDocument);
 
@@ -51,6 +56,7 @@ interface DomMergerInterface
      * Unset DOM document
      *
      * @return void
+     * @since 2.0.0
      */
     public function unsetDom();
 
@@ -59,6 +65,7 @@ interface DomMergerInterface
      *
      * @param string $schemaFileName
      * @return array
+     * @since 2.0.0
      */
     public function validate($schemaFileName);
 }

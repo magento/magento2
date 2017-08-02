@@ -6,12 +6,18 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+/**
+ * Class \Magento\Email\Controller\Adminhtml\Email\Template\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
      * Delete transactional email action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

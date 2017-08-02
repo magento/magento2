@@ -9,6 +9,7 @@ namespace Magento\Customer\Model;
  * Customer log model.
  *
  * Contains customer log data.
+ * @since 2.0.0
  */
 class Log
 {
@@ -16,6 +17,7 @@ class Log
      * Customer ID.
      *
      * @var int
+     * @since 2.0.0
      */
     protected $customerId;
 
@@ -23,6 +25,7 @@ class Log
      * Date and time of customer's last login.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $lastLoginAt;
 
@@ -30,6 +33,7 @@ class Log
      * Date and time of customer's last logout.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $lastVisitAt;
 
@@ -37,6 +41,7 @@ class Log
      * Date and time of customer's last visit.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $lastLogoutAt;
 
@@ -45,6 +50,7 @@ class Log
      * @param string $lastLoginAt
      * @param string $lastVisitAt
      * @param string $lastLogoutAt
+     * @since 2.0.0
      */
     public function __construct($customerId = null, $lastLoginAt = null, $lastVisitAt = null, $lastLogoutAt = null)
     {
@@ -58,6 +64,7 @@ class Log
      * Retrieve customer id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -68,6 +75,7 @@ class Log
      * Retrieve last login date as string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastLoginAt()
     {
@@ -78,6 +86,7 @@ class Log
      * Retrieve last visit date as string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastVisitAt()
     {
@@ -88,6 +97,7 @@ class Log
      * Retrieve last logout date as string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastLogoutAt()
     {

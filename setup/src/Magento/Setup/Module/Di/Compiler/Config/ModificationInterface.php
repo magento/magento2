@@ -6,6 +6,11 @@
 
 namespace Magento\Setup\Module\Di\Compiler\Config;
 
+/**
+ * Interface \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface
+ *
+ * @since 2.0.0
+ */
 interface ModificationInterface
 {
     /**
@@ -13,6 +18,7 @@ interface ModificationInterface
      *
      * @param array $config
      * @return array
+     * @since 2.0.0
      */
     public function modify(array $config);
 }

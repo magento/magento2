@@ -13,6 +13,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Flag extends \Magento\Framework\Flag
 {
@@ -45,6 +46,7 @@ class Flag extends \Magento\Framework\Flag
      * Synchronize flag code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_flagCode = 'synchronize';
 
@@ -54,6 +56,7 @@ class Flag extends \Magento\Framework\Flag
      * @param \Exception $e
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function passError(\Exception $e)
     {

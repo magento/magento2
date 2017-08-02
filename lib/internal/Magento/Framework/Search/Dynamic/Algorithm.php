@@ -10,6 +10,7 @@ namespace Magento\Framework\Search\Dynamic;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Algorithm
 {
@@ -45,6 +46,7 @@ class Algorithm
      * Upper values limit
      *
      * @var null|float
+     * @since 2.0.0
      */
     protected $_upperLimit = null;
 
@@ -52,6 +54,7 @@ class Algorithm
      * Lower values limit
      *
      * @var null|float
+     * @since 2.0.0
      */
     protected $_lowerLimit = null;
 
@@ -59,6 +62,7 @@ class Algorithm
      * Number of segmentation intervals
      *
      * @var null|int
+     * @since 2.0.0
      */
     protected $_intervalsNumber = null;
 
@@ -66,6 +70,7 @@ class Algorithm
      * Upper limits of skipped quantiles
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_skippedQuantilesUpperLimits = [];
 
@@ -73,6 +78,7 @@ class Algorithm
      * Total count of values
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_count = 0;
 
@@ -80,6 +86,7 @@ class Algorithm
      * Current quantile interval
      *
      * @var array [from, to]
+     * @since 2.0.0
      */
     protected $_quantileInterval = [0, 0];
 
@@ -87,6 +94,7 @@ class Algorithm
      * Values of current quantile
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_values = [];
 
@@ -94,6 +102,7 @@ class Algorithm
      * Max value
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_maxValue = 0;
 
@@ -101,6 +110,7 @@ class Algorithm
      * Min value
      *
      * @var float
+     * @since 2.0.0
      */
     protected $_minValue = 0;
 
@@ -108,6 +118,7 @@ class Algorithm
      * Last value query limiter
      *
      * @var array [index, value]
+     * @since 2.0.0
      */
     protected $_lastValueLimiter = [null, 0];
 
@@ -117,6 +128,7 @@ class Algorithm
      * @param null|float $lowerLimit
      * @param null|float $upperLimit
      * @return \Magento\Framework\Search\Dynamic\Algorithm
+     * @since 2.0.0
      */
     public function setLimits($lowerLimit = null, $upperLimit = null)
     {
@@ -134,6 +146,7 @@ class Algorithm
      * @param float $standardDeviation
      * @param int $count
      * @return $this
+     * @since 2.0.0
      */
     public function setStatistics($min, $max, $standardDeviation, $count)
     {
@@ -166,6 +179,7 @@ class Algorithm
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function calculateSeparators(IntervalInterface $interval)
     {
@@ -246,6 +260,7 @@ class Algorithm
      * Get amount of segmentation intervals
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getIntervalsNumber()
     {
@@ -265,6 +280,7 @@ class Algorithm
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _findValueSeparator($quantileNumber, IntervalInterface $interval)
     {
@@ -376,6 +392,7 @@ class Algorithm
      *
      * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
      * @return null|float[] [floatMin,floatMax]
+     * @since 2.0.0
      */
     protected function _getQuantileInterval($quantileNumber)
     {
@@ -407,6 +424,7 @@ class Algorithm
      *
      * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
      * @return float|null
+     * @since 2.0.0
      */
     protected function _getQuantile($quantileNumber)
     {
@@ -427,6 +445,7 @@ class Algorithm
      * @return false|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _findRoundValue($lowerValue, $upperValue, $returnEmpty = true, $roundingFactor = null)
     {
@@ -491,6 +510,7 @@ class Algorithm
      * @param array &$oldRoundValues
      * @param array &$newRoundValues
      * @return void
+     * @since 2.0.0
      */
     protected function _mergeRoundValues(&$oldRoundValues, &$newRoundValues)
     {
@@ -509,6 +529,7 @@ class Algorithm
      * Get intervals number with checking skipped quantiles
      *
      * @return int
+     * @since 2.0.0
      */
     protected function _getCalculatedIntervalsNumber()
     {
@@ -521,6 +542,7 @@ class Algorithm
      * @param int $quantileNumber
      * @param array $separators
      * @return array|false [deflection, separatorValue, $valueIndex]
+     * @since 2.0.0
      */
     protected function _findBestSeparator($quantileNumber, $separators)
     {
@@ -558,6 +580,7 @@ class Algorithm
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _binarySearch($value, $limits = null)
     {

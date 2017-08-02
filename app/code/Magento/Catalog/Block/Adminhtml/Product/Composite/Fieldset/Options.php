@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset;
  * Adminhtml block for fieldset of product custom options
  *
  * @api
+ * @since 2.0.0
  */
 class Options extends \Magento\Catalog\Block\Product\View\Options
 {
@@ -18,6 +19,7 @@ class Options extends \Magento\Catalog\Block\Product\View\Options
      * @param \Magento\Catalog\Model\Product\Option $option
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOptionHtml(\Magento\Catalog\Model\Product\Option $option)
     {

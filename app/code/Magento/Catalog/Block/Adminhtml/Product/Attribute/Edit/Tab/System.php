@@ -13,10 +13,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\System
+ *
+ * @since 2.0.0
+ */
 class System extends Generic
 {
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

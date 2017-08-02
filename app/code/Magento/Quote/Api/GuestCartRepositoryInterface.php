@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Cart Repository interface for guest carts.
  * @api
+ * @since 2.0.0
  */
 interface GuestCartRepositoryInterface
 {
@@ -17,6 +18,7 @@ interface GuestCartRepositoryInterface
      * @param string $cartId
      * @return \Magento\Quote\Api\Data\CartInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($cartId);
 }

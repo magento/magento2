@@ -7,37 +7,44 @@ namespace Magento\Paypal\Controller;
 
 /**
  * Payflow Checkout Controller
+ * @since 2.0.0
  */
 abstract class Payflow extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Paypal\Model\PayflowlinkFactory
+     * @since 2.0.0
      */
     protected $_payflowModelFactory;
 
     /**
      * @var \Magento\Paypal\Helper\Checkout
+     * @since 2.0.0
      */
     protected $_checkoutHelper;
 
     /**
      * Redirect block name
      * @var string
+     * @since 2.0.0
      */
     protected $_redirectBlockName = 'payflow.link.iframe';
 
@@ -48,6 +55,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
      * @param \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -70,6 +78,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
      *
      * @param string $errorMsg
      * @return false|string
+     * @since 2.0.0
      */
     protected function _cancelPayment($errorMsg = '')
     {

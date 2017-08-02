@@ -10,11 +10,13 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInte
 
 /**
  * Class Attribute
+ * @since 2.0.0
  */
 class Attribute implements AttributeInterface
 {
     /**
      * @var DirectiveInterface[]
+     * @since 2.0.0
      */
     protected $directivePool;
 
@@ -22,6 +24,7 @@ class Attribute implements AttributeInterface
      * Constructor
      *
      * @param DirectiveInterface[] $directivePool
+     * @since 2.0.0
      */
     public function __construct(array $directivePool)
     {
@@ -34,6 +37,7 @@ class Attribute implements AttributeInterface
      * @param \DOMAttr $node
      * @param DataObject $processedObject
      * @return void
+     * @since 2.0.0
      */
     public function compile(\DOMAttr $node, DataObject $processedObject)
     {

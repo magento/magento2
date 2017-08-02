@@ -7,11 +7,13 @@ namespace Magento\Framework\Config\Dom;
 
 /**
  * Configuration of identifier attributes to be taken into account during merging
+ * @since 2.0.0
  */
 class NodeMergingConfig
 {
     /**
      * @var NodePathMatcher
+     * @since 2.0.0
      */
     private $nodePathMatcher;
 
@@ -19,12 +21,14 @@ class NodeMergingConfig
      * Format: array('/node/path' => '<node_id_attribute>', ...)
      *
      * @var array
+     * @since 2.0.0
      */
     private $idAttributes = [];
 
     /**
      * @param NodePathMatcher $nodePathMatcher
      * @param array $idAttributes
+     * @since 2.0.0
      */
     public function __construct(NodePathMatcher $nodePathMatcher, array $idAttributes)
     {
@@ -37,6 +41,7 @@ class NodeMergingConfig
      *
      * @param string $nodeXpath
      * @return string|null
+     * @since 2.0.0
      */
     public function getIdAttribute($nodeXpath)
     {

@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -20,6 +21,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Helper object.
      *
      * @var \Magento\Framework\App\Helper\AbstractHelper
+     * @since 2.0.0
      */
     protected $_helper;
 
@@ -27,6 +29,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Import export data
      *
      * @var \Magento\ImportExport\Helper\Data
+     * @since 2.0.0
      */
     protected $_importExportData = null;
 
@@ -34,6 +37,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Local filters types base on attribute code
      *
      * @var \Magento\ImportExport\Helper\Data
+     * @since 2.0.0
      */
     protected $_filterTypeByAttrCode = [
         'updated_at' => \Magento\ImportExport\Model\Export::FILTER_TYPE_DATE,
@@ -44,6 +48,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,6 +64,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Set grid parameters.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,6 +87,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param Attribute $attribute
      * @param mixed $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getDateFromToHtmlWithValue(Attribute $attribute, $value)
     {
@@ -117,6 +124,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param Attribute $attribute
      * @param mixed $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getInputHtmlWithValue(Attribute $attribute, $value)
     {
@@ -135,6 +143,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param Attribute $attribute
      * @param mixed $value
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     protected function _getMultiSelectHtmlWithValue(Attribute $attribute, $value)
     {
@@ -175,6 +184,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param Attribute $attribute
      * @param mixed $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getNumberFromToHtmlWithValue(Attribute $attribute, $value)
     {
@@ -211,6 +221,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @return \Magento\Framework\Phrase
+     * @since 2.2.0
      */
     protected function getFromAttributePrefix(Attribute $attribute)
     {
@@ -228,6 +239,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param mixed $value
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _getSelectHtmlWithValue(Attribute $attribute, $value)
     {
@@ -270,6 +282,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add columns to grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -342,6 +355,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param boolean $isExport
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function decorateFilter($value, Attribute $row, \Magento\Framework\DataObject $column, $isExport)
     {
@@ -382,6 +396,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string $attributeCode
      * @return string
+     * @since 2.0.0
      */
     public function getFilterElementId($attributeCode)
     {
@@ -393,6 +408,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string $attributeCode
      * @return string
+     * @since 2.0.0
      */
     public function getFilterElementName($attributeCode)
     {
@@ -406,6 +422,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @return string|false
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {
@@ -417,6 +434,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @since 2.0.0
      */
     public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {

@@ -9,17 +9,24 @@ namespace Magento\Catalog\Model\Entity\Product\Attribute\Group;
 
 use Magento\Catalog\Model\Attribute;
 
+/**
+ * Class \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper
+ *
+ * @since 2.0.0
+ */
 class AttributeMapper implements AttributeMapperInterface
 {
     /**
      * Unassignable attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $unassignableAttributes;
 
     /**
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
+     * @since 2.0.0
      */
     public function __construct(Attribute\Config $attributeConfig)
     {
@@ -31,6 +38,7 @@ class AttributeMapper implements AttributeMapperInterface
      *
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return array
+     * @since 2.0.0
      */
     public function map(\Magento\Eav\Model\Entity\Attribute $attribute)
     {

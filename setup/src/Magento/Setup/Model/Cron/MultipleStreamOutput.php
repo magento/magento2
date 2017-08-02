@@ -10,11 +10,13 @@ use Symfony\Component\Console\Output\Output;
 
 /**
  * Class to allow output to multiple file streams
+ * @since 2.0.0
  */
 class MultipleStreamOutput extends Output
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $streams;
 
@@ -25,6 +27,7 @@ class MultipleStreamOutput extends Output
      * @param bool|int $verbosity
      * @param bool $decorated
      * @param OutputFormatterInterface $formatter
+     * @since 2.0.0
      */
     public function __construct(
         array $streams,
@@ -43,6 +46,7 @@ class MultipleStreamOutput extends Output
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function doWrite($message, $newline)
     {

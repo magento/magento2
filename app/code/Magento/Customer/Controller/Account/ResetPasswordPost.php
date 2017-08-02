@@ -14,21 +14,34 @@ use Magento\Framework\Exception\InputException;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Customer\Controller\Account\ResetPasswordPost
+ *
+ * @since 2.0.0
+ */
 class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $accountManagement;
 
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
+     */
     protected $customerRepository;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var CredentialsValidator
+     * @since 2.2.0
      */
     private $credentialsValidator;
 
@@ -38,6 +51,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param CredentialsValidator|null $credentialsValidator
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -60,6 +74,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      * Used to handle data received from reset forgotten password form
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -7,16 +7,19 @@ namespace Magento\Store\Model;
 
 /**
  * Verifies that the requested URL matches to base URL of store.
+ * @since 2.1.0
  */
 class BaseUrlChecker
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -30,6 +33,7 @@ class BaseUrlChecker
      * @param array $uri
      * @param \Magento\Framework\App\Request\Http $request
      * @return bool
+     * @since 2.1.0
      */
     public function execute($uri, $request)
     {
@@ -44,6 +48,7 @@ class BaseUrlChecker
      * Checks whether base URL verification is enabled or not.
      *
      * @return bool
+     * @since 2.1.0
      */
     public function isEnabled()
     {

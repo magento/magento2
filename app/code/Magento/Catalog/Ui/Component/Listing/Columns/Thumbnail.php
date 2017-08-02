@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -24,6 +25,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -43,6 +45,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -69,6 +72,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
      * @param array $row
      *
      * @return null|string
+     * @since 2.0.0
      */
     protected function getAlt($row)
     {

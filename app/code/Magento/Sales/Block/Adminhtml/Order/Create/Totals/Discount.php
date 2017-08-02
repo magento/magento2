@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
@@ -21,6 +22,7 @@ class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -33,6 +35,7 @@ class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,6 +55,7 @@ class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Display both
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayBoth()
     {

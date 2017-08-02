@@ -8,11 +8,13 @@ namespace Magento\Framework\Api;
 /**
  * Base Class for simple data Objects
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractSimpleObject
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_data;
 
@@ -20,6 +22,7 @@ abstract class AbstractSimpleObject
      * Initialize internal storage
      *
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(array $data = [])
     {
@@ -31,6 +34,7 @@ abstract class AbstractSimpleObject
      *
      * @param string $key
      * @return mixed|null
+     * @since 2.0.0
      */
     protected function _get($key)
     {
@@ -43,6 +47,7 @@ abstract class AbstractSimpleObject
      * @param string $key
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setData($key, $value)
     {
@@ -54,6 +59,7 @@ abstract class AbstractSimpleObject
      * Return Data Object data in array format.
      *
      * @return array
+     * @since 2.0.0
      */
     public function __toArray()
     {

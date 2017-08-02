@@ -21,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command provides possibility to show saved system configuration.
  *
  * @api
+ * @since 2.2.0
  */
 class ConfigShowCommand extends Command
 {
@@ -36,6 +37,7 @@ class ConfigShowCommand extends Command
      * Scope validator.
      *
      * @var ValidatorInterface
+     * @since 2.2.0
      */
     private $scopeValidator;
 
@@ -43,6 +45,7 @@ class ConfigShowCommand extends Command
      * Source of configurations.
      *
      * @var ConfigSourceInterface
+     * @since 2.2.0
      */
     private $configSource;
 
@@ -50,6 +53,7 @@ class ConfigShowCommand extends Command
      * Config path resolver.
      *
      * @var ConfigPathResolver
+     * @since 2.2.0
      */
     private $pathResolver;
 
@@ -57,6 +61,7 @@ class ConfigShowCommand extends Command
      * Class for processing value using backend model.
      *
      * @var ValueProcessor
+     * @since 2.2.0
      */
     private $valueProcessor;
 
@@ -64,6 +69,7 @@ class ConfigShowCommand extends Command
      * The scope of configuration.
      *
      * @var string
+     * @since 2.2.0
      */
     private $scope;
 
@@ -71,6 +77,7 @@ class ConfigShowCommand extends Command
      * The scope code of configuration.
      *
      * @var string
+     * @since 2.2.0
      */
     private $scopeCode;
 
@@ -78,6 +85,7 @@ class ConfigShowCommand extends Command
      * The configuration path.
      *
      * @var string
+     * @since 2.2.0
      */
     private $inputPath;
 
@@ -87,6 +95,7 @@ class ConfigShowCommand extends Command
      * @param ConfigPathResolver $pathResolver
      * @param ValueProcessor $valueProcessor
      * @internal param ScopeConfigInterface $appConfig
+     * @since 2.2.0
      */
     public function __construct(
         ValidatorInterface $scopeValidator,
@@ -103,6 +112,7 @@ class ConfigShowCommand extends Command
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -139,6 +149,7 @@ class ConfigShowCommand extends Command
      * or scope/scope-code doesn't pass validation.
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -191,6 +202,7 @@ class ConfigShowCommand extends Command
      * ```
      * @param string $configPath base configuration path
      * @return void
+     * @since 2.2.0
      */
     private function outputResult(OutputInterface $output, $configValue, $configPath)
     {

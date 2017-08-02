@@ -12,6 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types
  *
  * @api
+ * @since 2.0.0
  */
 class FrontendPool
 {
@@ -32,26 +33,31 @@ class FrontendPool
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $_objectManager;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
+     * @since 2.0.0
      */
     private $_frontendPool;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $_typeFrontendMap;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface[]
+     * @since 2.0.0
      */
     private $_instances = [];
 
@@ -60,6 +66,7 @@ class FrontendPool
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param \Magento\Framework\App\Cache\Frontend\Pool $frontendPool
      * @param array $typeFrontendMap Format: array('<cache_type_id>' => '<cache_frontend_id>', ...)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -78,6 +85,7 @@ class FrontendPool
      *
      * @param string $cacheType Cache type identifier
      * @return \Magento\Framework\Cache\FrontendInterface Cache frontend instance
+     * @since 2.0.0
      */
     public function get($cacheType)
     {
@@ -99,6 +107,7 @@ class FrontendPool
      *
      * @param string $cacheType
      * @return string
+     * @since 2.0.0
      */
     protected function _getCacheFrontendId($cacheType)
     {

@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * System Configuration Abstract Controller
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
@@ -23,11 +24,13 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 
     /**
      * @var \Magento\Config\Model\Config\Structure
+     * @since 2.0.0
      */
     protected $_configStructure;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $_sectionChecker;
 
@@ -35,6 +38,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param mixed $sectionChecker - deprecated
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -51,6 +55,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
@@ -69,6 +74,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * Check is allow modify system configuration
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAllowed()
     {
@@ -82,6 +88,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      *
      * @param array $configState
      * @return bool
+     * @since 2.0.0
      */
     protected function _saveState($configState = [])
     {
@@ -109,6 +116,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * @param array $configState
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.1.0
      */
     protected function sanitizeConfigState($configState)
     {

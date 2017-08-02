@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order;
 
 /**
  * Adminhtml customer view sales block
+ * @since 2.0.0
  */
 class Sales extends \Magento\Backend\Block\Template
 {
@@ -18,16 +19,19 @@ class Sales extends \Magento\Backend\Block\Template
      * Sales entity collection
      *
      * @var \Magento\Sales\Model\ResourceModel\Sale\Collection
+     * @since 2.0.0
      */
     protected $_collection;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_groupedCollection;
 
     /**
      * @var int[]
+     * @since 2.0.0
      */
     protected $_websiteCounts;
 
@@ -35,6 +39,7 @@ class Sales extends \Magento\Backend\Block\Template
      * Currency model
      *
      * @var Currency
+     * @since 2.0.0
      */
     protected $_currency;
 
@@ -42,16 +47,19 @@ class Sales extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -63,6 +71,7 @@ class Sales extends \Magento\Backend\Block\Template
      * @param \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -81,6 +90,7 @@ class Sales extends \Magento\Backend\Block\Template
      * Initialize the sales grid.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -92,6 +102,7 @@ class Sales extends \Magento\Backend\Block\Template
      * Execute before toHtml() code.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function _beforeToHtml()
     {
@@ -144,6 +155,7 @@ class Sales extends \Magento\Backend\Block\Template
      *
      * @param int $websiteId
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteCount($websiteId)
     {
@@ -152,6 +164,7 @@ class Sales extends \Magento\Backend\Block\Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getRows()
     {
@@ -160,6 +173,7 @@ class Sales extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -172,6 +186,7 @@ class Sales extends \Magento\Backend\Block\Template
      * @param float $price
      * @param null|int $websiteId
      * @return string
+     * @since 2.0.0
      */
     public function formatCurrency($price, $websiteId = null)
     {
@@ -182,6 +197,7 @@ class Sales extends \Magento\Backend\Block\Template
      * Is single store mode
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {

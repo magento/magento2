@@ -14,11 +14,13 @@ use Magento\Framework\Pricing\Price\PriceInterface;
  * Price box render interface
  *
  * @api
+ * @since 2.0.0
  */
 interface PriceBoxRenderInterface
 {
     /**
      * @return SaleableInterface
+     * @since 2.0.0
      */
     public function getSaleableItem();
 
@@ -27,6 +29,7 @@ interface PriceBoxRenderInterface
      * (to use in templates only)
      *
      * @return PriceInterface
+     * @since 2.0.0
      */
     public function getPrice();
 
@@ -37,6 +40,7 @@ interface PriceBoxRenderInterface
      * @param AmountInterface $price
      * @param array $arguments
      * @return string
+     * @since 2.0.0
      */
     public function renderAmount(AmountInterface $price, array $arguments = []);
 }

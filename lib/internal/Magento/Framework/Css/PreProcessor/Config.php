@@ -7,6 +7,11 @@ namespace Magento\Framework\Css\PreProcessor;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\Css\PreProcessor\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**
@@ -18,6 +23,7 @@ class Config
      * Returns relative path to materialization directory
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMaterializationRelativePath()
     {

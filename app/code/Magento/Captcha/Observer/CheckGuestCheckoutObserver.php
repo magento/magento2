@@ -7,30 +7,40 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckGuestCheckoutObserver
+ *
+ * @since 2.0.0
+ */
 class CheckGuestCheckoutObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var CaptchaStringResolver
+     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
     /**
      * @var \Magento\Checkout\Model\Type\Onepage
+     * @since 2.0.0
      */
     protected $_typeOnepage;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -40,6 +50,7 @@ class CheckGuestCheckoutObserver implements ObserverInterface
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Checkout\Model\Type\Onepage $typeOnepage
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -60,6 +71,7 @@ class CheckGuestCheckoutObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

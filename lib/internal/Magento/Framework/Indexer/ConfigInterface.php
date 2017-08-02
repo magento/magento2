@@ -9,6 +9,7 @@ namespace Magento\Framework\Indexer;
  * Indexer(s) configuration
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -16,6 +17,7 @@ interface ConfigInterface
      * Get indexers list
      *
      * @return array[]
+     * @since 2.0.0
      */
     public function getIndexers();
 
@@ -24,6 +26,7 @@ interface ConfigInterface
      *
      * @param string $indexerId
      * @return array
+     * @since 2.0.0
      */
     public function getIndexer($indexerId);
 }

@@ -8,10 +8,16 @@ namespace Magento\ProductAlert\Controller\Unsubscribe;
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Unsubscribe\PriceAll
+ *
+ * @since 2.0.0
+ */
 class PriceAll extends UnsubscribeController
 {
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

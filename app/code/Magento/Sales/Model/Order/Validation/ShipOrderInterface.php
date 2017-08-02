@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
  * Interface ShipOrderInterface
  *
  * @api
+ * @since 2.2.0
  */
 interface ShipOrderInterface
 {
@@ -26,6 +27,7 @@ interface ShipOrderInterface
      * @param array $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Model\ValidatorResultInterface
+     * @since 2.2.0
      */
     public function validate(
         $order,

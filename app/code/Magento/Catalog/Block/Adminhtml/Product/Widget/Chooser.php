@@ -16,30 +16,40 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser
+ *
+ * @since 2.0.0
+ */
 class Chooser extends Extended
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_selectedProducts = [];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category
+     * @since 2.0.0
      */
     protected $_resourceCategory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.0.0
      */
     protected $_resourceProduct;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
+     * @since 2.0.0
      */
     protected $_categoryFactory;
 
@@ -51,6 +61,7 @@ class Chooser extends Extended
      * @param \Magento\Catalog\Model\ResourceModel\Category $resourceCategory
      * @param \Magento\Catalog\Model\ResourceModel\Product $resourceProduct
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -72,6 +83,7 @@ class Chooser extends Extended
      * Block construction, prepare grid params
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -85,6 +97,7 @@ class Chooser extends Extended
      *
      * @param AbstractElement $element Form Element
      * @return AbstractElement
+     * @since 2.0.0
      */
     public function prepareElementHtml(AbstractElement $element)
     {
@@ -141,6 +154,7 @@ class Chooser extends Extended
      * Checkbox Check JS Callback
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCheckboxCheckCallback()
     {
@@ -155,6 +169,7 @@ class Chooser extends Extended
      * Grid Row JS Callback
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRowClickCallback()
     {
@@ -191,6 +206,7 @@ class Chooser extends Extended
      * Category Tree node onClick listener js function
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCategoryClickListenerJs()
     {
@@ -211,6 +227,7 @@ class Chooser extends Extended
      *
      * @param Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -231,6 +248,7 @@ class Chooser extends Extended
      * Prepare products collection, defined collection filters (category, product type)
      *
      * @return Extended
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -262,6 +280,7 @@ class Chooser extends Extended
      * Prepare columns for products grid
      *
      * @return Extended
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -320,6 +339,7 @@ class Chooser extends Extended
      * Adds additional parameter to URL for loading only products grid
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -340,6 +360,7 @@ class Chooser extends Extended
      *
      * @param array $selectedProducts
      * @return $this
+     * @since 2.0.0
      */
     public function setSelectedProducts($selectedProducts)
     {
@@ -351,6 +372,7 @@ class Chooser extends Extended
      * Getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectedProducts()
     {

@@ -13,6 +13,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * Product status functionality model
  *
  * @api
+ * @since 2.0.0
  */
 class Status extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
@@ -29,6 +30,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      * Retrieve Visible Status Ids
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getVisibleStatusIds()
     {
@@ -40,6 +42,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      * Default Product Enable status
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getSaleableStatusIds()
     {
@@ -50,6 +53,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      * Retrieve option array
      *
      * @return string[]
+     * @since 2.0.0
      */
     public static function getOptionArray()
     {
@@ -60,6 +64,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      * Retrieve option array with empty value
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -77,6 +82,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      *
      * @param string $optionId
      * @return string
+     * @since 2.0.0
      */
     public function getOptionText($optionId)
     {
@@ -91,6 +97,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir direction
      * @return AbstractSource
+     * @since 2.0.0
      */
     public function addValueSortToCollection($collection, $dir = 'asc')
     {

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Frontend;
  * Category image attribute frontend
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
@@ -18,6 +19,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -25,6 +27,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      * Construct
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -36,6 +39,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      *
      * @param \Magento\Framework\DataObject $object
      * @return string|null
+     * @since 2.0.0
      */
     public function getUrl($object)
     {

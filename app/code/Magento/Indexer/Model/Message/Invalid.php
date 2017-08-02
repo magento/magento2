@@ -6,21 +6,29 @@
 
 namespace Magento\Indexer\Model\Message;
 
+/**
+ * Class \Magento\Indexer\Model\Message\Invalid
+ *
+ * @since 2.0.0
+ */
 class Invalid implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * @var \Magento\Indexer\Model\Indexer\Collection
+     * @since 2.0.0
      */
     protected $collection;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @param \Magento\Indexer\Model\Indexer\Collection $collection
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Indexer\Model\Indexer\Collection $collection,
@@ -34,6 +42,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      * Check whether all indices are valid or not
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -53,6 +62,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      * Retrieve unique message identity
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentity()
     {
@@ -63,6 +73,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getText()
     {
@@ -80,6 +91,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message severity
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSeverity()
     {

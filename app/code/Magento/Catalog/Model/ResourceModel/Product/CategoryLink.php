@@ -12,16 +12,26 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Product CategoryLink resource model
+ * @since 2.2.0
  */
 class CategoryLink
 {
-    /** @var  \Magento\Framework\EntityManager\MetadataPool */
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
+     */
     private $metadataPool;
 
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
+     */
     private $resourceConnection;
 
-    /** @var \Magento\Framework\EntityManager\EntityMetadataInterface */
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadataInterface
+     * @since 2.2.0
+     */
     private $categoryLinkMetadata;
 
     /**
@@ -29,6 +39,7 @@ class CategoryLink
      *
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -44,6 +55,7 @@ class CategoryLink
      * @param ProductInterface $product
      * @param array $categoryIds
      * @return array
+     * @since 2.2.0
      */
     public function getCategoryLinks(ProductInterface $product, array $categoryIds = [])
     {
@@ -68,6 +80,7 @@ class CategoryLink
      * @param ProductInterface $product
      * @param array $categoryLinks
      * @return array
+     * @since 2.2.0
      */
     public function saveCategoryLinks(ProductInterface $product, array $categoryLinks = [])
     {
@@ -87,6 +100,7 @@ class CategoryLink
 
     /**
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
+     * @since 2.2.0
      */
     private function getCategoryLinkMetadata()
     {
@@ -103,6 +117,7 @@ class CategoryLink
      * @param array $newCategoryPositions
      * @param array $oldCategoryPositions
      * @return array
+     * @since 2.2.0
      */
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
@@ -128,6 +143,7 @@ class CategoryLink
      * @param ProductInterface $product
      * @param array $insertLinks
      * @return array
+     * @since 2.2.0
      */
     private function updateCategoryLinks(ProductInterface $product, array $insertLinks)
     {
@@ -161,6 +177,7 @@ class CategoryLink
      * @param ProductInterface $product
      * @param array $deleteLinks
      * @return array
+     * @since 2.2.0
      */
     private function deleteCategoryLinks(ProductInterface $product, array $deleteLinks)
     {
@@ -182,6 +199,7 @@ class CategoryLink
      *
      * @param array $links
      * @return array
+     * @since 2.2.0
      */
     private function verifyCategoryLinks(array $links)
     {
@@ -214,6 +232,7 @@ class CategoryLink
      * @param array $deleteUpdate
      * @param array $insertUpdate
      * @return array
+     * @since 2.2.0
      */
     private function analyseUpdatedLinks($deleteUpdate, $insertUpdate)
     {

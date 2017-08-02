@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel;
  * Eav Resource Config model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Array of entity types
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_entityTypes = [];
 
@@ -23,6 +25,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Array of attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_attributes = [];
 
@@ -31,6 +34,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -41,6 +45,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Load all entity types
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadTypes()
     {
@@ -65,6 +70,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $typeId
      * @return array
+     * @since 2.0.0
      */
     protected function _loadTypeAttributes($typeId)
     {
@@ -88,6 +94,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $entityType
      * @return array
+     * @since 2.0.0
      */
     public function fetchEntityTypeData($entityType)
     {

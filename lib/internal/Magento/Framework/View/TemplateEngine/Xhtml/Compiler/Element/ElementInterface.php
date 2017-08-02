@@ -10,6 +10,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
  * Interface ElementInterface
+ * @since 2.0.0
  */
 interface ElementInterface
 {
@@ -21,6 +22,7 @@ interface ElementInterface
      * @param DataObject $processedObject
      * @param DataObject $context
      * @return void
+     * @since 2.0.0
      */
     public function compile(
         CompilerInterface $compiler,

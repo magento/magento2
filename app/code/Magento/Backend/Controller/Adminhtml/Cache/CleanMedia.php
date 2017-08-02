@@ -9,12 +9,18 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache\CleanMedia
+ *
+ * @since 2.0.0
+ */
 class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * Clean JS/css files cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

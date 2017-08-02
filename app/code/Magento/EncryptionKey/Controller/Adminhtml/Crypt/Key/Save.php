@@ -9,21 +9,25 @@ namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
 
 /**
  * Encryption Key Save Controller
+ * @since 2.0.0
  */
 class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
 {
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $encryptor;
 
     /**
      * @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change
+     * @since 2.0.0
      */
     protected $change;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     protected $cache;
 
@@ -32,6 +36,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\EncryptionKey\Model\ResourceModel\Key\Change $change
      * @param \Magento\Framework\App\CacheInterface $cache
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -49,6 +54,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
      * Process saving new encryption key
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

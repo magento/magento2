@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
  * MSRP price model
+ * @since 2.0.0
  */
 class MsrpPrice extends FinalPrice implements MsrpPriceInterface
 {
@@ -22,11 +23,13 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
 
     /**
      * @var \Magento\Msrp\Helper\Data
+     * @since 2.0.0
      */
     protected $msrpData;
 
     /**
      * @var \Magento\Msrp\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
@@ -37,6 +40,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Msrp\Helper\Data $msrpData
      * @param \Magento\Msrp\Model\Config $config
+     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -55,6 +59,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      * Returns whether the MSRP should be shown on gesture
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isShowPriceOnGesture()
     {
@@ -65,6 +70,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      * Get Msrp message for price
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMsrpPriceMessage()
     {
@@ -75,6 +81,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      * Check if Minimum Advertised Price is enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMsrpEnabled()
     {
@@ -86,6 +93,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      *
      * @param Product $product
      * @return bool
+     * @since 2.0.0
      */
     public function canApplyMsrp(Product $product)
     {
@@ -95,6 +103,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
     /**
      * @param Product $product
      * @return bool|float
+     * @since 2.0.0
      */
     public function isMinimalPriceLessMsrp(Product $product)
     {

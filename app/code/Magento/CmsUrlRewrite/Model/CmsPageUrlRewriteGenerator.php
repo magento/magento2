@@ -8,6 +8,11 @@ namespace Magento\CmsUrlRewrite\Model;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
+/**
+ * Class \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
+ *
+ * @since 2.0.0
+ */
 class CmsPageUrlRewriteGenerator
 {
     /**
@@ -15,21 +20,29 @@ class CmsPageUrlRewriteGenerator
      */
     const ENTITY_TYPE = 'cms-page';
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     * @since 2.0.0
+     */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $cmsPageUrlPathGenerator;
 
     /**
      * Store manager
      *
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected $cmsPage;
 
@@ -37,6 +50,7 @@ class CmsPageUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
@@ -51,6 +65,7 @@ class CmsPageUrlRewriteGenerator
     /**
      * @param \Magento\Cms\Model\Page $cmsPage
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @since 2.0.0
      */
     public function generate($cmsPage)
     {
@@ -66,6 +81,7 @@ class CmsPageUrlRewriteGenerator
      * Generate list of urls for default store
      *
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @since 2.0.0
      */
     protected function generateForAllStores()
     {
@@ -81,6 +97,7 @@ class CmsPageUrlRewriteGenerator
      *
      * @param int[] $storeIds
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @since 2.0.0
      */
     protected function generateForSpecificStores($storeIds)
     {
@@ -101,6 +118,7 @@ class CmsPageUrlRewriteGenerator
      * @param int $storeId
      * @param int $redirectType
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @since 2.0.0
      */
     protected function createUrlRewrite($storeId, $redirectType = 0)
     {

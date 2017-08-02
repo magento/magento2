@@ -11,21 +11,25 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_currencyList = null;
 
     /**
      * @var \Magento\Directory\Model\Currency
+     * @since 2.0.0
      */
     protected $_currencyModel = null;
 
     /**
      * @var \Magento\Directory\Model\Currency\DefaultLocator
+     * @since 2.0.0
      */
     protected $_currencyLocator = null;
 
@@ -35,6 +39,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @param \Magento\Directory\Model\Currency $currencyModel
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -52,6 +57,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -100,6 +106,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve display currency select
      *
      * @return true|mixed
+     * @since 2.0.0
      */
     public function getDisplayCurrencySelect()
     {
@@ -114,6 +121,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve currency affect
      *
      * @return true|mixed
+     * @since 2.0.0
      */
     public function getCurrencyAffect()
     {
@@ -128,6 +136,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve currency select html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCurrencySelectHtml()
     {
@@ -150,6 +159,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve list of currencies
      *
      * @return array|null
+     * @since 2.0.0
      */
     protected function _getCurrencyList()
     {
@@ -164,6 +174,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      *
      * @param null $index
      * @return array|null
+     * @since 2.0.0
      */
     public function getValue($index = null)
     {
@@ -181,6 +192,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve filter condition
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCondition()
     {
@@ -209,6 +221,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve column currency code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getColumnCurrencyCode()
     {
@@ -228,6 +241,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @param string $fromRate
      * @param string $toRate
      * @return float
+     * @since 2.0.0
      */
     protected function _getRate($fromRate, $toRate)
     {
@@ -239,6 +253,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      *
      * @param string $displayCurrency
      * @return void
+     * @since 2.0.0
      */
     public function prepareRates($displayCurrency)
     {

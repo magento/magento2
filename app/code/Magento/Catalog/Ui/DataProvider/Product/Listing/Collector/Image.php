@@ -22,6 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * If you want to add new image, that should render on front you need
  * to configure this class in di.xml
  *
+ * @since 2.2.0
  */
 class Image implements ProductRenderCollectorInterface
 {
@@ -30,31 +31,37 @@ class Image implements ProductRenderCollectorInterface
 
     /**
      * @var ImageFactory
+     * @since 2.2.0
      */
     private $imageFactory;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $imageCodes;
 
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var DesignInterface
+     * @since 2.2.0
      */
     private $design;
 
     /**
      * @var ImageInterfaceFactory
+     * @since 2.2.0
      */
     private $imageRenderInfoFactory;
 
@@ -66,6 +73,7 @@ class Image implements ProductRenderCollectorInterface
      * @param DesignInterface $design
      * @param ImageInterfaceFactory $imageRenderInfoFactory
      * @param array $imageCodes
+     * @since 2.2.0
      */
     public function __construct(
         ImageFactory $imageFactory,
@@ -87,6 +95,7 @@ class Image implements ProductRenderCollectorInterface
      * In order to allow to use image generation using Services, we need to emulate area code and store code
      *
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {
@@ -126,6 +135,7 @@ class Image implements ProductRenderCollectorInterface
      * @param int $storeId
      * @param ImageInterface $image
      * @return \Magento\Catalog\Helper\Image
+     * @since 2.2.0
      */
     public function emulateImageCreating(ProductInterface $product, $imageCode, $storeId, ImageInterface $image)
     {

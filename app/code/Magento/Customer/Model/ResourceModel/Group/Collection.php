@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\ResourceModel\Group;
  * Customer group collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $indexes
      * @return $this
+     * @since 2.0.0
      */
     public function setIgnoreIdFilter($indexes)
     {
@@ -40,6 +43,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Set real groups filter
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setRealGroupsFilter()
     {
@@ -50,6 +54,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add tax class
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addTaxClass()
     {
@@ -64,6 +69,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -74,6 +80,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option hash
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionHash()
     {

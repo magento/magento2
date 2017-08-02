@@ -9,6 +9,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter;
  * Adminhtml newsletter queue grid block
  *
  * @api
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -16,11 +17,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry|null
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -30,6 +33,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -45,6 +49,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +65,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -68,6 +74,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -83,6 +90,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

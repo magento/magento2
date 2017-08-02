@@ -17,31 +17,37 @@ use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
  * Class StockRegistry
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class StockRegistry implements StockRegistryInterface
 {
     /**
      * @var StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @var StockRegistryProviderInterface
+     * @since 2.0.0
      */
     protected $stockRegistryProvider;
 
     /**
      * @var ProductFactory
+     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var StockItemRepositoryInterface
+     * @since 2.0.0
      */
     protected $stockItemRepository;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory
+     * @since 2.0.0
      */
     protected $criteriaFactory;
 
@@ -51,6 +57,7 @@ class StockRegistry implements StockRegistryInterface
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $criteriaFactory
      * @param ProductFactory $productFactory
+     * @since 2.0.0
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
@@ -69,6 +76,7 @@ class StockRegistry implements StockRegistryInterface
     /**
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
+     * @since 2.0.0
      */
     public function getStock($scopeId = null)
     {
@@ -80,6 +88,7 @@ class StockRegistry implements StockRegistryInterface
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
+     * @since 2.0.0
      */
     public function getStockItem($productId, $scopeId = null)
     {
@@ -92,6 +101,7 @@ class StockRegistry implements StockRegistryInterface
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getStockItemBySku($productSku, $scopeId = null)
     {
@@ -104,6 +114,7 @@ class StockRegistry implements StockRegistryInterface
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
+     * @since 2.0.0
      */
     public function getStockStatus($productId, $scopeId = null)
     {
@@ -116,6 +127,7 @@ class StockRegistry implements StockRegistryInterface
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getStockStatusBySku($productSku, $scopeId = null)
     {
@@ -129,6 +141,7 @@ class StockRegistry implements StockRegistryInterface
      * @param int $productId
      * @param int $scopeId
      * @return int
+     * @since 2.0.0
      */
     public function getProductStockStatus($productId, $scopeId = null)
     {
@@ -142,6 +155,7 @@ class StockRegistry implements StockRegistryInterface
      * @param null $scopeId
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getProductStockStatusBySku($productSku, $scopeId = null)
     {
@@ -152,6 +166,7 @@ class StockRegistry implements StockRegistryInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getLowStockItems($scopeId, $qty, $currentPage = 1, $pageSize = 0)
     {
@@ -165,6 +180,7 @@ class StockRegistry implements StockRegistryInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function updateStockItemBySku($productSku, \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
     {
@@ -184,6 +200,7 @@ class StockRegistry implements StockRegistryInterface
      * @param string $productSku
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     protected function resolveProductId($productSku)
     {

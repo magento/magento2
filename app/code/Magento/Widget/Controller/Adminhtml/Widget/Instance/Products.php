@@ -6,12 +6,18 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Products
+ *
+ * @since 2.0.0
+ */
 class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
      * Products chooser Action (Ajax request)
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

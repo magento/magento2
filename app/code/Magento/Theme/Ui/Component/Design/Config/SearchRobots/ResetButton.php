@@ -14,6 +14,7 @@ use Magento\Ui\Component\Form\Field;
  * ResetButton field instance
  *
  * @api
+ * @since 2.2.0
  */
 class ResetButton extends Field
 {
@@ -24,6 +25,7 @@ class ResetButton extends Field
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -35,6 +37,7 @@ class ResetButton extends Field
      * @param \Magento\Framework\View\Element\UiComponentInterface[] $components
      * @param array $data
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.2.0
      */
     public function __construct(
         ContextInterface $context,
@@ -51,6 +54,7 @@ class ResetButton extends Field
      * Get robots.txt custom instruction default value
      *
      * @return string
+     * @since 2.2.0
      */
     private function getRobotsDefaultCustomInstructions()
     {
@@ -65,6 +69,7 @@ class ResetButton extends Field
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     public function prepare()
     {

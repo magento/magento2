@@ -5,12 +5,18 @@
  */
 namespace Magento\Customer\Model\Backend;
 
+/**
+ * Class \Magento\Customer\Model\Backend\Customer
+ *
+ * @since 2.0.0
+ */
 class Customer extends \Magento\Customer\Model\Customer
 {
     /**
      * Get store id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {

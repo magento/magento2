@@ -33,26 +33,31 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxApplied(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Item extends AbstractModel implements InvoiceItemInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_invoice_item';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'invoice_item';
 
     /**
      * @var \Magento\Sales\Model\Order\Item|null
+     * @since 2.0.0
      */
     protected $_orderItem = null;
 
     /**
      * @var \Magento\Sales\Model\Order\ItemFactory
+     * @since 2.0.0
      */
     protected $_orderItemFactory;
 
@@ -65,6 +70,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -92,6 +98,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -103,6 +110,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceInterface $invoice
      * @return $this
+     * @since 2.0.0
      */
     public function setInvoice(\Magento\Sales\Api\Data\InvoiceInterface $invoice)
     {
@@ -115,6 +123,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -126,6 +135,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -138,6 +148,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Retrieve order item instance
      *
      * @return \Magento\Sales\Model\Order\Item
+     * @since 2.0.0
      */
     public function getOrderItem()
     {
@@ -158,6 +169,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -168,6 +180,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Applying qty to order item
      *
      * @return $this
+     * @since 2.0.0
      */
     public function register()
     {
@@ -195,6 +208,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Cancelling invoice item
      *
      * @return $this
+     * @since 2.0.0
      */
     public function cancel()
     {
@@ -222,6 +236,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Invoice item row total calculation
      *
      * @return $this
+     * @since 2.0.0
      */
     public function calcRowTotal()
     {
@@ -258,6 +273,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Checking if the item is last
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isLast()
     {
@@ -273,6 +289,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns additional_data
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAdditionalData()
     {
@@ -283,6 +300,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_cost
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBaseCost()
     {
@@ -293,6 +311,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_discount_amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBaseDiscountAmount()
     {
@@ -303,6 +322,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_discount_tax_compensation_amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -313,6 +333,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_price
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBasePrice()
     {
@@ -323,6 +344,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_price_incl_tax
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBasePriceInclTax()
     {
@@ -333,6 +355,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_row_total
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBaseRowTotal()
     {
@@ -343,6 +366,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_row_total_incl_tax
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBaseRowTotalInclTax()
     {
@@ -353,6 +377,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns base_tax_amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getBaseTaxAmount()
     {
@@ -363,6 +388,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns description
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -373,6 +399,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns discount_amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -383,6 +410,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns discount_tax_compensation_amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -393,6 +421,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -403,6 +432,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns order_item_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getOrderItemId()
     {
@@ -413,6 +443,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns parent_id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -423,6 +454,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns price
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -433,6 +465,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns price_incl_tax
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getPriceInclTax()
     {
@@ -443,6 +476,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns product_id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -453,6 +487,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns qty
      *
      * @return float
+     * @since 2.0.0
      */
     public function getQty()
     {
@@ -463,6 +498,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns row_total
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getRowTotal()
     {
@@ -473,6 +509,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns row_total_incl_tax
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getRowTotalInclTax()
     {
@@ -483,6 +520,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns sku
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSku()
     {
@@ -493,6 +531,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * Returns tax_amount
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getTaxAmount()
     {
@@ -501,6 +540,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -509,6 +549,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBasePrice($price)
     {
@@ -517,6 +558,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setTaxAmount($amount)
     {
@@ -525,6 +567,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseRowTotal($amount)
     {
@@ -533,6 +576,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDiscountAmount($amount)
     {
@@ -541,6 +585,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRowTotal($amount)
     {
@@ -549,6 +594,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -557,6 +603,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setPriceInclTax($amount)
     {
@@ -565,6 +612,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseTaxAmount($amount)
     {
@@ -573,6 +621,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBasePriceInclTax($amount)
     {
@@ -581,6 +630,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseCost($baseCost)
     {
@@ -589,6 +639,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -597,6 +648,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseRowTotalInclTax($amount)
     {
@@ -605,6 +657,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRowTotalInclTax($amount)
     {
@@ -613,6 +666,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setProductId($id)
     {
@@ -621,6 +675,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setOrderItemId($id)
     {
@@ -629,6 +684,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAdditionalData($additionalData)
     {
@@ -637,6 +693,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDescription($description)
     {
@@ -645,6 +702,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -653,6 +711,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -661,6 +720,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -669,6 +729,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -679,6 +740,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\InvoiceItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -690,6 +752,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes)
     {

@@ -14,12 +14,18 @@ namespace Magento\Framework\Backup;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem as AppFilesystem;
 
+/**
+ * Class \Magento\Framework\Backup\Snapshot
+ *
+ * @since 2.0.0
+ */
 class Snapshot extends Filesystem
 {
     /**
      * Database backup manager
      *
      * @var Db
+     * @since 2.0.0
      */
     protected $_dbBackupManager;
 
@@ -27,17 +33,20 @@ class Snapshot extends Filesystem
      * Filesystem facade
      *
      * @var AppFilesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var Factory
+     * @since 2.0.0
      */
     protected $_backupFactory;
 
     /**
      * @param AppFilesystem $filesystem
      * @param Factory $backupFactory
+     * @since 2.0.0
      */
     public function __construct(AppFilesystem $filesystem, Factory $backupFactory)
     {
@@ -50,6 +59,7 @@ class Snapshot extends Filesystem
      *
      * @throws \Exception
      * @return bool
+     * @since 2.0.0
      */
     public function rollback()
     {
@@ -75,6 +85,7 @@ class Snapshot extends Filesystem
      *
      * @throws \Exception
      * @return bool
+     * @since 2.0.0
      */
     public function create()
     {
@@ -99,6 +110,7 @@ class Snapshot extends Filesystem
      *
      * @return string
      * @see BackupInterface::getType()
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -109,6 +121,7 @@ class Snapshot extends Filesystem
      * Create Db Instance
      *
      * @return BackupInterface
+     * @since 2.0.0
      */
     protected function _createDbBackupInstance()
     {
@@ -123,6 +136,7 @@ class Snapshot extends Filesystem
      * Get database backup manager
      *
      * @return Db
+     * @since 2.0.0
      */
     protected function _getDbBackupManager()
     {
@@ -138,6 +152,7 @@ class Snapshot extends Filesystem
      *
      * @param AbstractBackup $manager
      * @return $this
+     * @since 2.0.0
      */
     public function setDbBackupManager(AbstractBackup $manager)
     {
@@ -149,6 +164,7 @@ class Snapshot extends Filesystem
      * Get Db Backup Filename
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDbBackupFilename()
     {
@@ -159,6 +175,7 @@ class Snapshot extends Filesystem
      * Remove Db backup after added it to the snapshot
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _removeDbBackup()
     {

@@ -13,26 +13,31 @@ use Magento\Framework\DB\Query\Generator;
 
 /**
  * Convert serialized data in quote tables to JSON
+ * @since 2.2.0
  */
 class ConvertSerializedDataToJson
 {
     /**
      * @var QuoteSetup
+     * @since 2.2.0
      */
     private $quoteSetup;
 
     /**
      * @var QueryModifierFactory
+     * @since 2.2.0
      */
     private $queryModifierFactory;
 
     /**
      * @var Generator
+     * @since 2.2.0
      */
     private $queryGenerator;
 
     /**
      * @var AggregatedFieldDataConverter
+     * @since 2.2.0
      */
     private $aggregatedFieldConverter;
 
@@ -43,6 +48,7 @@ class ConvertSerializedDataToJson
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param QueryModifierFactory $queryModifierFactory
      * @param Generator $queryGenerator
+     * @since 2.2.0
      */
     public function __construct(
         QuoteSetup $quoteSetup,
@@ -62,6 +68,7 @@ class ConvertSerializedDataToJson
      *
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function convert()
     {

@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Interface \Magento\Framework\Mview\View\StateInterface
+ *
+ * @since 2.0.0
+ */
 interface StateInterface
 {
     /**#@+
@@ -32,6 +37,7 @@ interface StateInterface
      *
      * @param string $viewId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByView($viewId);
 
@@ -40,6 +46,7 @@ interface StateInterface
      *
      * @return \Magento\Framework\Mview\View\StateInterface
      * @throws \Exception
+     * @since 2.0.0
      */
     public function save();
 
@@ -48,6 +55,7 @@ interface StateInterface
      *
      * @return \Magento\Framework\Mview\View\StateInterface
      * @throws \Exception
+     * @since 2.0.0
      */
     public function delete();
 
@@ -55,6 +63,7 @@ interface StateInterface
      * Get state view ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getViewId();
 
@@ -62,6 +71,7 @@ interface StateInterface
      * Get state mode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMode();
 
@@ -70,6 +80,7 @@ interface StateInterface
      *
      * @param string $mode
      * @return \Magento\Framework\Mview\View\StateInterface
+     * @since 2.0.0
      */
     public function setMode($mode);
 
@@ -77,6 +88,7 @@ interface StateInterface
      * Get state status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatus();
 
@@ -85,6 +97,7 @@ interface StateInterface
      *
      * @param string $status
      * @return \Magento\Framework\Mview\View\StateInterface
+     * @since 2.0.0
      */
     public function setStatus($status);
 
@@ -92,6 +105,7 @@ interface StateInterface
      * Get state version ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVersionId();
 
@@ -100,6 +114,7 @@ interface StateInterface
      *
      * @param int $versionId
      * @return \Magento\Framework\Mview\View\StateInterface
+     * @since 2.0.0
      */
     public function setVersionId($versionId);
 
@@ -107,6 +122,7 @@ interface StateInterface
      * Get state updated time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdated();
 
@@ -115,6 +131,7 @@ interface StateInterface
      *
      * @param string|int|\DateTimeInterface $updated
      * @return \Magento\Framework\Mview\View\StateInterface
+     * @since 2.0.0
      */
     public function setUpdated($updated);
 }

@@ -12,6 +12,7 @@ namespace Magento\Catalog\Helper\Product;
  * Class ProductList
  *
  * @api
+ * @since 2.0.0
  */
 class ProductList
 {
@@ -26,6 +27,7 @@ class ProductList
     const DEFAULT_SORT_DIRECTION = 'asc';
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -33,11 +35,13 @@ class ProductList
      * Default limits per page
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_defaultAvailableLimit  = [10 => 10,20 => 20,50 => 50];
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -49,6 +53,7 @@ class ProductList
      * Returns available mode for view
      *
      * @return array|null
+     * @since 2.0.0
      */
     public function getAvailableViewMode()
     {
@@ -80,6 +85,7 @@ class ProductList
      *
      * @param array $options
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultViewMode($options = [])
     {
@@ -93,6 +99,7 @@ class ProductList
      * Get default sort field
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getDefaultSortField()
     {
@@ -107,6 +114,7 @@ class ProductList
      *
      * @param string $mode
      * @return array
+     * @since 2.0.0
      */
     public function getAvailableLimit($mode)
     {
@@ -135,6 +143,7 @@ class ProductList
      *
      * @param string $viewMode
      * @return string (comma separated)
+     * @since 2.0.0
      */
     public function getDefaultLimitPerPageValue($viewMode)
     {

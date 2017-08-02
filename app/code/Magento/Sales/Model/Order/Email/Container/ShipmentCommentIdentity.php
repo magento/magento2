@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
+/**
+ * Class \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity
+ *
+ * @since 2.0.0
+ */
 class ShipmentCommentIdentity extends Container implements IdentityInterface
 {
     const XML_PATH_EMAIL_COPY_METHOD = 'sales_email/shipment_comment/copy_method';
@@ -16,6 +21,7 @@ class ShipmentCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -28,6 +34,7 @@ class ShipmentCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return array|bool
+     * @since 2.0.0
      */
     public function getEmailCopyTo()
     {
@@ -40,6 +47,7 @@ class ShipmentCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getCopyMethod()
     {
@@ -48,6 +56,7 @@ class ShipmentCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getGuestTemplateId()
     {
@@ -56,6 +65,7 @@ class ShipmentCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getTemplateId()
     {
@@ -64,6 +74,7 @@ class ShipmentCommentIdentity extends Container implements IdentityInterface
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getEmailIdentity()
     {

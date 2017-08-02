@@ -9,11 +9,13 @@ use Magento\Customer\Api\AddressMetadataInterface;
 
 /**
  * Cached customer address attribute metadata
+ * @since 2.0.0
  */
 class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInterface
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $entityType = 'customer_address';
 
@@ -22,6 +24,7 @@ class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInt
      *
      * @param AddressMetadata $metadata
      * @param AttributeMetadataCache|null $attributeMetadataCache
+     * @since 2.0.0
      */
     public function __construct(
         AddressMetadata $metadata,

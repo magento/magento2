@@ -13,6 +13,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ThemeValidator
+ * @since 2.0.0
  */
 class ThemeValidator
 {
@@ -21,6 +22,7 @@ class ThemeValidator
      * Store Manager
      *
      * @var StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     private $storeManager;
 
@@ -28,6 +30,7 @@ class ThemeValidator
      * Provider for themes registered in db
      *
      * @var ThemeProviderInterface $themeProvider
+     * @since 2.0.0
      */
     private $themeProvider;
 
@@ -35,6 +38,7 @@ class ThemeValidator
      * Configuration Data
      *
      * @var ValueInterface $configData
+     * @since 2.0.0
      */
     private $configData;
 
@@ -42,6 +46,7 @@ class ThemeValidator
      * @param StoreManagerInterface $storeManager
      * @param ThemeProviderInterface $themeProvider
      * @param ValueInterface $configData
+     * @since 2.0.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -58,6 +63,7 @@ class ThemeValidator
      *
      * @param string[] $themePaths
      * @return array
+     * @since 2.0.0
      */
     public function validateIsThemeInUse($themePaths)
     {

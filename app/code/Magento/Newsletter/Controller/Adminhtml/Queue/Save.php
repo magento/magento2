@@ -9,6 +9,11 @@
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
@@ -17,6 +22,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
  * Extends from this class only in case of urgency.
  *
  * @api
+ * @since 2.0.0
  */
 class IframeConfigProvider implements ConfigProviderInterface
 {
@@ -44,21 +45,25 @@ class IframeConfigProvider implements ConfigProviderInterface
 
     /**
      * @var Repository
+     * @since 2.0.0
      */
     protected $assetRepo;
 
     /**
      * @var RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -66,11 +71,13 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Payment method code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $methodCode;
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod
+     * @since 2.0.0
      */
     protected $method;
 
@@ -81,6 +88,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * @param LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param string $methodCode
+     * @since 2.0.0
      */
     public function __construct(
         Repository $assetRepo,
@@ -100,6 +108,7 @@ class IframeConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -124,6 +133,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Get delimiter for date
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getDateDelim()
     {
@@ -142,6 +152,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Returns Cc expire year length
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getExpireDateYearLength()
     {
@@ -153,6 +164,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Returns json formatted string
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getCardFieldsMap()
     {
@@ -172,6 +184,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * @param string $fileId
      * @param array $params
      * @return string[]
+     * @since 2.0.0
      */
     protected function getViewFileUrl($fileId, array $params = [])
     {
@@ -188,6 +201,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Retrieve place order url on front
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getPlaceOrderUrl()
     {
@@ -203,6 +217,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Retrieve save order url on front
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSaveOrderUrl()
     {
@@ -213,6 +228,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      * Retrieve gateway url
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getCgiUrl()
     {
@@ -226,6 +242,7 @@ class IframeConfigProvider implements ConfigProviderInterface
      *
      * @param string $fieldName
      * @return mixed
+     * @since 2.0.0
      */
     protected function getMethodConfigData($fieldName)
     {

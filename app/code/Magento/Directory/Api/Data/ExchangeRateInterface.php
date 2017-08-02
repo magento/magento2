@@ -9,6 +9,7 @@ namespace Magento\Directory\Api\Data;
  * Exchange Rate interface.
  *
  * @api
+ * @since 2.0.0
  */
 interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,6 +17,7 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get the currency code associated with the exchange rate.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrencyTo();
 
@@ -24,6 +26,7 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrencyTo($code);
 
@@ -31,6 +34,7 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get the exchange rate for the associated currency and the store's base currency.
      *
      * @return float
+     * @since 2.0.0
      */
     public function getRate();
 
@@ -39,6 +43,7 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setRate($rate);
 
@@ -46,6 +51,7 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Directory\Api\Data\ExchangeRateExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -54,6 +60,7 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Directory\Api\Data\ExchangeRateExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\ExchangeRateExtensionInterface $extensionAttributes

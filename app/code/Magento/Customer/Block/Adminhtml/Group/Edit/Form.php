@@ -9,26 +9,31 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer groups edit form
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Tax\Model\TaxClass\Source\Customer
+     * @since 2.0.0
      */
     protected $_taxCustomer;
 
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxHelper;
 
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $_groupRepository;
 
     /**
      * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
+     * @since 2.0.0
      */
     protected $groupDataFactory;
 
@@ -41,6 +46,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -63,6 +69,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form for render
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

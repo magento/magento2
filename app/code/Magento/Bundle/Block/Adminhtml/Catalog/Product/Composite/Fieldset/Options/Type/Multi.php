@@ -10,11 +10,13 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'product/composite/fieldset/options/type/multi.phtml';
 
@@ -22,6 +24,7 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
      * @param  string $elementId
      * @param  string $containerId
      * @return string
+     * @since 2.0.0
      */
     public function setValidationContainer($elementId, $containerId)
     {

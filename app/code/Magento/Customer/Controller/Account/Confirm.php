@@ -23,39 +23,61 @@ use Magento\Framework\Controller\ResultFactory;
  * Class Confirm
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Confirm extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
+     */
     protected $scopeConfig;
 
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $customerAccountManagement;
 
-    /** @var CustomerRepositoryInterface  */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
+     */
     protected $customerRepository;
 
-    /** @var Address */
+    /**
+     * @var \Magento\Customer\Helper\Address
+     * @since 2.0.0
+     */
     protected $addressHelper;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
+     */
     protected $urlModel;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.2.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.2.0
      */
     private $cookieMetadataManager;
 
@@ -68,6 +90,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -92,8 +115,9 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.2.0
      */
     private function getCookieManager()
     {
@@ -108,8 +132,9 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.2.0
      */
     private function getCookieMetadataFactory()
     {
@@ -125,6 +150,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * Confirm customer account by id and confirmation key
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -168,6 +194,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve success message
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSuccessMessage()
     {
@@ -197,6 +224,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve success redirect URL
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSuccessRedirect()
     {

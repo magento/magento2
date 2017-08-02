@@ -9,11 +9,13 @@ use Magento\Framework\DB\Select;
 
 /**
  * Add IN condition to select
+ * @since 2.2.0
  */
 class InQueryModifier implements QueryModifierInterface
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $values;
 
@@ -21,6 +23,7 @@ class InQueryModifier implements QueryModifierInterface
      * Constructor
      *
      * @param array $values
+     * @since 2.2.0
      */
     public function __construct(
         $values = []
@@ -30,6 +33,7 @@ class InQueryModifier implements QueryModifierInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function modify(Select $select)
     {

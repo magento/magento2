@@ -20,45 +20,56 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class ProductScopeRewriteGenerator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class ProductScopeRewriteGenerator
 {
     /**
      * @var StoreViewService
+     * @since 2.2.0
      */
     private $storeViewService;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var ObjectRegistryFactory
+     * @since 2.2.0
      */
     private $objectRegistryFactory;
 
     /**
      * @var AnchorUrlRewriteGenerator
+     * @since 2.2.0
      */
     private $anchorUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
+     * @since 2.2.0
      */
     private $currentUrlRewritesRegenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
+     * @since 2.2.0
      */
     private $categoriesUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
+     * @since 2.2.0
      */
     private $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     * @since 2.2.0
+     */
     private $mergeDataProviderPrototype;
 
     /**
@@ -70,6 +81,7 @@ class ProductScopeRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
+     * @since 2.2.0
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -99,6 +111,7 @@ class ProductScopeRewriteGenerator
      *
      * @param int|null $storeId
      * @return bool
+     * @since 2.2.0
      */
     public function isGlobalScope($storeId)
     {
@@ -112,6 +125,7 @@ class ProductScopeRewriteGenerator
      * @param Product $product
      * @param int|null $rootCategoryId
      * @return array
+     * @since 2.2.0
      */
     public function generateForGlobalScope($productCategories, Product $product, $rootCategoryId = null)
     {
@@ -142,6 +156,7 @@ class ProductScopeRewriteGenerator
      * @param \Magento\Catalog\Model\Product $product
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @since 2.2.0
      */
     public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
     {
@@ -188,6 +203,7 @@ class ProductScopeRewriteGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool
+     * @since 2.2.0
      */
     public function isCategoryProperForGenerating(Category $category, $storeId)
     {

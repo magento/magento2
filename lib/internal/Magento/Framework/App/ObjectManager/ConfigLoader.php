@@ -11,12 +11,18 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Framework\App\ObjectManager\ConfigLoader
+ *
+ * @since 2.0.0
+ */
 class ConfigLoader implements ConfigLoaderInterface
 {
     /**
      * Config reader
      *
      * @var \Magento\Framework\ObjectManager\Config\Reader\Dom
+     * @since 2.0.0
      */
     protected $_reader;
 
@@ -24,6 +30,7 @@ class ConfigLoader implements ConfigLoaderInterface
      * Config reader factory
      *
      * @var \Magento\Framework\ObjectManager\Config\Reader\DomFactory
+     * @since 2.0.0
      */
     protected $_readerFactory;
 
@@ -31,17 +38,20 @@ class ConfigLoader implements ConfigLoaderInterface
      * Cache
      *
      * @var \Magento\Framework\Config\CacheInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
@@ -55,6 +65,7 @@ class ConfigLoader implements ConfigLoaderInterface
      * Get reader instance
      *
      * @return \Magento\Framework\ObjectManager\Config\Reader\Dom
+     * @since 2.0.0
      */
     protected function _getReader()
     {
@@ -66,6 +77,7 @@ class ConfigLoader implements ConfigLoaderInterface
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     public function load($area)
     {
@@ -86,7 +98,8 @@ class ConfigLoader implements ConfigLoaderInterface
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getSerializer()
     {

@@ -6,10 +6,16 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Store\DeleteWebsite
+ *
+ * @since 2.0.0
+ */
 class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

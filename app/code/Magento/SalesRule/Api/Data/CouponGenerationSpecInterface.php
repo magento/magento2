@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * CouponGenerationSpecInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface CouponGenerationSpecInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -20,6 +21,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get the id of the rule associated with the coupon
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRuleId();
 
@@ -28,6 +30,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param int $ruleId
      * @return $this
+     * @since 2.0.0
      */
     public function setRuleId($ruleId);
 
@@ -35,6 +38,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get format of generated coupon code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormat();
 
@@ -43,6 +47,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param string $format
      * @return $this
+     * @since 2.0.0
      */
     public function setFormat($format);
 
@@ -50,6 +55,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Number of coupons to generate
      *
      * @return int
+     * @since 2.0.0
      */
     public function getQuantity();
 
@@ -58,6 +64,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param int $quantity
      * @return $this
+     * @since 2.0.0
      */
     public function setQuantity($quantity);
 
@@ -65,6 +72,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get length of coupon code
      *
      * @return int
+     * @since 2.0.0
      */
     public function getLength();
 
@@ -73,6 +81,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param int $length
      * @return $this
+     * @since 2.0.0
      */
     public function setLength($length);
 
@@ -80,6 +89,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get the prefix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPrefix();
 
@@ -88,6 +98,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param string $prefix
      * @return $this
+     * @since 2.0.0
      */
     public function setPrefix($prefix);
 
@@ -95,6 +106,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get the suffix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSuffix();
 
@@ -103,6 +115,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function setSuffix($suffix);
 
@@ -110,6 +123,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get the spacing where the delimiter should exist
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getDelimiterAtEvery();
 
@@ -118,6 +132,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param int $delimiterAtEvery
      * @return $this
+     * @since 2.0.0
      */
     public function setDelimiterAtEvery($delimiterAtEvery);
 
@@ -125,6 +140,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Get the delimiter
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDelimiter();
 
@@ -133,6 +149,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param string $delimiter
      * @return $this
+     * @since 2.0.0
      */
     public function setDelimiter($delimiter);
 
@@ -140,6 +157,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -148,6 +166,7 @@ interface CouponGenerationSpecInterface extends \Magento\Framework\Api\Extensibl
      *
      * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes

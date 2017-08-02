@@ -11,6 +11,7 @@ use Magento\Customer\Controller\RegistryConstants;
  * Adminhtml customer orders grid block
  *
  * @api
+ * @since 2.0.0
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,6 +19,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      * Sales reorder
      *
      * @var \Magento\Sales\Helper\Reorder
+     * @since 2.0.0
      */
     protected $_salesReorder = null;
 
@@ -25,11 +27,13 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -40,6 +44,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,6 +62,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,6 +76,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      * Apply various selection filters to prepare the sales order grid collection.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -102,6 +109,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -154,6 +162,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Sales\Model\Order|\Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {
@@ -162,6 +171,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getGridUrl()
     {

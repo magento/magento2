@@ -11,17 +11,20 @@ use Magento\Framework\ObjectManager\TMapFactory;
 /**
  * Class BuilderComposite
  * @api
+ * @since 2.0.0
  */
 class BuilderComposite implements BuilderInterface
 {
     /**
      * @var BuilderInterface[] | TMap
+     * @since 2.0.0
      */
     private $builders;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $builders
+     * @since 2.0.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -40,6 +43,7 @@ class BuilderComposite implements BuilderInterface
      *
      * @param array $buildSubject
      * @return array
+     * @since 2.0.0
      */
     public function build(array $buildSubject)
     {
@@ -58,6 +62,7 @@ class BuilderComposite implements BuilderInterface
      * @param array $result
      * @param array $builder
      * @return array
+     * @since 2.0.0
      */
     protected function merge(array $result, array $builder)
     {

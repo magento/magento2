@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme\Domain;
 
 /**
  * Interface PhysicalInterface
+ * @since 2.0.0
  */
 interface PhysicalInterface
 {
@@ -15,6 +16,7 @@ interface PhysicalInterface
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function createVirtualTheme($theme);
 }

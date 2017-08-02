@@ -12,6 +12,7 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class MassDelete
+ * @since 2.0.0
  */
 class MassDelete extends \Magento\Backend\App\Action
 {
@@ -24,11 +25,13 @@ class MassDelete extends \Magento\Backend\App\Action
 
     /**
      * @var Filter
+     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -36,6 +39,7 @@ class MassDelete extends \Magento\Backend\App\Action
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @since 2.0.0
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
@@ -49,6 +53,7 @@ class MassDelete extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
  * Adminhtml sales create order product search grid price column renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Price
 {
@@ -17,6 +18,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Price
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

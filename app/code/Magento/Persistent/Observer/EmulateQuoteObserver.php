@@ -10,6 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class EmulateQuote
+ * @since 2.0.0
  */
 class EmulateQuoteObserver implements ObserverInterface
 {
@@ -17,6 +18,7 @@ class EmulateQuoteObserver implements ObserverInterface
      * Customer account service
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -24,6 +26,7 @@ class EmulateQuoteObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -31,6 +34,7 @@ class EmulateQuoteObserver implements ObserverInterface
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -38,6 +42,7 @@ class EmulateQuoteObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession = null;
 
@@ -45,6 +50,7 @@ class EmulateQuoteObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -54,6 +60,7 @@ class EmulateQuoteObserver implements ObserverInterface
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -74,6 +81,7 @@ class EmulateQuoteObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

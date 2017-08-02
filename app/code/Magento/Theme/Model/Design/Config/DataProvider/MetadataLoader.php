@@ -10,25 +10,34 @@ use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader
+ *
+ * @since 2.1.0
+ */
 class MetadataLoader
 {
     /**
      * @var RequestInterface
+     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var ScopeFallbackResolverInterface
+     * @since 2.1.0
      */
     protected $scopeFallbackResolver;
 
     /**
      * @var DesignConfigRepositoryInterface
+     * @since 2.1.0
      */
     protected $designConfigRepository;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -37,6 +46,7 @@ class MetadataLoader
      * @param ScopeFallbackResolverInterface $scopeFallbackResolver
      * @param DesignConfigRepositoryInterface $designConfigRepository
      * @param StoreManagerInterface $storeManager
+     * @since 2.1.0
      */
     public function __construct(
         RequestInterface $request,
@@ -54,6 +64,7 @@ class MetadataLoader
      * Retrieve configuration metadata
      *
      * @return array
+     * @since 2.1.0
      */
     public function getData()
     {

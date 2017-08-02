@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
+ * @since 2.0.0
  */
 class SaveOrderAfterSubmitObserver implements ObserverInterface
 {
@@ -17,6 +18,7 @@ class SaveOrderAfterSubmitObserver implements ObserverInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -24,6 +26,7 @@ class SaveOrderAfterSubmitObserver implements ObserverInterface
      * Constructor
      *
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry
@@ -36,6 +39,7 @@ class SaveOrderAfterSubmitObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

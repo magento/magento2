@@ -11,12 +11,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
      * Background color
      * @var int|string
+     * @since 2.0.0
      */
     public $imageBackgroundColor = 0;
 
@@ -44,101 +46,121 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_fileType;
 
     /**
      * @var  string
+     * @since 2.0.0
      */
     protected $_fileName;
 
     /**
      * @var  string
+     * @since 2.0.0
      */
     protected $_fileMimeType;
 
     /**
      * @var  string
+     * @since 2.0.0
      */
     protected $_fileSrcName;
 
     /**
      * @var  string
+     * @since 2.0.0
      */
     protected $_fileSrcPath;
 
     /**
      * @var resource
+     * @since 2.0.0
      */
     protected $_imageHandler;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_imageSrcWidth;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_imageSrcHeight;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_requiredExtensions;
 
     /**
      * @var  string
+     * @since 2.0.0
      */
     protected $_watermarkPosition;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_watermarkWidth;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_watermarkHeight;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_watermarkImageOpacity;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_quality;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_fontSize = self::DEFAULT_FONT_SIZE;
 
     /**
      * @var  bool
+     * @since 2.0.0
      */
     protected $_keepAspectRatio;
 
     /**
      * @var  bool
+     * @since 2.0.0
      */
     protected $_keepFrame;
 
     /**
      * @var  bool
+     * @since 2.0.0
      */
     protected $_keepTransparency;
 
     /**
      * @var  array
+     * @since 2.0.0
      */
     protected $_backgroundColor;
 
     /**
      * @var  bool
+     * @since 2.0.0
      */
     protected $_constrainOnly;
 
@@ -146,16 +168,19 @@ abstract class AbstractAdapter implements AdapterInterface
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
+     * @since 2.0.0
      */
     protected $directoryWrite;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -164,6 +189,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $fileName
      * @return void
+     * @since 2.0.0
      */
     abstract public function open($fileName);
 
@@ -175,6 +201,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param null|string $newName
      * @return void
      * @throws \Exception  If destination path is not writable
+     * @since 2.0.0
      */
     abstract public function save($destination = null, $newName = null);
 
@@ -182,6 +209,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Render image and return its binary contents
      *
      * @return string
+     * @since 2.0.0
      */
     abstract public function getImage();
 
@@ -191,6 +219,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param null|int $width
      * @param null|int $height
      * @return void
+     * @since 2.0.0
      */
     abstract public function resize($width = null, $height = null);
 
@@ -199,6 +228,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $angle
      * @return void
+     * @since 2.0.0
      */
     abstract public function rotate($angle);
 
@@ -210,6 +240,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int $right
      * @param int $bottom
      * @return bool
+     * @since 2.0.0
      */
     abstract public function crop($top = 0, $left = 0, $right = 0, $bottom = 0);
 
@@ -222,6 +253,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int $opacity
      * @param bool $tile
      * @return void
+     * @since 2.0.0
      */
     abstract public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false);
 
@@ -230,6 +262,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return void
      * @throws \Exception If some of dependencies are missing
+     * @since 2.0.0
      */
     abstract public function checkDependencies();
 
@@ -239,6 +272,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $text
      * @param string $font Path to font file
      * @return AbstractAdapter
+     * @since 2.0.0
      */
     abstract public function createPngFromString($text, $font = '');
 
@@ -246,6 +280,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Reassign image dimensions
      *
      * @return void
+     * @since 2.0.0
      */
     abstract public function refreshImageDimensions();
 
@@ -255,6 +290,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int $x
      * @param int $y
      * @return array
+     * @since 2.0.0
      */
     abstract public function getColorAt($x, $y);
 
@@ -265,6 +301,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -280,6 +317,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Assign image width, height, fileMimeType to object properties
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getMimeType()
     {
@@ -295,6 +333,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Assign image width, height, fileType to object properties using getimagesize function
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getImageType()
     {
@@ -310,6 +349,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Retrieve Original Image Width
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getOriginalWidth()
     {
@@ -321,6 +361,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Retrieve Original Image Height
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getOriginalHeight()
     {
@@ -333,6 +374,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $position
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkPosition($position)
     {
@@ -344,6 +386,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Get watermark position
      *
      * @return string
+     * @since 2.0.0
      */
     public function getWatermarkPosition()
     {
@@ -355,6 +398,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $imageOpacity
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -366,6 +410,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Get watermark opacity
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWatermarkImageOpacity()
     {
@@ -377,6 +422,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $width
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkWidth($width)
     {
@@ -388,6 +434,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Get watermark width
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWatermarkWidth()
     {
@@ -399,6 +446,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $height
      * @return $this
+     * @since 2.0.0
      */
     public function setWatermarkHeight($height)
     {
@@ -410,6 +458,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Return watermark height
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWatermarkHeight()
     {
@@ -421,6 +470,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param bool $value
      * @return bool|\Magento\Framework\Image\Adapter\AbstractAdapter
+     * @since 2.0.0
      */
     public function keepAspectRatio($value = null)
     {
@@ -435,6 +485,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function keepFrame($value = null)
     {
@@ -449,6 +500,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function keepTransparency($value = null)
     {
@@ -463,6 +515,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function constrainOnly($value = null)
     {
@@ -477,6 +530,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $value
      * @return int
+     * @since 2.0.0
      */
     public function quality($value = null)
     {
@@ -491,6 +545,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param null|array $value
      * @return array|void
+     * @since 2.0.0
      */
     public function backgroundColor($value = null)
     {
@@ -512,6 +567,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Assign file dirname and basename to object properties
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _getFileAttributes()
     {
@@ -528,6 +584,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int $frameHeight
      * @return array
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _adaptResizeValues($frameWidth, $frameHeight)
     {
@@ -580,6 +637,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int $frameWidth
      * @param int $frameHeight
      * @return int[]
+     * @since 2.0.0
      */
     protected function _checkAspectRatio($frameWidth, $frameHeight)
     {
@@ -610,6 +668,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int $frameHeight
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _checkDimensions($frameWidth, $frameHeight)
     {
@@ -625,6 +684,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Return false if source width or height is empty
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _checkSrcDimensions()
     {
@@ -636,6 +696,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $filePath
      * @return array
+     * @since 2.0.0
      */
     protected function _getImageOptions($filePath)
     {
@@ -646,6 +707,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Return supported image formats
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedFormats()
     {
@@ -659,6 +721,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $newName
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _prepareDestination($destination = null, $newName = null)
     {
@@ -695,6 +758,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Checks is adapter can work with image
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _canProcess()
     {
@@ -707,6 +771,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $filePath
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function validateUploadFile($filePath)
     {

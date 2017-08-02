@@ -21,6 +21,7 @@ use Magento\Framework\Translate\InlineInterface;
 /**
  * Admin product edit tabs
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Tabs extends WigetTabs
 {
@@ -30,11 +31,13 @@ class Tabs extends WigetTabs
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_attributeTabBlock = \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes::class;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Catalog::product/edit/tabs.phtml';
 
@@ -42,6 +45,7 @@ class Tabs extends WigetTabs
      * Core registry
      *
      * @var Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -49,6 +53,7 @@ class Tabs extends WigetTabs
      * Catalog data
      *
      * @var Data
+     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -56,21 +61,25 @@ class Tabs extends WigetTabs
      * Adminhtml catalog
      *
      * @var Catalog
+     * @since 2.0.0
      */
     protected $_helperCatalog = null;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var Manager
+     * @since 2.0.0
      */
     protected $_moduleManager;
 
     /**
      * @var InlineInterface
+     * @since 2.0.0
      */
     protected $_translateInline;
 
@@ -86,6 +95,7 @@ class Tabs extends WigetTabs
      * @param InlineInterface $translateInline
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -110,6 +120,7 @@ class Tabs extends WigetTabs
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -121,6 +132,7 @@ class Tabs extends WigetTabs
     /**
      * @param int $attributeSetId
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
+     * @since 2.0.0
      */
     public function getGroupCollection($attributeSetId)
     {
@@ -135,6 +147,7 @@ class Tabs extends WigetTabs
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -282,6 +295,7 @@ class Tabs extends WigetTabs
      * Check whether active tab belong to advanced group
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAdvancedTabGroupActive()
     {
@@ -292,6 +306,7 @@ class Tabs extends WigetTabs
      * Retrieve product object from object if not from registry
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -305,6 +320,7 @@ class Tabs extends WigetTabs
      * Getting attribute block name for tabs
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeTabBlock()
     {
@@ -317,6 +333,7 @@ class Tabs extends WigetTabs
     /**
      * @param string $attributeTabBlock
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeTabBlock($attributeTabBlock)
     {
@@ -329,6 +346,7 @@ class Tabs extends WigetTabs
      *
      * @param string $html
      * @return string
+     * @since 2.0.0
      */
     protected function _translateHtml($html)
     {
@@ -339,6 +357,7 @@ class Tabs extends WigetTabs
     /**
      * @param string $parentTab
      * @return string
+     * @since 2.0.0
      */
     public function getAccordion($parentTab)
     {

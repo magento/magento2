@@ -8,21 +8,25 @@ namespace Magento\Framework\Model\Entity;
 
 /**
  * Class Scope
+ * @since 2.1.0
  */
 class Scope implements ScopeInterface
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     private $identifier;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $value;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private $fallback;
 
@@ -32,6 +36,7 @@ class Scope implements ScopeInterface
      * @param string $identifier
      * @param string $value
      * @param ScopeInterface|null $fallback
+     * @since 2.1.0
      */
     public function __construct(
         $identifier,
@@ -45,6 +50,7 @@ class Scope implements ScopeInterface
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getValue()
     {
@@ -53,6 +59,7 @@ class Scope implements ScopeInterface
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getIdentifier()
     {
@@ -61,6 +68,7 @@ class Scope implements ScopeInterface
 
     /**
      * @return ScopeInterface
+     * @since 2.1.0
      */
     public function getFallback()
     {

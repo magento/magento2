@@ -10,16 +10,19 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
+ * @since 2.1.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var SampleRepository
+     * @since 2.1.0
      */
     protected $sampleRepository;
 
     /**
      * @param SampleRepository $sampleRepository
+     * @since 2.1.0
      */
     public function __construct(SampleRepository $sampleRepository)
     {
@@ -31,6 +34,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

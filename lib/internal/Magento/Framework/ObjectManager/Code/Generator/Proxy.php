@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Code\Generator\Proxy
+ *
+ * @since 2.0.0
+ */
 class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -22,6 +27,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * @param string $modelClassName
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultResultClassName($modelClassName)
     {
@@ -32,6 +38,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve class properties
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -72,6 +79,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -129,6 +137,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _generateCode()
     {
@@ -149,6 +158,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param \ReflectionMethod $method
      * @return array
+     * @since 2.0.0
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
@@ -173,6 +183,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -213,6 +224,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * @param string $name
      * @param array $parameters
      * @return string
+     * @since 2.0.0
      */
     protected function _getMethodBody($name, array $parameters = [])
     {
@@ -226,6 +238,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _validateData()
     {

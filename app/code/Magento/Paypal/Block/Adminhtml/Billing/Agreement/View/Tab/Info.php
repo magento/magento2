@@ -9,11 +9,13 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Adminhtml billing agreement info tab
+ * @since 2.0.0
  */
 class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'billing/agreement/view/tab/info.phtml';
 
@@ -21,11 +23,13 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $_customerRepository;
 
@@ -34,6 +38,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * @param \Magento\Framework\Registry $registry
      * @param CustomerRepositoryInterface $customerRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,6 +53,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -56,6 +62,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -64,6 +71,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -72,6 +80,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -82,6 +91,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * Retrieve billing agreement model
      *
      * @return \Magento\Paypal\Model\Billing\Agreement
+     * @since 2.0.0
      */
     protected function _getBillingAgreement()
     {
@@ -92,6 +102,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * Set data to block
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

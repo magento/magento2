@@ -12,6 +12,7 @@ namespace Magento\Config\Model\Config\Backend;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Cache extends \Magento\Framework\App\Config\Value
 {
@@ -19,6 +20,7 @@ class Cache extends \Magento\Framework\App\Config\Value
      * Cache tags to clean
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_cacheTags = [];
 
@@ -26,6 +28,7 @@ class Cache extends \Magento\Framework\App\Config\Value
      * Clean cache, value was changed
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

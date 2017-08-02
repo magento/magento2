@@ -16,17 +16,20 @@ use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
 
 /**
  * Tax rate collection for a grid backed by Services
+ * @since 2.0.0
  */
 
 class TaxRateCollection extends AbstractServiceCollection
 {
     /**
      * @var TaxRateRepositoryInterface
+     * @since 2.0.0
      */
     protected $taxRateRepository;
 
     /**
      * @var \Magento\Tax\Model\Calculation\Rate\Converter
+     * @since 2.0.0
      */
     protected $rateConverter;
 
@@ -39,6 +42,7 @@ class TaxRateCollection extends AbstractServiceCollection
      * @param SortOrderBuilder $sortOrderBuilder
      * @param TaxRateRepositoryInterface $rateService
      * @param \Magento\Tax\Model\Calculation\Rate\Converter $rateConverter
+     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -55,6 +59,7 @@ class TaxRateCollection extends AbstractServiceCollection
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -75,6 +80,7 @@ class TaxRateCollection extends AbstractServiceCollection
      *
      * @param TaxRate $taxRate Input data for creating the item.
      * @return \Magento\Framework\DataObject Collection item that represents a tax rate
+     * @since 2.0.0
      */
     protected function createTaxRateCollectionItem(TaxRate $taxRate)
     {

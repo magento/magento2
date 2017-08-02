@@ -15,6 +15,7 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
 {
@@ -22,6 +23,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      * Retrieve allowed currencies for current scope
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAllowedCurrencies()
     {
@@ -43,6 +45,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      * Retrieve Installed Currencies
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getInstalledCurrencies()
     {
@@ -59,6 +62,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      * Retrieve Base Currency value for current scope
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCurrencyBase()
     {
@@ -77,6 +81,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      * Retrieve Default display Currency value for current scope
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCurrencyDefault()
     {
@@ -94,6 +99,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      * Check whether field saved from Admin form with other currency data or as single field, e.g. from CLI command
      *
      * @return bool True in case when field was saved from Admin form
+     * @since 2.2.0
      */
     private function isFormData()
     {

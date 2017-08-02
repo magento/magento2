@@ -9,7 +9,8 @@ namespace Magento\Widget\Model\ResourceModel;
 /**
  * Resource model for widget.
  *
- * @deprecated Data from this table was moved to xml(widget.xml).
+ * @deprecated 2.2.0 Data from this table was moved to xml(widget.xml).
+ * @since 2.0.0
  */
 class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,6 +18,7 @@ class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $widgetId
      * @return array|false
+     * @since 2.0.0
      */
     public function loadPreconfiguredWidget($widgetId)
     {

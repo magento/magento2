@@ -13,6 +13,7 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Stock item resource model
+ * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,11 +21,13 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Whether index events should be processed immediately
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $processIndexEvents = true;
 
     /**
      * @var Processor
+     * @since 2.0.0
      */
     protected $stockIndexerProcessor;
 
@@ -32,6 +35,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Processor $processor
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -46,6 +50,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table and initialize connection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,6 +64,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param int $stockId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByProductId(\Magento\CatalogInventory\Api\Data\StockItemInterface $item, $productId, $stockId)
     {
@@ -81,6 +87,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $value
      * @param \Magento\CatalogInventory\Model\Stock\Item $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -95,6 +102,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\DataObject $object
      * @param string $table
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareDataForTable(\Magento\Framework\DataObject $object, $table)
     {
@@ -117,6 +125,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -133,6 +142,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $process
      * @return $this
+     * @since 2.0.0
      */
     public function setProcessIndexEvents($process = true)
     {

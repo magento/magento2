@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGalleryEntryInterface
 {
@@ -19,6 +20,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Retrieve gallery entry ID
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -29,6 +31,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Get media type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaType()
     {
@@ -39,6 +42,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Retrieve gallery entry alternative text
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -49,6 +53,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Retrieve gallery entry position (sort order)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -59,6 +64,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Check if gallery entry is hidden from product page
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisabled()
     {
@@ -69,6 +75,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Retrieve gallery entry image types (thumbnail, image, small_image etc)
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getTypes()
     {
@@ -79,6 +86,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * Get file path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFile()
     {
@@ -87,6 +95,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
 
     /**
      * @return \Magento\Framework\Api\Data\ImageContentInterface|null
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -98,6 +107,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param string $mediaType
      * @return $this
+     * @since 2.0.0
      */
     public function setMediaType($mediaType)
     {
@@ -109,6 +119,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -120,6 +131,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param int $position
      * @return $this
+     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -131,6 +143,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param bool $disabled
      * @return $this
+     * @since 2.0.0
      */
     public function setDisabled($disabled)
     {
@@ -142,6 +155,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param string[] $types
      * @return $this
+     * @since 2.0.0
      */
     public function setTypes(array $types = null)
     {
@@ -153,6 +167,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param string $file
      * @return $this
+     * @since 2.0.0
      */
     public function setFile($file)
     {
@@ -164,6 +179,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param $content \Magento\Framework\Api\Data\ImageContentInterface
      * @return $this
+     * @since 2.0.0
      */
     public function setContent($content)
     {
@@ -174,6 +190,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * {@inheritdoc}
      *
      * @return ProductAttributeMediaGalleryEntryExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -185,6 +202,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      *
      * @param ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes)
     {

@@ -13,12 +13,18 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice
+ *
+ * @since 2.0.0
+ */
 class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
 {
     /**
      * Catalog product attribute backend tierprice
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
+     * @since 2.0.0
      */
     protected $_productAttributeBackendTierprice;
 
@@ -32,6 +38,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $productAttributeTierprice
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -61,6 +68,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * Retrieve resource instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -72,6 +80,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      *
      * @param array $objectArray
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalUniqueFields($objectArray)
     {
@@ -82,6 +91,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function getAdditionalFields($objectArray)
     {
@@ -96,6 +106,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * Error message when duplicates
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _getDuplicateErrorMessage()
     {
@@ -107,6 +118,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      *
      * @param \Magento\Catalog\Model\Product\Type\Price $priceObject
      * @return bool
+     * @since 2.0.0
      */
     protected function _isPriceFixed($priceObject)
     {
@@ -117,6 +129,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * By default attribute value is considered non-scalar that can be stored in a generic way
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isScalar()
     {
@@ -125,6 +138,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function validate($object)
     {
@@ -146,6 +160,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function validatePrice(array $priceRow)
     {
@@ -156,6 +171,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function modifyPriceData($object, $data)
     {
@@ -175,6 +191,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean
+     * @since 2.2.0
      */
     protected function updateValues(array $valuesToUpdate, array $oldValues)
     {
@@ -203,6 +220,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      *
      * @param array $priceRow
      * @return null
+     * @since 2.2.0
      */
     private function getPercentage($priceRow)
     {

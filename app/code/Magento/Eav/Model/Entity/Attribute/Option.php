@@ -18,6 +18,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Option extends AbstractModel implements AttributeOptionInterface
 {
@@ -25,6 +26,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -33,6 +35,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -41,6 +44,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -49,6 +53,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -57,6 +62,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsDefault()
     {
@@ -65,6 +71,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreLabels()
     {
@@ -76,6 +83,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -87,6 +95,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -98,6 +107,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      *
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -109,6 +119,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      *
      * @param bool $isDefault
      * @return $this
+     * @since 2.0.0
      */
     public function setIsDefault($isDefault)
     {
@@ -120,6 +131,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      *
      * @param \Magento\Eav\Api\Data\AttributeOptionLabelInterface[] $storeLabels
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabels(array $storeLabels = null)
     {

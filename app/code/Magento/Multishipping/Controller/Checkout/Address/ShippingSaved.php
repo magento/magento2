@@ -15,21 +15,25 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
  * Class ShippingSaved
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class ShippingSaved extends Address
 {
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.0.0
      */
     private $addressRepository;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.0.0
      */
     private $filterBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.0.0
      */
     private $searchCriteriaBuilder;
 
@@ -40,6 +44,7 @@ class ShippingSaved extends Address
      * @param AddressRepositoryInterface $addressRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -55,6 +60,7 @@ class ShippingSaved extends Address
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

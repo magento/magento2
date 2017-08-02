@@ -9,6 +9,7 @@ namespace Magento\SalesSequence\Model;
  * Class Config - configuration container for sequence
  *
  * @api
+ * @since 2.0.0
  */
 class Config
 {
@@ -21,6 +22,7 @@ class Config
      * maxValue represents last available increment id in system
      *
      * @var array
+     * @since 2.0.0
      */
     protected $defaultValues = [
         'prefix' => '',
@@ -36,6 +38,7 @@ class Config
      *
      * @param string|null $key
      * @return mixed
+     * @since 2.0.0
      */
     public function get($key = null)
     {

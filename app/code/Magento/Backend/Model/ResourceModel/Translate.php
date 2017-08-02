@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\ResourceModel;
 /**
  * Backend translate resource model
  * @api
+ * @since 2.0.0
  */
 class Translate extends \Magento\Translation\Model\ResourceModel\Translate
 {
@@ -16,6 +17,7 @@ class Translate extends \Magento\Translation\Model\ResourceModel\Translate
      * Use always default scope for store id
      *
      * @return int
+     * @since 2.0.0
      */
     protected function _getStoreId()
     {

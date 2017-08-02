@@ -11,12 +11,18 @@ namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
 use Magento\Store\Model\ResourceModel\Website\Collection;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter\Website
+ *
+ * @since 2.0.0
+ */
 class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * Website collection
      *
      * @var Collection
+     * @since 2.0.0
      */
     protected $_websiteCollection = null;
 
@@ -24,16 +30,19 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory
+     * @since 2.0.0
      */
     protected $_websitesFactory;
 
@@ -44,6 +53,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -63,6 +73,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get options for grid filter
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -73,6 +84,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 
     /**
      * @return Collection|null
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -89,6 +101,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * Get options for grid filter
      *
      * @return null|array
+     * @since 2.0.0
      */
     public function getCondition()
     {

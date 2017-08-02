@@ -8,6 +8,11 @@ namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Interface \Magento\Sales\Controller\AbstractController\OrderLoaderInterface
+ *
+ * @since 2.0.0
+ */
 interface OrderLoaderInterface
 {
     /**
@@ -15,6 +20,7 @@ interface OrderLoaderInterface
      *
      * @param RequestInterface $request
      * @return bool|\Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function load(RequestInterface $request);
 }

@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Class \Magento\Framework\Image\Adapter\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
 {
     const XML_PATH_IMAGE_ADAPTER = 'dev/image/default_adapter';
@@ -13,11 +18,13 @@ class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
@@ -28,6 +35,7 @@ class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
      * {@inherit}
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdapterAlias()
     {
@@ -38,6 +46,7 @@ class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
      * {@inherit}
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getAdapters()
     {

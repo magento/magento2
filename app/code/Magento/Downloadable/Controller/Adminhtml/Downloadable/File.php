@@ -9,6 +9,7 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
  * Downloadable File upload controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class File extends \Magento\Backend\App\Action
 {

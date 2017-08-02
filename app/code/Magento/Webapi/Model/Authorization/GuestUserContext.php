@@ -10,11 +10,13 @@ use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Guest user context
+ * @since 2.0.0
  */
 class GuestUserContext implements UserContextInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -23,6 +25,7 @@ class GuestUserContext implements UserContextInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserType()
     {

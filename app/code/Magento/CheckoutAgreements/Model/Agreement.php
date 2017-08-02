@@ -7,18 +7,25 @@ namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 
+/**
+ * Class \Magento\CheckoutAgreements\Model\Agreement
+ *
+ * @since 2.0.0
+ */
 class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
     /**
      * Allowed CSS units for height field
      *
      * @var array
+     * @since 2.0.0
      */
     protected $allowedCssUnits = ['px', 'pc', 'pt', 'ex', 'em', 'mm', 'cm', 'in', '%'];
 
     /**
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +35,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @param \Magento\Framework\DataObject $agreementData
      * @return array|bool
+     * @since 2.0.0
      */
     public function validateData($agreementData)
     {
@@ -47,6 +55,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Processing object before save data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -68,6 +77,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getAgreementId()
     {
@@ -76,6 +86,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setAgreementId($id)
     {
@@ -84,6 +95,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -92,6 +104,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -100,6 +113,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -108,6 +122,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setContent($content)
     {
@@ -116,6 +131,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getContentHeight()
     {
@@ -124,6 +140,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setContentHeight($height)
     {
@@ -132,6 +149,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getCheckboxText()
     {
@@ -140,6 +158,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setCheckboxText($text)
     {
@@ -148,6 +167,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getIsActive()
     {
@@ -156,6 +176,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setIsActive($status)
     {
@@ -164,6 +185,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getIsHtml()
     {
@@ -172,6 +194,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setIsHtml($isHtml)
     {
@@ -180,6 +203,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getMode()
     {
@@ -188,6 +212,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setMode($mode)
     {
@@ -198,6 +223,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * {@inheritdoc}
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -209,6 +235,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      *
      * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes

@@ -13,6 +13,7 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - last_id
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractIncrement extends \Magento\Framework\DataObject implements
     \Magento\Eav\Model\Entity\Increment\IncrementInterface
@@ -21,6 +22,7 @@ abstract class AbstractIncrement extends \Magento\Framework\DataObject implement
      * Get pad length
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPadLength()
     {
@@ -35,6 +37,7 @@ abstract class AbstractIncrement extends \Magento\Framework\DataObject implement
      * Get pad char
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPadChar()
     {
@@ -50,6 +53,7 @@ abstract class AbstractIncrement extends \Magento\Framework\DataObject implement
      *
      * @param mixed $id
      * @return string
+     * @since 2.0.0
      */
     public function format($id)
     {
@@ -64,6 +68,7 @@ abstract class AbstractIncrement extends \Magento\Framework\DataObject implement
      * @param mixed $id
      * @return mixed
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function frontendFormat($id)
     {

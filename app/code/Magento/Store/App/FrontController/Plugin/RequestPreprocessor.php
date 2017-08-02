@@ -5,30 +5,40 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+/**
+ * Class \Magento\Store\App\FrontController\Plugin\RequestPreprocessor
+ *
+ * @since 2.0.0
+ */
 class RequestPreprocessor
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\App\ResponseFactory
+     * @since 2.0.0
      */
     protected $_responseFactory;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Store\Model\BaseUrlChecker
+     * @since 2.1.0
      */
     private $baseUrlChecker;
 
@@ -37,6 +47,7 @@ class RequestPreprocessor
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -60,6 +71,7 @@ class RequestPreprocessor
      *
      * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundDispatch(
         \Magento\Framework\App\FrontController $subject,
@@ -98,7 +110,8 @@ class RequestPreprocessor
      * Gets base URL checker.
      *
      * @return \Magento\Store\Model\BaseUrlChecker
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getBaseUrlChecker()
     {

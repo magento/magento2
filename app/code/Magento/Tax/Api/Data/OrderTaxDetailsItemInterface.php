@@ -10,6 +10,7 @@ namespace Magento\Tax\Api\Data;
 /**
  * Interface OrderTaxDetailsItemInterface
  * @api
+ * @since 2.0.0
  */
 interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,6 +18,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      * Get type (shipping, product, weee, gift wrapping, etc)
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getType();
 
@@ -25,6 +27,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type);
 
@@ -32,6 +35,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      * Return item id if this item is a product
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getItemId();
 
@@ -40,6 +44,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      *
      * @param int $itemId
      * @return $this
+     * @since 2.0.0
      */
     public function setItemId($itemId);
 
@@ -47,6 +52,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      * Return associated item id if this item is associated with another item, null otherwise
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getAssociatedItemId();
 
@@ -55,6 +61,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      *
      * @param int $associatedItemId
      * @return $this
+     * @since 2.0.0
      */
     public function setAssociatedItemId($associatedItemId);
 
@@ -62,6 +69,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      * Get applied taxes
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[]|null
+     * @since 2.0.0
      */
     public function getAppliedTaxes();
 
@@ -70,6 +78,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
+     * @since 2.0.0
      */
     public function setAppliedTaxes(array $appliedTaxes = null);
 
@@ -77,6 +86,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -85,6 +95,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      *
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Tax\Api\Data\OrderTaxDetailsItemExtensionInterface $extensionAttributes

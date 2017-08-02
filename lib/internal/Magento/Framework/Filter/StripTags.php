@@ -7,21 +7,25 @@ namespace Magento\Framework\Filter;
 
 /**
  * Filter for standard strip_tags() function with extra functionality for html entities
+ * @since 2.0.0
  */
 class StripTags implements \Zend_Filter_Interface
 {
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $allowableTags;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $escape;
 
@@ -29,6 +33,7 @@ class StripTags implements \Zend_Filter_Interface
      * @param \Magento\Framework\Escaper $escaper
      * @param null $allowableTags
      * @param bool $escape
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Escaper $escaper, $allowableTags = null, $escape = false)
     {
@@ -42,6 +47,7 @@ class StripTags implements \Zend_Filter_Interface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function filter($value)
     {

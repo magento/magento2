@@ -14,6 +14,7 @@ use Magento\Framework\AppInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class UserConfig implements AppInterface
 {
@@ -21,6 +22,7 @@ class UserConfig implements AppInterface
      * Console response
      *
      * @var Response
+     * @since 2.0.0
      */
     private $response;
 
@@ -28,6 +30,7 @@ class UserConfig implements AppInterface
      * Requested changes
      *
      * @var array
+     * @since 2.0.0
      */
     private $request;
 
@@ -35,6 +38,7 @@ class UserConfig implements AppInterface
      * Factory for config models
      *
      * @var Factory
+     * @since 2.0.0
      */
     private $configFactory;
 
@@ -44,6 +48,7 @@ class UserConfig implements AppInterface
      * @param Factory $configFactory
      * @param Response $response
      * @param array $request
+     * @since 2.0.0
      */
     public function __construct(
         Factory $configFactory,
@@ -59,6 +64,7 @@ class UserConfig implements AppInterface
      * Run application
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function launch()
     {
@@ -71,6 +77,7 @@ class UserConfig implements AppInterface
      * Inserts provided user configuration data into database
      *
      * @return void
+     * @since 2.0.0
      */
     private function updateUserConfigData()
     {
@@ -83,6 +90,7 @@ class UserConfig implements AppInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {

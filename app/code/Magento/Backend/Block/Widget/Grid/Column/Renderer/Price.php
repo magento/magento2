@@ -9,12 +9,14 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Backend grid item renderer currency
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $_defaultWidth = 100;
 
@@ -22,11 +24,13 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Currency objects cache
      *
      * @var \Magento\Framework\DataObject[]
+     * @since 2.0.0
      */
     protected static $_currencies = [];
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -34,6 +38,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -49,6 +54,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -72,6 +78,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      *
      * @param \Magento\Framework\DataObject $row
      * @return string|false
+     * @since 2.0.0
      */
     protected function _getCurrencyCode($row)
     {
@@ -89,6 +96,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      *
      * @param \Magento\Framework\DataObject $row
      * @return float|int
+     * @since 2.0.0
      */
     protected function _getRate($row)
     {
@@ -105,6 +113,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Renders CSS
      *
      * @return string
+     * @since 2.0.0
      */
     public function renderCss()
     {

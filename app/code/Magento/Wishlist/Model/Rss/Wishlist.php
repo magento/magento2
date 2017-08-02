@@ -11,6 +11,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Wishlist RSS model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Wishlist implements DataProviderInterface
 {
@@ -18,17 +19,20 @@ class Wishlist implements DataProviderInterface
      * Url Builder
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * System event manager
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
@@ -36,36 +40,43 @@ class Wishlist implements DataProviderInterface
      * Parent layout of the block
      *
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected $wishlistHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Output
+     * @since 2.0.0
      */
     protected $outputHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Wishlist\Block\Customer\Wishlist
+     * @since 2.0.0
      */
     protected $wishlistBlock;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
+     * @since 2.0.0
      */
     protected $customerFactory;
 
@@ -82,6 +93,7 @@ class Wishlist implements DataProviderInterface
      * @param \Magento\Framework\App\RequestInterface $request
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Wishlist\Helper\Rss $wishlistHelper,
@@ -111,6 +123,7 @@ class Wishlist implements DataProviderInterface
      * Check if RSS feed allowed
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -124,6 +137,7 @@ class Wishlist implements DataProviderInterface
      * Get RSS feed items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -192,6 +206,7 @@ class Wishlist implements DataProviderInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCacheKey()
     {
@@ -200,6 +215,7 @@ class Wishlist implements DataProviderInterface
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -210,6 +226,7 @@ class Wishlist implements DataProviderInterface
      * Get data for Header section of RSS feed
      *
      * @return array
+     * @since 2.0.0
      */
     public function getHeader()
     {
@@ -228,6 +245,7 @@ class Wishlist implements DataProviderInterface
      * Retrieve Wishlist model
      *
      * @return \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     protected function getWishlist()
     {
@@ -240,6 +258,7 @@ class Wishlist implements DataProviderInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getProductPriceHtml(\Magento\Catalog\Model\Product $product)
     {
@@ -265,6 +284,7 @@ class Wishlist implements DataProviderInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -273,6 +293,7 @@ class Wishlist implements DataProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAuthRequired()
     {

@@ -6,30 +6,40 @@
 
 namespace Magento\Tax\Plugin\Checkout\CustomerData;
 
+/**
+ * Class \Magento\Tax\Plugin\Checkout\CustomerData\Cart
+ *
+ * @since 2.0.0
+ */
 class Cart
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Checkout\Helper\Data
+     * @since 2.0.0
      */
     protected $checkoutHelper;
 
     /**
      * @var \Magento\Tax\Block\Item\Price\Renderer
+     * @since 2.0.0
      */
     protected $itemPriceRenderer;
 
     /**
      * @var \Magento\Quote\Model\Quote|null
+     * @since 2.0.0
      */
     protected $quote = null;
 
     /**
      * @var array|null
+     * @since 2.0.0
      */
     protected $totals = null;
 
@@ -37,6 +47,7 @@ class Cart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -55,6 +66,7 @@ class Cart
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterGetSectionData(\Magento\Checkout\CustomerData\Cart $subject, $result)
     {
@@ -78,6 +90,7 @@ class Cart
      * Get subtotal, including tax
      *
      * @return float
+     * @since 2.0.0
      */
     protected function getSubtotalInclTax()
     {
@@ -93,6 +106,7 @@ class Cart
      * Get subtotal, excluding tax
      *
      * @return float
+     * @since 2.0.0
      */
     protected function getSubtotalExclTax()
     {
@@ -108,6 +122,7 @@ class Cart
      * Get totals
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -122,6 +137,7 @@ class Cart
      * Get active quote
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     protected function getQuote()
     {
@@ -137,6 +153,7 @@ class Cart
      * @param int $id
      * @param array $itemsHaystack
      * @return \Magento\Quote\Model\Quote\Item | bool
+     * @since 2.0.0
      */
     protected function findItemById($id, $itemsHaystack)
     {

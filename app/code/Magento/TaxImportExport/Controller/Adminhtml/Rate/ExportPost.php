@@ -8,12 +8,18 @@ namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost
+ *
+ * @since 2.0.0
+ */
 class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
      * Export action from import/export tax
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -86,6 +92,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAllowed()
     {

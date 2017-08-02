@@ -7,6 +7,7 @@ namespace Magento\Ui\Component;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class MassAction extends AbstractComponent
 {
@@ -14,6 +15,7 @@ class MassAction extends AbstractComponent
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -38,6 +40,7 @@ class MassAction extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

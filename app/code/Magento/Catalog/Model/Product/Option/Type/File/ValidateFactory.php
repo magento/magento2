@@ -6,10 +6,16 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory
+ *
+ * @since 2.0.0
+ */
 class ValidateFactory
 {
     /**
      * @return \Zend_Validate
+     * @since 2.0.0
      */
     public function create()
     {

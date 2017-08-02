@@ -23,46 +23,55 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory as Cred
 /**
  * Class Pdfdocs
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var Invoice
+     * @since 2.0.0
      */
     protected $pdfInvoice;
 
     /**
      * @var Shipment
+     * @since 2.0.0
      */
     protected $pdfShipment;
 
     /**
      * @var Creditmemo
+     * @since 2.0.0
      */
     protected $pdfCreditmemo;
 
     /**
      * @var DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var ShipmentCollectionFactory
+     * @since 2.0.0
      */
     protected $shipmentCollectionFactory;
 
     /**
      * @var InvoiceCollectionFactory
+     * @since 2.0.0
      */
     protected $invoiceCollectionFactory;
 
     /**
      * @var CreditmemoCollectionFactory
+     * @since 2.0.0
      */
     protected $creditmemoCollectionFactory;
 
@@ -80,6 +89,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      * @param OrderCollectionFactory $orderCollectionFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -113,6 +123,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

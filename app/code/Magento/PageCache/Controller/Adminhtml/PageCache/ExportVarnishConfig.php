@@ -8,15 +8,22 @@ namespace Magento\PageCache\Controller\Adminhtml\PageCache;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\PageCache\Controller\Adminhtml\PageCache\ExportVarnishConfig
+ *
+ * @since 2.0.0
+ */
 class ExportVarnishConfig extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Backend\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var \Magento\PageCache\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
@@ -24,6 +31,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\PageCache\Model\Config $config
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -39,6 +47,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action
      * Export Varnish Configuration as .vcl
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

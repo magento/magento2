@@ -13,11 +13,13 @@ use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationServic
  * Plugin around \Magento\Framework\Authorization::isAllowed
  *
  * Plugin to allow customer users to access resources with self permission
+ * @since 2.0.0
  */
 class CustomerAuthorization
 {
     /**
      * @var UserContextInterface
+     * @since 2.0.0
      */
     protected $userContext;
 
@@ -25,6 +27,7 @@ class CustomerAuthorization
      * Inject dependencies.
      *
      * @param UserContextInterface $userContext
+     * @since 2.0.0
      */
     public function __construct(UserContextInterface $userContext)
     {
@@ -42,6 +45,7 @@ class CustomerAuthorization
      * @return bool true If resource permission is self, to allow
      * customer access without further checks in parent method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundIsAllowed(
         \Magento\Framework\Authorization $subject,

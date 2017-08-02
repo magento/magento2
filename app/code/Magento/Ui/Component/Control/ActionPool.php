@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 
 /**
  * Class ActionPool
+ * @since 2.0.0
  */
 class ActionPool implements ActionPoolInterface
 {
@@ -25,6 +26,7 @@ class ActionPool implements ActionPoolInterface
      * Render context
      *
      * @var Context
+     * @since 2.0.0
      */
     protected $context;
 
@@ -32,6 +34,7 @@ class ActionPool implements ActionPoolInterface
      * Actions pool
      *
      * @var Item[]
+     * @since 2.0.0
      */
     protected $items;
 
@@ -39,11 +42,13 @@ class ActionPool implements ActionPoolInterface
      * Button factory
      *
      * @var ItemFactory
+     * @since 2.0.0
      */
     protected $itemFactory;
 
     /**
      * @var AbstractBlock
+     * @since 2.0.0
      */
     protected $toolbarBlock;
 
@@ -52,6 +57,7 @@ class ActionPool implements ActionPoolInterface
      *
      * @param Context $context
      * @param ItemFactory $itemFactory
+     * @since 2.0.0
      */
     public function __construct(Context $context, ItemFactory $itemFactory)
     {
@@ -63,6 +69,7 @@ class ActionPool implements ActionPoolInterface
      * Get toolbar block
      *
      * @return bool|BlockInterface
+     * @since 2.0.0
      */
     public function getToolbar()
     {
@@ -78,6 +85,7 @@ class ActionPool implements ActionPoolInterface
      * @param array $data
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     public function add($key, array $data, UiComponentInterface $component)
     {
@@ -97,6 +105,7 @@ class ActionPool implements ActionPoolInterface
      *
      * @param string $key
      * @return void
+     * @since 2.0.0
      */
     public function remove($key)
     {
@@ -109,6 +118,7 @@ class ActionPool implements ActionPoolInterface
      * @param string $key
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     public function update($key, array $data)
     {
@@ -124,6 +134,7 @@ class ActionPool implements ActionPoolInterface
      * @param  string $name
      * @param  array $arguments
      * @return void
+     * @since 2.1.0
      */
     public function addHtmlBlock($type, $name = '', array $arguments = [])
     {
@@ -140,6 +151,7 @@ class ActionPool implements ActionPoolInterface
      * @param string $key
      * @param UiComponentInterface $view
      * @return Container
+     * @since 2.0.0
      */
     protected function createContainer($key, UiComponentInterface $view)
     {

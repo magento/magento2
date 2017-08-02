@@ -10,6 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  *  Service Locator (instead DI container)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ServiceLocator
 {
@@ -17,6 +18,7 @@ class ServiceLocator
      * Domain abstract factory
      *
      * @var \Magento\Setup\Module\I18n\Factory
+     * @since 2.0.0
      */
     private static $_factory;
 
@@ -24,6 +26,7 @@ class ServiceLocator
      * Context manager
      *
      * @var \Magento\Setup\Module\I18n\Factory
+     * @since 2.0.0
      */
     private static $_context;
 
@@ -31,6 +34,7 @@ class ServiceLocator
      * Dictionary generator
      *
      * @var \Magento\Setup\Module\I18n\Dictionary\Generator
+     * @since 2.0.0
      */
     private static $_dictionaryGenerator;
 
@@ -38,6 +42,7 @@ class ServiceLocator
      * Pack generator
      *
      * @var \Magento\Setup\Module\I18n\Pack\Generator
+     * @since 2.0.0
      */
     private static $_packGenerator;
 
@@ -45,6 +50,7 @@ class ServiceLocator
      * Get dictionary generator
      *
      * @return \Magento\Setup\Module\I18n\Dictionary\Generator
+     * @since 2.0.0
      */
     public static function getDictionaryGenerator()
     {
@@ -80,6 +86,7 @@ class ServiceLocator
      * Get pack generator
      *
      * @return \Magento\Setup\Module\I18n\Pack\Generator
+     * @since 2.0.0
      */
     public static function getPackGenerator()
     {
@@ -96,6 +103,7 @@ class ServiceLocator
      * Get factory
      *
      * @return \Magento\Setup\Module\I18n\Factory
+     * @since 2.0.0
      */
     private static function _getFactory()
     {
@@ -109,6 +117,7 @@ class ServiceLocator
      * Get context
      *
      * @return \Magento\Setup\Module\I18n\Context
+     * @since 2.0.0
      */
     private static function _getContext()
     {

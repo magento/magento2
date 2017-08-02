@@ -6,12 +6,18 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role\RoleGrid
+ *
+ * @since 2.0.0
+ */
 class RoleGrid extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
      * Action for ajax request from grid
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

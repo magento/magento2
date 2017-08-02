@@ -5,12 +5,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Button;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Save
+ *
+ * @since 2.1.0
+ */
 class Save extends Generic
 {
     /**
      * Get button data
      *
      * @return array
+     * @since 2.1.0
      */
     public function getButtonData()
     {

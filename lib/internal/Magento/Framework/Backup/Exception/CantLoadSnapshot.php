@@ -8,6 +8,7 @@ namespace Magento\Framework\Backup\Exception;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class CantLoadSnapshot extends \Magento\Framework\Backup\BackupException
 {

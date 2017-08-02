@@ -11,6 +11,7 @@ namespace Magento\Config\Model\Config\Structure\Mapper\Helper;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class RelativePathConverter
 {
@@ -21,6 +22,7 @@ class RelativePathConverter
      * @param string $relativePath
      * @return string
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function convert($nodePath, $relativePath)
     {

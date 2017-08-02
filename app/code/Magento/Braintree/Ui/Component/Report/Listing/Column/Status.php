@@ -10,11 +10,13 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class Status
+ * @since 2.1.0
  */
 class Status implements OptionSourceInterface
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $options;
 
@@ -22,6 +24,7 @@ class Status implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.1.0
      */
     public function toOptionArray()
     {
@@ -40,6 +43,7 @@ class Status implements OptionSourceInterface
 
     /**
      * @return array
+     * @since 2.1.0
      */
     private function getAvailableStatuses()
     {

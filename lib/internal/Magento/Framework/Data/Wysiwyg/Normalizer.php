@@ -7,6 +7,7 @@ namespace Magento\Framework\Data\Wysiwyg;
 
 /**
  * Normalize widget content in Wysiwyg editor
+ * @since 2.2.0
  */
 class Normalizer
 {
@@ -23,6 +24,7 @@ class Normalizer
      *
      * @param string $content
      * @return string
+     * @since 2.2.0
      */
     public function replaceReservedCharacters($content)
     {
@@ -38,6 +40,7 @@ class Normalizer
      *
      * @param string $content
      * @return string
+     * @since 2.2.0
      */
     public function restoreReservedCharacters($content)
     {

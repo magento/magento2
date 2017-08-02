@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class ClientException
  * @package Magento\Payment\Gateway\Http
  * @api
+ * @since 2.0.0
  */
 class ClientException extends LocalizedException
 {

@@ -13,21 +13,34 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
+/**
+ * Class \Magento\Customer\Controller\Account\Confirmation
+ *
+ * @since 2.0.0
+ */
 class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $customerAccountManagement;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -37,6 +50,7 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
      * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -56,6 +70,7 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
      * Send confirmation link to specified email
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

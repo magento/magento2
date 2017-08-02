@@ -110,6 +110,7 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getLimitMethod()
  *
  * @api
+ * @since 2.0.0
  */
 class RateRequest extends \Magento\Framework\DataObject
 {

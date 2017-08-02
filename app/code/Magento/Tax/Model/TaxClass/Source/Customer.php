@@ -12,21 +12,25 @@ use Magento\Tax\Model\ClassModel;
 
 /**
  * Customer tax class source model.
+ * @since 2.0.0
  */
 class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
+     * @since 2.0.0
      */
     protected $taxClassRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -36,6 +40,7 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository,
@@ -52,6 +57,7 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      * @throws StateException
+     * @since 2.0.0
      */
     public function getAllOptions()
     {

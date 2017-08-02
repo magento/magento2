@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Factory;
 
+/**
+ * Interface \Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface
+ *
+ * @since 2.2.0
+ */
 interface ComponentFactoryInterface
 {
     /**
@@ -13,6 +18,7 @@ interface ComponentFactoryInterface
      * @param array $bundleComponents
      * @param array $arguments
      * @return bool|mixed
+     * @since 2.2.0
      */
     public function create(array &$bundleComponents, array $arguments = []);
 }

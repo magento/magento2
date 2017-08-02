@@ -11,6 +11,7 @@ use Magento\Framework\View\LayoutInterface;
  * Interface BuilderInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface BuilderInterface
 {
@@ -18,6 +19,7 @@ interface BuilderInterface
      * Build structure
      *
      * @return LayoutInterface
+     * @since 2.0.0
      */
     public function build();
 }

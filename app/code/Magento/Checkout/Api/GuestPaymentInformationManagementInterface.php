@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api;
 /**
  * Interface for managing guest payment information
  * @api
+ * @since 2.0.0
  */
 interface GuestPaymentInformationManagementInterface
 {
@@ -20,6 +21,7 @@ interface GuestPaymentInformationManagementInterface
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
+     * @since 2.0.0
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -37,6 +39,7 @@ interface GuestPaymentInformationManagementInterface
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
+     * @since 2.0.0
      */
     public function savePaymentInformation(
         $cartId,
@@ -50,6 +53,7 @@ interface GuestPaymentInformationManagementInterface
      *
      * @param string $cartId
      * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
+     * @since 2.0.0
      */
     public function getPaymentInformation($cartId);
 }

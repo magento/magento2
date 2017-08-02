@@ -30,11 +30,13 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Stock extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\ProductAlert\Model\ResourceModel\Stock\Customer\CollectionFactory
+     * @since 2.0.0
      */
     protected $_customerColFactory;
 
@@ -45,6 +47,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -60,6 +63,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -68,6 +72,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return Collection
+     * @since 2.0.0
      */
     public function getCustomerCollection()
     {
@@ -76,6 +81,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadByParam()
     {
@@ -89,6 +95,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
      * @param int $customerId
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteCustomer($customerId, $websiteId = 0)
     {

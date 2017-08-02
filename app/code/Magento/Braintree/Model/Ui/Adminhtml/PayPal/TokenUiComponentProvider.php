@@ -16,22 +16,26 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
  * Gets Ui component configuration for Braintree PayPal Vault
+ * @since 2.2.0
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
 
     /**
      * @var TokenUiComponentInterfaceFactory
+     * @since 2.2.0
      */
     private $componentFactory;
 
     /**
      * @var UrlInterface
+     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
@@ -39,6 +43,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
      * @param TokenUiComponentInterfaceFactory $componentFactory
      * @param UrlInterface $urlBuilder
      * @param Config $config
+     * @since 2.2.0
      */
     public function __construct(
         TokenUiComponentInterfaceFactory $componentFactory,
@@ -52,6 +57,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
@@ -76,6 +82,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     /**
      * Get url to retrieve payment method nonce
      * @return string
+     * @since 2.2.0
      */
     private function getNonceRetrieveUrl()
     {

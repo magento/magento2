@@ -13,6 +13,11 @@ use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
+/**
+ * Class \Magento\Weee\Model\Total\Quote\Weee
+ *
+ * @since 2.0.0
+ */
 class Weee extends AbstractTotal
 {
     /**
@@ -26,11 +31,13 @@ class Weee extends AbstractTotal
 
     /**
      * @var \Magento\Weee\Helper\Data
+     * @since 2.0.0
      */
     protected $weeeData;
 
     /**
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_store;
 
@@ -38,6 +45,7 @@ class Weee extends AbstractTotal
      * Counter
      *
      * @var int
+     * @since 2.0.0
      */
     protected $counter = 0;
 
@@ -45,6 +53,7 @@ class Weee extends AbstractTotal
      * Array to keep track of weee taxable item code to quote item
      *
      * @var array
+     * @since 2.0.0
      */
     protected $weeeCodeToItemMap;
 
@@ -52,6 +61,7 @@ class Weee extends AbstractTotal
      * Accumulates totals for Weee excluding tax
      *
      * @var int
+     * @since 2.0.0
      */
     protected $weeeTotalExclTax;
 
@@ -59,17 +69,20 @@ class Weee extends AbstractTotal
      * Accumulates totals for Weee base excluding tax
      *
      * @var int
+     * @since 2.0.0
      */
     protected $weeeBaseTotalExclTax;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param PriceCurrencyInterface $priceCurrency
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Weee\Helper\Data $weeeData,
@@ -88,6 +101,7 @@ class Weee extends AbstractTotal
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
+     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -138,6 +152,7 @@ class Weee extends AbstractTotal
      * @return  void|$this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function process(
         \Magento\Quote\Model\Quote\Address $address,
@@ -256,6 +271,7 @@ class Weee extends AbstractTotal
      * @param   float $rowValueInclTax
      * @param   float $baseRowValueInclTax
      * @return  $this
+     * @since 2.0.0
      */
     protected function processTotalAmount(
         $total,
@@ -285,6 +301,7 @@ class Weee extends AbstractTotal
      * id for an item.
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getNextIncrement()
     {
@@ -298,6 +315,7 @@ class Weee extends AbstractTotal
      * @return  void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -313,6 +331,7 @@ class Weee extends AbstractTotal
      *
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
+     * @since 2.0.0
      */
     protected function resetItemData($item)
     {
@@ -338,6 +357,7 @@ class Weee extends AbstractTotal
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -353,6 +373,7 @@ class Weee extends AbstractTotal
      * @return  array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function processConfigArray($config, $store)
     {
@@ -364,6 +385,7 @@ class Weee extends AbstractTotal
      *
      * TODO: fix
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {

@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Product;
 /**
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
@@ -25,6 +26,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param Product|\Magento\Framework\DataObject $row
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {
@@ -35,6 +37,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Remove some grid columns for product grid in popup
      *
      * @return void
+     * @since 2.0.0
      */
     public function _prepareColumns()
     {
@@ -48,6 +51,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Add import action to massaction block
      *
      * @return $this
+     * @since 2.0.0
      */
     public function _prepareMassaction()
     {
@@ -59,6 +63,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -84,6 +89,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Define grid update URL for ajax queries
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {

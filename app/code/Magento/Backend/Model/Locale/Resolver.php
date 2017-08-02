@@ -8,26 +8,31 @@ namespace Magento\Backend\Model\Locale;
 /**
  * Backend locale model
  * @api
+ * @since 2.0.0
  */
 class Resolver extends \Magento\Framework\Locale\Resolver
 {
     /**
      * @var \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Backend\Model\Locale\Manager
+     * @since 2.0.0
      */
     protected $_localeManager;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\Validator\Locale
+     * @since 2.0.0
      */
     protected $_localeValidator;
 
@@ -41,6 +46,7 @@ class Resolver extends \Magento\Framework\Locale\Resolver
      * @param \Magento\Framework\Validator\Locale $localeValidator
      * @param null $locale
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -64,6 +70,7 @@ class Resolver extends \Magento\Framework\Locale\Resolver
      *
      * @param string $locale
      * @return $this
+     * @since 2.0.0
      */
     public function setLocale($locale = null)
     {

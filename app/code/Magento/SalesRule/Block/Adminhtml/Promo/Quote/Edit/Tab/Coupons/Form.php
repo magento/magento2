@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
  * Coupons generation parameters form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Sales rule coupon
      *
      * @var \Magento\SalesRule\Helper\Coupon
+     * @since 2.0.0
      */
     protected $_salesRuleCoupon = null;
 
@@ -25,6 +27,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\SalesRule\Helper\Coupon $salesRuleCoupon
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +45,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -171,6 +175,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve URL to Generate Action
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGenerateUrl()
     {

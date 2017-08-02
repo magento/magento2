@@ -8,30 +8,40 @@ namespace Magento\Wishlist\Controller;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Wishlist\Controller\WishlistProvider
+ *
+ * @since 2.0.0
+ */
 class WishlistProvider implements WishlistProviderInterface
 {
     /**
      * @var \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     protected $wishlist;
 
     /**
      * @var \Magento\Wishlist\Model\WishlistFactory
+     * @since 2.0.0
      */
     protected $wishlistFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
@@ -40,6 +50,7 @@ class WishlistProvider implements WishlistProviderInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param RequestInterface $request
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
@@ -56,6 +67,7 @@ class WishlistProvider implements WishlistProviderInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getWishlist($wishlistId = null)
     {

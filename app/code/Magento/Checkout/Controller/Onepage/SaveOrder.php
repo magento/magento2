@@ -8,6 +8,11 @@ namespace Magento\Checkout\Controller\Onepage;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
+/**
+ * Class \Magento\Checkout\Controller\Onepage\SaveOrder
+ *
+ * @since 2.0.0
+ */
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
     /**
@@ -16,6 +21,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function execute()
     {

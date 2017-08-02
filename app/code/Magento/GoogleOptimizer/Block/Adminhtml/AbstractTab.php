@@ -7,26 +7,35 @@
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\AbstractTab
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\GoogleOptimizer\Helper\Data
+     * @since 2.0.0
      */
     protected $_helperData;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var \Magento\GoogleOptimizer\Helper\Code
+     * @since 2.0.0
      */
     protected $_codeHelper;
 
     /**
      * @var \Magento\GoogleOptimizer\Helper\Form
+     * @since 2.0.0
      */
     protected $_formHelper;
 
@@ -38,6 +47,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
      * @param \Magento\GoogleOptimizer\Helper\Form $formHelper
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -61,6 +71,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
      * Prepare form before rendering HTML
      *
      * @return \Magento\Backend\Block\Widget\Form
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -72,6 +83,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
      * Get google experiment code model
      *
      * @return \Magento\GoogleOptimizer\Model\Code|null
+     * @since 2.0.0
      */
     protected function _getGoogleExperiment()
     {
@@ -86,6 +98,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
      * Get Entity model
      *
      * @return \Magento\Catalog\Model\AbstractModel
+     * @since 2.0.0
      */
     abstract protected function _getEntity();
 
@@ -93,6 +106,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
      * Can show tab in tabs
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -103,6 +117,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
      * Tab is hidden
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHidden()
     {

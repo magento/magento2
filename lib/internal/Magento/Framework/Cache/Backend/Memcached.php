@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Memcached
+ *
+ * @since 2.0.0
+ */
 class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -22,6 +27,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      *
      * @param array $options @see \Zend_Cache_Backend_Memcached::__construct()
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function __construct(array $options = [])
     {
@@ -48,6 +54,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * @param string $id    Main data's ID
      * @param int    $index Particular chunk number to return ID for
      * @return string
+     * @since 2.0.0
      */
     protected function _getChunkId($id, $index)
     {
@@ -60,6 +67,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * @param string $id     ID of data's info cell
      * @param int    $chunks Number of chunks to remove (basically, the number after '{splitted}|')
      * @return null
+     * @since 2.0.0
      */
     protected function _cleanTheMess($id, $chunks)
     {
@@ -78,6 +86,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * @param string[] $tags           @see \Zend_Cache_Backend_Memcached::save()
      * @param bool $specificLifetime   @see \Zend_Cache_Backend_Memcached::save()
      * @return bool
+     * @since 2.0.0
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -105,6 +114,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * @param string $id                     @see \Zend_Cache_Backend_Memcached::load()
      * @param bool   $doNotTestCacheValidity @see \Zend_Cache_Backend_Memcached::load()
      * @return bool|false|string
+     * @since 2.0.0
      */
     public function load($id, $doNotTestCacheValidity = false)
     {

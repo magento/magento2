@@ -14,36 +14,43 @@ use Magento\Framework\Phrase;
  * Magento Library
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Tree
 {
     /**
      * @var string|int
+     * @since 2.0.0
      */
     private $_id;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $_left;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $_right;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $_level;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     private $_pid;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $_nodesInfo = [];
 
@@ -58,16 +65,19 @@ class Tree
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     private $_extTables = [];
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     private $_db;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $_table;
 
@@ -76,6 +86,7 @@ class Tree
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function __construct($config = [])
     {
@@ -146,6 +157,7 @@ class Tree
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setIdField($name)
     {
@@ -158,6 +170,7 @@ class Tree
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setLeftField($name)
     {
@@ -170,6 +183,7 @@ class Tree
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setRightField($name)
     {
@@ -182,6 +196,7 @@ class Tree
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setLevelField($name)
     {
@@ -194,6 +209,7 @@ class Tree
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setPidField($name)
     {
@@ -206,6 +222,7 @@ class Tree
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setTable($name)
     {
@@ -215,6 +232,7 @@ class Tree
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getKeys()
     {
@@ -232,6 +250,7 @@ class Tree
      *
      * @param array $data
      * @return string
+     * @since 2.0.0
      */
     public function clear($data = [])
     {
@@ -257,6 +276,7 @@ class Tree
      *
      * @param string|int $nodeId
      * @return array
+     * @since 2.0.0
      */
     public function getNodeInfo($nodeId)
     {
@@ -276,6 +296,7 @@ class Tree
      * @param array $data
      * @return false|string
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function appendChild($nodeId, $data)
     {
@@ -342,6 +363,7 @@ class Tree
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function checkNodes()
     {
@@ -372,6 +394,7 @@ class Tree
     /**
      * @param string|int $nodeId
      * @return bool|Node|void
+     * @since 2.0.0
      */
     public function removeNode($nodeId)
     {
@@ -447,6 +470,7 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function moveNode($eId, $pId, $aId = 0)
     {
@@ -782,6 +806,7 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function moveNodes($eId, $pId, $aId = 0)
     {
@@ -980,6 +1005,7 @@ class Tree
      * @param string $joinCondition
      * @param string $fields
      * @return void
+     * @since 2.0.0
      */
     public function addTable($tableName, $joinCondition, $fields = '*')
     {
@@ -989,6 +1015,7 @@ class Tree
     /**
      * @param Select $select
      * @return void
+     * @since 2.0.0
      */
     protected function _addExtTablesToSelect(Select &$select)
     {
@@ -1003,6 +1030,7 @@ class Tree
      * @param int $endLevel
      * @return NodeSet
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function getChildren($nodeId, $startLevel = 0, $endLevel = 0)
     {
@@ -1048,6 +1076,7 @@ class Tree
     /**
      * @param string|int $nodeId
      * @return Node
+     * @since 2.0.0
      */
     public function getNode($nodeId)
     {

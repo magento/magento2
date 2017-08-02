@@ -10,6 +10,7 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
  * Class Email
  *
  * @package Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
+ * @since 2.0.0
  */
 abstract class Email extends \Magento\Backend\App\Action
 {
@@ -22,12 +23,14 @@ abstract class Email extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -41,6 +44,7 @@ abstract class Email extends \Magento\Backend\App\Action
      * Notify user
      *
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

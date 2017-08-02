@@ -9,21 +9,29 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Api\AttributeTypeResolverInterface;
 use Magento\Framework\Api\ExtensionAttribute\Config;
 
+/**
+ * Class \Magento\Framework\Reflection\AttributeTypeResolver
+ *
+ * @since 2.0.0
+ */
 class AttributeTypeResolver implements AttributeTypeResolverInterface
 {
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var TypeProcessor
+     * @since 2.0.0
      */
     protected $typeProcessor;
 
     /**
      * @param TypeProcessor $typeProcessor
      * @param Config $config
+     * @since 2.0.0
      */
     public function __construct(TypeProcessor $typeProcessor, Config $config)
     {
@@ -33,6 +41,7 @@ class AttributeTypeResolver implements AttributeTypeResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function resolveObjectType($attributeCode, $value, $context)
     {

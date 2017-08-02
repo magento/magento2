@@ -10,6 +10,7 @@ namespace Magento\Framework\HTTP;
  * Factory for HTTP client classes
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class ClientFactory
 {
@@ -17,6 +18,7 @@ class ClientFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -24,6 +26,7 @@ class ClientFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -32,6 +35,7 @@ class ClientFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -46,6 +50,7 @@ class ClientFactory
      *
      * @param array $data
      * @return ClientInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

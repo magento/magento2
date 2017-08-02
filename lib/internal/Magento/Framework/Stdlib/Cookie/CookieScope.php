@@ -8,26 +8,31 @@ namespace Magento\Framework\Stdlib\Cookie;
 
 /**
  * CookieScope is used to store default scope metadata.
+ * @since 2.0.0
  */
 class CookieScope implements CookieScopeInterface
 {
     /**
      * @var SensitiveCookieMetadata
+     * @since 2.0.0
      */
     private $sensitiveCookieMetadata;
 
     /**
      * @var PublicCookieMetadata
+     * @since 2.0.0
      */
     private $publicCookieMetadata;
 
     /**
      * @var CookieMetadata
+     * @since 2.0.0
      */
     private $cookieMetadata;
 
     /**
      * @var CookieMetadataFactory
+     * @since 2.0.0
      */
     private $cookieMetadataFactory;
 
@@ -36,6 +41,7 @@ class CookieScope implements CookieScopeInterface
      * @param SensitiveCookieMetadata $sensitiveCookieMetadata
      * @param PublicCookieMetadata $publicCookieMetadata
      * @param CookieMetadata $deleteCookieMetadata
+     * @since 2.0.0
      */
     public function __construct(
         CookieMetadataFactory $cookieMetadataFactory,
@@ -55,6 +61,7 @@ class CookieScope implements CookieScopeInterface
      *
      * @param SensitiveCookieMetadata|null $override
      * @return SensitiveCookieMetadata
+     * @since 2.0.0
      */
     public function getSensitiveCookieMetadata(SensitiveCookieMetadata $override = null)
     {
@@ -76,6 +83,7 @@ class CookieScope implements CookieScopeInterface
      *
      * @param PublicCookieMetadata|null $override
      * @return PublicCookieMetadata
+     * @since 2.0.0
      */
     public function getPublicCookieMetadata(PublicCookieMetadata $override = null)
     {
@@ -97,6 +105,7 @@ class CookieScope implements CookieScopeInterface
      *
      * @param CookieMetadata|null $override
      * @return CookieMetadata
+     * @since 2.0.0
      */
     public function getCookieMetadata(CookieMetadata $override = null)
     {

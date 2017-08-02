@@ -12,16 +12,19 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog inventory module observer
+ * @since 2.0.0
  */
 class DisplayProductStatusInfoObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @param StockConfigurationInterface $stockConfiguration
+     * @since 2.0.0
      */
     public function __construct(StockConfigurationInterface $stockConfiguration)
     {
@@ -33,6 +36,7 @@ class DisplayProductStatusInfoObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

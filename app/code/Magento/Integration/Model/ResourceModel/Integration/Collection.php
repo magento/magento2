@@ -7,6 +7,7 @@ namespace Magento\Integration\Model\ResourceModel\Integration;
 
 /**
  * Integrations collection.
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -14,6 +15,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource collection initialization.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add filter for finding integrations with unsecure URLs.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addUnsecureUrlsFilter()
     {

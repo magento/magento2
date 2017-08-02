@@ -11,17 +11,24 @@
  */
 namespace Magento\Captcha\Model\Config;
 
+/**
+ * Class \Magento\Captcha\Model\Config\Font
+ *
+ * @since 2.0.0
+ */
 class Font implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Captcha data
      *
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $_captchaData = null;
 
     /**
      * @param \Magento\Captcha\Helper\Data $captchaData
+     * @since 2.0.0
      */
     public function __construct(\Magento\Captcha\Helper\Data $captchaData)
     {
@@ -32,6 +39,7 @@ class Font implements \Magento\Framework\Option\ArrayInterface
      * Get options for font selection field
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

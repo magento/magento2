@@ -13,6 +13,7 @@ namespace Magento\Backend\Block\Page;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Notices extends \Magento\Backend\Block\Template
 {
@@ -20,6 +21,7 @@ class Notices extends \Magento\Backend\Block\Template
      * Check if noscript notice should be displayed
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function displayNoscriptNotice()
     {
@@ -33,6 +35,7 @@ class Notices extends \Magento\Backend\Block\Template
      * Check if demo store notice should be displayed
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function displayDemoNotice()
     {

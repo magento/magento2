@@ -8,6 +8,11 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
@@ -19,12 +24,14 @@ class NewAction extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @since 2.0.0
      */
     protected $shipmentLoader;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -38,6 +45,7 @@ class NewAction extends \Magento\Backend\App\Action
      * Shipment create page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

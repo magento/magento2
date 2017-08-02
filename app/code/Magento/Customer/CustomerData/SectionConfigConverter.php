@@ -5,6 +5,11 @@
  */
 namespace Magento\Customer\CustomerData;
 
+/**
+ * Class \Magento\Customer\CustomerData\SectionConfigConverter
+ *
+ * @since 2.0.0
+ */
 class SectionConfigConverter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -14,6 +19,7 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convert($source)
     {

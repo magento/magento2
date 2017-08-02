@@ -12,6 +12,7 @@ namespace Magento\Framework\Validator;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class DataObject implements \Zend_Validate_Interface
 {
@@ -19,6 +20,7 @@ class DataObject implements \Zend_Validate_Interface
      * Validation rules per scope (particular fields or entire entity)
      *
      * @var \Zend_Validate_Interface[]
+     * @since 2.0.0
      */
     private $_rules = [];
 
@@ -26,6 +28,7 @@ class DataObject implements \Zend_Validate_Interface
      * Validation error messages
      *
      * @var array
+     * @since 2.0.0
      */
     private $_messages = [];
 
@@ -36,6 +39,7 @@ class DataObject implements \Zend_Validate_Interface
      * @param string $fieldName Field name to apply validation to, or empty value to validate entity as a whole
      * @return \Magento\Framework\Validator\DataObject
      * @api
+     * @since 2.0.0
      */
     public function addRule(\Zend_Validate_Interface $validator, $fieldName = '')
     {
@@ -61,6 +65,7 @@ class DataObject implements \Zend_Validate_Interface
      *
      * @throws \Exception
      * @api
+     * @since 2.0.0
      */
     public function isValid($entity)
     {
@@ -79,6 +84,7 @@ class DataObject implements \Zend_Validate_Interface
      * Return error messages (if any) after the last validation
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMessages()
     {

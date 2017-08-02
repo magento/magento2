@@ -11,15 +11,22 @@ use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Authorization\RoleLocatorInterface;
 
+/**
+ * Class \Magento\Webapi\Model\WebapiRoleLocator
+ *
+ * @since 2.0.0
+ */
 class WebapiRoleLocator implements RoleLocatorInterface
 {
     /**
      * @var UserContextInterface
+     * @since 2.0.0
      */
     protected $userContext;
 
     /**
      * @var RoleCollectionFactory
+     * @since 2.0.0
      */
     protected $roleCollectionFactory;
 
@@ -28,6 +35,7 @@ class WebapiRoleLocator implements RoleLocatorInterface
      *
      * @param UserContextInterface $userContext
      * @param RoleCollectionFactory $roleCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         UserContextInterface $userContext,
@@ -39,6 +47,7 @@ class WebapiRoleLocator implements RoleLocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAclRoleId()
     {

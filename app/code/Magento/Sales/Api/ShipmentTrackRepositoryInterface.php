@@ -11,6 +11,7 @@ namespace Magento\Sales\Api;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package.
  * @api
+ * @since 2.0.0
  */
 interface ShipmentTrackRepositoryInterface
 {
@@ -19,6 +20,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\ShipmentTrackSearchResultInterface Shipment track search result interface.
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -27,6 +29,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param int $id The shipment track ID.
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface Shipment track interface.
+     * @since 2.0.0
      */
     public function get($id);
 
@@ -35,6 +38,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackInterface $entity The shipment track.
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentTrackInterface $entity);
 
@@ -43,6 +47,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackInterface $entity The shipment track.
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface Shipment track interface.
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\ShipmentTrackInterface $entity);
 
@@ -51,6 +56,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param int $id The shipment track ID.
      * @return bool
+     * @since 2.0.0
      */
     public function deleteById($id);
 }

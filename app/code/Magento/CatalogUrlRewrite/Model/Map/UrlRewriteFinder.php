@@ -16,22 +16,35 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
  * A group of identifiers specifies a query consumed by the client to retrieve existing url rewrites from the database
  * Clients will query a map of DatabaseMapInterface type through this class resulting into a set of url rewrites results
  * Each map type will fallback to a UrlFinderInterface by identifiers for unmapped values
+ * @since 2.2.0
  */
 class UrlRewriteFinder
 {
     const ENTITY_TYPE_CATEGORY = 'category';
     const ENTITY_TYPE_PRODUCT = 'product';
 
-    /** @var DatabaseMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
+     * @since 2.2.0
+     */
     private $databaseMapPool;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @since 2.2.0
+     */
     private $urlFinder;
 
-    /** @var UrlRewrite */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @since 2.2.0
+     */
     private $urlRewritePrototype;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.2.0
+     */
     private $urlRewriteClassNames = [];
 
     /**
@@ -39,6 +52,7 @@ class UrlRewriteFinder
      * @param UrlFinderInterface $urlFinder
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param string[] $urlRewriteClassNames
+     * @since 2.2.0
      */
     public function __construct(
         DatabaseMapPool $databaseMapPool,
@@ -61,6 +75,7 @@ class UrlRewriteFinder
      * @param string $entityType
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @since 2.2.0
      */
     public function findAllByData($entityId, $storeId, $entityType, $rootCategoryId = null)
     {
@@ -91,6 +106,7 @@ class UrlRewriteFinder
      *
      * @param array $data
      * @return UrlRewrite[]
+     * @since 2.2.0
      */
     private function arrayToUrlRewriteObject(array $data)
     {
@@ -105,6 +121,7 @@ class UrlRewriteFinder
      *
      * @param array $data
      * @return UrlRewrite
+     * @since 2.2.0
      */
     private function createUrlRewrite(array $data)
     {

@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
  * SalesRule Rule Customer Model Resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $customerId
      * @param int $ruleId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCustomerRule($rule, $customerId, $ruleId)
     {

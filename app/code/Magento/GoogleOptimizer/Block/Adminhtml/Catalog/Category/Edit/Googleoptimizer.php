@@ -6,10 +6,16 @@
 
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Googleoptimizer
+ *
+ * @since 2.1.0
+ */
 class Googleoptimizer extends \Magento\Backend\Block\Template
 {
     /**
      * @return string
+     * @since 2.1.0
      */
     public function toHtml()
     {

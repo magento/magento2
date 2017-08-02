@@ -15,36 +15,43 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class Bundle
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Bundle
 {
     /**
      * @var ProductCustomOptionInterfaceFactory
+     * @since 2.1.0
      */
     protected $customOptionFactory;
 
     /**
      * @var RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var OptionFactory
+     * @since 2.1.0
      */
     protected $optionFactory;
 
     /**
      * @var LinkFactory
+     * @since 2.1.0
      */
     protected $linkFactory;
 
     /**
      * @var ProductRepository
+     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var StoreManager
+     * @since 2.1.0
      */
     protected $storeManager;
 
@@ -55,6 +62,7 @@ class Bundle
      * @param ProductRepository $productRepository
      * @param StoreManager $storeManager
      * @param ProductCustomOptionInterfaceFactory $customOptionFactory
+     * @since 2.0.0
      */
     public function __construct(
         RequestInterface $request,
@@ -82,6 +90,7 @@ class Bundle
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
@@ -118,6 +127,7 @@ class Bundle
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.1.0
      */
     protected function processBundleOptionsData(\Magento\Catalog\Model\Product $product)
     {
@@ -162,6 +172,7 @@ class Bundle
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @since 2.1.0
      */
     protected function processDynamicOptionsData(\Magento\Catalog\Model\Product $product)
     {
@@ -197,6 +208,7 @@ class Bundle
      * @param array $linkData
      *
      * @return \Magento\Bundle\Api\Data\LinkInterface
+     * @since 2.2.0
      */
     private function buildLink(
         \Magento\Catalog\Model\Product $product,

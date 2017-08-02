@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Action
+ * @since 2.0.0
  */
 class Action extends AbstractComponent implements ControlInterface
 {
@@ -19,6 +20,7 @@ class Action extends AbstractComponent implements ControlInterface
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

@@ -19,6 +19,7 @@ use Magento\Framework\Data\ValueSourceInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractComponent extends DataObject implements UiComponentInterface
 {
@@ -26,21 +27,25 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Render context
      *
      * @var ContextInterface
+     * @since 2.0.0
      */
     protected $context;
 
     /**
      * @var UiComponentInterface[]
+     * @since 2.0.0
      */
     protected $components;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $componentData = [];
 
     /**
      * @var DataSourceInterface[]
+     * @since 2.0.0
      */
     protected $dataSources = [];
 
@@ -50,6 +55,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * @param ContextInterface $context
      * @param UiComponentInterface[] $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -66,6 +72,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Get component context
      *
      * @return ContextInterface
+     * @since 2.0.0
      */
     public function getContext()
     {
@@ -76,6 +83,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -86,6 +94,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Prepare component configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -123,6 +132,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param UiComponentInterface $component
      * @return $this
+     * @since 2.1.0
      */
     protected function prepareChildComponent(UiComponentInterface $component)
     {
@@ -141,6 +151,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Produce and return block's html output
      *
      * @return string
+     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -151,6 +162,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Render component
      *
      * @return string
+     * @since 2.0.0
      */
     public function render()
     {
@@ -164,6 +176,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * @param string $name
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     public function addComponent($name, UiComponentInterface $component)
     {
@@ -173,6 +186,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     /**
      * @param string $name
      * @return UiComponentInterface
+     * @since 2.0.0
      */
     public function getComponent($name)
     {
@@ -183,6 +197,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Get components
      *
      * @return UiComponentInterface[]
+     * @since 2.0.0
      */
     public function getChildComponents()
     {
@@ -194,6 +209,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     public function renderChildComponent($name)
     {
@@ -208,6 +224,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Get template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemplate()
     {
@@ -218,6 +235,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * Get component configuration
      *
      * @return array
+     * @since 2.0.0
      */
     public function getConfiguration()
     {
@@ -230,6 +248,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param UiComponentInterface $component
      * @return array
+     * @since 2.0.0
      */
     public function getJsConfig(UiComponentInterface $component)
     {
@@ -246,6 +265,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * @param string|array $key
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     public function setData($key, $value = null)
     {
@@ -258,6 +278,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * @param string $key
      * @param string|int $index
      * @return mixed
+     * @since 2.0.0
      */
     public function getData($key = '', $index = null)
     {
@@ -269,6 +290,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -277,6 +299,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataSourceData()
     {
@@ -288,6 +311,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     protected function initObservers(array & $data = [])
     {

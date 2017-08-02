@@ -6,6 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\SuggestAttributes
+ *
+ * @since 2.0.0
+ */
 class SuggestAttributes extends \Magento\Backend\App\Action
 {
     /**
@@ -17,11 +22,13 @@ class SuggestAttributes extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -29,6 +36,7 @@ class SuggestAttributes extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -44,6 +52,7 @@ class SuggestAttributes extends \Magento\Backend\App\Action
      * Search for attributes by part of attribute's label in admin store
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

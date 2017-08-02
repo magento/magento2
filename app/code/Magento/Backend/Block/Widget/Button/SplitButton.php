@@ -17,6 +17,7 @@ namespace Magento\Backend\Block\Widget\Button;
  * @method string getStyle()
  * @method array getDataAttribute()
  * @api
+ * @since 2.0.0
  */
 class SplitButton extends \Magento\Backend\Block\Widget
 {
@@ -24,6 +25,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * Define block template
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -37,6 +39,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * Retrieve <div> wrapper attributes html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributesHtml()
     {
@@ -64,6 +67,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * Retrieve button attributes html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getButtonAttributesHtml()
     {
@@ -105,6 +109,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * Retrieve toggle button attributes html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getToggleAttributesHtml()
     {
@@ -139,6 +144,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * @param array $option
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getOptionAttributesHtml($key, $option)
     {
@@ -169,6 +175,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * If this function returns false then split button will be rendered as simple button
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasSplit()
     {
@@ -181,6 +188,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * @param array $data
      * @param array &$attributes
      * @return void
+     * @since 2.0.0
      */
     protected function _getDataAttributes($data, &$attributes)
     {
@@ -198,6 +206,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * @param string $disabled
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _prepareOptionAttributes($option, $title, $classes, $disabled)
     {
@@ -222,6 +231,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      *
      * @param array $attributes
      * @return string
+     * @since 2.0.0
      */
     protected function _getAttributesString($attributes)
     {

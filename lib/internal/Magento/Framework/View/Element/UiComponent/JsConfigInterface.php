@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface JsConfigInterface
+ * @since 2.0.0
  */
 interface JsConfigInterface extends UiComponentInterface
 {
@@ -17,6 +18,7 @@ interface JsConfigInterface extends UiComponentInterface
      *
      * @param UiComponentInterface $component
      * @return array
+     * @since 2.0.0
      */
     public function getJsConfig(UiComponentInterface $component);
 }

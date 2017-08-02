@@ -9,12 +9,14 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order Invoices grid
  *
  * @api
+ * @since 2.0.0
  */
 class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -23,6 +25,7 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -31,6 +34,7 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -39,6 +43,7 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {

@@ -6,10 +6,16 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
+     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
@@ -17,6 +23,7 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -31,6 +38,7 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * Index action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

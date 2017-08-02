@@ -6,6 +6,11 @@
 
 namespace Magento\Catalog\Model\ProductLink\Converter;
 
+/**
+ * Interface \Magento\Catalog\Model\ProductLink\Converter\ConverterInterface
+ *
+ * @since 2.0.0
+ */
 interface ConverterInterface
 {
     /**
@@ -13,6 +18,7 @@ interface ConverterInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @since 2.0.0
      */
     public function convert(\Magento\Catalog\Model\Product $product);
 }

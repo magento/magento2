@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * Page asset residing outside of the local file system
+ * @since 2.0.0
  */
 class Remote implements AssetInterface
 {
@@ -14,6 +15,7 @@ class Remote implements AssetInterface
      * URL
      *
      * @var string
+     * @since 2.0.0
      */
     protected $url;
 
@@ -21,6 +23,7 @@ class Remote implements AssetInterface
      * Content type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $contentType;
 
@@ -29,6 +32,7 @@ class Remote implements AssetInterface
      *
      * @param string $url
      * @param string $contentType
+     * @since 2.0.0
      */
     public function __construct($url, $contentType = 'unknown')
     {
@@ -38,6 +42,7 @@ class Remote implements AssetInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -46,6 +51,7 @@ class Remote implements AssetInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -54,6 +60,7 @@ class Remote implements AssetInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSourceContentType()
     {

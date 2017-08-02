@@ -6,10 +6,16 @@
  */
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Address\EditBilling
+ *
+ * @since 2.0.0
+ */
 class EditBilling extends \Magento\Multishipping\Controller\Checkout\Address
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

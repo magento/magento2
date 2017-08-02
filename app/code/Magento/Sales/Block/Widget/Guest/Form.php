@@ -13,11 +13,13 @@ use Magento\Customer\Model\Context;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
@@ -25,6 +27,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,6 +43,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
      * Check whether module is available
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEnable()
     {
@@ -50,6 +54,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
      * Select element for choosing registry type
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTypeSelectHtml()
     {
@@ -71,6 +76,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
      * Get Form Options for Guest
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getFormOptions()
     {
@@ -89,6 +95,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
      * Return quick search form action url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getActionUrl()
     {

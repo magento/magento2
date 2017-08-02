@@ -8,7 +8,8 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class UploadCss
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 class UploadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -16,6 +17,7 @@ class UploadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * Upload css file
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

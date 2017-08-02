@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Website repository interface
  *
  * @api
+ * @since 2.0.0
  */
 interface WebsiteRepositoryInterface
 {
@@ -20,6 +21,7 @@ interface WebsiteRepositoryInterface
      * @param string $code
      * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($code);
 
@@ -29,6 +31,7 @@ interface WebsiteRepositoryInterface
      * @param int $id
      * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function getById($id);
 
@@ -36,6 +39,7 @@ interface WebsiteRepositoryInterface
      * Retrieve list of all websites
      *
      * @return \Magento\Store\Api\Data\WebsiteInterface[]
+     * @since 2.0.0
      */
     public function getList();
 
@@ -44,6 +48,7 @@ interface WebsiteRepositoryInterface
      *
      * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws \DomainException
+     * @since 2.0.0
      */
     public function getDefault();
 
@@ -51,6 +56,7 @@ interface WebsiteRepositoryInterface
      * Clear cached entities
      *
      * @return void
+     * @since 2.0.0
      */
     public function clean();
 }

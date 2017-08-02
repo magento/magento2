@@ -8,12 +8,18 @@ namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 
+/**
+ * Class \Magento\Email\Controller\Adminhtml\Email\Template\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
      * Save transactional email action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

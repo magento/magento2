@@ -10,6 +10,7 @@ namespace Magento\Framework\Api\ExtensionAttribute;
  * Interface of data holder for extension attribute joins.
  *
  * @api
+ * @since 2.0.0
  */
 interface JoinDataInterface
 {
@@ -22,6 +23,7 @@ interface JoinDataInterface
      * Get attribute code.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeCode();
 
@@ -30,6 +32,7 @@ interface JoinDataInterface
      *
      * @param string $attributeCode
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode);
 
@@ -37,6 +40,7 @@ interface JoinDataInterface
      * Get reference table name.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getReferenceTable();
 
@@ -45,6 +49,7 @@ interface JoinDataInterface
      *
      * @param string $referenceTable
      * @return $this
+     * @since 2.0.0
      */
     public function setReferenceTable($referenceTable);
 
@@ -52,6 +57,7 @@ interface JoinDataInterface
      * Get reference table alias.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getReferenceTableAlias();
 
@@ -60,6 +66,7 @@ interface JoinDataInterface
      *
      * @param string $referenceTableAlias
      * @return $this
+     * @since 2.0.0
      */
     public function setReferenceTableAlias($referenceTableAlias);
 
@@ -67,6 +74,7 @@ interface JoinDataInterface
      * Get reference field.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getReferenceField();
 
@@ -75,6 +83,7 @@ interface JoinDataInterface
      *
      * @param string $referenceField
      * @return $this
+     * @since 2.0.0
      */
     public function setReferenceField($referenceField);
 
@@ -82,6 +91,7 @@ interface JoinDataInterface
      * Get join field.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJoinField();
 
@@ -90,6 +100,7 @@ interface JoinDataInterface
      *
      * @param string $joinField
      * @return $this
+     * @since 2.0.0
      */
     public function setJoinField($joinField);
 
@@ -97,6 +108,7 @@ interface JoinDataInterface
      * Get select fields.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectFields();
 
@@ -105,6 +117,7 @@ interface JoinDataInterface
      *
      * @param array $selectFields
      * @return $this
+     * @since 2.0.0
      */
     public function setSelectFields(array $selectFields);
 }

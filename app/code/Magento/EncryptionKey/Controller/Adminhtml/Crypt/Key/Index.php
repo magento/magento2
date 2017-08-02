@@ -8,6 +8,7 @@ namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
 
 /**
  * Key Index action
+ * @since 2.0.0
  */
 class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
 {
@@ -15,6 +16,7 @@ class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
      * Render main page with form
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

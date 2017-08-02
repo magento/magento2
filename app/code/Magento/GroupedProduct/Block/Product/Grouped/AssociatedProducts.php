@@ -7,11 +7,13 @@ namespace Magento\GroupedProduct\Block\Product\Grouped;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Container
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -23,6 +25,7 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -33,6 +36,7 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
      * Get parent tab code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getParentTab()
     {
@@ -43,6 +47,7 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
      * Tab is hidden
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -51,6 +56,7 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

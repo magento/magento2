@@ -11,6 +11,7 @@ namespace Magento\Config\Model\Config\Structure;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface MapperInterface
 {
@@ -19,6 +20,7 @@ interface MapperInterface
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     public function map(array $data);
 }

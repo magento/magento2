@@ -10,6 +10,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * System / Cache Management / Cache type "Web Services Configuration"
+ * @since 2.1.0
  */
 class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -25,11 +26,13 @@ class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var UserContextInterface
+     * @since 2.1.0
      */
     protected $userContext;
 
@@ -37,6 +40,7 @@ class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      * @param StoreManagerInterface $storeManager
      * @param UserContextInterface $userContext
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool,
@@ -53,6 +57,7 @@ class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
      *
      * @param string $prefix Prefix is used by hashing function
      * @return string
+     * @since 2.1.0
      */
     public function generateCacheIdUsingContext($prefix)
     {

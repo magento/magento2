@@ -6,6 +6,11 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Page\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
@@ -17,12 +22,14 @@ class NewAction extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,6 +43,7 @@ class NewAction extends \Magento\Backend\App\Action
      * Forward to edit
      *
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

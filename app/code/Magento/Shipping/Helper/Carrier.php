@@ -7,6 +7,7 @@ namespace Magento\Shipping\Helper;
 
 /**
  * Carrier helper
+ * @since 2.0.0
  */
 class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -24,12 +25,14 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      * Locale interface
      *
      * @var \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -44,6 +47,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|\Magento\Store\Model\Store|null $store
      * @return array
+     * @since 2.0.0
      */
     public function getOnlineCarrierCodes($store = null)
     {
@@ -67,6 +71,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $configPath
      * @param null $store
      * @return string
+     * @since 2.0.0
      */
     public function getCarrierConfigValue($carrierCode, $configPath, $store = null)
     {
@@ -84,6 +89,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $sourceWeightMeasure
      * @param string $toWeightMeasure
      * @return int|null|string
+     * @since 2.0.0
      */
     public function convertMeasureWeight($value, $sourceWeightMeasure, $toWeightMeasure)
     {
@@ -103,6 +109,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  string $sourceDimensionMeasure
      * @param  string $toDimensionMeasure
      * @return int|null|string
+     * @since 2.0.0
      */
     public function convertMeasureDimension($value, $sourceDimensionMeasure, $toDimensionMeasure)
     {
@@ -120,6 +127,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     public function getMeasureWeightName($key)
     {
@@ -136,6 +144,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     public function getMeasureDimensionName($key)
     {
@@ -153,6 +162,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $countryCode
      * @param null|int $storeId
      * @return bool
+     * @since 2.0.0
      */
     public function isCountryInEU($countryCode, $storeId = null)
     {

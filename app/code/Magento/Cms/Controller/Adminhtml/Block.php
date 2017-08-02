@@ -5,6 +5,11 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Block
+ *
+ * @since 2.0.0
+ */
 abstract class Block extends \Magento\Backend\App\Action
 {
     /**
@@ -18,12 +23,14 @@ abstract class Block extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -36,6 +43,7 @@ abstract class Block extends \Magento\Backend\App\Action
      *
      * @param \Magento\Backend\Model\View\Result\Page $resultPage
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     protected function initPage($resultPage)
     {

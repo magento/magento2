@@ -6,10 +6,16 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,6 +9,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  * Rating entity resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Entity extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Entity extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Rating entity resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Entity extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $entityCode
      * @return int
+     * @since 2.0.0
      */
     public function getIdByCode($entityCode)
     {

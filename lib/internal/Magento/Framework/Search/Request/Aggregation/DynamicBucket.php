@@ -10,21 +10,25 @@ use Magento\Framework\Search\Request\BucketInterface;
 /**
  * Dynamic Buckets
  * @api
+ * @since 2.0.0
  */
 class DynamicBucket implements BucketInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $field;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $method;
 
@@ -33,6 +37,7 @@ class DynamicBucket implements BucketInterface
      * @param string $field
      * @param string $method
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($name, $field, $method)
     {
@@ -43,6 +48,7 @@ class DynamicBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -51,6 +57,7 @@ class DynamicBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -60,6 +67,7 @@ class DynamicBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getField()
     {
@@ -71,6 +79,7 @@ class DynamicBucket implements BucketInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -80,6 +89,7 @@ class DynamicBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getMetrics()
     {

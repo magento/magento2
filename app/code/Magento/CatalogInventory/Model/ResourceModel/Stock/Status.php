@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * CatalogInventory Stock Status per website Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,7 +20,8 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -27,16 +29,19 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Website model factory
      *
      * @var \Magento\Store\Model\WebsiteFactory
+     * @since 2.0.0
      */
     protected $_websiteFactory;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     private $stockConfiguration;
 
@@ -46,6 +51,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,6 +71,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,6 +87,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int|null $websiteId
      * @param int $stockId
      * @return $this
+     * @since 2.0.0
      */
     public function saveProductStatus(
         $productId,
@@ -124,6 +132,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $websiteId
      * @param int $stockId
      * @return array
+     * @since 2.0.0
      */
     public function getProductsStockStatuses($productIds, $websiteId, $stockId = Stock::DEFAULT_STOCK_ID)
     {
@@ -144,6 +153,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Return array as key website_id, value store_id
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWebsiteStores()
     {
@@ -157,6 +167,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array|int $productIds
      * @return array
+     * @since 2.0.0
      */
     public function getProductsType($productIds)
     {
@@ -181,6 +192,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $lastEntityId
      * @param int $limit
      * @return array
+     * @since 2.0.0
      */
     public function getProductCollection($lastEntityId = 0, $limit = 1000)
     {
@@ -201,6 +213,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\Website $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return Status
+     * @since 2.0.0
      */
     public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
     {
@@ -218,6 +231,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param bool $isFilterInStock
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @since 2.1.0
      */
     public function addStockDataToCollection($collection, $isFilterInStock)
     {
@@ -252,6 +266,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
+     * @since 2.0.0
      */
     public function addIsInStockFilterToCollection($collection)
     {
@@ -284,6 +299,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int[] $productIds
      * @param int $storeId
      * @return array
+     * @since 2.0.0
      */
     public function getProductStatus($productIds, $storeId = null)
     {
@@ -339,7 +355,8 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStockConfiguration()
     {

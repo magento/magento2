@@ -16,6 +16,7 @@ use Magento\Store\Model\ResourceModel\Website;
 
 /**
  * Imports stores, websites and groups from transmitted data.
+ * @since 2.2.0
  */
 class Importer implements ImporterInterface
 {
@@ -23,6 +24,7 @@ class Importer implements ImporterInterface
      * The data difference calculator.
      *
      * @var DataDifferenceCalculator
+     * @since 2.2.0
      */
     private $dataDifferenceCalculator;
 
@@ -30,6 +32,7 @@ class Importer implements ImporterInterface
      * The factory for processors.
      *
      * @var ProcessorFactory
+     * @since 2.2.0
      */
     private $processFactory;
 
@@ -37,6 +40,7 @@ class Importer implements ImporterInterface
      * The manager for operations with store.
      *
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
@@ -44,6 +48,7 @@ class Importer implements ImporterInterface
      * The resource of transaction.
      *
      * @var Website
+     * @since 2.2.0
      */
     private $resource;
 
@@ -51,6 +56,7 @@ class Importer implements ImporterInterface
      * The application cache manager.
      *
      * @var CacheInterface
+     * @since 2.2.0
      */
     private $cacheManager;
 
@@ -60,6 +66,7 @@ class Importer implements ImporterInterface
      * @param StoreManagerInterface $storeManager The manager for operations with store
      * @param CacheInterface $cacheManager The application cache manager
      * @param Website $resource The resource of transaction
+     * @since 2.2.0
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
@@ -80,6 +87,7 @@ class Importer implements ImporterInterface
      * After the import it flushes the store caches.
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function import(array $data)
     {
@@ -125,6 +133,7 @@ class Importer implements ImporterInterface
      * Reinitialize store list.
      *
      * @return void
+     * @since 2.2.0
      */
     private function reinitStores()
     {
@@ -136,6 +145,7 @@ class Importer implements ImporterInterface
      * Retrieves message reminder about root category assigning.
      *
      * @return string
+     * @since 2.2.0
      */
     private function getStoreGroupAssignMessage()
     {
@@ -149,6 +159,7 @@ class Importer implements ImporterInterface
      *
      * @param array $data The data set.
      * @return array
+     * @since 2.2.0
      */
     private function getGroupsToCreate(array $data)
     {
@@ -168,6 +179,7 @@ class Importer implements ImporterInterface
      * Retrieves all affected entities during the import procedure.
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getWarningMessages(array $data)
     {
@@ -199,6 +211,7 @@ class Importer implements ImporterInterface
      * @param array $items The items to be used
      * @param string $scope The given scope
      * @return string
+     * @since 2.2.0
      */
     private function formatMessage($message, array $items, $scope)
     {

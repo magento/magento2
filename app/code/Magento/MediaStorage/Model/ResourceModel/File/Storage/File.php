@@ -9,22 +9,26 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class File
+ * @since 2.0.0
  */
 class File
 {
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Psr\Log\LoggerInterface $log
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Filesystem $filesystem, \Psr\Log\LoggerInterface $log)
     {
@@ -37,6 +41,7 @@ class File
      *
      * @param string $dir
      * @return array
+     * @since 2.0.0
      */
     public function getStorageData($dir = '/')
     {
@@ -68,6 +73,7 @@ class File
      *
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function clear($dir = '')
     {
@@ -87,6 +93,7 @@ class File
      * @param array $dir
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function saveDir($dir)
     {
@@ -116,6 +123,7 @@ class File
      * @param bool $overwrite
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function saveFile($filePath, $content, $overwrite = false)
     {

@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Template;
  * Accepts shortcuts on shortcut_buttons_container event and render shortcuts using custom order
  *
  * @api
+ * @since 2.0.0
  */
 class ShortcutButtons extends Template
 {
@@ -27,16 +28,19 @@ class ShortcutButtons extends Template
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_shortcuts = [];
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isCatalogProduct;
 
     /**
      * @var null|string
+     * @since 2.0.0
      */
     protected $_orPosition;
 
@@ -45,6 +49,7 @@ class ShortcutButtons extends Template
      * @param bool $isCatalogProduct
      * @param null|string $orPosition
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -62,6 +67,7 @@ class ShortcutButtons extends Template
      *
      * @param Template $block
      * @return void
+     * @since 2.0.0
      */
     public function addShortcut(Template $block)
     {
@@ -73,6 +79,7 @@ class ShortcutButtons extends Template
     /**
      * Dispatch shortcuts container event
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -91,6 +98,7 @@ class ShortcutButtons extends Template
      * Render all shortcuts
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

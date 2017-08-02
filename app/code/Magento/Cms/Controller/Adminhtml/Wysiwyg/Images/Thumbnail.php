@@ -8,10 +8,16 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Thumbnail
+ *
+ * @since 2.0.0
+ */
 class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -19,6 +25,7 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -33,6 +40,7 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * Generate image thumbnail on the fly
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

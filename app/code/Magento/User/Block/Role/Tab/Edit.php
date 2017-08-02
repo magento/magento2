@@ -12,11 +12,13 @@ use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
  * Rolesedit Tab Display Block.
  *
  * @api
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'role/edit.phtml';
 
@@ -24,6 +26,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Root ACL Resource
      *
      * @var \Magento\Framework\Acl\RootResource
+     * @since 2.0.0
      */
     protected $_rootResource;
 
@@ -31,6 +34,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Rules collection factory
      *
      * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
+     * @since 2.0.0
      */
     protected $_rulesCollectionFactory;
 
@@ -38,6 +42,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Acl builder
      *
      * @var \Magento\Authorization\Model\Acl\AclRetriever
+     * @since 2.0.0
      */
     protected $_aclRetriever;
 
@@ -45,16 +50,21 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Acl resource provider
      *
      * @var \Magento\Framework\Acl\AclResource\ProviderInterface
+     * @since 2.0.0
      */
     protected $_aclResourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     * @since 2.0.0
+     */
     protected $_integrationData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.1.0
      */
     protected $coreRegistry = null;
 
@@ -66,6 +76,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -89,7 +100,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
     {
@@ -100,7 +112,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get core registry
      *
      * @return \Magento\Framework\Registry
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     public function getCoreRegistry()
     {
@@ -115,6 +128,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get tab label
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -125,6 +139,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get tab title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -135,6 +150,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Whether tab is available
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -145,6 +161,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Whether tab is visible
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -155,6 +172,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Check if everything is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEverythingAllowed()
     {
@@ -167,6 +185,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get selected resources
      *
      * @return array|mixed|\string[]
+     * @since 2.1.0
      */
     public function getSelectedResources()
     {
@@ -193,6 +212,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get Json Representation of Resource Tree
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTree()
     {
@@ -203,6 +223,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getAclResources()
     {

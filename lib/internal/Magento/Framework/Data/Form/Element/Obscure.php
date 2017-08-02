@@ -11,10 +11,16 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Obscure
+ *
+ * @since 2.0.0
+ */
 class Obscure extends \Magento\Framework\Data\Form\Element\Password
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_obscuredValue = '******';
 
@@ -23,6 +29,7 @@ class Obscure extends \Magento\Framework\Data\Form\Element\Password
      *
      * @param string $index
      * @return string
+     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {
@@ -37,6 +44,7 @@ class Obscure extends \Magento\Framework\Data\Form\Element\Password
      * Returns list of html attributes possible to output in HTML
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {

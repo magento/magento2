@@ -6,6 +6,11 @@
 
 namespace Magento\Catalog\Model;
 
+/**
+ * Class \Magento\Catalog\Model\ProductWebsiteLink
+ *
+ * @since 2.0.0
+ */
 class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Catalog\Api\Data\ProductWebsiteLinkInterface
 {
@@ -18,6 +23,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSku()
     {
@@ -26,6 +32,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -35,6 +42,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
     /**
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -43,6 +51,7 @@ class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject imp
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {

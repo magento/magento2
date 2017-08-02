@@ -9,11 +9,13 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides materialized view configuration
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
      * @var \Magento\Framework\Mview\View\State\CollectionInterface
+     * @since 2.0.0
      */
     protected $stateCollection;
 
@@ -25,6 +27,7 @@ class Data extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Mview\View\State\CollectionInterface $stateCollection
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Mview\Config\Reader $reader,
@@ -48,6 +51,7 @@ class Data extends \Magento\Framework\Config\Data
      * Delete all states that are not in configuration
      *
      * @return void
+     * @since 2.0.0
      */
     protected function deleteNonexistentStates()
     {

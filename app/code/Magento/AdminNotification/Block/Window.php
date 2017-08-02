@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Window extends \Magento\Backend\Block\Template
 {
@@ -21,6 +22,7 @@ class Window extends \Magento\Backend\Block\Template
      * Severity icons url
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_severityIconsUrl;
 
@@ -28,6 +30,7 @@ class Window extends \Magento\Backend\Block\Template
      * Authentication
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_authSession;
 
@@ -35,11 +38,13 @@ class Window extends \Magento\Backend\Block\Template
      * Critical messages collection
      *
      * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
+     * @since 2.0.0
      */
     protected $_criticalCollection;
 
     /**
      * @var \Magento\Adminnotification\Model\Inbox
+     * @since 2.0.0
      */
     protected $_latestItem;
 
@@ -48,6 +53,7 @@ class Window extends \Magento\Backend\Block\Template
      * If it isn't defined then application considers it as false.
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isScopePrivate;
 
@@ -56,6 +62,7 @@ class Window extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Critical $criticalCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -73,6 +80,7 @@ class Window extends \Magento\Backend\Block\Template
      * Render block
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -92,6 +100,7 @@ class Window extends \Magento\Backend\Block\Template
      * Retrieve latest critical item
      *
      * @return bool|\Magento\Adminnotification\Model\Inbox
+     * @since 2.0.0
      */
     protected function _getLatestItem()
     {
@@ -110,6 +119,7 @@ class Window extends \Magento\Backend\Block\Template
      * Check whether block should be displayed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShow()
     {

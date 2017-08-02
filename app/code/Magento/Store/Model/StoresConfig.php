@@ -8,21 +8,29 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Store\Model\StoresConfig
+ *
+ * @since 2.0.0
+ */
 class StoresConfig
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -39,6 +47,7 @@ class StoresConfig
      *
      * @param string $path
      * @return array
+     * @since 2.0.0
      */
     public function getStoresConfigByPath($path)
     {

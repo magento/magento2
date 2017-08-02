@@ -11,11 +11,13 @@ use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Class FileIterator
+ * @since 2.0.0
  */
 class FileIterator extends \Magento\Framework\Config\FileIterator
 {
     /**
      * @var \Magento\Framework\Module\Dir\ReverseResolver
+     * @since 2.0.0
      */
     protected $_moduleDirResolver;
 
@@ -23,6 +25,7 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
      * @param ReadFactory $readFactory
      * @param array $paths
      * @param \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
+     * @since 2.0.0
      */
     public function __construct(
         ReadFactory $readFactory,
@@ -36,6 +39,7 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
     /**
      * @return string
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function current()
     {

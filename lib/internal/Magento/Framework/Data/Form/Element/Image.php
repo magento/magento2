@@ -13,10 +13,16 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\UrlInterface;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Image
+ *
+ * @since 2.0.0
+ */
 class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $_urlBuilder;
 
@@ -26,6 +32,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Escaper $escaper
      * @param UrlInterface $urlBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -43,6 +50,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return element html code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -90,6 +98,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return html code of delete checkbox element
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDeleteCheckbox()
     {
@@ -124,6 +133,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return html code of hidden element
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getHiddenInput()
     {
@@ -134,6 +144,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Get image preview url
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getUrl()
     {
@@ -144,6 +155,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Return name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {

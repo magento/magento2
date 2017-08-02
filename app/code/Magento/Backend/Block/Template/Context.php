@@ -18,36 +18,43 @@ namespace Magento\Backend\Block\Template;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     protected $_backendSession;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var \Magento\Framework\Code\NameBuilder
+     * @since 2.0.0
      */
     protected $nameBuilder;
 
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
@@ -84,6 +91,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -155,6 +163,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Get store manager
      *
      * @return \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     public function getStoreManager()
     {
@@ -165,6 +174,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Retrieve Authorization
      *
      * @return \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     public function getAuthorization()
     {
@@ -173,6 +183,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     public function getBackendSession()
     {
@@ -181,6 +192,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     public function getMathRandom()
     {
@@ -189,6 +201,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     public function getFormKey()
     {
@@ -197,6 +210,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     public function getNameBuilder()
     {

@@ -9,16 +9,19 @@ namespace Magento\Variable\Model\Variable;
  * Variable Wysiwyg Plugin Config
  *
  * @api
+ * @since 2.0.0
  */
 class Config
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
@@ -26,6 +29,7 @@ class Config
      * Constructor
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlInterface $url
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -40,6 +44,7 @@ class Config
      *
      * @param \Magento\Framework\DataObject $config
      * @return array
+     * @since 2.0.0
      */
     public function getWysiwygPluginSettings($config)
     {
@@ -72,6 +77,7 @@ class Config
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getWysiwygJsPluginSrc()
     {
@@ -84,6 +90,7 @@ class Config
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getVariablesWysiwygActionUrl()
     {

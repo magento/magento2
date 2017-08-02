@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
  * Product attribute edit page
  *
  * @api
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -16,6 +17,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Block group name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Catalog';
 
@@ -23,6 +25,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -30,6 +33,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -42,6 +46,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,6 +101,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -109,6 +115,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -126,6 +133,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve URL for validation
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValidationUrl()
     {
@@ -136,6 +144,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve URL for save
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {

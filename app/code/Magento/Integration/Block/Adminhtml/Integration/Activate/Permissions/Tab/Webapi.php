@@ -14,26 +14,45 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * API permissions tab for integration activation dialog.
  *
  * @api
+ * @since 2.0.0
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-    /** @var string[] */
+    /**
+     * @var string[]
+     * @since 2.0.0
+     */
     protected $_selectedResources;
 
-    /** @var \Magento\Framework\Acl\RootResource */
+    /**
+     * @var \Magento\Framework\Acl\RootResource
+     * @since 2.0.0
+     */
     protected $_rootResource;
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
+    /**
+     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
+     * @since 2.0.0
+     */
     protected $_resourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     * @since 2.0.0
+     */
     protected $_integrationData;
 
-    /** @var \Magento\Framework\Json\Encoder */
+    /**
+     * @var \Magento\Framework\Json\Encoder
+     * @since 2.0.0
+     */
     protected $encoder;
 
-    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     * @since 2.0.0
+     */
     protected $integrationService;
 
     /**
@@ -48,6 +67,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Json\Encoder $encoder
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -74,6 +94,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * If everything is allowed, the array will contain just the root resource id, which is "Magento_Backend::all".
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -93,6 +114,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -106,6 +128,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -116,6 +139,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -126,6 +150,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -136,6 +161,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Check if everything is allowed.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEverythingAllowed()
     {
@@ -146,6 +172,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get requested permissions tree.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getResourcesTreeJson()
     {
@@ -162,6 +189,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * returning "Magento_Backend::all".
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSelectedResourcesJson()
     {
@@ -176,6 +204,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getAclResources()
     {
@@ -195,6 +224,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isTreeEmpty()
     {
@@ -206,6 +236,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      *
      * @param array $resources
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getAllResourceIds(array $resources)
     {

@@ -7,12 +7,18 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\GetPriceConfigurationObserver
+ *
+ * @since 2.0.0
+ */
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $taxData;
 
@@ -20,16 +26,21 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * Weee data
      *
      * @var \Magento\Weee\Helper\Data
+     * @since 2.0.0
      */
     protected $weeeData;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     * @since 2.0.0
+     */
     protected $registry;
 
     /**
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param \Magento\Tax\Helper\Data $taxData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
@@ -47,6 +58,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -78,6 +90,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param  string $calcPrice
      * @param  array $weeeAttributesForBundle
      * @return array
+     * @since 2.0.0
      */
     private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice, $weeeAttributesForBundle = null)
     {
@@ -114,6 +127,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param  int|string $key
      * @param  array $weeeAttributesForBundle
      * @return array
+     * @since 2.0.0
      */
     private function insertWeeePrice($holder, $key, $weeeAttributesForBundle)
     {
@@ -142,6 +156,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param  int|null $storeId
      * @param  array|null $weeeAttributesForBundle
      * @return string
+     * @since 2.0.0
      */
     protected function getWhichCalcPriceToUse($storeId = null, $weeeAttributesForBundle = null)
     {

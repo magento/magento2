@@ -11,6 +11,11 @@
  */
 namespace Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\Framework\Event\Observer\Cron
+ *
+ * @since 2.0.0
+ */
 class Cron extends \Magento\Framework\Event\Observer
 {
     /**
@@ -21,6 +26,7 @@ class Cron extends \Magento\Framework\Event\Observer
      * @param \Magento\Framework\Event $event
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {
@@ -51,6 +57,7 @@ class Cron extends \Magento\Framework\Event\Observer
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getNow()
     {
@@ -66,6 +73,7 @@ class Cron extends \Magento\Framework\Event\Observer
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function matchCronExpression($expr, $num)
     {
@@ -120,6 +128,7 @@ class Cron extends \Magento\Framework\Event\Observer
     /**
      * @param int|string $value
      * @return bool|string
+     * @since 2.0.0
      */
     public function getNumeric($value)
     {

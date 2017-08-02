@@ -10,6 +10,7 @@ namespace Magento\Backup\Controller\Adminhtml;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 abstract class Index extends \Magento\Backend\App\Action
 {
@@ -24,26 +25,31 @@ abstract class Index extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Backup\Factory
+     * @since 2.0.0
      */
     protected $_backupFactory;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var \Magento\Backup\Model\BackupFactory
+     * @since 2.0.0
      */
     protected $_backupModelFactory;
 
     /**
      * @var \Magento\Framework\App\MaintenanceMode
+     * @since 2.0.0
      */
     protected $maintenanceMode;
 
@@ -54,6 +60,7 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
      * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

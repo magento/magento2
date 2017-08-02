@@ -11,6 +11,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  * Adminhtml sales order view
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -18,6 +19,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Block group
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Sales';
 
@@ -25,6 +27,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -32,6 +35,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Sales config
      *
      * @var \Magento\Sales\Model\Config
+     * @since 2.0.0
      */
     protected $_salesConfig;
 
@@ -39,6 +43,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Reorder helper
      *
      * @var \Magento\Sales\Helper\Reorder
+     * @since 2.0.0
      */
     protected $_reorderHelper;
 
@@ -48,6 +53,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Helper\Reorder $reorderHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -69,6 +75,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -264,6 +271,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve order model object
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -274,6 +282,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve Order Identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getOrderId()
     {
@@ -284,6 +293,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -311,6 +321,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param string $params
      * @param array $params2
      * @return string
+     * @since 2.0.0
      */
     public function getUrl($params = '', $params2 = [])
     {
@@ -322,6 +333,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Edit URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEditUrl()
     {
@@ -332,6 +344,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Email URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEmailUrl()
     {
@@ -342,6 +355,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Cancel URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCancelUrl()
     {
@@ -352,6 +366,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Invoice URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getInvoiceUrl()
     {
@@ -362,6 +377,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Credit memo URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreditmemoUrl()
     {
@@ -372,6 +388,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Hold URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHoldUrl()
     {
@@ -382,6 +399,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Unhold URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUnholdUrl()
     {
@@ -392,6 +410,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Ship URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShipUrl()
     {
@@ -402,6 +421,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Comment URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCommentUrl()
     {
@@ -412,6 +432,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Reorder URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getReorderUrl()
     {
@@ -422,6 +443,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Payment void URL getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVoidPaymentUrl()
     {
@@ -433,6 +455,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $resourceId
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAllowedAction($resourceId)
     {
@@ -443,6 +466,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Return back url for view grid
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -458,6 +482,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $action
      * @return string
+     * @since 2.0.0
      */
     public function getReviewPaymentUrl($action)
     {
@@ -467,6 +492,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @param \Magento\Sales\Model\Order $order
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function getEditMessage($order)
     {
@@ -487,6 +513,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @param \Magento\Sales\Model\Order $order
      * @return array
+     * @since 2.0.0
      */
     protected function getNonEditableTypes($order)
     {

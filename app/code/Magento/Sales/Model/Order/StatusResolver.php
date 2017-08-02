@@ -7,12 +7,18 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Class \Magento\Sales\Model\Order\StatusResolver
+ *
+ * @since 2.2.0
+ */
 class StatusResolver
 {
     /**
      * @param OrderInterface $order
      * @param string $state
      * @return string
+     * @since 2.2.0
      */
     public function getOrderStatusByState(OrderInterface $order, $state)
     {

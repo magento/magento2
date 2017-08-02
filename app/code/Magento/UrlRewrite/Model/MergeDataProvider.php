@@ -12,6 +12,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * Removes duplicates for a set/array of Url Rewrites based on the unique key of the url_rewrites table
  *
  * @api
+ * @since 2.2.0
  */
 class MergeDataProvider
 {
@@ -19,6 +20,7 @@ class MergeDataProvider
 
     /**
      * @var $rewritesArray[]
+     * @since 2.2.0
      */
     private $data = [];
 
@@ -27,6 +29,7 @@ class MergeDataProvider
      *
      * @param UrlRewriteService[] $urlRewritesArray
      * @return void
+     * @since 2.2.0
      */
     public function merge(array $urlRewritesArray)
     {
@@ -44,6 +47,7 @@ class MergeDataProvider
      * Returns the data added to container
      *
      * @return UrlRewriteService[]
+     * @since 2.2.0
      */
     public function getData()
     {

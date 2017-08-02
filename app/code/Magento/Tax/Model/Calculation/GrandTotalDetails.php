@@ -11,6 +11,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Grand Total Tax Details Model
+ * @since 2.0.0
  */
 class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetailsInterface
 {
@@ -24,6 +25,7 @@ class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetail
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getGroupId()
     {
@@ -32,6 +34,7 @@ class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetail
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setGroupId($id)
     {
@@ -40,6 +43,7 @@ class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetail
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -48,6 +52,7 @@ class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetail
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAmount($amount)
     {
@@ -56,6 +61,7 @@ class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetail
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRates()
     {
@@ -64,6 +70,7 @@ class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetail
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRates($rates)
     {

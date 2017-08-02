@@ -6,10 +6,16 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -19,6 +25,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -33,6 +40,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

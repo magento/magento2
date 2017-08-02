@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class AbstractOrder extends \Magento\Backend\Block\Widget
 {
@@ -19,6 +20,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -26,6 +28,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Admin helper
      *
      * @var \Magento\Sales\Helper\Admin
+     * @since 2.0.0
      */
     protected $_adminHelper;
 
@@ -34,6 +37,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,6 +55,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      *
      * @return Order
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -70,6 +75,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Get price data object
      *
      * @return Order|mixed
+     * @since 2.0.0
      */
     public function getPriceDataObject()
     {
@@ -87,6 +93,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * @param bool $strong
      * @param string $separator
      * @return string
+     * @since 2.0.0
      */
     public function displayPriceAttribute($code, $strong = false, $separator = '<br/>')
     {
@@ -101,6 +108,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * @param bool $strong
      * @param string $separator
      * @return string
+     * @since 2.0.0
      */
     public function displayPrices($basePrice, $price, $strong = false, $separator = '<br/>')
     {
@@ -117,6 +125,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Retrieve order totals block settings
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalData()
     {
@@ -127,6 +136,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Retrieve order info block settings
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderInfoData()
     {
@@ -138,6 +148,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      *
      * @param \Magento\Framework\DataObject $order
      * @return string
+     * @since 2.0.0
      */
     public function displayShippingPriceInclTax($order)
     {

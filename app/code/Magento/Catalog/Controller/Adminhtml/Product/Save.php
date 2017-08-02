@@ -14,41 +14,49 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\Helper
+     * @since 2.0.0
      */
     protected $initializationHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product\Copier
+     * @since 2.0.0
      */
     protected $productCopier;
 
     /**
      * @var \Magento\Catalog\Model\Product\TypeTransitionManager
+     * @since 2.0.0
      */
     protected $productTypeManager;
 
     /**
      * @var \Magento\Catalog\Api\CategoryLinkManagementInterface
+     * @since 2.1.0
      */
     protected $categoryLinkManagement;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var DataPersistorInterface
+     * @since 2.1.0
      */
     protected $dataPersistor;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
@@ -61,6 +69,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -83,6 +92,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -188,6 +198,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param array $postData
      * @param int $productId
      * @return void
+     * @since 2.0.0
      */
     private function handleImageRemoveError($postData, $productId)
     {
@@ -216,6 +227,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param array $data
      * @param int $productId
      * @return void
+     * @since 2.1.0
      */
     protected function copyToStores($data, $productId)
     {
@@ -242,6 +254,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
+     * @since 2.1.0
      */
     private function getCategoryLinkManagement()
     {
@@ -254,7 +267,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStoreManager()
     {
@@ -269,7 +283,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Retrieve data persistor
      *
      * @return DataPersistorInterface|mixed
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getDataPersistor()
     {

@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Template\Grid
+ *
+ * @since 2.0.0
+ */
 class Grid extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
      * JSON Grid Action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

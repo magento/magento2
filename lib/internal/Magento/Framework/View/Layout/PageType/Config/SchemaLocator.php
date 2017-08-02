@@ -7,17 +7,24 @@
  */
 namespace Magento\Framework\View\Layout\PageType\Config;
 
+/**
+ * Class \Magento\Framework\View\Layout\PageType\Config\SchemaLocator
+ *
+ * @since 2.0.0
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for config
      *
      * @var string
+     * @since 2.0.0
      */
     protected $schema;
 
     /**
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
@@ -28,6 +35,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to merged config schema
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSchema()
     {
@@ -38,6 +46,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to per file validation schema
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPerFileSchema()
     {
