@@ -98,8 +98,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $form = $this->_formFactory->create();
-        $fieldset = $this->_formFactory->create()
-            ->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
+        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Config\Block\System\Config\FormStub */
