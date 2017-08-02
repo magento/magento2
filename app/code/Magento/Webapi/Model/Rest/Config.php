@@ -36,7 +36,7 @@ class Config
     /*#@-*/
 
     /**
-     * @var 
+     * @var ModelConfig
      * @since 2.0.0
      */
     protected $_config;

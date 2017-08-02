@@ -47,7 +47,8 @@ class CartItemProcessorsPool
             return $this->cartItemProcessors;
         }
 
-        $arguments = $this->objectManagerConfig->getArguments(\Magento\Quote\Model\Quote\Item\Repository::class);
+        $typePreference = $this->objectManagerConfig->getPreference(Repository::class);
+        $arguments = $this->objectManagerConfig->getArguments($typePreference);
         if (isset($arguments['cartItemProcessors'])) {
             // Workaround for compiled mode.
             $processors = isset($arguments['cartItemProcessors']['_vac_'])
