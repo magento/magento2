@@ -255,6 +255,24 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityMetadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
+        $optionValueCollectionFactoryMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $optionValueCollectionMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection::class,
+            ['getIterator', 'addTitleToResult'],
+            [],
+            '',
+            false
+        );
+        $optionValueCollectionMock->expects($this->any())->method('getIterator')
+            ->willReturn($this->getMock(\Traversable::class, [], [], '', false));
+        $optionValueCollectionFactoryMock->expects($this->any())
+            ->method('create')->willReturn($optionValueCollectionMock);
         $modelClassArgs = [
             $this->getMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class, [], [], '', false),
             $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false),
@@ -285,6 +303,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 '',
                 false
             ),
+            $optionValueCollectionFactoryMock,
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         ];
 

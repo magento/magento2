@@ -369,7 +369,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * @var array
      */
-    private $optionValueTitles;
+    private $optionTypeTitles;
 
     /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -1314,7 +1314,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($this->_isReadyForSaving($options, $titles, $typeValues)) {
                 if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
                     $this->_compareOptionsWithExisting($options, $titles, $prices, $typeValues);
-                    $this->restoreOriginalOptionValueIds($typeValues, $typePrices, $typeTitles);
+                    $this->restoreOriginalOptionTypeIds($typeValues, $typePrices, $typeTitles);
                 }
 
                 $this->_saveOptions(
@@ -1525,7 +1525,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Restore original IDs for existing option values.
+     * Restore original IDs for existing option types.
      *
      * Warning: arguments are modified by reference
      *
@@ -1534,20 +1534,20 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $typeTitles
      * @return void
      */
-    private function restoreOriginalOptionValueIds(array &$typeValues, array &$typePrices, array &$typeTitles)
+    private function restoreOriginalOptionTypeIds(array &$typeValues, array &$typePrices, array &$typeTitles)
     {
-        foreach ($typeValues as $optionId => &$optionValues) {
-            foreach ($optionValues as &$optionValue) {
-                $optionValueId = $optionValue['option_type_id'];
-                foreach ($typeTitles[$optionValueId] as $storeId => $optionValueTitle) {
-                    $existingOptionValueId = $this->getExistingOptionValueId($optionId, $storeId, $optionValueTitle);
-                    if ($existingOptionValueId) {
-                        $optionValue['option_type_id'] = $existingOptionValueId;
-                        $typeTitles[$existingOptionValueId] = $typeTitles[$optionValueId];
-                        unset($typeTitles[$optionValueId]);
-                        $typePrices[$existingOptionValueId] = $typePrices[$optionValueId];
-                        unset($typePrices[$optionValueId]);
-                        // If option value titles match at least in one store, consider current option value as existing
+        foreach ($typeValues as $optionId => &$optionTypes) {
+            foreach ($optionTypes as &$optionType) {
+                $optionTypeId = $optionType['option_type_id'];
+                foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
+                    $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
+                    if ($existingTypeId) {
+                        $optionType['option_type_id'] = $existingTypeId;
+                        $typeTitles[$existingTypeId] = $typeTitles[$optionTypeId];
+                        unset($typeTitles[$optionTypeId]);
+                        $typePrices[$existingTypeId] = $typePrices[$optionTypeId];
+                        unset($typePrices[$optionTypeId]);
+                        // If option type titles match at least in one store, consider current option type as existing
                         break;
                     }
                 }
@@ -1556,30 +1556,30 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Identify ID of the provided option value by its title in the specified store.
+     * Identify ID of the provided option type by its title in the specified store.
      *
      * @param int $optionId
      * @param int $storeId
-     * @param string $optionValueTitle
+     * @param string $optionTypeTitle
      * @return int|null
      */
-    private function getExistingOptionValueId($optionId, $storeId, $optionValueTitle)
+    private function getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle)
     {
-        if (!isset($this->optionValueTitles[$storeId])) {
-            /** @var ProductOptionValueCollection $valueCollection */
-            $valueCollection = $this->productOptionValueCollectionFactory->create();
-            $valueCollection->addTitleToResult($storeId);
-            /** @var \Magento\Catalog\Model\Product\Option\Value $value */
-            foreach ($valueCollection as $value) {
-                $this->optionValueTitles[$storeId][$value->getOptionId()][$value->getId()] = $value->getTitle();
+        if (!isset($this->optionTypeTitles[$storeId])) {
+            /** @var ProductOptionValueCollection $optionTypeCollection */
+            $optionTypeCollection = $this->productOptionValueCollectionFactory->create();
+            $optionTypeCollection->addTitleToResult($storeId);
+            /** @var \Magento\Catalog\Model\Product\Option\Value $type */
+            foreach ($optionTypeCollection as $type) {
+                $this->optionTypeTitles[$storeId][$type->getOptionId()][$type->getId()] = $type->getTitle();
             }
         }
-        if (isset($this->optionValueTitles[$storeId][$optionId])
-            && is_array($this->optionValueTitles[$storeId][$optionId])
+        if (isset($this->optionTypeTitles[$storeId][$optionId])
+            && is_array($this->optionTypeTitles[$storeId][$optionId])
         ) {
-            foreach ($this->optionValueTitles[$storeId][$optionId] as $optionValueId => $currentValueTitle) {
-                if ($optionValueTitle === $currentValueTitle) {
-                    return $optionValueId;
+            foreach ($this->optionTypeTitles[$storeId][$optionId] as $optionTypeId => $currentTypeTitle) {
+                if ($optionTypeTitle === $currentTypeTitle) {
+                    return $optionTypeId;
                 }
             }
         }
