@@ -135,20 +135,26 @@ class Repository
         }
 
         // Set themeModel
-        $theme = null;
+        $themeId = null;
+        $themePath = null;
         $area = $params['area'];
         if (!empty($params['themeId'])) {
-            $theme = $params['themeId'];
+            $themeId = $params['themeId'];
         } elseif (isset($params['theme'])) {
-            $theme = $params['theme'];
+            $themePath = $params['theme'];
         } elseif (empty($params['themeModel']) && $area !== $this->getDefaultParameter('area')) {
-            $theme = $this->design->getConfigurationDesignTheme($area);
+            $themeId = $this->design->getConfigurationDesignTheme($area);
         }
 
-        if ($theme) {
-            $params['themeModel'] = $this->getThemeProvider()->getThemeById($theme);
+        if ($themeId) {
+            $params['themeModel'] = $this->getThemeProvider()->getThemeById($themeId);
             if (!$params['themeModel']) {
-                throw new \UnexpectedValueException("Could not find theme '$theme' for area '$area'");
+                throw new \UnexpectedValueException("Could not find theme '$themeId' for area '$area'");
+            }
+        } elseif ($themePath) {
+            $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $themePath);
+            if (!$params['themeModel']) {
+                throw new \UnexpectedValueException("Could not find theme '$themePath' for area '$area'");
             }
         } elseif (empty($params['themeModel'])) {
             $params['themeModel'] = $this->getDefaultParameter('themeModel');
