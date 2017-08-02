@@ -5,15 +5,22 @@
  */
 namespace Magento\CatalogRule\Model\Data\Condition;
 
+/**
+ * Class \Magento\CatalogRule\Model\Data\Condition\Converter
+ *
+ * @since 2.1.0
+ */
 class Converter
 {
     /**
      * @var \Magento\CatalogRule\Api\Data\ConditionInterfaceFactory
+     * @since 2.1.0
      */
     protected $ruleConditionFactory;
 
     /**
      * @param \Magento\CatalogRule\Api\Data\ConditionInterfaceFactory $ruleConditionFactory
+     * @since 2.1.0
      */
     public function __construct(\Magento\CatalogRule\Api\Data\ConditionInterfaceFactory $ruleConditionFactory)
     {
@@ -23,6 +30,7 @@ class Converter
     /**
      * @param \Magento\CatalogRule\Api\Data\ConditionInterface $dataModel
      * @return array
+     * @since 2.1.0
      */
     public function dataModelToArray(\Magento\CatalogRule\Api\Data\ConditionInterface $dataModel)
     {
@@ -46,6 +54,7 @@ class Converter
      * @param array $conditionArray
      * @return \Magento\CatalogRule\Api\Data\ConditionInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.1.0
      */
     public function arrayToDataModel(array $conditionArray)
     {

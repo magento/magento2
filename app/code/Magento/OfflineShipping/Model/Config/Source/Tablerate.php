@@ -7,16 +7,19 @@ namespace Magento\OfflineShipping\Model\Config\Source;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Tablerate implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\OfflineShipping\Model\Carrier\Tablerate
+     * @since 2.0.0
      */
     protected $_carrierTablerate;
 
     /**
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
+     * @since 2.0.0
      */
     public function __construct(\Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate)
     {
@@ -25,6 +28,7 @@ class Tablerate implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

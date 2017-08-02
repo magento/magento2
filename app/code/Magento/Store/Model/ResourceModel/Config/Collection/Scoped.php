@@ -7,12 +7,18 @@
  */
 namespace Magento\Store\Model\ResourceModel\Config\Collection;
 
+/**
+ * Class \Magento\Store\Model\ResourceModel\Config\Collection\Scoped
+ *
+ * @since 2.0.0
+ */
 class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Scope to filter by
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_scope;
 
@@ -20,6 +26,7 @@ class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abstra
      * Scope id to filter by
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_scopeId;
 
@@ -32,6 +39,7 @@ class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abstra
      * @param string $scope
      * @param mixed $connection
      * @param mixed $scopeId
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -52,6 +60,7 @@ class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abstra
      * Initialize select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

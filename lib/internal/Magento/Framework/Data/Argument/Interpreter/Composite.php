@@ -9,6 +9,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter that aggregates named interpreters and delegates every evaluation to one of them
+ * @since 2.0.0
  */
 class Composite implements InterpreterInterface
 {
@@ -16,6 +17,7 @@ class Composite implements InterpreterInterface
      * Format: array('<name>' => <instance>, ...)
      *
      * @var InterpreterInterface[]
+     * @since 2.0.0
      */
     private $interpreters;
 
@@ -23,6 +25,7 @@ class Composite implements InterpreterInterface
      * Data key that holds name of an interpreter to be used for that data
      *
      * @var string
+     * @since 2.0.0
      */
     private $discriminator;
 
@@ -30,6 +33,7 @@ class Composite implements InterpreterInterface
      * @param InterpreterInterface[] $interpreters
      * @param string $discriminator
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(array $interpreters, $discriminator)
     {
@@ -47,6 +51,7 @@ class Composite implements InterpreterInterface
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {
@@ -68,6 +73,7 @@ class Composite implements InterpreterInterface
      * @param InterpreterInterface $instance
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function addInterpreter($name, InterpreterInterface $instance)
     {
@@ -83,6 +89,7 @@ class Composite implements InterpreterInterface
      * @param string $name
      * @return InterpreterInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function getInterpreter($name)
     {

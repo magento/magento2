@@ -11,21 +11,25 @@ use Magento\Customer\Model\Context;
  * Sales order view block
  *
  * @api
+ * @since 2.0.0
  */
 class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/invoice.phtml';
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Payment\Helper\Data
+     * @since 2.0.0
      */
     protected $_paymentHelper;
 
@@ -35,6 +39,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -51,6 +56,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -61,6 +67,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -71,6 +78,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -81,6 +89,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
      * Return back url for logged in and guest users
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -94,6 +103,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
      * Return back title for logged in and guest users
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getBackTitle()
     {
@@ -106,6 +116,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getViewUrl($order)
     {
@@ -115,6 +126,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getShipmentUrl($order)
     {
@@ -124,6 +136,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getCreditmemoUrl($order)
     {
@@ -133,6 +146,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
     /**
      * @param object $invoice
      * @return string
+     * @since 2.0.0
      */
     public function getPrintInvoiceUrl($invoice)
     {
@@ -142,6 +156,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getPrintAllInvoicesUrl($order)
     {

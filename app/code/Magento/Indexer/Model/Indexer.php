@@ -15,46 +15,55 @@ use Magento\Framework\Indexer\StructureFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Indexer extends \Magento\Framework\DataObject implements IdxInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_idFieldName = 'indexer_id';
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var ActionFactory
+     * @since 2.0.0
      */
     protected $actionFactory;
 
     /**
      * @var StructureFactory
+     * @since 2.0.0
      */
     protected $structureFactory;
 
     /**
      * @var \Magento\Framework\Mview\ViewInterface
+     * @since 2.0.0
      */
     protected $view;
 
     /**
      * @var \Magento\Indexer\Model\Indexer\StateFactory
+     * @since 2.0.0
      */
     protected $stateFactory;
 
     /**
      * @var \Magento\Indexer\Model\Indexer\State
+     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @var Indexer\CollectionFactory
+     * @since 2.0.0
      */
     protected $indexersFactory;
 
@@ -67,6 +76,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $config,
@@ -92,6 +102,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * @codeCoverageIgnore
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -105,6 +116,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -119,6 +131,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @param  string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setIdFieldName($name)
     {
@@ -132,6 +145,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * @codeCoverageIgnore
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -142,6 +156,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer's view ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getViewId()
     {
@@ -152,6 +167,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer action class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getActionClass()
     {
@@ -162,6 +178,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -172,6 +189,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer description
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -182,6 +200,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer fields
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFields()
     {
@@ -192,6 +211,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer sources
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSources()
     {
@@ -202,6 +222,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer handlers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getHandlers()
     {
@@ -214,6 +235,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * @param string $indexerId
      * @return IdxInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function load($indexerId)
     {
@@ -232,6 +254,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return related view object
      *
      * @return \Magento\Framework\Mview\ViewInterface
+     * @since 2.0.0
      */
     public function getView()
     {
@@ -245,6 +268,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return related state object
      *
      * @return StateInterface
+     * @since 2.0.0
      */
     public function getState()
     {
@@ -260,6 +284,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @param StateInterface $state
      * @return IdxInterface
+     * @since 2.0.0
      */
     public function setState(StateInterface $state)
     {
@@ -271,6 +296,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Check whether indexer is run by schedule
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isScheduled()
     {
@@ -282,6 +308,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @param bool $scheduled
      * @return void
+     * @since 2.0.0
      */
     public function setScheduled($scheduled)
     {
@@ -297,6 +324,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Check whether indexer is valid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isValid()
     {
@@ -307,6 +335,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Check whether indexer is invalid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isInvalid()
     {
@@ -317,6 +346,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Check whether indexer is working
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isWorking()
     {
@@ -327,6 +357,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Set indexer invalid
      *
      * @return void
+     * @since 2.0.0
      */
     public function invalidate()
     {
@@ -339,6 +370,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -349,6 +381,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer or mview latest updated time
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLatestUpdated()
     {
@@ -369,6 +402,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer action instance
      *
      * @return ActionInterface
+     * @since 2.0.0
      */
     protected function getActionInstance()
     {
@@ -385,6 +419,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer structure instance
      *
      * @return IndexStructureInterface
+     * @since 2.0.0
      */
     protected function getStructureInstance()
     {
@@ -399,6 +434,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -428,6 +464,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @param int $id
      * @return void
+     * @since 2.0.0
      */
     public function reindexRow($id)
     {
@@ -440,6 +477,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     public function reindexList($ids)
     {

@@ -6,12 +6,18 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\NewFolder
+ *
+ * @since 2.0.0
+ */
 class NewFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * New folder action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,17 +9,20 @@ namespace Magento\Framework\Search;
 /**
  * Entity metadata
  * @api
+ * @since 2.0.0
  */
 class EntityMetadata
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $entityId;
 
     /**
      * @param string $entityId
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($entityId)
     {
@@ -31,6 +34,7 @@ class EntityMetadata
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getEntityId()
     {

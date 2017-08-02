@@ -42,6 +42,7 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenColle
  * @method Token setAuthorized() setAuthorized(int $authorized)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Token extends \Magento\Framework\Model\AbstractModel
 {
@@ -58,26 +59,31 @@ class Token extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var OauthHelper
+     * @since 2.0.0
      */
     protected $_oauthHelper;
 
     /**
      * @var \Magento\Integration\Helper\Oauth\Data
+     * @since 2.0.0
      */
     protected $_oauthData;
 
     /**
      * @var \Magento\Integration\Model\Oauth\ConsumerFactory
+     * @since 2.0.0
      */
     protected $_consumerFactory;
 
     /**
      * @var \Magento\Framework\Url\Validator
+     * @since 2.0.0
      */
     protected $_urlValidator;
 
     /**
      * @var Consumer\Validator\KeyLengthFactory
+     * @since 2.0.0
      */
     protected $_keyLengthFactory;
 
@@ -95,6 +101,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -120,6 +127,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -130,6 +138,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * The "After save" actions
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -147,6 +156,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $consumerId - The id of the consumer associated with the verifier to be generated.
      * @return $this
+     * @since 2.0.0
      */
     public function createVerifierToken($consumerId)
     {
@@ -175,6 +185,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      * @throws OauthException
+     * @since 2.0.0
      */
     public function convertToAccess()
     {
@@ -189,6 +200,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $userId
      * @return $this
+     * @since 2.0.0
      */
     public function createAdminToken($userId)
     {
@@ -201,6 +213,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $userId
      * @return $this
+     * @since 2.0.0
      */
     public function createCustomerToken($userId)
     {
@@ -214,6 +227,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param int $entityId Token identifier
      * @param string $callbackUrl Callback URL
      * @return $this
+     * @since 2.0.0
      */
     public function createRequestToken($entityId, $callbackUrl)
     {
@@ -238,6 +252,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -249,6 +264,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @return bool
      * @throws OauthException Throw exception on fail validation
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -291,6 +307,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * Return the token's verifier.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVerifier()
     {
@@ -302,6 +319,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $userType
      * @return $this
+     * @since 2.0.0
      */
     protected function saveAccessToken($userType)
     {
@@ -318,6 +336,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param int $consumerId
      * @param int $userType
      * @return $this
+     * @since 2.0.0
      */
     public function loadByConsumerIdAndUserType($consumerId, $userType)
     {
@@ -331,6 +350,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $adminId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByAdminId($adminId)
     {
@@ -344,6 +364,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCustomerId($customerId)
     {
@@ -357,6 +378,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $token
      * @return $this
+     * @since 2.0.0
      */
     public function loadByToken($token)
     {

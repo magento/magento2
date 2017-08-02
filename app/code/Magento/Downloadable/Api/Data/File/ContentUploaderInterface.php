@@ -8,6 +8,7 @@ namespace Magento\Downloadable\Api\Data\File;
 /**
  * @codeCoverageIgnore
  * @api
+ * @since 2.0.0
  */
 interface ContentUploaderInterface
 {
@@ -18,6 +19,7 @@ interface ContentUploaderInterface
      * @param string $contentType
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function upload(ContentInterface $fileContent, $contentType);
 }

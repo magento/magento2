@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Admin;
 
+/**
+ * Class \Magento\Sales\Model\Order\Admin\Item
+ *
+ * @since 2.0.0
+ */
 class Item
 {
     /**
@@ -13,6 +18,7 @@ class Item
      * @param \Magento\Sales\Model\Order\Item $item
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSku(\Magento\Sales\Model\Order\Item $item)
     {
@@ -25,6 +31,7 @@ class Item
      * @param \Magento\Sales\Model\Order\Item $item
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName(\Magento\Sales\Model\Order\Item $item)
     {
@@ -37,6 +44,7 @@ class Item
      * @param \Magento\Sales\Model\Order\Item $item
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProductId(\Magento\Sales\Model\Order\Item $item)
     {

@@ -12,26 +12,31 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Used to uninstall registry from the database and deployment config
+ * @since 2.0.0
  */
 class ModuleRegistryUninstaller
 {
     /**
      * @var DataSetupFactory
+     * @since 2.0.0
      */
     private $dataSetupFactory;
 
     /**
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var DeploymentConfig\Writer
+     * @since 2.0.0
      */
     private $writer;
 
     /**
      * @var Loader
+     * @since 2.0.0
      */
     private $loader;
 
@@ -42,6 +47,7 @@ class ModuleRegistryUninstaller
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
      * @param Loader $loader
+     * @since 2.0.0
      */
     public function __construct(
         DataSetupFactory $dataSetupFactory,
@@ -61,6 +67,7 @@ class ModuleRegistryUninstaller
      * @param OutputInterface $output
      * @param string[] $modules
      * @return void
+     * @since 2.0.0
      */
     public function removeModulesFromDb(OutputInterface $output, array $modules)
     {
@@ -80,6 +87,7 @@ class ModuleRegistryUninstaller
      * @param OutputInterface $output
      * @param string[] $modules
      * @return void
+     * @since 2.0.0
      */
     public function removeModulesFromDeploymentConfig(OutputInterface $output, array $modules)
     {

@@ -13,7 +13,9 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create" name="sales_creditmemo_create">
                 <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Form" name="form" template="Magento_Sales::order/creditmemo/create/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml">
+                        <container name="extra_customer_info"/>
+                    </block>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="Magento_Sales::order/creditmemo/create/items.phtml">
                         <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/creditmemo/create/items/renderer/default.phtml"/>

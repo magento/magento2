@@ -8,12 +8,18 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Export\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends ExportController
 {
     /**
      * Index action.
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

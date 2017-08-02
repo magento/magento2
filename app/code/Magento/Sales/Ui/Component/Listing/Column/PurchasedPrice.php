@@ -12,11 +12,13 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class Price
+ * @since 2.0.0
  */
 class PurchasedPrice extends Column
 {
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceFormatter;
 
@@ -28,6 +30,7 @@ class PurchasedPrice extends Column
      * @param PriceCurrencyInterface $priceFormatter
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -45,6 +48,7 @@ class PurchasedPrice extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

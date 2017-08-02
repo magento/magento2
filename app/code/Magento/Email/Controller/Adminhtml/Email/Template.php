@@ -9,6 +9,7 @@ namespace Magento\Email\Controller\Adminhtml\Email;
  * System Template admin controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class Template extends \Magento\Backend\App\Action
 {
@@ -23,12 +24,14 @@ abstract class Template extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -41,6 +44,7 @@ abstract class Template extends \Magento\Backend\App\Action
      *
      * @param string $idFieldName
      * @return \Magento\Email\Model\BackendTemplate $model
+     * @since 2.0.0
      */
     protected function _initTemplate($idFieldName = 'template_id')
     {

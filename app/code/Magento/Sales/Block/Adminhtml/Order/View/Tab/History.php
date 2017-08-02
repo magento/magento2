@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order history tab
  *
  * @api
+ * @since 2.0.0
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -16,6 +17,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Template
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/view/tab/history.phtml';
 
@@ -23,11 +25,13 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Sales\Helper\Admin
+     * @since 2.0.0
      */
     private $adminHelper;
 
@@ -36,6 +40,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,6 +57,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Retrieve order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -66,6 +72,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * and avoid generating it dynamically
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFullHistory()
     {
@@ -151,6 +158,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param string $dateType
      * @param int $format
      * @return string
+     * @since 2.0.0
      */
     public function getItemCreatedAt(array $item, $dateType = 'date', $format = \IntlDateFormatter::MEDIUM)
     {
@@ -168,6 +176,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param array $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemTitle(array $item)
     {
@@ -180,6 +189,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param array $item
      * @param bool $isSimpleCheck
      * @return bool
+     * @since 2.0.0
      */
     public function isItemNotified(array $item, $isSimpleCheck = true)
     {
@@ -194,6 +204,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param array $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemComment(array $item)
     {
@@ -210,6 +221,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param \DateTimeInterface $created
      * @param string $comment
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
     {
@@ -218,6 +230,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -226,6 +239,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -236,6 +250,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Get Tab Class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabClass()
     {
@@ -246,6 +261,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Get Class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getClass()
     {
@@ -256,6 +272,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Get Tab Url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabUrl()
     {
@@ -264,6 +281,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -272,6 +290,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -283,6 +302,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param array $historyItem
      * @return bool
+     * @since 2.0.0
      */
     public function isCustomerNotificationNotApplicable($historyItem)
     {
@@ -296,6 +316,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param mixed $a
      * @param mixed $b
      * @return int
+     * @since 2.0.0
      */
     public static function sortHistoryByTimestamp($a, $b)
     {
@@ -314,6 +335,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param int $createdAt
      * @return \DateTime
+     * @since 2.0.0
      */
     public function getOrderAdminDate($createdAt)
     {

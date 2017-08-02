@@ -13,6 +13,7 @@ namespace Magento\Config\Block\System\Config\Form\Field;
  * Class Image Field
  * @method getFieldConfig()
  * @method setFieldConfig()
+ * @since 2.0.0
  */
 class Image extends \Magento\Framework\Data\Form\Element\Image
 {
@@ -20,6 +21,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      * Get image preview url
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getUrl()
     {

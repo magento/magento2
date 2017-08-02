@@ -16,11 +16,13 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Collection
+     * @since 2.0.0
      */
     protected $_itemCollection;
 
@@ -28,6 +30,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -35,6 +38,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -42,11 +46,13 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      * Checkout cart
      *
      * @var \Magento\Checkout\Model\ResourceModel\Cart
+     * @since 2.0.0
      */
     protected $_checkoutCart;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
@@ -57,6 +63,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -78,6 +85,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareData()
     {
@@ -104,6 +112,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -113,6 +122,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
 
     /**
      * @return Collection
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -130,6 +140,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -144,6 +155,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      * Find out if some products can be easy added to cart
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canItemsAddToCart()
     {

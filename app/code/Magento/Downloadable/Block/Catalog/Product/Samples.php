@@ -14,6 +14,7 @@ use Magento\Downloadable\Model\ResourceModel\Sample;
  * Downloadable Product Samples part block
  *
  * @api
+ * @since 2.0.0
  */
 class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -21,6 +22,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      * Enter description here...
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function hasSamples()
     {
@@ -31,6 +33,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get downloadable product samples
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSamples()
     {
@@ -40,6 +43,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param Sample $sample
      * @return string
+     * @since 2.0.0
      */
     public function getSampleUrl($sample)
     {
@@ -50,6 +54,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      * Return title of samples section
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSamplesTitle()
     {
@@ -64,6 +69,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsOpenInNewWindow()
     {

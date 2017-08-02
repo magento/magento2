@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class TemporaryStorage
 {
@@ -22,11 +23,13 @@ class TemporaryStorage
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -38,7 +41,8 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function storeDocuments($documents)
     {
@@ -50,6 +54,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @since 2.1.0
      */
     public function storeApiDocuments($documents)
     {
@@ -71,6 +76,7 @@ class TemporaryStorage
      * @param array $data
      * @return Table
      * @throws \Zend_Db_Exception
+     * @since 2.1.0
      */
     private function populateTemporaryTable(Table $table, $data)
     {
@@ -91,6 +97,7 @@ class TemporaryStorage
      * @param Select $select
      * @return Table
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function storeDocumentsFromSelect(Select $select)
     {
@@ -101,6 +108,7 @@ class TemporaryStorage
 
     /**
      * @return false|AdapterInterface
+     * @since 2.0.0
      */
     private function getConnection()
     {
@@ -110,6 +118,7 @@ class TemporaryStorage
     /**
      * @return Table
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     private function createTemporaryTable()
     {

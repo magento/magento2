@@ -8,6 +8,7 @@ namespace Magento\Framework\Filesystem;
 
 /**
  * A pool of stream wrappers
+ * @since 2.0.0
  */
 class DriverPool
 {
@@ -24,6 +25,7 @@ class DriverPool
      * Supported types
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $types = [
         self::FILE => \Magento\Framework\Filesystem\Driver\File::class,
@@ -36,6 +38,7 @@ class DriverPool
      * The pool
      *
      * @var DriverInterface[]
+     * @since 2.0.0
      */
     private $pool = [];
 
@@ -44,6 +47,7 @@ class DriverPool
      *
      * @param array $extraTypes
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct($extraTypes = [])
     {
@@ -70,6 +74,7 @@ class DriverPool
      *
      * @param string $code
      * @return DriverInterface
+     * @since 2.0.0
      */
     public function getDriver($code)
     {

@@ -22,6 +22,7 @@ use Magento\Framework\Indexer\HandlerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 class Base implements ActionInterface
 {
@@ -32,40 +33,47 @@ class Base implements ActionInterface
 
     /**
      * @var FieldsetPool
+     * @since 2.0.0
      */
     protected $fieldsetPool;
 
     /**
      * @var AdapterInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var SourceProviderInterface[]
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $sources;
 
     /**
      * @var SourceProviderInterface
+     * @since 2.0.0
      */
     protected $primarySource;
 
     /**
      * @var HandlerInterface[]
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $handlers;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $data;
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
@@ -75,61 +83,72 @@ class Base implements ActionInterface
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $filterColumns;
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $searchColumns;
 
     /**
      * @var SourceFactory
+     * @since 2.0.0
      */
     protected $sourceFactory;
 
     /**
      * @var HandlerPool
+     * @since 2.0.0
      */
     protected $handlerPool;
 
     /**
      * @var SaveHandlerFactory
+     * @since 2.0.0
      */
     protected $saveHandlerFactory;
 
     /**
      * @var String
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var IndexStructureInterface
+     * @since 2.0.0
      */
     protected $indexStructure;
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $filterable = [];
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $searchable = [];
 
     /**
      * @var IndexerInterface
+     * @since 2.0.0
      */
     protected $saveHandler;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $tableAlias = 'main_table';
 
@@ -142,6 +161,7 @@ class Base implements ActionInterface
      * @param StdString $string
      * @param IndexStructureInterface $indexStructure
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         AppResource $resource,
@@ -168,6 +188,7 @@ class Base implements ActionInterface
      *
      * @param null|int|array $ids
      * @return void
+     * @since 2.0.0
      */
     protected function execute(array $ids = [])
     {
@@ -183,6 +204,7 @@ class Base implements ActionInterface
      * Execute full indexation
      *
      * @return void
+     * @since 2.0.0
      */
     public function executeFull()
     {
@@ -194,6 +216,7 @@ class Base implements ActionInterface
      *
      * @param int[] $ids
      * @return void
+     * @since 2.0.0
      */
     public function executeList(array $ids)
     {
@@ -205,6 +228,7 @@ class Base implements ActionInterface
      *
      * @param int $id
      * @return void
+     * @since 2.0.0
      */
     public function executeRow($id)
     {
@@ -216,6 +240,7 @@ class Base implements ActionInterface
      *
      * @param array|int|null $ids
      * @return SourceProviderInterface
+     * @since 2.0.0
      */
     protected function prepareDataSource(array $ids = [])
     {
@@ -228,6 +253,7 @@ class Base implements ActionInterface
      * Return index table name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getTableName()
     {
@@ -238,6 +264,7 @@ class Base implements ActionInterface
      * Return save handler
      *
      * @return IndexerInterface
+     * @since 2.0.0
      */
     protected function getSaveHandler()
     {
@@ -257,6 +284,7 @@ class Base implements ActionInterface
      * Return primary source provider
      *
      * @return SourceProviderInterface
+     * @since 2.0.0
      */
     protected function getPrimaryResource()
     {
@@ -267,6 +295,7 @@ class Base implements ActionInterface
      * Return primary fieldset
      *
      * @return []
+     * @since 2.0.0
      */
     protected function getPrimaryFieldset()
     {
@@ -277,6 +306,7 @@ class Base implements ActionInterface
      * Create select from indexer configuration
      *
      * @return SourceProviderInterface
+     * @since 2.0.0
      */
     protected function createResultCollection()
     {
@@ -319,6 +349,7 @@ class Base implements ActionInterface
      * Prepare configuration data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function prepareFields()
     {
@@ -353,7 +384,8 @@ class Base implements ActionInterface
      * @param array $field
      * @return void
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected function saveFieldByType($field)
     {

@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Search\Request\Config;
 
+/**
+ * Class \Magento\Framework\Search\Request\Config\FilesystemReader
+ *
+ * @since 2.0.0
+ */
 class FilesystemReader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of identifier attributes for merging
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/requests/request' => 'query',
@@ -33,6 +39,7 @@ class FilesystemReader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

@@ -14,6 +14,7 @@ use Zend\Mvc\Controller\AbstractActionController;
  * Class Environment
  *
  * Provides information and checks about the environment.
+ * @since 2.0.0
  */
 class Environment extends AbstractActionController
 {
@@ -26,6 +27,7 @@ class Environment extends AbstractActionController
      * File system
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -33,6 +35,7 @@ class Environment extends AbstractActionController
      * Cron Script Readiness Check
      *
      * @var \Magento\Setup\Model\CronScriptReadinessCheck
+     * @since 2.0.0
      */
     protected $cronScriptReadinessCheck;
 
@@ -40,6 +43,7 @@ class Environment extends AbstractActionController
      * PHP Readiness Check
      *
      * @var \Magento\Setup\Model\PhpReadinessCheck
+     * @since 2.0.0
      */
     protected $phpReadinessCheck;
 
@@ -50,6 +54,7 @@ class Environment extends AbstractActionController
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck
      * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Setup\FilePermissions $permissions,
@@ -67,6 +72,7 @@ class Environment extends AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.1.0
      */
     public function indexAction()
     {
@@ -80,6 +86,7 @@ class Environment extends AbstractActionController
      * Verifies php version
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.0.0
      */
     public function phpVersionAction()
     {
@@ -98,6 +105,7 @@ class Environment extends AbstractActionController
      * Checks PHP settings
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.0.0
      */
     public function phpSettingsAction()
     {
@@ -116,6 +124,7 @@ class Environment extends AbstractActionController
      * Verifies php verifications
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.0.0
      */
     public function phpExtensionsAction()
     {
@@ -135,6 +144,7 @@ class Environment extends AbstractActionController
      *
      * @param string $type
      * @return array
+     * @since 2.0.0
      */
     private function getPhpChecksInfo($type)
     {
@@ -156,6 +166,7 @@ class Environment extends AbstractActionController
      * Verifies file permissions
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.0.0
      */
     public function filePermissionsAction()
     {
@@ -190,6 +201,7 @@ class Environment extends AbstractActionController
      * Verifies updater application exists
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.0.0
      */
     public function updaterApplicationAction()
     {
@@ -208,6 +220,7 @@ class Environment extends AbstractActionController
      * Verifies Setup and Updater Cron status
      *
      * @return \Zend\View\Model\JsonModel
+     * @since 2.0.0
      */
     public function cronScriptAction()
     {

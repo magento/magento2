@@ -8,6 +8,7 @@ namespace Magento\Framework\View\File\FileList;
 
 /**
  * View file list collate interface
+ * @since 2.0.0
  */
 interface CollateInterface
 {
@@ -17,6 +18,7 @@ interface CollateInterface
      * @param \Magento\Framework\View\File[] $files
      * @param \Magento\Framework\View\File[] $filesOrigin
      * @return \Magento\Framework\View\File[]
+     * @since 2.0.0
      */
     public function collate($files, $filesOrigin);
 }

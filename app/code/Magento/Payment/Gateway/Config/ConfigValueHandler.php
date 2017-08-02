@@ -14,16 +14,19 @@ use Magento\Payment\Gateway\Helper\SubjectReader;
  * This class is designed to be injected into other classes. Inheritance in not recommended.
  *
  * @api
+ * @since 2.0.0
  */
 class ConfigValueHandler implements ValueHandlerInterface
 {
     /**
      * @var \Magento\Payment\Gateway\ConfigInterface
+     * @since 2.0.0
      */
     private $configInterface;
 
     /**
      * @param \Magento\Payment\Gateway\ConfigInterface $configInterface
+     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $configInterface
@@ -38,6 +41,7 @@ class ConfigValueHandler implements ValueHandlerInterface
      * @param int|null $storeId
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function handle(array $subject, $storeId = null)
     {

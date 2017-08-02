@@ -12,20 +12,28 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\Product\Attribute
+ *
+ * @since 2.0.0
+ */
 class Attribute
 {
     /**
      * @var RuleCollectionFactory
+     * @since 2.0.0
      */
     protected $ruleCollectionFactory;
 
     /**
      * @var RuleProductProcessor
+     * @since 2.0.0
      */
     protected $ruleProductProcessor;
 
     /**
      * @var ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -33,6 +41,7 @@ class Attribute
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param RuleProductProcessor $ruleProductProcessor
      * @param ManagerInterface $messageManager
+     * @since 2.0.0
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
@@ -50,6 +59,7 @@ class Attribute
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject,
@@ -67,6 +77,7 @@ class Attribute
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterDelete(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject,
@@ -84,6 +95,7 @@ class Attribute
      *
      * @param string $attributeCode
      * @return $this
+     * @since 2.0.0
      */
     protected function checkCatalogRulesAvailability($attributeCode)
     {
@@ -121,6 +133,7 @@ class Attribute
      * @param Combine $combine
      * @param string $attributeCode
      * @return void
+     * @since 2.0.0
      */
     protected function removeAttributeFromConditions(Combine $combine, $attributeCode)
     {

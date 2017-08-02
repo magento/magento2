@@ -9,20 +9,28 @@ namespace Magento\CatalogInventory\Observer;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogInventory\Observer\ReindexQuoteInventoryObserver
+ *
+ * @since 2.0.0
+ */
 class ReindexQuoteInventoryObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @since 2.0.0
      */
     protected $stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @since 2.0.0
      */
     protected $priceIndexer;
 
     /**
      * @var \Magento\CatalogInventory\Observer\ItemsForReindex
+     * @since 2.0.0
      */
     protected $itemsForReindex;
 
@@ -30,6 +38,7 @@ class ReindexQuoteInventoryObserver implements ObserverInterface
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
      * @param ItemsForReindex $itemsForReindex
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
@@ -46,6 +55,7 @@ class ReindexQuoteInventoryObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

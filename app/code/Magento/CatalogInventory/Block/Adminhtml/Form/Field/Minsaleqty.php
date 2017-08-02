@@ -9,11 +9,13 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
  * Adminhtml catalog inventory "Minimum Qty Allowed in Shopping Cart" field
  *
  * @api
+ * @since 2.0.0
  */
 class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
      * @var Customergroup
+     * @since 2.0.0
      */
     protected $_groupRenderer;
 
@@ -21,6 +23,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
      * Retrieve group column renderer
      *
      * @return Customergroup
+     * @since 2.0.0
      */
     protected function _getGroupRenderer()
     {
@@ -39,6 +42,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
      * Prepare to render
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareToRender()
     {
@@ -56,6 +60,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
      *
      * @param \Magento\Framework\DataObject $row
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
     {

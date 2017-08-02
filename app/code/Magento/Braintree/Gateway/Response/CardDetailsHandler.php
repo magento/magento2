@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class CardDetailsHandler
+ * @since 2.1.0
  */
 class CardDetailsHandler implements HandlerInterface
 {
@@ -28,11 +29,13 @@ class CardDetailsHandler implements HandlerInterface
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
@@ -41,6 +44,7 @@ class CardDetailsHandler implements HandlerInterface
      *
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(
         Config $config,
@@ -52,6 +56,7 @@ class CardDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -81,6 +86,7 @@ class CardDetailsHandler implements HandlerInterface
      *
      * @param string $type
      * @return array
+     * @since 2.1.0
      */
     private function getCreditCardType($type)
     {

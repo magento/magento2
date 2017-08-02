@@ -9,6 +9,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
  * Adminhtml block for fieldset of bundle product
  *
  * @api
+ * @since 2.0.0
  */
 class Bundle extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
 {
@@ -16,6 +17,7 @@ class Bundle extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
      * Returns string with json config for bundle product
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsonConfig()
     {

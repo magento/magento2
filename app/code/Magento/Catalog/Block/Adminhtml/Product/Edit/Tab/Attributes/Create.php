@@ -13,12 +13,18 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
 use Magento\Backend\Block\Widget\Button;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Create
+ *
+ * @since 2.0.0
+ */
 class Create extends Button
 {
     /**
      * Config of create new attribute
      *
      * @var \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected $_config = null;
 
@@ -26,6 +32,7 @@ class Create extends Button
      * Retrieve config of new attribute creation
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -38,6 +45,7 @@ class Create extends Button
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -86,6 +94,7 @@ class Create extends Button
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -103,6 +112,7 @@ class Create extends Button
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getJsObjectName()
     {

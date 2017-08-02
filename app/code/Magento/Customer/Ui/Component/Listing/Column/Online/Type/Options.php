@@ -9,11 +9,13 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class Options
+ * @since 2.0.0
  */
 class Options implements OptionSourceInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options;
 
@@ -21,6 +23,7 @@ class Options implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -8,6 +8,11 @@ namespace Magento\CatalogUrlRewrite\Model\ResourceModel\Category;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product
+ *
+ * @since 2.0.0
+ */
 class Product extends AbstractDb
 {
     /**
@@ -24,6 +29,7 @@ class Product extends AbstractDb
      * Primary key auto increment flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isPkAutoIncrement = false;
 
@@ -31,6 +37,7 @@ class Product extends AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,6 +47,7 @@ class Product extends AbstractDb
     /**
      * @param array $insertData
      * @return int
+     * @since 2.0.0
      */
     public function saveMultiple(array $insertData)
     {
@@ -60,6 +68,7 @@ class Product extends AbstractDb
      *
      * @param array $removeData
      * @return int
+     * @since 2.0.0
      */
     public function removeMultiple(array $removeData)
     {
@@ -75,6 +84,7 @@ class Product extends AbstractDb
      *
      * @param array $filter
      * @return int
+     * @since 2.2.0
      */
     public function removeMultipleByProductCategory(array $filter)
     {
@@ -89,6 +99,7 @@ class Product extends AbstractDb
      *
      * @param array $data
      * @return \Magento\Framework\DB\Select
+     * @since 2.2.0
      */
     private function prepareSelect($data)
     {

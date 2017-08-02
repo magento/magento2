@@ -9,7 +9,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Factory to combine several messages into one
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.1.0
  */
 class PhraseFactory
 {
@@ -20,6 +21,7 @@ class PhraseFactory
      * @param MessageInterface[] $subMessages
      * @param string $separator
      * @return Phrase
+     * @since 2.1.0
      */
     public function create($mainMessage, $subMessages, $separator = '; ')
     {

@@ -10,6 +10,7 @@ namespace Magento\Framework\Simplexml;
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
  * @api
+ * @since 2.0.0
  */
 class Element extends \SimpleXMLElement
 {
@@ -21,6 +22,7 @@ class Element extends \SimpleXMLElement
      * @todo make use of spl_object_hash to keep global array of simplexml elements
      *       to emulate complicated attributes
      * @var \Magento\Framework\Simplexml\Element
+     * @since 2.0.0
      */
     protected $_parent = null;
 
@@ -30,6 +32,7 @@ class Element extends \SimpleXMLElement
      * @param \Magento\Framework\Simplexml\Element $element
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setParent($element)
     {
@@ -43,6 +46,7 @@ class Element extends \SimpleXMLElement
      *
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\Simplexml\Element
+     * @since 2.0.0
      */
     public function getParent()
     {
@@ -63,6 +67,7 @@ class Element extends \SimpleXMLElement
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -82,6 +87,7 @@ class Element extends \SimpleXMLElement
      *
      * @param string $name
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttribute($name)
     {
@@ -98,6 +104,7 @@ class Element extends \SimpleXMLElement
      * @param   string $path Example: "child/grand@attrName=attrValue/subGrand" (to make it faster without regex)
      * @return  \Magento\Framework\Simplexml\Element
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function descend($path)
     {
@@ -158,6 +165,7 @@ class Element extends \SimpleXMLElement
      * @param string $name
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     public function setAttribute($name, $value)
     {
@@ -172,6 +180,7 @@ class Element extends \SimpleXMLElement
      * Returns the node and children as an array
      *
      * @return array|string
+     * @since 2.0.0
      */
     public function asArray()
     {
@@ -181,6 +190,7 @@ class Element extends \SimpleXMLElement
     /**
      * asArray() analog, but without attributes
      * @return array|string
+     * @since 2.0.0
      */
     public function asCanonicalArray()
     {
@@ -192,6 +202,7 @@ class Element extends \SimpleXMLElement
      *
      * @param bool $isCanonical - whether to ignore attributes
      * @return array|string
+     * @since 2.0.0
      */
     protected function _asArray($isCanonical = false)
     {
@@ -229,6 +240,7 @@ class Element extends \SimpleXMLElement
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function asNiceXml($filename = '', $level = 0)
     {
@@ -288,6 +300,7 @@ class Element extends \SimpleXMLElement
      *
      * @param int $level
      * @return string
+     * @since 2.0.0
      */
     public function innerXml($level = 0)
     {
@@ -303,6 +316,7 @@ class Element extends \SimpleXMLElement
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function xmlentities($value = null)
     {
@@ -325,6 +339,7 @@ class Element extends \SimpleXMLElement
      *
      * @param \Magento\Framework\Simplexml\Element $source
      * @return $this
+     * @since 2.0.0
      */
     public function appendChild($source)
     {
@@ -355,6 +370,7 @@ class Element extends \SimpleXMLElement
      * @param \Magento\Framework\Simplexml\Element $source
      * @param boolean $overwrite
      * @return $this
+     * @since 2.0.0
      */
     public function extend($source, $overwrite = false)
     {
@@ -377,6 +393,7 @@ class Element extends \SimpleXMLElement
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function extendChild($source, $overwrite = false)
     {
@@ -439,6 +456,7 @@ class Element extends \SimpleXMLElement
      * @param string $value
      * @param bool $overwrite
      * @return $this
+     * @since 2.0.0
      */
     public function setNode($path, $value, $overwrite = true)
     {
@@ -472,6 +490,7 @@ class Element extends \SimpleXMLElement
      *
      * Note: trying to refer this object as a variable after "unsetting" like this will result in E_WARNING
      * @return void
+     * @since 2.0.0
      */
     public function unsetSelf()
     {

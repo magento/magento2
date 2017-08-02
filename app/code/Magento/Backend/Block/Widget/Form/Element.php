@@ -11,32 +11,38 @@ use Magento\Framework\Data\Form;
  * Form element widget block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Element extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_element;
 
     /**
      * @var Form
+     * @since 2.0.0
      */
     protected $_form;
 
     /**
      * @var \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected $_formBlock;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/form/element.phtml';
 
     /**
      * @param string $element
      * @return $this
+     * @since 2.0.0
      */
     public function setElement($element)
     {
@@ -47,6 +53,7 @@ class Element extends \Magento\Backend\Block\Template
     /**
      * @param Form $form
      * @return $this
+     * @since 2.0.0
      */
     public function setForm($form)
     {
@@ -57,6 +64,7 @@ class Element extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Framework\DataObject $formBlock
      * @return $this
+     * @since 2.0.0
      */
     public function setFormBlock($formBlock)
     {
@@ -66,6 +74,7 @@ class Element extends \Magento\Backend\Block\Template
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

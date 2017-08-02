@@ -7,16 +7,19 @@ namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
 /**
  * CMS block chooser for Wysiwyg CMS widget
+ * @since 2.0.0
  */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Cms\Model\BlockFactory
+     * @since 2.0.0
      */
     protected $_blockFactory;
 
     /**
      * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -26,6 +29,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -43,6 +47,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Block construction, prepare grid params
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -58,6 +63,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element Form Element
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @since 2.0.0
      */
     public function prepareElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -93,6 +99,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Grid Row JS Callback
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRowClickCallback()
     {
@@ -120,6 +127,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare Cms static blocks collection
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -131,6 +139,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare columns for Cms blocks grid
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -163,6 +172,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get grid url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {

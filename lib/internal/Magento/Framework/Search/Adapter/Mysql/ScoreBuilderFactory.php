@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * ScoreBuilder Factory
+ * @since 2.0.0
  */
 class ScoreBuilderFactory
 {
@@ -14,6 +15,7 @@ class ScoreBuilderFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -21,6 +23,7 @@ class ScoreBuilderFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -29,6 +32,7 @@ class ScoreBuilderFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class ScoreBuilderFactory
      *
      * @param array $data
      * @return \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

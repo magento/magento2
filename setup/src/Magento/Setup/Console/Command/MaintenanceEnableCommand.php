@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 /**
  * Command for enabling maintenance mode
+ * @since 2.0.0
  */
 class MaintenanceEnableCommand extends AbstractMaintenanceCommand
 {
@@ -15,6 +16,7 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      * Initialization of the command
      *
      * @return void
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -26,6 +28,7 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      * Enable maintenance mode
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isEnable()
     {
@@ -36,6 +39,7 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      * Get enabled maintenance mode display string
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getDisplayString()
     {

@@ -6,16 +6,23 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe
+ *
+ * @since 2.0.0
+ */
 class DeniedIframe extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -29,6 +36,7 @@ class DeniedIframe extends \Magento\Backend\Controller\Adminhtml\Auth
      * Retrieve response for deniedIframeAction()
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDeniedIframe()
     {
@@ -40,6 +48,7 @@ class DeniedIframe extends \Magento\Backend\Controller\Adminhtml\Auth
      * Denied IFrame action
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

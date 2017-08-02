@@ -19,6 +19,7 @@ use Magento\Framework\DataObject;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -32,6 +33,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Config data array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_configData;
 
@@ -39,6 +41,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Backend config data instance
      *
      * @var \Magento\Config\Model\Config
+     * @since 2.0.0
      */
     protected $_configDataObject;
 
@@ -46,6 +49,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Default fieldset rendering block
      *
      * @var \Magento\Config\Block\System\Config\Form\Fieldset
+     * @since 2.0.0
      */
     protected $_fieldsetRenderer;
 
@@ -53,6 +57,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Default field rendering block
      *
      * @var \Magento\Config\Block\System\Config\Form\Field
+     * @since 2.0.0
      */
     protected $_fieldRenderer;
 
@@ -60,6 +65,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * List of fieldset
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_fieldsets = [];
 
@@ -67,6 +73,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Translated scope labels
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_scopeLabels = [];
 
@@ -74,6 +81,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Backend Config model factory
      *
      * @var \Magento\Config\Model\Config\Factory
+     * @since 2.0.0
      */
     protected $_configFactory;
 
@@ -81,6 +89,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Magento\Framework\Data\FormFactory
      *
      * @var \Magento\Framework\Data\FormFactory
+     * @since 2.0.0
      */
     protected $_formFactory;
 
@@ -88,6 +97,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * System config structure
      *
      * @var \Magento\Config\Model\Config\Structure
+     * @since 2.0.0
      */
     protected $_configStructure;
 
@@ -95,6 +105,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Form fieldset factory
      *
      * @var \Magento\Config\Block\System\Config\Form\Fieldset\Factory
+     * @since 2.0.0
      */
     protected $_fieldsetFactory;
 
@@ -102,16 +113,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Form field factory
      *
      * @var \Magento\Config\Block\System\Config\Form\Field\Factory
+     * @since 2.0.0
      */
     protected $_fieldFactory;
 
     /**
      * @var SettingChecker
+     * @since 2.2.0
      */
     private $settingChecker;
 
     /**
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $appConfig;
 
@@ -120,6 +134,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * by their paths in the system.xml structure.
      *
      * @var ElementVisibilityInterface
+     * @since 2.2.0
      */
     private $elementVisibility;
 
@@ -132,6 +147,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
      * @param \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -157,8 +173,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return SettingChecker
+     * @since 2.2.0
      */
     private function getSettingChecker()
     {
@@ -172,6 +189,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize objects required to render config form
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initObjects()
     {
@@ -195,6 +213,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize form
      *
      * @return $this
+     * @since 2.0.0
      */
     public function initForm()
     {
@@ -221,6 +240,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Config\Model\Config\Structure\Element\Section $section
      * @param \Magento\Framework\Data\Form\AbstractForm $form
      * @return void
+     * @since 2.0.0
      */
     protected function _initGroup(
         \Magento\Config\Model\Config\Structure\Element\Group $group,
@@ -270,6 +290,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Return dependency block object
      *
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
+     * @since 2.0.0
      */
     protected function _getDependence()
     {
@@ -288,6 +309,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $fieldPrefix
      * @param string $labelPrefix
      * @return $this
+     * @since 2.0.0
      */
     public function initFields(
         \Magento\Framework\Data\Form\Element\Fieldset $fieldset,
@@ -335,6 +357,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $fieldPrefix
      * @param string $labelPrefix
      * @return void
+     * @since 2.0.0
      */
     protected function _initElement(
         \Magento\Config\Model\Config\Structure\Element\Field $field,
@@ -410,6 +433,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @param string $path
      * @return mixed|null|string
+     * @since 2.2.0
      */
     private function getFieldData(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
     {
@@ -451,6 +475,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve Scope string code
      *
      * @return string
+     * @since 2.2.0
      */
     private function getStringScopeCode()
     {
@@ -478,6 +503,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $elementId
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     protected function _populateDependenciesBlock(array $dependencies, $elementId, $elementName)
     {
@@ -505,6 +531,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $fieldPrefix
      * @param string $separator
      * @return string
+     * @since 2.0.0
      */
     protected function _generateElementName($elementPath, $fieldPrefix = '', $separator = '/')
     {
@@ -523,6 +550,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     protected function _generateElementId($path)
     {
@@ -534,6 +562,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $path
      * @return mixed
+     * @since 2.0.0
      */
     public function getConfigValue($path)
     {
@@ -542,6 +571,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return \Magento\Backend\Block\Widget\Form|\Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -554,6 +584,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $html
      * @return string
+     * @since 2.0.0
      */
     protected function _afterToHtml($html)
     {
@@ -569,6 +600,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return boolean
+     * @since 2.0.0
      */
     public function canUseDefaultValue($fieldValue)
     {
@@ -586,6 +618,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return boolean
+     * @since 2.0.0
      */
     public function canUseWebsiteValue($fieldValue)
     {
@@ -600,6 +633,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return bool
+     * @since 2.1.0
      */
     public function isCanRestoreToDefault($fieldValue)
     {
@@ -613,6 +647,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Retrieve current scope
      *
      * @return string
+     * @since 2.0.0
      */
     public function getScope()
     {
@@ -636,6 +671,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @return string
+     * @since 2.0.0
      */
     public function getScopeLabel(\Magento\Config\Model\Config\Structure\Element\Field $field)
     {
@@ -654,6 +690,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get current scope code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getScopeCode()
     {
@@ -676,6 +713,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get current scope code
      *
      * @return int|string
+     * @since 2.0.0
      */
     public function getScopeId()
     {
@@ -697,6 +735,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get additional element types
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -717,6 +756,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @since 2.0.0
      */
     public function getSectionCode()
     {
@@ -728,6 +768,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @since 2.0.0
      */
     public function getWebsiteCode()
     {
@@ -739,6 +780,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @since 2.0.0
      */
     public function getStoreCode()
     {
@@ -750,6 +792,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @return string
+     * @since 2.0.0
      */
     protected function _getSharedCssClass(\Magento\Config\Model\Config\Structure\Element\Field $field)
     {
@@ -767,6 +810,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @param string $fieldPrefix
      * @return string
+     * @since 2.0.0
      */
     protected function _getRequiresCssClass(\Magento\Config\Model\Config\Structure\Element\Field $field, $fieldPrefix)
     {
@@ -785,8 +829,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve Deployment Configuration object.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return DeploymentConfig
+     * @since 2.2.0
      */
     private function getAppConfig()
     {
@@ -801,6 +846,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $path
      * @return null|string
+     * @since 2.2.0
      */
     private function getAppConfigDataValue($path)
     {
@@ -820,9 +866,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Gets instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated Added to not break backward compatibility of the constructor signature
+     * @deprecated 2.2.0 Added to not break backward compatibility of the constructor signature
      *             by injecting the new dependency directly.
      *             The method can be removed in a future major release, when constructor signature can be changed.
+     * @since 2.2.0
      */
     public function getElementVisibility()
     {

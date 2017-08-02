@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Interface RepositoryInterface must be implemented in new model
  * @api
+ * @since 2.0.0
  */
 interface CategoryAttributeOptionManagementInterface
 {
@@ -19,6 +20,7 @@ interface CategoryAttributeOptionManagementInterface
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
      * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]
+     * @since 2.0.0
      */
     public function getItems($attributeCode);
 }

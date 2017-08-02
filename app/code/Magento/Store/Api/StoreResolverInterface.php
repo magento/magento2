@@ -9,6 +9,7 @@ namespace Magento\Store\Api;
  * Store resolver interface
  *
  * @api
+ * @since 2.0.0
  */
 interface StoreResolverInterface
 {
@@ -21,6 +22,7 @@ interface StoreResolverInterface
      * Retrieve current store id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentStoreId();
 }

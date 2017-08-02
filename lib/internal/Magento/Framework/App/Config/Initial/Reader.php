@@ -7,12 +7,18 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial\Reader
+ *
+ * @since 2.0.0
+ */
 class Reader
 {
     /**
      * File locator
      *
      * @var \Magento\Framework\Config\FileResolverInterface
+     * @since 2.0.0
      */
     protected $_fileResolver;
 
@@ -20,6 +26,7 @@ class Reader
      * Config converter
      *
      * @var  \Magento\Framework\Config\ConverterInterface
+     * @since 2.0.0
      */
     protected $_converter;
 
@@ -27,6 +34,7 @@ class Reader
      * Config file name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_fileName;
 
@@ -34,6 +42,7 @@ class Reader
      * Class of dom configuration document used for merge
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_domDocumentClass;
 
@@ -41,6 +50,7 @@ class Reader
      * Scope priority loading scheme
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_scopePriorityScheme = ['global'];
 
@@ -48,6 +58,7 @@ class Reader
      * Path to corresponding XSD file with validation rules for config
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_schemaFile;
 
@@ -58,6 +69,7 @@ class Reader
      * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param string $fileName
      * @param string $domDocumentClass
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
@@ -79,6 +91,7 @@ class Reader
      * @return array
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function read()
     {

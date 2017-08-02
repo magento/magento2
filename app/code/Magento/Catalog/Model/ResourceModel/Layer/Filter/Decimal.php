@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,6 +19,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -32,6 +34,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $index
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function applyFilterToCollection(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $range, $index)
     {
@@ -67,6 +70,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @return array
+     * @since 2.0.0
      */
     public function getMinMax(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter)
     {
@@ -92,6 +96,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getSelect($filter)
     {
@@ -129,6 +134,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @param int $range
      * @return array
+     * @since 2.0.0
      */
     public function getCount(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $range)
     {

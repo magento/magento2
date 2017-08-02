@@ -13,6 +13,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * Class for handling API section within integration.
  *
  * @api
+ * @since 2.0.0
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -21,6 +22,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Root ACL Resource
      *
      * @var \Magento\Framework\Acl\RootResource
+     * @since 2.0.0
      */
     protected $rootResource;
 
@@ -28,13 +30,20 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Acl resource provider
      *
      * @var \Magento\Framework\Acl\AclResource\ProviderInterface
+     * @since 2.0.0
      */
     protected $aclResourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     * @since 2.0.0
+     */
     protected $integrationData;
 
-    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     * @since 2.0.0
+     */
     protected $integrationService;
 
     /**
@@ -50,6 +59,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -73,6 +83,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      *
      * @return \Magento\Framework\Phrase
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -84,6 +95,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -94,6 +106,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Whether tab is available
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -108,6 +121,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -118,6 +132,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -144,6 +159,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Retrieve saved resource
      *
      * @return array|bool
+     * @since 2.1.0
      */
     protected function retrieveFormResources()
     {
@@ -163,6 +179,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Check if everything is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEverythingAllowed()
     {
@@ -173,6 +190,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get Json Representation of Resource Tree
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTree()
     {
@@ -183,6 +201,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get lit of all ACL resources declared in the system.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getAclResources()
     {

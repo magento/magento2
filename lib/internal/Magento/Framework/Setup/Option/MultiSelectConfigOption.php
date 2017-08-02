@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Option;
 
 /**
  * Multi-select option in deployment config tool
+ * @since 2.0.0
  */
 class MultiSelectConfigOption extends AbstractConfigOption
 {
@@ -21,6 +22,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * Available options
      *
      * @var array
+     * @since 2.0.0
      */
     private $selectOptions;
 
@@ -35,6 +37,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * @param array $defaultValue
      * @param string|array|null $shortCut
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -69,6 +72,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * Get available options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectOptions()
     {
@@ -81,6 +85,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * @param mixed $data
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function validate($data)
     {

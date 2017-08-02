@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\Html;
 
 /**
  * HTML select element block
+ * @since 2.0.0
  */
 class Select extends \Magento\Framework\View\Element\AbstractBlock
 {
@@ -14,6 +15,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * Options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options = [];
 
@@ -21,6 +23,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * Get options of the element
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -32,6 +35,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param array $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions($options)
     {
@@ -46,6 +50,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * @param string $label  HTML label
      * @param array  $params HTML attributes
      * @return $this
+     * @since 2.0.0
      */
     public function addOption($value, $label, $params = [])
     {
@@ -58,6 +63,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param string $elementId ID
      * @return $this
+     * @since 2.0.0
      */
     public function setId($elementId)
     {
@@ -70,6 +76,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param string $class Class
      * @return $this
+     * @since 2.0.0
      */
     public function setClass($class)
     {
@@ -82,6 +89,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param string $title Title
      * @return $this
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -93,6 +101,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * HTML ID of the element
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -103,6 +112,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * CSS class of the element
      *
      * @return string
+     * @since 2.0.0
      */
     public function getClass()
     {
@@ -113,6 +123,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * Returns HTML title of the element
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -126,6 +137,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -192,6 +204,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * @param array $option
      * @param boolean $selected
      * @return string
+     * @since 2.0.0
      */
     protected function _optionToHtml($option, $selected = false)
     {
@@ -226,6 +239,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * Alias for toHtml()
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -237,6 +251,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param string $optionValue Value of the option
      * @return string
+     * @since 2.0.0
      */
     public function calcOptionHash($optionValue)
     {

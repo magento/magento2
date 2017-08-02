@@ -9,6 +9,7 @@ namespace Magento\Framework\Locale;
  * Manages locale config information
  *
  * @api
+ * @since 2.0.0
  */
 interface ResolverInterface
 {
@@ -16,6 +17,7 @@ interface ResolverInterface
      * Return path to default locale
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultLocalePath();
 
@@ -24,6 +26,7 @@ interface ResolverInterface
      *
      * @param   string $locale
      * @return  self
+     * @since 2.0.0
      */
     public function setDefaultLocale($locale);
 
@@ -31,6 +34,7 @@ interface ResolverInterface
      * Retrieve default locale code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultLocale();
 
@@ -39,6 +43,7 @@ interface ResolverInterface
      *
      * @param   string $locale
      * @return  self
+     * @since 2.0.0
      */
     public function setLocale($locale = null);
 
@@ -46,6 +51,7 @@ interface ResolverInterface
      * Retrieve locale
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLocale();
 
@@ -54,6 +60,7 @@ interface ResolverInterface
      *
      * @param int $scopeId
      * @return string|null
+     * @since 2.0.0
      */
     public function emulate($scopeId);
 
@@ -61,6 +68,7 @@ interface ResolverInterface
      * Get last locale, used before last emulation
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function revert();
 }

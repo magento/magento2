@@ -10,11 +10,13 @@ use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 
 /**
  * Class ThemeDependencyCheckerFactory creates instance of ThemeDependencyChecker
+ * @since 2.0.0
  */
 class ThemeDependencyCheckerFactory
 {
     /**
      * @var ObjectManagerProvider
+     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -22,6 +24,7 @@ class ThemeDependencyCheckerFactory
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -32,6 +35,7 @@ class ThemeDependencyCheckerFactory
      * Creates ThemeDependencyChecker object
      *
      * @return ThemeDependencyChecker
+     * @since 2.0.0
      */
     public function create()
     {

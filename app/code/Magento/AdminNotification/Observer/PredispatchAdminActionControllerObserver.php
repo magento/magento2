@@ -11,22 +11,26 @@ use Magento\Framework\Event\ObserverInterface;
  * AdminNotification observer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class PredispatchAdminActionControllerObserver implements ObserverInterface
 {
     /**
      * @var \Magento\AdminNotification\Model\FeedFactory
+     * @since 2.0.0
      */
     protected $_feedFactory;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_backendAuthSession;
 
     /**
      * @param \Magento\AdminNotification\Model\FeedFactory $feedFactory
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\AdminNotification\Model\FeedFactory $feedFactory,
@@ -42,6 +46,7 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

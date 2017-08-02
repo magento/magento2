@@ -7,15 +7,22 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 
+/**
+ * Class \Magento\GiftMessage\Model\CompositeConfigProvider
+ *
+ * @since 2.0.0
+ */
 class CompositeConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var ConfigProviderInterface[]
+     * @since 2.0.0
      */
     private $configProviders;
 
     /**
      * @param ConfigProviderInterface[] $configProviders
+     * @since 2.0.0
      */
     public function __construct(
         array $configProviders
@@ -25,6 +32,7 @@ class CompositeConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {

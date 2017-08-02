@@ -7,16 +7,19 @@ namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class FieldFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -28,6 +31,7 @@ class FieldFactory
      *
      * @param array $arguments
      * @return Field
+     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

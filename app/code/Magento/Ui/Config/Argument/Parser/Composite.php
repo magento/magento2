@@ -9,6 +9,7 @@ use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
  * This class is a composite of parsers which converts XML nodes to array
+ * @since 2.2.0
  */
 class Composite implements ParserInterface
 {
@@ -16,6 +17,7 @@ class Composite implements ParserInterface
      * Format: array('<name>' => <instance>, ...)
      *
      * @var ParserInterface[]
+     * @since 2.2.0
      */
     private $parsers;
 
@@ -23,6 +25,7 @@ class Composite implements ParserInterface
      * Data key that holds name of an parser to be used for that data
      *
      * @var string
+     * @since 2.2.0
      */
     private $discriminator;
 
@@ -30,6 +33,7 @@ class Composite implements ParserInterface
      * @param ParserInterface[] $parsers
      * @param string $discriminator
      * @throws \InvalidArgumentException if parser isn't implement parser interface
+     * @since 2.2.0
      */
     public function __construct(array $parsers, $discriminator)
     {
@@ -47,6 +51,7 @@ class Composite implements ParserInterface
     /**
      * @inheritdoc
      * @throws \InvalidArgumentException if discriminator isn't passed
+     * @since 2.2.0
      */
     public function parse(array $data, \DOMNode $node)
     {
@@ -67,6 +72,7 @@ class Composite implements ParserInterface
      * @param ParserInterface $instance
      * @return void
      * @throws \InvalidArgumentException if parser has already been defined
+     * @since 2.2.0
      */
     public function addParser($name, ParserInterface $instance)
     {
@@ -82,6 +88,7 @@ class Composite implements ParserInterface
      * @param string $name
      * @return ParserInterface
      * @throws \InvalidArgumentException if the parser hasn't already been defined
+     * @since 2.2.0
      */
     private function getParser($name)
     {

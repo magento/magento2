@@ -11,6 +11,11 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Text
+ *
+ * @since 2.0.0
+ */
 class Text extends \Magento\Eav\Model\Attribute\Data\Text
 {
 }

@@ -14,11 +14,13 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 
 /**
  * Class CustomerGroup
+ * @since 2.0.0
  */
 class CustomerGroup extends Column
 {
     /**
      * @var GroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
@@ -30,6 +32,7 @@ class CustomerGroup extends Column
      * @param UiComponentFactory $uiComponentFactory
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -47,6 +50,7 @@ class CustomerGroup extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

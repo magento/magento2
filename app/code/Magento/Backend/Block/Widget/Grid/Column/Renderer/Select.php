@@ -9,11 +9,13 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Grid select input column renderer
  *
  * @api
+ * @since 2.0.0
  */
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter
+     * @since 2.0.0
      */
     protected $_converter;
 
@@ -21,6 +23,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -35,6 +38,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * Get options from column
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getOptions()
     {
@@ -46,6 +50,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

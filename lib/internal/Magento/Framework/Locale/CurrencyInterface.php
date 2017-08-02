@@ -9,6 +9,7 @@ namespace Magento\Framework\Locale;
  * Provides access to currency config information
  *
  * @api
+ * @since 2.0.0
  */
 interface CurrencyInterface
 {
@@ -16,6 +17,7 @@ interface CurrencyInterface
      * Retrieve default currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultCurrency();
 
@@ -24,6 +26,7 @@ interface CurrencyInterface
      *
      * @param   string $currency
      * @return  \Magento\Framework\Currency
+     * @since 2.0.0
      */
     public function getCurrency($currency);
 }

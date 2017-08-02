@@ -8,6 +8,11 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Validator\Text
+ *
+ * @since 2.0.0
+ */
 class Text extends DefaultValidator
 {
     /**
@@ -15,6 +20,7 @@ class Text extends DefaultValidator
      *
      * @param Option $option
      * @return bool
+     * @since 2.0.0
      */
     protected function validateOptionValue(Option $option)
     {

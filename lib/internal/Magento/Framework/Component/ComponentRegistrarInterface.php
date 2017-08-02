@@ -7,6 +7,7 @@ namespace Magento\Framework\Component;
 
 /**
  * @author Josh Di Fabio <joshdifabio@gmail.com>
+ * @since 2.0.0
  */
 interface ComponentRegistrarInterface
 {
@@ -17,6 +18,7 @@ interface ComponentRegistrarInterface
      *
      * @param string $type
      * @return array
+     * @since 2.0.0
      */
     public function getPaths($type);
 
@@ -26,6 +28,7 @@ interface ComponentRegistrarInterface
      * @param string $type
      * @param string $componentName
      * @return null|string
+     * @since 2.0.0
      */
     public function getPath($type, $componentName);
 }

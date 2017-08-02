@@ -7,6 +7,11 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Class \Magento\Framework\View\Layout\Generator\Container
+ *
+ * @since 2.0.0
+ */
 class Container implements Layout\GeneratorInterface
 {
     /**#@+
@@ -22,6 +27,7 @@ class Container implements Layout\GeneratorInterface
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $allowedTags = [
         'aside',
@@ -45,6 +51,7 @@ class Container implements Layout\GeneratorInterface
      * {@inheritdoc}
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -57,6 +64,7 @@ class Container implements Layout\GeneratorInterface
      * @param \Magento\Framework\View\Layout\Reader\Context $readerContext
      * @param Context $generatorContext
      * @return $this
+     * @since 2.0.0
      */
     public function process(Layout\Reader\Context $readerContext, Layout\Generator\Context $generatorContext)
     {
@@ -79,6 +87,7 @@ class Container implements Layout\GeneratorInterface
      * @param string $elementName
      * @param array $options
      * @return void
+     * @since 2.0.0
      */
     public function generateContainer(
         Layout\Data\Structure $structure,
@@ -98,6 +107,7 @@ class Container implements Layout\GeneratorInterface
      * @param array $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function validateOptions($options)
     {

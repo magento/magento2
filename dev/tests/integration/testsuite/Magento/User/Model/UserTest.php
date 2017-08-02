@@ -231,6 +231,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedException \Magento\Framework\Exception\AuthenticationException
      * @magentoDbIsolation enabled
      */

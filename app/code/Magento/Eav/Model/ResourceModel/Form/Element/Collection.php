@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel\Form\Element;
  * Eav Form Element Resource Collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,6 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Eav\Model\Form\Type|int $type
      * @return $this
+     * @since 2.0.0
      */
     public function addTypeFilter($type)
     {
@@ -43,6 +46,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Eav\Model\Form\Fieldset|int $fieldset
      * @return $this
+     * @since 2.0.0
      */
     public function addFieldsetFilter($fieldset)
     {
@@ -59,6 +63,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|int $attribute
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addAttributeFilter($attribute)
     {
@@ -74,6 +79,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setSortOrder()
     {
@@ -86,6 +92,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join attribute data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinAttributeData()
     {
@@ -104,6 +111,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {

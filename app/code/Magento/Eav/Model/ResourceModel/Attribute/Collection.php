@@ -11,6 +11,7 @@ use Magento\Store\Model\Website;
  * EAV additional attribute resource collection (Using Forms)
  *
  * @api
+ * @since 2.0.0
  */
 abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
@@ -23,6 +24,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Current website scope instance
      *
      * @var Website
+     * @since 2.0.0
      */
     protected $_website;
 
@@ -30,11 +32,13 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Attribute Entity Type Filter
      *
      * @var \Magento\Eav\Model\Entity\Type
+     * @since 2.0.0
      */
     protected $_entityType;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -48,6 +52,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -67,6 +72,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Default attribute entity type code
      *
      * @return string
+     * @since 2.0.0
      */
     abstract protected function _getEntityTypeCode();
 
@@ -77,6 +83,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * If realization doesn't demand this functionality, let this function just return null
      *
      * @return string|null
+     * @since 2.0.0
      */
     abstract protected function _getEavWebsiteTable();
 
@@ -85,6 +92,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -95,6 +103,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Return eav entity type instance
      *
      * @return \Magento\Eav\Model\Entity\Type
+     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -109,6 +118,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      *
      * @param Website|int $website
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsite($website)
     {
@@ -121,6 +131,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Return current website scope instance
      *
      * @return Website
+     * @since 2.0.0
      */
     public function getWebsite()
     {
@@ -134,6 +145,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Initialize collection select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -217,6 +229,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setEntityTypeFilter($type)
     {
@@ -228,6 +241,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      *
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function addVisibleFilter()
     {
@@ -238,6 +252,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Exclude system hidden attributes
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addSystemHiddenFilter()
     {
@@ -255,6 +270,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      * Exclude system hidden attributes but include password hash
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addSystemHiddenFilterWithPasswordHash()
     {
@@ -276,6 +292,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
      *
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function addExcludeHiddenFrontendFilter()
     {

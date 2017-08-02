@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Category;
  * Product View block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class View extends AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -19,47 +20,56 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
+     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\Catalog\Helper\Product
+     * @since 2.0.0
      */
     protected $_productHelper;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @since 2.0.0
      */
     protected $productTypeConfig;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -77,6 +87,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * @param array $data
      * @codingStandardsIgnoreStart
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -112,7 +123,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return wishlist widget options
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function getWishlistOptions()
     {
@@ -123,6 +135,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Add meta information from product to head block
      *
      * @return \Magento\Catalog\Block\Product\View
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -168,6 +181,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Retrieve current product model
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -182,6 +196,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Check if product can be emailed to friend
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canEmailToFriend()
     {
@@ -194,6 +209,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return string
+     * @since 2.0.0
      */
     public function getAddToCartUrl($product, $additional = [])
     {
@@ -217,6 +233,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * price calculation depending on product options
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsonConfig()
     {
@@ -272,6 +289,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return true if product has options
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasOptions()
     {
@@ -285,6 +303,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Check if product has required options
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasRequiredOptions()
     {
@@ -298,6 +317,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * instantly.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isStartCustomization()
     {
@@ -310,6 +330,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      *
      * @param null|\Magento\Catalog\Model\Product $product
      * @return int|float
+     * @since 2.0.0
      */
     public function getProductDefaultQty($product = null)
     {
@@ -331,6 +352,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Get container name, where product options should be displayed
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOptionsContainer()
     {
@@ -341,6 +363,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Check whether quantity field should be rendered
      *
      * @return bool
+     * @since 2.0.0
      */
     public function shouldRenderQuantity()
     {
@@ -351,6 +374,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Get Validation Rules for Quantity field
      *
      * @return array
+     * @since 2.0.0
      */
     public function getQuantityValidators()
     {
@@ -363,6 +387,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -378,6 +403,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Retrieve customer data object
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getCustomerId()
     {

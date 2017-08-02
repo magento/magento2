@@ -16,16 +16,19 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
  * Class QuoteUpdater
+ * @since 2.1.0
  */
 class QuoteUpdater extends AbstractHelper
 {
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var CartRepositoryInterface
+     * @since 2.1.0
      */
     private $quoteRepository;
 
@@ -34,6 +37,7 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
+     * @since 2.1.0
      */
     public function __construct(
         Config $config,
@@ -52,6 +56,7 @@ class QuoteUpdater extends AbstractHelper
      * @return void
      * @throws \InvalidArgumentException
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function execute($nonce, array $details, Quote $quote)
     {
@@ -73,6 +78,7 @@ class QuoteUpdater extends AbstractHelper
      * @param Quote $quote
      * @param array $details
      * @return void
+     * @since 2.1.0
      */
     private function updateQuote(Quote $quote, array $details)
     {
@@ -101,6 +107,7 @@ class QuoteUpdater extends AbstractHelper
      * @param Quote $quote
      * @param array $details
      * @return void
+     * @since 2.1.0
      */
     private function updateQuoteAddress(Quote $quote, array $details)
     {
@@ -118,6 +125,7 @@ class QuoteUpdater extends AbstractHelper
      * @param Quote $quote
      * @param array $details
      * @return void
+     * @since 2.1.0
      */
     private function updateShippingAddress(Quote $quote, array $details)
     {
@@ -143,6 +151,7 @@ class QuoteUpdater extends AbstractHelper
      * @param Quote $quote
      * @param array $details
      * @return void
+     * @since 2.1.0
      */
     private function updateBillingAddress(Quote $quote, array $details)
     {
@@ -170,6 +179,7 @@ class QuoteUpdater extends AbstractHelper
      * @param Address $address
      * @param array $addressData
      * @return void
+     * @since 2.1.0
      */
     private function updateAddressData(Address $address, array $addressData)
     {

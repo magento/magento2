@@ -7,12 +7,18 @@ namespace Magento\Cms\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Cms\Observer\NoCookiesObserver
+ *
+ * @since 2.0.0
+ */
 class NoCookiesObserver implements ObserverInterface
 {
     /**
      * Cms page
      *
      * @var \Magento\Cms\Helper\Page
+     * @since 2.0.0
      */
     protected $_cmsPage;
 
@@ -20,12 +26,14 @@ class NoCookiesObserver implements ObserverInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Cms\Helper\Page $cmsPage
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Cms\Helper\Page $cmsPage,
@@ -40,6 +48,7 @@ class NoCookiesObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return self
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

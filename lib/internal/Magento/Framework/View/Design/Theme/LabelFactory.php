@@ -9,12 +9,18 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
+/**
+ * Class \Magento\Framework\View\Design\Theme\LabelFactory
+ *
+ * @since 2.0.0
+ */
 class LabelFactory
 {
     /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -22,6 +28,7 @@ class LabelFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -30,6 +37,7 @@ class LabelFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -44,6 +52,7 @@ class LabelFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Design\Theme\Label
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

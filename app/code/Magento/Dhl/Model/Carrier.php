@@ -20,6 +20,7 @@ use Magento\Framework\Xml\Security;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -46,6 +47,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Container types that could be customized
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_customizableContainerTypes = [self::DHL_CONTENT_TYPE_NON_DOC];
 
@@ -58,6 +60,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Rate request data
      *
      * @var RateRequest|null
+     * @since 2.0.0
      */
     protected $_request;
 
@@ -65,6 +68,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Rate result data
      *
      * @var Result|null
+     * @since 2.0.0
      */
     protected $_result;
 
@@ -72,6 +76,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Countries parameters data
      *
      * @var \Magento\Shipping\Model\Simplexml\Element|null
+     * @since 2.0.0
      */
     protected $_countryParams;
 
@@ -79,6 +84,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Errors placeholder
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -86,6 +92,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Dhl rates result
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_rates = [];
 
@@ -93,6 +100,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Carrier's code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = self::CODE;
 
@@ -100,6 +108,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Free Method config path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_freeMethod = 'free_method_nondoc';
 
@@ -107,6 +116,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Max weight without fee
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_maxWeight = 70;
 
@@ -114,6 +124,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Flag if response is for shipping label creating
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isShippingLabelFlag = false;
 
@@ -121,6 +132,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Request variables array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_requestVariables = [
         'id' => ['code' => 'dhl_id', 'setCode' => 'id'],
@@ -138,6 +150,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Flag that shows if shipping is domestic
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isDomestic = false;
 
@@ -145,6 +158,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Core string
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -152,46 +166,55 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
+     * @since 2.0.0
      */
     protected $_carrierHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_coreDate;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_configReader;
 
     /**
      * @var \Magento\Framework\Math\Division
+     * @since 2.0.0
      */
     protected $mathDivision;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     * @since 2.0.0
      */
     protected $readFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $_dateTime;
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @since 2.0.0
      */
     protected $_httpClientFactory;
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'SiteID', 'Password'
@@ -224,6 +247,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -290,6 +314,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string|int $origValue
      * @param string $pathToValue
      * @return string|int|null
+     * @since 2.0.0
      */
     protected function _getDefaultValue($origValue, $pathToValue)
     {
@@ -309,6 +334,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param RateRequest $request
      * @return bool|Result|Error
+     * @since 2.0.0
      */
     public function collectRates(RateRequest $request)
     {
@@ -346,6 +372,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $freeMethod
      * @return void
+     * @since 2.0.0
      */
     protected function _setFreeMethodRequest($freeMethod)
     {
@@ -359,6 +386,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Returns request result
      *
      * @return Result|null
+     * @since 2.0.0
      */
     public function getResult()
     {
@@ -370,6 +398,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $requestObject
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _addParams(\Magento\Framework\DataObject $requestObject)
     {
@@ -392,6 +421,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function setRequest(\Magento\Framework\DataObject $request)
     {
@@ -496,6 +526,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @return string[]
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getAllowedMethods()
     {
@@ -532,6 +563,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $type
      * @param string $code
      * @return array|bool
+     * @since 2.0.0
      */
     public function getCode($type, $code = '')
     {
@@ -576,6 +608,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $doc Package content type (doc/non-doc) see DHL_CONTENT_TYPE_* constants
      * @return array
+     * @since 2.0.0
      */
     public function getDhlProducts($doc)
     {
@@ -636,6 +669,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $code One-symbol code (see getDhlProducts())
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getDhlProductTitle($code)
     {
@@ -652,6 +686,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param bool $maxWeight
      * @param string|bool $configWeightUnit
      * @return float
+     * @since 2.0.0
      */
     protected function _getWeight($weight, $maxWeight = false, $configWeightUnit = false)
     {
@@ -670,7 +705,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configWeightUnit != $countryWeightUnit) {
             $weight = $this->_carrierHelper->convertMeasureWeight(
-                sprintf('%.3f', $weight),
+                (float)$weight,
                 $configWeightUnit,
                 $countryWeightUnit
             );
@@ -685,6 +720,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _getAllItems()
     {
@@ -776,6 +812,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Shipping\Model\Simplexml\Element $nodeBkgDetails
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _makePieces(\Magento\Shipping\Model\Simplexml\Element $nodeBkgDetails)
     {
@@ -848,6 +885,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param float $dimension
      * @param string|bool $configWeightUnit
      * @return float
+     * @since 2.0.0
      */
     protected function _getDimension($dimension, $configWeightUnit = false)
     {
@@ -870,7 +908,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configDimensionUnit != $countryDimensionUnit) {
             $dimension = $this->_carrierHelper->convertMeasureDimension(
-                sprintf('%.3f', $dimension),
+                (float)$dimension,
                 $configDimensionUnit,
                 $countryDimensionUnit
             );
@@ -884,14 +922,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Shipping\Model\Simplexml\Element $nodePiece
      * @return void
+     * @since 2.0.0
      */
     protected function _addDimension($nodePiece)
     {
         $sizeChecker = (string)$this->getConfigData('size');
 
-        $height = $this->_getDimension((string)$this->getConfigData('height'));
-        $depth = $this->_getDimension((string)$this->getConfigData('depth'));
-        $width = $this->_getDimension((string)$this->getConfigData('width'));
+        $height = $this->_getDimension((float)$this->getConfigData('height'));
+        $depth = $this->_getDimension((float)$this->getConfigData('depth'));
+        $width = $this->_getDimension((float)$this->getConfigData('width'));
 
         if ($sizeChecker && $height && $depth && $width) {
             $nodePiece->addChild('Height', $height);
@@ -904,6 +943,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Get shipping quotes
      *
      * @return \Magento\Framework\Model\AbstractModel|Result
+     * @since 2.0.0
      */
     protected function _getQuotes()
     {
@@ -951,6 +991,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $request
      * @return string
+     * @since 2.0.0
      */
     protected function _getQuotesFromServer($request)
     {
@@ -966,6 +1007,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Build quotes request XML object
      *
      * @return \SimpleXMLElement
+     * @since 2.0.0
      */
     protected function _buildQuotesRequestXml()
     {
@@ -1028,6 +1070,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \SimpleXMLElement $requestXml
      * @param string $date
      * @return \SimpleXMLElement
+     * @since 2.0.0
      */
     protected function _setQuotesRequestXmlDate(\SimpleXMLElement $requestXml, $date)
     {
@@ -1044,6 +1087,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _parseResponse($response)
     {
@@ -1134,6 +1178,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \SimpleXMLElement $shipmentDetails
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _addRate(\SimpleXMLElement $shipmentDetails)
     {
@@ -1208,6 +1253,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getDimensionUnit()
     {
@@ -1227,6 +1273,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getWeightUnit()
     {
@@ -1248,6 +1295,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return \Magento\Framework\DataObject
      *
      * @see $countryCode ISO 3166 Codes (Countries) A2
+     * @since 2.0.0
      */
     protected function getCountryParams($countryCode)
     {
@@ -1268,6 +1316,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1283,6 +1332,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
+     * @since 2.0.0
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
@@ -1317,6 +1367,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -1332,6 +1383,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\DataObject $request
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _mapRequestToShipment(\Magento\Framework\DataObject $request)
     {
@@ -1375,6 +1427,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $dimensionUnit
      * @return int
+     * @since 2.0.0
      */
     protected function _getMinDimension($dimensionUnit)
     {
@@ -1389,6 +1442,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _doRequest()
     {
@@ -1583,6 +1637,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _shipmentDetails($xml, $rawRequest, $originRegion = '')
     {
@@ -1686,6 +1741,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string|string[] $trackings
      * @return Result|null
+     * @since 2.0.0
      */
     public function getTracking($trackings)
     {
@@ -1702,6 +1758,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string[] $trackings
      * @return void
+     * @since 2.0.0
      */
     protected function _getXMLTracking($trackings)
     {
@@ -1773,6 +1830,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _parseXmlTrackingResponse($trackings, $response)
     {
@@ -1865,6 +1923,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $handlingType
      * @param float $handlingFee
      * @return float
+     * @since 2.0.0
      */
     protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
     {
@@ -1881,6 +1940,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Shipping\Model\Shipment\Request $request
      * @return array|\Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function requestToShipment($request)
     {
@@ -1912,6 +1972,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $origCountryCode
      * @param string $destCountryCode
      * @return bool
+     * @since 2.0.0
      */
     protected function _checkDomesticStatus($origCountryCode, $destCountryCode)
     {
@@ -1938,6 +1999,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \SimpleXMLElement $xml
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _prepareShippingLabelContent(\SimpleXMLElement $xml)
     {
@@ -1961,6 +2023,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $destCountryId
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isDutiable($origCountryId, $destCountryId)
     {

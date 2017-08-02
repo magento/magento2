@@ -16,6 +16,7 @@ use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Form extends \Magento\Framework\View\Element\Template
 {
@@ -23,6 +24,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Review data
      *
      * @var \Magento\Review\Helper\Data
+     * @since 2.0.0
      */
     protected $_reviewData = null;
 
@@ -30,6 +32,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Catalog product model
      *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -37,11 +40,13 @@ class Form extends \Magento\Framework\View\Element\Template
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
+     * @since 2.0.0
      */
     protected $_ratingFactory;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
+     * @since 2.0.0
      */
     protected $urlEncoder;
 
@@ -49,26 +54,31 @@ class Form extends \Magento\Framework\View\Element\Template
      * Message manager interface
      *
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $customerUrl;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $jsLayout;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -87,6 +97,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -117,6 +128,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Initialize review form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -143,6 +155,7 @@ class Form extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getJsLayout()
     {
@@ -154,6 +167,7 @@ class Form extends \Magento\Framework\View\Element\Template
      *
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getProductInfo()
     {
@@ -168,6 +182,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Get review product post action
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAction()
     {
@@ -185,6 +200,7 @@ class Form extends \Magento\Framework\View\Element\Template
      *
      * @return RatingCollection
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getRatings()
     {
@@ -203,6 +219,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Return register URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRegisterUrl()
     {
@@ -213,6 +230,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Get review product id
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getProductId()
     {

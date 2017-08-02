@@ -9,26 +9,31 @@ namespace Magento\Cms\Model\Template;
 
 /**
  * Filter provider model
+ * @since 2.0.0
  */
 class FilterProvider
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_pageFilter;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_blockFilter;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_instanceList;
 
@@ -36,6 +41,7 @@ class FilterProvider
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $pageFilter
      * @param string $blockFilter
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -51,6 +57,7 @@ class FilterProvider
      * @param string $instanceName
      * @return \Magento\Framework\Filter\Template
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _getFilterInstance($instanceName)
     {
@@ -68,6 +75,7 @@ class FilterProvider
 
     /**
      * @return \Magento\Framework\Filter\Template
+     * @since 2.0.0
      */
     public function getBlockFilter()
     {
@@ -76,6 +84,7 @@ class FilterProvider
 
     /**
      * @return \Magento\Framework\Filter\Template
+     * @since 2.0.0
      */
     public function getPageFilter()
     {

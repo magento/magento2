@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Item pool
+ * @since 2.0.0
  */
 class ItemPool implements ItemPoolInterface
 {
@@ -19,6 +20,7 @@ class ItemPool implements ItemPoolInterface
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,6 +28,7 @@ class ItemPool implements ItemPoolInterface
      * Default item id
      *
      * @var string
+     * @since 2.0.0
      */
     protected $defaultItemId;
 
@@ -33,6 +36,7 @@ class ItemPool implements ItemPoolInterface
      * Item map. Key is item type, value is item object id in di
      *
      * @var array
+     * @since 2.0.0
      */
     protected $itemMap;
 
@@ -43,6 +47,7 @@ class ItemPool implements ItemPoolInterface
      * @param string $defaultItemId
      * @param array $itemMap
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -57,6 +62,7 @@ class ItemPool implements ItemPoolInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItemData(Item $item)
     {
@@ -69,6 +75,7 @@ class ItemPool implements ItemPoolInterface
      * @param string $type
      * @return ItemInterface
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function get($type)
     {

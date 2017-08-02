@@ -13,21 +13,25 @@ use Magento\Framework\DB\Sql\ColumnValueExpression;
  * Class ColumnsResolver
  *
  * Resolves columns names
+ * @since 2.2.0
  */
 class ColumnsResolver
 {
     /**
      * @var NameResolver
+     * @since 2.2.0
      */
     private $nameResolver;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private $connection;
 
@@ -36,6 +40,7 @@ class ColumnsResolver
      *
      * @param NameResolver $nameResolver
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         NameResolver $nameResolver,
@@ -49,6 +54,7 @@ class ColumnsResolver
      * Returns connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private function getConnection()
     {
@@ -64,6 +70,7 @@ class ColumnsResolver
      * @param SelectBuilder $selectBuilder
      * @param array $entityConfig
      * @return array
+     * @since 2.2.0
      */
     public function getColumns(SelectBuilder $selectBuilder, $entityConfig)
     {

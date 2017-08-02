@@ -13,6 +13,7 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Class WishlistTab
+ * @since 2.0.0
  */
 class WishlistTab extends TabWrapper implements TabInterface
 {
@@ -20,11 +21,13 @@ class WishlistTab extends TabWrapper implements TabInterface
      * Core registry
      *
      * @var Registry
+     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $isAjaxLoaded = true;
 
@@ -34,6 +37,7 @@ class WishlistTab extends TabWrapper implements TabInterface
      * @param Context $context
      * @param Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(Context $context, Registry $registry, array $data = [])
     {
@@ -43,6 +47,7 @@ class WishlistTab extends TabWrapper implements TabInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -53,6 +58,7 @@ class WishlistTab extends TabWrapper implements TabInterface
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -63,6 +69,7 @@ class WishlistTab extends TabWrapper implements TabInterface
      * Return URL link to Tab content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabUrl()
     {

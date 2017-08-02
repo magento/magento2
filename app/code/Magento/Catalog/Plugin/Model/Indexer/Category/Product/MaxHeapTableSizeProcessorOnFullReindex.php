@@ -11,18 +11,21 @@ use Magento\Catalog\Model\ResourceModel\MaxHeapTableSizeProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 class MaxHeapTableSizeProcessorOnFullReindex
 {
     /**
      * @var MaxHeapTableSizeProcessor
+     * @since 2.0.0
      */
     protected $maxHeapTableSizeProcessor;
 
     /**
      * @param MaxHeapTableSizeProcessor $maxHeapTableSizeProcessor
      * @param LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         MaxHeapTableSizeProcessor $maxHeapTableSizeProcessor,
@@ -36,6 +39,7 @@ class MaxHeapTableSizeProcessorOnFullReindex
      * @param Full $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeExecute(Full $subject)
     {
@@ -51,6 +55,7 @@ class MaxHeapTableSizeProcessorOnFullReindex
      * @param Full $result
      * @return Full
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterExecute(Full $subject, Full $result)
     {

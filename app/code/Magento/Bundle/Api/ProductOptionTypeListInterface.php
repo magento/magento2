@@ -9,6 +9,7 @@ namespace Magento\Bundle\Api;
 /**
  * Interface ProductOptionTypeListInterface
  * @api
+ * @since 2.0.0
  */
 interface ProductOptionTypeListInterface
 {
@@ -16,6 +17,7 @@ interface ProductOptionTypeListInterface
      * Get all types for options for bundle products
      *
      * @return \Magento\Bundle\Api\Data\OptionTypeInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 }

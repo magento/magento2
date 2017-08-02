@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for checking if DB version is in sync with the code base version
+ * @since 2.0.0
  */
 class DbStatusCommand extends AbstractSetupCommand
 {
@@ -27,6 +28,7 @@ class DbStatusCommand extends AbstractSetupCommand
      * Object manager provider
      *
      * @var ObjectManagerProvider
+     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -34,6 +36,7 @@ class DbStatusCommand extends AbstractSetupCommand
      * Deployment configuration
      *
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -42,6 +45,7 @@ class DbStatusCommand extends AbstractSetupCommand
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider, DeploymentConfig $deploymentConfig)
     {
@@ -52,6 +56,7 @@ class DbStatusCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -62,6 +67,7 @@ class DbStatusCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

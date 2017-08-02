@@ -10,12 +10,18 @@ use Magento\Backend\Block\Widget\Grid\ExportInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportAccountsCsv
+ *
+ * @since 2.0.0
+ */
 class ExportAccountsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**
      * Export new accounts report grid to CSV format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

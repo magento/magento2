@@ -6,6 +6,11 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\Auth\ResetPasswordPost
+ *
+ * @since 2.0.0
+ */
 class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**
@@ -14,6 +19,7 @@ class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
      * Used to handle data received from reset forgotten password form
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

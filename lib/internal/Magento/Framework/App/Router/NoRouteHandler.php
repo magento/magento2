@@ -7,15 +7,22 @@
  */
 namespace Magento\Framework\App\Router;
 
+/**
+ * Class \Magento\Framework\App\Router\NoRouteHandler
+ *
+ * @since 2.0.0
+ */
 class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
@@ -28,6 +35,7 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function process(\Magento\Framework\App\RequestInterface $request)
     {

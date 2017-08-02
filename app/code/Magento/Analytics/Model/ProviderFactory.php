@@ -11,16 +11,19 @@ use Magento\Framework\ObjectManagerInterface;
  * Class ProviderFactory
  *
  * Factory for report providers
+ * @since 2.2.0
  */
 class ProviderFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -31,6 +34,7 @@ class ProviderFactory
     /**
      * @param string $providerName
      * @return object
+     * @since 2.2.0
      */
     public function create($providerName)
     {

@@ -11,12 +11,14 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Provides additional SQL JOIN to ensure search of required
  * tax rule by tax rate code in Tax Rules grid.
+ * @since 2.2.0
  */
 class RateCode implements CustomJoinInterface
 {
     /**
      * @param AbstractDb $collection
      * @return true
+     * @since 2.2.0
      */
     public function apply(AbstractDb $collection)
     {

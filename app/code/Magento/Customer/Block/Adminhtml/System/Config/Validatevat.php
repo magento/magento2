@@ -11,12 +11,18 @@
  */
 namespace Magento\Customer\Block\Adminhtml\System\Config;
 
+/**
+ * Class \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+ *
+ * @since 2.0.0
+ */
 class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * Merchant Country Field Name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_merchantCountry = 'general_store_information_country_id';
 
@@ -24,6 +30,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      * Merchant VAT Number Field
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_merchantVatNumber = 'general_store_information_merchant_vat_number';
 
@@ -31,6 +38,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      * Validate VAT Button Label
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_vatButtonLabel = 'Validate VAT Number';
 
@@ -39,6 +47,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param string $countryField
      * @return \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+     * @since 2.0.0
      */
     public function setMerchantCountryField($countryField)
     {
@@ -50,6 +59,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      * Get Merchant Country Field Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMerchantCountryField()
     {
@@ -61,6 +71,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param string $vatNumberField
      * @return \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+     * @since 2.0.0
      */
     public function setMerchantVatNumberField($vatNumberField)
     {
@@ -72,6 +83,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      * Get Merchant VAT Number Field
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMerchantVatNumberField()
     {
@@ -83,6 +95,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param string $vatButtonLabel
      * @return \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+     * @since 2.0.0
      */
     public function setVatButtonLabel($vatButtonLabel)
     {
@@ -94,6 +107,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      * Set template to itself
      *
      * @return \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -109,6 +123,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -121,6 +136,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

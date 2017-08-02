@@ -7,7 +7,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class DraggableHandle extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -16,6 +17,7 @@ class DraggableHandle extends \Magento\Backend\Block\Widget\Grid\Column\Renderer
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

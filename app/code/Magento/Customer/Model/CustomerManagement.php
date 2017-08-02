@@ -8,15 +8,22 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\CustomerManagementInterface;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
+/**
+ * Class \Magento\Customer\Model\CustomerManagement
+ *
+ * @since 2.0.0
+ */
 class CustomerManagement implements CustomerManagementInterface
 {
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $customersFactory;
 
     /**
      * @param CollectionFactory $customersFactory
+     * @since 2.0.0
      */
     public function __construct(CollectionFactory $customersFactory)
     {
@@ -25,6 +32,7 @@ class CustomerManagement implements CustomerManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCount()
     {

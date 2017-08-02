@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Source\Email;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Identity implements \Magento\Framework\Option\ArrayInterface
 {
@@ -14,6 +15,7 @@ class Identity implements \Magento\Framework\Option\ArrayInterface
      * Email Identity options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options = null;
 
@@ -21,11 +23,13 @@ class Identity implements \Magento\Framework\Option\ArrayInterface
      * Configuration structure
      *
      * @var \Magento\Config\Model\Config\Structure
+     * @since 2.0.0
      */
     protected $_configStructure;
 
     /**
      * @param \Magento\Config\Model\Config\Structure $configStructure
+     * @since 2.0.0
      */
     public function __construct(\Magento\Config\Model\Config\Structure $configStructure)
     {
@@ -36,6 +40,7 @@ class Identity implements \Magento\Framework\Option\ArrayInterface
      * Retrieve list of options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -11,31 +11,37 @@ use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Filesystem
 {
     /**
      * @var \Magento\Framework\Filesystem\DirectoryList
+     * @since 2.0.0
      */
     protected $directoryList;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     * @since 2.0.0
      */
     protected $readFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteFactory
+     * @since 2.0.0
      */
     protected $writeFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface[]
+     * @since 2.0.0
      */
     protected $readInstances = [];
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface[]
+     * @since 2.0.0
      */
     protected $writeInstances = [];
 
@@ -43,6 +49,7 @@ class Filesystem
      * @param Filesystem\DirectoryList $directoryList
      * @param Filesystem\Directory\ReadFactory $readFactory
      * @param Filesystem\Directory\WriteFactory $writeFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem\DirectoryList $directoryList,
@@ -60,6 +67,7 @@ class Filesystem
      * @param string $directoryCode
      * @param string $driverCode
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     public function getDirectoryRead($directoryCode, $driverCode = DriverPool::FILE)
     {
@@ -77,6 +85,7 @@ class Filesystem
      * @param string $driverCode
      * @return \Magento\Framework\Filesystem\Directory\WriteInterface
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function getDirectoryWrite($directoryCode, $driverCode = DriverPool::FILE)
     {
@@ -92,6 +101,7 @@ class Filesystem
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     protected function getDirPath($code)
     {
@@ -103,6 +113,7 @@ class Filesystem
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getUri($code)
     {

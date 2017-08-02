@@ -9,16 +9,19 @@ use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 
 /**
  * Class PreProcessorComposite
+ * @since 2.2.0
  */
 class PreProcessorComposite implements PreProcessorInterface
 {
     /**
      * @var PreProcessorInterface[]
+     * @since 2.2.0
      */
     private $processors = [];
 
     /**
      * @param PreProcessorInterface[] $processors
+     * @since 2.2.0
      */
     public function __construct(array $processors = [])
     {
@@ -27,6 +30,7 @@ class PreProcessorComposite implements PreProcessorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function process(array $config)
     {

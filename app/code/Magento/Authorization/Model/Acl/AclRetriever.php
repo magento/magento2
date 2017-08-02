@@ -18,22 +18,35 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Permission tree retriever
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AclRetriever
 {
     const PERMISSION_ANONYMOUS = 'anonymous';
     const PERMISSION_SELF = 'self';
 
-    /** @var Logger */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
+     */
     protected $logger;
 
-    /** @var RulesCollectionFactory */
+    /**
+     * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
+     * @since 2.0.0
+     */
     protected $rulesCollectionFactory;
 
-    /** @var AclBuilder */
+    /**
+     * @var \Magento\Framework\Acl\Builder
+     * @since 2.0.0
+     */
     protected $aclBuilder;
 
-    /** @var RoleCollectionFactory */
+    /**
+     * @var \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory
+     * @since 2.0.0
+     */
     protected $roleCollectionFactory;
 
     /**
@@ -43,6 +56,7 @@ class AclRetriever
      * @param RoleCollectionFactory $roleCollectionFactory
      * @param RulesCollectionFactory $rulesCollectionFactory
      * @param Logger $logger
+     * @since 2.0.0
      */
     public function __construct(
         AclBuilder $aclBuilder,
@@ -64,6 +78,7 @@ class AclRetriever
      * @return string[]
      * @throws AuthorizationException
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function getAllowedResourcesByUser($userType, $userId)
     {
@@ -99,6 +114,7 @@ class AclRetriever
      *
      * @param string $roleId
      * @return string[]
+     * @since 2.0.0
      */
     public function getAllowedResourcesByRole($roleId)
     {
@@ -123,6 +139,7 @@ class AclRetriever
      * @param int $userId
      * @return \Magento\Authorization\Model\Role|bool False if no role associated with provided user was found.
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _getUserRole($userType, $userId)
     {
@@ -144,6 +161,7 @@ class AclRetriever
      *
      * @param int $userType
      * @return bool
+     * @since 2.0.0
      */
     protected function _canRoleBeCreatedForUserType($userType)
     {

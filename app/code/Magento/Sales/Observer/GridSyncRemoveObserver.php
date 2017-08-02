@@ -12,6 +12,7 @@ use Magento\Framework\Event\ObserverInterface;
  *
  * Performs handling of events and cron jobs related to indexing
  * of Order, Invoice, Shipment and Creditmemo grids.
+ * @since 2.0.0
  */
 class GridSyncRemoveObserver implements ObserverInterface
 {
@@ -19,11 +20,13 @@ class GridSyncRemoveObserver implements ObserverInterface
      * Entity grid model.
      *
      * @var \Magento\Sales\Model\ResourceModel\GridInterface
+     * @since 2.0.0
      */
     protected $entityGrid;
 
     /**
      * @param \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid
@@ -44,6 +47,7 @@ class GridSyncRemoveObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -10,41 +10,49 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Class Concat
+ * @since 2.0.0
  */
 class SubSelect extends \Zend_Db_Expr
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $table;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $columns;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $originColumn;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $targetColumn;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $connectionName;
 
     /**
      * @var AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -55,6 +63,7 @@ class SubSelect extends \Zend_Db_Expr
      * @param string[] $columns
      * @param string $originColumn
      * @param string $targetColumn
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -74,6 +83,7 @@ class SubSelect extends \Zend_Db_Expr
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -94,6 +104,7 @@ class SubSelect extends \Zend_Db_Expr
      * Returns connection
      *
      * @return AdapterInterface
+     * @since 2.0.0
      */
     protected function getConnection()
     {

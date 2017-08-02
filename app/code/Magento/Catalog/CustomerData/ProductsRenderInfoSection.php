@@ -18,36 +18,43 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Section which provide information about products to customer data (private cache storage)
+ * @since 2.2.0
  */
 class ProductsRenderInfoSection implements SectionSourceInterface
 {
     /**
      * @var StoreManager
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var Hydrator
+     * @since 2.2.0
      */
     private $hydrator;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
+     * @since 2.2.0
      */
     private $filterBuilder;
 
     /**
      * @var ProductRenderList
+     * @since 2.2.0
      */
     private $productRenderList;
 
     /**
      * @var Synchronizer
+     * @since 2.2.0
      */
     private $actionsSynchronizer;
 
@@ -59,6 +66,7 @@ class ProductsRenderInfoSection implements SectionSourceInterface
      * @param ProductRenderList $productRenderList
      * @param Synchronizer $actionsSynchronizer
      * @param Hydrator $hydrator
+     * @since 2.2.0
      */
     public function __construct(
         StoreManager $storeManager,
@@ -80,6 +88,7 @@ class ProductsRenderInfoSection implements SectionSourceInterface
      * Aggregate by actions (recently_viewed or recently_compared) desired product ids
      *
      * @return array
+     * @since 2.2.0
      */
     private function getProductIds()
     {
@@ -97,6 +106,7 @@ class ProductsRenderInfoSection implements SectionSourceInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getSectionData()
     {

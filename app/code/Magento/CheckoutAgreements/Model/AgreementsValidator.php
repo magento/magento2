@@ -7,15 +7,20 @@ namespace Magento\CheckoutAgreements\Model;
 
 /**
  * Class AgreementsValidator
+ * @since 2.0.0
  */
 class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorInterface
 {
-    /** @var  AgreementsProviderInterface[] */
+    /**
+     * @var \Magento\CheckoutAgreements\Model\AgreementsProviderInterface[]
+     * @since 2.0.0
+     */
     protected $agreementsProviders;
 
     /**
      * @param AgreementsProviderInterface[] $list
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($list = null)
     {
@@ -27,6 +32,7 @@ class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorIn
      *
      * @param int[] $agreementIds
      * @return bool
+     * @since 2.0.0
      */
     public function isValid($agreementIds = [])
     {

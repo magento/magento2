@@ -14,6 +14,7 @@ namespace Magento\Backend\Block\Widget\Button;
  * @method int getLevel()
  * @method int getSortOrder()
  * @method string getTitle()
+ * @since 2.0.0
  */
 class Item extends \Magento\Framework\DataObject
 {
@@ -21,6 +22,7 @@ class Item extends \Magento\Framework\DataObject
      * Object delete flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isDeleted = false;
 
@@ -29,6 +31,7 @@ class Item extends \Magento\Framework\DataObject
      *
      * @param boolean $isDeleted
      * @return bool
+     * @since 2.0.0
      */
     public function isDeleted($isDeleted = null)
     {

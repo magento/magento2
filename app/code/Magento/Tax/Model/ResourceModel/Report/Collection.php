@@ -11,10 +11,16 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Report\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
      * @var \Zend_Db_Expr
+     * @since 2.0.0
      */
     protected $_periodFormat;
 
@@ -22,11 +28,13 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Aggregated Data Table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_aggregationTable = 'tax_order_aggregated_created';
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_selectedColumns = [];
 
@@ -37,6 +45,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param mixed $connection
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -52,6 +61,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getSelectedColumns()
     {
@@ -88,6 +98,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Apply custom columns before load
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeLoad()
     {

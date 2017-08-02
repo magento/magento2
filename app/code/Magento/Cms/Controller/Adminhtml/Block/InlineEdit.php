@@ -10,18 +10,30 @@ use Magento\Cms\Api\BlockRepositoryInterface as BlockRepository;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\BlockInterface;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Block\InlineEdit
+ *
+ * @since 2.0.0
+ */
 class InlineEdit extends \Magento\Backend\App\Action
 {
-    /** @var BlockRepository  */
+    /**
+     * @var \Magento\Cms\Api\BlockRepositoryInterface
+     * @since 2.0.0
+     */
     protected $blockRepository;
 
-    /** @var JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
+     */
     protected $jsonFactory;
 
     /**
      * @param Context $context
      * @param BlockRepository $blockRepository
      * @param JsonFactory $jsonFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -35,6 +47,7 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -78,6 +91,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param BlockInterface $block
      * @param string $errorText
      * @return string
+     * @since 2.0.0
      */
     protected function getErrorWithBlockId(BlockInterface $block, $errorText)
     {

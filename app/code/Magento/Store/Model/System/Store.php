@@ -11,6 +11,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * Core System Store Model
  *
  * @api
+ * @since 2.0.0
  */
 class Store extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
@@ -19,6 +20,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * websiteId => \Magento\Store\Model\Website
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_websiteCollection = [];
 
@@ -27,6 +29,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * groupId => \Magento\Store\Model\Group
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_groupCollection = [];
 
@@ -35,16 +38,19 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * storeId => \Magento\Store\Model\Store
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storeCollection;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     private $_isAdminScopeAllowed = true;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -53,6 +59,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Load Website, Group and Store collections
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -64,6 +71,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Load/Reload Website collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadWebsiteCollection()
     {
@@ -75,6 +83,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Load/Reload Group collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadGroupCollection()
     {
@@ -91,6 +100,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Load/Reload Store collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadStoreCollection()
     {
@@ -106,6 +116,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getStoreValuesForForm($empty = false, $all = false)
     {
@@ -164,6 +175,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getStoresStructure($isAll = false, $storeIds = [], $groupIds = [], $websiteIds = [])
     {
@@ -215,6 +227,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * @param bool $empty
      * @param bool $all
      * @return array
+     * @since 2.0.0
      */
     public function getWebsiteValuesForForm($empty = false, $all = false)
     {
@@ -238,6 +251,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * @param bool $withDefault
      * @param string $attribute
      * @return array
+     * @since 2.0.0
      */
     public function getWebsiteOptionHash($withDefault = false, $attribute = 'name')
     {
@@ -254,6 +268,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * @param bool $withDefault
      * @param string $attribute
      * @return array
+     * @since 2.0.0
      */
     public function getStoreOptionHash($withDefault = false, $attribute = 'name')
     {
@@ -269,6 +284,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param string $attribute
      * @return array
+     * @since 2.0.0
      */
     public function getStoreGroupOptionHash($attribute = 'name')
     {
@@ -284,6 +300,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param int $websiteId
      * @return string|null
+     * @since 2.0.0
      */
     public function getWebsiteName($websiteId)
     {
@@ -300,6 +317,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param int $groupId
      * @return string|null
+     * @since 2.0.0
      */
     public function getGroupName($groupId)
     {
@@ -316,6 +334,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param int $storeId
      * @return string|null
+     * @since 2.0.0
      */
     public function getStoreName($storeId)
     {
@@ -330,6 +349,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param  int $storeId
      * @return \Magento\Store\Model\Store|null
+     * @since 2.0.0
      */
     public function getStoreData($storeId)
     {
@@ -344,6 +364,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param  int $storeId
      * @return string
+     * @since 2.0.0
      */
     public function getStoreNameWithWebsite($storeId)
     {
@@ -369,6 +390,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Retrieve Website collection as array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWebsiteCollection()
     {
@@ -379,6 +401,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Retrieve Group collection as array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getGroupCollection()
     {
@@ -389,6 +412,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Retrieve Store collection as array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStoreCollection()
     {
@@ -401,6 +425,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function reload($type = null)
     {
@@ -431,6 +456,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param  int $storeId
      * @return string
+     * @since 2.0.0
      */
     public function getStoreNamePath($storeId)
     {
@@ -456,6 +482,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      *
      * @param bool $value
      * @return $this
+     * @since 2.0.0
      */
     public function setIsAdminScopeAllowed($value)
     {
@@ -467,6 +494,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Return array of options as value-label pairs
      *
      * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

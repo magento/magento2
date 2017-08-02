@@ -12,6 +12,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Converter for Image media gallery type
+ * @since 2.0.0
  */
 class ImageEntryConverter implements EntryConverterInterface
 {
@@ -22,17 +23,20 @@ class ImageEntryConverter implements EntryConverterInterface
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
+     * @since 2.0.0
      */
     protected $mediaGalleryEntryFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
@@ -44,6 +48,7 @@ class ImageEntryConverter implements EntryConverterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMediaEntryType()
     {
@@ -54,6 +59,7 @@ class ImageEntryConverter implements EntryConverterInterface
      * @param Product $product
      * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface $entry
+     * @since 2.0.0
      */
     public function convertTo(Product $product, array $rowData)
     {
@@ -77,6 +83,7 @@ class ImageEntryConverter implements EntryConverterInterface
     /**
      * @param ProductAttributeMediaGalleryEntryInterface $entry
      * @return array
+     * @since 2.0.0
      */
     public function convertFrom(ProductAttributeMediaGalleryEntryInterface $entry)
     {
@@ -96,6 +103,7 @@ class ImageEntryConverter implements EntryConverterInterface
     /**
      * @param ImageContentInterface $content
      * @return array
+     * @since 2.0.0
      */
     protected function convertFromMediaGalleryEntryContentInterface(
         ImageContentInterface $content = null

@@ -7,15 +7,22 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Api\Data\CartItemInterface;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor
+ *
+ * @since 2.1.0
+ */
 class CartItemOptionsProcessor
 {
     /**
      * @var CartItemProcessorInterface[]
+     * @since 2.1.0
      */
     private $cartItemProcessors = [];
 
     /**
      * @param CartItemProcessorsPool $cartItemProcessorsPool
+     * @since 2.1.0
      */
     public function __construct(CartItemProcessorsPool $cartItemProcessorsPool)
     {
@@ -26,6 +33,7 @@ class CartItemOptionsProcessor
      * @param string $productType
      * @param CartItemInterface $cartItem
      * @return \Magento\Framework\DataObject|float
+     * @since 2.1.0
      */
     public function getBuyRequest($productType, CartItemInterface $cartItem)
     {
@@ -43,6 +51,7 @@ class CartItemOptionsProcessor
      * @param CartItemInterface $cartItem
      * @param \Magento\Framework\DataObject|float $params
      * @return \Magento\Framework\DataObject|float
+     * @since 2.1.0
      */
     private function addCustomOptionsToBuyRequest(CartItemInterface $cartItem, $params)
     {
@@ -64,6 +73,7 @@ class CartItemOptionsProcessor
     /**
      * @param CartItemInterface $cartItem
      * @return CartItemInterface
+     * @since 2.1.0
      */
     public function applyCustomOptions(CartItemInterface $cartItem)
     {
@@ -77,6 +87,7 @@ class CartItemOptionsProcessor
      * @param string $productType
      * @param CartItemInterface $cartItem
      * @return CartItemInterface
+     * @since 2.1.0
      */
     public function addProductOptions($productType, CartItemInterface $cartItem)
     {

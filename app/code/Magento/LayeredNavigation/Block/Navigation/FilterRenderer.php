@@ -15,12 +15,14 @@ use Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface;
  * Catalog layer filter renderer
  *
  * @api
+ * @since 2.0.0
  */
 class FilterRenderer extends Template implements FilterRendererInterface
 {
     /**
      * @param FilterInterface $filter
      * @return string
+     * @since 2.0.0
      */
     public function render(FilterInterface $filter)
     {

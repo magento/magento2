@@ -7,30 +7,40 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckUserForgotPasswordBackendObserver
+ *
+ * @since 2.0.0
+ */
 class CheckUserForgotPasswordBackendObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var CaptchaStringResolver
+     * @since 2.0.0
      */
     protected $captchaStringResolver;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -40,6 +50,7 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -61,6 +72,7 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

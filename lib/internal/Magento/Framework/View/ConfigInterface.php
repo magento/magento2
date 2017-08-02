@@ -9,6 +9,7 @@ namespace Magento\Framework\View;
  * Config Interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -22,6 +23,7 @@ interface ConfigInterface
      *
      * @param array $params
      * @return \Magento\Framework\Config\View
+     * @since 2.0.0
      */
     public function getViewConfig(array $params = []);
 }

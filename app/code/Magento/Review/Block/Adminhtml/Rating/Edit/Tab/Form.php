@@ -5,17 +5,24 @@
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
+/**
+ * Class \Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * System store
      *
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $systemStore;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'rating/form.phtml';
 
@@ -23,6 +30,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Session
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $session;
 
@@ -30,11 +38,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Option factory
      *
      * @var \Magento\Review\Model\Rating\OptionFactory
+     * @since 2.0.0
      */
     protected $optionFactory;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Fieldset
+     * @since 2.0.0
      */
     protected $fieldset;
 
@@ -46,6 +56,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,6 +80,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -91,6 +103,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add rating fieldset to form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function addRatingFieldset()
     {
@@ -120,6 +133,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Set rating data to form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function setRatingData()
     {
@@ -145,6 +159,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param array $ratingCodes
      * @return void
+     * @since 2.0.0
      */
     protected function setRatingCodes($ratingCodes)
     {
@@ -160,6 +175,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Set rating options to form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function setRatingOptions()
     {
@@ -197,6 +213,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add visibility fieldset to form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function addVisibilityFieldset()
     {
@@ -236,6 +253,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $formId
      * @param array $config
      * @return void
+     * @since 2.0.0
      */
     protected function initFieldset($formId, array $config)
     {
@@ -253,6 +271,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $formId
      * @return \Magento\Framework\Data\Form\Element\Fieldset|null
+     * @since 2.0.0
      */
     protected function getFieldset($formId)
     {

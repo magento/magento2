@@ -15,6 +15,11 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
 
+/**
+ * Class \Magento\Catalog\Model\CustomOptions\CustomOption
+ *
+ * @since 2.0.0
+ */
 class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
     /**
@@ -26,6 +31,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
      * @param AbstractDb|null $resourceCollection
      * @param FileProcessor $fileProcessor
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -51,6 +57,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getOptionId()
     {
@@ -59,6 +66,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setOptionId($value)
     {
@@ -67,6 +75,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getOptionValue()
     {
@@ -85,6 +94,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setOptionValue($value)
     {
@@ -93,6 +103,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -101,6 +112,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\CustomOptionExtensionInterface $extensionAttributes

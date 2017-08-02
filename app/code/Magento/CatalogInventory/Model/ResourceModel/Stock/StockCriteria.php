@@ -9,11 +9,13 @@ use Magento\Framework\Data\AbstractCriteria;
 
 /**
  * Class StockCriteria
+ * @since 2.0.0
  */
 class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventory\Api\StockCriteriaInterface
 {
     /**
      * @param string $mapper
+     * @since 2.0.0
      */
     public function __construct($mapper = '')
     {
@@ -24,6 +26,7 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setScopeFilter($scope)
     {
@@ -36,6 +39,7 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
      *
      * @param \Magento\CatalogInventory\Api\StockCriteriaInterface $criteria
      * @return bool
+     * @since 2.0.0
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockCriteriaInterface $criteria)
     {

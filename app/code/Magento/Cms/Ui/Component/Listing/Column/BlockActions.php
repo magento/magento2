@@ -14,6 +14,7 @@ use Magento\Framework\Escaper;
 
 /**
  * Class BlockActions
+ * @since 2.0.0
  */
 class BlockActions extends Column
 {
@@ -26,11 +27,13 @@ class BlockActions extends Column
 
     /**
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var Escaper
+     * @since 2.2.0
      */
     private $escaper;
 
@@ -42,6 +45,7 @@ class BlockActions extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -59,6 +63,7 @@ class BlockActions extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -100,7 +105,8 @@ class BlockActions extends Column
     /**
      * Get instance of escaper
      * @return Escaper
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getEscaper()
     {

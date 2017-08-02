@@ -15,6 +15,7 @@ use Magento\Framework\Module\ModuleListInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Reader
 {
@@ -22,6 +23,7 @@ class Reader
      * Module directories that were set explicitly
      *
      * @var array
+     * @since 2.0.0
      */
     protected $customModuleDirs = [];
 
@@ -29,6 +31,7 @@ class Reader
      * Directory registry
      *
      * @var Dir
+     * @since 2.0.0
      */
     protected $moduleDirs;
 
@@ -36,16 +39,19 @@ class Reader
      * Modules configuration provider
      *
      * @var ModuleListInterface
+     * @since 2.0.0
      */
     protected $modulesList;
 
     /**
      * @var FileIteratorFactory
+     * @since 2.0.0
      */
     protected $fileIteratorFactory;
 
     /**
      * @var Filesystem\Directory\ReadFactory
+     * @since 2.0.0
      */
     protected $readFactory;
 
@@ -53,6 +59,7 @@ class Reader
      * Found configuration files grouped by configuration types (filename).
      *
      * @var array
+     * @since 2.2.0
      */
     private $fileIterators = [];
 
@@ -61,6 +68,7 @@ class Reader
      * @param ModuleListInterface $moduleList
      * @param FileIteratorFactory $fileIteratorFactory
      * @param Filesystem\Directory\ReadFactory $readFactory
+     * @since 2.0.0
      */
     public function __construct(
         Dir $moduleDirs,
@@ -79,6 +87,7 @@ class Reader
      *
      * @param string $filename
      * @return FileIterator
+     * @since 2.0.0
      */
     public function getConfigurationFiles($filename)
     {
@@ -89,6 +98,7 @@ class Reader
      * Go through all modules and find composer.json files of active modules.
      *
      * @return FileIterator
+     * @since 2.0.0
      */
     public function getComposerJsonFiles()
     {
@@ -102,6 +112,7 @@ class Reader
      * @param string $subDir
      *
      * @return FileIterator
+     * @since 2.2.0
      */
     private function getFilesIterator($filename, $subDir = '')
     {
@@ -119,6 +130,7 @@ class Reader
      * @param string $filename
      * @param string $subDir
      * @return array
+     * @since 2.0.0
      */
     private function getFiles($filename, $subDir = '')
     {
@@ -139,6 +151,7 @@ class Reader
      * Retrieve list of module action files
      *
      * @return array
+     * @since 2.0.0
      */
     public function getActionFiles()
     {
@@ -167,6 +180,7 @@ class Reader
      * @param string $type
      * @param string $moduleName
      * @return string
+     * @since 2.0.0
      */
     public function getModuleDir($type, $moduleName)
     {
@@ -183,6 +197,7 @@ class Reader
      * @param string $type directory type (etc, controllers, locale etc)
      * @param string $path
      * @return void
+     * @since 2.0.0
      */
     public function setModuleDir($moduleName, $type, $path)
     {

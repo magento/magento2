@@ -9,10 +9,16 @@ namespace Magento\GoogleOptimizer\Observer\Product;
 
 use Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\GoogleOptimizer\Observer\Product\SaveGoogleExperimentScriptObserver
+ *
+ * @since 2.0.0
+ */
 class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observer\AbstractSave
 {
     /**
      * @var \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected $_product;
 
@@ -21,6 +27,7 @@ class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observ
      *
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     protected function _initEntity($observer)
     {
@@ -31,6 +38,7 @@ class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observ
      * Check is Google Experiment enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isGoogleExperimentActive()
     {
@@ -41,6 +49,7 @@ class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observ
      * Get data for saving code model
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getCodeData()
     {

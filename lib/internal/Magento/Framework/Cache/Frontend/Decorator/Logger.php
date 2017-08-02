@@ -11,17 +11,20 @@ use Magento\Framework\Cache\InvalidateLogger as LoggerHandler;
 
 /**
  * Cache frontend decorator that logs cache invalidation actions
+ * @since 2.0.0
  */
 class Logger extends Bare
 {
     /**
      * @var LoggerHandler
+     * @since 2.0.0
      */
     private $logger;
 
     /**
      * @param FrontendInterface $frontend
      * @param LoggerHandler $logger
+     * @since 2.0.0
      */
     public function __construct(FrontendInterface $frontend, LoggerHandler $logger)
     {
@@ -31,6 +34,7 @@ class Logger extends Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -41,6 +45,7 @@ class Logger extends Bare
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
@@ -52,6 +57,7 @@ class Logger extends Bare
     /**
      * @param mixed $args
      * @return void
+     * @since 2.0.0
      */
     public function log($args)
     {

@@ -9,11 +9,13 @@ namespace Magento\Customer\Model\Customer\Attribute\Source;
  * Customer website attribute source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_store;
 
@@ -21,6 +23,7 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Store\Model\System\Store $store
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -33,6 +36,7 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -46,6 +50,7 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     /**
      * @param int|string $value
      * @return string|false
+     * @since 2.0.0
      */
     public function getOptionText($value)
     {

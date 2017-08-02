@@ -9,15 +9,22 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\Group;
 use Magento\Theme\Model\Data\Design\Config;
 
+/**
+ * Class \Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup
+ *
+ * @since 2.1.0
+ */
 class StoreGroup
 {
     /**
      * @var IndexerRegistry
+     * @since 2.1.0
      */
     protected $indexerRegistry;
 
     /**
      * @param IndexerRegistry $indexerRegistry
+     * @since 2.1.0
      */
     public function __construct(
         IndexerRegistry $indexerRegistry
@@ -33,6 +40,7 @@ class StoreGroup
      * @return Group
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function afterDelete(Group $subject, $result)
     {

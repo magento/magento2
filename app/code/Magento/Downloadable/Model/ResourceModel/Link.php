@@ -13,11 +13,13 @@ use Magento\Framework\EntityManager\MetadataPool;
  * Downloadable Product  Samples resource model
  *
  * @api
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -25,21 +27,25 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.0.0
      */
     protected $_catalogData;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_configuration;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -50,6 +56,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -70,6 +77,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -82,6 +90,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Downloadable\Model\Link $linkObject
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function saveItemTitleAndPrice($linkObject)
     {
@@ -172,6 +181,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Downloadable\Model\Link|array|int $items
      * @return $this
+     * @since 2.0.0
      */
     public function deleteItems($items)
     {
@@ -195,6 +205,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param int $storeId
      * @return array
+     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -228,6 +239,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return \Magento\Directory\Model\Currency
+     * @since 2.0.0
      */
     protected function _createCurrency()
     {
@@ -237,6 +249,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -7,6 +7,7 @@ namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * Currency rate import model (From http://fixer.io/)
+ * @since 2.1.0
  */
 class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
@@ -19,6 +20,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      * Http Client Factory
      *
      * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @since 2.1.0
      */
     protected $httpClientFactory;
 
@@ -26,6 +28,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      * Core scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
@@ -35,6 +38,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -48,6 +52,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function fetchRates()
     {
@@ -72,6 +77,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      * @param string $currencyFrom
      * @param array $currenciesTo
      * @return array
+     * @since 2.1.0
      */
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
@@ -109,6 +115,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      * @param string $url
      * @param int $retry
      * @return array
+     * @since 2.1.0
      */
     private function getServiceResponse($url, $retry = 0)
     {
@@ -141,6 +148,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     protected function _convert($currencyFrom, $currencyTo)
     {

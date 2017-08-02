@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Xml;
 
+/**
+ * Class \Magento\Framework\Xml\Generator
+ *
+ * @since 2.0.0
+ */
 class Generator
 {
     /**
@@ -14,21 +19,25 @@ class Generator
 
     /**
      * @var \DOMDocument|null
+     * @since 2.0.0
      */
     protected $_dom = null;
 
     /**
      * @var \DOMDocument
+     * @since 2.0.0
      */
     protected $_currentDom;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultIndexedArrayItemName;
 
     /**
      *
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -40,6 +49,7 @@ class Generator
 
     /**
      * @return \DOMDocument|null
+     * @since 2.0.0
      */
     public function getDom()
     {
@@ -48,6 +58,7 @@ class Generator
 
     /**
      * @return \DOMDocument
+     * @since 2.0.0
      */
     protected function _getCurrentDom()
     {
@@ -57,6 +68,7 @@ class Generator
     /**
      * @param \DOMDocument $node
      * @return $this
+     * @since 2.0.0
      */
     protected function _setCurrentDom($node)
     {
@@ -69,6 +81,7 @@ class Generator
      * @return $this
      * @throws \DOMException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function arrayToXml($content)
     {
@@ -111,6 +124,7 @@ class Generator
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -120,6 +134,7 @@ class Generator
     /**
      * @param string $file
      * @return $this
+     * @since 2.0.0
      */
     public function save($file)
     {
@@ -132,6 +147,7 @@ class Generator
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setIndexedArrayItemName($name)
     {
@@ -143,6 +159,7 @@ class Generator
      * Get xml node name to use instead of numeric index during numeric arrays conversion.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getIndexedArrayItemName()
     {

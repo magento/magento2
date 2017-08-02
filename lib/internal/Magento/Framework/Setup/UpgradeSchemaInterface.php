@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * Interface for DB schema upgrades of a module
  *
  * @api
+ * @since 2.0.0
  */
 interface UpgradeSchemaInterface
 {
@@ -18,6 +19,7 @@ interface UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @since 2.0.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context);
 }

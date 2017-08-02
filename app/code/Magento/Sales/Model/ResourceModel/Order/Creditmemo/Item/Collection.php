@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item;
  * Flat sales order creditmemo items collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_creditmemo_item_collection';
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'order_creditmemo_item_collection';
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,6 +48,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      *
      * @param int $creditmemoId
      * @return $this
+     * @since 2.0.0
      */
     public function setCreditmemoFilter($creditmemoId)
     {

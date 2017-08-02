@@ -13,11 +13,13 @@ use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
 
 /**
  * Class ResponseValidator
+ * @since 2.0.0
  */
 class ResponseValidator implements ValidatorInterface
 {
     /**
      * @var ValidatorInterface[]
+     * @since 2.0.0
      */
     protected $validators;
 
@@ -25,6 +27,7 @@ class ResponseValidator implements ValidatorInterface
      * Constructor
      *
      * @param ValidatorInterface[] $validators
+     * @since 2.0.0
      */
     public function __construct(array $validators)
     {
@@ -38,6 +41,7 @@ class ResponseValidator implements ValidatorInterface
      * @param Transparent $transparentModel
      * @return bool
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {

@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Config;
  * Configuration data storage
  *
  * @api
+ * @since 2.0.0
  */
 interface DataInterface
 {
@@ -17,6 +18,7 @@ interface DataInterface
      *
      * @param string|null $path
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue($path);
 
@@ -26,6 +28,7 @@ interface DataInterface
      * @param string $path
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     public function setValue($path, $value);
 }

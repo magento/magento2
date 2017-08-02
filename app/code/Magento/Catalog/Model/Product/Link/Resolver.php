@@ -7,22 +7,26 @@ namespace Magento\Catalog\Model\Product\Link;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class Resolver
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var null|array
+     * @since 2.1.0
      */
     protected $links = null;
 
     /**
      * Resolver constructor.
      * @param \Magento\Framework\App\RequestInterface $request
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request
@@ -35,6 +39,7 @@ class Resolver
      * Fallback to request if none.
      *
      * @return array|null
+     * @since 2.1.0
      */
     public function getLinks()
     {
@@ -49,6 +54,7 @@ class Resolver
      *
      * @param array|null $links
      * @return void
+     * @since 2.1.0
      */
     public function override($links)
     {

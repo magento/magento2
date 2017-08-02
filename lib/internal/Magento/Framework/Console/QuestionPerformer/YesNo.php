@@ -15,6 +15,7 @@ use Symfony\Component\Console\Question\QuestionFactory;
 
 /**
  * Asks a questions to the user.
+ * @since 2.2.0
  */
 class YesNo
 {
@@ -22,6 +23,7 @@ class YesNo
      * Provides helpers to interact with the user.
      *
      * @var QuestionHelper
+     * @since 2.2.0
      */
     private $questionHelper;
 
@@ -29,12 +31,14 @@ class YesNo
      * The factory for creating Question objects.
      *
      * @var QuestionFactory
+     * @since 2.2.0
      */
     private $questionFactory;
 
     /**
      * @param QuestionHelper $questionHelper Provides helpers to interact with the user
      * @param QuestionFactory $questionFactory The factory for creating Question objects
+     * @since 2.2.0
      */
     public function __construct(
         QuestionHelper $questionHelper,
@@ -51,6 +55,7 @@ class YesNo
      * @param InputInterface $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      * @return bool
+     * @since 2.2.0
      */
     public function execute(array $messages, InputInterface $input, OutputInterface $output)
     {
@@ -70,6 +75,7 @@ class YesNo
      * @param string[] $messages array of messages
      * @return Question
      * @throws LocalizedException is thrown when a user entered a wrong answer
+     * @since 2.2.0
      */
     private function getConfirmationQuestion(array $messages)
     {

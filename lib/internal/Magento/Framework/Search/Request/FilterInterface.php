@@ -9,6 +9,7 @@ namespace Magento\Framework\Search\Request;
  * Filter Interface
  *
  * @api
+ * @since 2.0.0
  */
 interface FilterInterface
 {
@@ -29,6 +30,7 @@ interface FilterInterface
      * Get Type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 
@@ -36,6 +38,7 @@ interface FilterInterface
      * Get Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 }

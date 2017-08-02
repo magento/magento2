@@ -10,6 +10,11 @@ namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button
 use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
+/**
+ * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends Button
 {
     /**
@@ -17,6 +22,7 @@ class Edit extends Button
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     protected function _getOnclickAttribute(DataObject $row)
     {
@@ -28,6 +34,7 @@ class Edit extends Button
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     protected function _getTitleAttribute(DataObject $row)
     {
@@ -39,6 +46,7 @@ class Edit extends Button
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function _getClassAttribute(DataObject $row)
     {

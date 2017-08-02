@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  *
  * Interface LineItemInterface
  * @api
+ * @since 2.2.0
  */
 interface LineItemInterface
 {
@@ -18,6 +19,7 @@ interface LineItemInterface
      * Gets the order item ID for the item.
      *
      * @return int Order item ID.
+     * @since 2.2.0
      */
     public function getOrderItemId();
 
@@ -26,6 +28,7 @@ interface LineItemInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.2.0
      */
     public function setOrderItemId($id);
 
@@ -33,6 +36,7 @@ interface LineItemInterface
      * Gets the quantity for the item.
      *
      * @return float Quantity.
+     * @since 2.2.0
      */
     public function getQty();
 
@@ -41,6 +45,7 @@ interface LineItemInterface
      *
      * @param float $qty
      * @return $this
+     * @since 2.2.0
      */
     public function setQty($qty);
 }

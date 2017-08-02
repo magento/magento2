@@ -9,26 +9,31 @@ use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 
 /**
  * Class Full reindex action
+ * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var \Magento\Framework\Indexer\BatchProviderInterface
+     * @since 2.2.0
      */
     private $batchProvider;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator
+     * @since 2.2.0
      */
     private $batchSizeCalculator;
 
     /**
      * @var ActiveTableSwitcher
+     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
@@ -39,6 +44,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator $batchSizeCalculator
      * @param ActiveTableSwitcher|null $activeTableSwitcher
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
@@ -70,6 +76,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute($ids = null)
     {
@@ -106,6 +113,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     protected function syncData($indexer, $destinationTable, $ids = null)
     {

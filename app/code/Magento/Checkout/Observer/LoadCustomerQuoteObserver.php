@@ -7,15 +7,22 @@ namespace Magento\Checkout\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Checkout\Observer\LoadCustomerQuoteObserver
+ *
+ * @since 2.0.0
+ */
 class LoadCustomerQuoteObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -23,6 +30,7 @@ class LoadCustomerQuoteObserver implements ObserverInterface
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -36,6 +44,7 @@ class LoadCustomerQuoteObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

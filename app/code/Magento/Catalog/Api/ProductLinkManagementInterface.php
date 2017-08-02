@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductLinkManagementInterface
 {
@@ -17,6 +18,7 @@ interface ProductLinkManagementInterface
      * @param string $sku
      * @param string $type
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @since 2.0.0
      */
     public function getLinkedItemsByType($sku, $type);
 
@@ -28,6 +30,7 @@ interface ProductLinkManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
+     * @since 2.0.0
      */
     public function setProductLinks($sku, array $items);
 }

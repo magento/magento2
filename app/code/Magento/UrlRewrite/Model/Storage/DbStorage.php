@@ -13,6 +13,11 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
 
+/**
+ * Class \Magento\UrlRewrite\Model\Storage\DbStorage
+ *
+ * @since 2.0.0
+ */
 class DbStorage extends AbstractStorage
 {
     /**
@@ -27,16 +32,19 @@ class DbStorage extends AbstractStorage
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
     /**
      * @var Resource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -45,6 +53,7 @@ class DbStorage extends AbstractStorage
      * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Psr\Log\LoggerInterface|null $logger
+     * @since 2.0.0
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
@@ -65,6 +74,7 @@ class DbStorage extends AbstractStorage
      *
      * @param array $data
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function prepareSelect(array $data)
     {
@@ -79,6 +89,7 @@ class DbStorage extends AbstractStorage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function doFindAllByData(array $data)
     {
@@ -87,6 +98,7 @@ class DbStorage extends AbstractStorage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function doFindOneByData(array $data)
     {
@@ -142,6 +154,7 @@ class DbStorage extends AbstractStorage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function doReplace(array $urls)
     {
@@ -191,6 +204,7 @@ class DbStorage extends AbstractStorage
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function insertMultiple($data)
     {
@@ -214,6 +228,7 @@ class DbStorage extends AbstractStorage
      *
      * @param UrlRewrite[] $urls
      * @return array
+     * @since 2.0.0
      */
     protected function createFilterDataBasedOnUrls($urls)
     {
@@ -232,6 +247,7 @@ class DbStorage extends AbstractStorage
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteByData(array $data)
     {

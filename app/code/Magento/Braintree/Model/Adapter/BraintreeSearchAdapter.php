@@ -14,12 +14,14 @@ use Braintree\TransactionSearch;
 /**
  * Class Braintree Search Adapter
  * @codeCoverageIgnore
+ * @since 2.1.0
  */
 class BraintreeSearchAdapter
 {
     /**
      * @return TextNode
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.1.0
      */
     public function id()
     {
@@ -28,6 +30,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return MultipleValueNode
+     * @since 2.1.0
      */
     public function merchantAccountId()
     {
@@ -36,6 +39,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return TextNode
+     * @since 2.1.0
      */
     public function orderId()
     {
@@ -44,6 +48,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return TextNode
+     * @since 2.1.0
      */
     public function paypalPaymentId()
     {
@@ -52,6 +57,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return MultipleValueNode
+     * @since 2.1.0
      */
     public function createdUsing()
     {
@@ -60,6 +66,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return MultipleValueNode
+     * @since 2.1.0
      */
     public function type()
     {
@@ -68,6 +75,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return RangeNode
+     * @since 2.1.0
      */
     public function createdAt()
     {
@@ -76,6 +84,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return RangeNode
+     * @since 2.1.0
      */
     public function amount()
     {
@@ -84,6 +93,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return MultipleValueNode
+     * @since 2.1.0
      */
     public function status()
     {
@@ -92,6 +102,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return TextNode
+     * @since 2.1.0
      */
     public function settlementBatchId()
     {
@@ -100,6 +111,7 @@ class BraintreeSearchAdapter
 
     /**
      * @return MultipleValueNode
+     * @since 2.1.0
      */
     public function paymentInstrumentType()
     {

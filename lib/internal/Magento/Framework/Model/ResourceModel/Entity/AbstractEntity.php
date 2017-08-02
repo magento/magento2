@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Entity;
 
+/**
+ * Class \Magento\Framework\Model\ResourceModel\Entity\AbstractEntity
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractEntity
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_name = null;
 
@@ -16,6 +22,7 @@ abstract class AbstractEntity
      * Configuration object
      *
      * @var \Magento\Framework\Simplexml\Config
+     * @since 2.0.0
      */
     protected $_config = [];
 
@@ -23,6 +30,7 @@ abstract class AbstractEntity
      * Set config
      *
      * @param \Magento\Framework\Simplexml\Config $config
+     * @since 2.0.0
      */
     public function __construct($config)
     {
@@ -34,6 +42,7 @@ abstract class AbstractEntity
      *
      * @param string $key
      * @return \Magento\Framework\Simplexml\Config|string|false
+     * @since 2.0.0
      */
     public function getConfig($key = '')
     {

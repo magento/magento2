@@ -6,12 +6,18 @@
  */
 namespace Magento\Framework\Controller\Noroute;
 
+/**
+ * Class \Magento\Framework\Controller\Noroute\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Noroute application handler
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

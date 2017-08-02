@@ -6,10 +6,16 @@
 
 namespace Magento\Framework\Session\Config\Validator;
 
+/**
+ * Class \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator
+ *
+ * @since 2.0.0
+ */
 class CookieLifetimeValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isValid($value)
     {

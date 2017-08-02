@@ -10,6 +10,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
+/**
+ * Class \Magento\Framework\App\Router\ActionList
+ *
+ * @since 2.0.0
+ */
 class ActionList
 {
     /**
@@ -21,11 +26,13 @@ class ActionList
      * List of application actions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $actions;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $reservedWords = [
         'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const',
@@ -39,11 +46,13 @@ class ActionList
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $actionInterface;
 
@@ -56,6 +65,7 @@ class ActionList
      * @param string $cacheKey
      * @param array $reservedWords
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
@@ -85,6 +95,7 @@ class ActionList
      * @param string $namespace
      * @param string $action
      * @return null|string
+     * @since 2.0.0
      */
     public function get($module, $area, $namespace, $action)
     {

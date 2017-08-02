@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Template\Html;
  * HTML minifier
  *
  * @api
+ * @since 2.0.0
  */
 interface MinifierInterface
 {
@@ -18,6 +19,7 @@ interface MinifierInterface
      *
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getMinified($file);
 
@@ -26,6 +28,7 @@ interface MinifierInterface
      *
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getPathToMinified($file);
 
@@ -34,6 +37,7 @@ interface MinifierInterface
      *
      * @param string $file
      * @return void
+     * @since 2.0.0
      */
     public function minify($file);
 }

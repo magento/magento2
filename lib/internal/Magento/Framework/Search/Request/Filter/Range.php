@@ -11,26 +11,31 @@ use Magento\Framework\Search\Request\FilterInterface;
  * Range Filter
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @api
+ * @since 2.0.0
  */
 class Range implements FilterInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $field;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $from;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $to;
 
@@ -39,6 +44,7 @@ class Range implements FilterInterface
      * @param string $field
      * @param int $from
      * @param int $to
+     * @since 2.0.0
      */
     public function __construct($name, $field, $from, $to)
     {
@@ -50,6 +56,7 @@ class Range implements FilterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -59,6 +66,7 @@ class Range implements FilterInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -69,6 +77,7 @@ class Range implements FilterInterface
      * Get Field
      *
      * @return string
+     * @since 2.0.0
      */
     public function getField()
     {
@@ -80,6 +89,7 @@ class Range implements FilterInterface
      *
      * @return int
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getFrom()
     {
@@ -91,6 +101,7 @@ class Range implements FilterInterface
      *
      * @return int
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTo()
     {

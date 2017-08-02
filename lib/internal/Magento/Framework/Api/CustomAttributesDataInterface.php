@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
  * Interface for entities which can be extended with custom attributes.
  *
  * @api
+ * @since 2.0.0
  */
 interface CustomAttributesDataInterface extends ExtensibleDataInterface
 {
@@ -23,6 +24,7 @@ interface CustomAttributesDataInterface extends ExtensibleDataInterface
      *
      * @param string $attributeCode
      * @return \Magento\Framework\Api\AttributeInterface|null
+     * @since 2.0.0
      */
     public function getCustomAttribute($attributeCode);
 
@@ -32,6 +34,7 @@ interface CustomAttributesDataInterface extends ExtensibleDataInterface
      * @param string $attributeCode
      * @param mixed $attributeValue
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomAttribute($attributeCode, $attributeValue);
 
@@ -39,6 +42,7 @@ interface CustomAttributesDataInterface extends ExtensibleDataInterface
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
+     * @since 2.0.0
      */
     public function getCustomAttributes();
 
@@ -48,6 +52,7 @@ interface CustomAttributesDataInterface extends ExtensibleDataInterface
      * @param \Magento\Framework\Api\AttributeInterface[] $attributes
      * @return $this
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function setCustomAttributes(array $attributes);
 }

@@ -11,12 +11,14 @@ use \Magento\Framework\Api\AttributeValueFactory;
 /**
  * Class Customer
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 2.0.0
  */
 class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\CustomerInterface
 {
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface
+     * @since 2.0.0
      */
     protected $metadataService;
 
@@ -27,6 +29,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * @param AttributeValueFactory $attributeValueFactory
      * @param \Magento\Customer\Api\CustomerMetadataInterface $metadataService
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
@@ -40,6 +43,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function getCustomAttributesCodes()
     {
@@ -51,6 +55,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getDefaultBilling()
     {
@@ -61,6 +66,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get default shipping address id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDefaultShipping()
     {
@@ -71,6 +77,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get confirmation
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getConfirmation()
     {
@@ -81,6 +88,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get created at time
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -91,6 +99,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get created in area
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCreatedIn()
     {
@@ -101,6 +110,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get updated at time
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getUpdatedAt()
     {
@@ -111,6 +121,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get date of birth
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDob()
     {
@@ -121,6 +132,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get email address
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEmail()
     {
@@ -131,6 +143,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get first name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFirstname()
     {
@@ -141,6 +154,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get gender
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getGender()
     {
@@ -151,6 +165,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get group id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getGroupId()
     {
@@ -161,6 +176,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get customer id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -171,6 +187,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get last name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastname()
     {
@@ -181,6 +198,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get middle name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getMiddlename()
     {
@@ -191,6 +209,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get prefix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPrefix()
     {
@@ -201,6 +220,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get store id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -211,6 +231,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get suffix
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSuffix()
     {
@@ -221,6 +242,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get tax Vat.
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getTaxvat()
     {
@@ -231,6 +253,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get website id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -241,6 +264,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get addresses
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]|null
+     * @since 2.0.0
      */
     public function getAddresses()
     {
@@ -251,6 +275,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get disable auto group change flag.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getDisableAutoGroupChange()
     {
@@ -262,6 +287,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -273,6 +299,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param int $groupId
      * @return $this
+     * @since 2.0.0
      */
     public function setGroupId($groupId)
     {
@@ -284,6 +311,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $defaultBilling
      * @return $this
+     * @since 2.0.0
      */
     public function setDefaultBilling($defaultBilling)
     {
@@ -295,6 +323,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $defaultShipping
      * @return $this
+     * @since 2.0.0
      */
     public function setDefaultShipping($defaultShipping)
     {
@@ -306,6 +335,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $confirmation
      * @return $this
+     * @since 2.0.0
      */
     public function setConfirmation($confirmation)
     {
@@ -317,6 +347,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $createdAt
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -328,6 +359,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $updatedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -339,6 +371,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $createdIn
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedIn($createdIn)
     {
@@ -350,6 +383,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $dob
      * @return $this
+     * @since 2.0.0
      */
     public function setDob($dob)
     {
@@ -361,6 +395,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $email
      * @return $this
+     * @since 2.0.0
      */
     public function setEmail($email)
     {
@@ -372,6 +407,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $firstname
      * @return $this
+     * @since 2.0.0
      */
     public function setFirstname($firstname)
     {
@@ -383,6 +419,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $lastname
      * @return string
+     * @since 2.0.0
      */
     public function setLastname($lastname)
     {
@@ -394,6 +431,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $middlename
      * @return $this
+     * @since 2.0.0
      */
     public function setMiddlename($middlename)
     {
@@ -405,6 +443,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $prefix
      * @return $this
+     * @since 2.0.0
      */
     public function setPrefix($prefix)
     {
@@ -416,6 +455,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $suffix
      * @return $this
+     * @since 2.0.0
      */
     public function setSuffix($suffix)
     {
@@ -427,6 +467,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $gender
      * @return $this
+     * @since 2.0.0
      */
     public function setGender($gender)
     {
@@ -438,6 +479,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -449,6 +491,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param string $taxvat
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxvat($taxvat)
     {
@@ -460,6 +503,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -471,6 +515,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
      * @return $this
+     * @since 2.0.0
      */
     public function setAddresses(array $addresses = null)
     {
@@ -482,6 +527,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param int $disableAutoGroupChange
      * @return $this
+     * @since 2.0.0
      */
     public function setDisableAutoGroupChange($disableAutoGroupChange)
     {
@@ -492,6 +538,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * {@inheritdoc}
      *
      * @return \Magento\Customer\Api\Data\CustomerExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -503,6 +550,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      *
      * @param \Magento\Customer\Api\Data\CustomerExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Customer\Api\Data\CustomerExtensionInterface $extensionAttributes)
     {

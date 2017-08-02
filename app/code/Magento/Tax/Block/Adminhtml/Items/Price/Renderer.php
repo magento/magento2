@@ -16,26 +16,31 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * Sales Order items price column renderer
  *
  * @api
+ * @since 2.0.0
  */
 class Renderer extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $taxHelper;
 
     /**
      * @var \Magento\Tax\Block\Item\Price\Renderer
+     * @since 2.0.0
      */
     protected $itemPriceRenderer;
 
     /**
      * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
+     * @since 2.0.0
      */
     protected $defaultColumnRenderer;
 
     /**
      * @var Item|QuoteItem|InvoiceItem|CreditmemoItem
+     * @since 2.0.0
      */
     protected $item;
 
@@ -45,6 +50,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * @param TaxHelper $taxHelper
      * @param ItemPriceRenderer $itemPriceRenderer
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -64,6 +70,7 @@ class Renderer extends \Magento\Backend\Block\Template
      *
      * @param Item|QuoteItem|InvoiceItem|CreditmemoItem $item
      * @return $this
+     * @since 2.0.0
      */
     public function setItem($item)
     {
@@ -77,6 +84,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * Return order item or quote item
      *
      * @return Item|QuoteItem
+     * @since 2.0.0
      */
     public function getItem()
     {
@@ -87,6 +95,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * Return whether display setting is to display price including tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayPriceInclTax()
     {
@@ -97,6 +106,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * Return whether display setting is to display price excluding tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayPriceExclTax()
     {
@@ -107,6 +117,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * Return whether display setting is to display both price including tax and price excluding tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayBothPrices()
     {
@@ -118,6 +129,7 @@ class Renderer extends \Magento\Backend\Block\Template
      *
      * @param Item|QuoteItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
+     * @since 2.0.0
      */
     public function getTotalAmount($item)
     {
@@ -129,6 +141,7 @@ class Renderer extends \Magento\Backend\Block\Template
      *
      * @param Item|QuoteItem|InvoiceItem|CreditmemoItem $item
      * @return mixed
+     * @since 2.0.0
      */
     public function getBaseTotalAmount($item)
     {
@@ -140,6 +153,7 @@ class Renderer extends \Magento\Backend\Block\Template
      *
      * @param float $price
      * @return string
+     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -152,6 +166,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * @param float $basePrice
      * @param float $displayPrice
      * @return string
+     * @since 2.0.0
      */
     public function displayPrices($basePrice, $displayPrice)
     {

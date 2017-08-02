@@ -10,16 +10,19 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class NotifyStock
  * @package Magento\Catalog\Block\Adminhtml\Rss
+ * @since 2.0.0
  */
 class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataProviderInterface
 {
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Product\NotifyStock
+     * @since 2.0.0
      */
     protected $rssModel;
 
@@ -28,6 +31,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
      * @param \Magento\Catalog\Model\Rss\Product\NotifyStock $rssModel
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -42,6 +46,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,6 +56,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -74,6 +80,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -82,6 +89,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -90,6 +98,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -98,6 +107,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAuthRequired()
     {

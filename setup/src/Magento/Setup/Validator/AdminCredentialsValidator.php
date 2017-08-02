@@ -11,21 +11,25 @@ use Magento\Setup\Model\Installer;
 
 /**
  * Admin user credentials validator
+ * @since 2.1.0
  */
 class AdminCredentialsValidator
 {
     /**
      * @var \Magento\Setup\Module\ConnectionFactory
+     * @since 2.1.0
      */
     private $connectionFactory;
 
     /**
      * @var \Magento\Setup\Model\AdminAccountFactory
+     * @since 2.1.0
      */
     private $adminAccountFactory;
 
     /**
      * @var \Magento\Setup\Module\SetupFactory
+     * @since 2.1.0
      */
     private $setupFactory;
 
@@ -35,6 +39,7 @@ class AdminCredentialsValidator
      * @param \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory
      * @param \Magento\Setup\Module\ConnectionFactory $connectionFactory
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory,
@@ -52,6 +57,7 @@ class AdminCredentialsValidator
      * @param array $data
      * @return void
      * @throws \Exception
+     * @since 2.1.0
      */
     public function validate(array $data)
     {

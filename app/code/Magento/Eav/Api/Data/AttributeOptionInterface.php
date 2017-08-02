@@ -10,6 +10,7 @@ namespace Magento\Eav\Api\Data;
  * Created from:
  * @codeCoverageIgnore
  * @api
+ * @since 2.0.0
  */
 interface AttributeOptionInterface
 {
@@ -30,6 +31,7 @@ interface AttributeOptionInterface
      * Get option label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel();
 
@@ -38,6 +40,7 @@ interface AttributeOptionInterface
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -45,6 +48,7 @@ interface AttributeOptionInterface
      * Get option value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -53,6 +57,7 @@ interface AttributeOptionInterface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -60,6 +65,7 @@ interface AttributeOptionInterface
      * Get option order
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -68,6 +74,7 @@ interface AttributeOptionInterface
      *
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -75,6 +82,7 @@ interface AttributeOptionInterface
      * is default
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsDefault();
 
@@ -83,6 +91,7 @@ interface AttributeOptionInterface
      *
      * @param bool $isDefault
      * @return $this
+     * @since 2.0.0
      */
     public function setIsDefault($isDefault);
 
@@ -90,6 +99,7 @@ interface AttributeOptionInterface
      * Get option label for store scopes
      *
      * @return \Magento\Eav\Api\Data\AttributeOptionLabelInterface[]|null
+     * @since 2.0.0
      */
     public function getStoreLabels();
 
@@ -98,6 +108,7 @@ interface AttributeOptionInterface
      *
      * @param \Magento\Eav\Api\Data\AttributeOptionLabelInterface[] $storeLabels
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabels(array $storeLabels = null);
 }

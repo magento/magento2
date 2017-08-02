@@ -11,22 +11,26 @@ use Traversable;
 
 /**
  * Customers data batch generator for customer_grid indexer
+ * @since 2.2.0
  */
 class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 {
     /**
      * @var Collection
+     * @since 2.2.0
      */
     private $customerCollection;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $batchSize;
 
     /**
      * @param \Magento\Customer\Model\ResourceModel\Customer\Indexer\CollectionFactory $collection
      * @param int $batchSize
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Customer\Model\ResourceModel\Customer\Indexer\CollectionFactory $collectionFactory,
@@ -38,6 +42,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getMainTable()
     {
@@ -46,6 +51,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getIdFieldName()
     {
@@ -54,6 +60,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function addFieldToSelect($fieldName, $alias = null)
     {
@@ -63,6 +70,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSelect()
     {
@@ -71,6 +79,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -80,6 +89,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
 
     /**
      * @return int
+     * @since 2.2.0
      */
     public function count()
     {
@@ -90,6 +100,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
      * Retrieve an iterator
      *
      * @return Traversable
+     * @since 2.2.0
      */
     public function getIterator()
     {

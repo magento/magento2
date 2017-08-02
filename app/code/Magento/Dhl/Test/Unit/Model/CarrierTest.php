@@ -167,6 +167,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
+        $localeResolver = $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class);
+        $localeResolver->method('getLocale')->willReturn('fr_FR');
+
+        $carrierHelper = $this->objectManager->getObject(
+            \Magento\Shipping\Helper\Carrier::class,
+            [
+                'localeResolver' => $localeResolver
+            ]
+        );
         $this->model = $this->objectManager->getObject(
             \Magento\Dhl\Model\Carrier::class,
             [
@@ -179,6 +188,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'httpClientFactory' => $httpClientFactory,
                 'readFactory' => $readFactory,
                 'storeManager' => $storeManager,
+                'carrierHelper' => $carrierHelper,
                 'data' => ['id' => 'dhl', 'store' => '1']
             ]
         );
@@ -205,7 +215,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/showmethod' => 1,
             'carriers/dhl/title' => 'dhl Title',
             'carriers/dhl/specificerrmsg' => 'dhl error message',
-            'carriers/dhl/unit_of_measure' => 'L',
+            'carriers/dhl/unit_of_measure' => 'K',
+            'carriers/dhl/size' => '1',
+            'carriers/dhl/height' => '1.6',
+            'carriers/dhl/width' => '1.6',
+            'carriers/dhl/depth' => '1.6',
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
@@ -280,7 +294,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rawPostData->setAccessible(true);
 
         self::assertNotEmpty($this->model->collectRates($request)->getAllRates());
-        self::assertContains('<Weight>8.266</Weight>', $rawPostData->getValue($this->httpClient));
+        self::assertContains('<Weight>18.223</Weight>', $rawPostData->getValue($this->httpClient));
+        self::assertContains('<Height>0.630</Height>', $rawPostData->getValue($this->httpClient));
+        self::assertContains('<Width>0.630</Width>', $rawPostData->getValue($this->httpClient));
+        self::assertContains('<Depth>0.630</Depth>', $rawPostData->getValue($this->httpClient));
     }
 
     public function testCollectRatesErrorMessage()

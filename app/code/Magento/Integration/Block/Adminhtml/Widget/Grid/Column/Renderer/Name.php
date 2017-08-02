@@ -7,6 +7,7 @@ namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 /**
  * Integration Name Renderer
+ * @since 2.0.0
  */
 class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -17,6 +18,7 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -33,6 +35,7 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param string $url
      * @return bool
+     * @since 2.0.0
      */
     protected function isUrlSecure($url)
     {

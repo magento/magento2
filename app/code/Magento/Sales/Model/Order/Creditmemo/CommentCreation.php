@@ -9,21 +9,25 @@ use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 
 /**
  * Class CommentCreation
+ * @since 2.2.0
  */
 class CommentCreation implements CreditmemoCommentCreationInterface
 {
     /**
      * @var \Magento\Sales\Api\Data\CreditmemoCommentCreationExtensionInterface
+     * @since 2.2.0
      */
     private $extensionAttributes;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $comment;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $isVisibleOnFront;
 
@@ -31,6 +35,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentCreationExtensionInterface|null
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -42,6 +47,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoCommentCreationExtensionInterface $extensionAttributes
@@ -52,6 +58,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getComment()
     {
@@ -60,6 +67,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setComment($comment)
     {
@@ -69,6 +77,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getIsVisibleOnFront()
     {
@@ -77,6 +86,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {

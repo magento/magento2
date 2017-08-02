@@ -9,6 +9,11 @@ namespace Magento\Catalog\Block\Product\ReviewRenderer;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 
+/**
+ * Class \Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider
+ *
+ * @since 2.0.0
+ */
 class DefaultProvider implements ReviewRendererInterface
 {
     /**
@@ -18,6 +23,7 @@ class DefaultProvider implements ReviewRendererInterface
      * @param string $templateType
      * @param bool $displayIfNoReviews
      * @return string
+     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,

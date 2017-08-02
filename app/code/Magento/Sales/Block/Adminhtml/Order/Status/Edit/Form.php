@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Status\Edit;
 /**
  * Edit status form
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form
 {
@@ -15,6 +16,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -26,6 +28,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form
      * Modify structure of new status form
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -8,11 +8,13 @@ namespace Magento\Eav\Model\EavCustomAttributeTypeLocator;
 
 /**
  * Class to locate complex types for EAV custom attributes
+ * @since 2.1.0
  */
 class ComplexType
 {
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.1.0
      */
     private $stringUtility;
 
@@ -21,6 +23,7 @@ class ComplexType
      *
      * @codeCoverageIgnore
      * @param \Magento\Framework\Stdlib\StringUtils $stringUtility
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $stringUtility
@@ -35,6 +38,7 @@ class ComplexType
      * @param string $serviceClass
      * @param $serviceBackendModelDataInterfaceMap array
      * @return string|null
+     * @since 2.1.0
      */
     public function getType($attribute, $serviceClass, $serviceBackendModelDataInterfaceMap)
     {

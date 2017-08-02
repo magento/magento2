@@ -6,12 +6,18 @@
 
 namespace Magento\Paypal\Model\System\Config\Source;
 
+/**
+ * Class \Magento\Paypal\Model\System\Config\Source\BmlSize
+ *
+ * @since 2.0.0
+ */
 class BmlSize
 {
     /**
      * Options getter for Home Page and position Header
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeHPH()
     {
@@ -29,6 +35,7 @@ class BmlSize
      * Options getter for Home Page and position Sidebar (right)
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeHPS()
     {
@@ -47,6 +54,7 @@ class BmlSize
      * Options getter for Catalog Category Page and position Center
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeCCPC()
     {
@@ -64,6 +72,7 @@ class BmlSize
      * Options getter for Catalog Category Page and position Sidebar (right)
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeCCPS()
     {
@@ -82,6 +91,7 @@ class BmlSize
      * Options getter for Catalog Product Page and position Center
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeCPPC()
     {
@@ -99,6 +109,7 @@ class BmlSize
      * Options getter for Catalog Product Page and position Near Bill Me Later checkout button
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeCPPN()
     {
@@ -117,6 +128,7 @@ class BmlSize
      * Options getter for Checkout Cart Page and position Center
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeCheckoutC()
     {
@@ -133,6 +145,7 @@ class BmlSize
      * Options getter for Checkout Cart Page and position Near Bill Me Later checkout button
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlSizeCheckoutN()
     {

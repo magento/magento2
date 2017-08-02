@@ -9,6 +9,7 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeManagementInterface
  * @api
+ * @since 2.0.0
  */
 interface AttributeManagementInterface
 {
@@ -23,6 +24,7 @@ interface AttributeManagementInterface
      * @return int
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
 
@@ -35,6 +37,7 @@ interface AttributeManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return bool
+     * @since 2.0.0
      */
     public function unassign($attributeSetId, $attributeCode);
 
@@ -45,6 +48,7 @@ interface AttributeManagementInterface
      * @param string $attributeSetId
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $attributeSetId is not found
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @since 2.0.0
      */
     public function getAttributes($entityTypeCode, $attributeSetId);
 }

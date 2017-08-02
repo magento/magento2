@@ -7,6 +7,7 @@ namespace Magento\Usps\Model\Source;
 
 /**
  * Container source
+ * @since 2.0.0
  */
 class Container extends Generic
 {
@@ -14,6 +15,7 @@ class Container extends Generic
      * Carrier code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $code = 'container';
 }

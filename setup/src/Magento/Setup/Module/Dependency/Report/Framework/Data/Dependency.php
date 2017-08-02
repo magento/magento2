@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Dependency\Report\Framework\Data;
 
 /**
  * Dependency
+ * @since 2.0.0
  */
 class Dependency
 {
@@ -14,6 +15,7 @@ class Dependency
      * Lib we depend on
      *
      * @var string
+     * @since 2.0.0
      */
     protected $lib;
 
@@ -21,6 +23,7 @@ class Dependency
      * Dependencies count
      *
      * @var int
+     * @since 2.0.0
      */
     protected $count;
 
@@ -29,6 +32,7 @@ class Dependency
      *
      * @param string $lib
      * @param int $count
+     * @since 2.0.0
      */
     public function __construct($lib, $count)
     {
@@ -40,6 +44,7 @@ class Dependency
      * Get lib
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLib()
     {
@@ -50,6 +55,7 @@ class Dependency
      * Get count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCount()
     {

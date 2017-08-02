@@ -9,11 +9,13 @@ namespace Magento\ImportExport\Model\Source\Import\Behavior;
  * Import behavior source model
  *
  * @api
+ * @since 2.0.0
  */
 class Custom extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toArray()
     {
@@ -26,6 +28,7 @@ class Custom extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCode()
     {

@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides email templates configuration
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {
@@ -19,6 +20,7 @@ class Data extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Reader $reader,

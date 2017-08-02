@@ -7,21 +7,29 @@ namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ConstructorArgumentTypes
+ *
+ * @since 2.0.0
+ */
 class ConstructorArgumentTypes implements ValidatorInterface
 {
     /**
      * @var \Magento\Framework\Code\Reader\ArgumentsReader
+     * @since 2.0.0
      */
     protected $argumentsReader;
 
     /**
      * @var \Magento\Framework\Code\Reader\SourceArgumentsReader
+     * @since 2.0.0
      */
     protected $sourceArgumentsReader;
 
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
      * @param \Magento\Framework\Code\Reader\SourceArgumentsReader $sourceArgumentsReader
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
@@ -38,6 +46,7 @@ class ConstructorArgumentTypes implements ValidatorInterface
      * @param string $className
      * @return bool
      * @throws \Magento\Framework\Exception\ValidatorException
+     * @since 2.0.0
      */
     public function validate($className)
     {

@@ -15,8 +15,9 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 /**
  * Contact base helper
  *
- * @deprecated
+ * @deprecated 2.2.0
  * @see \Magento\Contact\Model\ConfigInterface
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -26,21 +27,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Helper\View
+     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
     /**
      * @var DataPersistorInterface
+     * @since 2.1.0
      */
     private $dataPersistor;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $postData = null;
 
@@ -48,6 +53,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerViewHelper $customerViewHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -63,7 +69,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if enabled
      *
      * @return string|null
-     * @deprecated use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
+     * @deprecated 2.2.0 use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -77,6 +84,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get user name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUserName()
     {
@@ -95,6 +103,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get user email
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUserEmail()
     {
@@ -114,6 +123,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return string
+     * @since 2.1.0
      */
     public function getPostValue($key)
     {
@@ -133,6 +143,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Data Persistor
      *
      * @return DataPersistorInterface
+     * @since 2.1.0
      */
     private function getDataPersistor()
     {

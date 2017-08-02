@@ -12,11 +12,13 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Braintree Settlement Report controller
+ * @since 2.1.0
  */
 class Index extends Action
 {
     /**
      * @var PageFactory
+     * @since 2.1.0
      */
     protected $resultPageFactory;
 
@@ -25,6 +27,7 @@ class Index extends Action
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @since 2.1.0
      */
     public function __construct(
         Context $context,
@@ -38,6 +41,7 @@ class Index extends Action
      * Index action
      *
      * @return Page
+     * @since 2.1.0
      */
     public function execute()
     {

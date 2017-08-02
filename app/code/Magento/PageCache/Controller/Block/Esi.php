@@ -6,12 +6,18 @@
  */
 namespace Magento\PageCache\Controller\Block;
 
+/**
+ * Class \Magento\PageCache\Controller\Block\Esi
+ *
+ * @since 2.0.0
+ */
 class Esi extends \Magento\PageCache\Controller\Block
 {
     /**
      * Returns block content as part of ESI request from Varnish
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

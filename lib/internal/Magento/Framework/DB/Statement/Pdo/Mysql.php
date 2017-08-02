@@ -13,6 +13,11 @@ namespace Magento\Framework\DB\Statement\Pdo;
 
 use Magento\Framework\DB\Statement\Parameter;
 
+/**
+ * Class \Magento\Framework\DB\Statement\Pdo\Mysql
+ *
+ * @since 2.0.0
+ */
 class Mysql extends \Zend_Db_Statement_Pdo
 {
     /**
@@ -23,6 +28,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
      * @return bool
      * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function _executeWithBinding(array $params)
     {
@@ -74,6 +80,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
      * @param array $params OPTIONAL Values to bind to parameter placeholders.
      * @return bool
      * @throws \Zend_Db_Statement_Exception
+     * @since 2.0.0
      */
     public function _execute(array $params = null)
     {

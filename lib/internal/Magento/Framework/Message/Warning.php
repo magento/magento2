@@ -7,6 +7,7 @@ namespace Magento\Framework\Message;
 
 /**
  * Warning message model
+ * @since 2.0.0
  */
 class Warning extends AbstractMessage
 {
@@ -14,6 +15,7 @@ class Warning extends AbstractMessage
      * Getter message type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {

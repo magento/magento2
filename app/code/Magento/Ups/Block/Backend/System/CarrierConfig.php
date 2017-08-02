@@ -14,6 +14,7 @@ use Magento\Ups\Helper\Config as ConfigHelper;
  * Backend shipping UPS content block
  *
  * @api
+ * @since 2.0.0
  */
 class CarrierConfig extends Template
 {
@@ -21,11 +22,13 @@ class CarrierConfig extends Template
      * Shipping carrier config
      *
      * @var \Magento\Ups\Helper\Config
+     * @since 2.0.0
      */
     protected $carrierConfig;
 
     /**
      * @var \Magento\Store\Model\Website
+     * @since 2.0.0
      */
     protected $_websiteModel;
 
@@ -34,6 +37,7 @@ class CarrierConfig extends Template
      * @param \Magento\Ups\Helper\Config $carrierConfig
      * @param \Magento\Store\Model\Website $websiteModel
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         TemplateContext $context,
@@ -50,6 +54,7 @@ class CarrierConfig extends Template
      * Get shipping model
      *
      * @return \Magento\Ups\Helper\Config
+     * @since 2.0.0
      */
     public function getCarrierConfig()
     {
@@ -60,6 +65,7 @@ class CarrierConfig extends Template
      * Get website model
      *
      * @return \Magento\Store\Model\Website
+     * @since 2.0.0
      */
     public function getWebsiteModel()
     {
@@ -72,6 +78,7 @@ class CarrierConfig extends Template
      * @param string $path
      * @param mixed $store
      * @return mixed
+     * @since 2.0.0
      */
     public function getConfig($path, $store = null)
     {

@@ -13,6 +13,7 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Custom extends \Magento\Framework\App\Config\Value
 {
@@ -53,7 +54,10 @@ class Custom extends \Magento\Framework\App\Config\Value
     const XML_PATH_CARRIERS = 'carriers';
     const XML_PATH_PAYMENT = 'payment';
 
-    /* @var \Magento\Framework\App\Config\Storage\WriterInterface */
+    /**
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     * @since 2.0.0
+     */
     protected $_configWriter;
 
     /**
@@ -65,6 +69,7 @@ class Custom extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -84,6 +89,7 @@ class Custom extends \Magento\Framework\App\Config\Value
      * Validate value before save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -101,6 +107,7 @@ class Custom extends \Magento\Framework\App\Config\Value
      * Change secure/unsecure base_url after use_custom_url was modified
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

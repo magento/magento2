@@ -6,12 +6,18 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Billing\Agreement\StartWizard
+ *
+ * @since 2.0.0
+ */
 class StartWizard extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**
      * Wizard start action
      *
      * @return \Magento\Framework\App\Response\Http
+     * @since 2.0.0
      */
     public function execute()
     {

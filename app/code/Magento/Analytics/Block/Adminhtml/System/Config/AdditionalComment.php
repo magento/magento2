@@ -7,12 +7,14 @@ namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
 /**
  * Provides field with additional information
+ * @since 2.2.0
  */
 class AdditionalComment extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.2.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -25,6 +27,7 @@ class AdditionalComment extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string
+     * @since 2.2.0
      */
     private function decorateRowHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element, $html)
     {

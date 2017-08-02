@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -19,6 +20,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Total renderers
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_totalRenderers;
 
@@ -26,6 +28,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Default renderer
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultRenderer = \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals::class;
 
@@ -33,6 +36,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
+     * @since 2.0.0
      */
     protected $_salesData = null;
 
@@ -40,6 +44,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Sales config
      *
      * @var \Magento\Sales\Model\Config
+     * @since 2.0.0
      */
     protected $_salesConfig;
 
@@ -51,6 +56,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,6 +76,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,6 +88,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get totals
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -97,6 +105,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -107,6 +116,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get header css class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -118,6 +128,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param string $code
      * @return bool|\Magento\Framework\View\Element\BlockInterface
+     * @since 2.0.0
      */
     protected function _getTotalRenderer($code)
     {
@@ -147,6 +158,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param string|null $area
      * @param int $colspan
      * @return mixed
+     * @since 2.0.0
      */
     public function renderTotal($total, $area = null, $colspan = 1)
     {
@@ -167,6 +179,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param null $area
      * @param int $colspan
      * @return string
+     * @since 2.0.0
      */
     public function renderTotals($area = null, $colspan = 1)
     {
@@ -184,6 +197,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Check allow to send new order confirmation email
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canSendNewOrderConfirmationEmail()
     {
@@ -195,6 +209,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getNoteNotify()
     {

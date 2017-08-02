@@ -5,15 +5,22 @@
  */
 namespace Magento\Framework\Locale\Bundle;
 
+/**
+ * Class \Magento\Framework\Locale\Bundle\DataBundle
+ *
+ * @since 2.0.0
+ */
 class DataBundle
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $path = 'ICUDATA';
 
     /**
      * @var \ResourceBundle[][]
+     * @since 2.0.0
      */
     protected static $bundles = [];
 
@@ -22,6 +29,7 @@ class DataBundle
      *
      * @param string $locale
      * @return \ResourceBundle
+     * @since 2.0.0
      */
     public function get($locale)
     {
@@ -41,6 +49,7 @@ class DataBundle
      * @param string $locale
      * @param string $path
      * @return null|\ResourceBundle
+     * @since 2.0.0
      */
     protected function createResourceBundle($locale, $path)
     {
@@ -58,6 +67,7 @@ class DataBundle
      *
      * @param string $locale
      * @return string
+     * @since 2.0.0
      */
     protected function cleanLocale($locale)
     {

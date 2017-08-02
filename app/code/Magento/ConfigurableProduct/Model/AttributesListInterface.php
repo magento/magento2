@@ -7,6 +7,7 @@ namespace Magento\ConfigurableProduct\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface AttributesListInterface
 {
@@ -15,6 +16,7 @@ interface AttributesListInterface
      *
      * @param array $ids
      * @return array
+     * @since 2.0.0
      */
     public function getAttributes($ids);
 }

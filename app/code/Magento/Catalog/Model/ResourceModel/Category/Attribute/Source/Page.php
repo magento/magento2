@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Source;
  * Catalog category landing page attribute source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -16,6 +17,7 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Block collection factory
      *
      * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
+     * @since 2.0.0
      */
     protected $_blockCollectionFactory;
 
@@ -23,6 +25,7 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Construct
      *
      * @param \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $blockCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\Cms\Model\ResourceModel\Block\CollectionFactory $blockCollectionFactory)
     {
@@ -33,6 +36,7 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Return all block options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllOptions()
     {

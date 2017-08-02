@@ -20,36 +20,43 @@ use Psr\Log\LoggerInterface;
  * Class GatewayCommand
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class GatewayCommand implements CommandInterface
 {
     /**
      * @var BuilderInterface
+     * @since 2.0.0
      */
     private $requestBuilder;
 
     /**
      * @var TransferFactoryInterface
+     * @since 2.0.0
      */
     private $transferFactory;
 
     /**
      * @var ClientInterface
+     * @since 2.0.0
      */
     private $client;
 
     /**
      * @var HandlerInterface
+     * @since 2.0.0
      */
     private $handler;
 
     /**
      * @var ValidatorInterface
+     * @since 2.0.0
      */
     private $validator;
 
     /**
      * @var LoggerInterface
+     * @since 2.1.0
      */
     private $logger;
 
@@ -60,6 +67,7 @@ class GatewayCommand implements CommandInterface
      * @param LoggerInterface $logger
      * @param HandlerInterface $handler
      * @param ValidatorInterface $validator
+     * @since 2.0.0
      */
     public function __construct(
         BuilderInterface $requestBuilder,
@@ -83,6 +91,7 @@ class GatewayCommand implements CommandInterface
      * @param array $commandSubject
      * @return void
      * @throws CommandException
+     * @since 2.0.0
      */
     public function execute(array $commandSubject)
     {
@@ -115,6 +124,7 @@ class GatewayCommand implements CommandInterface
     /**
      * @param Phrase[] $fails
      * @return void
+     * @since 2.1.0
      */
     private function logExceptions(array $fails)
     {

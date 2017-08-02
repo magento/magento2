@@ -5,12 +5,18 @@
  */
 namespace Magento\Sales\Block\Adminhtml;
 
+/**
+ * Class \Magento\Sales\Block\Adminhtml\Totals
+ *
+ * @since 2.0.0
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
      * Admin helper
      *
      * @var \Magento\Sales\Helper\Admin
+     * @since 2.0.0
      */
     protected $_adminHelper;
 
@@ -19,6 +25,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -35,6 +42,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      *
      * @param \Magento\Framework\DataObject $total
      * @return string
+     * @since 2.0.0
      */
     public function formatValue($total)
     {
@@ -48,6 +56,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * Initialize order totals array
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initTotals()
     {

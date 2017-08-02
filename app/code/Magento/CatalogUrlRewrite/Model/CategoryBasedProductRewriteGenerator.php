@@ -13,16 +13,19 @@ use Magento\Catalog\Model\Product\Visibility;
  * Class ProductUrlRewriteGenerator
  * @package Magento\CatalogUrlRewrite\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class CategoryBasedProductRewriteGenerator
 {
     /**
      * @var ProductScopeRewriteGenerator
+     * @since 2.2.0
      */
     private $productScopeRewriteGenerator;
 
     /**
      * @param ProductScopeRewriteGenerator $productScopeRewriteGenerator
+     * @since 2.2.0
      */
     public function __construct(
         ProductScopeRewriteGenerator $productScopeRewriteGenerator
@@ -37,6 +40,7 @@ class CategoryBasedProductRewriteGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @since 2.2.0
      */
     public function generate(Product $product, Category $category, $rootCategoryId = null)
     {

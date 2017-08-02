@@ -7,10 +7,14 @@ namespace Magento\Customer\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class SectionConfig extends \Magento\Framework\View\Element\Template
 {
-    /** @var \Magento\Framework\Config\DataInterface */
+    /**
+     * @var \Magento\Framework\Config\DataInterface
+     * @since 2.0.0
+     */
     protected $sectionConfig;
 
     /**
@@ -18,6 +22,7 @@ class SectionConfig extends \Magento\Framework\View\Element\Template
      * Sections that do not have server side providers
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $clientSideSections;
 
@@ -26,6 +31,7 @@ class SectionConfig extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Config\DataInterface $sectionConfig
      * @param array $data
      * @param string[] $clientSideSections
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -42,6 +48,7 @@ class SectionConfig extends \Magento\Framework\View\Element\Template
      * Get list of sections for invalidation
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSections()
     {
@@ -51,6 +58,7 @@ class SectionConfig extends \Magento\Framework\View\Element\Template
     /**
      * Get list of client side sections
      * @return string[]
+     * @since 2.0.0
      */
     public function getClientSideSections()
     {

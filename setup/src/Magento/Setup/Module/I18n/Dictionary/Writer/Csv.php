@@ -10,6 +10,7 @@ use Magento\Setup\Module\I18n\Dictionary\WriterInterface;
 
 /**
  * Csv writer
+ * @since 2.0.0
  */
 class Csv implements WriterInterface
 {
@@ -17,6 +18,7 @@ class Csv implements WriterInterface
      * File handler
      *
      * @var resource
+     * @since 2.0.0
      */
     protected $_fileHandler;
 
@@ -25,6 +27,7 @@ class Csv implements WriterInterface
      *
      * @param string $outputFilename
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct($outputFilename)
     {
@@ -38,6 +41,7 @@ class Csv implements WriterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function write(Phrase $phrase)
     {
@@ -54,6 +58,7 @@ class Csv implements WriterInterface
      * Destructor for closing resource
      *
      * @return void
+     * @since 2.2.0
      */
     public function __destruct()
     {

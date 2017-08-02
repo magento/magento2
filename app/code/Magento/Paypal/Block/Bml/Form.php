@@ -9,11 +9,17 @@ namespace Magento\Paypal\Block\Bml;
 use Magento\Paypal\Block\Express;
 use Magento\Paypal\Model\Config;
 
+/**
+ * Class \Magento\Paypal\Block\Bml\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends Express\Form
 {
     /**
      * Payment method code
      * @var string
+     * @since 2.0.0
      */
     protected $_methodCode = Config::METHOD_WPP_BML;
 
@@ -21,6 +27,7 @@ class Form extends Express\Form
      * Set template and redirect message
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

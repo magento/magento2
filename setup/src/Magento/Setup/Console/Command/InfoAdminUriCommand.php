@@ -11,10 +11,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
+/**
+ * Class \Magento\Setup\Console\Command\InfoAdminUriCommand
+ *
+ * @since 2.0.0
+ */
 class InfoAdminUriCommand extends Command
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -24,6 +30,7 @@ class InfoAdminUriCommand extends Command
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {
@@ -35,6 +42,7 @@ class InfoAdminUriCommand extends Command
      * Initialization of the command
      *
      * @return void
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -43,9 +51,10 @@ class InfoAdminUriCommand extends Command
         parent::configure();
     }
 
-     /**
-      * {@inheritdoc}
-      */
+    /**
+     * {@inheritdoc}
+     * @since 2.0.0
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(

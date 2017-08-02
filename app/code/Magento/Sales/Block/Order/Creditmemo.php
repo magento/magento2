@@ -12,21 +12,25 @@ use Magento\Customer\Model\Context;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/creditmemo.phtml';
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Payment\Helper\Data
+     * @since 2.0.0
      */
     protected $_paymentHelper;
 
@@ -36,6 +40,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -52,6 +57,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -62,6 +68,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -72,6 +79,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -82,6 +90,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
      * Return back url for logged in and guest users
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -95,6 +104,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
      * Return back title for logged in and guest users
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getBackTitle()
     {
@@ -107,6 +117,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getInvoiceUrl($order)
     {
@@ -116,6 +127,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getShipmentUrl($order)
     {
@@ -125,6 +137,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getViewUrl($order)
     {
@@ -134,6 +147,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     /**
      * @param object $creditmemo
      * @return string
+     * @since 2.0.0
      */
     public function getPrintCreditmemoUrl($creditmemo)
     {
@@ -143,6 +157,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     /**
      * @param object $order
      * @return string
+     * @since 2.0.0
      */
     public function getPrintAllCreditmemosUrl($order)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter that returns value of a constant by its name
+ * @since 2.0.0
  */
 class Constant implements InterpreterInterface
 {
@@ -16,6 +17,7 @@ class Constant implements InterpreterInterface
      * {@inheritdoc}
      * @return mixed
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

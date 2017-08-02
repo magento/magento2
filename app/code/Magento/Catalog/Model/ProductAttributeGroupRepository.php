@@ -9,20 +9,28 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
+/**
+ * Class \Magento\Catalog\Model\ProductAttributeGroupRepository
+ *
+ * @since 2.0.0
+ */
 class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeGroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\GroupFactory
+     * @since 2.0.0
      */
     protected $groupFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group
+     * @since 2.0.0
      */
     protected $groupResource;
 
@@ -30,6 +38,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
      * @param \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource
      * @param Product\Attribute\GroupFactory $groupFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository,
@@ -43,6 +52,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeGroupInterface $group)
     {
@@ -51,6 +61,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -59,6 +70,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($groupId)
     {
@@ -73,6 +85,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($groupId)
     {
@@ -84,6 +97,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Eav\Api\Data\AttributeGroupInterface $group)
     {

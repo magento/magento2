@@ -13,23 +13,31 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 
+/**
+ * Class \Magento\Catalog\Model\Product\TypeTransitionManager
+ *
+ * @since 2.0.0
+ */
 class TypeTransitionManager
 {
     /**
      * List of compatible product types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $compatibleTypes;
 
     /**
      * @var Edit\WeightResolver
+     * @since 2.0.0
      */
     protected $weightResolver;
 
     /**
      * @param Edit\WeightResolver $weightResolver
      * @param array $compatibleTypes
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Edit\WeightResolver $weightResolver,
@@ -44,6 +52,7 @@ class TypeTransitionManager
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @since 2.0.0
      */
     public function processProduct(Product $product)
     {

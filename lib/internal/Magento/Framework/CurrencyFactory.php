@@ -6,21 +6,29 @@
 
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\CurrencyFactory
+ *
+ * @since 2.0.0
+ */
 class CurrencyFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -35,6 +43,7 @@ class CurrencyFactory
      *
      * @param array $data
      * @return CurrencyInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\Api\Search;
 
 /**
  * Faceted data
+ * @since 2.0.0
  */
 interface AggregationInterface
 {
@@ -15,6 +16,7 @@ interface AggregationInterface
      *
      * @param string $bucketName
      * @return \Magento\Framework\Api\Search\BucketInterface
+     * @since 2.0.0
      */
     public function getBucket($bucketName);
 
@@ -22,6 +24,7 @@ interface AggregationInterface
      * Get all Document fields
      *
      * @return \Magento\Framework\Api\Search\BucketInterface[]
+     * @since 2.0.0
      */
     public function getBuckets();
 
@@ -29,6 +32,7 @@ interface AggregationInterface
      * Get Document field names
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getBucketNames();
 }

@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
+ * @since 2.0.0
  */
 interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterface
 {
@@ -124,6 +125,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the additional data for the invoice item.
      *
      * @return string|null Additional data.
+     * @since 2.0.0
      */
     public function getAdditionalData();
 
@@ -131,6 +133,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base cost for the invoice item.
      *
      * @return float|null Base cost.
+     * @since 2.0.0
      */
     public function getBaseCost();
 
@@ -138,6 +141,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base discount amount for the invoice item.
      *
      * @return float|null Base discount amount.
+     * @since 2.0.0
      */
     public function getBaseDiscountAmount();
 
@@ -145,6 +149,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base discount tax compensation amount for the invoice item.
      *
      * @return float|null Base discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -152,6 +157,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base price for the invoice item.
      *
      * @return float|null Base price.
+     * @since 2.0.0
      */
     public function getBasePrice();
 
@@ -159,6 +165,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base price including tax for the invoice item.
      *
      * @return float|null Base price including tax.
+     * @since 2.0.0
      */
     public function getBasePriceInclTax();
 
@@ -166,6 +173,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base row total for the invoice item.
      *
      * @return float|null Base row total.
+     * @since 2.0.0
      */
     public function getBaseRowTotal();
 
@@ -173,6 +181,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base row total including tax for the invoice item.
      *
      * @return float|null Base row total including tax.
+     * @since 2.0.0
      */
     public function getBaseRowTotalInclTax();
 
@@ -180,6 +189,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the base tax amount for the invoice item.
      *
      * @return float|null Base tax amount.
+     * @since 2.0.0
      */
     public function getBaseTaxAmount();
 
@@ -187,6 +197,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the description for the invoice item.
      *
      * @return string|null Description.
+     * @since 2.0.0
      */
     public function getDescription();
 
@@ -194,6 +205,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the discount amount for the invoice item.
      *
      * @return float|null Discount amount.
+     * @since 2.0.0
      */
     public function getDiscountAmount();
 
@@ -201,6 +213,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the ID for the invoice item.
      *
      * @return int|null Invoice item ID.
+     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -209,6 +222,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -216,6 +230,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the discount tax compensation amount for the invoice item.
      *
      * @return float|null Discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -223,6 +238,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the name for the invoice item.
      *
      * @return string|null Name.
+     * @since 2.0.0
      */
     public function getName();
 
@@ -230,6 +246,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the parent ID for the invoice item.
      *
      * @return int|null Parent ID.
+     * @since 2.0.0
      */
     public function getParentId();
 
@@ -237,6 +254,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the price for the invoice item.
      *
      * @return float|null Price.
+     * @since 2.0.0
      */
     public function getPrice();
 
@@ -244,6 +262,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the price including tax for the invoice item.
      *
      * @return float|null Price including tax.
+     * @since 2.0.0
      */
     public function getPriceInclTax();
 
@@ -251,6 +270,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the product ID for the invoice item.
      *
      * @return int|null Product ID.
+     * @since 2.0.0
      */
     public function getProductId();
 
@@ -258,6 +278,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the row total for the invoice item.
      *
      * @return float|null Row total.
+     * @since 2.0.0
      */
     public function getRowTotal();
 
@@ -265,6 +286,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the row total including tax for the invoice item.
      *
      * @return float|null Row total including tax.
+     * @since 2.0.0
      */
     public function getRowTotalInclTax();
 
@@ -272,6 +294,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the SKU for the invoice item.
      *
      * @return string SKU.
+     * @since 2.0.0
      */
     public function getSku();
 
@@ -279,6 +302,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Gets the tax amount for the invoice item.
      *
      * @return float|null Tax amount.
+     * @since 2.0.0
      */
     public function getTaxAmount();
 
@@ -287,6 +311,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -295,6 +320,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setBasePrice($price);
 
@@ -303,6 +329,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxAmount($amount);
 
@@ -311,6 +338,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseRowTotal($amount);
 
@@ -319,6 +347,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountAmount($amount);
 
@@ -327,6 +356,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setRowTotal($amount);
 
@@ -335,6 +365,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountAmount($amount);
 
@@ -343,6 +374,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setPriceInclTax($amount);
 
@@ -351,6 +383,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxAmount($amount);
 
@@ -359,6 +392,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBasePriceInclTax($amount);
 
@@ -367,6 +401,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $baseCost
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseCost($baseCost);
 
@@ -375,6 +410,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -383,6 +419,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseRowTotalInclTax($amount);
 
@@ -391,6 +428,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setRowTotalInclTax($amount);
 
@@ -399,6 +437,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setProductId($id);
 
@@ -407,6 +446,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param string $additionalData
      * @return $this
+     * @since 2.0.0
      */
     public function setAdditionalData($additionalData);
 
@@ -415,6 +455,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param string $description
      * @return $this
+     * @since 2.0.0
      */
     public function setDescription($description);
 
@@ -423,6 +464,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -431,6 +473,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -439,6 +482,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($amount);
 
@@ -447,6 +491,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationAmount($amount);
 
@@ -454,6 +499,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\InvoiceItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -462,6 +508,7 @@ interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterfac
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes);
 }

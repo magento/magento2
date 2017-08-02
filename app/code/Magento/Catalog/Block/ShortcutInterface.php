@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block;
  * Shortcut block interface
  *
  * @api
+ * @since 2.0.0
  */
 interface ShortcutInterface
 {
@@ -16,6 +17,7 @@ interface ShortcutInterface
      * Get shortcut alias
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAlias();
 }

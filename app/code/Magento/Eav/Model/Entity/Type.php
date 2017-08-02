@@ -36,6 +36,7 @@ namespace Magento\Eav\Model\Entity;
  * @method \Magento\Eav\Model\Entity\Type setEntityAttributeCollection(string $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {
@@ -43,6 +44,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Collection of attributes
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -50,6 +52,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Array of attributes
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributesBySet = [];
 
@@ -57,26 +60,31 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Collection of sets
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
+     * @since 2.0.0
      */
     protected $_sets;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
+     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @since 2.0.0
      */
     protected $_attSetFactory;
 
     /**
      * @var \Magento\Eav\Model\Entity\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
+     * @since 2.0.0
      */
     protected $_universalFactory;
 
@@ -91,6 +99,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -115,6 +124,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -126,6 +136,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCode($code)
     {
@@ -139,6 +150,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @param   int $setId
      * @return  \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @since 2.0.0
      */
     public function getAttributeCollection($setId = null)
     {
@@ -165,6 +177,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Init and retrieve attribute collection
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @since 2.0.0
      */
     protected function _getAttributeCollection()
     {
@@ -181,6 +194,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity tpe sets collection
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
+     * @since 2.0.0
      */
     public function getAttributeSetCollection()
     {
@@ -198,6 +212,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param int $storeId
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     public function fetchNewIncrementId($storeId = null)
     {
@@ -266,6 +281,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity id field
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getEntityIdField()
     {
@@ -276,6 +292,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity table name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getEntityTable()
     {
@@ -290,6 +307,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity table prefix name
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getValueTablePrefix()
     {
@@ -305,6 +323,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity table prefix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTablePrefix()
     {
@@ -321,6 +340,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Get default attribute set identifier for etity type
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDefaultAttributeSetId()
     {
@@ -331,6 +351,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity type id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -341,6 +362,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity type code
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {
@@ -351,6 +373,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Get attribute model code for entity type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeModel()
     {
@@ -365,6 +388,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource entity object
      *
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -375,6 +399,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Return attribute collection. If not specify return default
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityAttributeCollection()
     {

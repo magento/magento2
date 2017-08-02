@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
  * Entity attribute option resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,6 +18,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,6 +32,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param \Zend_Db_Expr $valueExpr
      * @return $this
+     * @since 2.0.0
      */
     public function addOptionValueToCollection($collection, $attribute, $valueExpr)
     {
@@ -68,6 +71,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $store
      * @param bool $hasValueField flag which require option value
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     public function getFlatUpdateSelect(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,

@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InputException;
  * Adminhtml common tax class controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class Tax extends \Magento\Backend\App\Action
 {
@@ -24,11 +25,13 @@ abstract class Tax extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
+     * @since 2.0.0
      */
     protected $taxClassRepository;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxClassInterfaceFactory
+     * @since 2.0.0
      */
     protected $taxClassDataObjectFactory;
 
@@ -36,6 +39,7 @@ abstract class Tax extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService
      * @param \Magento\Tax\Api\Data\TaxClassInterfaceFactory $taxClassDataObjectFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -53,6 +57,7 @@ abstract class Tax extends \Magento\Backend\App\Action
      * @param string $className
      * @return string processed class name
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     protected function _processClassName($className)
     {

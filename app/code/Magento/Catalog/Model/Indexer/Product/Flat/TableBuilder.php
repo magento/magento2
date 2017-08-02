@@ -7,30 +7,40 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder
+ *
+ * @since 2.0.0
+ */
 class TableBuilder
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
+     * @since 2.0.0
      */
     protected $_productIndexerHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $_connection;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.1.0
      */
     protected $resource;
 
     /**
      * @var BuilderInterfaceFactory
+     * @since 2.2.0
      */
     private $tableBuilderFactory;
 
@@ -38,6 +48,7 @@ class TableBuilder
      * Check whether builder was executed
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isExecuted = false;
 
@@ -47,6 +58,7 @@ class TableBuilder
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param BuilderInterfaceFactory|null $tableBuilderFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
@@ -67,6 +79,7 @@ class TableBuilder
      * @param array $changedIds
      * @param string $valueFieldSuffix
      * @return void
+     * @since 2.0.0
      */
     public function build($storeId, $changedIds, $valueFieldSuffix)
     {
@@ -128,6 +141,7 @@ class TableBuilder
      * @param string $valueFieldSuffix
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _createTemporaryTable($tableName, array $columns, $valueFieldSuffix)
     {
@@ -199,6 +213,7 @@ class TableBuilder
      *
      * @param string $tableName
      * @return string
+     * @since 2.0.0
      */
     protected function _getTemporaryTableName($tableName)
     {
@@ -212,6 +227,7 @@ class TableBuilder
      * @param array  $columns
      * @param array  $changedIds
      * @return void
+     * @since 2.0.0
      */
     protected function _fillTemporaryEntityTable($tableName, array $columns, array $changedIds = [])
     {
@@ -240,6 +256,7 @@ class TableBuilder
      * @param string $tableName
      * @param string $columnName
      * @return void
+     * @since 2.0.0
      */
     protected function _addPrimaryKeyToTable($tableName, $columnName = 'entity_id')
     {
@@ -260,6 +277,7 @@ class TableBuilder
      * @param string $valueFieldSuffix
      * @param int $storeId
      * @return void
+     * @since 2.0.0
      */
     protected function _fillTemporaryTable(
         $tableName,
@@ -357,7 +375,8 @@ class TableBuilder
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

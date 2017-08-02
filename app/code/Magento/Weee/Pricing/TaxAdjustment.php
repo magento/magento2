@@ -15,6 +15,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Weee tax pricing adjustment
+ * @since 2.0.0
  */
 class TaxAdjustment implements AdjustmentInterface
 {
@@ -27,11 +28,13 @@ class TaxAdjustment implements AdjustmentInterface
      * Weee helper
      *
      * @var WeeeHelper
+     * @since 2.0.0
      */
     protected $weeeHelper;
 
     /**
      * @var TaxHelper
+     * @since 2.0.0
      */
     protected $taxHelper;
 
@@ -39,11 +42,13 @@ class TaxAdjustment implements AdjustmentInterface
      * Sort order
      *
      * @var int|null
+     * @since 2.0.0
      */
     protected $sortOrder;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -54,6 +59,7 @@ class TaxAdjustment implements AdjustmentInterface
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param int $sortOrder
+     * @since 2.0.0
      */
     public function __construct(
         WeeeHelper $weeeHelper,
@@ -71,6 +77,7 @@ class TaxAdjustment implements AdjustmentInterface
      * Get adjustment code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdjustmentCode()
     {
@@ -82,6 +89,7 @@ class TaxAdjustment implements AdjustmentInterface
      * (FPT is excluded from base price)
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIncludedInBasePrice()
     {
@@ -92,6 +100,7 @@ class TaxAdjustment implements AdjustmentInterface
      * Define if adjustment is included in display price
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIncludedInDisplayPrice()
     {
@@ -115,6 +124,7 @@ class TaxAdjustment implements AdjustmentInterface
      * @param null|array $context
      * @return float
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
@@ -128,6 +138,7 @@ class TaxAdjustment implements AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
+     * @since 2.0.0
      */
     public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
@@ -142,6 +153,7 @@ class TaxAdjustment implements AdjustmentInterface
      *
      * @param string $adjustmentCode
      * @return bool
+     * @since 2.0.0
      */
     public function isExcludedWith($adjustmentCode)
     {
@@ -154,6 +166,7 @@ class TaxAdjustment implements AdjustmentInterface
      *
      * @param SaleableInterface $saleableItem
      * @return float
+     * @since 2.0.0
      */
     protected function getAmount(SaleableInterface $saleableItem)
     {
@@ -172,6 +185,7 @@ class TaxAdjustment implements AdjustmentInterface
      * Return sort order position
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSortOrder()
     {

@@ -11,12 +11,18 @@
  */
 namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System;
 
+/**
+ * Class \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
+ *
+ * @since 2.0.0
+ */
 abstract class Storage extends \Magento\Backend\App\Action
 {
     /**
      * Return file storage singleton
      *
      * @return \Magento\MediaStorage\Model\File\Storage
+     * @since 2.0.0
      */
     protected function _getSyncSingleton()
     {
@@ -27,6 +33,7 @@ abstract class Storage extends \Magento\Backend\App\Action
      * Return synchronize process status flag
      *
      * @return \Magento\MediaStorage\Model\File\Storage\Flag
+     * @since 2.0.0
      */
     protected function _getSyncFlag()
     {

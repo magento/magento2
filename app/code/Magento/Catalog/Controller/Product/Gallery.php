@@ -10,15 +10,22 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Product\Gallery
+ *
+ * @since 2.0.0
+ */
 class Gallery extends \Magento\Catalog\Controller\Product
 {
     /**
      * @var Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -28,6 +35,7 @@ class Gallery extends \Magento\Catalog\Controller\Product
      * @param Context $context
      * @param Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -43,6 +51,7 @@ class Gallery extends \Magento\Catalog\Controller\Product
      * View product gallery action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

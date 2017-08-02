@@ -9,32 +9,38 @@ use Magento\Framework\DB\QueryInterface;
 
 /**
  * Class SearchResultIterator
+ * @since 2.0.0
  */
 class SearchResultIterator implements \Iterator
 {
     /**
      * @var SearchResultInterface
+     * @since 2.0.0
      */
     protected $searchResult;
 
     /**
      * @var QueryInterface
+     * @since 2.0.0
      */
     protected $query;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $current;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $key = 0;
 
     /**
      * @param AbstractSearchResult $searchResult
      * @param QueryInterface $query
+     * @since 2.0.0
      */
     public function __construct(AbstractSearchResult $searchResult, QueryInterface $query)
     {
@@ -44,6 +50,7 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return array|mixed
+     * @since 2.0.0
      */
     public function current()
     {
@@ -52,6 +59,7 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function next()
     {
@@ -61,6 +69,7 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return int|mixed
+     * @since 2.0.0
      */
     public function key()
     {
@@ -69,6 +78,7 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function valid()
     {
@@ -77,6 +87,7 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function rewind()
     {

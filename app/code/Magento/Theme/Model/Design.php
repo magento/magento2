@@ -23,6 +23,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @method \Magento\Theme\Model\Design setDateFrom(string $value)
  * @method string getDateTo()
  * @method \Magento\Theme\Model\Design setDateTo(string $value)
+ * @since 2.0.0
  */
 class Design extends AbstractModel implements IdentityInterface, DesignInterface
 {
@@ -35,6 +36,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'core_design';
 
@@ -44,21 +46,25 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      * When you use true - all cache will be clean
      *
      * @var string|bool
+     * @since 2.0.0
      */
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $_dateTime;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -71,6 +77,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param SerializerInterface $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -92,6 +99,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -104,6 +112,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      * @param string $storeId
      * @param string|null $date
      * @return $this
+     * @since 2.0.0
      */
     public function loadChange($storeId, $date = null)
     {
@@ -135,6 +144,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      *
      * @param \Magento\Framework\View\DesignInterface $packageInto
      * @return $this
+     * @since 2.0.0
      */
     public function changeDesign(\Magento\Framework\View\DesignInterface $packageInto)
     {
@@ -149,6 +159,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      * Get identities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

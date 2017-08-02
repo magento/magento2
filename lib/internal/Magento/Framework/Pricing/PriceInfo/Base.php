@@ -17,22 +17,26 @@ use Magento\Framework\Pricing\PriceInfoInterface;
  * Price info base model
  *
  * @api
+ * @since 2.0.0
  */
 class Base implements PriceInfoInterface
 {
     /**
      * @var PriceCollection
+     * @since 2.0.0
      */
     protected $priceCollection;
 
     /**
      * @var Collection
+     * @since 2.0.0
      */
     protected $adjustmentCollection;
 
     /**
      * @param PriceCollection $prices
      * @param Collection $adjustmentCollection
+     * @since 2.0.0
      */
     public function __construct(
         PriceCollection $prices,
@@ -46,6 +50,7 @@ class Base implements PriceInfoInterface
      * Returns array of prices
      *
      * @return PriceCollection
+     * @since 2.0.0
      */
     public function getPrices()
     {
@@ -57,6 +62,7 @@ class Base implements PriceInfoInterface
      *
      * @param string $priceCode
      * @return PriceInterface
+     * @since 2.0.0
      */
     public function getPrice($priceCode)
     {
@@ -67,6 +73,7 @@ class Base implements PriceInfoInterface
      * Get all registered adjustments
      *
      * @return AdjustmentInterface[]
+     * @since 2.0.0
      */
     public function getAdjustments()
     {
@@ -79,6 +86,7 @@ class Base implements PriceInfoInterface
      * @param string $adjustmentCode
      * @throws \InvalidArgumentException
      * @return AdjustmentInterface
+     * @since 2.0.0
      */
     public function getAdjustment($adjustmentCode)
     {

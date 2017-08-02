@@ -5,21 +5,29 @@
  */
 namespace Magento\GiftMessage\Model\Type\Plugin;
 
+/**
+ * Class \Magento\GiftMessage\Model\Type\Plugin\Multishipping
+ *
+ * @since 2.0.0
+ */
 class Multishipping
 {
     /**
      * @var \Magento\GiftMessage\Model\GiftMessageManager
+     * @since 2.0.0
      */
     protected $message;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @param \Magento\GiftMessage\Model\GiftMessageManager $message
      * @param \Magento\Framework\App\RequestInterface $request
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\GiftMessage\Model\GiftMessageManager $message,
@@ -34,6 +42,7 @@ class Multishipping
      * @param array|null $methods
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeSetShippingMethods(
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $subject,

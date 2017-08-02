@@ -14,6 +14,7 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
  * Deployable files collector
  *
  * Default implementation uses Source Pool object (@see SourcePool)
+ * @since 2.2.0
  */
 class Collector implements CollectorInterface
 {
@@ -23,6 +24,7 @@ class Collector implements CollectorInterface
      * Provides the list of source objects
      *
      * @var SourcePool
+     * @since 2.2.0
      */
     private $sourcePool;
 
@@ -33,6 +35,7 @@ class Collector implements CollectorInterface
      * resolver provides the final static file name
      *
      * @var FileNameResolver
+     * @since 2.2.0
      */
     private $fileNameResolver;
 
@@ -41,6 +44,7 @@ class Collector implements CollectorInterface
      *
      * @see Package
      * @var PackageFactory
+     * @since 2.2.0
      */
     private $packageFactory;
 
@@ -48,6 +52,7 @@ class Collector implements CollectorInterface
      * Default values for package primary identifiers
      *
      * @var array
+     * @since 2.2.0
      */
     private $packageDefaultValues = [
         'area' => Package::BASE_AREA,
@@ -61,6 +66,7 @@ class Collector implements CollectorInterface
      * @param SourcePool $sourcePool
      * @param FileNameResolver $fileNameResolver
      * @param PackageFactory $packageFactory
+     * @since 2.2.0
      */
     public function __construct(
         SourcePool $sourcePool,
@@ -74,6 +80,7 @@ class Collector implements CollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect()
     {

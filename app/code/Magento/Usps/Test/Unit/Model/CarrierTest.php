@@ -153,6 +153,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
+        $localeResolver = $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class);
+        $localeResolver->method('getLocale')->willReturn('fr_FR');
+        $carrierHelper = $this->objectManager->getObject(
+            \Magento\Shipping\Helper\Carrier::class,
+            [
+                'localeResolver' => $localeResolver
+            ]
+        );
+
         $arguments = [
             'scopeConfig' => $this->scope,
             'xmlSecurity' => new \Magento\Framework\Xml\Security(),
@@ -162,7 +171,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'httpClientFactory' => $httpClientFactory,
             'data' => $data,
             'rateErrorFactory' => $this->errorFactory,
-
+            'carrierHelper' => $carrierHelper,
         ];
 
         $this->dataHelper = $this->getMockBuilder(DataHelper::class)
@@ -246,6 +255,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             \Magento\Shipping\Model\Shipment\ReturnShipment::class,
             require __DIR__ . '/_files/return_shipment_request_data.php'
         );
+        $this->httpClient->expects(self::exactly(2))
+            ->method('setParameterGet')
+            ->withConsecutive(
+                ['API', 'SignatureConfirmationCertifyV3'],
+                ['XML', $this->stringContains('<WeightInOunces>80</WeightInOunces>')]
+            );
+
         $this->assertNotEmpty($this->carrier->returnOfShipment($request)->getInfo()[0]['tracking_number']);
     }
 

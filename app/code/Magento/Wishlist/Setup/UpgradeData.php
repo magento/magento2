@@ -14,20 +14,28 @@ use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\Select\InQueryModifier;
 use Magento\Framework\DB\Query\Generator;
 
+/**
+ * Class \Magento\Wishlist\Setup\UpgradeData
+ *
+ * @since 2.2.0
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @var FieldDataConverterFactory
+     * @since 2.2.0
      */
     private $fieldDataConverterFactory;
 
     /**
      * @var QueryModifierFactory
+     * @since 2.2.0
      */
     private $queryModifierFactory;
 
     /**
      * @var Generator
+     * @since 2.2.0
      */
     private $queryGenerator;
 
@@ -37,6 +45,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      * @param Generator $queryGenerator
+     * @since 2.2.0
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
@@ -50,6 +59,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -64,6 +74,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
+     * @since 2.2.0
      */
     private function upgradeToVersionTwoZeroOne(ModuleDataSetupInterface $setup)
     {

@@ -8,12 +8,18 @@ namespace Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 
+/**
+ * Class \Magento\Sales\Model\Order\Shipment\OrderRegistrar
+ *
+ * @since 2.2.0
+ */
 class OrderRegistrar implements \Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface
 {
     /**
      * @param OrderInterface $order
      * @param ShipmentInterface $shipment
      * @return OrderInterface
+     * @since 2.2.0
      */
     public function register(OrderInterface $order, ShipmentInterface $shipment)
     {

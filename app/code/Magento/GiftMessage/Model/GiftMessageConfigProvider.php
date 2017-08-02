@@ -18,41 +18,49 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @since 2.0.0
  */
 class GiftMessageConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfiguration;
 
     /**
      * @var \Magento\GiftMessage\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $cartRepository;
 
     /**
      * @var \Magento\GiftMessage\Api\ItemRepositoryInterface
+     * @since 2.0.0
      */
     protected $itemRepository;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var LocaleFormat
+     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
@@ -65,6 +73,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param LocaleFormat $localeFormat
      * @param FormKey $formKey
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -88,6 +97,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -129,6 +139,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * Check if customer is logged in
      *
      * @return bool
+     * @since 2.0.0
      */
     private function isCustomerLoggedIn()
     {
@@ -139,6 +150,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * Retrieve store code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getStoreCode()
     {
@@ -149,6 +161,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * Check if quote is virtual
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isQuoteVirtual()
     {
@@ -159,6 +172,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * Load already specified quote level gift message.
      *
      * @return \Magento\GiftMessage\Api\Data\MessageInterface|null
+     * @since 2.0.0
      */
     protected function getOrderLevelGiftMessages()
     {
@@ -170,6 +184,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * Load already specified item level gift messages and related configuration.
      *
      * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
+     * @since 2.0.0
      */
     protected function getItemLevelGiftMessages()
     {

@@ -5,12 +5,18 @@
  */
 namespace Magento\MediaStorage\Model\Config\Backend\Storage\Media;
 
+/**
+ * Class \Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database
+ *
+ * @since 2.0.0
+ */
 class Database extends \Magento\Framework\App\Config\Value
 {
     /**
      * Core file storage
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
+     * @since 2.0.0
      */
     protected $_coreFileStorage = null;
 
@@ -23,6 +29,7 @@ class Database extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -42,6 +49,7 @@ class Database extends \Magento\Framework\App\Config\Value
      * Create db structure
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

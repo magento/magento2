@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\View\Url;
 
+/**
+ * Class \Magento\Framework\View\Url\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements \Magento\Framework\View\Url\ConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -16,6 +22,7 @@ class Config implements \Magento\Framework\View\Url\ConfigInterface
      * View url config model
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -27,6 +34,7 @@ class Config implements \Magento\Framework\View\Url\ConfigInterface
      *
      * @param string $path
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue($path)
     {

@@ -9,12 +9,14 @@ namespace Magento\Catalog\Model\Category\Attribute\Source;
  * Catalog category landing page attribute source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Mode extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getAllOptions()
     {

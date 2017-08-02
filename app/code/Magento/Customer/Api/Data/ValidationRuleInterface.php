@@ -10,6 +10,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Validation rule interface.
  * @api
+ * @since 2.0.0
  */
 interface ValidationRuleInterface
 {
@@ -24,6 +25,7 @@ interface ValidationRuleInterface
      * Get validation rule name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -32,6 +34,7 @@ interface ValidationRuleInterface
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -39,6 +42,7 @@ interface ValidationRuleInterface
      * Get validation rule value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -47,6 +51,7 @@ interface ValidationRuleInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value);
 }

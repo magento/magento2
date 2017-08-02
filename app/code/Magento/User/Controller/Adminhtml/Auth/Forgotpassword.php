@@ -8,10 +8,16 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 
 use Magento\Security\Model\SecurityManager;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\Auth\Forgotpassword
+ *
+ * @since 2.0.0
+ */
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**
      * @var SecurityManager
+     * @since 2.1.0
      */
     protected $securityManager;
 
@@ -19,6 +25,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -34,6 +41,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

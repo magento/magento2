@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Status extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,6 +18,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Container
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -38,6 +40,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Container
      * Create url getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreateUrl()
     {
@@ -48,6 +51,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Container
      * Assign url getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAssignUrl()
     {

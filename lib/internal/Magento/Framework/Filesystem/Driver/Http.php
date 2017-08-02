@@ -12,6 +12,7 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Class Http
  *
+ * @since 2.0.0
  */
 class Http extends File
 {
@@ -19,6 +20,7 @@ class Http extends File
      * Scheme distinguisher
      *
      * @var string
+     * @since 2.0.0
      */
     protected $scheme = 'http';
 
@@ -28,6 +30,7 @@ class Http extends File
      * @param string $path
      * @return bool
      * @throws FileSystemException
+     * @since 2.0.0
      */
     public function isExists($path)
     {
@@ -50,6 +53,7 @@ class Http extends File
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function stat($path)
     {
@@ -83,6 +87,7 @@ class Http extends File
      * @param resource|null $context
      * @return string
      * @throws FileSystemException
+     * @since 2.0.0
      */
     public function fileGetContents($path, $flags = null, $context = null)
     {
@@ -108,6 +113,7 @@ class Http extends File
      * @param resource|null $context
      * @return int The number of bytes that were written
      * @throws FileSystemException
+     * @since 2.0.0
      */
     public function filePutContents($path, $content, $mode = null, $context = null)
     {
@@ -131,6 +137,7 @@ class Http extends File
      * @return resource file
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function fileOpen($path, $mode)
     {
@@ -194,6 +201,7 @@ class Http extends File
      * @param string $ending [optional]
      * @return string
      * @throws FileSystemException
+     * @since 2.0.0
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
@@ -210,6 +218,7 @@ class Http extends File
      * @param string|null $scheme
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
@@ -228,6 +237,7 @@ class Http extends File
      *
      * @param null|string $scheme
      * @return string
+     * @since 2.0.0
      */
     protected function getScheme($scheme = null)
     {
@@ -242,6 +252,7 @@ class Http extends File
      * @param int $port
      * @throws \Magento\Framework\Exception\FileSystemException
      * @return array
+     * @since 2.0.0
      */
     protected function open($hostname, $port)
     {
@@ -262,6 +273,7 @@ class Http extends File
      *
      * @param string $path
      * @return array
+     * @since 2.0.0
      */
     protected function parseUrl($path)
     {

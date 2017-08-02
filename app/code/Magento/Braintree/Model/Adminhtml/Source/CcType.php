@@ -8,12 +8,14 @@ namespace Magento\Braintree\Model\Adminhtml\Source;
 /**
  * Class CcType
  * @codeCoverageIgnore
+ * @since 2.1.0
  */
 class CcType extends \Magento\Payment\Model\Source\Cctype
 {
     /**
      * List of specific credit card types
      * @var array
+     * @since 2.1.0
      */
     private $specificCardTypesList = [
         'CUP' => 'China Union Pay'
@@ -23,6 +25,7 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
      * Allowed credit card types
      *
      * @return string[]
+     * @since 2.1.0
      */
     public function getAllowedTypes()
     {
@@ -33,6 +36,7 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
      * Returns credit cards types
      *
      * @return array
+     * @since 2.1.0
      */
     public function getCcTypeLabelMap()
     {
@@ -41,6 +45,7 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

@@ -15,6 +15,7 @@ use Magento\Store\Model\ScopeInterface;
  * To process value retrieved from config implementation of \Magento\Payment\Gateway\Config\ValueHandlerInterface
  * should be used (inheritance and overriding of getValue method or introduction of new public methods
  * is not recommended).
+ * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
@@ -22,16 +23,19 @@ class Config implements ConfigInterface
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var string|null
+     * @since 2.0.0
      */
     private $methodCode;
 
     /**
      * @var string|null
+     * @since 2.0.0
      */
     private $pathPattern;
 
@@ -39,6 +43,7 @@ class Config implements ConfigInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param string|null $methodCode
      * @param string $pathPattern
+     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -55,6 +60,7 @@ class Config implements ConfigInterface
      *
      * @param string $methodCode
      * @return void
+     * @since 2.0.0
      */
     public function setMethodCode($methodCode)
     {
@@ -66,6 +72,7 @@ class Config implements ConfigInterface
      *
      * @param string $pathPattern
      * @return void
+     * @since 2.0.0
      */
     public function setPathPattern($pathPattern)
     {
@@ -79,6 +86,7 @@ class Config implements ConfigInterface
      * @param int|null $storeId
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue($field, $storeId = null)
     {

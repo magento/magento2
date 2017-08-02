@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class CommandException
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 2.0.0
  */
 class CommandException extends LocalizedException
 {

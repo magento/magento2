@@ -9,6 +9,7 @@ namespace Magento\Shipping\Model\ResourceModel\Order\Track;
  * Flat sales order shipment tracks collection
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Shipment\Track
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

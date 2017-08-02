@@ -10,6 +10,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class OrderStatus
  * @package Magento\Sales\Model\Rss
+ * @since 2.0.0
  */
 class OrderStatus implements DataProviderInterface
 {
@@ -17,41 +18,49 @@ class OrderStatus implements DataProviderInterface
      * Url Builder
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     protected $order;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory
+     * @since 2.0.0
      */
     protected $orderResourceFactory;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
@@ -63,6 +72,7 @@ class OrderStatus implements DataProviderInterface
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -86,6 +96,7 @@ class OrderStatus implements DataProviderInterface
      * Check if RSS feed allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -97,6 +108,7 @@ class OrderStatus implements DataProviderInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -109,6 +121,7 @@ class OrderStatus implements DataProviderInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCacheKey()
     {
@@ -122,6 +135,7 @@ class OrderStatus implements DataProviderInterface
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -130,6 +144,7 @@ class OrderStatus implements DataProviderInterface
 
     /**
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     protected function getOrder()
     {
@@ -166,6 +181,7 @@ class OrderStatus implements DataProviderInterface
      * Get RSS feed items
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getEntries()
     {
@@ -208,6 +224,7 @@ class OrderStatus implements DataProviderInterface
      * Get data for Header esction of RSS feed
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getHeader()
     {
@@ -219,6 +236,7 @@ class OrderStatus implements DataProviderInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -227,6 +245,7 @@ class OrderStatus implements DataProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAuthRequired()
     {

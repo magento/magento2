@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Adjustment\Factory as AdjustmentFactory;
  * Global adjustment pool model
  *
  * @api
+ * @since 2.0.0
  */
 class Pool
 {
@@ -22,22 +23,26 @@ class Pool
 
     /**
      * @var AdjustmentFactory
+     * @since 2.0.0
      */
     protected $adjustmentFactory;
 
     /**
      * @var array[]
+     * @since 2.0.0
      */
     protected $adjustments;
 
     /**
      * @var AdjustmentInterface[]
+     * @since 2.0.0
      */
     protected $adjustmentInstances;
 
     /**
      * @param AdjustmentFactory $adjustmentFactory
      * @param array[] $adjustments
+     * @since 2.0.0
      */
     public function __construct(AdjustmentFactory $adjustmentFactory, $adjustments = [])
     {
@@ -47,6 +52,7 @@ class Pool
 
     /**
      * @return AdjustmentInterface[]
+     * @since 2.0.0
      */
     public function getAdjustments()
     {
@@ -60,6 +66,7 @@ class Pool
      * @param string $adjustmentCode
      * @return AdjustmentInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getAdjustmentByCode($adjustmentCode)
     {
@@ -77,6 +84,7 @@ class Pool
      *
      * @param string[] $adjustments
      * @return AdjustmentInterface[]
+     * @since 2.0.0
      */
     protected function createAdjustments($adjustments)
     {
@@ -94,6 +102,7 @@ class Pool
      *
      * @param string $adjustmentCode
      * @return AdjustmentInterface
+     * @since 2.0.0
      */
     protected function createAdjustment($adjustmentCode)
     {

@@ -11,6 +11,11 @@
  */
 namespace Magento\Framework\Archive;
 
+/**
+ * Class \Magento\Framework\Archive\Gz
+ *
+ * @since 2.0.0
+ */
 class Gz extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
@@ -19,6 +24,7 @@ class Gz extends \Magento\Framework\Archive\AbstractArchive implements \Magento\
      * @param string $source
      * @param string $destination
      * @return string
+     * @since 2.0.0
      */
     public function pack($source, $destination)
     {
@@ -44,6 +50,7 @@ class Gz extends \Magento\Framework\Archive\AbstractArchive implements \Magento\
      * @param string $source
      * @param string $destination
      * @return string
+     * @since 2.0.0
      */
     public function unpack($source, $destination)
     {

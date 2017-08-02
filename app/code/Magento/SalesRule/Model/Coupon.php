@@ -11,6 +11,7 @@ namespace Magento\SalesRule\Model;
  * @api
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon _getResource()
  * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
+ * @since 2.0.0
  */
 class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\SalesRule\Api\Data\CouponInterface
@@ -30,6 +31,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -42,6 +44,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return $this
+     * @since 2.0.0
      */
     public function setRule(\Magento\SalesRule\Model\Rule $rule)
     {
@@ -54,6 +57,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\SalesRule\Model\Rule|int $rule
      * @return $this
+     * @since 2.0.0
      */
     public function loadPrimaryByRule($rule)
     {
@@ -66,6 +70,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $couponCode
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCode($couponCode)
     {
@@ -79,6 +84,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get coupon id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCouponId()
     {
@@ -90,6 +96,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $couponId
      * @return $this
+     * @since 2.0.0
      */
     public function setCouponId($couponId)
     {
@@ -100,6 +107,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get the id of the rule associated with the coupon
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRuleId()
     {
@@ -111,6 +119,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $ruleId
      * @return $this
+     * @since 2.0.0
      */
     public function setRuleId($ruleId)
     {
@@ -121,6 +130,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get coupon code
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -132,6 +142,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -142,6 +153,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get usage limit
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getUsageLimit()
     {
@@ -153,6 +165,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $usageLimit
      * @return $this
+     * @since 2.0.0
      */
     public function setUsageLimit($usageLimit)
     {
@@ -163,6 +176,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get usage limit per customer
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getUsagePerCustomer()
     {
@@ -174,6 +188,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $usagePerCustomer
      * @return $this
+     * @since 2.0.0
      */
     public function setUsagePerCustomer($usagePerCustomer)
     {
@@ -184,6 +199,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get the number of times the coupon has been used
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTimesUsed()
     {
@@ -193,6 +209,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @param int $timesUsed
      * @return $this
+     * @since 2.0.0
      */
     public function setTimesUsed($timesUsed)
     {
@@ -203,6 +220,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get expiration date
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getExpirationDate()
     {
@@ -214,6 +232,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $expirationDate
      * @return $this
+     * @since 2.0.0
      */
     public function setExpirationDate($expirationDate)
     {
@@ -225,6 +244,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsPrimary()
     {
@@ -236,6 +256,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param bool $isPrimary
      * @return $this
+     * @since 2.0.0
      */
     public function setIsPrimary($isPrimary)
     {
@@ -246,6 +267,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Date when the coupon is created
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -257,6 +279,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $createdAt
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -267,6 +290,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Type of coupon
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -276,6 +300,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @param int $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -286,6 +311,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\CouponExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -297,6 +323,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes

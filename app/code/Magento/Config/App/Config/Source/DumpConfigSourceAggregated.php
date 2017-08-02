@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class DumpConfigSourceAggregated aggregates configurations from all available sources
+ * @since 2.2.0
  */
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
@@ -30,21 +31,25 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Checker for config type.
      *
      * @var TypePool
+     * @since 2.2.0
      */
     private $typePool;
 
     /**
      * @var ConfigSourceInterface[]
+     * @since 2.2.0
      */
     private $sources;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $excludedFields;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $data;
 
@@ -73,6 +78,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * It means that result will contains only 'sensitive' and 'environment' configurations.
      *
      * @var array
+     * @since 2.2.0
      */
     private $rules;
 
@@ -82,6 +88,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param TypePool|null $typePool
      * @param array $rules Rules for filtration the configuration data.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function __construct(
         ExcludeList $excludeList,
@@ -99,6 +106,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path
      * @return array
+     * @since 2.2.0
      */
     public function get($path = '')
     {
@@ -129,6 +137,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param string $path
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     private function filterChain($path, &$data)
     {
@@ -154,6 +163,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path Configuration field path. For example 'contact/email/recipient_email'
      * @return boolean Return true if path should be excluded
+     * @since 2.2.0
      */
     private function isExcludedPath($path)
     {
@@ -182,6 +192,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path
      * @return null|string
+     * @since 2.2.0
      */
     private function filterPath($path)
     {
@@ -205,6 +216,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Sort sources ASC from higher priority to lower
      *
      * @return void
+     * @since 2.2.0
      */
     private function sortSources()
     {
@@ -216,6 +228,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     /**
      * Retrieves list of field paths were excluded from config dump
      * @return array
+     * @since 2.2.0
      */
     public function getExcludedFields()
     {

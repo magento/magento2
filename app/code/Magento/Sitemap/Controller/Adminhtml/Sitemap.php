@@ -7,6 +7,7 @@ namespace Magento\Sitemap\Controller\Adminhtml;
 
 /**
  * XML sitemap controller
+ * @since 2.0.0
  */
 abstract class Sitemap extends \Magento\Backend\App\Action
 {
@@ -21,6 +22,7 @@ abstract class Sitemap extends \Magento\Backend\App\Action
      * Init actions
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initAction()
     {

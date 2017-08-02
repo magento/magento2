@@ -15,21 +15,25 @@ use Magento\Framework\Controller\AbstractResult;
  * so this is a result object that implements all necessary properties of a HTTP redirect
  *
  * @api
+ * @since 2.0.0
  */
 class Redirect extends AbstractResult
 {
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     protected $redirect;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $url;
 
@@ -38,6 +42,7 @@ class Redirect extends AbstractResult
      *
      * @param App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @since 2.0.0
      */
     public function __construct(
         App\Response\RedirectInterface $redirect,
@@ -51,6 +56,7 @@ class Redirect extends AbstractResult
      * Set url from referer
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setRefererUrl()
     {
@@ -62,6 +68,7 @@ class Redirect extends AbstractResult
      * Set referer url or base if referer is not exist
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setRefererOrBaseUrl()
     {
@@ -72,6 +79,7 @@ class Redirect extends AbstractResult
     /**
      * @param string $url
      * @return $this
+     * @since 2.0.0
      */
     public function setUrl($url)
     {
@@ -85,6 +93,7 @@ class Redirect extends AbstractResult
      * @param string $path
      * @param array $params
      * @return $this
+     * @since 2.0.0
      */
     public function setPath($path, array $params = [])
     {
@@ -94,6 +103,7 @@ class Redirect extends AbstractResult
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function render(HttpResponseInterface $response)
     {

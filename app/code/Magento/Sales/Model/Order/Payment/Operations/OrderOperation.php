@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * Class Order
+ * @since 2.0.0
  */
 class OrderOperation extends AbstractOperation
 {
@@ -18,6 +19,7 @@ class OrderOperation extends AbstractOperation
      * @param OrderPaymentInterface $payment
      * @param string|float $amount
      * @return OrderPaymentInterface
+     * @since 2.0.0
      */
     public function order(OrderPaymentInterface $payment, $amount)
     {

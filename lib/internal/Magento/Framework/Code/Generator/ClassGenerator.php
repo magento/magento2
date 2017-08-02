@@ -8,6 +8,11 @@ namespace Magento\Framework\Code\Generator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
+/**
+ * Class \Magento\Framework\Code\Generator\ClassGenerator
+ *
+ * @since 2.0.0
+ */
 class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
@@ -15,6 +20,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * Possible doc block options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_docBlockOptions = [
         'shortDescription' => 'setShortDescription',
@@ -26,6 +32,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * Possible class property options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_propertyOptions = [
         'name' => 'setName',
@@ -39,6 +46,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * Possible class method options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_methodOptions = [
         'name' => 'setName',
@@ -53,6 +61,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * Possible method parameter options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_parameterOptions = [
         'name' => 'setName',
@@ -66,6 +75,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * @param array $data
      * @param array $map
      * @return void
+     * @since 2.0.0
      */
     protected function _setDataToObject($object, array $data, array $map)
     {
@@ -81,6 +91,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      *
      * @param array $docBlock
      * @return $this
+     * @since 2.0.0
      */
     public function setClassDocBlock(array $docBlock)
     {
@@ -96,6 +107,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      *
      * @param array $methods
      * @return $this
+     * @since 2.0.0
      */
     public function addMethods(array $methods)
     {
@@ -144,6 +156,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * @param  MethodGenerator $method
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function addMethodFromGenerator(MethodGenerator $method)
     {
@@ -160,6 +173,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * @param array $properties
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function addProperties(array $properties)
     {
@@ -189,6 +203,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * @param  PropertyGenerator $property
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function addPropertyFromGenerator(PropertyGenerator $property)
     {
@@ -203,6 +218,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      * Instantiate method generator object.
      *
      * @return MethodGenerator
+     * @since 2.0.0
      */
     protected function createMethodGenerator()
     {
@@ -211,6 +227,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getNamespaceName()
     {

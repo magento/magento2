@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\Compiled
+ *
+ * @since 2.0.0
+ */
 class Compiled extends AbstractFactory
 {
     /**
      * Object manager config
      *
      * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
@@ -18,11 +24,13 @@ class Compiled extends AbstractFactory
      * Global arguments
      *
      * @var array
+     * @since 2.0.0
      */
     protected $globalArguments;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $sharedInstances;
 
@@ -30,6 +38,7 @@ class Compiled extends AbstractFactory
      * @param \Magento\Framework\ObjectManager\ConfigInterface $config
      * @param array $sharedInstances
      * @param array $globalArguments
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $config,
@@ -49,6 +58,7 @@ class Compiled extends AbstractFactory
      * @return object
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function create($requestedType, array $arguments = [])
     {
@@ -116,6 +126,7 @@ class Compiled extends AbstractFactory
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function parseArray(&$array)
     {
@@ -143,6 +154,7 @@ class Compiled extends AbstractFactory
      *
      * @param string $type
      * @return mixed
+     * @since 2.0.0
      */
     protected function get($type)
     {

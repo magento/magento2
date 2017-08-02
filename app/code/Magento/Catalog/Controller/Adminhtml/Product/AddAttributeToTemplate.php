@@ -23,51 +23,61 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Class AddAttributeToTemplate
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var AttributeRepositoryInterface
+     * @since 2.1.0
      */
     protected $attributeRepository;
 
     /**
      * @var AttributeSetRepositoryInterface
+     * @since 2.1.0
      */
     protected $attributeSetRepository;
 
     /**
      * @var AttributeGroupRepositoryInterface
+     * @since 2.1.0
      */
     protected $attributeGroupRepository;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var AttributeGroupInterfaceFactory
+     * @since 2.1.0
      */
     protected $attributeGroupFactory;
 
     /**
      * @var AttributeManagementInterface
+     * @since 2.1.0
      */
     protected $attributeManagement;
 
     /**
      * @var LoggerInterface
+     * @since 2.1.0
      */
     protected $logger;
 
     /**
      * @var ExtensionAttributesFactory
+     * @since 2.1.0
      */
     protected $extensionAttributesFactory;
 
@@ -79,6 +89,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory|null $attributeGroupFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -96,6 +107,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * Add attribute to attribute set
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -176,6 +188,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      *
      * @return SearchCriteriaBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     private function getBasicAttributeSearchCriteriaBuilder()
     {
@@ -192,6 +205,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeRepositoryInterface
+     * @since 2.1.0
      */
     private function getAttributeRepository()
     {
@@ -204,6 +218,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeSetRepositoryInterface
+     * @since 2.1.0
      */
     private function getAttributeSetRepository()
     {
@@ -216,6 +231,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeGroupRepositoryInterface
+     * @since 2.1.0
      */
     private function getAttributeGroupRepository()
     {
@@ -228,6 +244,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private function getSearchCriteriaBuilder()
     {
@@ -240,6 +257,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return AttributeManagementInterface
+     * @since 2.1.0
      */
     private function getAttributeManagement()
     {
@@ -252,6 +270,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return LoggerInterface
+     * @since 2.1.0
      */
     private function getLogger()
     {
@@ -264,6 +283,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
     /**
      * @return ExtensionAttributesFactory
+     * @since 2.1.0
      */
     private function getExtensionAttributesFactory()
     {

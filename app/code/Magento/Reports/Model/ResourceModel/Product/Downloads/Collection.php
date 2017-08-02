@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -20,6 +21,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Identifier field name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_idFieldName = 'link_id';
 
@@ -27,6 +29,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add downloads summary grouping by product
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addSummary()
     {
@@ -68,6 +71,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
@@ -85,6 +89,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $field
      * @param null|string $condition
      * @return $this
+     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {

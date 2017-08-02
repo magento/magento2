@@ -16,21 +16,25 @@ use Magento\Framework\Data\Tree\Node;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $_nodes;
 
     /**
      * @var Node
+     * @since 2.0.0
      */
     private $_container;
 
     /**
      * @param Node $container
+     * @since 2.0.0
      */
     public function __construct($container)
     {
@@ -42,6 +46,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Get the nodes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getNodes()
     {
@@ -52,6 +57,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Implementation of \IteratorAggregate::getIterator()
      *
      * @return \ArrayIterator
+     * @since 2.0.0
      */
     public function getIterator()
     {
@@ -64,6 +70,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * @param string $key
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     public function offsetSet($key, $value)
     {
@@ -74,6 +81,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Implementation of \ArrayAccess:offsetGet()
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     public function offsetGet($key)
     {
@@ -84,6 +92,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Implementation of \ArrayAccess:offsetUnset()
      * @param string $key
      * @return void
+     * @since 2.0.0
      */
     public function offsetUnset($key)
     {
@@ -94,6 +103,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Implementation of \ArrayAccess:offsetExists()
      * @param string $key
      * @return bool
+     * @since 2.0.0
      */
     public function offsetExists($key)
     {
@@ -104,6 +114,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Adds a node to this node
      * @param Node $node
      * @return Node
+     * @since 2.0.0
      */
     public function add(Node $node)
     {
@@ -124,6 +135,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param Node $node
      * @return $this
+     * @since 2.0.0
      */
     public function delete($node)
     {
@@ -137,6 +149,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Return count
      *
      * @return int
+     * @since 2.0.0
      */
     public function count()
     {
@@ -147,6 +160,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Return the last node
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function lastNode()
     {
@@ -165,6 +179,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      *
      * @param string $nodeId
      * @return null
+     * @since 2.0.0
      */
     public function searchById($nodeId)
     {

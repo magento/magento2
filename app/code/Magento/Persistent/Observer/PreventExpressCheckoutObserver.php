@@ -8,10 +8,16 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Persistent\Observer\PreventExpressCheckoutObserver
+ *
+ * @since 2.0.0
+ */
 class PreventExpressCheckoutObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
@@ -19,6 +25,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
      * Url model
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
@@ -26,16 +33,19 @@ class PreventExpressCheckoutObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession = null;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Checkout\Helper\ExpressRedirect
+     * @since 2.0.0
      */
     protected $_expressRedirectHelper;
 
@@ -45,6 +55,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Checkout\Helper\ExpressRedirect $expressRedirectHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -65,6 +76,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

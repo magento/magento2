@@ -15,6 +15,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -32,6 +33,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Currently logged in customer
      *
      * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected $_currentCustomer;
 
@@ -39,6 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Customer Wishlist instance
      *
      * @var \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     protected $_wishlist;
 
@@ -46,6 +49,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Wishlist Product Items Collection
      *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     protected $_productCollection;
 
@@ -53,6 +57,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Wishlist Items Collection
      *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     protected $_wishlistItemCollection;
 
@@ -60,41 +65,49 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Wishlist\Model\WishlistFactory
+     * @since 2.0.0
      */
     protected $_wishlistFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
+     * @since 2.0.0
      */
     protected $_postDataHelper;
 
     /**
      * @var \Magento\Customer\Helper\View
+     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -108,6 +121,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param WishlistProviderInterface $wishlistProvider
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -135,6 +149,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve customer login status
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isCustomerLogIn()
     {
@@ -145,6 +160,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve logged in customer
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected function _getCurrentCustomer()
     {
@@ -156,6 +172,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return void
+     * @since 2.0.0
      */
     public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
@@ -166,6 +183,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve current customer
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -179,6 +197,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve wishlist by logged in customer
      *
      * @return \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     public function getWishlist()
     {
@@ -197,6 +216,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Used in top link menu only
      *
      * @return int
+     * @since 2.0.0
      */
     public function getItemCount()
     {
@@ -226,6 +246,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Create wishlist item collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     protected function _createWishlistItemCollection()
     {
@@ -236,6 +257,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve wishlist items collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 2.0.0
      */
     public function getWishlistItemCollection()
     {
@@ -250,6 +272,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected function _getUrlStore($item)
     {
@@ -278,6 +301,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @param bool $addReferer
      * @return string
+     * @since 2.0.0
      */
     public function getRemoveParams($item, $addReferer = false)
     {
@@ -294,6 +318,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
+     * @since 2.0.0
      */
     public function getConfigureUrl($item)
     {
@@ -312,6 +337,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @param array $params
      * @return string
+     * @since 2.0.0
      */
     public function getAddParams($item, array $params = [])
     {
@@ -337,6 +363,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $itemId
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMoveFromCartParams($itemId)
     {
@@ -351,6 +378,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      *
      * @return  string|false
+     * @since 2.0.0
      */
     public function getUpdateParams($item)
     {
@@ -378,6 +406,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
+     * @since 2.0.0
      */
     public function getAddToCartUrl($item)
     {
@@ -390,6 +419,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @param bool $addReferer
      * @return string
+     * @since 2.0.0
      */
     public function getAddToCartParams($item, $addReferer = false)
     {
@@ -408,6 +438,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $params
      * @return array
+     * @since 2.0.0
      */
     public function addRefererToParams(array $params)
     {
@@ -421,6 +452,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
+     * @since 2.0.0
      */
     public function getSharedAddToCartUrl($item)
     {
@@ -434,6 +466,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve URL for adding All items to shopping cart from shared wishlist
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSharedAddAllToCartUrl()
     {
@@ -445,6 +478,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return array
+     * @since 2.0.0
      */
     protected function _getCartUrlParameters($item)
     {
@@ -462,6 +496,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $wishlistId
      * @return string
+     * @since 2.0.0
      */
     public function getListUrl($wishlistId = null)
     {
@@ -476,6 +511,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check is allow wishlist module
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllow()
     {
@@ -493,6 +529,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check is allow wishlist action in shopping cart
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowInCart()
     {
@@ -503,6 +540,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve customer name
      *
      * @return string|void
+     * @since 2.0.0
      */
     public function getCustomerName()
     {
@@ -516,6 +554,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|string|null $wishlistId
      * @return string
+     * @since 2.0.0
      */
     public function getRssUrl($wishlistId = null)
     {
@@ -534,6 +573,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve default empty comment message
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function defaultCommentString()
     {
@@ -544,6 +584,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve default empty comment message
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getDefaultWishlistName()
     {
@@ -556,6 +597,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Depends from configuration.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function calculate()
     {
@@ -593,6 +635,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Should display item quantities in my wishlist link
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayQty()
     {
@@ -608,6 +651,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
      * @param  array $additional
      * @return string
+     * @since 2.0.0
      */
     public function getProductUrl($item, $additional = [])
     {

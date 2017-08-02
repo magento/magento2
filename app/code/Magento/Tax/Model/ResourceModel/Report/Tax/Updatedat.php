@@ -11,12 +11,18 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Report\Tax\Updatedat
+ *
+ * @since 2.0.0
+ */
 class Updatedat extends \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat
 {
     /**
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +35,7 @@ class Updatedat extends \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat
      * @param mixed $from
      * @param mixed $to
      * @return $this
+     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {

@@ -8,12 +8,14 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductAttributeTypeInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -22,6 +24,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -33,6 +36,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -44,6 +48,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -54,6 +59,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -65,6 +71,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface $extensionAttributes

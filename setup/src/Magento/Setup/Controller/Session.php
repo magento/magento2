@@ -5,21 +5,29 @@
  */
 namespace Magento\Setup\Controller;
 
+/**
+ * Class \Magento\Setup\Controller\Session
+ *
+ * @since 2.0.0
+ */
 class Session extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**
      * @var \Zend\ServiceManager\ServiceManager
+     * @since 2.0.0
      */
     private $serviceManager;
 
     /**
      * @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     private $objectManagerProvider;
 
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(
         \Zend\ServiceManager\ServiceManager $serviceManager,
@@ -33,6 +41,7 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
      * No index action, return 404 error page
      *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @since 2.1.0
      */
     public function indexAction()
     {
@@ -46,6 +55,7 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
      * Prolong session
      *
      * @return string
+     * @since 2.0.0
      */
     public function prolongAction()
     {
@@ -79,6 +89,7 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
 
     /**
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @since 2.0.0
      */
     public function unloginAction()
     {

@@ -10,6 +10,7 @@ namespace Magento\Directory\Model\Data;
  * Class Region Information
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Directory\Api\Data\RegionInformationInterface
@@ -20,6 +21,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -28,6 +30,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setId($regionId)
     {
@@ -36,6 +39,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -44,6 +48,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setCode($regionCode)
     {
@@ -52,6 +57,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -60,6 +66,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setName($regionName)
     {
@@ -68,6 +75,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -76,6 +84,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\RegionInformationExtensionInterface $extensionAttributes

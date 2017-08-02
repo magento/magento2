@@ -7,21 +7,29 @@
 
 namespace Magento\Sales\Controller\AbstractController;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\OrderViewAuthorization
+ *
+ * @since 2.0.0
+ */
 class OrderViewAuthorization implements OrderViewAuthorizationInterface
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
+     * @since 2.0.0
      */
     protected $orderConfig;
 
     /**
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
@@ -33,6 +41,7 @@ class OrderViewAuthorization implements OrderViewAuthorizationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canView(\Magento\Sales\Model\Order $order)
     {

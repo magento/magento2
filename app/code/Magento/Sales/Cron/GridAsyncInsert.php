@@ -10,16 +10,19 @@ namespace Magento\Sales\Cron;
  *
  * Performs handling cron jobs related to indexing
  * of Order, Invoice, Shipment and Creditmemo grids.
+ * @since 2.0.0
  */
 class GridAsyncInsert
 {
     /**
      * @var \Magento\Sales\Model\GridAsyncInsert
+     * @since 2.0.0
      */
     protected $asyncInsert;
 
     /**
      * @param \Magento\Sales\Model\GridAsyncInsert $asyncInsert
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\GridAsyncInsert $asyncInsert
@@ -39,6 +42,7 @@ class GridAsyncInsert
      * in global settings.
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

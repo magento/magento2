@@ -23,41 +23,49 @@ use Psr\Log\LoggerInterface as Logger;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AuthorizationService implements \Magento\Integration\Api\AuthorizationServiceInterface
 {
     /**
      * @var AclBuilder
+     * @since 2.0.0
      */
     protected $_aclBuilder;
 
     /**
      * @var RoleFactory
+     * @since 2.0.0
      */
     protected $_roleFactory;
 
     /**
      * @var RoleCollectionFactory
+     * @since 2.0.0
      */
     protected $_roleCollectionFactory;
 
     /**
      * @var RulesFactory
+     * @since 2.0.0
      */
     protected $_rulesFactory;
 
     /**
      * @var RulesCollectionFactory
+     * @since 2.0.0
      */
     protected $_rulesCollectionFactory;
 
     /**
      * @var Logger
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var RootAclResource
+     * @since 2.0.0
      */
     protected $_rootAclResource;
 
@@ -71,6 +79,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
      * @param RulesCollectionFactory $rulesCollectionFactory
      * @param Logger $logger
      * @param RootAclResource $rootAclResource
+     * @since 2.0.0
      */
     public function __construct(
         AclBuilder $aclBuilder,
@@ -92,6 +101,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function grantPermissions($integrationId, $resources)
     {
@@ -111,6 +121,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function grantAllPermissions($integrationId)
     {
@@ -119,6 +130,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function removePermissions($integrationId)
     {
@@ -140,6 +152,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
      *
      * @param int $integrationId
      * @return \Magento\Authorization\Model\Role
+     * @since 2.0.0
      */
     protected function _createRole($integrationId)
     {
@@ -159,6 +172,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
      *
      * @param int $integrationId
      * @return \Magento\Authorization\Model\Role
+     * @since 2.0.0
      */
     protected function _deleteRole($integrationId)
     {
@@ -172,6 +186,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
      *
      * @param int $integrationId
      * @return \Magento\Authorization\Model\Role|false Return false in case when no role associated with user was found.
+     * @since 2.0.0
      */
     protected function _getUserRole($integrationId)
     {
@@ -190,6 +205,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
      * @param string[] $resources
      * @return void
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _associateResourcesWithRole($role, $resources)
     {

@@ -14,6 +14,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
  * Upgrade Data script
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -21,6 +22,7 @@ class UpgradeData implements UpgradeDataInterface
      * Category setup factory
      *
      * @var CategorySetupFactory
+     * @since 2.0.0
      */
     private $categorySetupFactory;
 
@@ -28,16 +30,19 @@ class UpgradeData implements UpgradeDataInterface
      * EAV setup factory
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
+     * @since 2.1.0
      */
     private $eavSetupFactory;
 
     /**
      * @var UpgradeWidgetData
+     * @since 2.2.0
      */
     private $upgradeWidgetData;
 
     /**
      * @var UpgradeWebsiteAttributes
+     * @since 2.2.0
      */
     private $upgradeWebsiteAttributes;
 
@@ -48,6 +53,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
      * @param UpgradeWidgetData $upgradeWidgetData
      * @param UpgradeWebsiteAttributes $upgradeWebsiteAttributes
+     * @since 2.0.0
      */
     public function __construct(
         CategorySetupFactory $categorySetupFactory,
@@ -66,6 +72,7 @@ class UpgradeData implements UpgradeDataInterface
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -401,6 +408,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
+     * @since 2.2.0
      */
     private function disallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
     {
@@ -420,6 +428,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CategorySetup $categorySetup
      * @return void
+     * @since 2.2.0
      */
     private function changePriceAttributeDefaultScope($categorySetup)
     {

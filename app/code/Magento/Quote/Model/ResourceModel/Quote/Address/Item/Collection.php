@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Item;
  * Quote addresses collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Set parent items
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -50,6 +53,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param int $addressId
      * @return $this
+     * @since 2.0.0
      */
     public function setAddressFilter($addressId)
     {

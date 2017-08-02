@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class for accessing to communication configuration.
  *
  * @api
+ * @since 2.1.0
  */
 interface ConfigInterface
 {
@@ -45,6 +46,7 @@ interface ConfigInterface
      * @param string $topicName
      * @return array
      * @throws LocalizedException
+     * @since 2.1.0
      */
     public function getTopic($topicName);
 
@@ -53,6 +55,7 @@ interface ConfigInterface
      *
      * @param string $topicName
      * @return array
+     * @since 2.1.0
      */
     public function getTopicHandlers($topicName);
 
@@ -60,6 +63,7 @@ interface ConfigInterface
      * Get list of all declared topics and their configuration.
      *
      * @return array
+     * @since 2.1.0
      */
     public function getTopics();
 }

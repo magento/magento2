@@ -9,23 +9,31 @@
  */
 namespace Magento\Sales\Model;
 
+/**
+ * Class \Magento\Sales\Model\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements \Magento\Sales\Model\ConfigInterface
 {
     /**
      * Modules configuration model
      *
      * @var \Magento\Sales\Model\Config\Data
+     * @since 2.0.0
      */
     protected $_dataContainer;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @param \Magento\Sales\Model\Config\Data $dataContainer
      * @param \Magento\Framework\App\State $appState
+     * @since 2.0.0
      */
     public function __construct(\Magento\Sales\Model\Config\Data $dataContainer, \Magento\Framework\App\State $appState)
     {
@@ -40,6 +48,7 @@ class Config implements \Magento\Sales\Model\ConfigInterface
      * @param string $group
      * @param string $code
      * @return array
+     * @since 2.0.0
      */
     public function getTotalsRenderer($section, $group, $code)
     {
@@ -54,6 +63,7 @@ class Config implements \Magento\Sales\Model\ConfigInterface
      * @param string $section
      * @param string $group
      * @return array
+     * @since 2.0.0
      */
     public function getGroupTotals($section, $group)
     {
@@ -65,6 +75,7 @@ class Config implements \Magento\Sales\Model\ConfigInterface
      * Get available product types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAvailableProductTypes()
     {

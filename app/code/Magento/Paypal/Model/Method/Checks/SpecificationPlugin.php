@@ -13,16 +13,19 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Plugin for \Magento\Payment\Model\Checks\Composite
+ * @since 2.0.0
  */
 class SpecificationPlugin
 {
     /**
      * @var AgreementFactory
+     * @since 2.2.0
      */
     private $agreementFactory;
 
     /**
      * @param AgreementFactory $agreementFactory
+     * @since 2.0.0
      */
     public function __construct(AgreementFactory $agreementFactory)
     {
@@ -39,6 +42,7 @@ class SpecificationPlugin
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterIsApplicable(
         SpecificationInterface $specification,

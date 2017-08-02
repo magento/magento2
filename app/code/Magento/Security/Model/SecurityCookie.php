@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
  * Manager for a cookie with logout reason
  *
  * @api
+ * @since 2.1.0
  */
 class SecurityCookie
 {
@@ -21,21 +22,25 @@ class SecurityCookie
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private $phpCookieManager;
 
     /**
      * @var \Magento\Backend\Helper\Data
+     * @since 2.1.0
      */
     private $backendData;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory
+     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var CookieReaderInterface
+     * @since 2.1.0
      */
     private $cookieReader;
 
@@ -44,6 +49,7 @@ class SecurityCookie
      * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
      * @param CookieReaderInterface $cookieReader
      * @param \Magento\Backend\Helper\Data $backendData
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,
@@ -61,6 +67,7 @@ class SecurityCookie
      * Get cookie with logout reason code
      *
      * @return string|int
+     * @since 2.1.0
      */
     public function getLogoutReasonCookie()
     {
@@ -72,6 +79,7 @@ class SecurityCookie
      *
      * @param int $status
      * @return $this
+     * @since 2.1.0
      */
     public function setLogoutReasonCookie($status)
     {
@@ -91,6 +99,7 @@ class SecurityCookie
      * Delete cookie with reason of logout
      *
      * @return $this
+     * @since 2.1.0
      */
     public function deleteLogoutReasonCookie()
     {
@@ -110,6 +119,7 @@ class SecurityCookie
      * Create Cookie Metadata instance
      *
      * @return \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata
+     * @since 2.1.0
      */
     private function createCookieMetaData()
     {

@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductAttributeGroupRepositoryInterface
 {
@@ -16,6 +17,7 @@ interface ProductAttributeGroupRepositoryInterface
      *
      * @param \Magento\Eav\Api\Data\AttributeGroupInterface $group
      * @return \Magento\Eav\Api\Data\AttributeGroupInterface
+     * @since 2.0.0
      */
     public function save(\Magento\Eav\Api\Data\AttributeGroupInterface $group);
 
@@ -25,6 +27,7 @@ interface ProductAttributeGroupRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -33,6 +36,7 @@ interface ProductAttributeGroupRepositoryInterface
      *
      * @param int $groupId
      * @return \Magento\Eav\Api\Data\AttributeGroupInterface
+     * @since 2.0.0
      */
     public function get($groupId);
 
@@ -41,6 +45,7 @@ interface ProductAttributeGroupRepositoryInterface
      *
      * @param \Magento\Eav\Api\Data\AttributeGroupInterface $group
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Eav\Api\Data\AttributeGroupInterface $group);
 
@@ -49,6 +54,7 @@ interface ProductAttributeGroupRepositoryInterface
      *
      * @param int $groupId
      * @return bool
+     * @since 2.0.0
      */
     public function deleteById($groupId);
 }

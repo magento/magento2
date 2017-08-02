@@ -8,16 +8,19 @@ namespace Magento\Rule\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ActionFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -30,6 +33,7 @@ class ActionFactory
      * @param string $type
      * @param array $data
      * @return \Magento\Rule\Model\Action\ActionInterface
+     * @since 2.0.0
      */
     public function create($type, array $data = [])
     {

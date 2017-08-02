@@ -13,10 +13,16 @@ use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Setup\Console\Command\ConfigSetCommand
+ *
+ * @since 2.0.0
+ */
 class ConfigSetCommand extends AbstractSetupCommand
 {
     /**
      * @var ConfigModel
+     * @since 2.0.0
      */
     protected $configModel;
 
@@ -24,11 +30,13 @@ class ConfigSetCommand extends AbstractSetupCommand
      * Enabled module list
      *
      * @var ModuleList
+     * @since 2.0.0
      */
     private $moduleList;
 
     /**
      * Existing deployment config
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -38,6 +46,7 @@ class ConfigSetCommand extends AbstractSetupCommand
      * @param \Magento\Setup\Model\ConfigModel $configModel
      * @param ModuleList $moduleList
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     public function __construct(
         ConfigModel $configModel,
@@ -54,6 +63,7 @@ class ConfigSetCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -68,6 +78,7 @@ class ConfigSetCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -130,6 +141,7 @@ class ConfigSetCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {

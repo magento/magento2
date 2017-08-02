@@ -10,11 +10,13 @@ namespace Magento\Backend\Block;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 class Widget extends \Magento\Backend\Block\Template
 {
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -29,6 +31,7 @@ class Widget extends \Magento\Backend\Block\Template
      *
      * @param string $suffix
      * @return string
+     * @since 2.0.0
      */
     public function getSuffixId($suffix)
     {
@@ -37,6 +40,7 @@ class Widget extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -48,6 +52,7 @@ class Widget extends \Magento\Backend\Block\Template
      *
      * @param array $params url parameters
      * @return string current url
+     * @since 2.0.0
      */
     public function getCurrentUrl($params = [])
     {
@@ -62,6 +67,7 @@ class Widget extends \Magento\Backend\Block\Template
      * @param string|null $title
      * @param string|null $link
      * @return void
+     * @since 2.0.0
      */
     protected function _addBreadcrumb($label, $title = null, $link = null)
     {
@@ -77,6 +83,7 @@ class Widget extends \Magento\Backend\Block\Template
      * @param string $buttonId
      * @param array $dataAttr
      * @return string
+     * @since 2.0.0
      */
     public function getButtonHtml($label, $onclick, $class = '', $buttonId = null, $dataAttr = [])
     {

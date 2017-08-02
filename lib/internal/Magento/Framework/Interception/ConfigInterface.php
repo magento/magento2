@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Interception;
 
+/**
+ * Interface \Magento\Framework\Interception\ConfigInterface
+ *
+ * @since 2.0.0
+ */
 interface ConfigInterface
 {
     /**
@@ -14,6 +19,7 @@ interface ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     public function hasPlugins($type);
 
@@ -22,6 +28,7 @@ interface ConfigInterface
      *
      * @param array $classDefinitions
      * @return void
+     * @since 2.0.0
      */
     public function initialize($classDefinitions = []);
 }

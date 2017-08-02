@@ -11,6 +11,7 @@ namespace Magento\Framework\Config;
  * Config reader interface.
  *
  * @api
+ * @since 2.0.0
  */
 interface ReaderInterface
 {
@@ -19,6 +20,7 @@ interface ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @since 2.0.0
      */
     public function read($scope = null);
 }

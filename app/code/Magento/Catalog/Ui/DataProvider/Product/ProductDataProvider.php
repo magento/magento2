@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
  * Class ProductDataProvider
  *
  * @api
+ * @since 2.0.0
  */
 class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -18,16 +19,19 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Product collection
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @since 2.0.0
      */
     protected $collection;
 
     /**
      * @var \Magento\Ui\DataProvider\AddFieldToCollectionInterface[]
+     * @since 2.0.0
      */
     protected $addFieldStrategies;
 
     /**
      * @var \Magento\Ui\DataProvider\AddFilterToCollectionInterface[]
+     * @since 2.0.0
      */
     protected $addFilterStrategies;
 
@@ -42,6 +46,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -63,6 +68,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getData()
     {
@@ -83,6 +89,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string|array $field
      * @param string|null $alias
      * @return void
+     * @since 2.0.0
      */
     public function addField($field, $alias = null)
     {
@@ -95,6 +102,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {

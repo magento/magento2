@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Convert the array data to SimpleXMLElement object
+ * @since 2.0.0
  */
 class ConvertArray
 {
@@ -20,6 +21,7 @@ class ConvertArray
      * @param string $rootName
      * @return \SimpleXMLElement
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function assocToXml(array $array, $rootName = '_')
     {
@@ -45,6 +47,7 @@ XML;
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     public static function toFlatArray($data)
     {
@@ -66,6 +69,7 @@ XML;
      * @param \SimpleXMLElement $xml
      * @return \SimpleXMLElement
      * @throws LocalizedException
+     * @since 2.0.0
      */
     private function _assocToXml(array $array, $rootName, \SimpleXMLElement $xml)
     {

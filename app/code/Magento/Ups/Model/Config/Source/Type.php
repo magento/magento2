@@ -9,11 +9,13 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class Type
+ * @since 2.0.0
  */
 class Type implements OptionSourceInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

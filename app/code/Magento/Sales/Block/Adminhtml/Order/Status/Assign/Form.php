@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Status\Assign;
 
 /**
  * Assign order status to order state form
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -14,6 +15,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Collection factory
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -21,6 +23,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Order config
      *
      * @var \Magento\Sales\Model\Order\Config
+     * @since 2.0.0
      */
     protected $_orderConfig;
 
@@ -31,6 +34,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,6 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +65,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form fields
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Customize SKU field
+ * @since 2.1.0
  */
 class BundleSku extends AbstractModifier
 {
@@ -17,11 +18,13 @@ class BundleSku extends AbstractModifier
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
+     * @since 2.1.0
      */
     public function __construct(ArrayManager $arrayManager)
     {
@@ -30,6 +33,7 @@ class BundleSku extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -52,6 +56,7 @@ class BundleSku extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {

@@ -13,26 +13,31 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Class to manage customer dashboard addresses section
  *
  * @api
+ * @since 2.0.0
  */
 class Address extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Model\Address\Config
+     * @since 2.0.0
      */
     protected $_addressConfig;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomerAddress
+     * @since 2.0.0
      */
     protected $currentCustomerAddress;
 
     /**
      * @var Mapper
+     * @since 2.0.0
      */
     protected $addressMapper;
 
@@ -43,6 +48,7 @@ class Address extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param Mapper $addressMapper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -63,6 +69,7 @@ class Address extends \Magento\Framework\View\Element\Template
      * Get the logged in customer
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -77,6 +84,7 @@ class Address extends \Magento\Framework\View\Element\Template
      * HTML for Shipping Address
      *
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function getPrimaryShippingAddressHtml()
     {
@@ -97,6 +105,7 @@ class Address extends \Magento\Framework\View\Element\Template
      * HTML for Billing Address
      *
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function getPrimaryBillingAddressHtml()
     {
@@ -115,6 +124,7 @@ class Address extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPrimaryShippingAddressEditUrl()
     {
@@ -132,6 +142,7 @@ class Address extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPrimaryBillingAddressEditUrl()
     {
@@ -149,6 +160,7 @@ class Address extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAddressBookUrl()
     {
@@ -160,6 +172,7 @@ class Address extends \Magento\Framework\View\Element\Template
      *
      * @param AddressInterface $address
      * @return string
+     * @since 2.0.0
      */
     protected function _getAddressHtml($address)
     {

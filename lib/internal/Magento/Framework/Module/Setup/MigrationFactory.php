@@ -8,6 +8,7 @@ namespace Magento\Framework\Module\Setup;
 
 /**
  * Factory class for \Magento\Framework\Module\Setup\Migration
+ * @since 2.0.0
  */
 class MigrationFactory
 {
@@ -15,6 +16,7 @@ class MigrationFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -22,6 +24,7 @@ class MigrationFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -30,6 +33,7 @@ class MigrationFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -45,6 +49,7 @@ class MigrationFactory
      * @param array $data
      * @return \Magento\Framework\Module\Setup\Migration
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

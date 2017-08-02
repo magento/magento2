@@ -11,21 +11,25 @@ use Magento\Framework\EntityManager\HydratorPool;
 
 /**
  * Class ValidateDataIntegrity
+ * @since 2.1.0
  */
 class ValidateDataIntegrity
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var HydratorPool
+     * @since 2.1.0
      */
     private $hydratorPool;
 
     /**
      * @var ObjectRelationProcessor
+     * @since 2.1.0
      */
     private $objectRelationProcessor;
 
@@ -35,6 +39,7 @@ class ValidateDataIntegrity
      * @param MetadataPool $metadataPool
      * @param HydratorPool $hydratorPool
      * @param ObjectRelationProcessor $objectRelationProcessor
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -51,6 +56,7 @@ class ValidateDataIntegrity
      * @param object $entity
      * @throws \Exception
      * @return void
+     * @since 2.1.0
      */
     public function execute($entityType, $entity)
     {

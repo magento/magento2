@@ -10,6 +10,7 @@ namespace Magento\Shipping\Model\Rate;
  * Container for Rates
  *
  * @api
+ * @since 2.0.0
  */
 class Result
 {
@@ -17,6 +18,7 @@ class Result
      * Shipping method rates
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_rates = [];
 
@@ -24,16 +26,19 @@ class Result
      * Shipping errors
      *
      * @var null|bool
+     * @since 2.0.0
      */
     protected $_error = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -44,6 +49,7 @@ class Result
      * Reset result
      *
      * @return $this
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -56,6 +62,7 @@ class Result
      *
      * @param bool $error
      * @return void
+     * @since 2.0.0
      */
     public function setError($error)
     {
@@ -66,6 +73,7 @@ class Result
      * Get Error
      *
      * @return null|bool
+     * @since 2.0.0
      */
     public function getError()
     {
@@ -77,6 +85,7 @@ class Result
      *
      * @param \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
      * @return $this
+     * @since 2.0.0
      */
     public function append($result)
     {
@@ -98,6 +107,7 @@ class Result
      * Return all quotes in the result
      *
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method[]
+     * @since 2.0.0
      */
     public function getAllRates()
     {
@@ -109,6 +119,7 @@ class Result
      *
      * @param int $id
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method|null
+     * @since 2.0.0
      */
     public function getRateById($id)
     {
@@ -120,6 +131,7 @@ class Result
      *
      * @param string $carrier
      * @return array
+     * @since 2.0.0
      */
     public function getRatesByCarrier($carrier)
     {
@@ -136,6 +148,7 @@ class Result
      * Converts object to array
      *
      * @return array
+     * @since 2.0.0
      */
     public function asArray()
     {
@@ -170,6 +183,7 @@ class Result
      * Get cheapest rate
      *
      * @return null|\Magento\Quote\Model\Quote\Address\RateResult\Method
+     * @since 2.0.0
      */
     public function getCheapestRate()
     {
@@ -189,6 +203,7 @@ class Result
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function sortRatesByPrice()
     {
@@ -216,6 +231,7 @@ class Result
      *
      * @param int $packageCount
      * @return $this
+     * @since 2.0.0
      */
     public function updateRatePrice($packageCount)
     {

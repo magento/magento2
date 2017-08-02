@@ -12,27 +12,32 @@ use Magento\Catalog\Model\Category as CategoryModel;
 
 /**
  * Options tree for "Categories" field
+ * @since 2.1.0
  */
 class Options implements OptionSourceInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @since 2.1.0
      */
     protected $categoryCollectionFactory;
 
     /**
      * @var RequestInterface
+     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $categoriesTree;
 
     /**
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param RequestInterface $request
+     * @since 2.1.0
      */
     public function __construct(
         CategoryCollectionFactory $categoryCollectionFactory,
@@ -44,6 +49,7 @@ class Options implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function toOptionArray()
     {
@@ -54,6 +60,7 @@ class Options implements OptionSourceInterface
      * Retrieve categories tree
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getCategoriesTree()
     {

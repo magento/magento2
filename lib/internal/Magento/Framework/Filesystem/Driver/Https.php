@@ -10,6 +10,7 @@ namespace Magento\Framework\Filesystem\Driver;
 /**
  * Class Https
  *
+ * @since 2.0.0
  */
 class Https extends Http
 {
@@ -17,6 +18,7 @@ class Https extends Http
      * Scheme distinguisher
      *
      * @var string
+     * @since 2.0.0
      */
     protected $scheme = 'https';
 
@@ -25,6 +27,7 @@ class Https extends Http
      *
      * @param string $path
      * @return array
+     * @since 2.0.0
      */
     protected function parseUrl($path)
     {
@@ -43,6 +46,7 @@ class Https extends Http
      * @param string $hostname
      * @param int $port
      * @return array
+     * @since 2.0.0
      */
     protected function open($hostname, $port)
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\View;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class TemplateEnginePool
 {
@@ -14,6 +15,7 @@ class TemplateEnginePool
      * Factory
      *
      * @var TemplateEngineFactory
+     * @since 2.0.0
      */
     protected $factory;
 
@@ -21,6 +23,7 @@ class TemplateEnginePool
      * Template engines
      *
      * @var \Magento\Framework\View\TemplateEngineInterface[]
+     * @since 2.0.0
      */
     protected $engines = [];
 
@@ -28,6 +31,7 @@ class TemplateEnginePool
      * Constructor
      *
      * @param TemplateEngineFactory $factory
+     * @since 2.0.0
      */
     public function __construct(TemplateEngineFactory $factory)
     {
@@ -39,6 +43,7 @@ class TemplateEnginePool
      *
      * @param string $name
      * @return \Magento\Framework\View\TemplateEngineInterface
+     * @since 2.0.0
      */
     public function get($name)
     {

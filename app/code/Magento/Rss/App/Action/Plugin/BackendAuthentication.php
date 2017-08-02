@@ -15,26 +15,31 @@ use Magento\Framework\Exception\AuthenticationException;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
     /**
      * @var \Magento\Framework\HTTP\Authentication
+     * @since 2.0.0
      */
     protected $httpAuthentication;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     protected $authorization;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $aclResources;
 
@@ -53,6 +58,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param array $aclResources
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -96,6 +102,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
     {

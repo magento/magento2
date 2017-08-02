@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup;
 
 /**
  * Data setup cache
+ * @since 2.0.0
  */
 interface DataCacheInterface
 {
@@ -18,6 +19,7 @@ interface DataCacheInterface
      * @param string $rowId
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     public function setRow($table, $parentId, $rowId, $value);
 
@@ -30,6 +32,7 @@ interface DataCacheInterface
      * @param string $field
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     public function setField($table, $parentId, $rowId, $field, $value);
 
@@ -41,6 +44,7 @@ interface DataCacheInterface
      * @param string $rowId
      * @param string|null $field
      * @return mixed Returns false if there is no such record
+     * @since 2.0.0
      */
     public function get($table, $parentId, $rowId, $field = null);
 
@@ -51,6 +55,7 @@ interface DataCacheInterface
      * @param string $parentId
      * @param string $rowId
      * @return void
+     * @since 2.0.0
      */
     public function remove($table, $parentId, $rowId);
 
@@ -62,6 +67,7 @@ interface DataCacheInterface
      * @param string $rowId
      * @param string|null $field
      * @return bool
+     * @since 2.0.0
      */
     public function has($table, $parentId, $rowId, $field = null);
 }

@@ -14,6 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Exception;
  * @api
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 2.0.0
  */
 class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -21,6 +22,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
      * Layout update validator factory
      *
      * @var ValidatorFactory
+     * @since 2.0.0
      */
     protected $_layoutUpdateValidatorFactory;
 
@@ -28,6 +30,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
      * Construct the custom layout update class
      *
      * @param ValidatorFactory $layoutUpdateValidatorFactory
+     * @since 2.0.0
      */
     public function __construct(ValidatorFactory $layoutUpdateValidatorFactory)
     {
@@ -40,6 +43,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
      * @param \Magento\Framework\DataObject $object
      * @return bool
      * @throws Exception
+     * @since 2.0.0
      */
     public function validate($object)
     {

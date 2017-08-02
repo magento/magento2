@@ -7,6 +7,7 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config;
 
 /**
  * Custom renderer for PayPal API credentials wizard popup
+ * @since 2.0.0
  */
 class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -19,6 +20,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
      * Set template to itself
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -34,6 +36,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -46,6 +49,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -81,6 +85,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param array $requestData
      * @return string
+     * @since 2.1.0
      */
     private function createQuery(array $requestData)
     {

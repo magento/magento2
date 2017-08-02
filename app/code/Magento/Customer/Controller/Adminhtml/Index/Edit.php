@@ -8,6 +8,11 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
@@ -17,6 +22,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function execute()
     {

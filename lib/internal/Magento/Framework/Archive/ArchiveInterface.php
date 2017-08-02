@@ -13,6 +13,7 @@ namespace Magento\Framework\Archive;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ArchiveInterface
 {
@@ -22,6 +23,7 @@ interface ArchiveInterface
      * @param string $source
      * @param string $destination
      * @return string
+     * @since 2.0.0
      */
     public function pack($source, $destination);
 
@@ -31,6 +33,7 @@ interface ArchiveInterface
      * @param string $source
      * @param string $destination
      * @return string
+     * @since 2.0.0
      */
     public function unpack($source, $destination);
 }

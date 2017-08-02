@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
  * Price types mode source
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Price implements ProductPriceOptionsInterface
 {
@@ -18,6 +19,7 @@ class Price implements ProductPriceOptionsInterface
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

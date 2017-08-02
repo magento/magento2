@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
  * A service for reading language package dictionaries
  *
  * @api
+ * @since 2.0.0
  */
 class Dictionary
 {
@@ -20,6 +21,7 @@ class Dictionary
      * Paths of all language packages
      *
      * @var string[]
+     * @since 2.0.0
      */
     private $paths;
 
@@ -27,6 +29,7 @@ class Dictionary
      * Creates directory read objects
      *
      * @var ReadFactory
+     * @since 2.0.0
      */
     private $directoryReadFactory;
 
@@ -34,16 +37,19 @@ class Dictionary
      * Component Registrar
      *
      * @var ReadFactory
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
     /**
      * @var ConfigFactory
+     * @since 2.0.0
      */
     private $configFactory;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $packList = [];
 
@@ -51,6 +57,7 @@ class Dictionary
      * @param ReadFactory $directoryReadFactory
      * @param ComponentRegistrar $componentRegistrar
      * @param ConfigFactory $configFactory
+     * @since 2.0.0
      */
     public function __construct(
         ReadFactory $directoryReadFactory,
@@ -71,6 +78,7 @@ class Dictionary
      * @param string $languageCode
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getDictionary($languageCode)
     {
@@ -126,6 +134,7 @@ class Dictionary
      * @param int $level
      * @param array $visitedPacks
      * @return void
+     * @since 2.0.0
      */
     private function collectInheritedPacks($languageConfig, &$result, $level = 0, array &$visitedPacks = [])
     {
@@ -158,6 +167,7 @@ class Dictionary
      * @param array $next
      * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     * @since 2.0.0
      */
     private function sortInherited($current, $next)
     {
@@ -182,6 +192,7 @@ class Dictionary
      * @param string $vendor
      * @param string $package
      * @return array
+     * @since 2.0.0
      */
     private function readPackCsv($vendor, $package)
     {

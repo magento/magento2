@@ -7,6 +7,11 @@ namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\FactoryInterface
+ *
+ * @since 2.0.0
+ */
 interface FactoryInterface
 {
     /**
@@ -17,6 +22,7 @@ interface FactoryInterface
      * @return object
      * @throws \LogicException
      * @throws \BadMethodCallException
+     * @since 2.0.0
      */
     public function create($requestedType, array $arguments = []);
 
@@ -26,6 +32,7 @@ interface FactoryInterface
      * @param ObjectManagerInterface $objectManager
      *
      * @return void
+     * @since 2.0.0
      */
     public function setObjectManager(ObjectManagerInterface $objectManager);
 }

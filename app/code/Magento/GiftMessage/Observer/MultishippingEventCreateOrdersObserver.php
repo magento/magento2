@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
  * Gift Message Observer Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class MultishippingEventCreateOrdersObserver implements ObserverInterface
 {
@@ -19,6 +20,7 @@ class MultishippingEventCreateOrdersObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

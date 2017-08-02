@@ -9,11 +9,13 @@ namespace Magento\Customer\Block\Adminhtml\Grid\Filter;
  * Country customer grid column filter
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -22,6 +24,7 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -35,6 +38,7 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getOptions()
     {

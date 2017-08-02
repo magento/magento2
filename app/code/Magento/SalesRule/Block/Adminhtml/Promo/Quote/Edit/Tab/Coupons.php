@@ -9,11 +9,13 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
  * "Manage Coupons Codes" Tab
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Coupons extends \Magento\Framework\View\Element\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -22,6 +24,7 @@ class Coupons extends \Magento\Framework\View\Element\Template implements \Magen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -30,6 +33,7 @@ class Coupons extends \Magento\Framework\View\Element\Template implements \Magen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -38,6 +42,7 @@ class Coupons extends \Magento\Framework\View\Element\Template implements \Magen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -47,6 +52,7 @@ class Coupons extends \Magento\Framework\View\Element\Template implements \Magen
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function setCanSHow($canShow)
     {

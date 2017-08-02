@@ -11,18 +11,28 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class \Magento\Customer\Controller\Account\CreatePassword
+ *
+ * @since 2.0.0
+ */
 class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $accountManagement;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -31,6 +41,7 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $accountManagement
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -48,6 +59,7 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
      * Resetting password handler
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

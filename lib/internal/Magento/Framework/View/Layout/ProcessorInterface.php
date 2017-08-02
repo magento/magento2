@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Interface ProcessorInterface
+ * @since 2.0.0
  */
 interface ProcessorInterface
 {
@@ -15,6 +16,7 @@ interface ProcessorInterface
      *
      * @param string $update
      * @return ProcessorInterface
+     * @since 2.0.0
      */
     public function addUpdate($update);
 
@@ -22,6 +24,7 @@ interface ProcessorInterface
      * Get all registered updates as array
      *
      * @return array
+     * @since 2.0.0
      */
     public function asArray();
 
@@ -29,6 +32,7 @@ interface ProcessorInterface
      * Get all registered updates as string
      *
      * @return string
+     * @since 2.0.0
      */
     public function asString();
 
@@ -37,6 +41,7 @@ interface ProcessorInterface
      *
      * @param string|string[] $handleName
      * @return ProcessorInterface
+     * @since 2.0.0
      */
     public function addHandle($handleName);
 
@@ -45,6 +50,7 @@ interface ProcessorInterface
      *
      * @param string $handleName
      * @return ProcessorInterface
+     * @since 2.0.0
      */
     public function removeHandle($handleName);
 
@@ -52,6 +58,7 @@ interface ProcessorInterface
      * Get handle names array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getHandles();
 
@@ -63,6 +70,7 @@ interface ProcessorInterface
      *
      * @param array $handlesToTry
      * @return bool
+     * @since 2.0.0
      */
     public function addPageHandles(array $handlesToTry);
 
@@ -70,6 +78,7 @@ interface ProcessorInterface
      * Retrieve all design abstractions that exist in the system.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllDesignAbstractions();
 
@@ -78,6 +87,7 @@ interface ProcessorInterface
      *
      * @param array $abstraction
      * @return bool
+     * @since 2.0.0
      */
     public function isPageLayoutDesignAbstraction(array $abstraction);
 
@@ -86,6 +96,7 @@ interface ProcessorInterface
      *
      * @param array $abstraction
      * @return bool
+     * @since 2.0.0
      */
     public function isCustomerDesignAbstraction(array $abstraction);
 
@@ -95,6 +106,7 @@ interface ProcessorInterface
      * @param array|string $handles
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return ProcessorInterface
+     * @since 2.0.0
      */
     public function load($handles = []);
 
@@ -102,6 +114,7 @@ interface ProcessorInterface
      * Get layout updates as \Magento\Framework\View\Layout\Element object
      *
      * @return \SimpleXMLElement
+     * @since 2.0.0
      */
     public function asSimplexml();
 
@@ -109,6 +122,7 @@ interface ProcessorInterface
      * Retrieve already merged layout updates from files for specified area/theme/package/store
      *
      * @return \Magento\Framework\View\Layout\Element
+     * @since 2.0.0
      */
     public function getFileLayoutUpdatesXml();
 
@@ -122,6 +136,7 @@ interface ProcessorInterface
      * )
      *
      * @return array
+     * @since 2.0.0
      */
     public function getContainers();
 
@@ -129,6 +144,7 @@ interface ProcessorInterface
      * Return cache ID based current area/package/theme/store and handles
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCacheId();
 }

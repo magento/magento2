@@ -14,6 +14,11 @@ use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\Checkmo;
 
+/**
+ * Class \Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver
+ *
+ * @since 2.0.0
+ */
 class BeforeOrderPaymentSaveObserver implements ObserverInterface
 {
     /**
@@ -21,6 +26,7 @@ class BeforeOrderPaymentSaveObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -8,6 +8,11 @@ namespace Magento\Ui\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Class \Magento\Ui\Model\Config
+ *
+ * @since 2.0.0
+ */
 class Config
 {
     /**
@@ -22,11 +27,13 @@ class Config
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -37,6 +44,7 @@ class Config
      * Is session storage logging enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isLoggingEnabled()
     {
@@ -47,6 +55,7 @@ class Config
      * Get session storage key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSessionStorageKey()
     {

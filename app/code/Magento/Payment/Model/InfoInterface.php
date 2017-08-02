@@ -9,6 +9,7 @@ namespace Magento\Payment\Model;
 /**
  * Interface InfoInterface
  * @api
+ * @since 2.0.0
  */
 interface InfoInterface
 {
@@ -17,6 +18,7 @@ interface InfoInterface
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     public function encrypt($data);
 
@@ -25,6 +27,7 @@ interface InfoInterface
      *
      * @param string $data
      * @return string
+     * @since 2.0.0
      */
     public function decrypt($data);
 
@@ -34,6 +37,7 @@ interface InfoInterface
      * @param string $key
      * @param string|null $value
      * @return mixed
+     * @since 2.0.0
      */
     public function setAdditionalInformation($key, $value = null);
 
@@ -42,6 +46,7 @@ interface InfoInterface
      *
      * @param mixed|null $key
      * @return bool
+     * @since 2.0.0
      */
     public function hasAdditionalInformation($key = null);
 
@@ -50,6 +55,7 @@ interface InfoInterface
      *
      * @param string|null $key
      * @return $this
+     * @since 2.0.0
      */
     public function unsAdditionalInformation($key = null);
 
@@ -58,6 +64,7 @@ interface InfoInterface
      *
      * @param string|null $key
      * @return mixed
+     * @since 2.0.0
      */
     public function getAdditionalInformation($key = null);
 
@@ -66,6 +73,7 @@ interface InfoInterface
      *
      * @return \Magento\Payment\Model\MethodInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getMethodInstance();
 }

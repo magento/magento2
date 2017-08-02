@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\ResourceModel;
  * ImportExport MySQL resource helper model
  *
  * @api
+ * @since 2.0.0
  */
 class Helper extends \Magento\Framework\DB\Helper
 {
@@ -25,6 +26,7 @@ class Helper extends \Magento\Framework\DB\Helper
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'importexport')
     {
@@ -35,6 +37,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * Returns maximum size of packet, that we can send to DB
      *
      * @return int
+     * @since 2.0.0
      */
     public function getMaxDataSize()
     {
@@ -48,6 +51,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param string $tableName Real table name in DB
      * @return int
+     * @since 2.0.0
      */
     public function getNextAutoincrement($tableName)
     {

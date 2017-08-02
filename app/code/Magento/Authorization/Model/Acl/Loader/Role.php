@@ -10,6 +10,11 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Authorization\Model\Acl\Loader\Role
+ *
+ * @since 2.0.0
+ */
 class Role implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
@@ -19,31 +24,37 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Authorization\Model\Acl\Role\GroupFactory
+     * @since 2.0.0
      */
     protected $_groupFactory;
 
     /**
      * @var \Magento\Authorization\Model\Acl\Role\UserFactory
+     * @since 2.0.0
      */
     protected $_roleFactory;
 
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @since 2.2.0
      */
     private $aclDataCache;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $cacheKey;
 
@@ -54,6 +65,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
      * @param string $cacheKey
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
@@ -78,6 +90,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      *
      * @param \Magento\Framework\Acl $acl
      * @return void
+     * @since 2.0.0
      */
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
@@ -103,6 +116,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      * Get application ACL roles array
      *
      * @return array
+     * @since 2.2.0
      */
     private function getRolesArray()
     {

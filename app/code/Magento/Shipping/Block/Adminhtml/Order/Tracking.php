@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml\Order;
  * Shipment tracking control form
  *
  * @api
+ * @since 2.0.0
  */
 class Tracking extends \Magento\Backend\Block\Template
 {
@@ -16,11 +17,13 @@ class Tracking extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Shipping\Model\Config
+     * @since 2.0.0
      */
     protected $_shippingConfig;
 
@@ -29,6 +32,7 @@ class Tracking extends \Magento\Backend\Block\Template
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -45,6 +49,7 @@ class Tracking extends \Magento\Backend\Block\Template
      * Prepares layout of block
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -59,6 +64,7 @@ class Tracking extends \Magento\Backend\Block\Template
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -69,6 +75,7 @@ class Tracking extends \Magento\Backend\Block\Template
      * Retrieve carriers
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCarriers()
     {
@@ -85,6 +92,7 @@ class Tracking extends \Magento\Backend\Block\Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getCarriersInstances()
     {

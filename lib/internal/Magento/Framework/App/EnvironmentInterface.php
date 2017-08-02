@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * Interface for ObjectManager Environment
+ * @since 2.0.0
  */
 interface EnvironmentInterface
 {
@@ -19,6 +20,7 @@ interface EnvironmentInterface
      * Return name of running mode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMode();
 
@@ -26,6 +28,7 @@ interface EnvironmentInterface
      * Return config object
      *
      * @return ConfigInterface
+     * @since 2.0.0
      */
     public function getDiConfig();
 
@@ -34,6 +37,7 @@ interface EnvironmentInterface
      *
      * @param array $arguments
      * @return FactoryInterface
+     * @since 2.0.0
      */
     public function getObjectManagerFactory($arguments);
 
@@ -41,6 +45,7 @@ interface EnvironmentInterface
      * Return ConfigLoader object
      *
      * @return ConfigLoaderInterface
+     * @since 2.0.0
      */
     public function getObjectManagerConfigLoader();
 
@@ -48,6 +53,7 @@ interface EnvironmentInterface
      * @param ConfigInterface $diConfig
      * @param array &$sharedInstances
      * @return void
+     * @since 2.0.0
      */
     public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances);
 }

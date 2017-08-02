@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Class \Magento\Framework\Search\AbstractKeyValuePair
+ *
+ * @since 2.0.0
+ */
 class AbstractKeyValuePair
 {
     /**
      * Field name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
@@ -18,6 +24,7 @@ class AbstractKeyValuePair
      * Field values
      *
      * @var mixed
+     * @since 2.0.0
      */
     protected $value;
 
@@ -25,6 +32,7 @@ class AbstractKeyValuePair
      * @param string $name
      * @param mixed $value
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($name, $value)
     {
@@ -37,6 +45,7 @@ class AbstractKeyValuePair
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -48,6 +57,7 @@ class AbstractKeyValuePair
      *
      * @return mixed Return data in raw-formt. Must be escaped for using in sql
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getValue()
     {

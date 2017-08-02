@@ -5,20 +5,28 @@
  */
 namespace Magento\Captcha\Model\Checkout;
 
+/**
+ * Class \Magento\Captcha\Model\Checkout\ConfigProvider
+ *
+ * @since 2.0.0
+ */
 class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $captchaData;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $formIds;
 
@@ -26,6 +34,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param array $formIds
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -39,6 +48,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -60,6 +70,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      *
      * @param string $formId
      * @return bool
+     * @since 2.0.0
      */
     protected function isCaseSensitive($formId)
     {
@@ -71,6 +82,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      *
      * @param string $formId
      * @return int
+     * @since 2.0.0
      */
     protected function getImageHeight($formId)
     {
@@ -82,6 +94,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      *
      * @param string $formId
      * @return string
+     * @since 2.0.0
      */
     protected function getImageSrc($formId)
     {
@@ -97,6 +110,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      * Returns URL to controller action which returns new captcha image
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getRefreshUrl()
     {
@@ -109,6 +123,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      *
      * @param string $formId
      * @return bool
+     * @since 2.0.0
      */
     protected function isRequired($formId)
     {
@@ -120,6 +135,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      *
      * @param string $formId
      * @return \Magento\Captcha\Model\CaptchaInterface
+     * @since 2.0.0
      */
     protected function getCaptchaModel($formId)
     {

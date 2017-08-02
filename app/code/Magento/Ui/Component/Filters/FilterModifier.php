@@ -11,6 +11,7 @@ use Magento\Framework\Api\FilterBuilder;
 
 /**
  * Apply modifiers to filter
+ * @since 2.0.0
  */
 class FilterModifier
 {
@@ -19,19 +20,29 @@ class FilterModifier
      */
     const FILTER_MODIFIER = 'filters_modifier';
 
-    /** @var RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
+     */
     protected $request;
 
-    /** @var FilterBuilder */
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.0.0
+     */
     protected $filterBuilder;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $allowedConditionTypes;
 
     /**
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param array $allowedConditionTypes
+     * @since 2.0.0
      */
     public function __construct(RequestInterface $request, FilterBuilder $filterBuilder, $allowedConditionTypes = [])
     {
@@ -50,6 +61,7 @@ class FilterModifier
      * @param string $filterName
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function applyFilterModifier(DataProviderInterface $dataProvider, $filterName)
     {

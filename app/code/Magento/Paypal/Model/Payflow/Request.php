@@ -9,6 +9,7 @@ namespace Magento\Paypal\Model\Payflow;
  * Payflow Link request model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Request extends \Magento\Framework\DataObject
 {
@@ -21,6 +22,7 @@ class Request extends \Magento\Framework\DataObject
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function __call($method, $args)
     {

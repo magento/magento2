@@ -9,6 +9,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Input/output client interface
+ * @since 2.0.0
  */
 interface IoInterface
 {
@@ -17,6 +18,7 @@ interface IoInterface
      *
      * @param array $args
      * @return bool
+     * @since 2.0.0
      */
     public function open(array $args = []);
 
@@ -24,6 +26,7 @@ interface IoInterface
      * Close a connection
      *
      * @return bool
+     * @since 2.0.0
      */
     public function close();
 
@@ -34,6 +37,7 @@ interface IoInterface
      * @param int $mode
      * @param bool $recursive
      * @return bool
+     * @since 2.0.0
      */
     public function mkdir($dir, $mode = 0777, $recursive = true);
 
@@ -43,6 +47,7 @@ interface IoInterface
      * @param string $dir
      * @param bool $recursive
      * @return bool
+     * @since 2.0.0
      */
     public function rmdir($dir, $recursive = false);
 
@@ -50,6 +55,7 @@ interface IoInterface
      * Get current working directory
      *
      * @return string
+     * @since 2.0.0
      */
     public function pwd();
 
@@ -59,6 +65,7 @@ interface IoInterface
      * @param string $dir
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function cd($dir);
 
@@ -68,6 +75,7 @@ interface IoInterface
      * @param string $filename
      * @param string|resource|null $dest
      * @return string|bool
+     * @since 2.0.0
      */
     public function read($filename, $dest = null);
 
@@ -78,6 +86,7 @@ interface IoInterface
      * @param string|resource $src
      * @param int|null $mode
      * @return int|bool
+     * @since 2.0.0
      */
     public function write($filename, $src, $mode = null);
 
@@ -87,6 +96,7 @@ interface IoInterface
      * @param string $filename
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function rm($filename);
 
@@ -97,6 +107,7 @@ interface IoInterface
      * @param string $dest
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function mv($src, $dest);
 
@@ -106,6 +117,7 @@ interface IoInterface
      * @param string $filename
      * @param int $mode
      * @return bool
+     * @since 2.0.0
      */
     public function chmod($filename, $mode);
 
@@ -115,6 +127,7 @@ interface IoInterface
      * @param string|null $grep
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function ls($grep = null);
 
@@ -122,6 +135,7 @@ interface IoInterface
      * Retrieve directory separator in context of io resource
      *
      * @return string
+     * @since 2.0.0
      */
     public function dirsep();
 }

@@ -9,11 +9,13 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
  * Bundle Special Price Attribute Block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Special extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

@@ -9,6 +9,7 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
  * Encryption key change form block
  *
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add form fields
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

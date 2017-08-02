@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address;
  * Quote addresses collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_quote_address_collection';
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Event object name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'quote_address_collection';
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +49,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @param int $quoteId
      * @return $this
+     * @since 2.0.0
      */
     public function setQuoteFilter($quoteId)
     {
@@ -56,6 +61,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * Redeclare after load method for dispatch event
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {

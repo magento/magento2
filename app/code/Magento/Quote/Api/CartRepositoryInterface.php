@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface CartRepositoryInterface
  * @api
+ * @since 2.0.0
  */
 interface CartRepositoryInterface
 {
@@ -17,6 +18,7 @@ interface CartRepositoryInterface
      * @param int $cartId
      * @return \Magento\Quote\Api\Data\CartInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($cartId);
 
@@ -30,6 +32,7 @@ interface CartRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Quote\Api\Data\CartSearchResultsInterface
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -40,6 +43,7 @@ interface CartRepositoryInterface
      * @param int[] $sharedStoreIds
      * @return \Magento\Quote\Api\Data\CartInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getForCustomer($customerId, array $sharedStoreIds = []);
 
@@ -50,6 +54,7 @@ interface CartRepositoryInterface
      * @param int[] $sharedStoreIds
      * @return \Magento\Quote\Api\Data\CartInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getActive($cartId, array $sharedStoreIds = []);
 
@@ -60,6 +65,7 @@ interface CartRepositoryInterface
      * @param int[] $sharedStoreIds
      * @return \Magento\Quote\Api\Data\CartInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = []);
 
@@ -68,6 +74,7 @@ interface CartRepositoryInterface
      *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return void
+     * @since 2.0.0
      */
     public function save(\Magento\Quote\Api\Data\CartInterface $quote);
 
@@ -76,6 +83,7 @@ interface CartRepositoryInterface
      *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return void
+     * @since 2.0.0
      */
     public function delete(\Magento\Quote\Api\Data\CartInterface $quote);
 }

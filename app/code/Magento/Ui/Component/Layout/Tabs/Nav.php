@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * Class Nav
+ * @since 2.0.0
  */
 class Nav extends Template
 {

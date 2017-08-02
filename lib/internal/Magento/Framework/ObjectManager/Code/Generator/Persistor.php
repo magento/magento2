@@ -8,6 +8,7 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 
 /**
  * Class Persistor
+ * @since 2.0.0
  */
 class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -20,6 +21,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve class properties
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -112,6 +114,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns source factory property name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getSourceFactoryPropertyName()
     {
@@ -121,6 +124,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns source collection factory property name
      * @return string
+     * @since 2.0.0
      */
     protected function _getSourceResourcePropertyName() // InvoiceResource
     {
@@ -131,6 +135,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns collection factory class name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getSourceResourceClassName() // Invoice\Resource
     {
@@ -145,6 +150,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -164,6 +170,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -215,6 +222,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getGetConnectionMethod()
     {
@@ -244,6 +252,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns register() method
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getLoadEntityMethod()
     {
@@ -277,6 +286,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns registerDelete() method
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getRegisterDeletedMethod()
     {
@@ -309,6 +319,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getDoPersistMethod()
     {
@@ -367,6 +378,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns registerDelete() method
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDoPersistEntityMethod()
     {
@@ -407,6 +419,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns registerDelete() method
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getRegisterFromArrayMethod()
     {
@@ -442,6 +455,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns registerDelete() method
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getRegisterNewMethod()
     {
@@ -476,6 +490,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _validateData()
     {

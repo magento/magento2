@@ -11,11 +11,13 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class StockFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -23,11 +25,13 @@ class StockFactory
      * Default Stock Indexer resource model name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultIndexer = \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock::class;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -41,6 +45,7 @@ class StockFactory
      * @param array $data
      * @return \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($indexerClassName = '', array $data = [])
     {

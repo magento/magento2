@@ -13,26 +13,31 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Locale extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory
+     * @since 2.0.0
      */
     protected $_configsFactory;
 
     /**
      * @var \Magento\Store\Model\WebsiteFactory
+     * @since 2.0.0
      */
     protected $_websiteFactory;
 
     /**
      * @var \Magento\Store\Model\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -50,6 +55,7 @@ class Locale extends \Magento\Framework\App\Config\Value
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -74,6 +80,7 @@ class Locale extends \Magento\Framework\App\Config\Value
     /**
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function afterSave()
     {

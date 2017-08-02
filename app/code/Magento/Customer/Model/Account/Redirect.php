@@ -22,6 +22,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Redirect
 {
@@ -30,47 +31,56 @@ class Redirect
 
     /**
      * @var RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var DecoderInterface
+     * @since 2.0.0
      */
     protected $urlDecoder;
 
     /**
      * @var CustomerUrl
+     * @since 2.0.0
      */
     protected $customerUrl;
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $url;
 
     /**
      * @var ResultFactory
+     * @since 2.1.0
      */
     protected $resultFactory;
 
     /**
      * @var CookieManagerInterface
+     * @since 2.1.0
      */
     protected $cookieManager;
 
     /**
      * @var HostChecker
+     * @since 2.2.0
      */
     private $hostChecker;
 
@@ -84,6 +94,7 @@ class Redirect
      * @param CustomerUrl $customerUrl
      * @param ResultFactory $resultFactory
      * @param HostChecker|null $hostChecker
+     * @since 2.0.0
      */
     public function __construct(
         RequestInterface $request,
@@ -111,6 +122,7 @@ class Redirect
      * Retrieve redirect
      *
      * @return ResultRedirect|ResultForward
+     * @since 2.0.0
      */
     public function getRedirect()
     {
@@ -135,6 +147,7 @@ class Redirect
      * Update last customer id, if required
      *
      * @return void
+     * @since 2.0.0
      */
     protected function updateLastCustomerId()
     {
@@ -152,6 +165,7 @@ class Redirect
      * Prepare redirect URL
      *
      * @return void
+     * @since 2.0.0
      */
     protected function prepareRedirectUrl()
     {
@@ -192,6 +206,7 @@ class Redirect
      * Redirect customer to the last page visited after logging in.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function processLoggedCustomer()
     {
@@ -220,6 +235,7 @@ class Redirect
      *
      * @param string $url
      * @return void
+     * @since 2.0.0
      */
     private function applyRedirect($url)
     {
@@ -229,8 +245,9 @@ class Redirect
     /**
      * Get Cookie manager. For release backward compatibility.
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return CookieManagerInterface
+     * @since 2.1.0
      */
     protected function getCookieManager()
     {
@@ -243,9 +260,10 @@ class Redirect
     /**
      * Set cookie manager. For unit tests.
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @param object $value
      * @return void
+     * @since 2.1.0
      */
     public function setCookieManager($value)
     {
@@ -256,6 +274,7 @@ class Redirect
      * Get redirect route from cookie for case of successful login/registration
      *
      * @return null|string
+     * @since 2.1.0
      */
     public function getRedirectCookie()
     {
@@ -267,6 +286,7 @@ class Redirect
      *
      * @param string $route
      * @return void
+     * @since 2.1.0
      */
     public function setRedirectCookie($route)
     {
@@ -277,6 +297,7 @@ class Redirect
      * Clear cookie with requested route
      *
      * @return void
+     * @since 2.1.0
      */
     public function clearRedirectCookie()
     {

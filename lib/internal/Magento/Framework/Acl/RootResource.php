@@ -9,6 +9,7 @@ namespace Magento\Framework\Acl;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class RootResource
 {
@@ -16,11 +17,13 @@ class RootResource
      * Root resource id
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_identifier;
 
     /**
      * @param string $identifier
+     * @since 2.0.0
      */
     public function __construct($identifier)
     {
@@ -31,6 +34,7 @@ class RootResource
      * Retrieve root resource id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId()
     {

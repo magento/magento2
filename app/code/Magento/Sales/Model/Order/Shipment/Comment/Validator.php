@@ -9,6 +9,7 @@ use Magento\Sales\Model\Order\Shipment\Comment;
 
 /**
  * Class Validator
+ * @since 2.0.0
  */
 class Validator
 {
@@ -16,6 +17,7 @@ class Validator
      * Required field
      *
      * @var array
+     * @since 2.0.0
      */
     protected $required = [
         'parent_id' => 'Parent Shipment Id',
@@ -27,6 +29,7 @@ class Validator
      *
      * @param \Magento\Sales\Model\Order\Shipment\Comment $comment
      * @return array
+     * @since 2.0.0
      */
     public function validate(Comment $comment)
     {

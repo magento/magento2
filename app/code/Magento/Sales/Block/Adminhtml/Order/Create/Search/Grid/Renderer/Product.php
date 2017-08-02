@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
  * Adminhtml sales create order product search grid product name column renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -17,6 +18,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

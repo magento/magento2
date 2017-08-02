@@ -6,15 +6,22 @@
 
 namespace Magento\Developer\Model\Tools;
 
+/**
+ * Class \Magento\Developer\Model\Tools\Formatter
+ *
+ * @since 2.0.0
+ */
 class Formatter
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $_indent;
 
     /**
      * @param string $indent
+     * @since 2.0.0
      */
     public function __construct($indent = "    ")
     {
@@ -26,6 +33,7 @@ class Formatter
      *
      * @param string $xmlString
      * @return string
+     * @since 2.0.0
      */
     public function format($xmlString)
     {

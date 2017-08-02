@@ -9,6 +9,7 @@ namespace Magento\Framework\Config;
  * Config scope list interface.
  *
  * @api
+ * @since 2.0.0
  */
 interface ScopeListInterface
 {
@@ -16,6 +17,7 @@ interface ScopeListInterface
      * Retrieve list of all scopes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getAllScopes();
 }

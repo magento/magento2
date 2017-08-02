@@ -9,6 +9,7 @@ namespace Magento\Multishipping\Block\Checkout;
  * Multishipping cart link
  *
  * @api
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
@@ -16,6 +17,7 @@ class Link extends \Magento\Framework\View\Element\Template
      * Multishipping helper
      *
      * @var \Magento\Multishipping\Helper\Data
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -23,6 +25,7 @@ class Link extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -36,6 +39,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutUrl()
     {
@@ -44,6 +48,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -52,6 +57,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function _toHtml()
     {

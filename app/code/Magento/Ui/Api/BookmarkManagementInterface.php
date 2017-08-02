@@ -9,6 +9,7 @@ namespace Magento\Ui\Api;
  * Interface for managing bookmarks
  *
  * @api
+ * @since 2.0.0
  */
 interface BookmarkManagementInterface
 {
@@ -17,6 +18,7 @@ interface BookmarkManagementInterface
      *
      * @param string $namespace
      * @return \Magento\Ui\Api\Data\BookmarkInterface[]
+     * @since 2.0.0
      */
     public function loadByNamespace($namespace);
 
@@ -26,6 +28,7 @@ interface BookmarkManagementInterface
      * @param string $identifier
      * @param string $namespace
      * @return \Magento\Ui\Api\Data\BookmarkInterface
+     * @since 2.0.0
      */
     public function getByIdentifierNamespace($identifier, $namespace);
 }

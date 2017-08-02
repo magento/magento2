@@ -10,21 +10,25 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  *
  * @method getArea()
  * @method getTheme()
+ * @since 2.0.0
  */
 class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
 {
     /**
      * @var \Magento\Framework\View\Layout\ProcessorFactory
+     * @since 2.0.0
      */
     protected $_layoutProcessorFactory;
 
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
+     * @since 2.0.0
      */
     protected $_themesFactory;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
@@ -34,6 +38,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
      * @param \Magento\Framework\App\State $appState
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -52,6 +57,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      * Add necessary options
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -72,6 +78,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      *
      * @param int $themeId
      * @return \Magento\Theme\Model\Theme|null
+     * @since 2.0.0
      */
     protected function _getThemeInstance($themeId)
     {
@@ -85,6 +92,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      *
      * @param array $arguments
      * @return \Magento\Framework\View\Layout\ProcessorInterface
+     * @since 2.0.0
      */
     protected function _getLayoutProcessor(array $arguments)
     {
@@ -96,6 +104,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      *
      * @param array $designAbstractions
      * @return void
+     * @since 2.0.0
      */
     protected function _addDesignAbstractionOptions(array $designAbstractions)
     {

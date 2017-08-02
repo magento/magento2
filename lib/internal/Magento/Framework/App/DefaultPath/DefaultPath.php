@@ -7,17 +7,24 @@
  */
 namespace Magento\Framework\App\DefaultPath;
 
+/**
+ * Class \Magento\Framework\App\DefaultPath\DefaultPath
+ *
+ * @since 2.0.0
+ */
 class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
 {
     /**
      * Default path parts
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_parts;
 
     /**
      * @param array $parts
+     * @since 2.0.0
      */
     public function __construct(array $parts)
     {
@@ -29,6 +36,7 @@ class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getPart($code)
     {

@@ -9,16 +9,19 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Configures full path for configurations, including scope data and configuration type.
+ * @since 2.2.0
  */
 class ConfigPathResolver
 {
     /**
      * @var ScopeCodeResolver
+     * @since 2.2.0
      */
     private $scopeCodeResolver;
 
     /**
      * @param ScopeCodeResolver $scopeCodeResolver
+     * @since 2.2.0
      */
     public function __construct(ScopeCodeResolver $scopeCodeResolver)
     {
@@ -40,6 +43,7 @@ class ConfigPathResolver
      * const CONFIG_TYPE = 'system';
      * ```
      * @return string Resolved configuration path
+     * @since 2.2.0
      */
     public function resolve($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null, $type = null)
     {

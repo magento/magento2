@@ -11,10 +11,16 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+/**
+ * Class \Magento\Widget\Block\Adminhtml\Widget\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Widget\Model\WidgetFactory
+     * @since 2.0.0
      */
     protected $_widgetFactory;
 
@@ -24,6 +30,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -40,6 +47,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Form with widget to select
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -73,6 +81,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare options for widgets HTML select
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getWidgetSelectOptions()
     {
@@ -86,6 +95,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare widgets select after element HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getWidgetSelectAfterHtml()
     {
@@ -103,6 +113,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param bool $withEmptyElement
      * @return array
+     * @since 2.0.0
      */
     protected function _getAvailableWidgets($withEmptyElement = false)
     {
@@ -129,6 +140,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Return array of widgets disabled for selection
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getSkippedWidgets()
     {

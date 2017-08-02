@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Dependency\Report\Dependency\Data;
 
 /**
  * Dependency
+ * @since 2.0.0
  */
 class Dependency
 {
@@ -23,6 +24,7 @@ class Dependency
      * Module we depend on
      *
      * @var string
+     * @since 2.0.0
      */
     protected $module;
 
@@ -30,6 +32,7 @@ class Dependency
      * Dependency type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $type;
 
@@ -38,6 +41,7 @@ class Dependency
      *
      * @param string $module
      * @param string $type One of self::TYPE_* constants
+     * @since 2.0.0
      */
     public function __construct($module, $type = self::TYPE_HARD)
     {
@@ -50,6 +54,7 @@ class Dependency
      * Get module
      *
      * @return string
+     * @since 2.0.0
      */
     public function getModule()
     {
@@ -60,6 +65,7 @@ class Dependency
      * Get type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -70,6 +76,7 @@ class Dependency
      * Check is hard dependency
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHard()
     {
@@ -80,6 +87,7 @@ class Dependency
      * Check is soft dependency
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSoft()
     {

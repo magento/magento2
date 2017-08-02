@@ -13,21 +13,25 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class CreateSequence
+ * @since 2.0.0
  */
 class SequenceCreatorObserver implements ObserverInterface
 {
     /**
      * @var Builder
+     * @since 2.0.0
      */
     private $sequenceBuilder;
 
     /**
      * @var EntityPool
+     * @since 2.0.0
      */
     private $entityPool;
 
     /**
      * @var Config
+     * @since 2.0.0
      */
     private $sequenceConfig;
 
@@ -37,6 +41,7 @@ class SequenceCreatorObserver implements ObserverInterface
      * @param Builder $sequenceBuilder
      * @param EntityPool $entityPool
      * @param Config $sequenceConfig
+     * @since 2.0.0
      */
     public function __construct(
         Builder $sequenceBuilder,
@@ -51,6 +56,7 @@ class SequenceCreatorObserver implements ObserverInterface
     /**
      * @param EventObserver $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

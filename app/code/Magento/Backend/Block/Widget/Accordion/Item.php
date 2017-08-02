@@ -11,17 +11,20 @@ use Magento\Backend\Block\Widget\Accordion;
  * Accordion item
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Item extends \Magento\Backend\Block\Widget
 {
     /**
      * @var Accordion
+     * @since 2.0.0
      */
     protected $_accordion;
 
     /**
      * @param Accordion $accordion
      * @return $this
+     * @since 2.0.0
      */
     public function setAccordion($accordion)
     {
@@ -31,6 +34,7 @@ class Item extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTarget()
     {
@@ -39,6 +43,7 @@ class Item extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -53,6 +58,7 @@ class Item extends \Magento\Backend\Block\Widget
 
     /**
      * @return null|string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -68,6 +74,7 @@ class Item extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getClass()
     {
@@ -80,6 +87,7 @@ class Item extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

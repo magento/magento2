@@ -11,6 +11,7 @@ namespace Magento\Sales\Model\Status;
  * to owner object of this model.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class ListStatus
 {
@@ -18,6 +19,7 @@ class ListStatus
      * Status information entities
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_items = [];
 
@@ -29,6 +31,7 @@ class ListStatus
      * @param string|null $message Status message
      * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
+     * @since 2.0.0
      */
     public function addItem($origin = null, $code = null, $message = null, $additionalData = null)
     {
@@ -45,6 +48,7 @@ class ListStatus
      * Retrieves all items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -59,6 +63,7 @@ class ListStatus
      *
      * @param array $params
      * @return array
+     * @since 2.0.0
      */
     public function removeItemsByParams($params)
     {
@@ -94,6 +99,7 @@ class ListStatus
      *
      * @param int|array $indexes
      * @return array
+     * @since 2.0.0
      */
     public function removeItems($indexes)
     {
@@ -127,6 +133,7 @@ class ListStatus
      * Clears list from all items
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clear()
     {

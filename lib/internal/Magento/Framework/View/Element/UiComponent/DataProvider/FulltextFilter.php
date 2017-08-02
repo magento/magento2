@@ -12,6 +12,7 @@ use Magento\Framework\Api\Filter;
 
 /**
  * Class Fulltext
+ * @since 2.0.0
  */
 class FulltextFilter implements FilterApplierInterface
 {
@@ -21,6 +22,7 @@ class FulltextFilter implements FilterApplierInterface
      * @param AbstractDb $collection
      * @param string $indexTable
      * @return array
+     * @since 2.0.0
      */
     protected function getFulltextIndexColumns(AbstractDb $collection, $indexTable)
     {
@@ -40,6 +42,7 @@ class FulltextFilter implements FilterApplierInterface
      * @param AbstractDb $collection
      * @param string $indexTable
      * @return array
+     * @since 2.1.0
      */
     protected function addTableAliasToColumns(array $columns, AbstractDb $collection, $indexTable)
     {
@@ -68,6 +71,7 @@ class FulltextFilter implements FilterApplierInterface
      * @param Collection $collection
      * @param Filter $filter
      * @return void
+     * @since 2.0.0
      */
     public function apply(Collection $collection, Filter $filter)
     {

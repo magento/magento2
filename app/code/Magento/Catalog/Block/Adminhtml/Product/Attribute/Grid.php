@@ -15,11 +15,13 @@ use Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grid extends AbstractGrid
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -28,6 +30,7 @@ class Grid extends AbstractGrid
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,6 +47,7 @@ class Grid extends AbstractGrid
      * Prepare product attributes grid collection object
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -57,6 +61,7 @@ class Grid extends AbstractGrid
      * Prepare product attributes grid columns
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

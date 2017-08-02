@@ -7,15 +7,22 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\FormFactory
+ *
+ * @since 2.0.0
+ */
 class FormFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -32,6 +39,7 @@ class FormFactory
      * @param bool $ignoreInvisible
      * @param array $filterAttributes
      * @return \Magento\Customer\Model\Metadata\Form
+     * @since 2.0.0
      */
     public function create(
         $entityType,

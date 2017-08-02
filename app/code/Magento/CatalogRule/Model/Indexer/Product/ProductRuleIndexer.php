@@ -7,10 +7,16 @@ namespace Magento\CatalogRule\Model\Indexer\Product;
 
 use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 
+/**
+ * Class \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer
+ *
+ * @since 2.0.0
+ */
 class ProductRuleIndexer extends AbstractIndexer
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function doExecuteList($ids)
     {
@@ -20,6 +26,7 @@ class ProductRuleIndexer extends AbstractIndexer
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function doExecuteRow($id)
     {

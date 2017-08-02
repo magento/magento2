@@ -9,12 +9,18 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rate\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Delete Rate and Data
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|void
+     * @since 2.0.0
      */
     public function execute()
     {

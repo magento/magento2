@@ -12,6 +12,7 @@ use Magento\Framework\View\File\CollectorInterface;
 
 /**
  * Source of RequireJs config files basing on list of directories they may be located in
+ * @since 2.0.0
  */
 class Aggregated implements CollectorInterface
 {
@@ -19,6 +20,7 @@ class Aggregated implements CollectorInterface
      * Base files
      *
      * @var \Magento\Framework\View\File\CollectorInterface
+     * @since 2.0.0
      */
     protected $baseFiles;
 
@@ -26,6 +28,7 @@ class Aggregated implements CollectorInterface
      * Theme files
      *
      * @var \Magento\Framework\View\File\CollectorInterface
+     * @since 2.0.0
      */
     protected $themeFiles;
 
@@ -33,16 +36,19 @@ class Aggregated implements CollectorInterface
      * Theme modular files
      *
      * @var \Magento\Framework\View\File\CollectorInterface
+     * @since 2.0.0
      */
     protected $themeModularFiles;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @since 2.0.0
      */
     protected $libDirectory;
 
     /**
      * @var \Magento\Framework\View\File\Factory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
@@ -52,6 +58,7 @@ class Aggregated implements CollectorInterface
      * @param CollectorInterface $baseFiles
      * @param CollectorInterface $themeFiles
      * @param CollectorInterface $themeModularFiles
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -74,6 +81,7 @@ class Aggregated implements CollectorInterface
      * @param string $filePath
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\View\File[]
+     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

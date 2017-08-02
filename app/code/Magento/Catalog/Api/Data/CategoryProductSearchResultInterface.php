@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api\Data;
 /**
  * Interface CategoryProductSearchResultInterface
  * @api
+ * @since 2.1.0
  */
 interface CategoryProductSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -16,6 +17,7 @@ interface CategoryProductSearchResultInterface extends \Magento\Framework\Api\Se
      * Get category product sets list.
      *
      * @return \Magento\Catalog\Api\Data\CategoryProductLinkInterface[]
+     * @since 2.1.0
      */
     public function getItems();
 
@@ -24,6 +26,7 @@ interface CategoryProductSearchResultInterface extends \Magento\Framework\Api\Se
      *
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkInterface[] $items
      * @return $this
+     * @since 2.1.0
      */
     public function setItems(array $items);
 }

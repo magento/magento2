@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Source;
  * Catalog Category *_sort_by Attributes Source Model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -16,6 +17,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -23,6 +25,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Construct
      *
      * @param \Magento\Catalog\Model\Config $catalogConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\Config $catalogConfig)
     {
@@ -33,6 +36,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Catalog Config Singleton
      *
      * @return \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     protected function _getCatalogConfig()
     {
@@ -41,6 +45,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAllOptions()
     {

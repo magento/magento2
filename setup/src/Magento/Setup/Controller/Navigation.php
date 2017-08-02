@@ -14,27 +14,32 @@ use Magento\Setup\Model\Cron\Status;
 /**
  * Class Navigation
  *
+ * @since 2.0.0
  */
 class Navigation extends AbstractActionController
 {
     /**
      * @var NavModel
+     * @since 2.0.0
      */
     protected $navigation;
 
     /**
      * @var Status
+     * @since 2.0.0
      */
     protected $status;
 
     /**
      * @var ViewModel
+     * @since 2.0.0
      */
     protected $view;
 
     /**
      * @param NavModel $navigation
      * @param Status $status
+     * @since 2.0.0
      */
     public function __construct(NavModel $navigation, Status $status)
     {
@@ -47,6 +52,7 @@ class Navigation extends AbstractActionController
 
     /**
      * @return JsonModel
+     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -60,6 +66,7 @@ class Navigation extends AbstractActionController
 
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function menuAction()
     {
@@ -72,6 +79,7 @@ class Navigation extends AbstractActionController
 
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function sideMenuAction()
     {
@@ -83,6 +91,7 @@ class Navigation extends AbstractActionController
 
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function headerBarAction()
     {

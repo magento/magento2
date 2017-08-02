@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * An abstraction for getting context path of an asset
+ * @since 2.0.0
  */
 interface ContextInterface
 {
@@ -15,6 +16,7 @@ interface ContextInterface
      * Get context path of an asset
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPath();
 
@@ -22,6 +24,7 @@ interface ContextInterface
      * Get base URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl();
 }

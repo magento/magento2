@@ -9,11 +9,13 @@ namespace Magento\Review\Block\Product\View;
  * Product view other block
  *
  * @api
+ * @since 2.0.0
  */
 class Other extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry;
 
@@ -21,6 +23,7 @@ class Other extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -35,6 +38,7 @@ class Other extends \Magento\Framework\View\Element\Template
      * Get product object
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {

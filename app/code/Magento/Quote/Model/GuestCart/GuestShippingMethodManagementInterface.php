@@ -5,6 +5,11 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
+/**
+ * Interface \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface
+ *
+ * @since 2.0.0
+ */
 interface GuestShippingMethodManagementInterface
 {
     /**
@@ -19,6 +24,7 @@ interface GuestShippingMethodManagementInterface
      * @throws \Magento\Framework\Exception\StateException The billing or shipping address is not set.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart contains only virtual products
      * so the shipping method does not apply.
+     * @since 2.0.0
      */
     public function set($cartId, $carrierCode, $methodCode);
 
@@ -29,6 +35,7 @@ interface GuestShippingMethodManagementInterface
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface Shipping method.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified shopping cart does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
+     * @since 2.0.0
      */
     public function get($cartId);
 }

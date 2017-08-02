@@ -11,30 +11,40 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice
+ *
+ * @since 2.2.0
+ */
 class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.2.0
      */
     private $customerSession;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var BaseSelectProcessorInterface
+     * @since 2.2.0
      */
     private $baseSelectProcessor;
 
@@ -45,6 +55,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param BaseSelectProcessorInterface|null $baseSelectProcessor
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -63,6 +74,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function build($productId)
     {

@@ -6,12 +6,18 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Validate
+ *
+ * @since 2.0.0
+ */
 class Validate extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * AJAX customer validation action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

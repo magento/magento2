@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Communication configuration reader. Reads data from env.php.
+ * @since 2.1.0
  */
 class EnvReader implements \Magento\Framework\Config\ReaderInterface
 {
@@ -17,17 +18,20 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
 
     /**
      * @var DeploymentConfig
+     * @since 2.1.0
      */
     private $deploymentConfig;
 
     /**
      * @var Validator
+     * @since 2.1.0
      */
     private $envValidator;
 
     /**
      * @param DeploymentConfig $deploymentConfig
      * @param Validator $envValidator
+     * @since 2.1.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -43,6 +47,7 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
      * @param string|null $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function read($scope = null)
     {

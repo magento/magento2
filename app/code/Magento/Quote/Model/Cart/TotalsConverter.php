@@ -10,16 +10,19 @@ use Magento\Quote\Api\Data\TotalSegmentInterfaceFactory;
 
 /**
  * Cart totals data objects converter.
+ * @since 2.0.0
  */
 class TotalsConverter
 {
     /**
      * @var TotalSegmentInterfaceFactory
+     * @since 2.0.0
      */
     protected $factory;
 
     /**
      * @param TotalSegmentInterfaceFactory $factory
+     * @since 2.0.0
      */
     public function __construct(
         TotalSegmentInterfaceFactory $factory
@@ -30,6 +33,7 @@ class TotalsConverter
     /**
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
+     * @since 2.0.0
      */
     public function process($addressTotals)
     {

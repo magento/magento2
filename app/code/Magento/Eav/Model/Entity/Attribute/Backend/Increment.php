@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
  * Entity/Attribute/Model - attribute backend default
  *
  * @api
+ * @since 2.0.0
  */
 class Increment extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -17,6 +18,7 @@ class Increment extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBack
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {

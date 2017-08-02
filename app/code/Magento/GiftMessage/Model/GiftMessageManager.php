@@ -7,15 +7,22 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\GiftMessage\Model\GiftMessageManager
+ *
+ * @since 2.0.0
+ */
 class GiftMessageManager
 {
     /**
      * @var \Magento\GiftMessage\Model\MessageFactory
+     * @since 2.0.0
      */
     protected $messageFactory;
 
     /**
      * @param MessageFactory $messageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\GiftMessage\Model\MessageFactory $messageFactory
@@ -28,6 +35,7 @@ class GiftMessageManager
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function add($giftMessages, $quote)
     {
@@ -99,6 +107,7 @@ class GiftMessageManager
      * @param null|int $entityId The entity ID.
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
+     * @since 2.0.0
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {

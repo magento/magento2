@@ -15,11 +15,13 @@ use Magento\Backend\Block\Widget\Form;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -57,6 +59,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {
@@ -79,6 +82,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

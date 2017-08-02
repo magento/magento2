@@ -11,20 +11,28 @@ use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Oauth\TokenProviderInterface;
 use Magento\Integration\Model\Oauth\Token;
 
+/**
+ * Class \Magento\Integration\Model\Oauth\Token\Provider
+ *
+ * @since 2.0.0
+ */
 class Provider implements TokenProviderInterface
 {
     /**
      * @var \Magento\Integration\Model\Oauth\ConsumerFactory
+     * @since 2.0.0
      */
     protected $_consumerFactory;
 
     /**
      * @var \Magento\Integration\Model\Oauth\TokenFactory
+     * @since 2.0.0
      */
     protected $_tokenFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -32,6 +40,7 @@ class Provider implements TokenProviderInterface
      * @param \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
@@ -45,6 +54,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateConsumer($consumer)
     {
@@ -59,6 +69,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function createRequestToken($consumer)
     {
@@ -74,6 +85,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateRequestToken($requestToken, $consumer, $oauthVerifier)
     {
@@ -100,6 +112,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAccessToken($consumer)
     {
@@ -119,6 +132,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateAccessTokenRequest($accessToken, $consumer)
     {
@@ -145,6 +159,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateAccessToken($accessToken)
     {
@@ -169,6 +184,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateOauthToken($oauthToken)
     {
@@ -177,6 +193,7 @@ class Provider implements TokenProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConsumerByKey($consumerKey)
     {
@@ -204,6 +221,7 @@ class Provider implements TokenProviderInterface
      * @param string $tokenVerifier
      * @return void
      * @throws \Magento\Framework\Oauth\Exception
+     * @since 2.0.0
      */
     protected function _validateVerifierParam($oauthVerifier, $tokenVerifier)
     {
@@ -230,6 +248,7 @@ class Provider implements TokenProviderInterface
      * @param int $consumerId
      * @return \Magento\Framework\Oauth\ConsumerInterface
      * @throws \Magento\Framework\Oauth\Exception
+     * @since 2.0.0
      */
     protected function _getConsumer($consumerId)
     {
@@ -253,6 +272,7 @@ class Provider implements TokenProviderInterface
      * @param string $token
      * @return Token
      * @throws \Magento\Framework\Oauth\Exception
+     * @since 2.0.0
      */
     protected function _getToken($token)
     {
@@ -279,6 +299,7 @@ class Provider implements TokenProviderInterface
      * @param int $consumerId - The Id of the consumer.
      * @return Token
      * @throws \Magento\Framework\Oauth\Exception
+     * @since 2.0.0
      */
     public function getIntegrationTokenByConsumerId($consumerId)
     {
@@ -304,6 +325,7 @@ class Provider implements TokenProviderInterface
      * @param Token $token
      * @param \Magento\Framework\Oauth\ConsumerInterface $consumer
      * @return bool
+     * @since 2.0.0
      */
     protected function _isTokenAssociatedToConsumer($token, $consumer)
     {

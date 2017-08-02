@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Product type details
  * @api
+ * @since 2.0.0
  */
 interface ProductTypeInterface extends ExtensibleDataInterface
 {
@@ -18,6 +19,7 @@ interface ProductTypeInterface extends ExtensibleDataInterface
      * Get product type code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -26,6 +28,7 @@ interface ProductTypeInterface extends ExtensibleDataInterface
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -33,6 +36,7 @@ interface ProductTypeInterface extends ExtensibleDataInterface
      * Get product type label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel();
 
@@ -41,6 +45,7 @@ interface ProductTypeInterface extends ExtensibleDataInterface
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -48,6 +53,7 @@ interface ProductTypeInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Catalog\Api\Data\ProductTypeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -56,6 +62,7 @@ interface ProductTypeInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes

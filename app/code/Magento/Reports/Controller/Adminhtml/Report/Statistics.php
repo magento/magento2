@@ -16,6 +16,7 @@ use Magento\Backend\Model\Session;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class Statistics extends \Magento\Backend\App\Action
 {
@@ -30,11 +31,13 @@ abstract class Statistics extends \Magento\Backend\App\Action
      * Admin session model
      *
      * @var null|AuthSession
+     * @since 2.0.0
      */
     protected $_adminSession = null;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @since 2.0.0
      */
     protected $_dateFilter;
 
@@ -42,6 +45,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
      * Codes for Refresh Statistics
      *
      * @var []
+     * @since 2.0.0
      */
     protected $reportTypes;
 
@@ -49,6 +53,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param [] $reportTypes
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -64,6 +69,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
      * Add reports and statistics breadcrumbs
      *
      * @return $this
+     * @since 2.0.0
      */
     public function _initAction()
     {
@@ -78,6 +84,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
      *
      * @return array
      * @throws \Exception
+     * @since 2.0.0
      */
     protected function _getCollectionNames()
     {
@@ -103,6 +110,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
      * Retrieve admin session model
      *
      * @return AuthSession|Session|mixed|null
+     * @since 2.0.0
      */
     protected function _getSession()
     {

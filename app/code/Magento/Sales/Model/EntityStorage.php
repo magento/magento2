@@ -10,11 +10,13 @@ use Magento\Framework\Model\AbstractModel as FrameworkAbstractModel;
 
 /**
  * Class EntityStorage store only one type of entity per instance
+ * @since 2.0.0
  */
 class EntityStorage
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $registry = [];
 
@@ -22,6 +24,7 @@ class EntityStorage
      * Using for mapping hashes of identifying fields to entity ids
      *
      * @var array
+     * @since 2.0.0
      */
     protected $storageMapper = [];
 
@@ -38,6 +41,7 @@ class EntityStorage
      * @param string $storageName
      * @return void
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function addByIdentifyingFields(FrameworkAbstractModel $object, array $identifyingFields, $storageName)
     {
@@ -56,6 +60,7 @@ class EntityStorage
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return void
+     * @since 2.0.0
      */
     public function add($entity)
     {
@@ -67,6 +72,7 @@ class EntityStorage
      *
      * @param int $id
      * @return bool|FrameworkAbstractModel
+     * @since 2.0.0
      */
     public function get($id)
     {
@@ -82,6 +88,7 @@ class EntityStorage
      * @param array $identifyingFields
      * @param string $storageName
      * @return bool|FrameworkAbstractModel
+     * @since 2.0.0
      */
     public function getByIdentifyingFields(array $identifyingFields, $storageName)
     {
@@ -97,6 +104,7 @@ class EntityStorage
      *
      * @param int $id
      * @return void
+     * @since 2.0.0
      */
     public function remove($id)
     {
@@ -110,6 +118,7 @@ class EntityStorage
      *
      * @param int $id
      * @return bool
+     * @since 2.0.0
      */
     public function has($id)
     {
@@ -121,6 +130,7 @@ class EntityStorage
      *
      * @param array $fields
      * @return string
+     * @since 2.0.0
      */
     protected function getHash(array $fields)
     {

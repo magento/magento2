@@ -10,6 +10,7 @@ namespace Magento\Review\Model\ResourceModel\Rating\Option\Vote;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,11 +18,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store list manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
+     * @since 2.0.0
      */
     protected $_ratingCollectionF;
 
@@ -34,6 +37,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -54,6 +58,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -68,6 +73,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $reviewId
      * @return $this
+     * @since 2.0.0
      */
     public function setReviewFilter($reviewId)
     {
@@ -80,6 +86,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityPkFilter($entityId)
     {
@@ -92,6 +99,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreFilter($storeId)
     {
@@ -114,6 +122,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addRatingInfo($storeId = null)
     {
@@ -155,6 +164,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add option info to select
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addOptionInfo()
     {
@@ -169,6 +179,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add rating options
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addRatingOptions()
     {

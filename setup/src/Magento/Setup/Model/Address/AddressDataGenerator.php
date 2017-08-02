@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Address;
 
 /**
  * Generate address data for customer
+ * @since 2.2.0
  */
 class AddressDataGenerator
 {
@@ -14,6 +15,7 @@ class AddressDataGenerator
      * Generate address data
      *
      * @return array
+     * @since 2.2.0
      */
     public function generateAddress()
     {

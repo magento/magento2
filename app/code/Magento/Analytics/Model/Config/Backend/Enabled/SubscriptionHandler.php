@@ -14,6 +14,7 @@ use Magento\Framework\FlagManager;
 
 /**
  * Class for processing of activation/deactivation MBI subscription.
+ * @since 2.2.0
  */
 class SubscriptionHandler
 {
@@ -31,6 +32,7 @@ class SubscriptionHandler
      * Max value for reserve counter of attempts to subscribe.
      *
      * @var int
+     * @since 2.2.0
      */
     private $attemptsInitValue = 24;
 
@@ -38,6 +40,7 @@ class SubscriptionHandler
      * Service which allows to write values into config.
      *
      * @var WriterInterface
+     * @since 2.2.0
      */
     private $configWriter;
 
@@ -45,6 +48,7 @@ class SubscriptionHandler
      * Flag Manager.
      *
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
@@ -52,6 +56,7 @@ class SubscriptionHandler
      * Model for handling Magento BI token value.
      *
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
@@ -59,11 +64,13 @@ class SubscriptionHandler
      * Resource for managing last notification time about subscription to Magento Analytics.
      *
      * @var NotificationTime
+     * @since 2.2.0
      */
     private $notificationTime;
 
     /**
      * @var ReinitableConfigInterface
+     * @since 2.2.0
      */
     private $reinitableConfig;
 
@@ -73,6 +80,7 @@ class SubscriptionHandler
      * @param AnalyticsToken $analyticsToken
      * @param NotificationTime $notificationTime
      * @param ReinitableConfigInterface $reinitableConfig
+     * @since 2.2.0
      */
     public function __construct(
         WriterInterface $configWriter,
@@ -94,6 +102,7 @@ class SubscriptionHandler
      * Activate process of subscription handling if Analytics token is not received.
      *
      * @return bool
+     * @since 2.2.0
      */
     public function processEnabled()
     {
@@ -111,6 +120,7 @@ class SubscriptionHandler
      * Set cron schedule setting into config for activation of subscription process.
      *
      * @return bool
+     * @since 2.2.0
      */
     private function setCronSchedule()
     {
@@ -133,6 +143,7 @@ class SubscriptionHandler
      * Set flag as reserve counter of attempts subscription operation.
      *
      * @return bool
+     * @since 2.2.0
      */
     private function setAttemptsFlag()
     {
@@ -147,6 +158,7 @@ class SubscriptionHandler
      * and interrupt subscription handling if Analytics token is not received.
      *
      * @return bool
+     * @since 2.2.0
      */
     public function processDisabled()
     {
@@ -163,6 +175,7 @@ class SubscriptionHandler
      * Unset flag of attempts subscription operation.
      *
      * @return bool
+     * @since 2.2.0
      */
     private function unsetAttemptsFlag()
     {
@@ -174,6 +187,7 @@ class SubscriptionHandler
      * Unset schedule of collection data cron.
      *
      * @return bool
+     * @since 2.2.0
      */
     private function disableCollectionData()
     {

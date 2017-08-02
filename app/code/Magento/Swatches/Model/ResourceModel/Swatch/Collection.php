@@ -9,6 +9,7 @@ namespace Magento\Swatches\Model\ResourceModel\Swatch;
  * @codeCoverageIgnore
  * Swatch Resource Collection
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Standard collection initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeId)
     {
@@ -39,6 +42,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $optionsIds
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByOptionsIds(array $optionsIds)
     {

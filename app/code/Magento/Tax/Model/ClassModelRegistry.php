@@ -12,6 +12,7 @@ use Magento\Tax\Model\ClassModelFactory as TaxClassModelFactory;
 
 /**
  * Registry for the tax class models
+ * @since 2.0.0
  */
 class ClassModelRegistry
 {
@@ -19,6 +20,7 @@ class ClassModelRegistry
      * Tax class model factory
      *
      * @var TaxClassModelFactory
+     * @since 2.0.0
      */
     private $taxClassModelFactory;
 
@@ -26,6 +28,7 @@ class ClassModelRegistry
      * Tax class models
      *
      * @var TaxClassModel[]
+     * @since 2.0.0
      */
     private $taxClassRegistryById = [];
 
@@ -33,6 +36,7 @@ class ClassModelRegistry
      * Initialize dependencies
      *
      * @param TaxClassModelFactory $taxClassModelFactory
+     * @since 2.0.0
      */
     public function __construct(TaxClassModelFactory $taxClassModelFactory)
     {
@@ -44,6 +48,7 @@ class ClassModelRegistry
      *
      * @param TaxClassModel $taxClassModel
      * @return void
+     * @since 2.0.0
      */
     public function registerTaxClass(TaxClassModel $taxClassModel)
     {
@@ -56,6 +61,7 @@ class ClassModelRegistry
      * @param int $taxClassId
      * @return TaxClassModel
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function retrieve($taxClassId)
     {
@@ -77,6 +83,7 @@ class ClassModelRegistry
      *
      * @param int $taxClassId
      * @return void
+     * @since 2.0.0
      */
     public function remove($taxClassId)
     {

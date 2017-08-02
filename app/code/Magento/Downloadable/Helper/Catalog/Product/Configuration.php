@@ -12,6 +12,7 @@ namespace Magento\Downloadable\Helper\Catalog\Product;
  * Helper for fetching properties by product configurational item
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
     \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
@@ -20,12 +21,14 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      * Catalog product configuration
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
+     * @since 2.0.0
      */
     protected $productConfig = null;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -40,6 +43,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
+     * @since 2.0.0
      */
     public function getLinks(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
@@ -62,6 +66,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getLinksTitle($product)
     {
@@ -77,6 +82,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
+     * @since 2.0.0
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {

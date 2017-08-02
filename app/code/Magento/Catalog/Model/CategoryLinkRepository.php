@@ -9,21 +9,29 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\Catalog\Model\CategoryLinkRepository
+ *
+ * @since 2.0.0
+ */
 class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
 {
     /**
      * @var CategoryRepository
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
@@ -35,6 +43,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -61,6 +70,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -69,6 +79,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteByIds($categoryId, $sku)
     {

@@ -12,11 +12,13 @@ use Magento\Framework\View;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Builder extends View\Page\Builder
 {
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function afterGenerateBlock()
     {

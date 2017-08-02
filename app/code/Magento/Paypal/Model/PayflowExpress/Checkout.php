@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model\PayflowExpress;
 /**
  * Wrapper that performs Paypal Express and Checkout communication
  * Use current Paypal Express method instance
+ * @since 2.0.0
  */
 class Checkout extends \Magento\Paypal\Model\Express\Checkout
 {
@@ -15,6 +16,7 @@ class Checkout extends \Magento\Paypal\Model\Express\Checkout
      * Api Model Type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_apiType = \Magento\Paypal\Model\Api\PayflowNvp::class;
 
@@ -22,6 +24,7 @@ class Checkout extends \Magento\Paypal\Model\Express\Checkout
      * Payment method type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_methodType = \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS;
 
@@ -30,6 +33,7 @@ class Checkout extends \Magento\Paypal\Model\Express\Checkout
      *
      * @param string $methodCode
      * @return void
+     * @since 2.0.0
      */
     public function updateShippingMethod($methodCode)
     {

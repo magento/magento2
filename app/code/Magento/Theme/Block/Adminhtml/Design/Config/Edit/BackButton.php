@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  * "Back" button data provider
  *
  * @api
+ * @since 2.1.0
  */
 class BackButton implements ButtonProviderInterface
 {
@@ -20,11 +21,13 @@ class BackButton implements ButtonProviderInterface
      * Url Builder
      *
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
     /**
      * @param Context $context
+     * @since 2.1.0
      */
     public function __construct(
         Context $context
@@ -34,6 +37,7 @@ class BackButton implements ButtonProviderInterface
 
     /**
      * @inheritdoc
+     * @since 2.1.0
      */
     public function getButtonData()
     {
@@ -49,6 +53,7 @@ class BackButton implements ButtonProviderInterface
      * Get URL for back (reset) button
      *
      * @return string
+     * @since 2.1.0
      */
     public function getBackUrl()
     {

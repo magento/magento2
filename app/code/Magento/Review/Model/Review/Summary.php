@@ -11,6 +11,7 @@ namespace Magento\Review\Model\Review;
  * @api
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Summary extends \Magento\Framework\Model\AbstractModel
 {
@@ -20,6 +21,7 @@ class Summary extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Review\Model\ResourceModel\Review\Summary $resource
      * @param \Magento\Review\Model\ResourceModel\Review\Summary\Collection $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -35,6 +37,7 @@ class Summary extends \Magento\Framework\Model\AbstractModel
      * Get entity primary key value
      *
      * @return int
+     * @since 2.0.0
      */
     public function getEntityPkValue()
     {
@@ -45,6 +48,7 @@ class Summary extends \Magento\Framework\Model\AbstractModel
      * Get rating summary data
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRatingSummary()
     {
@@ -55,6 +59,7 @@ class Summary extends \Magento\Framework\Model\AbstractModel
      * Get count of reviews
      *
      * @return int
+     * @since 2.0.0
      */
     public function getReviewsCount()
     {

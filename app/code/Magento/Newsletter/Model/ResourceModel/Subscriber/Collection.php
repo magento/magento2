@@ -13,6 +13,7 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -20,6 +21,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Queue link table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_queueLinkTable;
 
@@ -27,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_storeTable;
 
@@ -34,6 +37,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Queue joined flag
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_queueJoinedFlag = false;
 
@@ -41,6 +45,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Flag that indicates apply of customers info on load
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_showCustomersInfo = false;
 
@@ -48,6 +53,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Filter for count
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_countFilterPart = [];
 
@@ -55,6 +61,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Customer Eav data
      *
      * @var   \Magento\Eav\Helper\Data
+     * @since 2.0.0
      */
     protected $_customerHelperData;
 
@@ -66,6 +73,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Eav\Helper\Data $customerHelperData
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -85,6 +93,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Configures collection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -111,6 +120,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param ModelQueue $queue
      * @return $this
+     * @since 2.0.0
      */
     public function useQueue(ModelQueue $queue)
     {
@@ -130,6 +140,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Set using of links to only unsendet letter subscribers.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function useOnlyUnsent()
     {
@@ -144,6 +155,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Adds customer info to select
      *
      * @return $this
+     * @since 2.0.0
      */
     public function showCustomerInfo()
     {
@@ -161,6 +173,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add type field expression to select
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addSubscriberTypeField()
     {
@@ -172,6 +185,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Sets flag for customer info loading on load
      *
      * @return $this
+     * @since 2.0.0
      */
     public function showStoreInfo()
     {
@@ -188,6 +202,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Returns select count sql
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -203,6 +218,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Load only subscribed customers
      *
      * @return $this
+     * @since 2.0.0
      */
     public function useOnlyCustomers()
     {
@@ -215,6 +231,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Show only with subscribed status
      *
      * @return $this
+     * @since 2.0.0
      */
     public function useOnlySubscribed()
     {
@@ -231,6 +248,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int[]|int $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeIds)
     {
@@ -243,6 +261,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getQueueJoinedFlag()
     {

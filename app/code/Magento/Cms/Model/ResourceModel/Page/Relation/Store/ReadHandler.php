@@ -11,22 +11,26 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
+ * @since 2.1.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
     /**
      * @var Page
+     * @since 2.1.0
      */
     protected $resourcePage;
 
     /**
      * @param MetadataPool $metadataPool
      * @param Page $resourcePage
+     * @since 2.1.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -41,6 +45,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function execute($entity, $arguments = [])
     {

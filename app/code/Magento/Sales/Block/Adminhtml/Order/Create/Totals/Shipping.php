@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
@@ -19,6 +20,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Template
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/create/totals/shipping.phtml';
 
@@ -26,6 +28,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -38,6 +41,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,6 +61,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Check if we need display shipping include and exclude tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayBoth()
     {
@@ -67,6 +72,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Check if we need display shipping include tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayIncludeTax()
     {
@@ -77,6 +83,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Get shipping amount include tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingIncludeTax()
     {
@@ -87,6 +94,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Get shipping amount exclude tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingExcludeTax()
     {
@@ -97,6 +105,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Get label for shipping include tax
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getIncludeTaxLabel()
     {
@@ -110,6 +119,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * Get label for shipping exclude tax
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getExcludeTaxLabel()
     {

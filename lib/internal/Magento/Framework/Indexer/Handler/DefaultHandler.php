@@ -8,6 +8,11 @@ namespace Magento\Framework\Indexer\Handler;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Indexer\HandlerInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Handler\DefaultHandler
+ *
+ * @since 2.0.0
+ */
 class DefaultHandler implements HandlerInterface
 {
     /**
@@ -15,6 +20,7 @@ class DefaultHandler implements HandlerInterface
      * @param string $alias
      * @param array $fieldInfo
      * @return void
+     * @since 2.0.0
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {

@@ -12,6 +12,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * Layer price filter
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
@@ -19,6 +20,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Resource instance
      *
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     * @since 2.0.0
      */
     protected $_resource;
 
@@ -26,6 +28,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -33,6 +36,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Catalog layer filter price algorithm
      *
      * @var \Magento\Framework\Search\Dynamic\Algorithm
+     * @since 2.0.0
      */
     protected $_priceAlgorithm;
 
@@ -40,25 +44,32 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var Dynamic\AlgorithmFactory
+     * @since 2.0.0
      */
     private $algorithmFactory;
 
-    /** @var DataProvider\Price */
+    /**
+     * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
+     * @since 2.0.0
+     */
     private $dataProvider;
 
     /**
@@ -74,6 +85,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param DataProvider\PriceFactory $dataProviderFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -103,6 +115,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -144,6 +157,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Retrieve active customer group id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCustomerGroupId()
     {
@@ -160,6 +174,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param int $customerGroupId
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerGroupId($customerGroupId)
     {
@@ -170,6 +185,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Retrieve active currency rate for filter
      *
      * @return float
+     * @since 2.0.0
      */
     public function getCurrencyRate()
     {
@@ -190,6 +206,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrencyRate($rate)
     {
@@ -200,6 +217,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get filter value for reset current filter state
      *
      * @return null|string
+     * @since 2.0.0
      */
     public function getResetValue()
     {
@@ -210,6 +228,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get 'clear price' link text
      *
      * @return \Magento\Framework\Phrase|bool
+     * @since 2.0.0
      */
     public function getClearLinkText()
     {
@@ -227,6 +246,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param float|string $fromPrice
      * @param float|string $toPrice
      * @return float|\Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
@@ -249,6 +269,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get additional request param data
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getAdditionalRequestData()
     {
@@ -269,6 +290,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Get data for build price filter items
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getItemsData()
     {
@@ -281,6 +303,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Apply price range filter to collection
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _applyPriceRange()
     {

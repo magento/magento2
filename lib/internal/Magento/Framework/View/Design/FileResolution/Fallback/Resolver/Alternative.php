@@ -12,11 +12,13 @@ use Magento\Framework\View\Design\FileResolution\Fallback;
 
 /**
  * Resolver for view files with support of alternative extensions map
+ * @since 2.0.0
  */
 class Alternative extends Simple
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $alternativeExtensions;
 
@@ -26,6 +28,7 @@ class Alternative extends Simple
      * @param ReadFactory $readFactory
      * @param \Magento\Framework\View\Design\Fallback\RulePool $rulePool
      * @param array $alternativeExtensions
+     * @since 2.0.0
      */
     public function __construct(
         ReadFactory $readFactory,
@@ -46,6 +49,7 @@ class Alternative extends Simple
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function resolveFile(RuleInterface $fallbackRule, $file, array $params = [])
     {

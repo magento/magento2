@@ -10,16 +10,19 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
+ * @since 2.0.0
  */
 class HtmlTransactionIdObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Paypal\Helper\Data
+     * @since 2.0.0
      */
     private $paypalData;
 
     /**
      * @param \Magento\Paypal\Helper\Data $paypalData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Helper\Data $paypalData
@@ -32,6 +35,7 @@ class HtmlTransactionIdObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

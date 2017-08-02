@@ -13,11 +13,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command for checking cache status
  *
  * @api
+ * @since 2.0.0
  */
 class CacheStatusCommand extends AbstractCacheCommand
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -28,6 +30,7 @@ class CacheStatusCommand extends AbstractCacheCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

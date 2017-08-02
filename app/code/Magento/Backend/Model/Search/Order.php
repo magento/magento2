@@ -10,6 +10,7 @@ namespace Magento\Backend\Model\Search;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Order extends \Magento\Framework\DataObject
 {
@@ -17,17 +18,20 @@ class Order extends \Magento\Framework\DataObject
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
@@ -41,6 +45,7 @@ class Order extends \Magento\Framework\DataObject
      * Load search results
      *
      * @return $this
+     * @since 2.0.0
      */
     public function load()
     {

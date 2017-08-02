@@ -9,6 +9,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
  * Newsletter template preview block
  *
  * @api
+ * @since 2.0.0
  */
 class Preview extends \Magento\Backend\Block\Widget
 {
@@ -16,16 +17,19 @@ class Preview extends \Magento\Backend\Block\Widget
      * Name for profiler
      *
      * @var string
+     * @since 2.0.0
      */
     protected $profilerName = "newsletter_template_proccessing";
 
     /**
      * @var \Magento\Newsletter\Model\TemplateFactory
+     * @since 2.0.0
      */
     protected $_templateFactory;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @since 2.0.0
      */
     protected $_subscriberFactory;
 
@@ -34,6 +38,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,6 +55,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Get html code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -95,6 +101,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Return template preview data
      *
      * @return array
+     * @since 2.1.0
      */
     private function getPreviewData()
     {
@@ -121,6 +128,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Get Store Id from request or default
      *
      * @return int|null
+     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -144,6 +152,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * @param \Magento\Newsletter\Model\Template $template
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     protected function loadTemplate(\Magento\Newsletter\Model\Template $template, $id)
     {

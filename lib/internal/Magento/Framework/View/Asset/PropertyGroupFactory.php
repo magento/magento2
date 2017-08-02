@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * Property group factory
+ * @since 2.0.0
  */
 class PropertyGroupFactory
 {
@@ -14,6 +15,7 @@ class PropertyGroupFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -21,6 +23,7 @@ class PropertyGroupFactory
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -32,6 +35,7 @@ class PropertyGroupFactory
      *
      * @param array $data
      * @return Collection
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

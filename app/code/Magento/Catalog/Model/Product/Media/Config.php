@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Config implements ConfigInterface
 {
@@ -24,16 +25,19 @@ class Config implements ConfigInterface
      * Store manager
      *
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var Attribute
+     * @since 2.1.0
      */
     private $attributeHelper;
 
     /**
      * @param StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(StoreManagerInterface $storeManager)
     {
@@ -45,6 +49,7 @@ class Config implements ConfigInterface
      * relatively to media folder
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseMediaPathAddition()
     {
@@ -56,6 +61,7 @@ class Config implements ConfigInterface
      * relatively to media folder
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseMediaUrlAddition()
     {
@@ -64,6 +70,7 @@ class Config implements ConfigInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBaseMediaPath()
     {
@@ -72,6 +79,7 @@ class Config implements ConfigInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBaseMediaUrl()
     {
@@ -83,6 +91,7 @@ class Config implements ConfigInterface
      * relatively to media folder
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseTmpMediaPath()
     {
@@ -91,6 +100,7 @@ class Config implements ConfigInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBaseTmpMediaUrl()
     {
@@ -102,6 +112,7 @@ class Config implements ConfigInterface
     /**
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getMediaUrl($file)
     {
@@ -111,6 +122,7 @@ class Config implements ConfigInterface
     /**
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getMediaPath($file)
     {
@@ -120,6 +132,7 @@ class Config implements ConfigInterface
     /**
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getTmpMediaUrl($file)
     {
@@ -132,6 +145,7 @@ class Config implements ConfigInterface
      *
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getTmpMediaShortUrl($file)
     {
@@ -143,6 +157,7 @@ class Config implements ConfigInterface
      *
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getMediaShortUrl($file)
     {
@@ -152,6 +167,7 @@ class Config implements ConfigInterface
     /**
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getTmpMediaPath($file)
     {
@@ -161,6 +177,7 @@ class Config implements ConfigInterface
     /**
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     protected function _prepareFile($file)
     {
@@ -169,6 +186,7 @@ class Config implements ConfigInterface
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getMediaAttributeCodes()
     {
@@ -177,6 +195,7 @@ class Config implements ConfigInterface
 
     /**
      * @return Attribute
+     * @since 2.1.0
      */
     private function getAttributeHelper()
     {

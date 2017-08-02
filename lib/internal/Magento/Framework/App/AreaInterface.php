@@ -8,6 +8,7 @@ namespace Magento\Framework\App;
 
 /**
  * Interface AreaInterface
+ * @since 2.0.0
  */
 interface AreaInterface
 {
@@ -20,6 +21,7 @@ interface AreaInterface
      *
      * @param string $partName
      * @return $this
+     * @since 2.0.0
      */
     public function load($partName = null);
 }

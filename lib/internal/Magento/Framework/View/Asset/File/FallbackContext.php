@@ -12,21 +12,25 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * An advanced context that contains information necessary for view files fallback system
  *
  * @api
+ * @since 2.0.0
  */
 class FallbackContext extends Context
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $area;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $theme;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $locale;
 
@@ -35,6 +39,7 @@ class FallbackContext extends Context
      * @param string $areaType
      * @param string $themePath
      * @param string $localeCode
+     * @since 2.0.0
      */
     public function __construct($baseUrl, $areaType, $themePath, $localeCode)
     {
@@ -48,6 +53,7 @@ class FallbackContext extends Context
      * Get area code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAreaCode()
     {
@@ -58,6 +64,7 @@ class FallbackContext extends Context
      * Get theme path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getThemePath()
     {
@@ -68,6 +75,7 @@ class FallbackContext extends Context
      * Get locale code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLocale()
     {
@@ -78,6 +86,7 @@ class FallbackContext extends Context
      * Generate path based on the context parameters
      *
      * @return string
+     * @since 2.0.0
      */
     private function generatePath()
     {
@@ -90,6 +99,7 @@ class FallbackContext extends Context
      * Returns path to Require.js config object depending on HTTPS or HTTP protocol being used
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConfigPath()
     {

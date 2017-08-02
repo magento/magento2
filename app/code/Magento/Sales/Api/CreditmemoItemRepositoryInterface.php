@@ -13,6 +13,7 @@ namespace Magento\Sales\Api;
  * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
  * a merchant creates a credit memo.
  * @api
+ * @since 2.0.0
  */
 interface CreditmemoItemRepositoryInterface
 {
@@ -21,6 +22,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param int $id The credit memo item ID.
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo item interface.
+     * @since 2.0.0
      */
     public function get($id);
 
@@ -29,6 +31,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoItemSearchResultInterface Credit memo item search results interface.
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -37,6 +40,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 
@@ -45,6 +49,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo interface.
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 }

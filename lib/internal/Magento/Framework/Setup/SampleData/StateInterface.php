@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\SampleData;
 
 /**
  * Interface for SampleData modules installation
+ * @since 2.0.0
  */
 interface StateInterface
 {
@@ -20,6 +21,7 @@ interface StateInterface
      * Set error flag to Sample Data state
      *
      * @return void
+     * @since 2.0.0
      */
     public function setError();
 
@@ -27,6 +29,7 @@ interface StateInterface
      * Check if Sample Data state has error
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasError();
 
@@ -34,6 +37,7 @@ interface StateInterface
      * Set installed flag to Sample Data state
      *
      * @return void
+     * @since 2.0.0
      */
     public function setInstalled();
 
@@ -41,6 +45,7 @@ interface StateInterface
      * Check if Sample Data is installed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isInstalled();
 
@@ -48,6 +53,7 @@ interface StateInterface
      * Clear Sample Data state
      *
      * @return void
+     * @since 2.0.0
      */
     public function clearState();
 }

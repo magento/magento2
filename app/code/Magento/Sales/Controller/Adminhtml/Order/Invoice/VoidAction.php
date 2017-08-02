@@ -6,12 +6,18 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\VoidAction
+ *
+ * @since 2.2.0
+ */
 class VoidAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
      * Void invoice action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.2.0
      */
     public function execute()
     {

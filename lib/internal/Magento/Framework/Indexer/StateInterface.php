@@ -7,6 +7,7 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Retrieve status of the Indexer
+ * @since 2.0.0
  */
 interface StateInterface
 {
@@ -21,6 +22,7 @@ interface StateInterface
      * Return indexer id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIndexerId();
 
@@ -29,6 +31,7 @@ interface StateInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setIndexerId($value);
 
@@ -36,6 +39,7 @@ interface StateInterface
      * Return status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStatus();
 
@@ -43,6 +47,7 @@ interface StateInterface
      * Return updated
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdated();
 
@@ -51,6 +56,7 @@ interface StateInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdated($value);
 
@@ -59,6 +65,7 @@ interface StateInterface
      *
      * @param string $indexerId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByIndexer($indexerId);
 
@@ -67,6 +74,7 @@ interface StateInterface
      *
      * @param string $status
      * @return $this
+     * @since 2.0.0
      */
     public function setStatus($status);
 }

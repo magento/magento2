@@ -6,6 +6,11 @@
  */
 namespace Magento\Framework\ObjectManager\Profiler\Code\Generator;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger
+ *
+ * @since 2.0.0
+ */
 class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -16,6 +21,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * @param string $modelClassName
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultResultClassName($modelClassName)
     {
@@ -26,6 +32,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of properties for class generator
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getClassProperties()
     {
@@ -57,6 +64,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      * Get default constructor definition for generated class
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -75,6 +83,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      * Returns list of methods for class generator
      *
      * @return mixed
+     * @since 2.0.0
      */
     protected function _getClassMethods()
     {
@@ -133,6 +142,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      * Retrieve body of the _invoke method
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getInvokeMethodBody()
     {
@@ -149,6 +159,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param \ReflectionMethod $method
      * @return array
+     * @since 2.0.0
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
@@ -180,6 +191,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      * Generate resulting class source code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _generateCode()
     {
@@ -196,6 +208,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _validateData()
     {

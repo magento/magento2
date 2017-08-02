@@ -9,6 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractFlatState
 {
@@ -24,21 +25,27 @@ abstract class AbstractFlatState
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $isAvailable;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
+     */
     protected $indexerRegistry;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param bool $isAvailable
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -54,6 +61,7 @@ abstract class AbstractFlatState
      * Check if Flat Index is enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isFlatEnabled()
     {
@@ -64,6 +72,7 @@ abstract class AbstractFlatState
      * Check if Flat Index is available for use
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable()
     {

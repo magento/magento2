@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Validates that scopes data contain correct values
+ * @since 2.2.0
  */
 class Validator implements ValidatorInterface
 {
@@ -17,6 +18,7 @@ class Validator implements ValidatorInterface
      * Checks that scopes data contain at least one not admin website, group and store
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function validate(array $data)
     {

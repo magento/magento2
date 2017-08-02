@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class for the handling of a new data collection for MBI.
+ * @since 2.2.0
  */
 class ExportDataHandler implements ExportDataHandlerInterface
 {
@@ -21,6 +22,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Subdirectory path for all temporary files.
      *
      * @var string
+     * @since 2.2.0
      */
     private $subdirectoryPath = 'analytics/';
 
@@ -28,16 +30,19 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Filename of archive with collected data.
      *
      * @var string
+     * @since 2.2.0
      */
     private $archiveName = 'data.tgz';
 
     /**
      * @var Filesystem
+     * @since 2.2.0
      */
     private $filesystem;
 
     /**
      * @var Archive
+     * @since 2.2.0
      */
     private $archive;
 
@@ -45,6 +50,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Resource for write data of reports into separate files.
      *
      * @var ReportWriterInterface
+     * @since 2.2.0
      */
     private $reportWriter;
 
@@ -52,6 +58,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Resource for encrypting data.
      *
      * @var Cryptographer
+     * @since 2.2.0
      */
     private $cryptographer;
 
@@ -59,6 +66,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Resource for registration a new file.
      *
      * @var FileRecorder
+     * @since 2.2.0
      */
     private $fileRecorder;
 
@@ -68,6 +76,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * @param ReportWriterInterface $reportWriter
      * @param Cryptographer $cryptographer
      * @param FileRecorder $fileRecorder
+     * @since 2.2.0
      */
     public function __construct(
         Filesystem $filesystem,
@@ -85,6 +94,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function prepareExportData()
     {
@@ -117,6 +127,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Return relative path to a directory for temporary files with reports data.
      *
      * @return string
+     * @since 2.2.0
      */
     private function getTmpFilesDirRelativePath()
     {
@@ -127,6 +138,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * Return relative path to a directory for an archive.
      *
      * @return string
+     * @since 2.2.0
      */
     private function getArchiveRelativePath()
     {
@@ -139,6 +151,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * @param WriteInterface $directory
      * @param string $path
      * @return string
+     * @since 2.2.0
      */
     private function prepareDirectory(WriteInterface $directory, $path)
     {
@@ -153,6 +166,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * @param WriteInterface $directory
      * @param string $path
      * @return string
+     * @since 2.2.0
      */
     private function prepareFileDirectory(WriteInterface $directory, $path)
     {
@@ -170,6 +184,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * @param string $source
      * @param string $destination
      * @return bool
+     * @since 2.2.0
      */
     private function pack($source, $destination)
     {
@@ -191,6 +206,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
      * @param string $path
      * @return string
      * @throws LocalizedException If source is not exist.
+     * @since 2.2.0
      */
     private function validateSource(WriteInterface $directory, $path)
     {

@@ -14,23 +14,32 @@ use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Form extends \Magento\UrlRewrite\Block\Edit\Form
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
+     * @since 2.0.0
      */
     protected $_categoryFactory;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $categoryUrlPathGenerator;
 
     /**
@@ -48,6 +57,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -84,6 +94,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      *
      * @param \Magento\Framework\Data\Form $form
      * @return $this
+     * @since 2.0.0
      */
     protected function _formPostInit($form)
     {
@@ -141,6 +152,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * @param \Magento\Catalog\Model\Product|null $product
      * @param \Magento\Catalog\Model\Category|null $category
      * @return string
+     * @since 2.0.0
      */
     protected function getRequestPath($product = null, $category = null)
     {
@@ -153,6 +165,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * @param \Magento\Catalog\Model\Product|null $product
      * @param \Magento\Catalog\Model\Category|null $category
      * @return string
+     * @since 2.0.0
      */
     protected function getTargetPath($product = null, $category = null)
     {
@@ -166,6 +179,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getEntityStores()
     {
@@ -208,6 +222,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * Get product model instance
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected function _getProduct()
     {
@@ -221,6 +236,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * Get category model instance
      *
      * @return \Magento\Catalog\Model\Category
+     * @since 2.0.0
      */
     protected function _getCategory()
     {

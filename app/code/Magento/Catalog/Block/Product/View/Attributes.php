@@ -17,11 +17,13 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Attributes extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $_product = null;
 
@@ -29,11 +31,13 @@ class Attributes extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -42,6 +46,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,6 +61,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -72,6 +78,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
      * @param array $excludeAttr
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getAdditionalData(array $excludeAttr = [])
     {

@@ -8,36 +8,43 @@ namespace Magento\SalesRule\Model\Service;
 /**
  * Coupon management service class
  *
+ * @since 2.0.0
  */
 class CouponManagementService implements \Magento\SalesRule\Api\CouponManagementInterface
 {
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
+     * @since 2.0.0
      */
     protected $couponFactory;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.0.0
      */
     protected $ruleFactory;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Coupon\Massgenerator
+     * @since 2.0.0
      */
     protected $couponGenerator;
 
     /**
      * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
+     * @since 2.0.0
      */
     protected $resourceModel;
 
     /**
      * var \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory
+     * @since 2.0.0
      */
     protected $couponMassDeleteResultFactory;
 
@@ -48,6 +55,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @param \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator
      * @param \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
      * @param \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
@@ -72,6 +80,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @return string[]
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function generate(\Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec)
     {
@@ -113,6 +122,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      *
      * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec
      * @return array
+     * @since 2.0.0
      */
     protected function convertCouponSpec(\Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec)
     {
@@ -144,6 +154,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @param bool $ignoreInvalidCoupons
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteByIds(array $ids, $ignoreInvalidCoupons = true)
     {
@@ -157,6 +168,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @param bool $ignoreInvalidCoupons
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteByCodes(array $codes, $ignoreInvalidCoupons = true)
     {
@@ -171,6 +183,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * @param bool $ignoreInvalid
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function massDelete($fieldName, array $fieldValues, $ignoreInvalid)
     {

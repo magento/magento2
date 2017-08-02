@@ -10,16 +10,19 @@ use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 
 /**
  * Class PageLayout
+ * @since 2.0.0
  */
 class PageLayout implements OptionSourceInterface
 {
     /**
      * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
+     * @since 2.0.0
      */
     protected $pageLayoutBuilder;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options;
 
@@ -27,6 +30,7 @@ class PageLayout implements OptionSourceInterface
      * Constructor
      *
      * @param BuilderInterface $pageLayoutBuilder
+     * @since 2.0.0
      */
     public function __construct(BuilderInterface $pageLayoutBuilder)
     {
@@ -37,6 +41,7 @@ class PageLayout implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

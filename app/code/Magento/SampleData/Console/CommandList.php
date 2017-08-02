@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class CommandList
+ * @since 2.0.0
  */
 class CommandList implements \Magento\Framework\Console\CommandListInterface
 {
@@ -16,11 +17,13 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -31,6 +34,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
      * Gets list of command classes
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function getCommandsClasses()
     {
@@ -42,6 +46,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCommands()
     {

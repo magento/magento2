@@ -10,13 +10,22 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rule as TaxRuleModel;
 use Magento\Tax\Model\Calculation\RuleFactory as TaxRuleModelFactory;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\TaxRuleRegistry
+ *
+ * @since 2.0.0
+ */
 class TaxRuleRegistry
 {
-    /** @var  TaxRuleModelFactory */
+    /**
+     * @var \Magento\Tax\Model\Calculation\RuleFactory
+     * @since 2.0.0
+     */
     private $taxRuleModelFactory;
 
     /**
      * @var array taxRuleId => TaxRuleModel
+     * @since 2.0.0
      */
     private $registry = [];
 
@@ -24,6 +33,7 @@ class TaxRuleRegistry
      * Constructor
      *
      * @param TaxRuleModelFactory $taxRuleModelFactory
+     * @since 2.0.0
      */
     public function __construct(
         TaxRuleModelFactory $taxRuleModelFactory
@@ -36,6 +46,7 @@ class TaxRuleRegistry
      *
      * @param TaxRuleModel $taxRuleModel
      * @return void
+     * @since 2.0.0
      */
     public function registerTaxRule(TaxRuleModel $taxRuleModel)
     {
@@ -48,6 +59,7 @@ class TaxRuleRegistry
      * @param int $taxRuleId
      * @return TaxRuleModel
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function retrieveTaxRule($taxRuleId)
     {
@@ -68,6 +80,7 @@ class TaxRuleRegistry
      *
      * @param int $taxRuleId
      * @return void
+     * @since 2.0.0
      */
     public function removeTaxRule($taxRuleId)
     {

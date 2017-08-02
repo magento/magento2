@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
  * Interface for custom attribute value.
  *
  * @api
+ * @since 2.0.0
  */
 interface AttributeInterface
 {
@@ -24,6 +25,7 @@ interface AttributeInterface
      * Get attribute code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeCode();
 
@@ -32,6 +34,7 @@ interface AttributeInterface
      *
      * @param string $attributeCode
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode);
 
@@ -39,6 +42,7 @@ interface AttributeInterface
      * Get attribute value
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -47,6 +51,7 @@ interface AttributeInterface
      *
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value);
 }

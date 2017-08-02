@@ -12,6 +12,7 @@ use Magento\CatalogInventory\Helper\Stock as StockHelper;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -19,31 +20,37 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Items quantity will be capped to this value
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_maxItemCount = 4;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $_productVisibility;
 
     /**
      * @var StockHelper
+     * @since 2.0.0
      */
     protected $stockHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkFactory
+     * @since 2.0.0
      */
     protected $_productLinkFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Item\RelatedProducts
+     * @since 2.0.0
      */
     protected $_itemRelationsList;
 
@@ -58,6 +65,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -84,6 +92,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get crosssell items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -134,6 +143,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @return int
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItemCount()
     {
@@ -144,6 +154,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get ids of products that are in cart
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getCartProductIds()
     {
@@ -166,6 +177,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @return int
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _getLastAddedProductId()
     {
@@ -177,6 +189,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @return \Magento\Quote\Model\Quote
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -187,6 +200,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get crosssell products collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
+     * @since 2.0.0
      */
     protected function _getCollection()
     {

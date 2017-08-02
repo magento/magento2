@@ -7,6 +7,11 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\UpdateElementTypesObserver
+ *
+ * @since 2.0.0
+ */
 class UpdateElementTypesObserver implements ObserverInterface
 {
     /**
@@ -14,6 +19,7 @@ class UpdateElementTypesObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

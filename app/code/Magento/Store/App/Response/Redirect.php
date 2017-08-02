@@ -9,40 +9,52 @@ namespace Magento\Store\App\Response;
 
 use Magento\Store\Api\StoreResolverInterface;
 
+/**
+ * Class \Magento\Store\App\Response\Redirect
+ *
+ * @since 2.0.0
+ */
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Encryption\UrlCoder
+     * @since 2.0.0
      */
     protected $_urlCoder;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
+     * @since 2.0.0
      */
     protected $_sidResolver;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_canUseSessionIdInParam;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_urlBuilder;
 
@@ -56,6 +68,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param bool $canUseSessionIdInParam
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -77,6 +90,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _getUrl()
     {
@@ -106,6 +120,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * Identify referer url via all accepted methods (HTTP_REFERER, regular or base64-encoded request param)
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRefererUrl()
     {
@@ -117,6 +132,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param   string $defaultUrl
      * @return  \Magento\Framework\App\ActionInterface
+     * @since 2.0.0
      */
     public function getRedirectUrl($defaultUrl = null)
     {
@@ -132,6 +148,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param string $defaultUrl
      * @return  string
+     * @since 2.0.0
      */
     public function error($defaultUrl)
     {
@@ -150,6 +167,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param string $defaultUrl
      * @return string
+     * @since 2.0.0
      */
     public function success($defaultUrl)
     {
@@ -168,6 +186,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param array $arguments
      * @return array
+     * @since 2.0.0
      */
     public function updatePathParams(array $arguments)
     {
@@ -191,6 +210,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param string $path
      * @param array $arguments
      * @return void
+     * @since 2.0.0
      */
     public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = [])
     {
@@ -203,6 +223,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param string $url
      * @return bool
+     * @since 2.0.0
      */
     protected function _isUrlInternal($url)
     {
@@ -220,6 +241,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param string $refererUrl
      * @return string
+     * @since 2.0.0
      */
     protected function normalizeRefererUrl($refererUrl)
     {
@@ -252,6 +274,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      *
      * @param array $refererQuery
      * @return array
+     * @since 2.0.0
      */
     protected function normalizeRefererQueryParts($refererQuery)
     {

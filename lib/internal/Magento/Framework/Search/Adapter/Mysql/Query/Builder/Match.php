@@ -16,6 +16,7 @@ use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Match implements QueryInterface
 {
@@ -25,26 +26,31 @@ class Match implements QueryInterface
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $replaceSymbols = [];
 
     /**
      * @var ResolverInterface
+     * @since 2.0.0
      */
     private $resolver;
 
     /**
      * @var Fulltext
+     * @since 2.0.0
      */
     private $fulltextHelper;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $fulltextSearchMode;
 
     /**
      * @var PreprocessorInterface[]
+     * @since 2.1.0
      */
     protected $preprocessors;
 
@@ -53,6 +59,7 @@ class Match implements QueryInterface
      * @param Fulltext $fulltextHelper
      * @param string $fulltextSearchMode
      * @param PreprocessorInterface[] $preprocessors
+     * @since 2.0.0
      */
     public function __construct(
         ResolverInterface $resolver,
@@ -69,6 +76,7 @@ class Match implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function build(
         ScoreBuilder $scoreBuilder,
@@ -115,6 +123,7 @@ class Match implements QueryInterface
      * @param string $queryValue
      * @param string $conditionType
      * @return string
+     * @since 2.0.0
      */
     protected function prepareQuery($queryValue, $conditionType)
     {

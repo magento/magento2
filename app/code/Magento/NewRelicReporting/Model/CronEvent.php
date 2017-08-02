@@ -7,10 +7,16 @@ namespace Magento\NewRelicReporting\Model;
 
 use \Magento\Framework\HTTP\ZendClient;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\CronEvent
+ *
+ * @since 2.0.0
+ */
 class CronEvent
 {
     /**
      * @var \Magento\Framework\HTTP\ZendClient
+     * @since 2.0.0
      */
     protected $request;
 
@@ -18,6 +24,7 @@ class CronEvent
      * URL for Insights API, generated via method getEventsUrl
      *
      * @var string
+     * @since 2.0.0
      */
     protected $eventsUrl = '';
 
@@ -25,21 +32,25 @@ class CronEvent
      * Parameters to be sent to New Relic for a job run
      *
      * @var array
+     * @since 2.0.0
      */
     protected $customParameters = [];
 
     /**
      * @var \Magento\NewRelicReporting\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonEncoder;
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @since 2.0.0
      */
     protected $clientFactory;
 
@@ -49,6 +60,7 @@ class CronEvent
      * @param \Magento\NewRelicReporting\Model\Config $config
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\NewRelicReporting\Model\Config $config,
@@ -65,6 +77,7 @@ class CronEvent
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function getEventsUrl()
     {
@@ -87,6 +100,7 @@ class CronEvent
      * Returns HTTP request to events url
      *
      * @return \Magento\Framework\HTTP\ZendClient
+     * @since 2.0.0
      */
     protected function getRequest()
     {
@@ -110,6 +124,7 @@ class CronEvent
      * Returns all set custom parameters as JSON string
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getJsonForResponse()
     {
@@ -136,6 +151,7 @@ class CronEvent
      *
      * @param array $data
      * @return \Magento\NewRelicReporting\Model\CronEvent $this
+     * @since 2.0.0
      */
     public function addData(array $data)
     {
@@ -147,6 +163,7 @@ class CronEvent
      * Instantiates request if necessary and sends off with collected data
      *
      * @return bool
+     * @since 2.0.0
      */
     public function sendRequest()
     {

@@ -9,11 +9,13 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
  * Uploader block for Wysiwyg Images
  *
  * @api
+ * @since 2.0.0
  */
 class Uploader extends \Magento\Backend\Block\Media\Uploader
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Images\Storage
+     * @since 2.0.0
      */
     protected $_imagesStorage;
 
@@ -22,6 +24,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -35,6 +38,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +64,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      * Return current media type based on request or data
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getMediaType()
     {

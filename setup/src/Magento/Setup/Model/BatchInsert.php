@@ -8,36 +8,43 @@ namespace Magento\Setup\Model;
 
 /**
  * Encapsulate logic that performs batch insert into table
+ * @since 2.2.0
  */
 class BatchInsert
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private $dbConnection;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $insertIntoTable;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $batchSize;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $dataStorage;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $currentStorageIndex = 0;
 
@@ -45,6 +52,7 @@ class BatchInsert
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param string $insertIntoTable
      * @param int $batchSize
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -63,6 +71,7 @@ class BatchInsert
      *
      * @param array $dataToInsert
      * @return void
+     * @since 2.2.0
      */
     public function insert(array $dataToInsert)
     {
@@ -78,6 +87,7 @@ class BatchInsert
      * Insert all data form $dataStorage to DB and clear $dataStorage
      *
      * @return void
+     * @since 2.2.0
      */
     public function flush()
     {
@@ -104,6 +114,7 @@ class BatchInsert
      * Method is required to eliminate multiple calls to ResourceConnection class
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.2.0
      */
     private function getDbConnection()
     {

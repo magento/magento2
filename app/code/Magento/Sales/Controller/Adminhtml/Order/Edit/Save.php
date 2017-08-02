@@ -6,6 +6,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create\Save
 {
     /**

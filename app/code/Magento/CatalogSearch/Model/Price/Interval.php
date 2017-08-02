@@ -7,15 +7,22 @@ namespace Magento\CatalogSearch\Model\Price;
 
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Price\Interval
+ *
+ * @since 2.0.0
+ */
 class Interval implements IntervalInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource)
     {
@@ -24,6 +31,7 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
@@ -33,6 +41,7 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadPrevious($data, $index, $lower = null)
     {
@@ -42,6 +51,7 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
@@ -52,6 +62,7 @@ class Interval implements IntervalInterface
     /**
      * @param array $prices
      * @return array
+     * @since 2.0.0
      */
     private function arrayValuesToFloat($prices)
     {

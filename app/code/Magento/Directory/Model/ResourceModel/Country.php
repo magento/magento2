@@ -9,6 +9,7 @@ namespace Magento\Directory\Model\ResourceModel;
  * Country Resource Model
  *
  * @api
+ * @since 2.0.0
  */
 class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $code
      * @return \Magento\Directory\Model\ResourceModel\Country
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function loadByCode(\Magento\Directory\Model\Country $country, $code)
     {

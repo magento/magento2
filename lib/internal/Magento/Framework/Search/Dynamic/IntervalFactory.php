@@ -11,16 +11,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class IntervalFactory
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     private $interval;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -30,6 +33,7 @@ class IntervalFactory
      * @param string $configPath
      * @param string[] $intervals
      * @param string $scope
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -52,6 +56,7 @@ class IntervalFactory
      *
      * @param array $data
      * @return IntervalInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

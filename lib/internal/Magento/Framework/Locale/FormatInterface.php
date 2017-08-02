@@ -7,6 +7,7 @@ namespace Magento\Framework\Locale;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface FormatInterface
 {
@@ -26,6 +27,7 @@ interface FormatInterface
      *
      * @param string|float|int $value
      * @return float|null
+     * @since 2.0.0
      */
     public function getNumber($value);
 
@@ -34,6 +36,7 @@ interface FormatInterface
      * formatCurrency in js/varien/js.js
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPriceFormat();
 }

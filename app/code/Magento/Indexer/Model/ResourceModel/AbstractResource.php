@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
  * Abstract resource model. Can be used as base for indexer resources
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,6 +20,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * Constructor
      *
      * @var \Magento\Framework\Indexer\Table\StrategyInterface
+     * @since 2.0.0
      */
     protected $tableStrategy;
 
@@ -28,6 +30,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -42,6 +45,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * Reindex all
      *
      * @return $this
+     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -53,6 +57,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * Get DB adapter for index data processing
      *
      * @return AdapterInterface
+     * @since 2.0.0
      */
     protected function _getIndexAdapter()
     {
@@ -64,6 +69,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param string $table
      * @return string
+     * @since 2.0.0
      */
     public function getIdxTable($table = null)
     {
@@ -77,6 +83,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * Synchronize data between index storage and original storage
      *
      * @return $this
+     * @since 2.0.0
      */
     public function syncData()
     {
@@ -102,6 +109,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param string $destTable
      * @param bool $readToIndex data migration direction (true - read=>index, false - index=>read)
      * @return $this
+     * @since 2.0.0
      */
     public function insertFromTable($sourceTable, $destTable, $readToIndex = true)
     {
@@ -127,6 +135,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param array $columns
      * @param bool $readToIndex data migration direction (true - read=>index, false - index=>read)
      * @return $this
+     * @since 2.0.0
      */
     public function insertFromSelect($select, $destTable, array $columns, $readToIndex = true)
     {
@@ -166,6 +175,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * Clean up temporary index table
      *
      * @return void
+     * @since 2.0.0
      */
     public function clearTemporaryIndexTable()
     {

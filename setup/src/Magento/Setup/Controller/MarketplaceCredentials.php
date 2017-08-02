@@ -8,10 +8,16 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\MarketplaceCredentials
+ *
+ * @since 2.1.0
+ */
 class MarketplaceCredentials extends AbstractActionController
 {
     /**
      * @return ViewModel
+     * @since 2.1.0
      */
     public function indexAction()
     {

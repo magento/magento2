@@ -9,11 +9,13 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer attribute filter
+ * @since 2.0.0
  */
 class Attribute extends AbstractFilter
 {
     /**
      * @var \Magento\Framework\Filter\StripTags
+     * @since 2.0.0
      */
     private $tagFilter;
 
@@ -24,6 +26,7 @@ class Attribute extends AbstractFilter
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param \Magento\Framework\Filter\StripTags $tagFilter
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -49,6 +52,7 @@ class Attribute extends AbstractFilter
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -75,6 +79,7 @@ class Attribute extends AbstractFilter
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getItemsData()
     {
@@ -110,6 +115,7 @@ class Attribute extends AbstractFilter
      * @param array $optionsFacetedData
      * @param int $productSize
      * @return void
+     * @since 2.2.0
      */
     private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize)
     {
@@ -134,6 +140,7 @@ class Attribute extends AbstractFilter
      *
      * @param array $option
      * @return bool|string
+     * @since 2.2.0
      */
     private function getOptionValue($option)
     {
@@ -149,6 +156,7 @@ class Attribute extends AbstractFilter
      * @param int|string $value
      * @param array $optionsFacetedData
      * @return int
+     * @since 2.2.0
      */
     private function getOptionCount($value, $optionsFacetedData)
     {

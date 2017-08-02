@@ -7,16 +7,23 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+/**
+ * Class \Magento\Webapi\Model\Soap\ServerFactory
+ *
+ * @since 2.0.0
+ */
 class ServerFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Webapi\Controller\Soap\Request\Handler
+     * @since 2.0.0
      */
     protected $_soapHandler;
 
@@ -25,6 +32,7 @@ class ServerFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Webapi\Controller\Soap\Request\Handler $soapHandler
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -40,6 +48,7 @@ class ServerFactory
      * @param string $url URL of a WSDL file
      * @param array $options Options including encoding, soap_version etc
      * @return \SoapServer
+     * @since 2.0.0
      */
     public function create($url, $options)
     {

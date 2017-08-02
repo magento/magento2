@@ -15,21 +15,25 @@ use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * An Abstract class for Indexer related commands.
+ * @since 2.0.0
  */
 abstract class AbstractIndexerCommand extends Command
 {
     /**
      * @var ObjectManagerFactory
+     * @since 2.0.0
      */
     private $objectManagerFactory;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Indexer\Model\Indexer\CollectionFactory
+     * @since 2.2.0
      */
     private $collectionFactory;
 
@@ -38,6 +42,7 @@ abstract class AbstractIndexerCommand extends Command
      *
      * @param ObjectManagerFactory $objectManagerFactory
      * @param \Magento\Indexer\Model\Indexer\CollectionFactory|null $collectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -52,6 +57,7 @@ abstract class AbstractIndexerCommand extends Command
      * Get all indexers
      *
      * @return IndexerInterface[]
+     * @since 2.0.0
      */
     protected function getAllIndexers()
     {
@@ -62,6 +68,7 @@ abstract class AbstractIndexerCommand extends Command
      * Gets initialized object manager
      *
      * @return ObjectManagerInterface
+     * @since 2.0.0
      */
     protected function getObjectManager()
     {
@@ -81,7 +88,8 @@ abstract class AbstractIndexerCommand extends Command
      * Get collection factory
      *
      * @return \Magento\Indexer\Model\Indexer\CollectionFactory
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getCollectionFactory()
     {

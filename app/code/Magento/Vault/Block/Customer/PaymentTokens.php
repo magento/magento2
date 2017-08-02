@@ -12,16 +12,19 @@ use Magento\Vault\Model\CustomerTokenManagement;
 
 /**
  * Class PaymentTokens
+ * @since 2.2.0
  */
 abstract class PaymentTokens extends Template
 {
     /**
      * @var PaymentTokenInterface[]
+     * @since 2.2.0
      */
     private $customerTokens;
 
     /**
      * @var CustomerTokenManagement
+     * @since 2.2.0
      */
     private $customerTokenManagement;
 
@@ -30,6 +33,7 @@ abstract class PaymentTokens extends Template
      * @param Template\Context $context
      * @param CustomerTokenManagement $customerTokenManagement
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(
         Template\Context $context,
@@ -43,11 +47,13 @@ abstract class PaymentTokens extends Template
     /**
      * Get type of token
      * @return string
+     * @since 2.2.0
      */
     abstract public function getType();
 
     /**
      * @return PaymentTokenInterface[]
+     * @since 2.2.0
      */
     public function getPaymentTokens()
     {
@@ -64,6 +70,7 @@ abstract class PaymentTokens extends Template
     /**
      * @param PaymentTokenInterface $token
      * @return string
+     * @since 2.2.0
      */
     public function renderTokenHtml(PaymentTokenInterface $token)
     {
@@ -80,6 +87,7 @@ abstract class PaymentTokens extends Template
     /**
      * Checks if customer tokens exists
      * @return bool
+     * @since 2.2.0
      */
     public function isExistsCustomerTokens()
     {
@@ -89,6 +97,7 @@ abstract class PaymentTokens extends Template
     /**
      * Get customer session tokens
      * @return PaymentTokenInterface[]
+     * @since 2.2.0
      */
     private function getCustomerTokens()
     {

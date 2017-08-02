@@ -13,10 +13,16 @@ use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\RatingItems
+ *
+ * @since 2.0.0
+ */
 class RatingItems extends ProductController
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -26,6 +32,7 @@ class RatingItems extends ProductController
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -40,6 +47,7 @@ class RatingItems extends ProductController
 
     /**
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

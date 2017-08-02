@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Tax class key interface.
  * @api
+ * @since 2.0.0
  */
 interface TaxClassKeyInterface extends ExtensibleDataInterface
 {
@@ -25,6 +26,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
      * Get type of tax class key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 
@@ -33,6 +35,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type);
 
@@ -40,6 +43,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
      * Get value of tax class key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -48,6 +52,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -55,6 +60,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -63,6 +69,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes);
 }

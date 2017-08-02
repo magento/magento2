@@ -6,20 +6,28 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Validator
+ *
+ * @since 2.0.0
+ */
 class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_entityType;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_entityData;
 
     /**
      * @param ElementFactory $attrDataFactory
+     * @since 2.0.0
      */
     public function __construct(ElementFactory $attrDataFactory)
     {
@@ -31,6 +39,7 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
      *
      * @param \Magento\Framework\DataObject|array $entityData Data set from the Model attributes
      * @return bool
+     * @since 2.0.0
      */
     public function isValid($entityData)
     {
@@ -47,6 +56,7 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface[] $attributes
      * @param string                                                   $entityType
      * @return bool
+     * @since 2.0.0
      */
     public function validateData(array $data, array $attributes, $entityType)
     {
@@ -76,6 +86,7 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
      *
      * @param string $entityType
      * @return void
+     * @since 2.0.0
      */
     public function setEntityType($entityType)
     {

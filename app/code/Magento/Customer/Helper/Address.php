@@ -16,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -43,6 +44,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Array of Customer Address Attributes
      *
      * @var AttributeMetadataInterface[]
+     * @since 2.0.0
      */
     protected $_attributes;
 
@@ -50,6 +52,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Customer address config node per website
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_config = [];
 
@@ -57,31 +60,46 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Customer Number of Lines in a Street Address per website
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_streetLines = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_formatTemplate = [];
 
-    /** @var \Magento\Framework\View\Element\BlockFactory */
+    /**
+     * @var \Magento\Framework\View\Element\BlockFactory
+     * @since 2.0.0
+     */
     protected $_blockFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
+     */
     protected $_storeManager;
 
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $_customerMetadataService;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     * @since 2.0.0
+     */
     protected $_addressMetadataService;
 
-    /** @var \Magento\Customer\Model\Address\Config*/
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     * @since 2.0.0
+     */
     protected $_addressConfig;
 
     /**
@@ -91,6 +109,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * @param CustomerMetadataInterface $customerMetadataService
      * @param AddressMetadataInterface $addressMetadataService
      * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -112,6 +131,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Addresses url
      *
      * @return void
+     * @since 2.0.0
      */
     public function getBookUrl()
     {
@@ -119,6 +139,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function getEditUrl()
     {
@@ -126,6 +147,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function getDeleteUrl()
     {
@@ -133,6 +155,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function getCreateUrl()
     {
@@ -141,6 +164,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $renderer
      * @return \Magento\Framework\View\Element\BlockInterface
+     * @since 2.0.0
      */
     public function getRenderer($renderer)
     {
@@ -157,6 +181,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $key
      * @param \Magento\Store\Model\Store|int|string $store
      * @return string|null
+     * @since 2.0.0
      */
     public function getConfig($key, $store = null)
     {
@@ -177,6 +202,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Model\Store|int|string $store
      * @return int
+     * @since 2.0.0
      */
     public function getStreetLines($store = null)
     {
@@ -197,6 +223,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $code
      * @return Format|string
+     * @since 2.0.0
      */
     public function getFormat($code)
     {
@@ -209,6 +236,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $code
      * @return \Magento\Customer\Block\Address\Renderer\RendererInterface|null
+     * @since 2.0.0
      */
     public function getFormatTypeRenderer($code)
     {
@@ -224,6 +252,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return bool
+     * @since 2.0.0
      */
     public function canShowConfig($key)
     {
@@ -237,6 +266,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getAttributeValidationClass($attributeCode)
     {
@@ -270,6 +300,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string[] $origStreets
      * @param int $toCount
      * @return string[]
+     * @since 2.0.0
      */
     public function convertStreetLines($origStreets, $toCount)
     {
@@ -301,6 +332,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return bool
+     * @since 2.0.0
      */
     public function isVatValidationEnabled($store = null)
     {
@@ -315,6 +347,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve disable auto group assign default value
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisableAutoGroupAssignDefaultValue()
     {
@@ -329,6 +362,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return bool
+     * @since 2.0.0
      */
     public function hasValidateOnEachTransaction($store = null)
     {
@@ -344,6 +378,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Model\Store|string|int|null $store
      * @return string
+     * @since 2.0.0
      */
     public function getTaxCalculationAddressType($store = null)
     {
@@ -358,6 +393,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if VAT ID address attribute has to be shown on frontend (on Customer Address management forms)
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isVatAttributeVisible()
     {
@@ -372,6 +408,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $code
      * @return bool
+     * @since 2.2.0
      */
     public function isAttributeVisible($code)
     {

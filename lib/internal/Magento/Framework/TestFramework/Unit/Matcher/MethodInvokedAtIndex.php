@@ -17,17 +17,20 @@ namespace Magento\Framework\TestFramework\Unit\Matcher;
  * $mock->getMethod(); // returns 2
  *
  * @package Magento\TestFramework\Matcher
+ * @since 2.0.0
  */
 class MethodInvokedAtIndex extends \PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $indexes = [];
 
     /**
      * @param  \PHPUnit_Framework_MockObject_Invocation $invocation
      * @return boolean
+     * @since 2.0.0
      */
     public function matches(\PHPUnit_Framework_MockObject_Invocation $invocation)
     {

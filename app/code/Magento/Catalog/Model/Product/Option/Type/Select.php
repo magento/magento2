@@ -9,16 +9,19 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option select type
+ * @since 2.0.0
  */
 class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
      * @var string|array
+     * @since 2.0.0
      */
     protected $_formattedOptionValue;
 
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -26,6 +29,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
@@ -35,6 +39,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -54,6 +59,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function validateUserValue($values)
     {
@@ -80,6 +86,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Prepare option value for cart
      *
      * @return string|null Prepared option value
+     * @since 2.0.0
      */
     public function prepareForCart()
     {
@@ -95,6 +102,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
+     * @since 2.0.0
      */
     public function getFormattedOptionValue($optionValue)
     {
@@ -109,6 +117,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
+     * @since 2.0.0
      */
     public function getPrintableOptionValue($optionValue)
     {
@@ -119,6 +128,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Return currently unavailable product configuration message
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _getWrongConfigurationMessage()
     {
@@ -130,6 +140,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
+     * @since 2.0.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -171,6 +182,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue
      * @param array $productOptionValues Values for product option
      * @return string|null
+     * @since 2.0.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -197,6 +209,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue
      * @return string
+     * @since 2.0.0
      */
     public function prepareOptionValueForRequest($optionValue)
     {
@@ -212,6 +225,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @param float $basePrice
      * @return float
+     * @since 2.0.0
      */
     public function getOptionPrice($optionValue, $basePrice)
     {
@@ -258,6 +272,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @param string $skuDelimiter Delimiter for Sku parts
      * @return string
+     * @since 2.0.0
      */
     public function getOptionSku($optionValue, $skuDelimiter)
     {
@@ -298,6 +313,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Check if option has single or multiple values selection
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _isSingleSelection()
     {

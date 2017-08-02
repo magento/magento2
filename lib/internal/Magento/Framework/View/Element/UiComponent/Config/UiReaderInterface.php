@@ -9,6 +9,7 @@ use Magento\Framework\Config\ReaderInterface;
 
 /**
  * Interface UiReaderInterface
+ * @since 2.0.0
  */
 interface UiReaderInterface extends ReaderInterface
 {
@@ -17,6 +18,7 @@ interface UiReaderInterface extends ReaderInterface
      *
      * @param string $xmlContent
      * @return void
+     * @since 2.0.0
      */
     public function addXMLContent($xmlContent);
 
@@ -24,6 +26,7 @@ interface UiReaderInterface extends ReaderInterface
      * Get content from the merged files
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent();
 
@@ -31,6 +34,7 @@ interface UiReaderInterface extends ReaderInterface
      * Get DOM document
      *
      * @return \DOMDocument
+     * @since 2.0.0
      */
     public function getDOMDocument();
 
@@ -39,6 +43,7 @@ interface UiReaderInterface extends ReaderInterface
      *
      * @param \DOMNode $node
      * @return void
+     * @since 2.0.0
      */
     public function addNode(\DOMNode $node);
 }

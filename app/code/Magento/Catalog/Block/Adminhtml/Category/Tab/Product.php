@@ -15,17 +15,24 @@ use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Tab\Product
+ *
+ * @since 2.0.0
+ */
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -35,6 +42,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,6 +58,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -61,6 +70,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return array|null
+     * @since 2.0.0
      */
     public function getCategory()
     {
@@ -70,6 +80,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -92,6 +103,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return Grid
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -131,6 +143,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return Extended
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -186,6 +199,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -194,6 +208,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {

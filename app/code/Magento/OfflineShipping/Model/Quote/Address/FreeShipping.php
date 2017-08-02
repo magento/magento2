@@ -5,21 +5,29 @@
  */
 namespace Magento\OfflineShipping\Model\Quote\Address;
 
+/**
+ * Class \Magento\OfflineShipping\Model\Quote\Address\FreeShipping
+ *
+ * @since 2.0.0
+ */
 class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInterface
 {
     /**
      * @var \Magento\OfflineShipping\Model\SalesRule\Calculator
+     * @since 2.0.0
      */
     protected $calculator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\SalesRule\Calculator $calculator
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -31,6 +39,7 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function isFreeShipping(\Magento\Quote\Model\Quote $quote, $items)
     {
@@ -79,6 +88,7 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param bool $isFreeShipping
      * @return void
+     * @since 2.0.0
      */
     protected function applyToChildren(\Magento\Quote\Model\Quote\Item\AbstractItem $item, $isFreeShipping)
     {

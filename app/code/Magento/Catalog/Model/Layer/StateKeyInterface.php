@@ -6,6 +6,11 @@
  */
 namespace Magento\Catalog\Model\Layer;
 
+/**
+ * Interface \Magento\Catalog\Model\Layer\StateKeyInterface
+ *
+ * @since 2.0.0
+ */
 interface StateKeyInterface
 {
     /**
@@ -13,6 +18,7 @@ interface StateKeyInterface
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return string
+     * @since 2.0.0
      */
     public function toString($category);
 }

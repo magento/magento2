@@ -10,20 +10,28 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Theme\Model\Theme;
 
+/**
+ * Class \Magento\Theme\Observer\CleanThemeRelatedContentObserver
+ *
+ * @since 2.0.0
+ */
 class CleanThemeRelatedContentObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\ImageFactory
+     * @since 2.0.0
      */
     protected $themeImageFactory;
 
     /**
      * @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection
+     * @since 2.0.0
      */
     protected $updateCollection;
 
     /**
      * @var \Magento\Theme\Model\Config\Customization
+     * @since 2.0.0
      */
     protected $themeConfig;
 
@@ -31,6 +39,7 @@ class CleanThemeRelatedContentObserver implements ObserverInterface
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory
      * @param \Magento\Widget\Model\ResourceModel\Layout\Update\Collection $updateCollection
      * @param \Magento\Theme\Model\Config\Customization $themeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory,
@@ -48,6 +57,7 @@ class CleanThemeRelatedContentObserver implements ObserverInterface
      * @param EventObserver $observer
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

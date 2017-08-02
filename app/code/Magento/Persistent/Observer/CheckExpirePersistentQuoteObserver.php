@@ -8,12 +8,18 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver
+ *
+ * @since 2.0.0
+ */
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
     /**
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -21,6 +27,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -28,6 +35,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
@@ -35,11 +43,13 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession = null;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager
+     * @since 2.0.0
      */
     protected $quoteManager;
 
@@ -47,6 +57,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData = null;
 
@@ -57,6 +68,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -79,6 +91,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -8,12 +8,14 @@ namespace Magento\Framework\Model\EntitySnapshot;
 
 /**
  * Interface AttributeProviderInterface
+ * @since 2.1.0
  */
 interface AttributeProviderInterface
 {
     /**
      * @param string $entityType
      * @return array
+     * @since 2.1.0
      */
     public function getAttributes($entityType);
 }

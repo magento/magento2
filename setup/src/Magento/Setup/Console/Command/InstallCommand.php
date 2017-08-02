@@ -15,6 +15,7 @@ use Magento\Setup\Model\ConfigModel;
 /**
  * Command to install Magento application
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class InstallCommand extends AbstractSetupCommand
 {
@@ -42,21 +43,25 @@ class InstallCommand extends AbstractSetupCommand
      * Installer service factory
      *
      * @var InstallerFactory
+     * @since 2.0.0
      */
     private $installerFactory;
 
     /**
      * @var ConfigModel
+     * @since 2.0.0
      */
     protected $configModel;
 
     /**
      * @var InstallStoreConfigurationCommand
+     * @since 2.0.0
      */
     protected $userConfig;
 
     /**
      * @var AdminUserCreateCommand
+     * @since 2.0.0
      */
     protected $adminUser;
 
@@ -67,6 +72,7 @@ class InstallCommand extends AbstractSetupCommand
      * @param ConfigModel $configModel
      * @param InstallStoreConfigurationCommand $userConfig
      * @param AdminUserCreateCommand $adminUser
+     * @since 2.0.0
      */
     public function __construct(
         InstallerFactory $installerFactory,
@@ -83,6 +89,7 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -117,6 +124,7 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -127,6 +135,7 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -159,6 +168,7 @@ class InstallCommand extends AbstractSetupCommand
      *
      * @param InputInterface $input
      * @return string[] Array of error messages
+     * @since 2.0.0
      */
     public function validate(InputInterface $input)
     {

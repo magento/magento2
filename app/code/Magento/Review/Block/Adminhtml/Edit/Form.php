@@ -9,17 +9,24 @@
  */
 namespace Magento\Review\Block\Adminhtml\Edit;
 
+/**
+ * Class \Magento\Review\Block\Adminhtml\Edit\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * Review data
      *
      * @var \Magento\Review\Helper\Data
+     * @since 2.0.0
      */
     protected $_reviewData = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -27,6 +34,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Catalog product factory
      *
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -34,6 +42,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Core system store model
      *
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_systemStore;
 
@@ -46,6 +55,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,6 +79,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

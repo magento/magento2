@@ -9,11 +9,17 @@
  */
 namespace Magento\Framework\Archive\Helper\File;
 
+/**
+ * Class \Magento\Framework\Archive\Helper\File\Gz
+ *
+ * @since 2.0.0
+ */
 class Gz extends \Magento\Framework\Archive\Helper\File
 {
     /**
      * {@inheritdoc}
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function _open($mode)
     {
@@ -31,6 +37,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _write($data)
     {
@@ -45,6 +52,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _read($length)
     {
@@ -53,6 +61,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _eof()
     {
@@ -61,6 +70,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _close()
     {

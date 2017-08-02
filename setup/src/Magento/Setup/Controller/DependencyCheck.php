@@ -18,6 +18,7 @@ use Zend\View\Model\JsonModel;
  * Class DependencyCheck
  *
  * Checks dependencies.
+ * @since 2.0.0
  */
 class DependencyCheck extends AbstractActionController
 {
@@ -25,6 +26,7 @@ class DependencyCheck extends AbstractActionController
      * Dependency Readiness Check
      *
      * @var DependencyReadinessCheck
+     * @since 2.0.0
      */
     protected $dependencyReadinessCheck;
 
@@ -32,6 +34,7 @@ class DependencyCheck extends AbstractActionController
      * Uninstall Dependency Readiness Check
      *
      * @var UninstallDependencyCheck
+     * @since 2.0.0
      */
     protected $uninstallDependencyCheck;
 
@@ -39,6 +42,7 @@ class DependencyCheck extends AbstractActionController
      * Module/Status Object
      *
      * @var Status
+     * @since 2.0.0
      */
     protected $moduleStatus;
 
@@ -48,6 +52,7 @@ class DependencyCheck extends AbstractActionController
      * @param DependencyReadinessCheck $dependencyReadinessCheck
      * @param UninstallDependencyCheck $uninstallDependencyCheck
      * @param ModuleStatusFactory $moduleStatusFactory
+     * @since 2.0.0
      */
     public function __construct(
         DependencyReadinessCheck $dependencyReadinessCheck,
@@ -63,6 +68,7 @@ class DependencyCheck extends AbstractActionController
      * Verifies component dependency
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function componentDependencyAction()
     {
@@ -86,6 +92,7 @@ class DependencyCheck extends AbstractActionController
      * Verifies component dependency for uninstall
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function uninstallDependencyCheckAction()
     {
@@ -111,6 +118,7 @@ class DependencyCheck extends AbstractActionController
      * Verifies component dependency for enable/disable actions
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function enableDisableDependencyCheckAction()
     {

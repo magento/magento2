@@ -10,6 +10,7 @@ namespace Magento\Integration\Api;
  * Interface providing token generation for Customers
  *
  * @api
+ * @since 2.0.0
  */
 interface CustomerTokenServiceInterface
 {
@@ -20,6 +21,7 @@ interface CustomerTokenServiceInterface
      * @param string $password
      * @return string Token created
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @since 2.0.0
      */
     public function createCustomerAccessToken($username, $password);
 
@@ -29,6 +31,7 @@ interface CustomerTokenServiceInterface
      * @param int $customerId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function revokeCustomerAccessToken($customerId);
 }

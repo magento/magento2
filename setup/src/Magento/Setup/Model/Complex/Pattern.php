@@ -10,6 +10,7 @@ namespace Magento\Setup\Model\Complex;
  * Complex pattern class for complex generator (used for creating configurable products)
  *
  *
+ * @since 2.0.0
  */
 class Pattern
 {
@@ -17,6 +18,7 @@ class Pattern
      * Pattern headers set
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_headers;
 
@@ -24,6 +26,7 @@ class Pattern
      * Rows set - array of rows pattern, can contain as many rows as you need
      *
      * @var array(array)
+     * @since 2.0.0
      */
     protected $_rowsSet;
 
@@ -31,6 +34,7 @@ class Pattern
      * Position
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_position = 0;
 
@@ -40,6 +44,7 @@ class Pattern
      * @param array $headers
      *
      * @return Pattern
+     * @since 2.0.0
      */
     public function setHeaders(array $headers)
     {
@@ -51,6 +56,7 @@ class Pattern
      * Get headers array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getHeaders()
     {
@@ -64,6 +70,7 @@ class Pattern
      *
      * @return Pattern
      * @throws \Exception
+     * @since 2.0.0
      */
     public function setRowsSet(array $rowsSet)
     {
@@ -83,6 +90,7 @@ class Pattern
      * @param array $row
      *
      * @return Pattern
+     * @since 2.0.0
      */
     public function addRow(array $row)
     {
@@ -97,6 +105,7 @@ class Pattern
      * @param int $generatorKey
      *
      * @return array|null
+     * @since 2.0.0
      */
     public function getRow($index, $generatorKey)
     {
@@ -119,6 +128,7 @@ class Pattern
      * Get rows count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRowsCount()
     {

@@ -10,15 +10,22 @@ namespace Magento\Captcha\Controller\Refresh;
 
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class \Magento\Captcha\Controller\Refresh\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 2.0.0
      */
     protected $captchaHelper;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     protected $serializer;
 
@@ -27,6 +34,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param \Magento\Captcha\Helper\Data $captchaHelper
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -41,6 +49,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function execute()
     {

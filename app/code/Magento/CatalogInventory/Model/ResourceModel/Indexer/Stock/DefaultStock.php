@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -24,6 +25,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Current Product Type Id
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_typeId;
 
@@ -31,6 +33,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Product Type is composite flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isComposite = false;
 
@@ -38,16 +41,19 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var QueryProcessorComposite
+     * @since 2.1.0
      */
     private $queryProcessorComposite;
 
     /**
      * @var StockConfigurationInterface
+     * @since 2.1.0
      */
     protected $stockConfiguration;
 
@@ -55,6 +61,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Param for switching logic which depends on action type (full reindex or partial)
      *
      * @var string
+     * @since 2.2.0
      */
     private $actionType;
 
@@ -66,6 +73,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -82,6 +90,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Initialize connection and define main table name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -93,6 +102,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -113,6 +123,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param int|array $entityIds
      * @return $this
+     * @since 2.0.0
      */
     public function reindexEntity($entityIds)
     {
@@ -130,6 +141,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Returns action run type
      *
      * @return string
+     * @since 2.2.0
      */
     public function getActionType()
     {
@@ -141,6 +153,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param string $type
      * @return $this
+     * @since 2.2.0
      */
     public function setActionType($type)
     {
@@ -153,6 +166,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param string $typeId
      * @return $this
+     * @since 2.0.0
      */
     public function setTypeId($typeId)
     {
@@ -165,6 +179,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getTypeId()
     {
@@ -179,6 +194,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setIsComposite($flag)
     {
@@ -191,6 +207,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsComposite()
     {
@@ -201,6 +218,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Retrieve is Global Manage Stock enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isManageStock()
     {
@@ -217,6 +235,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
@@ -264,6 +283,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param int|array $entityIds the product limitation
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareIndexTable($entityIds = null)
     {
@@ -281,6 +301,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param array|int $entityIds
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateIndex($entityIds)
     {
@@ -319,6 +340,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param array $ids
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function deleteOldRecords(array $ids)
     {
@@ -332,6 +354,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateIndexTable($data)
     {
@@ -351,6 +374,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param string $table
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getIdxTable($table = null)
     {
@@ -361,6 +385,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param AdapterInterface $connection
      * @param bool $isAggregate
      * @return mixed
+     * @since 2.1.0
      */
     protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
     {
@@ -384,7 +409,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getStockConfiguration()
     {
@@ -397,6 +423,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * @return QueryProcessorComposite
+     * @since 2.1.0
      */
     private function getQueryProcessorComposite()
     {

@@ -9,6 +9,7 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit;
  * Theme Edit Form
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -16,6 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize theme form
      *
      * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form|\Magento\Backend\Block\Widget\Form
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

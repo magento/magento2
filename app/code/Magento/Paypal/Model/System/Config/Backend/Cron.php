@@ -5,6 +5,11 @@
  */
 namespace Magento\Paypal\Model\System\Config\Backend;
 
+/**
+ * Class \Magento\Paypal\Model\System\Config\Backend\Cron
+ *
+ * @since 2.0.0
+ */
 class Cron extends \Magento\Framework\App\Config\Value
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/paypal_fetch_settlement_reports/schedule/cron_expr';
@@ -13,6 +18,7 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
+     * @since 2.0.0
      */
     protected $_configValueFactory;
 
@@ -25,6 +31,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -44,6 +51,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * Cron settings after save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {

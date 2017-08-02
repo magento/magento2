@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter;
  * Url compatible translit filter
  *
  * Process string based on convertation table
+ * @since 2.0.0
  */
 class TranslitUrl extends Translit
 {
@@ -17,6 +18,7 @@ class TranslitUrl extends Translit
      *
      * @param string $string
      * @return string
+     * @since 2.0.0
      */
     public function filter($string)
     {

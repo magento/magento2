@@ -5,10 +5,16 @@
  */
 namespace Magento\Paypal\Cron;
 
+/**
+ * Class \Magento\Paypal\Cron\FetchReports
+ *
+ * @since 2.0.0
+ */
 class FetchReports
 {
     /**
      * @var \Magento\Paypal\Model\Report\SettlementFactory
+     * @since 2.0.0
      */
     protected $_settlementFactory;
 
@@ -16,6 +22,7 @@ class FetchReports
      * Constructor
      *
      * @param \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
@@ -28,6 +35,7 @@ class FetchReports
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -7,6 +7,7 @@ namespace Magento\Cron\Model\Config\Converter;
 
 /**
  * Convert data incoming from data base storage
+ * @since 2.0.0
  */
 class Db implements \Magento\Framework\Config\ConverterInterface
 {
@@ -15,6 +16,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $source
      * @return array
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -31,6 +33,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $jobs
      * @return array
+     * @since 2.0.0
      */
     protected function _extractParams(array $cronTab)
     {
@@ -58,6 +61,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      * @param string $jobName
      * @param array  $result
      * @return void
+     * @since 2.0.0
      */
     protected function _processConfigParam(array $jobConfig, $jobName, array &$result)
     {
@@ -73,6 +77,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      * @param string $jobName
      * @param array  $result
      * @return void
+     * @since 2.0.0
      */
     protected function _processScheduleParam(array $jobConfig, $jobName, array &$result)
     {
@@ -88,6 +93,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      * @param string $jobName
      * @param array  $result
      * @return void
+     * @since 2.0.0
      */
     protected function _processRunModel(array $jobConfig, $jobName, array &$result)
     {

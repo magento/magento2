@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\SaleableInterface;
  * Interface AdjustmentInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface AdjustmentInterface
 {
@@ -20,6 +21,7 @@ interface AdjustmentInterface
      * (as declared in DI configuration)
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdjustmentCode();
 
@@ -27,6 +29,7 @@ interface AdjustmentInterface
      * Define if adjustment is included in base price
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIncludedInBasePrice();
 
@@ -34,6 +37,7 @@ interface AdjustmentInterface
      * Define if adjustment is included in display price
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIncludedInDisplayPrice();
 
@@ -44,6 +48,7 @@ interface AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
+     * @since 2.0.0
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = []);
 
@@ -54,6 +59,7 @@ interface AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
+     * @since 2.0.0
      */
     public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = []);
 
@@ -62,6 +68,7 @@ interface AdjustmentInterface
      *
      * @param string $adjustmentCode
      * @return bool
+     * @since 2.0.0
      */
     public function isExcludedWith($adjustmentCode);
 
@@ -69,6 +76,7 @@ interface AdjustmentInterface
      * Return sort order position
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSortOrder();
 }

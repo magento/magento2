@@ -9,17 +9,20 @@ namespace Magento\Backend\Model\Cache\ResourceModel\Grid;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -36,6 +39,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param bool $logQuery
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

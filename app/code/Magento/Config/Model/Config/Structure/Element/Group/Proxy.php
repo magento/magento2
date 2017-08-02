@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Structure\Element\Group;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
@@ -14,16 +15,19 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
     /**
      * Object manager
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Group
+     * @since 2.0.0
      */
     protected $_subject;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManger
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger)
     {
@@ -34,6 +38,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve subject
      *
      * @return \Magento\Config\Model\Config\Structure\Element\Group
+     * @since 2.0.0
      */
     protected function _getSubject()
     {
@@ -51,6 +56,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * @param array $data
      * @param string $scope
      * @return void
+     * @since 2.0.0
      */
     public function setData(array $data, $scope)
     {
@@ -61,6 +67,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve element id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -71,6 +78,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve element label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -81,6 +89,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve element label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComment()
     {
@@ -91,6 +100,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve frontend model class name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrontendModel()
     {
@@ -102,6 +112,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      *
      * @param string $key
      * @return mixed
+     * @since 2.0.0
      */
     public function getAttribute($key)
     {
@@ -112,6 +123,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Check whether section is allowed for current user
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -124,6 +136,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * @param string $websiteCode
      * @param string $storeCode
      * @return bool
+     * @since 2.0.0
      */
     public function isVisible($websiteCode = '', $storeCode = '')
     {
@@ -134,6 +147,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve css class of a tab
      *
      * @return string
+     * @since 2.0.0
      */
     public function getClass()
     {
@@ -144,6 +158,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Check whether element has visible child elements
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasChildren()
     {
@@ -154,6 +169,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve children iterator
      *
      * @return \Magento\Config\Model\Config\Structure\Element\Iterator
+     * @since 2.0.0
      */
     public function getChildren()
     {
@@ -164,6 +180,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Should group fields be cloned
      *
      * @return bool
+     * @since 2.0.0
      */
     public function shouldCloneFields()
     {
@@ -174,6 +191,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve clone model
      *
      * @return \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     public function getCloneModel()
     {
@@ -185,6 +203,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      *
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
+     * @since 2.0.0
      */
     public function populateFieldset(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
@@ -195,6 +214,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve element data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getData()
     {
@@ -206,6 +226,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      *
      * @param string $fieldPrefix
      * @return string
+     * @since 2.0.0
      */
     public function getPath($fieldPrefix = '')
     {
@@ -216,6 +237,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Check whether element should be expanded
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isExpanded()
     {
@@ -226,6 +248,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      * Retrieve fieldset css
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFieldsetCss()
     {
@@ -237,6 +260,7 @@ class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group impleme
      *
      * @param string $storeCode
      * @return array
+     * @since 2.0.0
      */
     public function getDependencies($storeCode)
     {

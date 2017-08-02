@@ -10,25 +10,34 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Builder;
 
+/**
+ * Class \Magento\Framework\Search\Search
+ *
+ * @since 2.0.0
+ */
 class Search implements SearchInterface
 {
     /**
      * @var Builder
+     * @since 2.0.0
      */
     private $requestBuilder;
 
     /**
      * @var ScopeResolverInterface
+     * @since 2.0.0
      */
     private $scopeResolver;
 
     /**
      * @var SearchEngineInterface
+     * @since 2.0.0
      */
     private $searchEngine;
 
     /**
      * @var SearchResponseBuilder
+     * @since 2.0.0
      */
     private $searchResponseBuilder;
 
@@ -37,6 +46,7 @@ class Search implements SearchInterface
      * @param ScopeResolverInterface $scopeResolver
      * @param SearchEngineInterface $searchEngine
      * @param SearchResponseBuilder $searchResponseBuilder
+     * @since 2.0.0
      */
     public function __construct(
         Builder $requestBuilder,
@@ -52,6 +62,7 @@ class Search implements SearchInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function search(SearchCriteriaInterface $searchCriteria)
     {
@@ -81,6 +92,7 @@ class Search implements SearchInterface
      * @param string $field
      * @param string|array|null $condition
      * @return $this
+     * @since 2.0.0
      */
     private function addFieldToFilter($field, $condition = null)
     {

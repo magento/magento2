@@ -9,6 +9,7 @@ namespace Magento\PageCache\Block\System\Config\Form\Field;
  * Class Export
  *
  * @api
+ * @since 2.0.0
  */
 class Export extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -18,6 +19,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -43,6 +45,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * Return Varnish version to this class
      *
      * @return int
+     * @since 2.0.0
      */
     public function getVarnishVersion()
     {
@@ -51,6 +54,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.1.0
      */
     private function getLabel()
     {
@@ -61,6 +65,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * @param array $params
      *
      * @return string
+     * @since 2.1.0
      */
     private function getVarnishUrl($params = [])
     {
@@ -72,7 +77,8 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * to avoid saving empty field
      *
      * @return string
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function getTtlValue()
     {

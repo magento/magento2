@@ -14,16 +14,19 @@ use \Magento\Framework\Filter\Template\Tokenizer\Parameter as ParameterTokenizer
 
 /**
  * Design configuration validator
+ * @since 2.1.0
  */
 class Validator
 {
     /**
      * @var string[]
+     * @since 2.1.0
      */
     private $fields = [];
 
     /**
      * @var TemplateFactory
+     * @since 2.1.0
      */
     private $templateFactory;
 
@@ -32,6 +35,7 @@ class Validator
      *
      * @param TemplateFactory $templateFactory
      * @param string[] $fields
+     * @since 2.1.0
      */
     public function __construct(TemplateFactory $templateFactory, $fields = [])
     {
@@ -46,6 +50,7 @@ class Validator
      *
      * @throws LocalizedException
      * @return void
+     * @since 2.1.0
      */
     public function validate(DesignConfigInterface $designConfig)
     {
@@ -99,6 +104,7 @@ class Validator
      *
      * @param string $value raw parameters
      * @return array
+     * @since 2.1.0
      */
     private function getParameters($value)
     {

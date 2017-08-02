@@ -9,16 +9,19 @@ namespace Magento\Rss\Block;
  * Class Feeds
  * @api
  * @package Magento\Rss\Block
+ * @since 2.0.0
  */
 class Feeds extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'feeds.phtml';
 
     /**
      * @var \Magento\Framework\App\Rss\RssManagerInterface
+     * @since 2.0.0
      */
     protected $rssManager;
 
@@ -26,6 +29,7 @@ class Feeds extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Rss\RssManagerInterface $rssManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,6 +44,7 @@ class Feeds extends \Magento\Framework\View\Element\Template
      * Add Link elements to head
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -61,6 +66,7 @@ class Feeds extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getFeeds()
     {

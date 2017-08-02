@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
  * Import entity virtual product type
  *
  * @api
+ * @since 2.0.0
  */
 class Virtual extends \Magento\CatalogImportExport\Model\Import\Product\Type\Simple
 {
@@ -23,6 +24,7 @@ class Virtual extends \Magento\CatalogImportExport\Model\Import\Product\Type\Sim
      * @param array $rowData
      * @param bool $withDefaultValue
      * @return array
+     * @since 2.0.0
      */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
@@ -36,6 +38,7 @@ class Virtual extends \Magento\CatalogImportExport\Model\Import\Product\Type\Sim
      *
      * @param array $rowData
      * @return array
+     * @since 2.0.0
      */
     protected function setWeightVirtualProduct(array $rowData)
     {

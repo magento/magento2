@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Xsd\Media;
 
 /**
  * Interface that encapsulates complexity of expression computation
+ * @since 2.0.0
  */
 interface TypeDataExtractorInterface
 {
@@ -16,6 +17,7 @@ interface TypeDataExtractorInterface
      * @param \DOMElement $childNode
      * @param string $mediaParentTag
      * @return mixed
+     * @since 2.0.0
      */
     public function process(\DOMElement $childNode, $mediaParentTag);
 }

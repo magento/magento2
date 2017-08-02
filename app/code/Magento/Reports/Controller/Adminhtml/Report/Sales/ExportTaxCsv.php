@@ -9,12 +9,18 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportTaxCsv
+ *
+ * @since 2.0.0
+ */
 class ExportTaxCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Export tax report grid to CSV format
      *
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function execute()
     {

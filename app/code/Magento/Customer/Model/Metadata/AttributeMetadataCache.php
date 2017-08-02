@@ -15,6 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Cache for attribute metadata
+ * @since 2.2.0
  */
 class AttributeMetadataCache
 {
@@ -25,31 +26,37 @@ class AttributeMetadataCache
 
     /**
      * @var CacheInterface
+     * @since 2.2.0
      */
     private $cache;
 
     /**
      * @var StateInterface
+     * @since 2.2.0
      */
     private $state;
 
     /**
      * @var AttributeMetadataInterface[]
+     * @since 2.2.0
      */
     private $attributes;
 
     /**
      * @var bool
+     * @since 2.2.0
      */
     private $isAttributeCacheEnabled;
 
     /**
      * @var AttributeMetadataHydrator
+     * @since 2.2.0
      */
     private $attributeMetadataHydrator;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -60,6 +67,7 @@ class AttributeMetadataCache
      * @param StateInterface $state
      * @param SerializerInterface $serializer
      * @param AttributeMetadataHydrator $attributeMetadataHydrator
+     * @since 2.2.0
      */
     public function __construct(
         CacheInterface $cache,
@@ -79,6 +87,7 @@ class AttributeMetadataCache
      * @param string $entityType
      * @param string $suffix
      * @return AttributeMetadataInterface[]|bool
+     * @since 2.2.0
      */
     public function load($entityType, $suffix = '')
     {
@@ -108,6 +117,7 @@ class AttributeMetadataCache
      * @param AttributeMetadataInterface[] $attributes
      * @param string $suffix
      * @return void
+     * @since 2.2.0
      */
     public function save($entityType, array $attributes, $suffix = '')
     {
@@ -135,6 +145,7 @@ class AttributeMetadataCache
      * Clean attributes metadata cache
      *
      * @return void
+     * @since 2.2.0
      */
     public function clean()
     {
@@ -153,6 +164,7 @@ class AttributeMetadataCache
      * Check if cache enabled
      *
      * @return bool
+     * @since 2.2.0
      */
     private function isEnabled()
     {

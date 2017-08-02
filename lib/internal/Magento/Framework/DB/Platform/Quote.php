@@ -9,12 +9,14 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class Quote
+ * @since 2.1.0
  */
 class Quote
 {
     /**
      * @param string $identifier
      * @return string
+     * @since 2.1.0
      */
     public function quoteIdentifier($identifier)
     {
@@ -25,6 +27,7 @@ class Quote
      * @param string $identifier
      * @param string|null $alias
      * @return string
+     * @since 2.1.0
      */
     public function quoteColumnAs($identifier, $alias = null)
     {
@@ -35,6 +38,7 @@ class Quote
      * @param string $identifier
      * @param string|null $alias
      * @return string
+     * @since 2.1.0
      */
     public function quoteTableAs($identifier, $alias = null)
     {
@@ -46,6 +50,7 @@ class Quote
      * @param string|null $alias
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.1.0
      */
     protected function quoteIdentifierAs($identifier, $alias = null)
     {
@@ -83,6 +88,7 @@ class Quote
     /**
      * @param string $value
      * @return string
+     * @since 2.1.0
      */
     protected function replaceQuoteSymbol($value)
     {
@@ -92,6 +98,7 @@ class Quote
 
     /**
      * @return string
+     * @since 2.1.0
      */
     protected function getQuoteIdentifierSymbol()
     {

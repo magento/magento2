@@ -12,47 +12,60 @@ namespace Magento\Paypal\Block\Express\Review;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Class \Magento\Paypal\Block\Express\Review\Shipping
+ *
+ * @since 2.0.0
+ */
 class Shipping extends \Magento\Framework\View\Element\Template
 {
     /**
      * Sales Quote Shipping Address instance
      *
      * @var \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     protected $address = null;
 
     /**
      * @var \Magento\Quote\Model\Quote\AddressFactory
+     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected $customer;
 
     /**
      * @var Quote
+     * @since 2.0.0
      */
     protected $quote;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
@@ -64,6 +77,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Quote\Model\Quote\AddressFactory $addressFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -87,6 +101,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * Initialize shipping address step
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -102,6 +117,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * Return checkout method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -112,6 +128,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * Retrieve is allow and show block
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isShow()
     {
@@ -122,6 +139,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * Return Sales Quote Address model (shipping address)
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -141,6 +159,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      *
      * @param string $path
      * @return string|null
+     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -151,6 +170,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * Get logged in customer
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected function _getCustomer()
     {
@@ -164,6 +184,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
      * Retrieve sales quote model
      *
      * @return Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -175,6 +196,7 @@ class Shipping extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isCustomerLoggedIn()
     {

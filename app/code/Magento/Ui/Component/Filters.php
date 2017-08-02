@@ -13,6 +13,7 @@ use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Filters extends AbstractComponent implements ObserverInterface
 {
@@ -22,6 +23,7 @@ class Filters extends AbstractComponent implements ObserverInterface
      * Filters created from columns
      *
      * @var UiComponentInterface[]
+     * @since 2.0.0
      */
     protected $columnFilters = [];
 
@@ -29,6 +31,7 @@ class Filters extends AbstractComponent implements ObserverInterface
      * Maps filter declaration to type
      *
      * @var array
+     * @since 2.0.0
      */
     protected $filterMap = [
         'text' => 'filterInput',
@@ -39,11 +42,13 @@ class Filters extends AbstractComponent implements ObserverInterface
 
     /**
      * @var UiComponentFactory
+     * @since 2.0.0
      */
     protected $uiComponentFactory;
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -59,6 +64,7 @@ class Filters extends AbstractComponent implements ObserverInterface
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -67,6 +73,7 @@ class Filters extends AbstractComponent implements ObserverInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function update(UiComponentInterface $component)
     {
@@ -96,6 +103,7 @@ class Filters extends AbstractComponent implements ObserverInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function addComponent($name, UiComponentInterface $component)
     {
@@ -105,6 +113,7 @@ class Filters extends AbstractComponent implements ObserverInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getChildComponents()
     {

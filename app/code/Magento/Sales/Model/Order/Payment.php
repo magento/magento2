@@ -27,6 +27,7 @@ use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Payment extends Info implements OrderPaymentInterface
 {
@@ -47,22 +48,26 @@ class Payment extends Info implements OrderPaymentInterface
      * Order model object
      *
      * @var Order
+     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * Whether can void
      * @var string
+     * @since 2.0.0
      */
     protected $_canVoidLookup = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_payment';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'payment';
 
@@ -70,51 +75,61 @@ class Payment extends Info implements OrderPaymentInterface
      * Transaction additional information container
      *
      * @var array
+     * @since 2.0.0
      */
     protected $transactionAdditionalInfo = [];
 
     /**
      * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @since 2.0.0
      */
     protected $creditmemoFactory;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     * @since 2.0.0
      */
     protected $transactionRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface
+     * @since 2.0.0
      */
     protected $transactionManager;
 
     /**
      * @var \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface
+     * @since 2.0.0
      */
     protected $transactionBuilder;
 
     /**
      * @var Payment\Processor
+     * @since 2.0.0
      */
     protected $orderPaymentProcessor;
 
     /**
      * @var OrderRepositoryInterface
+     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var OrderStateResolverInterface
+     * @since 2.2.0
      */
     private $orderStateResolver;
 
     /**
      * @var CreditmemoManager
+     * @since 2.2.0
      */
     private $creditmemoManager = null;
 
@@ -137,6 +152,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param array $data
      * @param CreditmemoManager $creditmemoManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -182,6 +198,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -195,6 +212,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Order $order
      * @return $this
+     * @since 2.0.0
      */
     public function setOrder(Order $order)
     {
@@ -207,6 +225,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @codeCoverageIgnore
      * @return Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -222,6 +241,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param string $transactionId
      * @return $this
+     * @since 2.0.0
      */
     public function setTransactionId($transactionId)
     {
@@ -233,6 +253,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Return transaction id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTransactionId()
     {
@@ -244,6 +265,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param bool $isClosed
      * @return $this
+     * @since 2.0.0
      */
     public function setIsTransactionClosed($isClosed)
     {
@@ -255,6 +277,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns transaction parent
      *
      * @return string
+     * @since 2.0.0
      */
     public function getParentTransactionId()
     {
@@ -265,6 +288,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns transaction parent
      *
      * @return string
+     * @since 2.1.0
      */
     public function setParentTransactionId($txnId)
     {
@@ -275,6 +299,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Check order payment capture action availability
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCapture()
     {
@@ -298,6 +323,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canRefund()
     {
@@ -306,6 +332,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canRefundPartialPerInvoice()
     {
@@ -314,6 +341,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canCapturePartial()
     {
@@ -327,6 +355,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function place()
     {
@@ -391,6 +420,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param string $orderStatus
      * @param bool $isCustomerNotified
      * @return void
+     * @since 2.0.0
      */
     protected function updateOrder(Order $order, $orderState, $orderStatus, $isCustomerNotified)
     {
@@ -423,6 +453,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param string $action
      * @param Order $order
      * @return void
+     * @since 2.0.0
      */
     protected function processAction($action, Order $order)
     {
@@ -457,6 +488,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param null|Invoice $invoice
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function capture($invoice = null)
     {
@@ -473,6 +505,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @param bool $skipFraudDetection
      * @return $this
+     * @since 2.0.0
      */
     public function registerCaptureNotification($amount, $skipFraudDetection = false)
     {
@@ -485,6 +518,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @return $this
      * @see self::_authorize()
+     * @since 2.0.0
      */
     public function registerAuthorizationNotification($amount)
     {
@@ -496,6 +530,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Invoice $invoice
      * @return $this
+     * @since 2.0.0
      */
     public function pay($invoice)
     {
@@ -516,6 +551,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Invoice $invoice
      * @return $this
+     * @since 2.0.0
      */
     public function cancelInvoice($invoice)
     {
@@ -539,6 +575,7 @@ class Payment extends Info implements OrderPaymentInterface
      * register this invoice and capture
      *
      * @return Invoice
+     * @since 2.0.0
      */
     protected function _invoice()
     {
@@ -557,6 +594,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Check order payment void availability
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canVoid()
     {
@@ -576,6 +614,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\DataObject $document
      * @return $this
      * @see self::_void()
+     * @since 2.0.0
      */
     public function void(\Magento\Framework\DataObject $document)
     {
@@ -590,6 +629,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @return $this
      * @see self::_void()
+     * @since 2.0.0
      */
     public function registerVoidNotification($amount = null)
     {
@@ -604,6 +644,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Creditmemo $creditmemo
      * @return $this
+     * @since 2.0.0
      */
     public function setCreditmemo(Creditmemo $creditmemo)
     {
@@ -615,6 +656,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns Creditmemo assigned for this payment
      *
      * @return Creditmemo|null
+     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -634,6 +676,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function refund($creditmemo)
     {
@@ -739,6 +782,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function registerRefundNotification($amount)
     {
@@ -815,6 +859,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Creditmemo $creditmemo
      * @return $this
+     * @since 2.0.0
      */
     public function cancelCreditmemo($creditmemo)
     {
@@ -838,6 +883,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Adds void transaction if needed
      *
      * @return $this
+     * @since 2.0.0
      */
     public function cancel()
     {
@@ -863,6 +909,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Check order payment review availability
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canReviewPayment()
     {
@@ -871,6 +918,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canFetchTransactionInfo()
     {
@@ -881,6 +929,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Accept online a payment that is in review state
      *
      * @return $this
+     * @since 2.0.0
      */
     public function accept()
     {
@@ -913,6 +962,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $isOnline
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deny($isOnline = true)
     {
@@ -953,6 +1003,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $isOnline
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function update($isOnline = true)
     {
@@ -993,6 +1044,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Triggers invoice pay and updates base_amount_paid_online total.
      *
      * @param \Magento\Sales\Model\Order\Invoice|false $invoice
+     * @since 2.0.0
      */
     protected function updateBaseAmountPaidOnlineTotal($invoice)
     {
@@ -1007,6 +1059,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Sets order state to 'processing' with appropriate message
      *
      * @param \Magento\Framework\Phrase|string $message
+     * @since 2.0.0
      */
     protected function setOrderStateProcessing($message)
     {
@@ -1020,6 +1073,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Invoice|false $invoice
      * @param string $message
+     * @since 2.0.0
      */
     protected function cancelInvoiceAndRegisterCancellation($invoice, $message)
     {
@@ -1035,6 +1089,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param string $message
      * @param int|null $transactionId
+     * @since 2.0.0
      */
     protected function setOrderStatePaymentReview($message, $transactionId)
     {
@@ -1068,6 +1123,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     protected function _order($amount)
     {
@@ -1084,6 +1140,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      *
      * @return $this
+     * @since 2.0.0
      */
     public function authorize($isOnline, $amount)
     {
@@ -1102,6 +1159,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _void($isOnline, $amount = null, $gatewayCallback = 'void')
     {
@@ -1157,6 +1215,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Sales\Model\AbstractModel $salesDocument
      * @param bool $failSafe
      * @return null|Transaction
+     * @since 2.0.0
      */
     public function addTransaction($type, $salesDocument = null, $failSafe = false)
     {
@@ -1171,6 +1230,9 @@ class Payment extends Info implements OrderPaymentInterface
         return $builder->build($type);
     }
 
+    /**
+     * @since 2.0.0
+     */
     public function addTransactionCommentsToOrder($transaction, $message)
     {
         $order = $this->getOrder();
@@ -1183,6 +1245,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Transaction $transactionTo
      * @return $this
+     * @since 2.0.0
      */
     public function importTransactionInfo(Transaction $transactionTo)
     {
@@ -1209,6 +1272,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     protected function _updateTotals($data)
     {
@@ -1226,6 +1290,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Transaction|null $transaction
      * @param string $message
      * @return string
+     * @since 2.0.0
      */
     protected function _appendTransactionToMessage($transaction, $message)
     {
@@ -1242,6 +1307,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param string|\Magento\Sales\Model\Order\Status\History $messagePrependTo
      * @return string|\Magento\Sales\Model\Order\Status\History
+     * @since 2.0.0
      */
     public function prependMessage($messagePrependTo)
     {
@@ -1270,6 +1336,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param string|float $amount
      * @param bool $asFloat
      * @return string|float
+     * @since 2.0.0
      */
     public function formatAmount($amount, $asFloat = false)
     {
@@ -1281,6 +1348,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Format price with currency sign
      * @param float $amount
      * @return string
+     * @since 2.0.0
      */
     public function formatPrice($amount)
     {
@@ -1290,6 +1358,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Lookup an authorization transaction using parent transaction id, if set
      * @return Transaction|false
+     * @since 2.0.0
      */
     public function getAuthorizationTransaction()
     {
@@ -1305,6 +1374,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param float $amountToCapture
      * @return bool
+     * @since 2.0.0
      */
     public function isCaptureFinal($amountToCapture)
     {
@@ -1316,6 +1386,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Check whether payment currency corresponds to order currency
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSameCurrency()
     {
@@ -1328,6 +1399,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param string $key
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     public function setTransactionAdditionalInfo($key, $value)
     {
@@ -1338,6 +1410,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Additional transaction info setter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTransactionAdditionalInfo()
     {
@@ -1348,6 +1421,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Reset transaction additional info property
      *
      * @return $this
+     * @since 2.0.0
      */
     public function resetTransactionAdditionalInfo()
     {
@@ -1362,6 +1436,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param $baseGrandTotal
      * @param false|Invoice $invoice
      * @return mixed
+     * @since 2.0.0
      */
     protected function prepareCreditMemo($amount, $baseGrandTotal, $invoice)
     {
@@ -1388,6 +1463,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Checks if transaction exists
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function checkIfTransactionExists()
     {
@@ -1402,6 +1478,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param string $transactionId
      * @return Invoice|false
+     * @since 2.0.0
      */
     protected function _getInvoiceForTransactionId($transactionId)
     {
@@ -1425,8 +1502,9 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.2.0
      * @return OrderStateResolverInterface
+     * @since 2.2.0
      */
     private function getOrderStateResolver()
     {
@@ -1443,6 +1521,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns account_status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAccountStatus()
     {
@@ -1453,6 +1532,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns additional_data
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalData()
     {
@@ -1463,6 +1543,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns address_status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAddressStatus()
     {
@@ -1473,6 +1554,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns amount_authorized
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmountAuthorized()
     {
@@ -1483,6 +1565,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns amount_canceled
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmountCanceled()
     {
@@ -1493,6 +1576,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns amount_ordered
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmountOrdered()
     {
@@ -1503,6 +1587,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns amount_paid
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmountPaid()
     {
@@ -1513,6 +1598,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns amount_refunded
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmountRefunded()
     {
@@ -1523,6 +1609,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns anet_trans_method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAnetTransMethod()
     {
@@ -1533,6 +1620,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_authorized
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountAuthorized()
     {
@@ -1543,6 +1631,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_canceled
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountCanceled()
     {
@@ -1553,6 +1642,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_ordered
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountOrdered()
     {
@@ -1563,6 +1653,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_paid
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountPaid()
     {
@@ -1573,6 +1664,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_paid_online
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountPaidOnline()
     {
@@ -1583,6 +1675,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_refunded
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountRefunded()
     {
@@ -1593,6 +1686,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_amount_refunded_online
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmountRefundedOnline()
     {
@@ -1603,6 +1697,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_shipping_amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseShippingAmount()
     {
@@ -1613,6 +1708,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_shipping_captured
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseShippingCaptured()
     {
@@ -1623,6 +1719,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns base_shipping_refunded
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseShippingRefunded()
     {
@@ -1633,6 +1730,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_approval
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcApproval()
     {
@@ -1643,6 +1741,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_avs_status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcAvsStatus()
     {
@@ -1653,6 +1752,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_cid_status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcCidStatus()
     {
@@ -1663,6 +1763,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_debug_request_body
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcDebugRequestBody()
     {
@@ -1673,6 +1774,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_debug_response_body
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcDebugResponseBody()
     {
@@ -1683,6 +1785,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_debug_response_serialized
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcDebugResponseSerialized()
     {
@@ -1693,6 +1796,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_exp_month
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcExpMonth()
     {
@@ -1703,6 +1807,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_exp_year
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcExpYear()
     {
@@ -1713,6 +1818,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_last_4
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcLast4()
     {
@@ -1723,6 +1829,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_number_enc
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcNumberEnc()
     {
@@ -1733,6 +1840,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_owner
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcOwner()
     {
@@ -1743,6 +1851,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_secure_verify
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcSecureVerify()
     {
@@ -1753,7 +1862,8 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function getCcSsIssue()
     {
@@ -1764,7 +1874,8 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function getCcSsStartMonth()
     {
@@ -1775,7 +1886,8 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function getCcSsStartYear()
     {
@@ -1786,6 +1898,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_status
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcStatus()
     {
@@ -1796,6 +1909,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_status_description
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcStatusDescription()
     {
@@ -1806,6 +1920,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_trans_id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcTransId()
     {
@@ -1816,6 +1931,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCcType()
     {
@@ -1826,6 +1942,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns echeck_account_name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEcheckAccountName()
     {
@@ -1836,6 +1953,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns echeck_account_type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEcheckAccountType()
     {
@@ -1846,6 +1964,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns echeck_bank_name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEcheckBankName()
     {
@@ -1856,6 +1975,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns echeck_routing_number
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEcheckRoutingNumber()
     {
@@ -1866,6 +1986,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns echeck_type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEcheckType()
     {
@@ -1876,6 +1997,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns last_trans_id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastTransId()
     {
@@ -1886,6 +2008,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -1896,6 +2019,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns parent_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -1906,6 +2030,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns po_number
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPoNumber()
     {
@@ -1916,6 +2041,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns protection_eligibility
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProtectionEligibility()
     {
@@ -1926,6 +2052,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns quote_payment_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getQuotePaymentId()
     {
@@ -1936,6 +2063,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns shipping_amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingAmount()
     {
@@ -1946,6 +2074,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns shipping_captured
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingCaptured()
     {
@@ -1956,6 +2085,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns shipping_refunded
      *
      * @return float
+     * @since 2.0.0
      */
     public function getShippingRefunded()
     {
@@ -1964,6 +2094,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -1972,6 +2103,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseShippingCaptured($baseShippingCaptured)
     {
@@ -1980,6 +2112,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setShippingCaptured($shippingCaptured)
     {
@@ -1988,6 +2121,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAmountRefunded($amountRefunded)
     {
@@ -1996,6 +2130,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountPaid($baseAmountPaid)
     {
@@ -2004,6 +2139,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAmountCanceled($amountCanceled)
     {
@@ -2012,6 +2148,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountAuthorized($baseAmountAuthorized)
     {
@@ -2020,6 +2157,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountPaidOnline($baseAmountPaidOnline)
     {
@@ -2028,6 +2166,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountRefundedOnline($baseAmountRefundedOnline)
     {
@@ -2036,6 +2175,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseShippingAmount($amount)
     {
@@ -2044,6 +2184,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setShippingAmount($amount)
     {
@@ -2052,6 +2193,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAmountPaid($amountPaid)
     {
@@ -2060,6 +2202,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAmountAuthorized($amountAuthorized)
     {
@@ -2068,6 +2211,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountOrdered($baseAmountOrdered)
     {
@@ -2076,6 +2220,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseShippingRefunded($baseShippingRefunded)
     {
@@ -2084,6 +2229,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setShippingRefunded($shippingRefunded)
     {
@@ -2092,6 +2238,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountRefunded($baseAmountRefunded)
     {
@@ -2100,6 +2247,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAmountOrdered($amountOrdered)
     {
@@ -2108,6 +2256,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setBaseAmountCanceled($baseAmountCanceled)
     {
@@ -2116,6 +2265,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setQuotePaymentId($id)
     {
@@ -2124,6 +2274,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAdditionalData($additionalData)
     {
@@ -2132,6 +2283,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcExpMonth($ccExpMonth)
     {
@@ -2140,7 +2292,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2149,6 +2302,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEcheckBankName($echeckBankName)
     {
@@ -2157,6 +2311,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setMethod($method)
     {
@@ -2165,6 +2320,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcDebugRequestBody($ccDebugRequestBody)
     {
@@ -2173,6 +2329,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcSecureVerify($ccSecureVerify)
     {
@@ -2181,6 +2338,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setProtectionEligibility($protectionEligibility)
     {
@@ -2189,6 +2347,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcApproval($ccApproval)
     {
@@ -2197,6 +2356,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcLast4($ccLast4)
     {
@@ -2205,6 +2365,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcStatusDescription($description)
     {
@@ -2213,6 +2374,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEcheckType($echeckType)
     {
@@ -2221,6 +2383,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcDebugResponseSerialized($ccDebugResponseSerialized)
     {
@@ -2229,7 +2392,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2238,6 +2402,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEcheckAccountType($echeckAccountType)
     {
@@ -2246,6 +2411,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setLastTransId($id)
     {
@@ -2254,6 +2420,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcCidStatus($ccCidStatus)
     {
@@ -2262,6 +2429,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcOwner($ccOwner)
     {
@@ -2270,6 +2438,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcType($ccType)
     {
@@ -2278,6 +2447,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setPoNumber($poNumber)
     {
@@ -2286,6 +2456,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcExpYear($ccExpYear)
     {
@@ -2294,6 +2465,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcStatus($ccStatus)
     {
@@ -2302,6 +2474,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEcheckRoutingNumber($echeckRoutingNumber)
     {
@@ -2310,6 +2483,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAccountStatus($accountStatus)
     {
@@ -2318,6 +2492,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAnetTransMethod($anetTransMethod)
     {
@@ -2326,6 +2501,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcDebugResponseBody($ccDebugResponseBody)
     {
@@ -2334,7 +2510,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     public function setCcSsIssue($ccSsIssue)
     {
@@ -2343,6 +2520,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEcheckAccountName($echeckAccountName)
     {
@@ -2351,6 +2529,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcAvsStatus($ccAvsStatus)
     {
@@ -2359,6 +2538,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcNumberEnc($ccNumberEnc)
     {
@@ -2367,6 +2547,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCcTransId($id)
     {
@@ -2375,6 +2556,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setAddressStatus($addressStatus)
     {
@@ -2385,6 +2567,7 @@ class Payment extends Info implements OrderPaymentInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -2396,6 +2579,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes)
     {
@@ -2407,6 +2591,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param bool|int $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setIsTransactionPending($flag)
     {
@@ -2419,6 +2604,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsTransactionPending()
     {
@@ -2430,6 +2616,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param bool|int $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setIsFraudDetected($flag)
     {
@@ -2442,6 +2629,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsFraudDetected()
     {
@@ -2453,6 +2641,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param int|bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setShouldCloseParentTransaction($flag)
     {
@@ -2465,6 +2654,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getShouldCloseParentTransaction()
     {
@@ -2475,6 +2665,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Set payment parent transaction id and current transaction id if it not set
      * @param Transaction $transaction
      * @return void
+     * @since 2.0.0
      */
     private function setTransactionIdsForRefund(Transaction $transaction)
     {

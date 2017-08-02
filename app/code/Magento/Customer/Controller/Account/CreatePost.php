@@ -30,65 +30,109 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $accountManagement;
 
-    /** @var Address */
+    /**
+     * @var \Magento\Customer\Helper\Address
+     * @since 2.0.0
+     */
     protected $addressHelper;
 
-    /** @var FormFactory */
+    /**
+     * @var \Magento\Customer\Model\Metadata\FormFactory
+     * @since 2.0.0
+     */
     protected $formFactory;
 
-    /** @var SubscriberFactory */
+    /**
+     * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @since 2.0.0
+     */
     protected $subscriberFactory;
 
-    /** @var RegionInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     * @since 2.0.0
+     */
     protected $regionDataFactory;
 
-    /** @var AddressInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     * @since 2.0.0
+     */
     protected $addressDataFactory;
 
-    /** @var Registration */
+    /**
+     * @var \Magento\Customer\Model\Registration
+     * @since 2.0.0
+     */
     protected $registration;
 
-    /** @var CustomerInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @since 2.0.0
+     */
     protected $customerDataFactory;
 
-    /** @var CustomerUrl */
+    /**
+     * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
+     */
     protected $customerUrl;
 
-    /** @var Escaper */
+    /**
+     * @var \Magento\Framework\Escaper
+     * @since 2.0.0
+     */
     protected $escaper;
 
-    /** @var CustomerExtractor */
+    /**
+     * @var \Magento\Customer\Model\CustomerExtractor
+     * @since 2.0.0
+     */
     protected $customerExtractor;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
+     */
     protected $urlModel;
 
-    /** @var DataObjectHelper  */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
+     */
     protected $dataObjectHelper;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var AccountRedirect
+     * @since 2.0.0
      */
     private $accountRedirect;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private $cookieMetadataManager;
 
@@ -113,6 +157,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param AccountRedirect $accountRedirect
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -157,8 +202,9 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private function getCookieManager()
     {
@@ -173,8 +219,9 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.1.0
      */
     private function getCookieMetadataFactory()
     {
@@ -190,6 +237,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * Add address to customer during create account
      *
      * @return AddressInterface|null
+     * @since 2.0.0
      */
     protected function extractAddress()
     {
@@ -242,6 +290,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -349,6 +398,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param string $confirmation
      * @return void
      * @throws InputException
+     * @since 2.0.0
      */
     protected function checkPasswordConfirmation($password, $confirmation)
     {
@@ -361,6 +411,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve success message
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSuccessMessage()
     {

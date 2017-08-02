@@ -12,6 +12,7 @@ use Magento\Customer\Model\Context;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class RegisterLink extends \Magento\Framework\View\Element\Html\Link
 {
@@ -19,16 +20,19 @@ class RegisterLink extends \Magento\Framework\View\Element\Html\Link
      * Customer session
      *
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Customer\Model\Registration
+     * @since 2.0.0
      */
     protected $_registration;
 
     /**
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -38,6 +42,7 @@ class RegisterLink extends \Magento\Framework\View\Element\Html\Link
      * @param \Magento\Customer\Model\Registration $registration
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -54,6 +59,7 @@ class RegisterLink extends \Magento\Framework\View\Element\Html\Link
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -62,6 +68,7 @@ class RegisterLink extends \Magento\Framework\View\Element\Html\Link
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

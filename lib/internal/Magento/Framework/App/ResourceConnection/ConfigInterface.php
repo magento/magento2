@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\App\ResourceConnection;
 
+/**
+ * Interface \Magento\Framework\App\ResourceConnection\ConfigInterface
+ *
+ * @since 2.0.0
+ */
 interface ConfigInterface
 {
     /**
@@ -14,6 +19,7 @@ interface ConfigInterface
      *
      * @param string $resourceName
      * @return string
+     * @since 2.0.0
      */
     public function getConnectionName($resourceName);
 }

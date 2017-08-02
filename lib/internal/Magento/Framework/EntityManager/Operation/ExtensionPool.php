@@ -11,22 +11,26 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ExtensionPool
+ * @since 2.1.0
  */
 class ExtensionPool
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.1.0
      */
     protected $objectManager;
 
     /**
      * @var object[]
+     * @since 2.1.0
      */
     protected $actions;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $extensionActions
+     * @since 2.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -41,6 +45,7 @@ class ExtensionPool
      * @param string $actionName
      * @return ExtensionInterface[]
      * @throws \Exception
+     * @since 2.1.0
      */
     public function getActions($entityType, $actionName)
     {

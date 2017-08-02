@@ -8,21 +8,25 @@ namespace Magento\Catalog\Model\Rss;
 /**
  * Class Category
  * @package Magento\Catalog\Model\Rss
+ * @since 2.0.0
  */
 class Category
 {
     /**
      * @var \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     protected $catalogLayer;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $visibility;
 
@@ -30,6 +34,7 @@ class Category
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
@@ -45,6 +50,7 @@ class Category
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function getProductCollection(\Magento\Catalog\Model\Category $category, $storeId)
     {

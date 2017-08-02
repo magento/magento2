@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
@@ -19,6 +20,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -31,11 +33,13 @@ class Totals extends \Magento\Sales\Block\Order\Totals
 
     /**
      * @var Creditmemo|null
+     * @since 2.0.0
      */
     protected $_creditmemo = null;
 
     /**
      * @return Creditmemo|null
+     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -54,6 +58,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * @param Creditmemo $creditmemo
      * @return $this
+     * @since 2.0.0
      */
     public function setCreditmemo($creditmemo)
     {
@@ -65,6 +70,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * Get totals source object
      *
      * @return Creditmemo
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -75,6 +81,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * Initialize order totals array
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initTotals()
     {

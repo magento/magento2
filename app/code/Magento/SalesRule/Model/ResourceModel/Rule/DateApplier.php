@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 /**
  * Class DateApplier
  * adds the dates just for SalesRule
+ * @since 2.1.0
  */
 class DateApplier
 {
@@ -15,6 +16,7 @@ class DateApplier
      * @param \Magento\Framework\DB\Select $select
      * @param int|string $now
      * @return void
+     * @since 2.1.0
      */
     public function applyDate($select, $now)
     {

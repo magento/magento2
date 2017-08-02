@@ -11,22 +11,26 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Represents an analytics notification about failed subscription.
+ * @since 2.2.0
  */
 class NotificationAboutFailedSubscription implements MessageInterface
 {
     /**
      * @var SubscriptionStatusProvider
+     * @since 2.2.0
      */
     private $subscriptionStatusProvider;
 
     /**
      * @var UrlInterface
+     * @since 2.2.0
      */
     private $urlBuilder;
 
     /**
      * @param SubscriptionStatusProvider $subscriptionStatusProvider
      * @param UrlInterface $urlBuilder
+     * @since 2.2.0
      */
     public function __construct(SubscriptionStatusProvider $subscriptionStatusProvider, UrlInterface $urlBuilder)
     {
@@ -38,6 +42,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
      * @inheritdoc
      *
      * @codeCoverageIgnore
+     * @since 2.2.0
      */
     public function getIdentity()
     {
@@ -46,6 +51,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isDisplayed()
     {
@@ -54,6 +60,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getText()
     {
@@ -72,6 +79,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
      * @inheritdoc
      *
      * @codeCoverageIgnore
+     * @since 2.2.0
      */
     public function getSeverity()
     {

@@ -7,26 +7,31 @@ namespace Magento\Reports\Observer;
 
 /**
  * Reports Event observer model
+ * @since 2.0.0
  */
 class EventSaver
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Reports\Model\EventFactory
+     * @since 2.0.0
      */
     protected $_eventFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -35,6 +40,7 @@ class EventSaver
      * @param \Magento\Reports\Model\EventFactory $event
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -56,6 +62,7 @@ class EventSaver
      * @param int|null $subjectId
      * @param int $subtype
      * @return void
+     * @since 2.0.0
      */
     public function save($eventTypeId, $objectId, $subjectId = null, $subtype = 0)
     {

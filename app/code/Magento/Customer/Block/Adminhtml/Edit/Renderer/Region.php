@@ -7,12 +7,14 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 
 /**
  * Customer address region field renderer
+ * @since 2.0.0
  */
 class Region extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $_directoryHelper;
 
@@ -20,6 +22,7 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -37,6 +40,7 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

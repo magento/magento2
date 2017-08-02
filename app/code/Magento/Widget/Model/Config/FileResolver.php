@@ -10,22 +10,30 @@ namespace Magento\Widget\Model\Config;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Class \Magento\Widget\Model\Config\FileResolver
+ *
+ * @since 2.0.0
+ */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
      * Module configuration file reader
      *
      * @var \Magento\Framework\Module\Dir\Reader
+     * @since 2.0.0
      */
     protected $_moduleReader;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
+     * @since 2.0.0
      */
     protected $iteratorFactory;
 
     /**
      * @var DirSearch
+     * @since 2.0.0
      */
     private $componentDirSearch;
 
@@ -33,6 +41,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
      * @param DirSearch $componentDirSearch
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Module\Dir\Reader $moduleReader,
@@ -46,6 +55,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($filename, $scope)
     {

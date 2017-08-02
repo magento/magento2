@@ -15,6 +15,11 @@ use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Developer\Model\TemplateEngine\Plugin\DebugHints
+ *
+ * @since 2.0.0
+ */
 class DebugHints
 {
     /**
@@ -24,21 +29,25 @@ class DebugHints
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var DevHelper
+     * @since 2.0.0
      */
     protected $devHelper;
 
     /**
      * @var DebugHintsFactory
+     * @since 2.0.0
      */
     protected $debugHintsFactory;
 
@@ -50,6 +59,7 @@ class DebugHints
      *     dev/debug/template_hints_admin
      *
      * @var string
+     * @since 2.0.0
      */
     protected $debugHintsPath;
 
@@ -59,6 +69,7 @@ class DebugHints
      * @param DevHelper $devHelper
      * @param DebugHintsFactory $debugHintsFactory
      * @param string $debugHintsPath
+     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -82,6 +93,7 @@ class DebugHints
      *
      * @return TemplateEngineInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterCreate(
         TemplateEngineFactory $subject,

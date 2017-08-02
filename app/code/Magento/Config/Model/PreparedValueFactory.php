@@ -21,6 +21,7 @@ use Magento\Framework\Exception\RuntimeException;
  *
  * @see ValueInterface
  * @api
+ * @since 2.2.0
  */
 class PreparedValueFactory
 {
@@ -28,6 +29,7 @@ class PreparedValueFactory
      * The scope resolver pool.
      *
      * @var ScopeResolverPool
+     * @since 2.2.0
      */
     private $scopeResolverPool;
 
@@ -35,6 +37,7 @@ class PreparedValueFactory
      * The manager for system configuration structure.
      *
      * @var StructureFactory
+     * @since 2.2.0
      */
     private $structureFactory;
 
@@ -43,6 +46,7 @@ class PreparedValueFactory
      *
      * @see ValueInterface
      * @var BackendFactory
+     * @since 2.2.0
      */
     private $valueFactory;
 
@@ -50,6 +54,7 @@ class PreparedValueFactory
      * The scope configuration.
      *
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $config;
 
@@ -57,6 +62,7 @@ class PreparedValueFactory
      * The scope type normalizer.
      *
      * @var ScopeTypeNormalizer
+     * @since 2.2.0
      */
     private $scopeTypeNormalizer;
 
@@ -66,6 +72,7 @@ class PreparedValueFactory
      * @param BackendFactory $valueFactory The factory for configuration value objects
      * @param ScopeConfigInterface $config The scope configuration
      * @param ScopeTypeNormalizer $scopeTypeNormalizer The scope type normalizer
+     * @since 2.2.0
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,
@@ -91,6 +98,7 @@ class PreparedValueFactory
      * @return ValueInterface
      * @throws RuntimeException If Value can not be created
      * @see ValueInterface
+     * @since 2.2.0
      */
     public function create($path, $value, $scope, $scopeCode = null)
     {

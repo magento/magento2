@@ -9,6 +9,7 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Shopping cart abstract block
+ * @since 2.0.0
  */
 class AbstractCart extends \Magento\Framework\View\Element\Template
 {
@@ -19,16 +20,19 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
 
     /**
      * @var Quote|null
+     * @since 2.0.0
      */
     protected $_quote = null;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_totals;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_itemRenders = [];
 
@@ -36,11 +40,13 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * TODO: MAGETWO-34827: unused object?
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -50,6 +56,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -67,6 +74,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * Retrieve renderer list
      *
      * @return \Magento\Framework\View\Element\RendererList
+     * @since 2.0.0
      */
     protected function _getRendererList()
     {
@@ -83,6 +91,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * @param string|null $type
      * @return \Magento\Framework\View\Element\Template
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function getItemRenderer($type = null)
     {
@@ -102,6 +111,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * Get active quote
      *
      * @return Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -116,6 +126,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      *
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -127,6 +138,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      *
      * @param   \Magento\Quote\Model\Quote\Item $item
      * @return  string
+     * @since 2.0.0
      */
     public function getItemHtml(\Magento\Quote\Model\Quote\Item $item)
     {
@@ -137,6 +149,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     /**
      * @return array
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -145,6 +158,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getTotalsCache()
     {

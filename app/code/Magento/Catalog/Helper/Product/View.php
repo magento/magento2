@@ -13,6 +13,7 @@ use Magento\Framework\View\Result\Page as ResultPage;
 /**
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -20,6 +21,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * List of catalog product session message groups
      *
      * @var array
+     * @since 2.0.0
      */
     protected $messageGroups;
 
@@ -27,6 +29,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -34,6 +37,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
+     * @since 2.0.0
      */
     protected $_catalogProduct = null;
 
@@ -41,6 +45,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog design
      *
      * @var \Magento\Catalog\Model\Design
+     * @since 2.0.0
      */
     protected $_catalogDesign;
 
@@ -48,16 +53,19 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
+     * @since 2.0.0
      */
     protected $_catalogSession;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @since 2.0.0
      */
     protected $categoryUrlPathGenerator;
 
@@ -72,6 +80,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -102,6 +111,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @return \Magento\Catalog\Helper\Product\View
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function initProductLayout(ResultPage $resultPage, $product, $params = null)
     {
@@ -178,6 +188,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Catalog\Helper\Product\View
+     * @since 2.0.0
      */
     public function prepareAndRender(ResultPage $resultPage, $productId, $controller, $params = null)
     {

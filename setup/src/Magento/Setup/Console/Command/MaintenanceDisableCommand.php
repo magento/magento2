@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 /**
  * Command for disabling maintenance mode
+ * @since 2.0.0
  */
 class MaintenanceDisableCommand extends AbstractMaintenanceCommand
 {
@@ -15,6 +16,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      * Initialization of the command
      *
      * @return void
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -26,6 +28,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      * Disable maintenance mode
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isEnable()
     {
@@ -36,6 +39,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      * Get disabled maintenance mode display string
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getDisplayString()
     {
@@ -46,6 +50,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      * Return if IP addresses effective for maintenance mode were set
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isSetAddressInfo()
     {

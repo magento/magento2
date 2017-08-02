@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class SelectHydrator
+ * @since 2.2.0
  */
 class SelectHydrator
 {
@@ -19,6 +20,7 @@ class SelectHydrator
      * Array of supported Select parts
      *
      * @var array
+     * @since 2.2.0
      */
     private $predefinedSelectParts =
         [
@@ -37,16 +39,19 @@ class SelectHydrator
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $selectParts;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -54,6 +59,7 @@ class SelectHydrator
      * @param ResourceConnection $resourceConnection
      * @param ObjectManagerInterface $objectManager
      * @param array $selectParts
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -67,6 +73,7 @@ class SelectHydrator
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getSelectParts()
     {
@@ -79,6 +86,7 @@ class SelectHydrator
      * @param Select $select
      * @return array
      * @throws \Zend_Db_Select_Exception
+     * @since 2.2.0
      */
     public function extract(Select $select)
     {
@@ -92,6 +100,7 @@ class SelectHydrator
     /**
      * @param array $selectParts
      * @return Select
+     * @since 2.2.0
      */
     public function recreate(array $selectParts)
     {
@@ -115,6 +124,7 @@ class SelectHydrator
      * @param Select $select
      * @param array $selectParts
      * @return Select
+     * @since 2.2.0
      */
     private function processColumns(Select $select, array &$selectParts)
     {

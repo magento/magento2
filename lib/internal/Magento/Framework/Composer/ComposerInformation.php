@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
+ * @since 2.0.0
  */
 class ComposerInformation
 {
@@ -65,15 +66,20 @@ class ComposerInformation
 
     /**
      * @var \Composer\Composer
+     * @since 2.0.0
      */
     private $composer;
 
     /**
      * @var \Composer\Package\Locker
+     * @since 2.0.0
      */
     private $locker;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     private static $packageTypes = [
         self::THEME_PACKAGE_TYPE,
         self::LANGUAGE_PACKAGE_TYPE,
@@ -85,6 +91,7 @@ class ComposerInformation
 
     /**
      * @var ComposerFactory
+     * @since 2.1.0
      */
     private $composerFactory;
 
@@ -92,6 +99,7 @@ class ComposerInformation
      * @param ComposerFactory $composerFactory
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(ComposerFactory $composerFactory)
     {
@@ -103,6 +111,7 @@ class ComposerInformation
      *
      * @return string
      * @throws \Exception If attributes are missing in composer.lock file.
+     * @since 2.0.0
      */
     public function getRequiredPhpVersion()
     {
@@ -138,6 +147,7 @@ class ComposerInformation
      *
      * @return array
      * @throws \Exception If attributes are missing in composer.lock file.
+     * @since 2.0.0
      */
     public function getRequiredExtensions()
     {
@@ -166,6 +176,7 @@ class ComposerInformation
      * Collect suggests from composer.lock file and modules composer.json files
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSuggestedPackages()
     {
@@ -182,6 +193,7 @@ class ComposerInformation
      * Collect required packages from root composer.lock file
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRootRequiredPackages()
     {
@@ -197,6 +209,7 @@ class ComposerInformation
      * Collect required packages and types from root composer.lock file
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRootRequiredPackageTypesByName()
     {
@@ -212,6 +225,7 @@ class ComposerInformation
      * Collect all installed Magento packages from composer.lock
      *
      * @return array
+     * @since 2.0.0
      */
     public function getInstalledMagentoPackages()
     {
@@ -234,6 +248,7 @@ class ComposerInformation
      * Collect all system packages from composer.lock
      *
      * @return array
+     * @since 2.1.0
      */
     public function getSystemPackages()
     {
@@ -256,6 +271,7 @@ class ComposerInformation
      *
      * @param string $packageName
      * @return bool
+     * @since 2.0.0
      */
     public function isSystemPackage($packageName = '')
     {
@@ -269,6 +285,7 @@ class ComposerInformation
      * Determines if Magento is the root package or it is included as a requirement.
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isMagentoRoot()
     {
@@ -281,6 +298,7 @@ class ComposerInformation
      * Get root package
      *
      * @return \Composer\Package\RootPackageInterface
+     * @since 2.1.0
      */
     public function getRootPackage()
     {
@@ -292,6 +310,7 @@ class ComposerInformation
      *
      * @param string $packageName
      * @return bool
+     * @since 2.0.0
      */
     public function isPackageInComposerJson($packageName)
     {
@@ -302,6 +321,7 @@ class ComposerInformation
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getPackagesTypes()
     {
@@ -312,6 +332,7 @@ class ComposerInformation
      * @param string $name
      * @param string $version
      * @return array
+     * @since 2.0.0
      */
     public function getPackageRequirements($name, $version)
     {
@@ -323,6 +344,7 @@ class ComposerInformation
      * Returns all repository URLs, except local and packagists.
      *
      * @return string[]
+     * @since 2.1.0
      */
     public function getRootRepositories()
     {
@@ -341,7 +363,8 @@ class ComposerInformation
      * Load composerFactory
      *
      * @return ComposerFactory
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getComposerFactory()
     {
@@ -355,6 +378,7 @@ class ComposerInformation
      * Load composer
      *
      * @return \Composer\Composer
+     * @since 2.1.0
      */
     private function getComposer()
     {
@@ -368,6 +392,7 @@ class ComposerInformation
      * Load locker
      *
      * @return \Composer\Package\Locker
+     * @since 2.1.0
      */
     private function getLocker()
     {

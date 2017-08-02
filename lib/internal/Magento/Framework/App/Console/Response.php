@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Console;
 
 /**
  * @SuppressWarnings(PHPMD.ExitExpression)
+ * @since 2.0.0
  */
 class Response implements \Magento\Framework\App\ResponseInterface
 {
@@ -18,6 +19,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      *  -1 (error)
      *
      * @var int
+     * @since 2.0.0
      */
     protected $code = 0;
 
@@ -35,6 +37,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      * Text to output on send response
      *
      * @var string
+     * @since 2.0.0
      */
     private $body;
 
@@ -42,6 +45,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      * Set whether to terminate process on send or not
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $terminateOnSend = true;
 
@@ -49,6 +53,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      * Send response to client
      *
      * @return int
+     * @since 2.0.0
      */
     public function sendResponse()
     {
@@ -65,6 +70,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      * Get body
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBody()
     {
@@ -76,6 +82,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      *
      * @param string $body
      * @return void
+     * @since 2.0.0
      */
     public function setBody($body)
     {
@@ -87,6 +94,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      *
      * @param int $code
      * @return void
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -101,6 +109,7 @@ class Response implements \Magento\Framework\App\ResponseInterface
      *
      * @param bool $terminate
      * @return void
+     * @since 2.0.0
      */
     public function terminateOnSend($terminate)
     {

@@ -9,6 +9,7 @@ namespace Magento\Ups\Helper;
  * Configuration data of carrier
  *
  * @api
+ * @since 2.0.0
  */
 class Config
 {
@@ -18,6 +19,7 @@ class Config
      * @param string $type
      * @param string $code
      * @return array|string|false
+     * @since 2.0.0
      */
     public function getCode($type, $code = '')
     {
@@ -40,6 +42,7 @@ class Config
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function getCodes()
     {

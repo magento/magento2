@@ -22,6 +22,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
  * @method int getStatusId()
  * @method \Magento\Review\Model\Review setStatusId(int $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Review extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
@@ -29,6 +30,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Event prefix for observer
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'review';
 
@@ -71,6 +73,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Review product collection factory
      *
      * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $productCollectionFactory;
 
@@ -78,6 +81,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Review status collection factory
      *
      * @var \Magento\Review\Model\ResourceModel\Review\Status\CollectionFactory
+     * @since 2.0.0
      */
     protected $_statusFactory;
 
@@ -85,6 +89,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Review model summary factory
      *
      * @var \Magento\Review\Model\Review\SummaryFactory
+     * @since 2.0.0
      */
     protected $_summaryFactory;
 
@@ -92,6 +97,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Review model summary factory
      *
      * @var \Magento\Review\Model\Review\SummaryFactory
+     * @since 2.0.0
      */
     protected $_summaryModFactory;
 
@@ -99,6 +105,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Review model summary
      *
      * @var \Magento\Review\Model\Review\Summary
+     * @since 2.0.0
      */
     protected $_reviewSummary;
 
@@ -106,6 +113,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Core model store manager interface
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -113,6 +121,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Url interface
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_urlModel;
 
@@ -130,6 +139,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -159,6 +169,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -169,6 +180,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Get product collection
      *
      * @return ProductCollection
+     * @since 2.0.0
      */
     public function getProductCollection()
     {
@@ -179,6 +191,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Get status collection
      *
      * @return StatusCollection
+     * @since 2.0.0
      */
     public function getStatusCollection()
     {
@@ -192,6 +205,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param bool $approvedOnly
      * @param int $storeId
      * @return int
+     * @since 2.0.0
      */
     public function getTotalReviews($entityPkValue, $approvedOnly = false, $storeId = 0)
     {
@@ -202,6 +216,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Aggregate reviews
      *
      * @return $this
+     * @since 2.0.0
      */
     public function aggregate()
     {
@@ -215,6 +230,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param Product $product
      * @param int $storeId
      * @return void
+     * @since 2.0.0
      */
     public function getEntitySummary($product, $storeId = 0)
     {
@@ -228,6 +244,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Get pending status
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPendingStatus()
     {
@@ -238,6 +255,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Get review product view url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getReviewUrl()
     {
@@ -250,6 +268,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param string|int $productId
      * @param string|int $storeId
      * @return string
+     * @since 2.0.0
      */
     public function getProductUrl($productId, $storeId)
     {
@@ -264,6 +283,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Validate review summary fields
      *
      * @return bool|string[]
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -291,6 +311,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Perform actions after object delete
      *
      * @return \Magento\Framework\Model\AbstractModel
+     * @since 2.0.0
      */
     public function afterDeleteCommit()
     {
@@ -303,6 +324,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @param ProductCollection $collection
      * @return $this
+     * @since 2.0.0
      */
     public function appendSummary($collection)
     {
@@ -335,6 +357,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Check if current review approved or not
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isApproved()
     {
@@ -346,6 +369,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @param int|\Magento\Store\Model\Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailableOnStore($store = null)
     {
@@ -361,6 +385,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @param string $entityCode
      * @return int|bool
+     * @since 2.0.0
      */
     public function getEntityIdByCode($entityCode)
     {
@@ -371,6 +396,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * Return unique ID(s) for each object in system
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

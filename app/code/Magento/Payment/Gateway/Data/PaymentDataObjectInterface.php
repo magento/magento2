@@ -11,6 +11,7 @@ use Magento\Payment\Model\InfoInterface;
  * Interface PaymentDataObjectInterface
  * @package Magento\Payment\Gateway\Data
  * @api
+ * @since 2.0.0
  */
 interface PaymentDataObjectInterface
 {
@@ -18,6 +19,7 @@ interface PaymentDataObjectInterface
      * Returns order
      *
      * @return OrderAdapterInterface
+     * @since 2.0.0
      */
     public function getOrder();
 
@@ -25,6 +27,7 @@ interface PaymentDataObjectInterface
      * Returns payment
      *
      * @return InfoInterface
+     * @since 2.0.0
      */
     public function getPayment();
 }

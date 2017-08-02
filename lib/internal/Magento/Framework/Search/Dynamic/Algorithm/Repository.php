@@ -10,21 +10,25 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Repository
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $algorithms = [];
 
     /**
      * @var AlgorithmInterface[]
+     * @since 2.0.0
      */
     private $instances = [];
 
@@ -33,6 +37,7 @@ class Repository
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $algorithms
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, array $algorithms)
     {
@@ -47,6 +52,7 @@ class Repository
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return AlgorithmInterface
+     * @since 2.0.0
      */
     public function get($algorithmType, array $data = [])
     {

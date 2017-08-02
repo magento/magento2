@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Operation abstract class
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
@@ -18,6 +19,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Enable loging
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_debugMode = false;
 
@@ -25,6 +27,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = [];
 
@@ -32,16 +35,19 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Contains all log information
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_logTrace = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $_varDirectory;
 
@@ -49,6 +55,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -66,6 +73,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param mixed $debugData
      * @return $this
+     * @since 2.0.0
      */
     public function addLogComment($debugData)
     {
@@ -86,6 +94,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Return human readable debug trace.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormatedLogTrace()
     {

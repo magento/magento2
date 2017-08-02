@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Crosssell extends Extended
 {
@@ -19,36 +20,43 @@ class Crosssell extends Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkFactory
+     * @since 2.0.0
      */
     protected $_linkFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory]
+     * @since 2.0.0
      */
     protected $_setsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
+     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @since 2.0.0
      */
     protected $_status;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $_visibility;
 
@@ -65,6 +73,7 @@ class Crosssell extends Extended
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -92,6 +101,7 @@ class Crosssell extends Extended
      * Set grid params
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -111,6 +121,7 @@ class Crosssell extends Extended
      * Retrieve currently edited product model
      *
      * @return Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -122,6 +133,7 @@ class Crosssell extends Extended
      *
      * @param Column $column
      * @return $this
+     * @since 2.0.0
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -148,6 +160,7 @@ class Crosssell extends Extended
      * Prepare collection
      *
      * @return Extended
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -175,6 +188,7 @@ class Crosssell extends Extended
      * Checks when this block is readonly
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -186,6 +200,7 @@ class Crosssell extends Extended
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -325,6 +340,7 @@ class Crosssell extends Extended
      * Retrieve grid URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -342,6 +358,7 @@ class Crosssell extends Extended
      * Retrieve selected crosssell products
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getSelectedProducts()
     {
@@ -356,6 +373,7 @@ class Crosssell extends Extended
      * Retrieve crosssell products
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSelectedCrossSellProducts()
     {
@@ -372,6 +390,7 @@ class Crosssell extends Extended
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection $collection
      * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
      * @return $this
+     * @since 2.0.0
      */
     public function filterProductPosition($collection, $column)
     {

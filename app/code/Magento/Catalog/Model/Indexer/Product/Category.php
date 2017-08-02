@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Category extends \Magento\Catalog\Model\Indexer\Category\Product
 {
@@ -19,6 +20,7 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
      * @param \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory $fullActionFactory
      * @param Category\Action\RowsFactory $rowsActionFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory $fullActionFactory,
@@ -32,6 +34,7 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
      * Add tags to cache context
      *
      * @return void
+     * @since 2.1.0
      */
     protected function registerTags()
     {
@@ -48,6 +51,7 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
      *
      * @param int[] $ids
      * @return void
+     * @since 2.1.0
      */
     protected function registerEntities($ids)
     {

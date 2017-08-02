@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml;
  * Adminhtml shipment create
  *
  * @api
+ * @since 2.0.0
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -16,6 +17,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -23,6 +25,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -35,6 +38,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,6 +55,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -59,6 +64,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -68,6 +74,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {

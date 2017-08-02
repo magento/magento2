@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Config\ConfigResource;
 
 /**
  * Resource for storing store configuration values
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -18,6 +19,7 @@ interface ConfigInterface
      * @param string $scope
      * @param int $scopeId
      * @return $this
+     * @since 2.0.0
      */
     public function saveConfig($path, $value, $scope, $scopeId);
 
@@ -28,6 +30,7 @@ interface ConfigInterface
      * @param string $scope
      * @param int $scopeId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteConfig($path, $scope, $scopeId);
 }

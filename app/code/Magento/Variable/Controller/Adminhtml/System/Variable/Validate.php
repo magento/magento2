@@ -9,6 +9,7 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 /**
  * Validate variable value before save controller
  * @api
+ * @since 2.0.0
  */
 class Validate extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
@@ -16,6 +17,7 @@ class Validate extends \Magento\Variable\Controller\Adminhtml\System\Variable
      * Validate Action
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

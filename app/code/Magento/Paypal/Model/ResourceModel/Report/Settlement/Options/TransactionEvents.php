@@ -9,16 +9,19 @@ namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Options;
  * Transaction Events Types Options
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\Row
+     * @since 2.0.0
      */
     protected $_model;
 
     /**
      * @param \Magento\Paypal\Model\Report\Settlement\Row $model
+     * @since 2.0.0
      */
     public function __construct(\Magento\Paypal\Model\Report\Settlement\Row $model)
     {
@@ -27,6 +30,7 @@ class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

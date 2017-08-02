@@ -7,36 +7,47 @@ namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Helper\ImageFactory as HelperFactory;
 
+/**
+ * Class \Magento\Catalog\Block\Product\ImageBuilder
+ *
+ * @since 2.0.0
+ */
 class ImageBuilder
 {
     /**
      * @var ImageFactory
+     * @since 2.0.0
      */
     protected $imageFactory;
 
     /**
      * @var HelperFactory
+     * @since 2.0.0
      */
     protected $helperFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected $product;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $imageId;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $attributes = [];
 
     /**
      * @param HelperFactory $helperFactory
      * @param ImageFactory $imageFactory
+     * @since 2.0.0
      */
     public function __construct(
         HelperFactory $helperFactory,
@@ -51,6 +62,7 @@ class ImageBuilder
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -63,6 +75,7 @@ class ImageBuilder
      *
      * @param string $imageId
      * @return $this
+     * @since 2.0.0
      */
     public function setImageId($imageId)
     {
@@ -75,6 +88,7 @@ class ImageBuilder
      *
      * @param array $attributes
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributes(array $attributes)
     {
@@ -88,6 +102,7 @@ class ImageBuilder
      * Retrieve image custom attributes for HTML element
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getCustomAttributes()
     {
@@ -103,6 +118,7 @@ class ImageBuilder
      *
      * @param \Magento\Catalog\Helper\Image $helper
      * @return float|int
+     * @since 2.0.0
      */
     protected function getRatio(\Magento\Catalog\Helper\Image $helper)
     {
@@ -118,6 +134,7 @@ class ImageBuilder
      * Create image block
      *
      * @return \Magento\Catalog\Block\Product\Image
+     * @since 2.0.0
      */
     public function create()
     {

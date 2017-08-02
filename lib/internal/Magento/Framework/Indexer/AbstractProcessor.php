@@ -8,6 +8,11 @@
 
 namespace Magento\Framework\Indexer;
 
+/**
+ * Class \Magento\Framework\Indexer\AbstractProcessor
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractProcessor
 {
     /**
@@ -15,11 +20,15 @@ abstract class AbstractProcessor
      */
     const INDEXER_ID = '';
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
+     */
     protected $indexerRegistry;
 
     /**
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
@@ -31,6 +40,7 @@ abstract class AbstractProcessor
      * Get indexer
      *
      * @return \Magento\Framework\Indexer\IndexerInterface
+     * @since 2.0.0
      */
     public function getIndexer()
     {
@@ -43,6 +53,7 @@ abstract class AbstractProcessor
      * @param int $id
      * @param bool $forceReindex
      * @return void
+     * @since 2.0.0
      */
     public function reindexRow($id, $forceReindex = false)
     {
@@ -58,6 +69,7 @@ abstract class AbstractProcessor
      * @param int[] $ids
      * @param bool $forceReindex
      * @return void
+     * @since 2.0.0
      */
     public function reindexList($ids, $forceReindex = false)
     {
@@ -71,6 +83,7 @@ abstract class AbstractProcessor
      * Run Full reindex
      *
      * @return void
+     * @since 2.0.0
      */
     public function reindexAll()
     {
@@ -81,6 +94,7 @@ abstract class AbstractProcessor
      * Mark Product price indexer as invalid
      *
      * @return void
+     * @since 2.0.0
      */
     public function markIndexerAsInvalid()
     {
@@ -91,6 +105,7 @@ abstract class AbstractProcessor
      * Get processor indexer ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIndexerId()
     {
@@ -101,6 +116,7 @@ abstract class AbstractProcessor
      * Check if indexer is on scheduled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIndexerScheduled()
     {

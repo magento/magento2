@@ -11,11 +11,13 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
 {
     /**
      * @var \Magento\Store\Model\GroupFactory
+     * @since 2.0.0
      */
     protected $_groupFactory;
 
@@ -25,6 +27,7 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\GroupFactory $groupFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +45,7 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
      *
      * @param \Magento\Framework\Data\Form $form
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareStoreFieldset(\Magento\Framework\Data\Form $form)
     {

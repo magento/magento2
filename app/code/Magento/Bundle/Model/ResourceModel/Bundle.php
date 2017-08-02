@@ -9,16 +9,19 @@ namespace Magento\Bundle\Model\ResourceModel;
  * Bundle Resource Model
  *
  * @api
+ * @since 2.0.0
  */
 class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     * @since 2.0.0
      */
     protected $_productRelation;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @since 2.0.0
      */
     protected $quoteResource;
 
@@ -27,6 +30,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
      * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -43,6 +47,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -56,6 +61,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param array $columns
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getSelect($productId, $columns = [])
     {
@@ -79,6 +85,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $productId
      * @return array
+     * @since 2.0.0
      */
     public function getSelectionsData($productId)
     {
@@ -90,6 +97,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $productId
      * @return void
+     * @since 2.0.0
      */
     public function dropAllQuoteChildItems($productId)
     {
@@ -119,6 +127,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param array $ids
      * @return void
+     * @since 2.0.0
      */
     public function dropAllUnneededSelections($productId, $ids)
     {
@@ -135,6 +144,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param array $childIds
      * @return $this
+     * @since 2.0.0
      */
     public function saveProductRelations($parentId, $childIds)
     {
@@ -149,6 +159,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param int $childId
      * @return $this
+     * @since 2.1.0
      */
     public function addProductRelation($parentId, $childId)
     {
@@ -162,6 +173,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param array $childIds
      * @return $this
+     * @since 2.0.0
      */
     public function addProductRelations($parentId, $childIds)
     {
@@ -175,6 +187,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param array $childIds
      * @return $this
+     * @since 2.0.0
      */
     public function removeProductRelations($parentId, $childIds)
     {

@@ -10,16 +10,19 @@ use Magento\Framework\App\State;
 
 /**
  * Class checks that action can be displayed on massaction list
+ * @since 2.2.0
  */
 class ProductionModeVisibilityChecker implements VisibilityCheckerInterface
 {
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
     /**
      * @param State $state
+     * @since 2.2.0
      */
     public function __construct(State $state)
     {
@@ -28,6 +31,7 @@ class ProductionModeVisibilityChecker implements VisibilityCheckerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isVisible()
     {

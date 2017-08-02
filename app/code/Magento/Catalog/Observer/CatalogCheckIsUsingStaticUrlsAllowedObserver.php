@@ -7,17 +7,24 @@ namespace Magento\Catalog\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowedObserver
+ *
+ * @since 2.0.0
+ */
 class CatalogCheckIsUsingStaticUrlsAllowedObserver implements ObserverInterface
 {
     /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.0.0
      */
     protected $catalogData;
 
     /**
      * @param \Magento\Catalog\Helper\Data $catalogData
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Helper\Data $catalogData)
     {
@@ -29,6 +36,7 @@ class CatalogCheckIsUsingStaticUrlsAllowedObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -19,26 +19,31 @@ use Magento\Framework\App\RequestInterface;
  * Class Configurable
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Configurable
 {
     /**
      * @var VariationHandler
+     * @since 2.0.0
      */
     private $variationHandler;
 
     /**
      * @var RequestInterface
+     * @since 2.0.0
      */
     private $request;
 
     /**
      * @var Factory
+     * @since 2.1.0
      */
     private $optionsFactory;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $keysPost = [
         'status',
@@ -60,6 +65,7 @@ class Configurable
      * @param VariationHandler $variationHandler
      * @param RequestInterface $request
      * @param Factory $optionsFactory
+     * @since 2.0.0
      */
     public function __construct(
         VariationHandler $variationHandler,
@@ -80,6 +86,7 @@ class Configurable
      * @throws \InvalidArgumentException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterInitialize(Helper $subject, ProductInterface $product)
     {
@@ -124,6 +131,7 @@ class Configurable
      * @param ProductExtensionInterface $extensionAttributes
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
@@ -149,6 +157,7 @@ class Configurable
      * Get variation-matrix from request
      *
      * @return array
+     * @since 2.1.0
      */
     protected function getVariationMatrix()
     {
@@ -176,6 +185,7 @@ class Configurable
      *
      * @param array $item
      * @return array
+     * @since 2.1.0
      */
     private function mapData(array $item)
     {

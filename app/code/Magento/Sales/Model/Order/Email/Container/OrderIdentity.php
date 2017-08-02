@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
+/**
+ * Class \Magento\Sales\Model\Order\Email\Container\OrderIdentity
+ *
+ * @since 2.0.0
+ */
 class OrderIdentity extends Container implements IdentityInterface
 {
     /**
@@ -19,6 +24,7 @@ class OrderIdentity extends Container implements IdentityInterface
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -33,6 +39,7 @@ class OrderIdentity extends Container implements IdentityInterface
      * Return email copy_to list
      *
      * @return array|bool
+     * @since 2.0.0
      */
     public function getEmailCopyTo()
     {
@@ -47,6 +54,7 @@ class OrderIdentity extends Container implements IdentityInterface
      * Return copy method
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getCopyMethod()
     {
@@ -57,6 +65,7 @@ class OrderIdentity extends Container implements IdentityInterface
      * Return guest template id
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getGuestTemplateId()
     {
@@ -67,6 +76,7 @@ class OrderIdentity extends Container implements IdentityInterface
      * Return template id
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getTemplateId()
     {
@@ -77,6 +87,7 @@ class OrderIdentity extends Container implements IdentityInterface
      * Return email identity
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getEmailIdentity()
     {

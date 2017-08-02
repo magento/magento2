@@ -12,6 +12,7 @@ namespace Magento\Sales\Model\Config\Source\Order;
 /**
  * Class Status
  * @api
+ * @since 2.0.0
  */
 class Status implements \Magento\Framework\Option\ArrayInterface
 {
@@ -19,6 +20,7 @@ class Status implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $_stateStatuses = [
         \Magento\Sales\Model\Order::STATE_NEW,
@@ -31,11 +33,13 @@ class Status implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @var \Magento\Sales\Model\Order\Config
+     * @since 2.0.0
      */
     protected $_orderConfig;
 
     /**
      * @param \Magento\Sales\Model\Order\Config $orderConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Sales\Model\Order\Config $orderConfig)
     {
@@ -44,6 +48,7 @@ class Status implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

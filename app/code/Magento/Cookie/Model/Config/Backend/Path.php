@@ -7,10 +7,14 @@ namespace Magento\Cookie\Model\Config\Backend;
 
 /**
  * Backend model for domain config value
+ * @since 2.0.0
  */
 class Path extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\Session\Config\Validator\CookiePathValidator */
+    /**
+     * @var \Magento\Framework\Session\Config\Validator\CookiePathValidator
+     * @since 2.0.0
+     */
     protected $configValidator;
 
     /**
@@ -23,6 +27,7 @@ class Path extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -43,6 +48,7 @@ class Path extends \Magento\Framework\App\Config\Value
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function beforeSave()
     {

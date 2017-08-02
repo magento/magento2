@@ -15,16 +15,19 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class Comment. Is used to retrieve comment for config dump file
  * @api
+ * @since 2.2.0
  */
 class Comment implements CommentInterface
 {
     /**
      * @var PlaceholderInterface
+     * @since 2.2.0
      */
     private $placeholder;
 
     /**
      * @var DumpConfigSourceInterface
+     * @since 2.2.0
      */
     private $source;
 
@@ -32,6 +35,7 @@ class Comment implements CommentInterface
      * Checker for config type.
      *
      * @var TypePool
+     * @since 2.2.0
      */
     private $typePool;
 
@@ -39,6 +43,7 @@ class Comment implements CommentInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
      * @param TypePool|null $typePool The checker for config type
+     * @since 2.2.0
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
@@ -57,6 +62,7 @@ class Comment implements CommentInterface
      * a list with descriptions of these fields will be added to the comments.
      *
      * @return string
+     * @since 2.2.0
      */
     public function get()
     {

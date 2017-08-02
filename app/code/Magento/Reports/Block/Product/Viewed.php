@@ -12,7 +12,8 @@ use \Magento\Framework\DataObject\IdentityInterface;
  * Reports Recently Viewed Products Block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 class Viewed extends AbstractProduct implements IdentityInterface
 {
@@ -25,6 +26,7 @@ class Viewed extends AbstractProduct implements IdentityInterface
      * Viewed Product Index type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_indexType = \Magento\Reports\Model\Product\Index\Factory::TYPE_VIEWED;
 
@@ -32,6 +34,7 @@ class Viewed extends AbstractProduct implements IdentityInterface
      * Retrieve page size (count)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -48,6 +51,7 @@ class Viewed extends AbstractProduct implements IdentityInterface
      * Added predefined ids support
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCount()
     {
@@ -63,6 +67,7 @@ class Viewed extends AbstractProduct implements IdentityInterface
      * check has viewed products
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -74,6 +79,7 @@ class Viewed extends AbstractProduct implements IdentityInterface
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

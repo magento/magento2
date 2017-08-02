@@ -13,21 +13,25 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Assembles FROM condition
+ * @since 2.2.0
  */
 class FromAssembler implements AssemblerInterface
 {
     /**
      * @var NameResolver
+     * @since 2.2.0
      */
     private $nameResolver;
 
     /**
      * @var ColumnsResolver
+     * @since 2.2.0
      */
     private $columnsResolver;
 
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
@@ -35,6 +39,7 @@ class FromAssembler implements AssemblerInterface
      * @param NameResolver $nameResolver
      * @param ColumnsResolver $columnsResolver
      * @param ResourceConnection $resourceConnection
+     * @since 2.2.0
      */
     public function __construct(
         NameResolver $nameResolver,
@@ -52,6 +57,7 @@ class FromAssembler implements AssemblerInterface
      * @param SelectBuilder $selectBuilder
      * @param array $queryConfig
      * @return SelectBuilder
+     * @since 2.2.0
      */
     public function assemble(SelectBuilder $selectBuilder, $queryConfig)
     {

@@ -12,15 +12,22 @@ namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
+/**
+ * Class \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database
+ *
+ * @since 2.0.0
+ */
 class Database implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     protected $deploymentConfig;
 
     /**
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     public function __construct(DeploymentConfig $deploymentConfig)
     {
@@ -31,6 +38,7 @@ class Database implements \Magento\Framework\Option\ArrayInterface
      * Returns list of available resources
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
