@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Newsletter;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget
 {
@@ -18,7 +17,6 @@ class Form extends \Magento\Backend\Block\Widget
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

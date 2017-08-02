@@ -11,13 +11,11 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Review\Controller\Adminhtml\Product\Delete
  *
- * @since 2.0.0
  */
 class Delete extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

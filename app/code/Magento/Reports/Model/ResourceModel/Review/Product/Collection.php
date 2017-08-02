@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Review\Product;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Init Select
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -34,7 +32,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join review table to result
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _joinReview()
     {
@@ -86,7 +83,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this|\Magento\Catalog\Model\ResourceModel\Product\Collection
-     * @since 2.0.0
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -102,7 +98,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Get select count sql
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {

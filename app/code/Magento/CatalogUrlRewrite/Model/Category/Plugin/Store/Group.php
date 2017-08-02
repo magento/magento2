@@ -17,43 +17,36 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Group
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     * @since 2.0.0
      */
     protected $urlPersist;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $categoryFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
-     * @since 2.0.0
      */
     protected $productUrlRewriteGenerator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -64,7 +57,6 @@ class Group
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
@@ -124,7 +116,6 @@ class Group
      * @param int $websiteId
      * @param int $originWebsiteId
      * @return array
-     * @since 2.0.0
      */
     protected function generateProductUrls($websiteId, $originWebsiteId)
     {
@@ -153,7 +144,6 @@ class Group
      * @param int $rootCategoryId
      * @param array $storeIds
      * @return array
-     * @since 2.0.0
      */
     protected function generateCategoryUrls($rootCategoryId, $storeIds)
     {

@@ -7,13 +7,11 @@ namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
 /**
  * Class Collection
- * @since 2.0.0
  */
 abstract class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var Snapshot
-     * @since 2.0.0
      */
     protected $entitySnapshot;
 
@@ -25,7 +23,6 @@ abstract class Collection extends \Magento\Framework\Model\ResourceModel\Db\Coll
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -49,7 +46,6 @@ abstract class Collection extends \Magento\Framework\Model\ResourceModel\Db\Coll
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function fetchItem()
     {
@@ -62,7 +58,6 @@ abstract class Collection extends \Magento\Framework\Model\ResourceModel\Db\Coll
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {

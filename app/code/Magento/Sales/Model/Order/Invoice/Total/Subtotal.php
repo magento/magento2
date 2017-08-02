@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Order\Invoice\Total;
 /**
  * Class \Magento\Sales\Model\Order\Invoice\Total\Subtotal
  *
- * @since 2.0.0
  */
 class Subtotal extends AbstractTotal
 {
@@ -17,7 +16,6 @@ class Subtotal extends AbstractTotal
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
-     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {

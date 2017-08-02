@@ -12,7 +12,6 @@ use Magento\Payment\Model\Method\SpecificationInterface;
  * Abstract specification
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractSpecification implements SpecificationInterface
 {
@@ -20,7 +19,6 @@ abstract class AbstractSpecification implements SpecificationInterface
      * Payment methods info
      *
      * @var array
-     * @since 2.0.0
      */
     protected $methodsInfo = [];
 
@@ -28,7 +26,6 @@ abstract class AbstractSpecification implements SpecificationInterface
      * Construct
      *
      * @param PaymentConfig $paymentConfig
-     * @since 2.0.0
      */
     public function __construct(PaymentConfig $paymentConfig)
     {

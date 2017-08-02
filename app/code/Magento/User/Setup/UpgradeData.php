@@ -15,7 +15,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 /**
  * Class \Magento\User\Setup\UpgradeData
  *
- * @since 2.0.0
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -39,7 +38,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -59,7 +57,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.0.0
      */
     private function upgradeHash($setup)
     {

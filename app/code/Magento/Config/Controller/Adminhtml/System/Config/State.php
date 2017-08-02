@@ -9,13 +9,11 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 /**
  * Class \Magento\Config\Controller\Adminhtml\System\Config\State
  *
- * @since 2.0.0
  */
 class State extends AbstractScopeConfig
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -25,7 +23,6 @@ class State extends AbstractScopeConfig
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config $backendConfig
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -42,7 +39,6 @@ class State extends AbstractScopeConfig
      * Save fieldset state through AJAX
      *
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Shipment;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Shipment\PrintAction
  *
- * @since 2.0.0
  */
 class PrintAction extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\PrintAction
 {

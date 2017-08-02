@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Cache\Type;
 
 /**
  * System / Cache Management / Cache type "Layouts"
- * @since 2.0.0
  */
 class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -23,7 +22,6 @@ class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 
     /**
      * @param FrontendPool $cacheFrontendPool
-     * @since 2.0.0
      */
     public function __construct(FrontendPool $cacheFrontendPool)
     {

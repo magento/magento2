@@ -10,7 +10,6 @@ namespace Magento\Swatches\Model\ResourceModel;
  * @codeCoverageIgnore
  * Swatch Resource Model
  * @api
- * @since 2.0.0
  */
 class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,7 +17,6 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,7 +27,6 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $defaultValue
      * @param integer $id
      * @return void
-     * @since 2.0.0
      */
     public function saveDefaultSwatchOption($id, $defaultValue)
     {

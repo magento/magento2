@@ -19,7 +19,6 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Pdfshipments
  *
- * @since 2.0.0
  */
 abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -32,19 +31,16 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
 
     /**
      * @var FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var Shipment
-     * @since 2.0.0
      */
     protected $pdfShipment;
 
@@ -55,7 +51,6 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
      * @param FileFactory $fileFactory
      * @param Shipment $shipment
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -76,7 +71,6 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
      * @param AbstractCollection $collection
      * @return $this|ResponseInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     public function massAction(AbstractCollection $collection)
     {

@@ -14,7 +14,6 @@ namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Row;
 /**
  * Class \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -22,7 +21,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initializing
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -36,7 +34,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join reports info table
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -54,7 +51,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $accountId
      * @return $this
-     * @since 2.0.0
      */
     public function addAccountFilter($accountId)
     {

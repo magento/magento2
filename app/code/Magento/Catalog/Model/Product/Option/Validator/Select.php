@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product\Option;
 /**
  * Class \Magento\Catalog\Model\Product\Option\Validator\Select
  *
- * @since 2.0.0
  */
 class Select extends DefaultValidator
 {
@@ -20,7 +19,6 @@ class Select extends DefaultValidator
      *
      * @param array $values
      * @return bool
-     * @since 2.0.0
      */
     protected function checkAllValuesRemoved($values)
     {
@@ -39,7 +37,6 @@ class Select extends DefaultValidator
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function validateOptionValue(Option $option)
     {
@@ -80,7 +77,6 @@ class Select extends DefaultValidator
      * @param int $price
      * @param int $storeId
      * @return bool
-     * @since 2.0.0
      */
     protected function isValidOptionPrice($priceType, $price, $storeId)
     {

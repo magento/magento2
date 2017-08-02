@@ -7,25 +7,21 @@ namespace Magento\Checkout\Block\Total;
 
 /**
  * Default Total Row Renderer
- * @since 2.0.0
  */
 class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Checkout::total/default.phtml';
 
     /**
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_store;
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -37,7 +33,6 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
      * Get style assigned to total object
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStyle()
     {
@@ -47,7 +42,6 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
     /**
      * @param float $total
      * @return $this
-     * @since 2.0.0
      */
     public function setTotal($total)
     {
@@ -60,7 +54,6 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
 
     /**
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {

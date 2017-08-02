@@ -11,13 +11,13 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Class \Magento\Sales\Model\Order\Shipping
  *
- * @since 2.1.0
+ * @since 2.0.3
  */
 class Shipping extends AbstractExtensibleModel implements ShippingInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function getAddress()
     {
@@ -26,7 +26,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function getMethod()
     {
@@ -35,7 +35,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function getTotal()
     {
@@ -44,7 +44,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function setAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address)
     {
@@ -53,7 +53,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function setMethod($method)
     {
@@ -62,7 +62,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function setTotal(\Magento\Sales\Api\Data\TotalInterface $total)
     {
@@ -71,7 +71,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function getExtensionAttributes()
     {
@@ -80,7 +80,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShippingExtensionInterface $extensionAttributes

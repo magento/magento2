@@ -7,13 +7,11 @@ namespace Magento\Theme\Model\ResourceModel\Design;
 
 /**
  * Core Design resource collection
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -25,7 +23,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -44,7 +41,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Core Design resource collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -55,7 +51,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join store data to collection
      *
      * @return \Magento\Theme\Model\ResourceModel\Design\Collection
-     * @since 2.0.0
      */
     public function joinStore()
     {
@@ -67,7 +62,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param null|int|string|\DateTimeInterface $date
      * @return $this
-     * @since 2.0.0
      */
     public function addDateFilter($date = null)
     {
@@ -87,7 +81,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|array $storeId
      * @return \Magento\Theme\Model\ResourceModel\Design\Collection
-     * @since 2.0.0
      */
     public function addStoreFilter($storeId)
     {

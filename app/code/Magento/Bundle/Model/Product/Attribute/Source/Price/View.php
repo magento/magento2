@@ -12,19 +12,16 @@ use Magento\Framework\DB\Ddl\Table;
  * Bundle Price View Attribute Renderer
  *
  * @api
- * @since 2.0.0
  */
 class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var OptionFactory
-     * @since 2.0.0
      */
     protected $optionFactory;
 
     /**
      * @param OptionFactory $optionFactory
-     * @since 2.0.0
      */
     public function __construct(OptionFactory $optionFactory)
     {
@@ -35,7 +32,6 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get all options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -53,7 +49,6 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param string|integer $value
      * @return string|bool
-     * @since 2.0.0
      */
     public function getOptionText($value)
     {
@@ -69,7 +64,6 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve flat column definition
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -92,7 +86,6 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param   int $store
      * @return  \Magento\Framework\DB\Select|null
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {

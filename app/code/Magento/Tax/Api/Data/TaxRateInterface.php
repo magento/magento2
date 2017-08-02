@@ -10,7 +10,6 @@ namespace Magento\Tax\Api\Data;
 /**
  * Tax rate interface.
  * @api
- * @since 2.0.0
  */
 interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -18,7 +17,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getId();
 
@@ -27,7 +25,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -35,7 +32,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get country id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTaxCountryId();
 
@@ -44,7 +40,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $taxCountryId
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxCountryId($taxCountryId);
 
@@ -52,7 +47,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get region id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getTaxRegionId();
 
@@ -61,7 +55,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int $taxRegionId
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxRegionId($taxRegionId);
 
@@ -69,7 +62,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get region name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getRegionName();
 
@@ -78,7 +70,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $regionName
      * @return $this
-     * @since 2.0.0
      */
     public function setRegionName($regionName);
 
@@ -86,7 +77,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get postcode
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getTaxPostcode();
 
@@ -95,7 +85,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $taxPostCode
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxPostcode($taxPostCode);
 
@@ -103,7 +92,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get zip is range
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getZipIsRange();
 
@@ -112,7 +100,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int $zipIsRange
      * @return $this
-     * @since 2.0.0
      */
     public function setZipIsRange($zipIsRange);
 
@@ -120,7 +107,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get zip range from
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getZipFrom();
 
@@ -129,7 +115,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int $zipFrom
      * @return $this
-     * @since 2.0.0
      */
     public function setZipFrom($zipFrom);
 
@@ -137,7 +122,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get zip range to
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getZipTo();
 
@@ -146,7 +130,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param int $zipTo
      * @return $this
-     * @since 2.0.0
      */
     public function setZipTo($zipTo);
 
@@ -154,7 +137,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get tax rate in percentage
      *
      * @return float
-     * @since 2.0.0
      */
     public function getRate();
 
@@ -163,7 +145,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param float $rate
      * @return $this
-     * @since 2.0.0
      */
     public function setRate($rate);
 
@@ -171,7 +152,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get tax rate code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -180,7 +160,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param string $code
      * @return $this
-     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -188,7 +167,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get tax rate titles
      *
      * @return \Magento\Tax\Api\Data\TaxRateTitleInterface[]|null
-     * @since 2.0.0
      */
     public function getTitles();
 
@@ -197,7 +175,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param \Magento\Tax\Api\Data\TaxRateTitleInterface[] $titles
      * @return $this
-     * @since 2.0.0
      */
     public function setTitles(array $titles = null);
 
@@ -205,7 +182,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\TaxRateExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -214,7 +190,6 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @param \Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes);
 }

@@ -9,7 +9,6 @@ namespace Magento\ImportExport\Model\ResourceModel;
  * Class History
  *
  * @api
- * @since 2.0.0
  */
 class History extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class History extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,7 +27,6 @@ class History extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $userId
      * @return int $lastId
-     * @since 2.0.0
      */
     public function getLastInsertedId($userId)
     {

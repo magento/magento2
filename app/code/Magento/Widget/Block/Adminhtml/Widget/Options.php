@@ -9,26 +9,22 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
  * WYSIWYG widget options form
  *
  * @api
- * @since 2.0.0
  */
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * Element type used by default if configuration is omitted
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultElementType = 'text';
 
     /**
      * @var \Magento\Widget\Model\Widget
-     * @since 2.0.0
      */
     protected $_widget;
 
     /**
      * @var \Magento\Framework\Option\ArrayPool
-     * @since 2.0.0
      */
     protected $_sourceModelPool;
 
@@ -39,7 +35,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Option\ArrayPool $sourceModelPool
      * @param \Magento\Widget\Model\Widget $widget
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -61,7 +56,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * widget_values may be set before to render element values
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -74,7 +68,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * Form getter/instantiation
      *
      * @return \Magento\Framework\Data\Form
-     * @since 2.0.0
      */
     public function getForm()
     {
@@ -91,7 +84,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * Fieldset getter/instantiation
      *
      * @return \Magento\Framework\Data\Form\Element\Fieldset
-     * @since 2.0.0
      */
     public function getMainFieldset()
     {
@@ -118,7 +110,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function addFields()
     {
@@ -144,7 +135,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _addField($parameter)
     {
@@ -246,7 +236,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $fieldType
      * @return bool
-     * @since 2.0.0
      */
     protected function _isClassName($fieldType)
     {

@@ -13,7 +13,6 @@ namespace Magento\Backend\Helper;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Js
 {
@@ -34,7 +33,6 @@ class Js
      *
      * @param   string $encoded
      * @return  array
-     * @since 2.0.0
      */
     public function decodeGridSerializedInput($encoded)
     {

@@ -9,13 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

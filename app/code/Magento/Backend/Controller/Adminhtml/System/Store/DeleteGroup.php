@@ -9,13 +9,11 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 /**
  * Class \Magento\Backend\Controller\Adminhtml\System\Store\DeleteGroup
  *
- * @since 2.0.0
  */
 class DeleteGroup extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

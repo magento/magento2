@@ -10,19 +10,16 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
  * Class aggregate all Media Gallery Entry Converters
  *
  * @api
- * @since 2.0.0
  */
 class EntryConverterPool
 {
     /**
      * @var EntryConverterInterface[]
-     * @since 2.0.0
      */
     private $mediaGalleryEntryConvertersCollection;
 
     /**
      * @param EntryConverterInterface[] $mediaGalleryEntryConvertersCollection
-     * @since 2.0.0
      */
     public function __construct(array $mediaGalleryEntryConvertersCollection)
     {
@@ -42,7 +39,6 @@ class EntryConverterPool
      * @param string $mediaType
      * @return EntryConverterInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getConverterByMediaType($mediaType)
     {

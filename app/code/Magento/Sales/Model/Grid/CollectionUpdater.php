@@ -9,19 +9,16 @@ namespace Magento\Sales\Model\Grid;
 /**
  * Class \Magento\Sales\Model\Grid\CollectionUpdater
  *
- * @since 2.0.0
  */
 class CollectionUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registryManager;
 
     /**
      * @param \Magento\Framework\Registry $registryManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Registry $registryManager)
     {
@@ -33,7 +30,6 @@ class CollectionUpdater implements \Magento\Framework\View\Layout\Argument\Updat
      *
      * @param \Magento\Sales\Model\ResourceModel\Transaction\Grid\Collection $argument
      * @return \Magento\Sales\Model\ResourceModel\Transaction\Grid\Collection
-     * @since 2.0.0
      */
     public function update($argument)
     {

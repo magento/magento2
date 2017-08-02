@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * Store associated with rule entities information map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_associatedEntitiesMap;
 
@@ -59,7 +57,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,7 +69,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $attributeCode
      * @return $this
      * @api
-     * @since 2.0.0
      */
     public function addAttributeInConditionFilter($attributeCode)
     {

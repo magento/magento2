@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Config\Source;
  * Config category source
  *
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Category implements \Magento\Framework\Option\ArrayInterface
 {
@@ -17,7 +16,6 @@ class Category implements \Magento\Framework\Option\ArrayInterface
      * Category collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @since 2.0.0
      */
     protected $_categoryCollectionFactory;
 
@@ -25,7 +23,6 @@ class Category implements \Magento\Framework\Option\ArrayInterface
      * Construct
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
@@ -38,7 +35,6 @@ class Category implements \Magento\Framework\Option\ArrayInterface
      *
      * @param bool $addEmpty
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray($addEmpty = true)
     {

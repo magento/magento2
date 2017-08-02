@@ -12,13 +12,11 @@ use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
 /**
  * Class Status
- * @since 2.0.0
  */
 class Status extends Column
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $statuses;
 
@@ -30,7 +28,6 @@ class Status extends Column
      * @param CollectionFactory $collectionFactory
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -48,7 +45,6 @@ class Status extends Column
      *
      * @param array $dataSource
      * @return void
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

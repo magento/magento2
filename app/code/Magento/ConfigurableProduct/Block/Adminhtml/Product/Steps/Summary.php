@@ -7,13 +7,11 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Summary extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCaption()
     {
@@ -24,7 +22,6 @@ class Summary extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      * Get url to upload files
      *
      * @return string
-     * @since 2.0.0
      */
     public function getImageUploadUrl()
     {

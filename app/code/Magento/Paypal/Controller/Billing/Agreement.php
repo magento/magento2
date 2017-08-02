@@ -9,7 +9,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Billing agreements controller
- * @since 2.0.0
  */
 abstract class Agreement extends \Magento\Framework\App\Action\Action
 {
@@ -17,14 +16,12 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -39,7 +36,6 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -56,7 +52,6 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      * Init billing agreement model from request
      *
      * @return \Magento\Paypal\Model\Billing\Agreement|false
-     * @since 2.0.0
      */
     protected function _initAgreement()
     {
@@ -83,7 +78,6 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      * Retrieve customer session model
      *
      * @return \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected function _getSession()
     {

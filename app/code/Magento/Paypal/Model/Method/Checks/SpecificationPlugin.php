@@ -13,7 +13,6 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Plugin for \Magento\Payment\Model\Checks\Composite
- * @since 2.0.0
  */
 class SpecificationPlugin
 {
@@ -25,7 +24,6 @@ class SpecificationPlugin
 
     /**
      * @param AgreementFactory $agreementFactory
-     * @since 2.0.0
      */
     public function __construct(AgreementFactory $agreementFactory)
     {

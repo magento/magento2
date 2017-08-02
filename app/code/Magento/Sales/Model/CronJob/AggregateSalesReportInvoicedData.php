@@ -7,25 +7,21 @@ namespace Magento\Sales\Model\CronJob;
 
 /**
  * Class AggregateSalesReportInvoicedData
- * @since 2.0.0
  */
 class AggregateSalesReportInvoicedData
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory
-     * @since 2.0.0
      */
     protected $invoicedFactory;
 
@@ -33,7 +29,6 @@ class AggregateSalesReportInvoicedData
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      * @param \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory $invoicedFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -49,7 +44,6 @@ class AggregateSalesReportInvoicedData
      * Refresh sales invoiced report statistics for last day
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,7 +10,6 @@ use Magento\Theme\Model\Theme\Data\Collection as ThemeCollection;
 
 /**
  * Class checks theme dependencies
- * @since 2.0.0
  */
 class ThemeDependencyChecker
 {
@@ -18,7 +17,6 @@ class ThemeDependencyChecker
      * Theme Collection
      *
      * @var ThemeCollection
-     * @since 2.0.0
      */
     private $themeCollection;
 
@@ -26,7 +24,6 @@ class ThemeDependencyChecker
      * Provider for themes registered in db
      *
      * @var ThemeProvider
-     * @since 2.0.0
      */
     private $themeProvider;
 
@@ -34,7 +31,6 @@ class ThemeDependencyChecker
      * Package name finder
      *
      * @var ThemePackageInfo
-     * @since 2.0.0
      */
     private $themePackageInfo;
 
@@ -44,7 +40,6 @@ class ThemeDependencyChecker
      * @param ThemeCollection $themeCollection
      * @param ThemeProvider $themeProvider
      * @param ThemePackageInfo $themePackageInfo,
-     * @since 2.0.0
      */
     public function __construct(
         ThemeCollection $themeCollection,
@@ -61,7 +56,6 @@ class ThemeDependencyChecker
      *
      * @param string[] $packages
      * @return string[]
-     * @since 2.0.0
      */
     public function checkChildThemeByPackagesName($packages)
     {
@@ -84,7 +78,6 @@ class ThemeDependencyChecker
      *
      * @param string[] $themePaths
      * @return string[]
-     * @since 2.0.0
      */
     public function checkChildTheme($themePaths)
     {
@@ -118,7 +111,6 @@ class ThemeDependencyChecker
      * Obtain a parent theme -> children themes map from the filesystem
      *
      * @return array
-     * @since 2.0.0
      */
     private function getParentChildThemeMap()
     {

@@ -18,19 +18,16 @@ use Magento\Framework\DataObjectFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\Url\DecoderInterface
-     * @since 2.0.0
      */
     protected $urlDecoder;
 
@@ -64,7 +61,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -133,7 +129,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @throws NotFoundException
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     public function execute()
     {

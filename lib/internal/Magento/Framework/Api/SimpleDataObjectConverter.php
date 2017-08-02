@@ -11,19 +11,16 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 /**
  * Class \Magento\Framework\Api\SimpleDataObjectConverter
  *
- * @since 2.0.0
  */
 class SimpleDataObjectConverter
 {
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @param DataObjectProcessor $dataObjectProcessor
-     * @since 2.0.0
      */
     public function __construct(DataObjectProcessor $dataObjectProcessor)
     {
@@ -36,7 +33,6 @@ class SimpleDataObjectConverter
      * @param ExtensibleDataInterface $dataObject
      * @param string $dataObjectType
      * @return array
-     * @since 2.0.0
      */
     public function toFlatArray(ExtensibleDataInterface $dataObject, $dataObjectType = null)
     {
@@ -52,7 +48,6 @@ class SimpleDataObjectConverter
      *
      * @param array $dataArray
      * @return \stdClass
-     * @since 2.0.0
      */
     public function convertKeysToCamelCase(array $dataArray)
     {
@@ -75,7 +70,6 @@ class SimpleDataObjectConverter
      *
      * @param array $data
      * @return bool
-     * @since 2.0.0
      */
     protected function _isSimpleSequentialArray(array $data)
     {
@@ -96,7 +90,6 @@ class SimpleDataObjectConverter
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function convertStdObjectToArray($input, $removeItemNode = false)
     {
@@ -130,7 +123,6 @@ class SimpleDataObjectConverter
      *
      * @param mixed $data
      * @return array Unpacked associative array if array was passed as argument or original value otherwise
-     * @since 2.0.0
      */
     protected function _unpackAssociativeArray($data)
     {
@@ -154,7 +146,6 @@ class SimpleDataObjectConverter
      *
      * @param string $input
      * @return string
-     * @since 2.0.0
      */
     public static function snakeCaseToUpperCamelCase($input)
     {
@@ -166,7 +157,6 @@ class SimpleDataObjectConverter
      *
      * @param string $input
      * @return string
-     * @since 2.0.0
      */
     public static function snakeCaseToCamelCase($input)
     {
@@ -181,7 +171,6 @@ class SimpleDataObjectConverter
      *
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     public static function camelCaseToSnakeCase($name)
     {

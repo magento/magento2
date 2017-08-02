@@ -9,7 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -17,13 +16,11 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      * Array of actions which can be processed without secret key validation
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_publicActions = ['edit'];
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -31,7 +28,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -46,7 +42,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      * Product edit form
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

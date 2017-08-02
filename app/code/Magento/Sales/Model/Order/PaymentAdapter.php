@@ -11,19 +11,19 @@ use Magento\Sales\Model\Order\Invoice\PayOperation;
 
 /**
  * @inheritdoc
- * @since 2.2.0
+ * @since 2.1.2
  */
 class PaymentAdapter implements PaymentAdapterInterface
 {
     /**
      * @var PayOperation
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $payOperation;
 
     /**
      * @param PayOperation $payOperation
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function __construct(
         PayOperation $payOperation
@@ -33,7 +33,7 @@ class PaymentAdapter implements PaymentAdapterInterface
 
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function pay(
         OrderInterface $order,

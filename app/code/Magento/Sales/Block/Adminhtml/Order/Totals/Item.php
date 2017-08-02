@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Totals;
  * Totals item block
  *
  * @api
- * @since 2.0.0
  */
 class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
 {
@@ -17,7 +16,6 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      * Determine display parameters before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -34,7 +32,6 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      * Initialize totals object
      *
      * @return $this
-     * @since 2.0.0
      */
     public function initTotals()
     {
@@ -60,7 +57,6 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      * @param float $baseAmount
      * @param float $amount
      * @return string
-     * @since 2.0.0
      */
     public function displayPrices($baseAmount, $amount)
     {
@@ -74,7 +70,6 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      * @param bool $strong
      * @param string $separator
      * @return string
-     * @since 2.0.0
      */
     public function displayPriceAttribute($code, $strong = false, $separator = '<br/>')
     {
@@ -85,7 +80,6 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      * Source order getter
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getSource()
     {

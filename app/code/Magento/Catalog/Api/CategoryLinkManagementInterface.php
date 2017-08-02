@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface CategoryLinkManagementInterface
 {
@@ -17,7 +16,6 @@ interface CategoryLinkManagementInterface
      *
      * @param int $categoryId
      * @return \Magento\Catalog\Api\Data\CategoryProductLinkInterface[]
-     * @since 2.0.0
      */
     public function getAssignedProducts($categoryId);
 

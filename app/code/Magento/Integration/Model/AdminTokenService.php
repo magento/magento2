@@ -17,7 +17,6 @@ use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 
 /**
  * Class to handle token generation for Admins
- * @since 2.0.0
  */
 class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInterface
 {
@@ -25,7 +24,6 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * Token Model
      *
      * @var TokenModelFactory
-     * @since 2.0.0
      */
     private $tokenModelFactory;
 
@@ -33,13 +31,11 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * User Model
      *
      * @var UserModel
-     * @since 2.0.0
      */
     private $userModel;
 
     /**
      * @var \Magento\Integration\Model\CredentialsValidator
-     * @since 2.0.0
      */
     private $validatorHelper;
 
@@ -47,13 +43,12 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * Token Collection Factory
      *
      * @var TokenCollectionFactory
-     * @since 2.0.0
      */
     private $tokenModelCollectionFactory;
 
     /**
      * @var RequestThrottler
-     * @since 2.1.0
+     * @since 2.0.3
      */
     private $requestThrottler;
 
@@ -64,7 +59,6 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * @param UserModel $userModel
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
-     * @since 2.0.0
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
@@ -80,7 +74,6 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function createAdminAccessToken($username, $password)
     {
@@ -110,7 +103,6 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * @param int $adminId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function revokeAdminAccessToken($adminId)
     {
@@ -132,8 +124,8 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.3
+     * @since 2.0.3
      */
     private function getRequestThrottler()
     {

@@ -12,7 +12,6 @@ namespace Magento\Customer\Model\Metadata;
 /**
  * Class \Magento\Customer\Model\Metadata\ElementFactory
  *
- * @since 2.0.0
  */
 class ElementFactory
 {
@@ -25,22 +24,17 @@ class ElementFactory
 
     // available only for multiply attributes
 
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
-     */
+    // available only for multiply attributes
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $_string;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -58,7 +52,6 @@ class ElementFactory
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @return \Magento\Customer\Model\Metadata\Form\AbstractData
-     * @since 2.0.0
      */
     public function create(
         \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,

@@ -9,7 +9,6 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeOptionLabelInterface
  * @api
- * @since 2.0.0
  */
 interface AttributeOptionLabelInterface
 {
@@ -21,7 +20,6 @@ interface AttributeOptionLabelInterface
      * Get store id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getStoreId();
 
@@ -30,7 +28,6 @@ interface AttributeOptionLabelInterface
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId);
 
@@ -38,7 +35,6 @@ interface AttributeOptionLabelInterface
      * Get option label
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getLabel();
 
@@ -47,7 +43,6 @@ interface AttributeOptionLabelInterface
      *
      * @param string $label
      * @return $this
-     * @since 2.0.0
      */
     public function setLabel($label);
 }

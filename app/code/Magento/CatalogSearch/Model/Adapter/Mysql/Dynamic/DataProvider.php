@@ -20,43 +20,36 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class DataProvider implements DataProviderInterface
 {
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var Range
-     * @since 2.0.0
      */
     private $range;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     private $customerSession;
 
     /**
      * @var MysqlDataProviderInterface
-     * @since 2.0.0
      */
     private $dataProvider;
 
     /**
      * @var IntervalFactory
-     * @since 2.0.0
      */
     private $intervalFactory;
 
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     private $connection;
 
@@ -73,7 +66,6 @@ class DataProvider implements DataProviderInterface
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
      * @param StoreManager $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -94,7 +86,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRange()
     {
@@ -103,7 +94,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
@@ -131,7 +121,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getInterval(
         BucketInterface $bucket,
@@ -145,7 +134,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAggregation(
         BucketInterface $bucket,
@@ -175,7 +163,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function prepareData($range, array $dbRanges)
     {
@@ -201,7 +188,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @return Select
-     * @since 2.0.0
      */
     private function getSelect()
     {
@@ -211,7 +197,6 @@ class DataProvider implements DataProviderInterface
     /**
      * @param Select $select
      * @return Select
-     * @since 2.0.0
      */
     private function setCustomerGroupId($select)
     {

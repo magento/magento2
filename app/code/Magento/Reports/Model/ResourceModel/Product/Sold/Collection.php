@@ -16,7 +16,6 @@ use Magento\Framework\DB\Select;
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {
@@ -26,7 +25,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      * @param int $from
      * @param int $to
      * @return $this
-     * @since 2.0.0
      */
     public function setDateRange($from, $to)
     {
@@ -48,7 +46,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      * @param string $from
      * @param string $to
      * @return $this
-     * @since 2.0.0
      */
     public function addOrderedQty($from = '', $to = '')
     {
@@ -88,7 +85,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      *
      * @param array $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {
@@ -104,7 +100,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
@@ -138,7 +133,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      * @param string $from
      * @param string $to
      * @return string Formatted sql string
-     * @since 2.0.0
      */
     protected function prepareBetweenSql($fieldName, $from, $to)
     {

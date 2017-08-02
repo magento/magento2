@@ -11,7 +11,6 @@ use Magento\Framework\App\ActionInterface;
 /**
  * Interface \Magento\Sales\Controller\OrderInterface
  *
- * @since 2.0.0
  */
 interface OrderInterface extends ActionInterface
 {

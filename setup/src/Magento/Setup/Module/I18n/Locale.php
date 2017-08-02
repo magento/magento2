@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n;
 
 /**
  *  Locale
- * @since 2.0.0
  */
 class Locale
 {
@@ -20,7 +19,6 @@ class Locale
      * Locale name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_locale;
 
@@ -29,7 +27,6 @@ class Locale
      *
      * @param string $locale
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct($locale)
     {
@@ -43,7 +40,6 @@ class Locale
      * Return locale string
      *
      * @return string
-     * @since 2.0.0
      */
     public function __toString()
     {

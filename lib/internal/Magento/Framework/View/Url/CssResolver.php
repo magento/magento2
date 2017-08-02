@@ -11,7 +11,6 @@ use Magento\Framework\View\FileSystem;
  * CSS URLs resolver class.
  * This utility class provides a set of methods to work with CSS files.
  * @api
- * @since 2.0.0
  */
 class CssResolver
 {
@@ -28,7 +27,6 @@ class CssResolver
      * @param string $relatedPath
      * @param string $filePath
      * @return mixed
-     * @since 2.0.0
      */
     public function relocateRelativeUrls($cssContent, $relatedPath, $filePath)
     {
@@ -48,7 +46,6 @@ class CssResolver
      * @param string $cssContent
      * @param callback $inlineCallback
      * @return string
-     * @since 2.0.0
      */
     public function replaceRelativeUrls($cssContent, $inlineCallback)
     {
@@ -74,7 +71,6 @@ class CssResolver
      *
      * @param string $cssContent
      * @return string
-     * @since 2.0.0
      */
     public function aggregateImportDirectives($cssContent)
     {
@@ -103,7 +99,6 @@ class CssResolver
      *
      * @param string $cssContent
      * @return array
-     * @since 2.0.0
      */
     private static function extractRelativeUrls($cssContent)
     {

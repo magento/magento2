@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
  * Sales report invoiced collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Invoiced extends Order
 {
@@ -20,7 +19,6 @@ class Invoiced extends Order
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,

@@ -11,19 +11,16 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
  *
- * @since 2.0.0
  */
 class Directive extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Url\DecoderInterface
-     * @since 2.0.0
      */
     protected $urlDecoder;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
-     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -31,7 +28,6 @@ class Directive extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -47,7 +43,6 @@ class Directive extends \Magento\Backend\App\Action
      * Template directives callback
      *
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

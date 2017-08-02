@@ -14,7 +14,6 @@ namespace Magento\Newsletter\Block\Adminhtml\Problem\Grid\Renderer;
 /**
  * Class \Magento\Newsletter\Block\Adminhtml\Problem\Grid\Renderer\Checkbox
  *
- * @since 2.0.0
  */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -23,7 +22,6 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param   \Magento\Framework\DataObject $row
      * @return  string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

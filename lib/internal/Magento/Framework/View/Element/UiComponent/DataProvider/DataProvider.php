@@ -14,7 +14,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Class DataProvider
- * @since 2.0.0
  */
 class DataProvider implements DataProviderInterface
 {
@@ -22,7 +21,6 @@ class DataProvider implements DataProviderInterface
      * Data Provider name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
@@ -30,7 +28,6 @@ class DataProvider implements DataProviderInterface
      * Data Provider Primary Identifier name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $primaryFieldName;
 
@@ -38,13 +35,11 @@ class DataProvider implements DataProviderInterface
      * Data Provider Request Parameter Identifier name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $requestFieldName;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $meta = [];
 
@@ -52,37 +47,31 @@ class DataProvider implements DataProviderInterface
      * Provider configuration data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $data = [];
 
     /**
      * @var ReportingInterface
-     * @since 2.0.0
      */
     protected $reporting;
 
     /**
      * @var FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var SearchCriteria
-     * @since 2.0.0
      */
     protected $searchCriteria;
 
@@ -96,7 +85,6 @@ class DataProvider implements DataProviderInterface
      * @param FilterBuilder $filterBuilder
      * @param array $meta
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -123,7 +111,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function prepareUpdateUrl()
     {
@@ -152,7 +139,6 @@ class DataProvider implements DataProviderInterface
      * Get Data Provider name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -163,7 +149,6 @@ class DataProvider implements DataProviderInterface
      * Get primary field name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPrimaryFieldName()
     {
@@ -174,7 +159,6 @@ class DataProvider implements DataProviderInterface
      * Get field name in request
      *
      * @return string
-     * @since 2.0.0
      */
     public function getRequestFieldName()
     {
@@ -183,7 +167,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getMeta()
     {
@@ -195,7 +178,6 @@ class DataProvider implements DataProviderInterface
      *
      * @param string $fieldSetName
      * @return array
-     * @since 2.0.0
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
@@ -205,7 +187,6 @@ class DataProvider implements DataProviderInterface
     /**
      * @param string $fieldSetName
      * @return array
-     * @since 2.0.0
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
@@ -216,7 +197,6 @@ class DataProvider implements DataProviderInterface
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
-     * @since 2.0.0
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
@@ -227,7 +207,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -240,7 +219,6 @@ class DataProvider implements DataProviderInterface
      * @param string $field
      * @param string $direction
      * @return void
-     * @since 2.0.0
      */
     public function addOrder($field, $direction)
     {
@@ -253,7 +231,6 @@ class DataProvider implements DataProviderInterface
      * @param int $offset
      * @param int $size
      * @return void
-     * @since 2.0.0
      */
     public function setLimit($offset, $size)
     {
@@ -264,7 +241,6 @@ class DataProvider implements DataProviderInterface
     /**
      * @param SearchResultInterface $searchResult
      * @return array
-     * @since 2.0.0
      */
     protected function searchResultToOutput(SearchResultInterface $searchResult)
     {
@@ -288,7 +264,6 @@ class DataProvider implements DataProviderInterface
      * Returns search criteria
      *
      * @return \Magento\Framework\Api\Search\SearchCriteria
-     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -303,7 +278,6 @@ class DataProvider implements DataProviderInterface
      * Get data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData()
     {
@@ -314,7 +288,6 @@ class DataProvider implements DataProviderInterface
      * Get config data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfigData()
     {
@@ -326,7 +299,6 @@ class DataProvider implements DataProviderInterface
      *
      * @param mixed $config
      * @return void
-     * @since 2.0.0
      */
     public function setConfigData($config)
     {
@@ -337,7 +309,6 @@ class DataProvider implements DataProviderInterface
      * Returns Search result
      *
      * @return SearchResultInterface
-     * @since 2.0.0
      */
     public function getSearchResult()
     {

@@ -9,31 +9,26 @@ use Magento\Framework\Search\Request\BucketInterface;
 
 /**
  * Range Buckets
- * @since 2.0.0
  */
 class RangeBucket implements BucketInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $field;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $metrics;
 
     /**
      * @var Range[]
-     * @since 2.0.0
      */
     protected $ranges;
 
@@ -42,7 +37,6 @@ class RangeBucket implements BucketInterface
      * @param string $field
      * @param array $metrics
      * @param Range[] $ranges
-     * @since 2.0.0
      */
     public function __construct($name, $field, array $metrics, array $ranges)
     {
@@ -54,7 +48,6 @@ class RangeBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -64,7 +57,6 @@ class RangeBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -74,7 +66,6 @@ class RangeBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getField()
     {
@@ -84,7 +75,6 @@ class RangeBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getMetrics()
     {
@@ -96,7 +86,6 @@ class RangeBucket implements BucketInterface
      *
      * @return Range[]
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getRanges()
     {

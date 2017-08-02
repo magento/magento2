@@ -9,26 +9,22 @@ use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class AttributesList implements AttributesListInterface
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var \Magento\Swatches\Helper\Data
-     * @since 2.0.0
      */
     protected $dataHelper;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Helper\Data $dataHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
@@ -43,7 +39,6 @@ class AttributesList implements AttributesListInterface
      *
      * @param array $ids
      * @return array
-     * @since 2.0.0
      */
     public function getAttributes($ids)
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\File\Write;
 
 /**
  * Class Synchronization
- * @since 2.0.0
  */
 class Synchronization
 {
@@ -19,7 +18,6 @@ class Synchronization
      * Database storage factory
      *
      * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
-     * @since 2.0.0
      */
     protected $storageFactory;
 
@@ -27,14 +25,12 @@ class Synchronization
      * File stream handler
      *
      * @var DirectoryWrite
-     * @since 2.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageFactory
      * @param DirectoryWrite $directory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageFactory,
@@ -50,7 +46,6 @@ class Synchronization
      * @param string $relativeFileName
      * @return void
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function synchronize($relativeFileName)
     {

@@ -12,26 +12,22 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * Assets minification pre-processor
- * @since 2.0.0
  */
 class Minify implements PreProcessorInterface
 {
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     protected $adapter;
 
     /**
      * @var Minification
-     * @since 2.0.0
      */
     protected $minification;
 
     /**
      * @param AdapterInterface $adapter
      * @param Minification $minification
-     * @since 2.0.0
      */
     public function __construct(AdapterInterface $adapter, Minification $minification)
     {
@@ -44,7 +40,6 @@ class Minify implements PreProcessorInterface
      *
      * @param PreProcessor\Chain $chain
      * @return void
-     * @since 2.0.0
      */
     public function process(PreProcessor\Chain $chain)
     {

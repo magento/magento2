@@ -7,7 +7,6 @@ namespace Magento\Catalog\Block\Product\Widget;
 
 /**
  * New products widget
- * @since 2.0.0
  */
 class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Magento\Widget\Block\BlockInterface
 {
@@ -42,7 +41,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Instance of pager block
      *
      * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
-     * @since 2.0.0
      */
     protected $_pager;
 
@@ -86,7 +84,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Product collection initialize process
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected function _getProductCollection()
     {
@@ -107,7 +104,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Prepare collection for recent product list
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected function _getRecentlyAddedProductsCollection()
     {
@@ -127,7 +123,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Get number of current page based on query value
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrentPage()
     {
@@ -138,7 +133,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Get key pieces for caching block content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -157,7 +151,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Retrieve display type for products
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayType()
     {
@@ -171,7 +164,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Retrieve how many products should be displayed
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductsCount()
     {
@@ -185,7 +177,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Retrieve how many products should be displayed
      *
      * @return int
-     * @since 2.0.0
      */
     public function getProductsPerPage()
     {
@@ -199,7 +190,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Return flag whether pager need to be shown or not
      *
      * @return bool
-     * @since 2.0.0
      */
     public function showPager()
     {
@@ -213,7 +203,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Retrieve how many products should be displayed on page
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getPageSize()
     {
@@ -224,7 +213,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Render pagination HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPagerHtml()
     {
@@ -259,7 +247,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param array $arguments
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,

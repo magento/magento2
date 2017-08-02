@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order address block
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
@@ -19,7 +18,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Address form template
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'order/address/form.phtml';
 
@@ -27,7 +25,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -50,7 +47,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -97,7 +93,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Order address getter
      *
      * @return \Magento\Sales\Model\Order\Address
-     * @since 2.0.0
      */
     protected function _getAddress()
     {
@@ -108,7 +103,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Define form attributes (id, method, action)
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -126,7 +120,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Form header text getter
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -137,7 +130,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return Form Elements values
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFormValues()
     {

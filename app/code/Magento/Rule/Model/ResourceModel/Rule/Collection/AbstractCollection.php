@@ -10,7 +10,6 @@ namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
  * Abstract Rule entity resource collection model
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -33,7 +32,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_associatedEntitiesMap = [];
 
@@ -41,7 +39,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Add website ids to rules data
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -61,7 +58,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param bool|null $flag
      * @return $this
-     * @since 2.0.0
      */
     public function addWebsitesToResult($flag = null)
     {
@@ -75,7 +71,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param int|int[]|\Magento\Store\Model\Website $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function addWebsiteFilter($websiteId)
     {
@@ -104,7 +99,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string $field
      * @param null|string|array $condition
      * @return $this
-     * @since 2.0.0
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -121,7 +115,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param int $isActive
      * @return $this
-     * @since 2.0.0
      */
     public function addIsActiveFilter($isActive = 1)
     {
@@ -140,7 +133,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
-     * @since 2.0.0
      */
     protected function _getAssociatedEntityInfo($entityType)
     {

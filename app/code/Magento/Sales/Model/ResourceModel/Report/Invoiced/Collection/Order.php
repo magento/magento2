@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
  * Sales report invoiced collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
      * Period format
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_periodFormat;
 
@@ -25,7 +23,6 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
      * Columns for select
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_selectedColumns = [];
 
@@ -36,7 +33,6 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -54,7 +50,6 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
      * Retrieve columns for select
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getSelectedColumns()
     {
@@ -90,7 +85,6 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {

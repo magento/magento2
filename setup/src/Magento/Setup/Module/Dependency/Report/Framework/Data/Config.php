@@ -11,13 +11,11 @@ use Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig;
  * Config
  *
  * @method \Magento\Setup\Module\Dependency\Report\Framework\Data\Module[] getModules()
- * @since 2.0.0
  */
 class Config extends AbstractConfig
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDependenciesCount()
     {

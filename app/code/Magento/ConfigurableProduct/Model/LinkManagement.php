@@ -13,43 +13,38 @@ use Magento\Framework\Exception\StateException;
 /**
  * Class \Magento\ConfigurableProduct\Model\LinkManagement
  *
- * @since 2.0.0
  */
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     private $productRepository;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
-     * @since 2.0.0
      */
     private $productFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
-     * @since 2.0.0
      */
     private $configurableType;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     private $dataObjectHelper;
 
     /**
      * @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory;
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $optionsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private $attributeFactory;
 
@@ -61,7 +56,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -80,7 +74,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getChildren($sku)
     {
@@ -120,7 +113,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addChild($sku, $childSku)
     {
@@ -159,7 +151,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function removeChild($sku, $childSku)
     {
@@ -192,8 +183,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      *
      * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 2.1.2
+     * @since 2.1.2
      */
     private function getOptionsFactory()
     {
@@ -209,7 +200,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      *
      * @param int[] $attributeIds
      * @return array
-     * @since 2.2.0
+     * @since 2.1.2
      */
     private function getConfigurableAttributesData($attributeIds)
     {

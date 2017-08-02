@@ -15,31 +15,26 @@ use Magento\Framework\View\File\CollectorInterface;
 
 /**
  * Source of base layout files introduced by modules
- * @since 2.0.0
  */
 class Library implements CollectorInterface
 {
     /**
      * @var \Magento\Framework\View\File\Factory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var ReadInterface
-     * @since 2.0.0
      */
     protected $libraryDirectory;
 
     /**
      * @var \Magento\Framework\View\File\FileList\Factory
-     * @since 2.0.0
      */
     protected $fileListFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadFactory
-     * @since 2.0.0
      */
     private $readFactory;
 
@@ -47,7 +42,6 @@ class Library implements CollectorInterface
      * Component registry
      *
      * @var ComponentRegistrarInterface
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -57,7 +51,6 @@ class Library implements CollectorInterface
      * @param \Magento\Framework\View\File\Factory $fileFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param ComponentRegistrarInterface $componentRegistrar
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\File\FileList\Factory $fileListFactory,
@@ -81,7 +74,6 @@ class Library implements CollectorInterface
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
-     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
@@ -110,7 +102,6 @@ class Library implements CollectorInterface
      * @param ThemeInterface $theme
      * @param array $files
      * @return array
-     * @since 2.0.0
      */
     protected function createFiles(ReadInterface $reader, ThemeInterface $theme, $files)
     {

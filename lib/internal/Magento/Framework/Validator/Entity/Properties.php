@@ -13,13 +13,11 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Class \Magento\Framework\Validator\Entity\Properties
  *
- * @since 2.0.0
  */
 class Properties extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $_readOnlyProperties = [];
 
@@ -28,7 +26,6 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param string[] $readOnlyProperties
      * @return void
-     * @since 2.0.0
      */
     public function setReadOnlyProperties(array $readOnlyProperties)
     {
@@ -44,7 +41,6 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
      * @return bool
      * @throws \InvalidArgumentException when $value is not instanceof \Magento\Framework\DataObject
      * @api
-     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -74,7 +70,6 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
      * @param mixed $firstValue
      * @param mixed $secondValue
      * @return bool
-     * @since 2.0.0
      */
     protected function _hasChanges($firstValue, $secondValue)
     {

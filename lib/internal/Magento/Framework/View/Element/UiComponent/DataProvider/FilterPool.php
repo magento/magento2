@@ -13,19 +13,16 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
  * Class FilterPool
  *
  * @api
- * @since 2.0.0
  */
 class FilterPool
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $appliers;
 
     /**
      * @param array $appliers
-     * @since 2.0.0
      */
     public function __construct(array $appliers = [])
     {
@@ -36,7 +33,6 @@ class FilterPool
      * @param Collection $collection
      * @param SearchCriteriaInterface $criteria
      * @return void
-     * @since 2.0.0
      */
     public function applyFilters(Collection $collection, SearchCriteriaInterface $criteria)
     {

@@ -12,19 +12,16 @@ use \Magento\Framework\Webapi\Rest\Request;
 /**
  * Class \Magento\Webapi\Controller\Rest\Router
  *
- * @since 2.0.0
  */
 class Router
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_routes = [];
 
     /**
      * @var \Magento\Webapi\Model\Rest\Config
-     * @since 2.0.0
      */
     protected $_apiConfig;
 
@@ -32,7 +29,6 @@ class Router
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Rest\Config $apiConfig
-     * @since 2.0.0
      */
     public function __construct(\Magento\Webapi\Model\Rest\Config $apiConfig)
     {
@@ -46,7 +42,6 @@ class Router
      * @param Request $request
      * @return \Magento\Webapi\Controller\Rest\Router\Route
      * @throws \Magento\Framework\Webapi\Exception
-     * @since 2.0.0
      */
     public function match(Request $request)
     {

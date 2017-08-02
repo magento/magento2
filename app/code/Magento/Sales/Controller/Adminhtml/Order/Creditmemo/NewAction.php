@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\NewAction
  *
- * @since 2.0.0
  */
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -23,19 +22,16 @@ class NewAction extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
-     * @since 2.0.0
      */
     protected $creditmemoLoader;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -44,7 +40,6 @@ class NewAction extends \Magento\Backend\App\Action
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -62,7 +57,6 @@ class NewAction extends \Magento\Backend\App\Action
      * Creditmemo create page
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

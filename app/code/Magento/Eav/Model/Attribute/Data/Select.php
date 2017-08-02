@@ -11,7 +11,6 @@ use Magento\Framework\App\RequestInterface;
  * EAV Entity Attribute Select Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -20,7 +19,6 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param RequestInterface $request
      * @return array|string
-     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -33,7 +31,6 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return bool|array
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -66,7 +63,6 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -82,7 +78,6 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param array|string $value
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -94,7 +89,6 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param int $value
      * @return string
-     * @since 2.0.0
      */
     protected function _getOptionText($value)
     {
@@ -106,7 +100,6 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param string $format
      * @return string|array
-     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {

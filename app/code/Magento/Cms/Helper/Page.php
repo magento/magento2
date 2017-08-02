@@ -12,7 +12,6 @@ use Magento\Framework\App\Action\Action;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
- * @since 2.0.0
  */
 class Page extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -35,25 +34,21 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $_design;
 
     /**
      * @var \Magento\Cms\Model\Page
-     * @since 2.0.0
      */
     protected $_page;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -61,7 +56,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -69,19 +63,16 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Page factory
      *
      * @var \Magento\Cms\Model\PageFactory
-     * @since 2.0.0
      */
     protected $_pageFactory;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -98,7 +89,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -128,7 +118,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Action $action
      * @param null $pageId
      * @return \Magento\Framework\View\Result\Page|bool
-     * @since 2.0.0
      */
     public function prepareResultPage(Action $action, $pageId = null)
     {
@@ -193,7 +182,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $pageId
      * @return string
-     * @since 2.0.0
      */
     public function getPageUrl($pageId = null)
     {
@@ -219,7 +207,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $inRange
      * @param \Magento\Framework\View\Result\Page $resultPage
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     protected function setLayoutType($inRange, $resultPage)
     {

@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Api\Data;
  * Interface RuleLabelInterface
  *
  * @api
- * @since 2.0.0
  */
 interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,7 +16,6 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Get storeId
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId();
 
@@ -26,7 +24,6 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId);
 
@@ -34,7 +31,6 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Return the label for the store
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStoreLabel();
 
@@ -43,7 +39,6 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param string $storeLabel
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreLabel($storeLabel);
 
@@ -51,7 +46,6 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -60,7 +54,6 @@ interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes

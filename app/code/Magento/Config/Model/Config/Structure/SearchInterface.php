@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface SearchInterface
 {
@@ -16,7 +15,6 @@ interface SearchInterface
      *
      * @param string $path
      * @return ElementInterface|null
-     * @since 2.0.0
      */
     public function getElement($path);
 }

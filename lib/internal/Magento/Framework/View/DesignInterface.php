@@ -7,7 +7,6 @@ namespace Magento\Framework\View;
 
 /**
  * Design Interface
- * @since 2.0.0
  */
 interface DesignInterface
 {
@@ -34,7 +33,6 @@ interface DesignInterface
      * @param string $area
      * @return DesignInterface
      * @TODO MAGETWO-31474: Remove deprecated method setArea
-     * @since 2.0.0
      */
     public function setArea($area);
 
@@ -42,7 +40,6 @@ interface DesignInterface
      * Retrieve package area
      *
      * @return string
-     * @since 2.0.0
      */
     public function getArea();
 
@@ -52,7 +49,6 @@ interface DesignInterface
      * @param Design\ThemeInterface|int|string $theme
      * @param string|null $area
      * @return DesignInterface
-     * @since 2.0.0
      */
     public function setDesignTheme($theme, $area = null);
 
@@ -62,7 +58,6 @@ interface DesignInterface
      * @param string|null $area
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getConfigurationDesignTheme($area = null, array $params = []);
 
@@ -70,7 +65,6 @@ interface DesignInterface
      * Set default design theme
      *
      * @return DesignInterface
-     * @since 2.0.0
      */
     public function setDefaultDesignTheme();
 
@@ -78,7 +72,6 @@ interface DesignInterface
      * Design theme model getter
      *
      * @return Design\ThemeInterface
-     * @since 2.0.0
      */
     public function getDesignTheme();
 
@@ -87,7 +80,6 @@ interface DesignInterface
      *
      * @param Design\ThemeInterface $theme
      * @return string
-     * @since 2.0.0
      */
     public function getThemePath(Design\ThemeInterface $theme);
 
@@ -95,7 +87,6 @@ interface DesignInterface
      * Get locale
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLocale();
 
@@ -103,7 +94,6 @@ interface DesignInterface
      * Get design settings for current request
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDesignParams();
 }

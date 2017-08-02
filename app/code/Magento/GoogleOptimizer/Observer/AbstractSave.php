@@ -12,31 +12,26 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class AbstractSave implements ObserverInterface
 {
     /**
      * @var \Magento\GoogleOptimizer\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\GoogleOptimizer\Model\Code
-     * @since 2.0.0
      */
     protected $_modelCode;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_params;
 
@@ -44,7 +39,6 @@ abstract class AbstractSave implements ObserverInterface
      * @param \Magento\GoogleOptimizer\Helper\Data $helper
      * @param \Magento\GoogleOptimizer\Model\Code $modelCode
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\GoogleOptimizer\Helper\Data $helper,
@@ -61,7 +55,6 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @param Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {
@@ -79,7 +72,6 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     abstract protected function _initEntity($observer);
 
@@ -87,7 +79,6 @@ abstract class AbstractSave implements ObserverInterface
      * Check is Google Experiment enabled
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isGoogleExperimentActive()
     {
@@ -98,7 +89,6 @@ abstract class AbstractSave implements ObserverInterface
      * Processes Save event of the entity
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _processCode()
     {
@@ -121,7 +111,6 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _initRequestParams()
     {
@@ -135,7 +124,6 @@ abstract class AbstractSave implements ObserverInterface
      * Check is new model
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isNewCode()
     {
@@ -146,7 +134,6 @@ abstract class AbstractSave implements ObserverInterface
      * Save code model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _saveCode()
     {
@@ -158,7 +145,6 @@ abstract class AbstractSave implements ObserverInterface
      * Get data for saving code model
      *
      * @return array
-     * @since 2.0.0
      */
     abstract protected function _getCodeData();
 
@@ -167,7 +153,6 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _loadCode()
     {
@@ -181,7 +166,6 @@ abstract class AbstractSave implements ObserverInterface
      * Is empty code
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isEmptyCode()
     {
@@ -193,7 +177,6 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _deleteCode()
     {
@@ -202,7 +185,7 @@ abstract class AbstractSave implements ObserverInterface
 
     /**
      * @return bool
-     * @since 2.1.0
+     * @since 2.0.11
      */
     private function isDataAvailable()
     {
@@ -212,7 +195,7 @@ abstract class AbstractSave implements ObserverInterface
 
     /**
      * @return mixed
-     * @since 2.1.0
+     * @since 2.0.11
      */
     private function getRequestData()
     {

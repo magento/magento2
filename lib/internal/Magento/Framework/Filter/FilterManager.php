@@ -25,32 +25,27 @@ namespace Magento\Framework\Filter;
  * @method string decrypt(string $value, $params = array())
  * @method string translit(string $value)
  * @method string translitUrl(string $value)
- * @since 2.0.0
  */
 class FilterManager
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var FilterManager\Config
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var FactoryInterface[]
-     * @since 2.0.0
      */
     protected $factoryInstances;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManger
      * @param FilterManager\Config $config
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger, FilterManager\Config $config)
     {
@@ -65,7 +60,6 @@ class FilterManager
      * @param array $arguments
      * @return \Zend_Filter_Interface
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function get($filterAlias, array $arguments = [])
     {
@@ -85,7 +79,6 @@ class FilterManager
      * @param array $arguments
      * @return \Zend_Filter_Interface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function createFilterInstance($filterAlias, $arguments)
     {
@@ -103,7 +96,6 @@ class FilterManager
      *
      * @return FactoryInterface[]
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     protected function getFilterFactories()
     {
@@ -129,7 +121,6 @@ class FilterManager
      * @param string $filterAlias
      * @param array $arguments
      * @return \Zend_Filter_Interface
-     * @since 2.0.0
      */
     public function __call($filterAlias, array $arguments = [])
     {

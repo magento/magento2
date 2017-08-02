@@ -9,13 +9,11 @@ namespace Magento\ProductAlert\Block\Email;
  * ProductAlert email price changed grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Price extends \Magento\ProductAlert\Block\Email\AbstractEmail
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'email/price.phtml';
 
@@ -24,7 +22,6 @@ class Price extends \Magento\ProductAlert\Block\Email\AbstractEmail
      *
      * @param int $productId
      * @return string
-     * @since 2.0.0
      */
     public function getProductUnsubscribeUrl($productId)
     {
@@ -37,7 +34,6 @@ class Price extends \Magento\ProductAlert\Block\Email\AbstractEmail
      * Retrieve unsubscribe url for all products
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUnsubscribeUrl()
     {

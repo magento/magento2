@@ -17,7 +17,6 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 /**
  * Payflow Link payment gateway model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 {
@@ -30,7 +29,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Controller for callback urls
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_callbackController = 'payflow';
 
@@ -38,19 +36,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Payment method code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code = \Magento\Paypal\Model\Config::METHOD_PAYFLOWLINK;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Paypal\Block\Payflow\Link\Form::class;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
@@ -58,7 +53,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseInternal = false;
 
@@ -66,7 +60,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Availability option
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isInitializeNeeded = true;
 
@@ -74,7 +67,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Request & response model
      *
      * @var \Magento\Paypal\Model\Payflow\Request
-     * @since 2.0.0
      */
     protected $_response;
 
@@ -92,37 +84,31 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Key for storing secure hash in additional information of payment model
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_secureSilentPostHashKey = 'secure_silent_post_hash';
 
     /**
      * @var \Magento\Paypal\Model\Payflow\RequestFactory
-     * @since 2.0.0
      */
     protected $_requestFactory;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $_orderFactory;
 
     /**
      * @var \Magento\Store\Model\WebsiteFactory
-     * @since 2.0.0
      */
     protected $_websiteFactory;
 
     /**
      * @var OrderSender
-     * @since 2.0.0
      */
     protected $orderSender;
 
@@ -157,7 +143,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -215,7 +200,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Do not validate payment form using server methods
      *
      * @return true
-     * @since 2.0.0
      */
     public function validate()
     {
@@ -228,7 +212,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -240,7 +223,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param int|null $storeId
      * @return bool
-     * @since 2.0.0
      */
     public function isActive($storeId = null)
     {
@@ -253,7 +235,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param string $paymentAction
      * @param \Magento\Framework\DataObject $stateObject
      * @return void
-     * @since 2.0.0
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -286,7 +267,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Return response model.
      *
      * @return \Magento\Paypal\Model\Payflow\Request
-     * @since 2.0.0
      */
     public function getResponse()
     {
@@ -303,7 +283,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param array $responseData
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException In case of validation error or order creation error
-     * @since 2.0.0
      */
     public function process($responseData)
     {
@@ -325,7 +304,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _processOrder(\Magento\Sales\Model\Order $order)
     {
@@ -392,7 +370,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @throws \Magento\Framework\Exception\LocalizedException In other cases
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getOrderFromResponse()
     {
@@ -441,7 +418,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _buildTokenRequest(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -468,7 +444,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * or default
      *
      * @return int
-     * @since 2.0.0
      */
     protected function _getStoreId()
     {
@@ -483,7 +458,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Return request object with basic information for gateway request
      *
      * @return \Magento\Paypal\Model\Payflow\Request
-     * @since 2.0.0
      */
     public function buildBasicRequest()
     {
@@ -525,7 +499,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Get payment action code
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getTrxTokenType()
     {
@@ -547,7 +520,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _processTokenErrors($response, $payment)
     {
@@ -572,7 +544,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
-     * @since 2.0.0
      */
     protected function _getSecureSilentPostHash($payment)
     {
@@ -584,7 +555,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
-     * @since 2.0.0
      */
     protected function _generateSecureSilentPostHash($payment)
     {
@@ -598,7 +568,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param string $actionName
      * @return string
-     * @since 2.0.0
      */
     protected function _getCallbackUrl($actionName)
     {

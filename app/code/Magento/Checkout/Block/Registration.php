@@ -9,43 +9,36 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Registration extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Customer\Model\Registration
-     * @since 2.0.0
      */
     protected $registration;
 
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
-     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
-     * @since 2.0.0
      */
     protected $orderRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Validator
-     * @since 2.0.0
      */
     protected $addressValidator;
 
@@ -59,7 +52,6 @@ class Registration extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\Order\Address\Validator $addressValidator
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -85,7 +77,6 @@ class Registration extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getEmailAddress()
     {
@@ -97,7 +88,6 @@ class Registration extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCreateAccountUrl()
     {
@@ -106,7 +96,6 @@ class Registration extends \Magento\Framework\View\Element\Template
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -124,7 +113,6 @@ class Registration extends \Magento\Framework\View\Element\Template
      * Validate order addresses
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function validateAddresses()
     {

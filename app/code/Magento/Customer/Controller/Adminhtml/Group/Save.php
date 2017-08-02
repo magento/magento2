@@ -13,13 +13,11 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Group\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
@@ -32,7 +30,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -59,7 +56,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      *
      * @param array $customerGroupData
      * @return void
-     * @since 2.0.0
      */
     protected function storeCustomerGroupDataToSession($customerGroupData)
     {
@@ -74,7 +70,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * Create or save customer group.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
-     * @since 2.0.0
      */
     public function execute()
     {

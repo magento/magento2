@@ -14,19 +14,16 @@ namespace Magento\Backend\Block\Dashboard;
 /**
  * Class \Magento\Backend\Block\Dashboard\Totals
  *
- * @since 2.0.0
  */
 class Totals extends \Magento\Backend\Block\Dashboard\Bar
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'dashboard/totalbar.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $_moduleManager;
 
@@ -35,7 +32,6 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,7 +45,6 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
 
     /**
      * @return $this|void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

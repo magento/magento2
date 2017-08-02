@@ -10,31 +10,26 @@ namespace Magento\Framework\App\Router;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Base implements \Magento\Framework\App\RouterInterface
 {
     /**
      * @var \Magento\Framework\App\ActionFactory
-     * @since 2.0.0
      */
     protected $actionFactory;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $actionInterface = \Magento\Framework\App\ActionInterface::class;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_modules = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_dispatchData = [];
 
@@ -42,13 +37,11 @@ class Base implements \Magento\Framework\App\RouterInterface
      * List of required request parameters
      * Order sensitive
      * @var string[]
-     * @since 2.0.0
      */
     protected $_requiredParams = ['moduleFrontName', 'actionPath', 'actionName'];
 
     /**
      * @var \Magento\Framework\App\Route\ConfigInterface
-     * @since 2.0.0
      */
     protected $_routeConfig;
 
@@ -56,7 +49,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Url security information.
      *
      * @var \Magento\Framework\Url\SecurityInfoInterface
-     * @since 2.0.0
      */
     protected $_urlSecurityInfo;
 
@@ -64,43 +56,36 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\App\ResponseFactory
-     * @since 2.0.0
      */
     protected $_responseFactory;
 
     /**
      * @var \Magento\Framework\App\DefaultPathInterface
-     * @since 2.0.0
      */
     protected $_defaultPath;
 
     /**
      * @var \Magento\Framework\Code\NameBuilder
-     * @since 2.0.0
      */
     protected $nameBuilder;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $reservedNames = ['new', 'print', 'switch', 'return'];
 
@@ -108,25 +93,21 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Allows to control if we need to enable no route functionality in current router
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $applyNoRoute = false;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $pathPrefix = null;
 
     /**
      * @var \Magento\Framework\App\Router\ActionList
-     * @since 2.0.0
      */
     protected $actionList;
 
     /**
      * @var \Magento\Framework\App\Router\PathConfigInterface
-     * @since 2.0.0
      */
     protected $pathConfig;
 
@@ -143,7 +124,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Router\ActionList $actionList,
@@ -170,7 +150,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ActionInterface|null
-     * @since 2.0.0
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
@@ -184,7 +163,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return array
-     * @since 2.0.0
      */
     protected function parseRequest(\Magento\Framework\App\RequestInterface $request)
     {
@@ -209,7 +187,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $param
      * @return string|null
-     * @since 2.0.0
      */
     protected function matchModuleFrontName(\Magento\Framework\App\RequestInterface $request, $param)
     {
@@ -234,7 +211,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $param
      * @return string
-     * @since 2.0.0
      */
     protected function matchActionPath(\Magento\Framework\App\RequestInterface $request, $param)
     {
@@ -257,7 +233,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      *
      * @param string $currentModuleName
      * @return \Magento\Framework\App\ActionInterface|null
-     * @since 2.0.0
      */
     protected function getNotFoundAction($currentModuleName)
     {
@@ -282,7 +257,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @return \Magento\Framework\App\ActionInterface|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function matchAction(\Magento\Framework\App\RequestInterface $request, array $params)
     {
@@ -350,7 +324,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param string $module
      * @param string $actionPath
      * @return string
-     * @since 2.0.0
      */
     public function getActionClassName($module, $actionPath)
     {
@@ -366,7 +339,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param string $path
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
-     * @since 2.0.0
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
@@ -389,7 +361,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Check whether redirect url should be used for secure routes
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _shouldRedirectToSecure()
     {

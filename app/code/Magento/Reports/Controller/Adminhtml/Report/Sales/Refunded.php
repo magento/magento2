@@ -11,7 +11,6 @@ use Magento\Reports\Model\Flag;
 /**
  * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Refunded
  *
- * @since 2.0.0
  */
 class Refunded extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
@@ -19,7 +18,6 @@ class Refunded extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      * Refunds report action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
@@ -47,7 +46,6 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * Delete action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

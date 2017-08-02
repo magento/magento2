@@ -8,7 +8,6 @@ namespace Magento\Framework\TestFramework\Unit\Utility;
 /**
  * Class \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
  *
- * @since 2.0.0
  */
 class XsdValidator
 {
@@ -16,7 +15,6 @@ class XsdValidator
      * @param string $schema
      * @param string $xml
      * @return array
-     * @since 2.0.0
      */
     public function validate($schema, $xml)
     {

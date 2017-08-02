@@ -7,19 +7,16 @@ namespace Magento\Widget\Model\ResourceModel\Layout;
 
 /**
  * Class Plugin
- * @since 2.0.0
  */
 class Plugin
 {
     /**
      * @var \Magento\Widget\Model\ResourceModel\Layout\Update
-     * @since 2.0.0
      */
     private $update;
 
     /**
      * @param \Magento\Widget\Model\ResourceModel\Layout\Update $update
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Widget\Model\ResourceModel\Layout\Update $update
@@ -35,7 +32,6 @@ class Plugin
      * @param string $handle
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundGetDbUpdateString(
         \Magento\Framework\View\Model\Layout\Merge $subject,

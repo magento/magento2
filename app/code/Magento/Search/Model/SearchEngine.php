@@ -11,13 +11,11 @@ use Magento\Framework\Search\SearchEngineInterface;
 
 /**
  * Search Engine
- * @since 2.0.0
  */
 class SearchEngine implements SearchEngineInterface
 {
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     private $adapter = null;
 
@@ -25,13 +23,11 @@ class SearchEngine implements SearchEngineInterface
      * Adapter factory
      *
      * @var AdapterFactory
-     * @since 2.0.0
      */
     private $adapterFactory;
 
     /**
      * @param AdapterFactory $adapterFactory
-     * @since 2.0.0
      */
     public function __construct(AdapterFactory $adapterFactory)
     {
@@ -40,7 +36,6 @@ class SearchEngine implements SearchEngineInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function search(RequestInterface $request)
     {
@@ -51,7 +46,6 @@ class SearchEngine implements SearchEngineInterface
      * Get adapter
      *
      * @return AdapterInterface
-     * @since 2.0.0
      */
     protected function getConnection()
     {

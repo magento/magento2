@@ -7,37 +7,31 @@ namespace Magento\Directory\Block;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
-     * @since 2.0.0
      */
     protected $_regionCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
-     * @since 2.0.0
      */
     protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
@@ -55,7 +49,6 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -76,7 +69,6 @@ class Data extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getLoadrRegionUrl()
     {
@@ -85,7 +77,6 @@ class Data extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
-     * @since 2.0.0
      */
     public function getCountryCollection()
     {
@@ -102,7 +93,6 @@ class Data extends \Magento\Framework\View\Element\Template
      * Retrieve list of top destinations countries
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getTopDestinations()
     {
@@ -119,7 +109,6 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param string $id
      * @param string $title
      * @return string
-     * @since 2.0.0
      */
     public function getCountryHtmlSelect($defValue = null, $name = 'country_id', $id = 'country', $title = 'Country')
     {
@@ -159,7 +148,6 @@ class Data extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
-     * @since 2.0.0
      */
     public function getRegionCollection()
     {
@@ -174,7 +162,6 @@ class Data extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getRegionHtmlSelect()
     {
@@ -208,7 +195,6 @@ class Data extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getCountryId()
     {
@@ -221,7 +207,6 @@ class Data extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getRegionsJs()
     {

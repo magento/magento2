@@ -16,7 +16,6 @@ use Magento\Eav\Model\Entity\Type;
 /**
  * Class \Magento\Eav\Model\ResourceModel\Form\Type\Collection
  *
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -25,7 +24,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -36,7 +34,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert items array to array for select options
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -48,7 +45,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param Type|int $entity
      * @return $this
-     * @since 2.0.0
      */
     public function addEntityTypeFilter($entity)
     {

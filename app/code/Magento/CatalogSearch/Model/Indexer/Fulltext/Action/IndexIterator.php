@@ -13,103 +13,103 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @deprecated 2.2.0 No more used
  * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
  * @api
- * @since 2.1.0
+ * @since 2.0.1
  */
 class IndexIterator implements \Iterator
 {
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $dataProvider;
 
     /**
      * @var int
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $storeId;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $staticFields;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $productIds;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $dynamicFields;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $visibility;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $allowedVisibility;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $status;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $statusIds;
 
     /**
      * @var int
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $lastProductId = 0;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $products = [];
 
     /**
      * @var null
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $current = null;
 
     /**
      * @var bool
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $isValid = true;
 
     /**
      * @var null
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $key = null;
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $productAttributes = [];
 
     /**
      * @var array
-     * @since 2.1.0
+     * @since 2.0.1
      */
     private $productRelations = [];
 
@@ -127,7 +127,7 @@ class IndexIterator implements \Iterator
      * @param array $statusIds
      *
      * @SuppressWarnings(Magento.TypeDuplication)
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function __construct(
         DataProvider $dataProvider,
@@ -155,7 +155,7 @@ class IndexIterator implements \Iterator
      * {@inheritDoc}
      *
      * @deprecated 2.2.0 Since class is deprecated
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function current()
     {
@@ -166,7 +166,7 @@ class IndexIterator implements \Iterator
      * {@inheritDoc}
      *
      * @deprecated 2.2.0 Since class is deprecated
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function next()
     {
@@ -265,7 +265,7 @@ class IndexIterator implements \Iterator
      * {@inheritDoc}
      *
      * @deprecated 2.2.0 Since class is deprecated
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function key()
     {
@@ -276,7 +276,7 @@ class IndexIterator implements \Iterator
      * {@inheritDoc}
      *
      * @deprecated 2.2.0 Since class is deprecated
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function valid()
     {
@@ -287,7 +287,7 @@ class IndexIterator implements \Iterator
      * {@inheritDoc}
      *
      * @deprecated 2.2.0 Since class is deprecated
-     * @since 2.1.0
+     * @since 2.0.1
      */
     public function rewind()
     {

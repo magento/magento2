@@ -9,7 +9,6 @@ namespace Magento\Payment\Block;
  * Base payment iformation block
  *
  * @api
- * @since 2.0.0
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
@@ -17,13 +16,11 @@ class Info extends \Magento\Framework\View\Element\Template
      * Payment rendered specific information
      *
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_paymentSpecificInformation;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Payment::info/default.phtml';
 
@@ -32,7 +29,6 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @return \Magento\Payment\Model\InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getInfo()
     {
@@ -49,7 +45,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Retrieve payment method model
      *
      * @return \Magento\Payment\Model\MethodInterface
-     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -59,7 +54,6 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * Render as PDF
      * @return string
-     * @since 2.0.0
      */
     public function toPdf()
     {
@@ -73,7 +67,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Children must have toPdf() callable
      * Known issue: not sorted
      * @return array
-     * @since 2.0.0
      */
     public function getChildPdfAsArray()
     {
@@ -90,7 +83,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Get some specific information in format of array($label => $value)
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSpecificInformation()
     {
@@ -103,7 +95,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * @param mixed $value
      * @param bool $escapeHtml
      * @return array
-     * @since 2.0.0
      */
     public function getValueAsArray($value, $escapeHtml = false)
     {
@@ -128,7 +119,6 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsSecureMode()
     {
@@ -155,7 +145,6 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @param null|\Magento\Framework\DataObject|array $transport
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _prepareSpecificInformation($transport = null)
     {

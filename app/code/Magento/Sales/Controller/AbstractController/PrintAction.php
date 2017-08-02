@@ -12,19 +12,16 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class \Magento\Sales\Controller\AbstractController\PrintAction
  *
- * @since 2.0.0
  */
 abstract class PrintAction extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Sales\Controller\AbstractController\OrderLoaderInterface
-     * @since 2.0.0
      */
     protected $orderLoader;
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -32,7 +29,6 @@ abstract class PrintAction extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param OrderLoaderInterface $orderLoader
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -48,7 +44,6 @@ abstract class PrintAction extends \Magento\Framework\App\Action\Action
      * Print Order Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

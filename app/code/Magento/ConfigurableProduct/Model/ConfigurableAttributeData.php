@@ -12,7 +12,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 /**
  * Class ConfigurableAttributeData
  * @api
- * @since 2.0.0
  */
 class ConfigurableAttributeData
 {
@@ -22,7 +21,6 @@ class ConfigurableAttributeData
      * @param Product $product
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     public function getAttributesData(Product $product, array $options = [])
     {
@@ -53,7 +51,6 @@ class ConfigurableAttributeData
      * @param Attribute $attribute
      * @param array $config
      * @return array
-     * @since 2.0.0
      */
     protected function getAttributeOptionsData($attribute, $config)
     {
@@ -75,7 +72,6 @@ class ConfigurableAttributeData
      * @param int $attributeId
      * @param Product $product
      * @return mixed|null
-     * @since 2.0.0
      */
     protected function getAttributeConfigValue($attributeId, $product)
     {

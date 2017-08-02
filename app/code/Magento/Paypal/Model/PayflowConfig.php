@@ -10,7 +10,6 @@ use Magento\Payment\Model\Method\AbstractMethod;
 /**
  * Class PayflowConfig
  * @todo ELiminate current configuration class
- * @since 2.0.0
  */
 class PayflowConfig extends Config
 {
@@ -29,7 +28,6 @@ class PayflowConfig extends Config
      * Mapper from Magento payment actions to PayPal-specific transaction types
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getTrxType()
     {
@@ -50,7 +48,6 @@ class PayflowConfig extends Config
      *
      * @param bool|null $testMode Ability to specify test mode using
      * @return string
-     * @since 2.0.0
      */
     public function getTransactionUrl($testMode = null)
     {
@@ -65,7 +62,6 @@ class PayflowConfig extends Config
      * Payment action getter compatible with payment model
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getPaymentAction()
     {
@@ -87,7 +83,6 @@ class PayflowConfig extends Config
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isMethodActive($method)
     {
@@ -100,7 +95,6 @@ class PayflowConfig extends Config
      *
      * @param string $fieldName
      * @return string|null
-     * @since 2.0.0
      */
     protected function _getSpecificConfigPath($fieldName)
     {

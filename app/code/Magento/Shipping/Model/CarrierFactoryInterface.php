@@ -9,7 +9,6 @@ use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 
 /**
  * Interface CarrierFactoryInterface
- * @since 2.0.0
  */
 interface CarrierFactoryInterface
 {
@@ -19,7 +18,6 @@ interface CarrierFactoryInterface
      * @param string $carrierCode
      * @return bool|AbstractCarrierInterface
      * @api
-     * @since 2.0.0
      */
     public function get($carrierCode);
 
@@ -30,7 +28,6 @@ interface CarrierFactoryInterface
      * @param int|null $storeId
      * @return bool|AbstractCarrierInterface
      * @api
-     * @since 2.0.0
      */
     public function create($carrierCode, $storeId = null);
 
@@ -40,7 +37,6 @@ interface CarrierFactoryInterface
      * @param string $carrierCode
      * @return bool|AbstractCarrierInterface
      * @api
-     * @since 2.0.0
      */
     public function getIfActive($carrierCode);
 
@@ -51,7 +47,6 @@ interface CarrierFactoryInterface
      * @param null|int $storeId
      * @return bool|AbstractCarrierInterface
      * @api
-     * @since 2.0.0
      */
     public function createIfActive($carrierCode, $storeId = null);
 }

@@ -9,19 +9,16 @@ namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Backend;
  * Address region attribute backend
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Directory\Model\RegionFactory
-     * @since 2.0.0
      */
     protected $_regionFactory;
 
     /**
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\RegionFactory $regionFactory)
     {
@@ -33,7 +30,6 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -50,7 +46,6 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * @return \Magento\Directory\Model\Region
-     * @since 2.0.0
      */
     protected function _createRegionInstance()
     {

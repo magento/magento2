@@ -16,25 +16,25 @@ use Magento\Store\Model\Store;
 
 /**
  * Class StatusBaseSelectProcessor
- * @since 2.2.0
+ * @since 2.1.3
  */
 class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
 {
     /**
      * @var Config
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $eavConfig;
 
     /**
      * @var MetadataPool
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $metadataPool;
 
     /**
      * @var StoreResolverInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $storeResolver;
 
@@ -42,7 +42,7 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
      * @param Config $eavConfig
      * @param MetadataPool $metadataPool
      * @param StoreResolverInterface $storeResolver
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         Config $eavConfig,
@@ -57,7 +57,7 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @param Select $select
      * @return Select
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function process(Select $select)
     {

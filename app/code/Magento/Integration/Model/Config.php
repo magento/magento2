@@ -14,7 +14,6 @@ use Magento\Integration\Model\Cache\Type;
  *
  * This is a parent class for storing information about Integrations.
  * @deprecated 2.1.0
- * @since 2.0.0
  */
 class Config
 {
@@ -22,13 +21,11 @@ class Config
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
     /**
      * @var \Magento\Integration\Model\Config\Reader
-     * @since 2.0.0
      */
     protected $_configReader;
 
@@ -36,7 +33,6 @@ class Config
      * Array of integrations
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_integrations;
 
@@ -50,7 +46,6 @@ class Config
      * @param Cache\Type $configCacheType
      * @param Config\Reader $configReader
      * @param SerializerInterface $serializer
-     * @since 2.0.0
      */
     public function __construct(
         Cache\Type $configCacheType,
@@ -67,7 +62,6 @@ class Config
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getIntegrations()
     {

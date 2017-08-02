@@ -7,7 +7,6 @@ namespace Magento\Payment\Model\Cart\SalesModel;
 
 /**
  * Wrapper for \Magento\Sales\Model\Order sales model
- * @since 2.0.0
  */
 class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
 {
@@ -15,13 +14,11 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
      * Sales order model instance
      *
      * @var \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     protected $_salesModel;
 
     /**
      * @param \Magento\Sales\Model\Order $salesModel
-     * @since 2.0.0
      */
     public function __construct(\Magento\Sales\Model\Order $salesModel)
     {
@@ -30,7 +27,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllItems()
     {
@@ -53,7 +49,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseSubtotal()
     {
@@ -62,7 +57,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseTaxAmount()
     {
@@ -71,7 +65,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseShippingAmount()
     {
@@ -80,7 +73,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseDiscountAmount()
     {
@@ -89,7 +81,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDataUsingMethod($key, $args = null)
     {
@@ -98,7 +89,6 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxContainer()
     {

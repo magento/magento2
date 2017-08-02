@@ -9,25 +9,21 @@ namespace Magento\Catalog\Model\ProductLink\Converter;
 /**
  * Class \Magento\Catalog\Model\ProductLink\Converter\ConverterPool
  *
- * @since 2.0.0
  */
 class ConverterPool
 {
     /**
      * @var ConverterInterface[]
-     * @since 2.0.0
      */
     protected $converters;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $defaultConverterCode = 'default';
 
     /**
      * @param  ConverterInterface[] $converters
-     * @since 2.0.0
      */
     public function __construct(array $converters)
     {
@@ -39,7 +35,6 @@ class ConverterPool
      *
      * @param string $linkType
      * @return ConverterInterface
-     * @since 2.0.0
      */
     public function getConverter($linkType)
     {

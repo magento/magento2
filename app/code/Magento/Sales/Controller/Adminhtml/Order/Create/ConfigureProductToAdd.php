@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
  *
- * @since 2.0.0
  */
 class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -16,7 +15,6 @@ class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Cr
      * Ajax handler to response configuration fieldset of composite product in order
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @since 2.0.0
      */
     public function execute()
     {

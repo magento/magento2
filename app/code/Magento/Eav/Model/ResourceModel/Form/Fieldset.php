@@ -13,7 +13,6 @@ use Magento\Framework\Model\AbstractModel;
  * Eav Form Fieldset Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,7 +20,6 @@ class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -38,7 +36,6 @@ class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -100,7 +97,6 @@ class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param FormFieldset $object
      * @return array
-     * @since 2.0.0
      */
     public function getLabels($object)
     {
@@ -127,7 +123,6 @@ class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param FormFieldset $object
      * @return Select
-     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {

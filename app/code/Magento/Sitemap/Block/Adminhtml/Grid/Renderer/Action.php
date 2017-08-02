@@ -7,14 +7,12 @@ namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
 /**
  * Sitemap grid action column renderer
- * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     /**
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

@@ -9,7 +9,6 @@ namespace Magento\Framework\Message;
  * Represent a message with a type, content text, and an isSticky attribute to prevent message from being cleared.
  *
  * @api
- * @since 2.0.0
  */
 interface MessageInterface
 {
@@ -42,7 +41,6 @@ interface MessageInterface
      * Getter message type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType();
 
@@ -50,7 +48,6 @@ interface MessageInterface
      * Getter for text of message
      *
      * @return string
-     * @since 2.0.0
      */
     public function getText();
 
@@ -59,7 +56,6 @@ interface MessageInterface
      *
      * @param string $text
      * @return $this
-     * @since 2.0.0
      */
     public function setText($text);
 
@@ -68,7 +64,6 @@ interface MessageInterface
      *
      * @param string $identifier
      * @return $this
-     * @since 2.0.0
      */
     public function setIdentifier($identifier);
 
@@ -76,7 +71,6 @@ interface MessageInterface
      * Getter message identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdentifier();
 
@@ -85,7 +79,6 @@ interface MessageInterface
      *
      * @param bool $isSticky
      * @return $this
-     * @since 2.0.0
      */
     public function setIsSticky($isSticky);
 
@@ -94,7 +87,6 @@ interface MessageInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsSticky();
 
@@ -102,7 +94,6 @@ interface MessageInterface
      * Retrieve message as a string
      *
      * @return string
-     * @since 2.0.0
      */
     public function toString();
 
@@ -112,7 +103,6 @@ interface MessageInterface
      * @param array $data
      * @return $this
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function setData(array $data = []);
 
@@ -120,7 +110,6 @@ interface MessageInterface
      * Returns message data
      *
      * @return array
-     * @since 2.0.0
      */
     public function getData();
 }

@@ -12,7 +12,6 @@ use Magento\Review\Model\Review;
 /**
  * Class \Magento\Review\Controller\Product\View
  *
- * @since 2.0.0
  */
 class View extends ProductController
 {
@@ -22,7 +21,6 @@ class View extends ProductController
      *
      * @param int $reviewId
      * @return bool|Review
-     * @since 2.0.0
      */
     protected function loadReview($reviewId)
     {
@@ -45,7 +43,6 @@ class View extends ProductController
      * Show details of one review
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

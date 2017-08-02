@@ -15,13 +15,11 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
 /**
  * Customer Address Postal/Zip Code Attribute Data Model
  * This Data Model Has to Be Set Up in additional EAV attribute table
- * @since 2.0.0
  */
 class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $directoryHelper;
 
@@ -30,7 +28,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param PsrLogger $logger
      * @param ResolverInterface $localeResolver
      * @param DirectoryHelper $directoryHelper
-     * @since 2.0.0
      */
     public function __construct(
         MagentoTimezone $localeDate,
@@ -48,7 +45,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return array|bool
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -75,7 +71,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param RequestInterface $request
      * @return array|string
-     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -88,7 +83,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -103,7 +97,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -116,7 +109,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param string $format
      * @return string|array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function outputValue($format = AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {

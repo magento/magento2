@@ -9,7 +9,6 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 /**
  * Reports Product Index Abstract Resource Model
  * @api
- * @since 2.0.0
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      * Reports helper
      *
      * @var \Magento\Reports\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $_resourceHelper;
 
@@ -27,7 +25,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -43,7 +40,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      *
      * @param \Magento\Reports\Model\Product\Index\AbstractIndex $object
      * @return $this
-     * @since 2.0.0
      */
     public function updateCustomerFromVisitor(\Magento\Reports\Model\Product\Index\AbstractIndex $object)
     {
@@ -104,7 +100,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      *
      * @param \Magento\Reports\Model\Product\Index\AbstractIndex $object
      * @return $this
-     * @since 2.0.0
      */
     public function purgeVisitorByCustomer(\Magento\Reports\Model\Product\Index\AbstractIndex $object)
     {
@@ -127,7 +122,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -156,7 +150,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      * Clean index (visitor)
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clean()
     {
@@ -196,7 +189,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      * @param \Magento\Framework\DataObject|\Magento\Reports\Model\Product\Index\AbstractIndex $object
      * @param int[] $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function registerIds(\Magento\Framework\DataObject $object, $productIds)
     {

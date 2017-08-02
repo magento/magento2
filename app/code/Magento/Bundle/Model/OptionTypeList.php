@@ -9,26 +9,22 @@ namespace Magento\Bundle\Model;
 /**
  * Class \Magento\Bundle\Model\OptionTypeList
  *
- * @since 2.0.0
  */
 class OptionTypeList implements \Magento\Bundle\Api\ProductOptionTypeListInterface
 {
     /**
      * @var Source\Option\Type
-     * @since 2.0.0
      */
     protected $types;
 
     /**
      * @var \Magento\Bundle\Api\Data\OptionTypeInterfaceFactory
-     * @since 2.0.0
      */
     protected $typeFactory;
 
     /**
      * @param Source\Option\Type $type
      * @param \Magento\Bundle\Api\Data\OptionTypeInterfaceFactory $typeFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Bundle\Model\Source\Option\Type $type,
@@ -40,7 +36,6 @@ class OptionTypeList implements \Magento\Bundle\Api\ProductOptionTypeListInterfa
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems()
     {

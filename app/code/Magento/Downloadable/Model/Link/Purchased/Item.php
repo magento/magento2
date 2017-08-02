@@ -44,7 +44,6 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
  * @method Item setUpdatedAt($value)
  *
  * @api
- * @since 2.0.0
  */
 class Item extends \Magento\Framework\Model\AbstractModel
 {
@@ -64,7 +63,6 @@ class Item extends \Magento\Framework\Model\AbstractModel
      * Enter description here...
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -77,7 +75,6 @@ class Item extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function beforeSave()
     {

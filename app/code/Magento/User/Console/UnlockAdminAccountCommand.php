@@ -13,7 +13,6 @@ use Magento\User\Model\ResourceModel\User as AdminUser;
 
 /**
  * Command for unlocking an account.
- * @since 2.0.0
  */
 class UnlockAdminAccountCommand extends Command
 {
@@ -25,7 +24,6 @@ class UnlockAdminAccountCommand extends Command
 
     /**
      * @var AdminUser
-     * @since 2.0.0
      */
     private $adminUser;
 
@@ -33,7 +31,6 @@ class UnlockAdminAccountCommand extends Command
      * {@inheritdoc}
      *
      * @param AdminUser $userResource
-     * @since 2.0.0
      */
     public function __construct(
         AdminUser $adminUser,
@@ -45,7 +42,6 @@ class UnlockAdminAccountCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -67,7 +63,6 @@ class UnlockAdminAccountCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {

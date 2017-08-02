@@ -17,7 +17,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\DateFieldsOrder
  *
- * @since 2.0.0
  */
 class DateFieldsOrder extends Field
 {
@@ -25,7 +24,6 @@ class DateFieldsOrder extends Field
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

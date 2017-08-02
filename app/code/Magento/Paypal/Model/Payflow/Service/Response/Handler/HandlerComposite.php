@@ -11,19 +11,16 @@ use Magento\Payment\Model\InfoInterface;
 /**
  * Class \Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerComposite
  *
- * @since 2.0.0
  */
 class HandlerComposite implements HandlerInterface
 {
     /**
      * @var HandlerInterface[]
-     * @since 2.0.0
      */
     private $handlers = [];
 
     /**
      * @param HandlerInterface[] $handlers
-     * @since 2.0.0
      */
     public function __construct(array $handlers = [])
     {
@@ -45,7 +42,6 @@ class HandlerComposite implements HandlerInterface
 
     /**
      * {inheritdoc}
-     * @since 2.0.0
      */
     public function handle(InfoInterface $payment, DataObject $response)
     {

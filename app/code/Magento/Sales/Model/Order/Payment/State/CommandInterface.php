@@ -10,7 +10,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Interface CommandInterface using for payment related changes of order state
- * @since 2.0.0
  */
 interface CommandInterface
 {
@@ -21,7 +20,6 @@ interface CommandInterface
      * @param string|float|int $amount
      * @param OrderInterface $order
      * @return string
-     * @since 2.0.0
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order);
 }

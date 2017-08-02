@@ -9,7 +9,6 @@ use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * \Magento\User Auth controller
- * @since 2.0.0
  */
 abstract class Auth extends \Magento\Backend\App\AbstractAction
 {
@@ -17,7 +16,6 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
      * User model factory
      *
      * @var \Magento\User\Model\UserFactory
-     * @since 2.0.0
      */
     protected $_userFactory;
 
@@ -26,7 +24,6 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -43,7 +40,6 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
      * @param string $resetPasswordToken
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _validateResetPasswordLinkToken($userId, $resetPasswordToken)
     {
@@ -74,7 +70,6 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
      * Check if user has permissions to access this controller
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isAllowed()
     {

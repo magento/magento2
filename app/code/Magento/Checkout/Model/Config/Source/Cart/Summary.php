@@ -8,14 +8,12 @@ namespace Magento\Checkout\Model\Config\Source\Cart;
 /**
  * Class \Magento\Checkout\Model\Config\Source\Cart\Summary
  *
- * @since 2.0.0
  */
 class Summary implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

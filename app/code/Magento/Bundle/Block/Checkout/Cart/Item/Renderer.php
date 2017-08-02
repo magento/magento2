@@ -13,7 +13,6 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
  * Shopping cart item render block
  *
  * @api
- * @since 2.0.0
  */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
@@ -21,7 +20,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Bundle catalog product configuration
      *
      * @var Configuration
-     * @since 2.0.0
      */
     protected $_bundleProductConfiguration = null;
 
@@ -38,7 +36,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param Configuration $bundleProductConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -74,7 +71,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Caches result in quote item, because it can be used in cart 'recent view' and on same page in cart checkout
      *
      * @return array
-     * @since 2.0.0
      */
     public function getOptionList()
     {
@@ -85,7 +81,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Return cart item error messages
      *
      * @return array
-     * @since 2.0.0
      */
     public function getMessages()
     {

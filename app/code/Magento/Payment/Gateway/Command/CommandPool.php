@@ -13,20 +13,17 @@ use Magento\Framework\ObjectManager\TMapFactory;
 /**
  * Class CommandPool
  * @api
- * @since 2.0.0
  */
 class CommandPool implements CommandPoolInterface
 {
     /**
      * @var CommandInterface[] | TMap
-     * @since 2.0.0
      */
     private $commands;
 
     /**
      * @param TMapFactory $tmapFactory
      * @param array $commands
-     * @since 2.0.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -46,7 +43,6 @@ class CommandPool implements CommandPoolInterface
      * @param string $commandCode
      * @return CommandInterface
      * @throws NotFoundException
-     * @since 2.0.0
      */
     public function get($commandCode)
     {

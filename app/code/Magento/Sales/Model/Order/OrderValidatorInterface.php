@@ -12,7 +12,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface OrderValidatorInterface
- * @since 2.2.0
+ * @since 2.1.2
  */
 interface OrderValidatorInterface
 {
@@ -21,7 +21,7 @@ interface OrderValidatorInterface
      * @param ValidatorInterface[] $validators
      * @return ValidatorResultInterface
      * @throws DocumentValidationException
-     * @since 2.2.0
+     * @since 2.1.2
      */
     public function validate(OrderInterface $entity, array $validators);
 }

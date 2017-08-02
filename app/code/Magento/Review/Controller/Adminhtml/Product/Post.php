@@ -13,13 +13,11 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class \Magento\Review\Controller\Adminhtml\Product\Post
  *
- * @since 2.0.0
  */
 class Post extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

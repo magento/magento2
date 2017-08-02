@@ -9,7 +9,6 @@ namespace Magento\Framework\Mail\Template;
  * Mail Sender Resolver interface
  *
  * @api
- * @since 2.0.0
  */
 interface SenderResolverInterface
 {
@@ -21,7 +20,6 @@ interface SenderResolverInterface
      * @param string|array $sender
      * @param int|null $scopeId
      * @return array an array with 'name' and 'email' key/value pairs
-     * @since 2.0.0
      */
     public function resolve($sender, $scopeId = null);
 }

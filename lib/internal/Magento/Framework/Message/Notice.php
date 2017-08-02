@@ -7,7 +7,6 @@ namespace Magento\Framework\Message;
 
 /**
  * Notice message model
- * @since 2.0.0
  */
 class Notice extends AbstractMessage
 {
@@ -15,7 +14,6 @@ class Notice extends AbstractMessage
      * Getter message type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getType()
     {

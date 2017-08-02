@@ -9,7 +9,6 @@ namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 /**
  * Class \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
 {
@@ -17,7 +16,6 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
      * Save custom Currency symbol
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

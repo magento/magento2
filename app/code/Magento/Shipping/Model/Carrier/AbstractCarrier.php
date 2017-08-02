@@ -15,7 +15,6 @@ use Magento\Shipping\Model\Shipment\Request;
  * Class AbstractCarrier
  *
  * @api
- * @since 2.0.0
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
@@ -25,7 +24,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Carrier's code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_code;
 
@@ -33,7 +31,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Rates result
      *
      * @var array|null
-     * @since 2.0.0
      */
     protected $_rates;
 
@@ -41,7 +38,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Number of boxes in package
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_numBoxes = 1;
 
@@ -49,7 +45,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Free Method config path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_freeMethod = 'free_method';
 
@@ -57,7 +52,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Whether this carrier has fixed rates calculation
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isFixed = false;
 
@@ -65,7 +59,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Container types that could be customized
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_customizableContainerTypes = [];
 
@@ -87,7 +80,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Fields that should be replaced in debug with '***'
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = [];
 
@@ -95,19 +87,16 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory
-     * @since 2.0.0
      */
     protected $_rateErrorFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -116,7 +105,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -135,7 +123,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param   string $field
      * @return  false|string
-     * @since 2.0.0
      */
     public function getConfigData($field)
     {
@@ -158,7 +145,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @api
-     * @since 2.0.0
      */
     public function getConfigFlag($field)
     {
@@ -181,7 +167,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param Request $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function requestToShipment($request)
     {
@@ -195,7 +180,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param Request $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function returnOfShipment($request)
     {
@@ -208,7 +192,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -222,7 +205,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getAllowedContainers(\Magento\Framework\DataObject $params = null)
     {
@@ -275,7 +257,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Get Container Types, that could be customized
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getCustomizableContainerTypes()
     {
@@ -288,7 +269,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
@@ -299,7 +279,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function checkAvailableShipCountries(\Magento\Framework\DataObject $request)
     {
@@ -349,7 +328,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
@@ -360,7 +338,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Determine whether current carrier enabled for activity
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isActive()
     {
@@ -373,7 +350,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Whether this carrier has fixed rates calculation
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isFixed()
     {
@@ -384,7 +360,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Check if carrier has shipping tracking option available
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isTrackingAvailable()
     {
@@ -395,7 +370,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Check if carrier has shipping label option available
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isShippingLabelsAvailable()
     {
@@ -406,7 +380,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *  Retrieve sort order of current carrier
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -418,7 +391,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _updateFreeMethodQuote($request)
     {
@@ -478,7 +450,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param float $cost
      * @return float final price for shipping method
-     * @since 2.0.0
      */
     public function getFinalPriceWithHandlingFee($cost)
     {
@@ -510,7 +481,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param string $handlingType
      * @param float $handlingFee
      * @return float
-     * @since 2.0.0
      */
     protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
     {
@@ -528,7 +498,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param string $handlingType
      * @param float $handlingFee
      * @return float
-     * @since 2.0.0
      */
     protected function _getPerorderPrice($cost, $handlingType, $handlingFee)
     {
@@ -544,7 +513,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param int $weight in some measure
      * @return int
-     * @since 2.0.0
      */
     public function getTotalNumOfBoxes($weight)
     {
@@ -565,7 +533,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Is state province required
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isStateProvinceRequired()
     {
@@ -576,7 +543,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Check if city option required
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCityRequired()
     {
@@ -589,7 +555,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param string|null $countryId
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isZipCodeRequired($countryId = null)
     {
@@ -601,7 +566,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param mixed $debugData
      * @return void
-     * @since 2.0.0
      */
     protected function _debug($debugData)
     {
@@ -616,7 +580,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @api
-     * @since 2.0.0
      */
     public function getDebugFlag()
     {
@@ -628,7 +591,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param mixed $debugData
      * @return void
-     * @since 2.0.0
      */
     public function debugData($debugData)
     {
@@ -639,7 +601,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Getter for carrier code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCarrierCode()
     {
@@ -652,7 +613,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getContentTypes(\Magento\Framework\DataObject $params)
     {

@@ -13,19 +13,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
@@ -36,7 +33,6 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,7 +52,6 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * Form preparation
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -107,7 +102,6 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * Get parent category options
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getParentCategoryOptions()
     {
@@ -133,7 +127,6 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * Category save action URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSaveCategoryUrl()
     {
@@ -144,7 +137,6 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * Attach new category dialog widget initialization
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAfterElementHtml()
     {

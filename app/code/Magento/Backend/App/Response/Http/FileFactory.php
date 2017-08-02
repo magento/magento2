@@ -9,43 +9,36 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @api
- * @since 2.0.0
  */
 class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
 {
     /**
      * @var \Magento\Backend\Model\Auth
-     * @since 2.0.0
      */
     protected $_auth;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
-     * @since 2.0.0
      */
     protected $_flag;
 
     /**
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
@@ -57,7 +50,6 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\App\ActionFlag $flag
      * @param \Magento\Backend\Helper\Data $helper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
@@ -83,7 +75,6 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
      * @param   array $arguments
      * @return \Magento\Framework\App\ResponseInterface
      * @TODO move method
-     * @since 2.0.0
      */
     protected function _redirect($path, $arguments = [])
     {
@@ -104,7 +95,6 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
      * @param string $contentType
      * @param int $contentLength    explicit content length, if strlen($content) isn't applicable
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function create(
         $fileName,

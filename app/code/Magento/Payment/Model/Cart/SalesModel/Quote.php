@@ -7,7 +7,6 @@ namespace Magento\Payment\Model\Cart\SalesModel;
 
 /**
  * Wrapper for \Magento\Quote\Model\Quote sales model
- * @since 2.0.0
  */
 class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
 {
@@ -15,19 +14,16 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
      * Sales quote model instance
      *
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $_salesModel;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address
-     * @since 2.0.0
      */
     protected $_address;
 
     /**
      * @param \Magento\Quote\Model\Quote $salesModel
-     * @since 2.0.0
      */
     public function __construct(\Magento\Quote\Model\Quote $salesModel)
     {
@@ -43,7 +39,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllItems()
     {
@@ -66,7 +61,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseSubtotal()
     {
@@ -75,7 +69,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseTaxAmount()
     {
@@ -84,7 +77,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseShippingAmount()
     {
@@ -93,7 +85,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getBaseDiscountAmount()
     {
@@ -102,7 +93,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDataUsingMethod($key, $args = null)
     {
@@ -111,7 +101,6 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxContainer()
     {

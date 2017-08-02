@@ -10,7 +10,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Comment\Collection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      *
      * @param \Magento\Framework\Model\AbstractModel|int $parent
      * @return $this
-     * @since 2.0.0
      */
     public function setParentFilter($parent)
     {
@@ -34,7 +32,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      *
      * @param int $flag
      * @return $this
-     * @since 2.0.0
      */
     public function addVisibleOnFrontFilter($flag = 1)
     {
@@ -46,7 +43,6 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
      *
      * @param string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function setCreatedAtOrder($direction = 'desc')
     {

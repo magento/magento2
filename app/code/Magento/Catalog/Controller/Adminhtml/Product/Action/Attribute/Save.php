@@ -11,19 +11,16 @@ use Magento\Backend\App\Action;
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
-     * @since 2.0.0
      */
     protected $_productFlatIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     * @since 2.0.0
      */
     protected $_productPriceIndexerProcessor;
 
@@ -31,13 +28,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
-     * @since 2.0.0
      */
     protected $_catalogProduct;
 
     /**
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockItemFactory;
 
@@ -45,13 +40,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * Stock Indexer
      *
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     * @since 2.0.0
      */
     protected $_stockIndexerProcessor;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -64,7 +57,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -92,7 +84,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute()
     {

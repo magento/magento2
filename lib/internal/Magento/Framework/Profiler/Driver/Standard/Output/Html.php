@@ -14,7 +14,6 @@ use Magento\Framework\Profiler\Driver\Standard\Stat;
 /**
  * Class \Magento\Framework\Profiler\Driver\Standard\Output\Html
  *
- * @since 2.0.0
  */
 class Html extends AbstractOutput
 {
@@ -23,7 +22,6 @@ class Html extends AbstractOutput
      *
      * @param Stat $stat
      * @return void
-     * @since 2.0.0
      */
     public function display(Stat $stat)
     {
@@ -56,7 +54,6 @@ class Html extends AbstractOutput
      *
      * @param string $timerId
      * @return string
-     * @since 2.0.0
      */
     protected function _renderTimerId($timerId)
     {

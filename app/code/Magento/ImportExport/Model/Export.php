@@ -14,7 +14,6 @@ namespace Magento\ImportExport\Model;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -42,7 +41,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * Entity adapter.
      *
      * @var \Magento\ImportExport\Model\Export\Entity\AbstractEntity
-     * @since 2.0.0
      */
     protected $_entityAdapter;
 
@@ -50,25 +48,21 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * Writer object instance.
      *
      * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
-     * @since 2.0.0
      */
     protected $_writer;
 
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface
-     * @since 2.0.0
      */
     protected $_exportConfig;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Entity\Factory
-     * @since 2.0.0
      */
     protected $_entityFactory;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Adapter\Factory
-     * @since 2.0.0
      */
     protected $_exportAdapterFac;
 
@@ -79,7 +73,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory
      * @param \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -100,7 +93,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return \Magento\ImportExport\Model\Export\Entity\AbstractEntity|\Magento\ImportExport\Model\Export\AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getEntityAdapter()
     {
@@ -145,7 +137,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getWriter()
     {
@@ -180,7 +171,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function export()
     {
@@ -205,7 +195,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function filterAttributeCollection(\Magento\Framework\Data\Collection $collection)
     {
@@ -219,7 +208,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -246,7 +234,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @static
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
-     * @since 2.0.0
      */
     public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -277,7 +264,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * MIME-type for 'Content-Type' header.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -289,7 +275,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -303,7 +288,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * Entity attributes collection getter.
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getEntityAttributeCollection()
     {
@@ -315,7 +299,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getFileFormat()
     {
@@ -329,7 +312,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * Return file name for downloading.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileName()
     {

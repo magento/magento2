@@ -11,13 +11,11 @@ use Magento\Checkout\CustomerData\DefaultItem;
 
 /**
  * Configurable item
- * @since 2.0.0
  */
 class ConfigurableItem extends DefaultItem
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -28,7 +26,6 @@ class ConfigurableItem extends DefaultItem
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Image $imageHelper,
@@ -50,7 +47,6 @@ class ConfigurableItem extends DefaultItem
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function getProductForThumbnail()
     {
@@ -75,7 +71,6 @@ class ConfigurableItem extends DefaultItem
      * Get item configurable child product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     protected function getChildProduct()
     {

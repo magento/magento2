@@ -12,20 +12,17 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute
  *
- * @since 2.0.0
  */
 class AddAttribute extends Action
 {
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
-     * @since 2.0.0
      */
     protected $productBuilder;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -37,7 +34,6 @@ class AddAttribute extends Action
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function execute()
     {

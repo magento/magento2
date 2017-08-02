@@ -10,19 +10,16 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Class \Magento\Framework\Indexer\SaveHandler\Grid
  *
- * @since 2.0.0
  */
 class Grid extends IndexerHandler
 {
     /**
      * @var string[]
-     * @since 2.0.0
      */
     protected $dataTypes = ['searchable', 'filterable', 'virtual'];
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -35,7 +32,6 @@ class Grid extends IndexerHandler
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
-     * @since 2.0.0
      */
     protected function insertDocumentsForFilterable(array $documents, array $dimensions)
     {
@@ -56,7 +52,6 @@ class Grid extends IndexerHandler
     /**
      * @param array $documents
      * @return array
-     * @since 2.0.0
      */
     protected function prepareFilterableFields(array $documents)
     {
@@ -75,7 +70,6 @@ class Grid extends IndexerHandler
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteIndex($dimensions, \Traversable $ids)
     {

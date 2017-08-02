@@ -18,43 +18,36 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class Transaction
- * @since 2.0.0
  */
 class Transaction
 {
     /**
      * @var Generic
-     * @since 2.0.0
      */
     protected $sessionTransparent;
 
     /**
      * @var CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var Transparent
-     * @since 2.0.0
      */
     protected $transparent;
 
     /**
      * @var PaymentMethodManagementInterface
-     * @since 2.0.0
      */
     private $paymentManagement;
 
     /**
      * @var HandlerInterface
-     * @since 2.0.0
      */
     private $errorHandler;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     private $logger;
 
@@ -65,7 +58,6 @@ class Transaction
      * @param PaymentMethodManagementInterface $paymentManagement
      * @param HandlerInterface $errorHandler
      * @param Logger $logger
-     * @since 2.0.0
      */
     public function __construct(
         Generic $sessionTransparent,
@@ -88,7 +80,6 @@ class Transaction
      *
      * @param array $gatewayTransactionResponse
      * @return DataObject
-     * @since 2.0.0
      */
     public function getResponseObject($gatewayTransactionResponse)
     {
@@ -110,7 +101,6 @@ class Transaction
      * @param DataObject $response
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function savePaymentInQuote($response)
     {

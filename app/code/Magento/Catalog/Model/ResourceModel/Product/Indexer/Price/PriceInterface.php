@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 interface PriceInterface
 {
@@ -19,7 +18,6 @@ interface PriceInterface
      * Reindex temporary (price result data) for all products
      *
      * @return $this
-     * @since 2.0.0
      */
     public function reindexAll();
 
@@ -28,7 +26,6 @@ interface PriceInterface
      *
      * @param int|array $entityIds
      * @return $this
-     * @since 2.0.0
      */
     public function reindexEntity($entityIds);
 }

@@ -8,19 +8,16 @@ namespace Magento\Catalog\Block\Product;
 
 /**
  * Product price block
- * @since 2.0.0
  */
 class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var null
-     * @since 2.0.0
      */
     protected $_priceDisplayType = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_idSuffix = '';
 
@@ -28,7 +25,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -36,31 +32,26 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
-     * @since 2.0.0
      */
     protected $_cartHelper;
 
@@ -73,7 +64,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -98,7 +88,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * Retrieve product
      *
      * @return \Magento\Catalog\Model\Product
-     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -111,7 +100,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getDisplayMinimalPrice()
     {
@@ -121,7 +109,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     /**
      * @param string $idSuffix
      * @return $this
-     * @since 2.0.0
      */
     public function setIdSuffix($idSuffix)
     {
@@ -131,7 +118,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getIdSuffix()
     {
@@ -144,7 +130,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return string
-     * @since 2.0.0
      */
     public function getAddToCartUrl($product, $additional = [])
     {
@@ -155,7 +140,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * Prevent displaying if the price is not available
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -170,7 +154,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     public function getRealPriceJs($product)
     {
@@ -183,7 +166,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      *
      * @param string $sku
      * @return string
-     * @since 2.0.0
      */
     public function prepareSku($sku)
     {
@@ -196,7 +178,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param int $length
      * @param string|null $chars
      * @return string
-     * @since 2.0.0
      */
     public function getRandomString($length, $chars = null)
     {
@@ -207,7 +188,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

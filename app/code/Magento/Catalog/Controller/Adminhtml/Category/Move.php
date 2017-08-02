@@ -9,25 +9,21 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Category\Move
  *
- * @since 2.0.0
  */
 class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -36,7 +32,6 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory,
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -54,7 +49,6 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
      * Move category action
      *
      * @return \Magento\Framework\Controller\Result\Raw
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Simplexml\Element;
 /**
  * Class \Magento\Framework\View\Model\Layout\Translator
  *
- * @since 2.0.0
  */
 class Translator
 {
@@ -20,7 +19,6 @@ class Translator
      * @param Element $node
      * @param array $args
      * @return void
-     * @since 2.0.0
      **/
     public function translateActionParameters(Element $node, &$args)
     {
@@ -64,7 +62,6 @@ class Translator
      *
      * @param Element $node
      * @return string
-     * @since 2.0.0
      */
     public function translateArgument(Element $node)
     {
@@ -86,7 +83,6 @@ class Translator
      *
      * @param Element $node
      * @return array
-     * @since 2.0.0
      */
     protected function _getNodeNamesToTranslate(Element $node)
     {
@@ -98,7 +94,6 @@ class Translator
      *
      * @param Element $node
      * @return bool
-     * @since 2.0.0
      */
     protected function _isNodeTranslatable(Element $node)
     {
@@ -110,7 +105,6 @@ class Translator
      *
      * @param Element $node
      * @return bool
-     * @since 2.0.0
      */
     protected function _isSelfTranslatable(Element $node)
     {
@@ -122,7 +116,6 @@ class Translator
      *
      * @param Element $node
      * @return string
-     * @since 2.0.0
      */
     protected function _getNodeValue(Element $node)
     {
@@ -134,7 +127,6 @@ class Translator
      *
      * @param string $value
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     protected function _translateValue($value)
     {

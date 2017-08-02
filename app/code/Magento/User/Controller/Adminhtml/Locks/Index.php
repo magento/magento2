@@ -8,7 +8,6 @@ namespace Magento\User\Controller\Adminhtml\Locks;
 
 /**
  * Locks Index action
- * @since 2.0.0
  */
 class Index extends \Magento\User\Controller\Adminhtml\Locks
 {
@@ -16,7 +15,6 @@ class Index extends \Magento\User\Controller\Adminhtml\Locks
      * Render page with grid
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

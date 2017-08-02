@@ -19,7 +19,6 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Class UiComponent
- * @since 2.0.0
  */
 class UiComponent implements GeneratorInterface
 {
@@ -35,13 +34,11 @@ class UiComponent implements GeneratorInterface
 
     /**
      * @var UiComponentFactory
-     * @since 2.0.0
      */
     protected $uiComponentFactory;
 
     /**
      * @var UiComponentContextFactory
-     * @since 2.0.0
      */
     protected $contextFactory;
 
@@ -51,7 +48,6 @@ class UiComponent implements GeneratorInterface
      * @param UiComponentFactory $uiComponentFactory
      * @param BlockFactory $blockFactory
      * @param UiComponentContextFactory $contextFactory
-     * @since 2.0.0
      */
     public function __construct(
         UiComponentFactory $uiComponentFactory,
@@ -65,7 +61,6 @@ class UiComponent implements GeneratorInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -78,7 +73,6 @@ class UiComponent implements GeneratorInterface
      * @param ReaderContext $readerContext
      * @param GeneratorContext $generatorContext
      * @return $this
-     * @since 2.0.0
      */
     public function process(ReaderContext $readerContext, GeneratorContext $generatorContext)
     {
@@ -117,7 +111,6 @@ class UiComponent implements GeneratorInterface
      * @param string $data
      * @param LayoutInterface $layout
      * @return ContainerInterface
-     * @since 2.0.0
      */
     protected function generateComponent(DataStructure $structure, $elementName, $data, LayoutInterface $layout)
     {
@@ -154,7 +147,6 @@ class UiComponent implements GeneratorInterface
      *
      * @param UiComponentInterface $component
      * @return void
-     * @since 2.0.0
      */
     protected function prepareComponent(UiComponentInterface $component)
     {

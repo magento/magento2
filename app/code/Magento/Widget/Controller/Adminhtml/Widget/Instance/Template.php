@@ -9,7 +9,6 @@ namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 /**
  * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Template
  *
- * @since 2.0.0
  */
 class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
@@ -17,7 +16,6 @@ class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      * Templates Chooser Action (Ajax request)
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

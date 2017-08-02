@@ -8,7 +8,6 @@ namespace Magento\Setup\Model\Installer;
 
 /**
  * Installation progress model
- * @since 2.0.0
  */
 class Progress
 {
@@ -16,7 +15,6 @@ class Progress
      * Total number of steps
      *
      * @var int
-     * @since 2.0.0
      */
     private $total;
 
@@ -24,7 +22,6 @@ class Progress
      * Current step
      *
      * @var int
-     * @since 2.0.0
      */
     private $current;
 
@@ -33,7 +30,6 @@ class Progress
      *
      * @param int $total
      * @param int $current
-     * @since 2.0.0
      */
     public function __construct($total, $current = 0)
     {
@@ -46,7 +42,6 @@ class Progress
      * Increments current counter
      *
      * @return void
-     * @since 2.0.0
      */
     public function setNext()
     {
@@ -58,7 +53,6 @@ class Progress
      * Sets current counter to the end
      *
      * @return void
-     * @since 2.0.0
      */
     public function finish()
     {
@@ -69,7 +63,6 @@ class Progress
      * Gets the current counter
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrent()
     {
@@ -80,7 +73,6 @@ class Progress
      * Gets the total number
      *
      * @return int
-     * @since 2.0.0
      */
     public function getTotal()
     {
@@ -91,7 +83,6 @@ class Progress
      * Gets ratio of current to total
      *
      * @return float
-     * @since 2.0.0
      */
     public function getRatio()
     {
@@ -105,7 +96,6 @@ class Progress
      * @param int $current
      * @return void
      * @throws \LogicException
-     * @since 2.0.0
      */
     private function validate($total, $current)
     {

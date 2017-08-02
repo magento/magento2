@@ -10,7 +10,6 @@ use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 
 /**
  * Flat sales order payment resource
- * @since 2.0.0
  */
 class Payment extends SalesResource
 {
@@ -18,7 +17,6 @@ class Payment extends SalesResource
      * Serializeable field: additional_information
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_serializableFields = ['additional_information' => [null, []]];
 
@@ -26,7 +24,6 @@ class Payment extends SalesResource
      * Event prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_payment_resource';
 
@@ -34,7 +31,6 @@ class Payment extends SalesResource
      * Model initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,7 +42,6 @@ class Payment extends SalesResource
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

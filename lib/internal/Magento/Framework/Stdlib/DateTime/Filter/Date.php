@@ -11,7 +11,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  * Date filter. Converts date from localized to internal format.
  *
  * @api
- * @since 2.0.0
  */
 class Date implements \Zend_Filter_Interface
 {
@@ -21,7 +20,6 @@ class Date implements \Zend_Filter_Interface
      * @var \Zend_Filter_LocalizedToNormalized
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $_localToNormalFilter;
 
@@ -31,21 +29,18 @@ class Date implements \Zend_Filter_Interface
      * @var \Zend_Filter_NormalizedToLocalized
      *
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     protected $_normalToLocalFilter;
 
     /**
      * @var TimezoneInterface
      *
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @param TimezoneInterface $localeDate
      *
-     * @since 2.0.0
      */
     public function __construct(TimezoneInterface $localeDate)
     {
@@ -64,7 +59,6 @@ class Date implements \Zend_Filter_Interface
      * @param string $value
      * @return string
      * @throws \Exception
-     * @since 2.0.0
      */
     public function filter($value)
     {

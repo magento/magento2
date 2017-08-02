@@ -10,7 +10,6 @@ namespace Magento\Framework\Session;
 /**
  * Class \Magento\Framework\Session\Storage
  *
- * @since 2.0.0
  */
 class Storage extends \Magento\Framework\DataObject implements StorageInterface
 {
@@ -18,7 +17,6 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
      * Namespace of storage
      *
      * @var string
-     * @since 2.0.0
      */
     protected $namespace;
 
@@ -27,7 +25,6 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
      *
      * @param string $namespace
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct($namespace = 'default', array $data = [])
     {
@@ -37,7 +34,6 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function init(array $data)
     {
@@ -50,7 +46,6 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getNamespace()
     {
@@ -63,7 +58,6 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
      * @param string $key
      * @param bool $clear
      * @return mixed
-     * @since 2.0.0
      */
     public function getData($key = '', $clear = false)
     {

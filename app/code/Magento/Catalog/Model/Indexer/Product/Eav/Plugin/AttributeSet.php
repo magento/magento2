@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet
  *
- * @since 2.0.0
  */
 class AttributeSet
 {
@@ -31,13 +30,11 @@ class AttributeSet
 
     /**
      * @var Processor
-     * @since 2.0.0
      */
     private $_indexerEavProcessor;
 
     /**
      * @var AttributeSet\IndexableAttributeFilter
-     * @since 2.0.0
      */
     private $_attributeFilter;
 
@@ -47,7 +44,6 @@ class AttributeSet
      * @param Processor $indexerEavProcessor
      * @param AttributeSet\IndexableAttributeFilter $filter
      * @param SetFactory $attributeSetFactory
-     * @since 2.0.0
      */
     public function __construct(
         Processor $indexerEavProcessor,

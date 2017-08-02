@@ -12,7 +12,6 @@ namespace Magento\Widget\Controller\Adminhtml\Widget;
 /**
  * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance
  *
- * @since 2.0.0
  */
 abstract class Instance extends \Magento\Backend\App\Action
 {
@@ -27,31 +26,26 @@ abstract class Instance extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Widget\Model\Widget\InstanceFactory
-     * @since 2.0.0
      */
     protected $_widgetFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface
-     * @since 2.0.0
      */
     protected $_translateInline;
 
@@ -62,7 +56,6 @@ abstract class Instance extends \Magento\Backend\App\Action
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -84,7 +77,6 @@ abstract class Instance extends \Magento\Backend\App\Action
      * Load layout, set active menu and breadcrumbs
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -105,7 +97,6 @@ abstract class Instance extends \Magento\Backend\App\Action
      * Init widget instance object and set it to registry
      *
      * @return \Magento\Widget\Model\Widget\Instance|boolean
-     * @since 2.0.0
      */
     protected function _initWidgetInstance()
     {
@@ -136,7 +127,6 @@ abstract class Instance extends \Magento\Backend\App\Action
      *
      * @param string $body
      * @return void
-     * @since 2.0.0
      */
     protected function setBody($body)
     {

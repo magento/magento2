@@ -14,31 +14,26 @@ use Magento\Tax\Model\Rate\Provider as RateProvider;
 
 /**
  * Tax rate source model.
- * @since 2.0.0
  */
 class Source implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var \Magento\Tax\Api\TaxRateRepositoryInterface
-     * @since 2.0.0
      */
     protected $taxRateRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Convert\DataObject
-     * @since 2.0.0
      */
     protected $converter;
 
@@ -55,7 +50,6 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Converter $converter
      * @param RateProvider $rateProvider
-     * @since 2.0.0
      */
     public function __construct(
         TaxRateRepositoryInterface $taxRateRepository,
@@ -73,7 +67,6 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
      * Retrieve all tax rates as an options array.
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

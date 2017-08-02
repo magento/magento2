@@ -7,7 +7,6 @@ namespace Magento\Theme\Model\Layout;
 
 /**
  * Page layout config model
- * @since 2.0.0
  */
 class Config
 {
@@ -15,13 +14,11 @@ class Config
      * Available page layouts
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_pageLayouts;
 
     /**
      * @var \Magento\Framework\Config\DataInterface
-     * @since 2.0.0
      */
     protected $_dataStorage;
 
@@ -29,7 +26,6 @@ class Config
      * Constructor
      *
      * @param \Magento\Framework\Config\DataInterface $dataStorage
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
     {
@@ -40,7 +36,6 @@ class Config
      * Initialize page layouts list
      *
      * @return \Magento\Theme\Model\Layout\Config
-     * @since 2.0.0
      */
     protected function _initPageLayouts()
     {
@@ -58,7 +53,6 @@ class Config
      * Retrieve available page layouts
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getPageLayouts()
     {
@@ -71,7 +65,6 @@ class Config
      *
      * @param string $layoutCode
      * @return \Magento\Framework\DataObject|boolean
-     * @since 2.0.0
      */
     public function getPageLayout($layoutCode)
     {
@@ -88,7 +81,6 @@ class Config
      * Retrieve page layout handles
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPageLayoutHandles()
     {

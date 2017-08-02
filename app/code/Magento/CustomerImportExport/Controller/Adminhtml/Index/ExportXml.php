@@ -10,13 +10,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Index
- * @since 2.0.0
  */
 class ExportXml extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $_fileFactory;
 
@@ -25,7 +23,6 @@ class ExportXml extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -39,7 +36,6 @@ class ExportXml extends \Magento\Backend\App\Action
      * Export customer grid to XML format
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

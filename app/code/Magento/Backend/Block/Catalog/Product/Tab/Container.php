@@ -7,7 +7,6 @@ namespace Magento\Backend\Block\Catalog\Product\Tab;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Container extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -15,7 +14,6 @@ class Container extends \Magento\Backend\Block\Template implements \Magento\Back
      * Return Tab label
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -26,7 +24,6 @@ class Container extends \Magento\Backend\Block\Template implements \Magento\Back
      * Return Tab title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -37,7 +34,6 @@ class Container extends \Magento\Backend\Block\Template implements \Magento\Back
      * Can show tab in tabs
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -48,7 +44,6 @@ class Container extends \Magento\Backend\Block\Template implements \Magento\Back
      * Tab is hidden
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isHidden()
     {

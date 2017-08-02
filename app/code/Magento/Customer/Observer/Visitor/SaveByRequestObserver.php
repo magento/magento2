@@ -10,7 +10,6 @@ use Magento\Framework\Event\Observer;
 
 /**
  * Visitor Observer
- * @since 2.0.0
  */
 class SaveByRequestObserver extends AbstractVisitorObserver
 {
@@ -19,7 +18,6 @@ class SaveByRequestObserver extends AbstractVisitorObserver
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

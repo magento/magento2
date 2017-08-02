@@ -13,7 +13,6 @@ use Magento\Framework\Pricing\Price\PriceInterface;
  * Price info model interface
  *
  * @api
- * @since 2.0.0
  */
 interface PriceInfoInterface
 {
@@ -26,7 +25,6 @@ interface PriceInfoInterface
      * Returns array of prices
      *
      * @return PriceInterface[]
-     * @since 2.0.0
      */
     public function getPrices();
 
@@ -35,7 +33,6 @@ interface PriceInfoInterface
      *
      * @param string $priceCode
      * @return PriceInterface
-     * @since 2.0.0
      */
     public function getPrice($priceCode);
 
@@ -43,7 +40,6 @@ interface PriceInfoInterface
      * Get all registered adjustments
      *
      * @return AdjustmentInterface[]
-     * @since 2.0.0
      */
     public function getAdjustments();
 
@@ -52,7 +48,6 @@ interface PriceInfoInterface
      *
      * @param string $adjustmentCode
      * @return AdjustmentInterface
-     * @since 2.0.0
      */
     public function getAdjustment($adjustmentCode);
 }

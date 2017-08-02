@@ -14,7 +14,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -22,7 +21,6 @@ class InstallData implements InstallDataInterface
      * EAV setup factory
      *
      * @var EavSetupFactory
-     * @since 2.0.0
      */
     private $eavSetupFactory;
 
@@ -30,7 +28,6 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param EavSetupFactory $eavSetupFactory
-     * @since 2.0.0
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
     {
@@ -40,7 +37,6 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

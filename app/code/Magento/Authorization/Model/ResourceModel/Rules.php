@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Admin rule resource model
- * @since 2.0.0
  */
 class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -18,19 +17,16 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Root ACL resource
      *
      * @var \Magento\Framework\Acl\RootResource
-     * @since 2.0.0
      */
     protected $_rootResource;
 
     /**
      * @var \Magento\Framework\Acl\Builder
-     * @since 2.0.0
      */
     protected $_aclBuilder;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -47,7 +43,6 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param string $connectionName
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -70,7 +65,6 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -83,7 +77,6 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Authorization\Model\Rules $rule
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {

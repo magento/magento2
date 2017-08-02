@@ -9,7 +9,6 @@ namespace Magento\Directory\Api\Data;
  * Country Information interface.
  *
  * @api
- * @since 2.0.0
  */
 interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -17,7 +16,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Get the country id for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId();
 
@@ -26,7 +24,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -34,7 +31,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Get the country 2 letter abbreviation for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTwoLetterAbbreviation();
 
@@ -43,7 +39,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $abbreviation
      * @return $this
-     * @since 2.0.0
      */
     public function setTwoLetterAbbreviation($abbreviation);
 
@@ -51,7 +46,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Get the country 3 letter abbreviation for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getThreeLetterAbbreviation();
 
@@ -60,7 +54,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $abbreviation
      * @return $this
-     * @since 2.0.0
      */
     public function setThreeLetterAbbreviation($abbreviation);
 
@@ -68,7 +61,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Get the country full name (in store locale) for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFullNameLocale();
 
@@ -77,7 +69,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $fullNameLocale
      * @return $this
-     * @since 2.0.0
      */
     public function setFullNameLocale($fullNameLocale);
 
@@ -85,7 +76,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Get the country full name (in English) for the store.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFullNameEnglish();
 
@@ -94,7 +84,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $fullNameEnglish
      * @return $this
-     * @since 2.0.0
      */
     public function setFullNameEnglish($fullNameEnglish);
 
@@ -102,7 +91,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Get the available regions for the store.
      *
      * @return \Magento\Directory\Api\Data\RegionInformationInterface[]|null
-     * @since 2.0.0
      */
     public function getAvailableRegions();
 
@@ -111,7 +99,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param \Magento\Directory\Api\Data\RegionInformationInterface[] $availableRegions
      * @return $this
-     * @since 2.0.0
      */
     public function setAvailableRegions($availableRegions);
 
@@ -119,7 +106,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Directory\Api\Data\CountryInformationExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -128,7 +114,6 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param \Magento\Directory\Api\Data\CountryInformationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\CountryInformationExtensionInterface $extensionAttributes

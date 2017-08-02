@@ -8,7 +8,6 @@ namespace Magento\Framework\Cache;
 /**
  * Class \Magento\Framework\Cache\Core
  *
- * @since 2.0.0
  */
 class Core extends \Zend_Cache_Core
 {
@@ -20,7 +19,6 @@ class Core extends \Zend_Cache_Core
      * -- 'class' - concrete decorator, descendant of \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator
      * -- 'options' - optional array of specific decorator options
      * @var array
-     * @since 2.0.0
      */
     protected $_specificOptions = ['backend_decorators' => [], 'disable_save' => false];
 
@@ -31,7 +29,6 @@ class Core extends \Zend_Cache_Core
      *
      * @param  string $cacheId Cache id
      * @return string Cache id (with or without prefix)
-     * @since 2.0.0
      */
     protected function _id($cacheId)
     {
@@ -50,7 +47,6 @@ class Core extends \Zend_Cache_Core
      *
      * @param string[] $tags
      * @return string[]
-     * @since 2.0.0
      */
     protected function _tags($tags)
     {
@@ -72,7 +68,6 @@ class Core extends \Zend_Cache_Core
      * @param  int $priority                integer between 0 (very low priority) and 10 (maximum priority) used by
      *                                      some particular backends
      * @return bool                         True if no problem
-     * @since 2.0.0
      */
     public function save($data, $cacheId = null, $tags = [], $specificLifetime = false, $priority = 8)
     {
@@ -100,7 +95,6 @@ class Core extends \Zend_Cache_Core
      * @param string[] $tags
      * @throws \Zend_Cache_Exception
      * @return bool True if ok
-     * @since 2.0.0
      */
     public function clean($mode = 'all', $tags = [])
     {
@@ -115,7 +109,6 @@ class Core extends \Zend_Cache_Core
      *
      * @param string[] $tags array of tags
      * @return string[] array of matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -130,7 +123,6 @@ class Core extends \Zend_Cache_Core
      *
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
-     * @since 2.0.0
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -143,7 +135,6 @@ class Core extends \Zend_Cache_Core
      *
      * @param  \Zend_Cache_Backend $backendObject
      * @return void
-     * @since 2.0.0
      */
     public function setBackend(\Zend_Cache_Backend $backendObject)
     {
@@ -156,7 +147,6 @@ class Core extends \Zend_Cache_Core
      *
      * @param \Zend_Cache_Backend $backendObject
      * @return \Zend_Cache_Backend
-     * @since 2.0.0
      */
     protected function _decorateBackend(\Zend_Cache_Backend $backendObject)
     {

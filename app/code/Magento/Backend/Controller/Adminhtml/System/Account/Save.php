@@ -14,7 +14,6 @@ use Magento\Security\Model\SecurityCookie;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
@@ -45,7 +44,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

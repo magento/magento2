@@ -9,7 +9,6 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 /**
  * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Related
  *
- * @since 2.0.0
  */
 class Related extends \Magento\Catalog\Controller\Adminhtml\Product\Related
 {

@@ -17,25 +17,21 @@ namespace Magento\Framework\Model\ResourceModel\Db;
  * the classes they were introduced for.
  *
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $resources;
 
     /**
      * @var TransactionManagerInterface
-     * @since 2.0.0
      */
     protected $transactionManager;
 
     /**
      * @var ObjectRelationProcessor
-     * @since 2.0.0
      */
     protected $objectRelationProcessor;
 
@@ -43,7 +39,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param TransactionManagerInterface $transactionManager
      * @param ObjectRelationProcessor $objectRelationProcessor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -57,7 +52,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     public function getResources()
     {
@@ -66,7 +60,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return TransactionManagerInterface
-     * @since 2.0.0
      */
     public function getTransactionManager()
     {
@@ -75,7 +68,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return ObjectRelationProcessor
-     * @since 2.0.0
      */
     public function getObjectRelationProcessor()
     {

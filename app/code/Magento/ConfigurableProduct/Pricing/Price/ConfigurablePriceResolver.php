@@ -13,33 +13,29 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Class \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
  *
- * @since 2.0.0
  */
 class ConfigurablePriceResolver implements PriceResolverInterface
 {
     /**
      * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
-     * @since 2.0.0
      */
     protected $priceResolver;
 
     /**
      * @var PriceCurrencyInterface
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 2.1.1
      */
     protected $priceCurrency;
 
     /**
      * @var Configurable
-     * @deprecated 2.2.0
-     * @since 2.0.0
+     * @deprecated 2.1.1
      */
     protected $configurable;
 
     /**
      * @var LowestPriceOptionsProviderInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $lowestPriceOptionsProvider;
 
@@ -48,7 +44,6 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param Configurable $configurable
      * @param PriceCurrencyInterface $priceCurrency
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
-     * @since 2.0.0
      */
     public function __construct(
         PriceResolverInterface $priceResolver,
@@ -67,7 +62,6 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
      * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {

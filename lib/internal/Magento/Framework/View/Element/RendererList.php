@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class RendererList extends AbstractBlock
 {
@@ -15,7 +14,6 @@ class RendererList extends AbstractBlock
      * Renderer templates cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $rendererTemplates = [];
 
@@ -27,7 +25,6 @@ class RendererList extends AbstractBlock
      * @param string $rendererTemplate
      * @return bool|AbstractBlock
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function getRenderer($type, $default = null, $rendererTemplate = null)
     {

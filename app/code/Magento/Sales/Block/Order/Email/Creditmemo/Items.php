@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Order\Email\Creditmemo;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -19,7 +18,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $renderer
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareItem(\Magento\Framework\View\Element\AbstractBlock $renderer)
     {

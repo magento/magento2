@@ -14,7 +14,6 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Interface StockCollectionInterface
  * @api
- * @since 2.0.0
  */
 interface StockCollectionInterface extends SearchResultsInterface
 {
@@ -22,7 +21,6 @@ interface StockCollectionInterface extends SearchResultsInterface
      * Get items
      *
      * @return \Magento\CatalogInventory\Api\Data\StockInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -31,7 +29,6 @@ interface StockCollectionInterface extends SearchResultsInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

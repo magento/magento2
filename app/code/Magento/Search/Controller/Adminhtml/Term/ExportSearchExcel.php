@@ -14,20 +14,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class \Magento\Search\Controller\Adminhtml\Term\ExportSearchExcel
  *
- * @since 2.0.0
  */
 class ExportSearchExcel extends TermController
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -41,7 +38,6 @@ class ExportSearchExcel extends TermController
      * Export search report to Excel XML format
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function execute()
     {

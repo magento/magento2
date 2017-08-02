@@ -13,7 +13,6 @@ namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
 /**
  * @api
- * @since 2.0.0
  */
 abstract class Currency extends \Magento\Backend\App\Action
 {
@@ -28,14 +27,12 @@ abstract class Currency extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {

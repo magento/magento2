@@ -11,31 +11,26 @@ use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 /**
  * Class \Magento\Newsletter\Controller\Manage\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $formKeyValidator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var CustomerRepository
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
-     * @since 2.0.0
      */
     protected $subscriberFactory;
 
@@ -48,7 +43,6 @@ class Save extends \Magento\Newsletter\Controller\Manage
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CustomerRepository $customerRepository
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -69,7 +63,6 @@ class Save extends \Magento\Newsletter\Controller\Manage
      * Save newsletter subscription preference action
      *
      * @return void|null
-     * @since 2.0.0
      */
     public function execute()
     {

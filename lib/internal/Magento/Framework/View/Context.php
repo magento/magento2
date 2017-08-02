@@ -27,7 +27,6 @@ use Magento\Framework\View\ConfigInterface as ViewConfig;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Context
 {
@@ -35,7 +34,6 @@ class Context
      * Request
      *
      * @var Request
-     * @since 2.0.0
      */
     protected $request;
 
@@ -43,14 +41,12 @@ class Context
      * Event manager
      *
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * URL builder
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -58,7 +54,6 @@ class Context
      * Translator
      *
      * @var \Magento\Framework\TranslateInterface
-     * @since 2.0.0
      */
     protected $translator;
 
@@ -66,7 +61,6 @@ class Context
      * Cache
      *
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     protected $cache;
 
@@ -74,7 +68,6 @@ class Context
      * Design
      *
      * @var \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     protected $design;
 
@@ -82,7 +75,6 @@ class Context
      * Session
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     protected $session;
 
@@ -90,7 +82,6 @@ class Context
      * Store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -98,7 +89,6 @@ class Context
      * Front controller
      *
      * @var FrontControllerInterface
-     * @since 2.0.0
      */
     protected $frontController;
 
@@ -106,7 +96,6 @@ class Context
      * Layout
      *
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $layout;
 
@@ -114,7 +103,6 @@ class Context
      * View config model
      *
      * @var \Magento\Framework\View\Config
-     * @since 2.0.0
      */
     protected $viewConfig;
 
@@ -122,7 +110,6 @@ class Context
      * Cache state
      *
      * @var \Magento\Framework\App\Cache\StateInterface
-     * @since 2.0.0
      */
     protected $cacheState;
 
@@ -130,7 +117,6 @@ class Context
      * Logger
      *
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
@@ -138,7 +124,6 @@ class Context
      * Application state
      *
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $appState;
 
@@ -163,7 +148,6 @@ class Context
      * @todo reduce parameter number
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         Request $request,
@@ -201,7 +185,6 @@ class Context
      * Retrieve cache
      *
      * @return \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     public function getCache()
     {
@@ -212,7 +195,6 @@ class Context
      * Retrieve design package
      *
      * @return \Magento\Framework\View\DesignInterface
-     * @since 2.0.0
      */
     public function getDesignPackage()
     {
@@ -223,7 +205,6 @@ class Context
      * Retrieve event manager
      *
      * @return ManagerInterface
-     * @since 2.0.0
      */
     public function getEventManager()
     {
@@ -234,7 +215,6 @@ class Context
      * Retrieve front controller
      *
      * @return FrontControllerInterface
-     * @since 2.0.0
      */
     public function getFrontController()
     {
@@ -245,7 +225,6 @@ class Context
      * Retrieve layout
      *
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function getLayout()
     {
@@ -256,7 +235,6 @@ class Context
      * Retrieve request
      *
      * @return Request
-     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -267,7 +245,6 @@ class Context
      * Retrieve session
      *
      * @return \Magento\Framework\Session\SessionManagerInterface
-     * @since 2.0.0
      */
     public function getSession()
     {
@@ -278,7 +255,6 @@ class Context
      * Retrieve scope config
      *
      * @return \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     public function getScopeConfig()
     {
@@ -289,7 +265,6 @@ class Context
      * Retrieve translator
      *
      * @return \Magento\Framework\TranslateInterface
-     * @since 2.0.0
      */
     public function getTranslator()
     {
@@ -300,7 +275,6 @@ class Context
      * Retrieve URL builder
      *
      * @return \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     public function getUrlBuilder()
     {
@@ -311,7 +285,6 @@ class Context
      * Retrieve view config
      *
      * @return \Magento\Framework\View\ConfigInterface
-     * @since 2.0.0
      */
     public function getViewConfig()
     {
@@ -322,7 +295,6 @@ class Context
      * Retrieve cache state
      *
      * @return \Magento\Framework\App\Cache\StateInterface
-     * @since 2.0.0
      */
     public function getCacheState()
     {
@@ -333,7 +305,6 @@ class Context
      * Retrieve logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     public function getLogger()
     {
@@ -344,7 +315,6 @@ class Context
      * Retrieve layout area
      *
      * @return string
-     * @since 2.0.0
      */
     public function getArea()
     {
@@ -355,7 +325,6 @@ class Context
      * Retrieve the module name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getModuleName()
     {
@@ -368,7 +337,6 @@ class Context
      * @return string
      *
      * @todo alias of getModuleName
-     * @since 2.0.0
      */
     public function getFrontName()
     {
@@ -379,7 +347,6 @@ class Context
      * Retrieve the controller name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getControllerName()
     {
@@ -390,7 +357,6 @@ class Context
      * Retrieve the action name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getActionName()
     {
@@ -401,7 +367,6 @@ class Context
      * Retrieve the full action name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFullActionName()
     {
@@ -412,7 +377,6 @@ class Context
      * Retrieve acceptance type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAcceptType()
     {
@@ -435,7 +399,6 @@ class Context
      * @param string $key
      * @param mixed $default Default value to use if key not found
      * @return mixed|null if key does not exist
-     * @since 2.0.0
      */
     public function getPost($key = null, $default = null)
     {
@@ -448,7 +411,6 @@ class Context
      * @param string|null $key
      * @param mixed $default Default value to use if key not found
      * @return mixed alias of getPost
-     * @since 2.0.0
      */
     public function getQuery($key = null, $default = null)
     {
@@ -461,7 +423,6 @@ class Context
      * @param string|null $key
      * @param mixed $default Default value to use if key not found
      * @return mixed
-     * @since 2.0.0
      */
     public function getParam($key = null, $default = null)
     {
@@ -472,7 +433,6 @@ class Context
      * Retrieve an array of parameters
      *
      * @return array
-     * @since 2.0.0
      */
     public function getParams()
     {
@@ -484,7 +444,6 @@ class Context
      *
      * @param string $header
      * @return string|false HTTP header value, or false if not found
-     * @since 2.0.0
      */
     public function getHeader($header)
     {
@@ -495,7 +454,6 @@ class Context
      * Return the raw body of the request, if present
      *
      * @return string|false Raw body, or false if not present
-     * @since 2.0.0
      */
     public function getContent()
     {
@@ -506,7 +464,6 @@ class Context
      * Retrieve application state
      *
      * @return \Magento\Framework\App\State
-     * @since 2.0.0
      */
     public function getAppState()
     {
@@ -519,7 +476,6 @@ class Context
      * @param Design\ThemeInterface $theme
      * @return Design\ThemeInterface
      * @throws \Exception
-     * @since 2.0.0
      */
     protected function getPhysicalTheme(Design\ThemeInterface $theme)
     {

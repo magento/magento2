@@ -11,19 +11,16 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Class to convert Extensible Data Object array to flat array
- * @since 2.0.0
  */
 class ExtensibleDataObjectConverter
 {
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @param DataObjectProcessor $dataObjectProcessor
-     * @since 2.0.0
      */
     public function __construct(DataObjectProcessor $dataObjectProcessor)
     {
@@ -37,7 +34,6 @@ class ExtensibleDataObjectConverter
      * @param string[] $skipAttributes
      * @param string $dataObjectType
      * @return array
-     * @since 2.0.0
      */
     public function toNestedArray(
         ExtensibleDataInterface $dataObject,
@@ -80,7 +76,6 @@ class ExtensibleDataObjectConverter
      * @param string[] $skipCustomAttributes
      * @param string $dataObjectType
      * @return array
-     * @since 2.0.0
      */
     public function toFlatArray(
         ExtensibleDataInterface $dataObject,
@@ -96,7 +91,6 @@ class ExtensibleDataObjectConverter
      *
      * @param array $extensibleObjectData
      * @return array
-     * @since 2.0.0
      */
     public static function convertCustomAttributesToSequentialArray($extensibleObjectData)
     {

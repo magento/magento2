@@ -13,26 +13,22 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Webapi\Rest\Request\Deserializer\Xml
  *
- * @since 2.0.0
  */
 class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
     /**
      * @var \Magento\Framework\Xml\Parser
-     * @since 2.0.0
      */
     protected $_xmlParser;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @param \Magento\Framework\Xml\Parser $xmlParser
      * @param State $appState
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Xml\Parser $xmlParser, State $appState)
     {
@@ -46,7 +42,6 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      * Is null if there was no error while loading
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_errorMessage = null;
 
@@ -57,7 +52,6 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      * @return array Data converted from XML document to array. Root node is excluded from response.
      * @throws \InvalidArgumentException In case of invalid argument type.
      * @throws \Magento\Framework\Webapi\Exception If decoding error occurs.
-     * @since 2.0.0
      */
     public function deserialize($xmlRequestBody)
     {
@@ -98,7 +92,6 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      * @param integer $errorLine
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function handleErrors($errorNumber, $errorMessage, $errorFile, $errorLine)
     {

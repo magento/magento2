@@ -12,49 +12,41 @@ namespace Magento\Framework\View\Asset;
  * This class is a value object with lazy loading of some of its data (content, physical file path)
  *
  * @api
- * @since 2.0.0
  */
 class File implements MergeableInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $filePath;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $module;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $contentType;
 
     /**
      * @var ContextInterface
-     * @since 2.0.0
      */
     protected $context;
 
     /**
      * @var Source
-     * @since 2.0.0
      */
     protected $source;
 
     /**
      * @var string|bool
-     * @since 2.0.0
      */
     private $resolvedFile;
 
     /**
      * @var Minification
-     * @since 2.0.0
      */
     private $minification;
 
@@ -71,7 +63,6 @@ class File implements MergeableInterface
      * @param string $module
      * @param string $contentType
      * @param Minification $minification
-     * @since 2.0.0
      */
     public function __construct(
         Source $source,
@@ -91,7 +82,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getUrl()
     {
@@ -100,7 +90,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getSourceUrl()
     {
@@ -109,7 +98,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -118,7 +106,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPath()
     {
@@ -132,7 +119,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRelativeSourceFilePath()
     {
@@ -156,7 +142,6 @@ class File implements MergeableInterface
      * @param string $path
      * @param string $item
      * @return string
-     * @since 2.0.0
      */
     private function join($path, $item)
     {
@@ -166,7 +151,6 @@ class File implements MergeableInterface
     /**
      * {@inheritdoc}
      * @throws File\NotFoundException if file cannot be resolved
-     * @since 2.0.0
      */
     public function getSourceFile()
     {
@@ -195,7 +179,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getContent()
     {
@@ -208,7 +191,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getFilePath()
     {
@@ -218,7 +200,6 @@ class File implements MergeableInterface
     /**
      * {@inheritdoc}
      * @return File\Context
-     * @since 2.0.0
      */
     public function getContext()
     {
@@ -227,7 +208,6 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getModule()
     {

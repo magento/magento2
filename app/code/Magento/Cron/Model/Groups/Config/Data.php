@@ -9,7 +9,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides cron groups configuration
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {
@@ -20,7 +19,6 @@ class Data extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Cron\Model\Groups\Config\Reader\Xml $reader,
@@ -36,7 +34,6 @@ class Data extends \Magento\Framework\Config\Data
      *
      * @param string $groupId
      * @return array
-     * @since 2.0.0
      */
     public function getByGroupId($groupId)
     {

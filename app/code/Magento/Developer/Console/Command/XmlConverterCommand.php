@@ -18,7 +18,6 @@ use Magento\Framework\XsltProcessor\XsltProcessorFactory;
 /**
  * Class XmlConverterCommand
  * Converts XML file using XSL style sheets
- * @since 2.0.0
  */
 class XmlConverterCommand extends Command
 {
@@ -39,19 +38,16 @@ class XmlConverterCommand extends Command
 
     /**
      * @var Formatter
-     * @since 2.0.0
      */
     private $formatter;
 
     /**
      * @var DomDocumentFactory
-     * @since 2.0.0
      */
     private $domFactory;
 
     /**
      * @var XsltProcessorFactory
-     * @since 2.0.0
      */
     private $xsltProcessorFactory;
 
@@ -61,7 +57,6 @@ class XmlConverterCommand extends Command
      * @param Formatter $formatter
      * @param DomDocumentFactory $domFactory
      * @param XsltProcessorFactory $xsltProcessorFactory
-     * @since 2.0.0
      */
     public function __construct(
         Formatter $formatter,
@@ -77,7 +72,6 @@ class XmlConverterCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -108,7 +102,6 @@ class XmlConverterCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

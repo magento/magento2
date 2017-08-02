@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Config\Source;
 /**
  * Class \Magento\Catalog\Model\Config\Source\TimeFormat
  *
- * @since 2.0.0
  */
 class TimeFormat implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,7 +15,6 @@ class TimeFormat implements \Magento\Framework\Option\ArrayInterface
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

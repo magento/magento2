@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Class \Magento\Customer\Model\ResourceModel\Grid\Collection
  *
- * @since 2.1.0
+ * @since 2.0.11
  */
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {

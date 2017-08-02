@@ -13,7 +13,6 @@ use Magento\Framework\Exception\IntegrationException;
 /**
  * Class \Magento\Integration\Controller\Adminhtml\Integration\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -21,7 +20,6 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
      * Edit integration action.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

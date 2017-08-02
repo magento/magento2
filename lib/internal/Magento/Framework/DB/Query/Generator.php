@@ -9,13 +9,13 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Query generator
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Generator
 {
     /**
      * @var \Magento\Framework\DB\Query\BatchIteratorFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $iteratorFactory;
 
@@ -30,7 +30,7 @@ class Generator
      *
      * @param BatchIteratorFactory $iteratorFactory
      * @param BatchRangeIteratorFactory $rangeIteratorFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         BatchIteratorFactory $iteratorFactory,
@@ -65,7 +65,7 @@ class Generator
      * @param string $batchStrategy It determines which strategy is chosen
      * @return BatchIteratorInterface
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function generate(
         $rangeField,

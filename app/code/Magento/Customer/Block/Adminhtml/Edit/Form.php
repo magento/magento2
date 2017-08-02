@@ -9,7 +9,6 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer edit form block
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -17,13 +16,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Customer Repository.
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $_customerRepository;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     * @since 2.0.0
      */
     protected $_extensibleDataObjectConverter;
 
@@ -36,7 +33,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,7 +51,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare the form.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

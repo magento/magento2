@@ -7,25 +7,21 @@ namespace Magento\Sales\Block\Order;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Comments extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory
-     * @since 2.0.0
      */
     protected $_invoiceCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory
-     * @since 2.0.0
      */
     protected $_memoCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory
-     * @since 2.0.0
      */
     protected $_shipmentCollectionFactory;
 
@@ -33,7 +29,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      * Current entity (model instance) with getCommentsCollection() method
      *
      * @var \Magento\Sales\Model\AbstractModel
-     * @since 2.0.0
      */
     protected $_entity;
 
@@ -41,7 +36,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      * Current comments collection
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected $_commentCollection;
 
@@ -51,7 +45,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -71,7 +64,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Sales\Model\AbstractModel $entity
      * @return $this
-     * @since 2.0.0
      */
     public function setEntity($entity)
     {
@@ -85,7 +77,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      * Gets comments parent model instance
      *
      * @return \Magento\Sales\Model\AbstractModel
-     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -97,7 +88,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      *
      * @return \Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollection
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getComments()
     {
@@ -123,7 +113,6 @@ class Comments extends \Magento\Framework\View\Element\Template
      * Returns whether there are comments to show on frontend
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasComments()
     {

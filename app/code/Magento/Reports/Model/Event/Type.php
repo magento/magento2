@@ -16,13 +16,11 @@ namespace Magento\Reports\Model\Event;
  * @method \Magento\Reports\Model\Event\Type setCustomerLogin(int $value)
  *
  * @api
- * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

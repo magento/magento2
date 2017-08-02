@@ -13,7 +13,6 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Ordered extends \Magento\Framework\App\Config\Base
 {
@@ -21,7 +20,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Cache key for collectors
      *
      * @var string|null
-     * @since 2.0.0
      */
     protected $_collectorsCacheKey = null;
 
@@ -29,7 +27,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Configuration group where to collect registered totals
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configGroup;
 
@@ -37,7 +34,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Configuration section where to collect registered totals
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_configSection;
 
@@ -45,7 +41,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Prepared models
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_models = [];
 
@@ -53,7 +48,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Models configuration
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_modelsConfig = [];
 
@@ -61,25 +55,21 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Sorted models
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_collectors = [];
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Sales\Model\Config
-     * @since 2.0.0
      */
     protected $_salesConfig;
 
@@ -95,7 +85,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Simplexml\Element $sourceData
      * @param SerializerInterface $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
@@ -115,7 +104,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Initialize total models configuration and objects
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initModels()
     {
@@ -137,7 +125,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * @param array $totalConfig
      * @return mixed
      * @abstract
-     * @since 2.0.0
      */
     abstract protected function _initModelInstance($class, $totalCode, $totalConfig);
 
@@ -147,7 +134,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * @param   string $code
      * @param   \Magento\Framework\App\Config\Element $totalConfig
      * @return  array
-     * @since 2.0.0
      */
     protected function _prepareConfigArray($code, $totalConfig)
     {
@@ -162,7 +148,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      *
      * @param array $config
      * @return array
-     * @since 2.0.0
      */
     private function _getSortedCollectorCodes(array $config)
     {
@@ -201,7 +186,6 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * Collectors array is array of total models ordered based on configuration settings
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initCollectors()
     {

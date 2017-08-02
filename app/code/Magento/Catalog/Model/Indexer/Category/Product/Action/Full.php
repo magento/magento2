@@ -14,7 +14,6 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @package Magento\Catalog\Model\Indexer\Category\Product\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
@@ -98,7 +97,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Refresh entities index
      *
      * @return $this
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -111,7 +109,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getSelectUnnecessaryData()
     {
@@ -136,7 +133,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Remove unnecessary data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function removeUnnecessaryData()
     {
@@ -149,7 +145,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Publish data from tmp to index
      *
      * @return void
-     * @since 2.0.0
      */
     protected function publishData()
     {
@@ -171,7 +166,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Clear all index data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function clearTmpData()
     {

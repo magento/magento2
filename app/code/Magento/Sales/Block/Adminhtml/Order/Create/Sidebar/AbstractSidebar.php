@@ -12,7 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -20,7 +19,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Default Storage action on selected item
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_sidebarStorageAction = 'add';
 
@@ -28,7 +26,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Sales config
      *
      * @var \Magento\Sales\Model\Config
-     * @since 2.0.0
      */
     protected $_salesConfig;
 
@@ -39,7 +36,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,7 +53,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Return name of sidebar storage action
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSidebarStorageAction()
     {
@@ -68,7 +63,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve display block availability
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canDisplay()
     {
@@ -79,7 +73,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve disply item qty availablity
      *
      * @return false
-     * @since 2.0.0
      */
     public function canDisplayItemQty()
     {
@@ -90,7 +83,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve availability removing items in block
      *
      * @return true
-     * @since 2.0.0
      */
     public function canRemoveItems()
     {
@@ -102,7 +94,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getIdentifierId($item)
     {
@@ -114,7 +105,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getItemId($item)
     {
@@ -126,7 +116,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getProductId($item)
     {
@@ -137,7 +126,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve item count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getItemCount()
     {
@@ -154,7 +142,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -201,7 +188,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve item collection
      *
      * @return false
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -212,7 +198,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve disply price availablity
      *
      * @return true
-     * @since 2.0.0
      */
     public function canDisplayPrice()
     {
@@ -224,7 +209,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @param \Magento\Framework\DataObject $item
      * @return int
-     * @since 2.0.0
      */
     public function getItemQty(\Magento\Framework\DataObject $item)
     {
@@ -237,7 +221,6 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * @param string|int|null $productType
      * @return false
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isConfigurationRequired($productType)
     {

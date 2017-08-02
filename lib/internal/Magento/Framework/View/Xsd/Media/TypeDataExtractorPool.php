@@ -10,7 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
  *
- * @since 2.0.0
  */
 class TypeDataExtractorPool
 {
@@ -18,7 +17,6 @@ class TypeDataExtractorPool
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,14 +24,12 @@ class TypeDataExtractorPool
      * List of extractors
      *
      * @var array
-     * @since 2.0.0
      */
     protected $extractors = [];
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface[] $extractors
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -53,7 +49,6 @@ class TypeDataExtractorPool
      *
      * @param string $tagName
      * @return object
-     * @since 2.0.0
      */
     public function nodeProcessor($tagName)
     {

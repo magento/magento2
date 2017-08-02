@@ -10,7 +10,6 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Class \Magento\Framework\Filesystem\Directory\Write
  *
- * @since 2.0.0
  */
 class Write extends Read implements WriteInterface
 {
@@ -18,7 +17,6 @@ class Write extends Read implements WriteInterface
      * Permissions for new sub-directories
      *
      * @var int
-     * @since 2.0.0
      */
     protected $permissions = 0777;
 
@@ -29,7 +27,6 @@ class Write extends Read implements WriteInterface
      * @param \Magento\Framework\Filesystem\DriverInterface $driver
      * @param string $path
      * @param int $createPermissions
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem\File\WriteFactory $fileFactory,
@@ -51,7 +48,6 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     protected function assertWritable($path)
     {
@@ -69,7 +65,6 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     protected function assertIsFile($path)
     {
@@ -88,7 +83,6 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function create($path = null)
     {
@@ -107,7 +101,6 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
     {
@@ -129,7 +122,6 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
     {
@@ -153,7 +145,6 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
@@ -174,7 +165,6 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function delete($path = null)
     {
@@ -197,7 +187,6 @@ class Write extends Read implements WriteInterface
      * @param int $permissions
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function changePermissions($path, $permissions)
     {
@@ -213,7 +202,6 @@ class Write extends Read implements WriteInterface
      * @param int $filePermissions
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
     {
@@ -228,7 +216,6 @@ class Write extends Read implements WriteInterface
      * @param int|null $modificationTime
      * @return bool
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function touch($path, $modificationTime = null)
     {
@@ -244,7 +231,6 @@ class Write extends Read implements WriteInterface
      * @param null $path
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function isWritable($path = null)
     {
@@ -258,7 +244,6 @@ class Write extends Read implements WriteInterface
      * @param string $mode
      * @return \Magento\Framework\Filesystem\File\WriteInterface
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @since 2.0.0
      */
     public function openFile($path, $mode = 'w')
     {
@@ -277,7 +262,6 @@ class Write extends Read implements WriteInterface
      * @param string|null $mode
      * @return int The number of bytes that were written.
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function writeFile($path, $content, $mode = 'w+')
     {
@@ -288,7 +272,6 @@ class Write extends Read implements WriteInterface
      * Get driver
      *
      * @return \Magento\Framework\Filesystem\DriverInterface
-     * @since 2.0.0
      */
     public function getDriver()
     {

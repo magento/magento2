@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\ProductTypes;
  * Provides product types configuration
  *
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -18,7 +17,6 @@ interface ConfigInterface
      *
      * @param string $name
      * @return array
-     * @since 2.0.0
      */
     public function getType($name);
 
@@ -26,7 +24,6 @@ interface ConfigInterface
      * Get configuration of all registered product types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAll();
 
@@ -35,7 +32,6 @@ interface ConfigInterface
      *
      * @param string $typeId
      * @return bool
-     * @since 2.0.0
      */
     public function isProductSet($typeId);
 
@@ -43,7 +39,6 @@ interface ConfigInterface
      * Get composable types
      *
      * @return array
-     * @since 2.0.0
      */
     public function getComposableTypes();
 
@@ -53,7 +48,6 @@ interface ConfigInterface
      * @param string $customAttributeName
      * @param string $value
      * @return array
-     * @since 2.0.0
      */
     public function filter($customAttributeName, $value = 'true');
 }

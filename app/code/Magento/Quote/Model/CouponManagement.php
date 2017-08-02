@@ -14,7 +14,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Coupon management object.
- * @since 2.0.0
  */
 class CouponManagement implements CouponManagementInterface
 {
@@ -22,7 +21,6 @@ class CouponManagement implements CouponManagementInterface
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -30,7 +28,6 @@ class CouponManagement implements CouponManagementInterface
      * Constructs a coupon read service object.
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -40,7 +37,6 @@ class CouponManagement implements CouponManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -51,7 +47,6 @@ class CouponManagement implements CouponManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function set($cartId, $couponCode)
     {
@@ -76,7 +71,6 @@ class CouponManagement implements CouponManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function remove($cartId)
     {

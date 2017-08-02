@@ -11,7 +11,6 @@ namespace Magento\SendFriend\Model\ResourceModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,7 +18,6 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,7 +33,6 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $websiteId
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getSendCount($object, $ip, $startTime, $websiteId = null)
     {
@@ -61,7 +58,6 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $startTime
      * @param int $websiteId
      * @return $this
-     * @since 2.0.0
      */
     public function addSendItem($ip, $startTime, $websiteId)
     {
@@ -77,7 +73,6 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $time
      * @return $this
-     * @since 2.0.0
      */
     public function deleteLogsBefore($time)
     {

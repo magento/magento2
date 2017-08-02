@@ -8,25 +8,21 @@ namespace Magento\Store\Model\StoreResolver;
 /**
  * Class \Magento\Store\Model\StoreResolver\Website
  *
- * @since 2.0.0
  */
 class Website implements ReaderInterface
 {
     /**
      * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     * @since 2.0.0
      */
     protected $websiteRepository;
 
     /**
      * @var \Magento\Store\Api\GroupRepositoryInterface
-     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
-     * @since 2.0.0
      */
     protected $storeRepository;
 
@@ -34,7 +30,6 @@ class Website implements ReaderInterface
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
@@ -48,7 +43,6 @@ class Website implements ReaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAllowedStoreIds($scopeCode)
     {
@@ -64,7 +58,6 @@ class Website implements ReaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefaultStoreId($scopeCode)
     {

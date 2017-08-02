@@ -8,7 +8,6 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeOptionManagementInterface
  * @api
- * @since 2.0.0
  */
 interface AttributeOptionManagementInterface
 {
@@ -21,7 +20,6 @@ interface AttributeOptionManagementInterface
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
      * @return bool
-     * @since 2.0.0
      */
     public function add($entityType, $attributeCode, $option);
 
@@ -35,7 +33,6 @@ interface AttributeOptionManagementInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return bool
-     * @since 2.0.0
      */
     public function delete($entityType, $attributeCode, $optionId);
 
@@ -47,7 +44,6 @@ interface AttributeOptionManagementInterface
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
      * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]
-     * @since 2.0.0
      */
     public function getItems($entityType, $attributeCode);
 }

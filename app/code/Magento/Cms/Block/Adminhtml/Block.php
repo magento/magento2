@@ -7,13 +7,11 @@ namespace Magento\Cms\Block\Adminhtml;
 
 /**
  * Adminhtml cms blocks content block
- * @since 2.0.0
  */
 class Block extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

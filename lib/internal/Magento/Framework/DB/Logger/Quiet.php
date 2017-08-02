@@ -8,13 +8,11 @@ namespace Magento\Framework\DB\Logger;
 /**
  * Class \Magento\Framework\DB\Logger\Quiet
  *
- * @since 2.0.0
  */
 class Quiet implements \Magento\Framework\DB\LoggerInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function log($str)
     {
@@ -22,7 +20,6 @@ class Quiet implements \Magento\Framework\DB\LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function logStats($type, $sql, $bind = [], $result = null)
     {
@@ -30,7 +27,6 @@ class Quiet implements \Magento\Framework\DB\LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function critical(\Exception $e)
     {
@@ -38,7 +34,6 @@ class Quiet implements \Magento\Framework\DB\LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function startTimer()
     {

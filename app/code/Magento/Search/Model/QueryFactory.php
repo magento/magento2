@@ -13,7 +13,6 @@ use Magento\Framework\Stdlib\StringUtils as StdlibString;
 
 /**
  * @api
- * @since 2.0.0
  */
 class QueryFactory implements QueryFactoryInterface
 {
@@ -24,31 +23,26 @@ class QueryFactory implements QueryFactoryInterface
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     private $request;
 
     /**
      * @var Query
-     * @since 2.0.0
      */
     private $query;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var StdlibString
-     * @since 2.0.0
      */
     private $string;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
@@ -63,7 +57,6 @@ class QueryFactory implements QueryFactoryInterface
      * @param ObjectManagerInterface $objectManager
      * @param StdlibString $string
      * @param Data|null $queryHelper
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -80,7 +73,6 @@ class QueryFactory implements QueryFactoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function get()
     {
@@ -105,7 +97,6 @@ class QueryFactory implements QueryFactoryInterface
      *
      * @param array $data
      * @return Query
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {
@@ -116,7 +107,6 @@ class QueryFactory implements QueryFactoryInterface
      * Retrieve search query text
      *
      * @return string
-     * @since 2.0.0
      */
     private function getRawQueryText()
     {
@@ -130,7 +120,6 @@ class QueryFactory implements QueryFactoryInterface
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return string
-     * @since 2.0.0
      */
     private function getPreparedQueryText($queryText, $maxQueryLength)
     {
@@ -144,7 +133,6 @@ class QueryFactory implements QueryFactoryInterface
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return bool
-     * @since 2.0.0
      */
     private function isQueryTooLong($queryText, $maxQueryLength)
     {

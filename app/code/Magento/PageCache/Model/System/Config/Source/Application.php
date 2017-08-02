@@ -14,7 +14,6 @@ use Magento\PageCache\Model\Config;
 
 /**
  * Class Application
- * @since 2.0.0
  */
 class Application implements ArrayInterface
 {
@@ -22,7 +21,6 @@ class Application implements ArrayInterface
      * Options getter
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -42,7 +40,6 @@ class Application implements ArrayInterface
      * Get options in "key-value" format
      *
      * @return array
-     * @since 2.0.0
      */
     public function toArray()
     {

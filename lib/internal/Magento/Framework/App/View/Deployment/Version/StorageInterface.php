@@ -8,7 +8,6 @@ namespace Magento\Framework\App\View\Deployment\Version;
 
 /**
  * Persistence of deployment version of static files
- * @since 2.0.0
  */
 interface StorageInterface
 {
@@ -17,7 +16,6 @@ interface StorageInterface
      *
      * @return string
      * @throws \UnexpectedValueException Exception is thrown when unable to retrieve data from a storage
-     * @since 2.0.0
      */
     public function load();
 
@@ -26,7 +24,6 @@ interface StorageInterface
      *
      * @param string $data
      * @return void
-     * @since 2.0.0
      */
     public function save($data);
 }

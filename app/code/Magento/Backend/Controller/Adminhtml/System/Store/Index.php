@@ -10,7 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Index returns Stores page
- * @since 2.0.0
  */
 class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
@@ -18,7 +17,6 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
      * Returns Stores page
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

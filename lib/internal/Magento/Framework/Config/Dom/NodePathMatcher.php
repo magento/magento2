@@ -7,7 +7,6 @@ namespace Magento\Framework\Config\Dom;
 
 /**
  * Matching of XPath expressions to path patterns
- * @since 2.0.0
  */
 class NodePathMatcher
 {
@@ -17,7 +16,6 @@ class NodePathMatcher
      * @param string $pathPattern Example: '/some/static/path' or '/some/regexp/path(/item)+'
      * @param string $xpathSubject Example: '/some[@attr="value"]/static/ns:path'
      * @return bool
-     * @since 2.0.0
      */
     public function match($pathPattern, $xpathSubject)
     {
@@ -31,7 +29,6 @@ class NodePathMatcher
      *
      * @param string $xpath
      * @return string
-     * @since 2.0.0
      */
     protected function simplifyXpath($xpath)
     {

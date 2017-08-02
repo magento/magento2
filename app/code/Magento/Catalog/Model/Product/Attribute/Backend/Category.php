@@ -14,7 +14,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 /**
  * Class \Magento\Catalog\Model\Product\Attribute\Backend\Category
  *
- * @since 2.0.0
  */
 class Category extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -23,7 +22,6 @@ class Category extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
-     * @since 2.0.0
      */
     public function afterLoad($object)
     {

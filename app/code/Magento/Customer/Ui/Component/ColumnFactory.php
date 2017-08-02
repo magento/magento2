@@ -12,25 +12,21 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 /**
  * Class \Magento\Customer\Ui\Component\ColumnFactory
  *
- * @since 2.0.0
  */
 class ColumnFactory
 {
     /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
-     * @since 2.0.0
      */
     protected $componentFactory;
 
     /**
      * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
-     * @since 2.0.0
      */
     protected $inlineEditUpdater;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
@@ -40,7 +36,6 @@ class ColumnFactory
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $dataTypeMap = [
         'default' => 'text',
@@ -54,7 +49,6 @@ class ColumnFactory
     /**
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
      * @param InlineEditUpdater $inlineEditor
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
@@ -70,7 +64,6 @@ class ColumnFactory
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param array $config
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-     * @since 2.0.0
      */
     public function create(array $attributeData, $columnName, $context, array $config = [])
     {
@@ -114,7 +107,6 @@ class ColumnFactory
     /**
      * @param string $dataType
      * @return string
-     * @since 2.0.0
      */
     protected function getJsComponent($dataType)
     {
@@ -124,7 +116,6 @@ class ColumnFactory
     /**
      * @param string $frontendType
      * @return string
-     * @since 2.0.0
      */
     protected function getDataType($frontendType)
     {

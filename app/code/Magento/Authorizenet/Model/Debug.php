@@ -20,13 +20,11 @@ namespace Magento\Authorizenet\Model;
  * @method \Magento\Authorizenet\Model\Debug setRequestDump(string $value)
  * @method string getResultDump()
  * @method \Magento\Authorizenet\Model\Debug setResultDump(string $value)
- * @since 2.0.0
  */
 class Debug extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

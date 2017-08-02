@@ -15,7 +15,6 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - last_id
  *
  * @api
- * @since 2.0.0
  */
 class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
@@ -23,7 +22,6 @@ class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      * Get next id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNextId()
     {

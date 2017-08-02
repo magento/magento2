@@ -12,7 +12,6 @@ use Magento\Framework\Code\ValidatorInterface;
 /**
  * Class \Magento\Framework\Code\Validator\TypeDuplication
  *
- * @since 2.0.0
  */
 class TypeDuplication implements ValidatorInterface
 {
@@ -25,7 +24,6 @@ class TypeDuplication implements ValidatorInterface
 
     /**
      * @var \Magento\Framework\Code\Reader\ArgumentsReader
-     * @since 2.0.0
      */
     protected $_argumentsReader;
 
@@ -38,7 +36,6 @@ class TypeDuplication implements ValidatorInterface
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader|null $argumentsReader
      * @param \Magento\Framework\Code\Reader\ScalarTypesProvider|null $scalarTypesProvider
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
@@ -54,7 +51,6 @@ class TypeDuplication implements ValidatorInterface
      * @param string $className
      * @return bool
      * @throws \Magento\Framework\Exception\ValidatorException
-     * @since 2.0.0
      */
     public function validate($className)
     {
@@ -100,7 +96,6 @@ class TypeDuplication implements ValidatorInterface
      *
      * @param array $arguments
      * @return array
-     * @since 2.0.0
      */
     protected function _getObjectArguments(array $arguments)
     {
@@ -123,7 +118,6 @@ class TypeDuplication implements ValidatorInterface
      *
      * @param \ReflectionClass $class
      * @return bool
-     * @since 2.0.0
      */
     protected function _ignoreWarning(\ReflectionClass $class)
     {

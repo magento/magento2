@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface CommentInterface
 {
@@ -19,7 +18,6 @@ interface CommentInterface
      * Retrieve element comment by element value
      * @param string $elementValue
      * @return string
-     * @since 2.0.0
      */
     public function getCommentText($elementValue);
 }

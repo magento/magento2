@@ -11,13 +11,13 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Upgrade data script for Integration module
- * @since 2.2.0
+ * @since 2.1.7
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.7
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -37,7 +37,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
+     * @since 2.1.7
      */
     private function removeRevokedTokens($setup)
     {
@@ -52,7 +52,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
+     * @since 2.1.7
      */
     private function removeTokensFromInactiveAdmins($setup)
     {
@@ -78,7 +78,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @since 2.2.0
+     * @since 2.1.7
      */
     private function removeTokensFromInactiveCustomers($setup)
     {

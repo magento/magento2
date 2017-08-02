@@ -8,19 +8,16 @@ namespace Magento\Ui\Model\Export;
 /**
  * Class \Magento\Ui\Model\Export\SearchResultIterator
  *
- * @since 2.0.0
  */
 class SearchResultIterator implements \Iterator
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $items;
 
     /**
      * @param array $items
-     * @since 2.0.0
      */
     public function __construct(
         array $items
@@ -30,7 +27,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return array|mixed
-     * @since 2.0.0
      */
     public function current()
     {
@@ -39,7 +35,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return int|mixed
-     * @since 2.0.0
      */
     public function key()
     {
@@ -48,7 +43,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function next()
     {
@@ -57,7 +51,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function rewind()
     {
@@ -66,7 +59,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function valid()
     {

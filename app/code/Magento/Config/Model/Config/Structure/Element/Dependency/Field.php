@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Field
 {
@@ -15,7 +14,6 @@ class Field
      * Values for dependence
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_values;
 
@@ -23,7 +21,6 @@ class Field
      * Id of the dependent field
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_id;
 
@@ -31,14 +28,12 @@ class Field
      * Whether dependence is for negative comparison
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isNegative = false;
 
     /**
      * @param array $fieldData
      * @param string $fieldPrefix
-     * @since 2.0.0
      */
     public function __construct(array $fieldData = [], $fieldPrefix = "")
     {
@@ -64,7 +59,6 @@ class Field
      *
      * @param string $value
      * @return bool
-     * @since 2.0.0
      */
     public function isValueSatisfy($value)
     {
@@ -75,7 +69,6 @@ class Field
      * Get id of the dependent field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -86,7 +79,6 @@ class Field
      * Get values for dependence
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getValues()
     {
@@ -97,7 +89,6 @@ class Field
      * Get negative indication of dependency
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isNegative()
     {

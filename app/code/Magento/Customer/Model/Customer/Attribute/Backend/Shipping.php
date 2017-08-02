@@ -9,14 +9,12 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
  * Customer default shipping address backend
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @param \Magento\Framework\DataObject $object
      * @return void
-     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -29,7 +27,6 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     /**
      * @param \Magento\Framework\DataObject $object
      * @return void
-     * @since 2.0.0
      */
     public function afterSave($object)
     {

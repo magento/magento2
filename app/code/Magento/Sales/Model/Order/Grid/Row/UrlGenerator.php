@@ -7,13 +7,11 @@ namespace Magento\Sales\Model\Order\Grid\Row;
 
 /**
  * Sales orders grid row url generator
- * @since 2.0.0
  */
 class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
@@ -21,7 +19,6 @@ class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param array $args
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -36,7 +33,6 @@ class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
      * Generate row url
      * @param \Magento\Framework\DataObject $item
      * @return bool|string
-     * @since 2.0.0
      */
     public function getUrl($item)
     {

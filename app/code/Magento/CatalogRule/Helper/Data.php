@@ -12,7 +12,6 @@ namespace Magento\CatalogRule\Helper;
 /**
  * Class \Magento\CatalogRule\Helper\Data
  *
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -23,7 +22,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int $ruleAmount
      * @param  float $price
      * @return float|int
-     * @since 2.0.0
      */
     public function calcPriceRule($actionOperator, $ruleAmount, $price)
     {

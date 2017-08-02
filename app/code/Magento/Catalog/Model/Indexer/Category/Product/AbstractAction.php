@@ -18,7 +18,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractAction
 {
@@ -46,7 +45,6 @@ abstract class AbstractAction
      * Cached non anchor categories select by store id
      *
      * @var \Magento\Framework\DB\Select[]
-     * @since 2.0.0
      */
     protected $nonAnchorSelects = [];
 
@@ -54,7 +52,6 @@ abstract class AbstractAction
      * Cached anchor categories select by store id
      *
      * @var \Magento\Framework\DB\Select[]
-     * @since 2.0.0
      */
     protected $anchorSelects = [];
 
@@ -62,7 +59,6 @@ abstract class AbstractAction
      * Cached all product select by store id
      *
      * @var \Magento\Framework\DB\Select[]
-     * @since 2.0.0
      */
     protected $productsSelects = [];
 
@@ -70,25 +66,21 @@ abstract class AbstractAction
      * Category path by id
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $categoryPath = [];
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $config;
 
@@ -96,13 +88,11 @@ abstract class AbstractAction
      * Whether to use main or temporary index table
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $useTempTable = true;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
@@ -129,7 +119,6 @@ abstract class AbstractAction
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator $queryGenerator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -149,7 +138,6 @@ abstract class AbstractAction
      * Run full reindex
      *
      * @return $this
-     * @since 2.0.0
      */
     abstract public function execute();
 
@@ -157,7 +145,6 @@ abstract class AbstractAction
      * Run reindexation
      *
      * @return void
-     * @since 2.0.0
      */
     protected function reindex()
     {
@@ -175,7 +162,6 @@ abstract class AbstractAction
      *
      * @param string|string[] $table
      * @return string
-     * @since 2.0.0
      */
     protected function getTable($table)
     {
@@ -189,7 +175,6 @@ abstract class AbstractAction
      * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getMainTable()
     {
@@ -200,7 +185,6 @@ abstract class AbstractAction
      * Return temporary index table name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getMainTmpTable()
     {
@@ -214,7 +198,6 @@ abstract class AbstractAction
      *
      * @param int $categoryId
      * @return string
-     * @since 2.0.0
      */
     protected function getPathFromCategoryId($categoryId)
     {
@@ -237,7 +220,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -332,7 +314,6 @@ abstract class AbstractAction
      * Check whether select ranging is needed
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isRangingNeeded()
     {
@@ -346,7 +327,6 @@ abstract class AbstractAction
      * @param string $field
      * @param int $range
      * @return \Magento\Framework\DB\Select[]
-     * @since 2.0.0
      */
     protected function prepareSelectsByRange(
         \Magento\Framework\DB\Select $select,
@@ -375,7 +355,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return void
-     * @since 2.0.0
      */
     protected function reindexNonAnchorCategories(\Magento\Store\Model\Store $store)
     {
@@ -397,7 +376,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     protected function hasAnchorSelect(\Magento\Store\Model\Store $store)
     {
@@ -410,7 +388,6 @@ abstract class AbstractAction
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function createAnchorSelect(\Magento\Store\Model\Store $store)
     {
@@ -611,7 +588,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -626,7 +602,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return void
-     * @since 2.0.0
      */
     protected function reindexAnchorCategories(\Magento\Store\Model\Store $store)
     {
@@ -649,7 +624,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function getAllProducts(\Magento\Store\Model\Store $store)
     {
@@ -743,7 +717,6 @@ abstract class AbstractAction
      * Check whether indexation of root category is needed
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isIndexRootCategoryNeeded()
     {
@@ -755,7 +728,6 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return void
-     * @since 2.0.0
      */
     protected function reindexRootCategory(\Magento\Store\Model\Store $store)
     {

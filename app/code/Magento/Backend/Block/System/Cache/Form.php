@@ -9,13 +9,11 @@ namespace Magento\Backend\Block\System\Cache;
  * Cache management form page
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
-     * @since 2.0.0
      */
     protected $cacheTypeList;
 
@@ -25,7 +23,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,7 +39,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize cache management form
      *
      * @return $this
-     * @since 2.0.0
      */
     public function initForm()
     {

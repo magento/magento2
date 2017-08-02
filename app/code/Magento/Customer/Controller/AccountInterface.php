@@ -10,7 +10,6 @@ use Magento\Framework\App\ActionInterface;
 /**
  * Interface \Magento\Customer\Controller\AccountInterface
  *
- * @since 2.0.0
  */
 interface AccountInterface extends ActionInterface
 {

@@ -10,7 +10,6 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Shipping extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -18,13 +17,11 @@ class Shipping extends \Magento\Backend\Block\Widget\Grid\Container
      * Template file
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'report/grid/container.phtml';
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,7 +41,6 @@ class Shipping extends \Magento\Backend\Block\Widget\Grid\Container
      * Get filter URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFilterUrl()
     {

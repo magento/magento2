@@ -10,20 +10,17 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 /**
  * Class \Magento\Framework\HTTP\PhpEnvironment\Response
  *
- * @since 2.0.0
  */
 class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
 {
     /**
      * Flag; is this response a redirect?
      * @var boolean
-     * @since 2.0.0
      */
     protected $isRedirect = false;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getHeader($name)
     {
@@ -40,7 +37,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * requested.
      *
      * @return void
-     * @since 2.0.0
      */
     public function sendResponse()
     {
@@ -49,7 +45,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function appendBody($value)
     {
@@ -60,7 +55,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBody($value)
     {
@@ -71,7 +65,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     /**
      * Clear body
      * @return $this
-     * @since 2.0.0
      */
     public function clearBody()
     {
@@ -81,7 +74,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setHeader($name, $value, $replace = false)
     {
@@ -97,7 +89,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function clearHeader($name)
     {
@@ -114,7 +105,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * Remove all headers
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearHeaders()
     {
@@ -126,7 +116,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setRedirect($url, $code = 302)
     {
@@ -138,7 +127,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setHttpResponseCode($code)
     {
@@ -154,7 +142,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null)
     {
@@ -170,7 +157,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getHttpResponseCode()
     {
@@ -181,7 +167,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * Is this a redirect?
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isRedirect()
     {
@@ -190,7 +175,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * @return string[]
-     * @since 2.0.0
      */
     public function __sleep()
     {

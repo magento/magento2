@@ -8,19 +8,16 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Plugin;
 /**
  * Class \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup
  *
- * @since 2.0.0
  */
 class StoreGroup
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     * @since 2.0.0
      */
     protected $_indexerProcessor;
 
     /**
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor  $indexerProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\CatalogInventory\Model\Indexer\Stock\Processor $indexerProcessor)
     {
@@ -35,7 +32,6 @@ class StoreGroup
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function beforeSave(
         \Magento\Store\Model\ResourceModel\Group $subject,

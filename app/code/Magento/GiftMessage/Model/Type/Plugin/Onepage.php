@@ -8,26 +8,22 @@ namespace Magento\GiftMessage\Model\Type\Plugin;
 /**
  * Class \Magento\GiftMessage\Model\Type\Plugin\Onepage
  *
- * @since 2.0.0
  */
 class Onepage
 {
     /**
      * @var \Magento\GiftMessage\Model\GiftMessageManager
-     * @since 2.0.0
      */
     protected $message;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @param \Magento\GiftMessage\Model\GiftMessageManager $message
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\GiftMessage\Model\GiftMessageManager $message,
@@ -41,7 +37,6 @@ class Onepage
      * @param \Magento\Checkout\Model\Type\Onepage $subject
      * @param array $result
      * @return $this
-     * @since 2.0.0
      */
     public function afterSaveShippingMethod(
         \Magento\Checkout\Model\Type\Onepage $subject,

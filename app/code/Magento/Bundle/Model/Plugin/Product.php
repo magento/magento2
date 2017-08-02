@@ -11,19 +11,16 @@ use Magento\Catalog\Model\Product as CatalogProduct;
 /**
  * Class \Magento\Bundle\Model\Plugin\Product
  *
- * @since 2.0.0
  */
 class Product
 {
     /**
      * @var Type
-     * @since 2.0.0
      */
     private $type;
 
     /**
      * @param Type $type
-     * @since 2.0.0
      */
     public function __construct(Type $type)
     {
@@ -34,7 +31,6 @@ class Product
      * @param CatalogProduct $product
      * @param array $identities
      * @return string[]
-     * @since 2.0.0
      */
     public function afterGetIdentities(
         CatalogProduct $product,

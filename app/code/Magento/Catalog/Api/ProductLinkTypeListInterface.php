@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductLinkTypeListInterface
 {
@@ -16,7 +15,6 @@ interface ProductLinkTypeListInterface
      * Retrieve information about available product link types
      *
      * @return \Magento\Catalog\Api\Data\ProductLinkTypeInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -25,7 +23,6 @@ interface ProductLinkTypeListInterface
      *
      * @param string $type
      * @return \Magento\Catalog\Api\Data\ProductLinkAttributeInterface[]
-     * @since 2.0.0
      */
     public function getItemAttributes($type);
 }

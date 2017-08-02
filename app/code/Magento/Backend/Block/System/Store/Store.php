@@ -11,19 +11,16 @@ namespace Magento\Backend\Block\System\Store;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Store extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_blockGroup = 'Magento_Backend';
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

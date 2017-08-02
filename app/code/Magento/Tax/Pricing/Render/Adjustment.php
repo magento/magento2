@@ -13,13 +13,11 @@ use Magento\Framework\View\Element\Template;
 /**
  * @method string getIdSuffix()
  * @method string getDisplayLabel()
- * @since 2.0.0
  */
 class Adjustment extends AbstractAdjustment
 {
     /**
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxHelper;
 
@@ -28,7 +26,6 @@ class Adjustment extends AbstractAdjustment
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Helper\Data $helper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -42,7 +39,6 @@ class Adjustment extends AbstractAdjustment
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function apply()
     {
@@ -70,7 +66,6 @@ class Adjustment extends AbstractAdjustment
      * Obtain code of adjustment type
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAdjustmentCode()
     {
@@ -81,7 +76,6 @@ class Adjustment extends AbstractAdjustment
      * Define if both prices should be displayed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayBothPrices()
     {
@@ -94,7 +88,6 @@ class Adjustment extends AbstractAdjustment
      * @param array $exclude
      * @param bool $includeContainer
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayAmountExclTax($exclude = null, $includeContainer = false)
     {
@@ -114,7 +107,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param array $exclude
      * @return float
-     * @since 2.0.0
      */
     public function getRawAmount($exclude = null)
     {
@@ -130,7 +122,6 @@ class Adjustment extends AbstractAdjustment
      * Returns the list of default exclusions
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDefaultExclusions()
     {
@@ -142,7 +133,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param bool $includeContainer
      * @return string
-     * @since 2.0.0
      */
     public function getDisplayAmount($includeContainer = true)
     {
@@ -154,7 +144,6 @@ class Adjustment extends AbstractAdjustment
      *
      * @param string $prefix
      * @return string
-     * @since 2.0.0
      */
     public function buildIdWithPrefix($prefix)
     {
@@ -169,7 +158,6 @@ class Adjustment extends AbstractAdjustment
      * Should be displayed price including tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceIncludingTax()
     {
@@ -180,7 +168,6 @@ class Adjustment extends AbstractAdjustment
      * Should be displayed price excluding tax
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayPriceExcludingTax()
     {

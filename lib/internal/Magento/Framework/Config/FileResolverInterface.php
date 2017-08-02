@@ -9,7 +9,6 @@ namespace Magento\Framework\Config;
  * File resolver interface.
  *
  * @api
- * @since 2.0.0
  */
 interface FileResolverInterface
 {
@@ -19,7 +18,6 @@ interface FileResolverInterface
      * @param string $filename
      * @param string $scope
      * @return array
-     * @since 2.0.0
      */
     public function get($filename, $scope);
 }

@@ -9,7 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Service model responsible for making a decision of whether to use the merged asset in place of original ones
- * @since 2.0.0
  */
 class MergeService
 {
@@ -17,7 +16,6 @@ class MergeService
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,7 +23,6 @@ class MergeService
      * Config
      *
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
@@ -33,7 +30,6 @@ class MergeService
      * Filesystem
      *
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -41,7 +37,6 @@ class MergeService
      * State
      *
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $state;
 
@@ -52,7 +47,6 @@ class MergeService
      * @param ConfigInterface $config
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\State $state
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -73,7 +67,6 @@ class MergeService
      * @param string $contentType
      * @return array|\Iterator
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getMergedAssets(array $assets, $contentType)
     {
@@ -107,7 +100,6 @@ class MergeService
      * Remove all merged js/css files
      *
      * @return void
-     * @since 2.0.0
      */
     public function cleanMergedJsCss()
     {

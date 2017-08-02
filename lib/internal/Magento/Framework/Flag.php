@@ -16,7 +16,6 @@ namespace Magento\Framework;
  * @method \Magento\Framework\Flag setState(int $value)
  * @method string getLastUpdate()
  * @method \Magento\Framework\Flag setLastUpdate(string $value)
- * @since 2.0.0
  */
 class Flag extends Model\AbstractModel
 {
@@ -24,7 +23,6 @@ class Flag extends Model\AbstractModel
      * Flag code
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_flagCode = null;
 
@@ -81,7 +79,6 @@ class Flag extends Model\AbstractModel
      * Set flag_code if it is specified in arguments
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,7 +93,6 @@ class Flag extends Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -116,7 +112,6 @@ class Flag extends Model\AbstractModel
      * Retrieve flag data
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function getFlagData()
     {
@@ -136,7 +131,6 @@ class Flag extends Model\AbstractModel
      *
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setFlagData($value)
     {
@@ -148,7 +142,6 @@ class Flag extends Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function loadSelf()
     {

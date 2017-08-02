@@ -12,49 +12,41 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Class Utility
  *
  * @package Magento\SalesRule\Model
- * @since 2.0.0
  */
 class Utility
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_roundingDeltas = [];
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_baseRoundingDeltas = [];
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory
-     * @since 2.0.0
      */
     protected $usageFactory;
 
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
-     * @since 2.0.0
      */
     protected $couponFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Rule\CustomerFactory
-     * @since 2.0.0
      */
     protected $customerFactory;
 
     /**
      * @var \Magento\Framework\DataObjectFactory
-     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -64,7 +56,6 @@ class Utility
      * @param Rule\CustomerFactory $customerFactory
      * @param \Magento\Framework\DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory,
@@ -88,7 +79,6 @@ class Utility
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function canProcessRule($rule, $address)
     {
@@ -167,7 +157,6 @@ class Utility
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return void
-     * @since 2.0.0
      */
     public function minFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
@@ -193,7 +182,6 @@ class Utility
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
-     * @since 2.0.0
      */
     public function deltaRoundingFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
@@ -228,7 +216,6 @@ class Utility
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getItemPrice($item)
     {
@@ -242,7 +229,6 @@ class Utility
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getItemBasePrice($item)
     {
@@ -256,7 +242,6 @@ class Utility
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return int
-     * @since 2.0.0
      */
     public function getItemQty($item, $rule)
     {
@@ -272,7 +257,6 @@ class Utility
      * @param array|string $a2
      * @param bool $asString
      * @return array|string
-     * @since 2.0.0
      */
     public function mergeIds($a1, $a2, $asString = true)
     {
@@ -291,7 +275,6 @@ class Utility
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function resetRoundingDeltas()
     {

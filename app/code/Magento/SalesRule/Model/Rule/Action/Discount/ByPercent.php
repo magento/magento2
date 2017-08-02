@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
 /**
  * Class \Magento\SalesRule\Model\Rule\Action\Discount\ByPercent
  *
- * @since 2.0.0
  */
 class ByPercent extends AbstractDiscount
 {
@@ -17,7 +16,6 @@ class ByPercent extends AbstractDiscount
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return Data
-     * @since 2.0.0
      */
     public function calculate($rule, $item, $qty)
     {
@@ -31,7 +29,6 @@ class ByPercent extends AbstractDiscount
      * @param float $qty
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return float
-     * @since 2.0.0
      */
     public function fixQuantity($qty, $rule)
     {
@@ -49,7 +46,6 @@ class ByPercent extends AbstractDiscount
      * @param float $qty
      * @param float $rulePercent
      * @return Data
-     * @since 2.0.0
      */
     protected function _calculate($rule, $item, $qty, $rulePercent)
     {

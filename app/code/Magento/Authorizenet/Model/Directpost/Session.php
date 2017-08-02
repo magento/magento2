@@ -9,7 +9,6 @@ use Magento\Framework\Session\SessionManager;
 
 /**
  * Authorize.net DirectPost session model
- * @since 2.0.0
  */
 class Session extends SessionManager
 {
@@ -18,7 +17,6 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return void
-     * @since 2.0.0
      */
     public function addCheckoutOrderIncrementId($orderIncrementId)
     {
@@ -35,7 +33,6 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return void
-     * @since 2.0.0
      */
     public function removeCheckoutOrderIncrementId($orderIncrementId)
     {
@@ -56,7 +53,6 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return bool
-     * @since 2.0.0
      */
     public function isCheckoutOrderIncrementIdExist($orderIncrementId)
     {
@@ -72,7 +68,6 @@ class Session extends SessionManager
      *
      * @param int|string $id
      * @return $this
-     * @since 2.0.0
      */
     public function setQuoteId($id)
     {

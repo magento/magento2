@@ -9,7 +9,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
  * Images manage controller for Cms WYSIWYG editor
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Images extends \Magento\Backend\App\Action
 {
@@ -24,14 +23,12 @@ abstract class Images extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -43,7 +40,6 @@ abstract class Images extends \Magento\Backend\App\Action
      * Init storage
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -55,7 +51,6 @@ abstract class Images extends \Magento\Backend\App\Action
      * Register storage model and return it
      *
      * @return \Magento\Cms\Model\Wysiwyg\Images\Storage
-     * @since 2.0.0
      */
     public function getStorage()
     {

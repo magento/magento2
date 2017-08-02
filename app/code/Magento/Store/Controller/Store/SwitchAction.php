@@ -19,31 +19,26 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Switch current store view.
- * @since 2.0.0
  */
 class SwitchAction extends Action
 {
     /**
      * @var StoreCookieManagerInterface
-     * @since 2.0.0
      */
     protected $storeCookieManager;
 
     /**
      * @var HttpContext
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var StoreRepositoryInterface
-     * @since 2.0.0
      */
     protected $storeRepository;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -55,7 +50,6 @@ class SwitchAction extends Action
      * @param HttpContext $httpContext
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         ActionContext $context,
@@ -73,7 +67,6 @@ class SwitchAction extends Action
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

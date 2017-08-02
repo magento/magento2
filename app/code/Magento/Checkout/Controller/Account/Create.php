@@ -11,25 +11,21 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Checkout\Controller\Account\Create
  *
- * @since 2.0.0
  */
 class Create extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Sales\Api\OrderCustomerManagementInterface
-     * @since 2.0.0
      */
     protected $orderCustomerService;
 
@@ -39,7 +35,6 @@ class Create extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -60,7 +55,6 @@ class Create extends \Magento\Framework\App\Action\Action
      * @throws NoSuchEntityException
      * @throws \Exception
      * @return \Magento\Framework\Controller\Result\Json
-     * @since 2.0.0
      */
     public function execute()
     {

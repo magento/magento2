@@ -10,7 +10,6 @@ namespace Magento\Framework\Code\Reader;
 /**
  * Interface \Magento\Framework\Code\Reader\ClassReaderInterface
  *
- * @since 2.0.0
  */
 interface ClassReaderInterface
 {
@@ -20,7 +19,6 @@ interface ClassReaderInterface
      * @param string $className
      * @return array|null
      * @throws \ReflectionException
-     * @since 2.0.0
      */
     public function getConstructor($className);
 
@@ -35,7 +33,6 @@ interface ClassReaderInterface
      *
      * @param string $className
      * @return string[]
-     * @since 2.0.0
      */
     public function getParents($className);
 }

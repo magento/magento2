@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Factory
 {
@@ -32,13 +31,11 @@ class Factory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $_objectManager;
 
     /**
      * @var Filesystem
-     * @since 2.0.0
      */
     private $_filesystem;
 
@@ -46,7 +43,6 @@ class Factory
      * Cache options to be enforced for all instances being created
      *
      * @var array
-     * @since 2.0.0
      */
     private $_enforcedOptions = [];
 
@@ -58,7 +54,6 @@ class Factory
      * )
      *
      * @var array
-     * @since 2.0.0
      */
     private $_decorators = [];
 
@@ -66,7 +61,6 @@ class Factory
      * Default cache backend type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultBackend = 'Cm_Cache_Backend_File';
 
@@ -74,7 +68,6 @@ class Factory
      * Options for default backend
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
@@ -86,7 +79,6 @@ class Factory
      * Resource
      *
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource;
 
@@ -96,7 +88,6 @@ class Factory
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $enforcedOptions
      * @param array $decorators
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -117,7 +108,6 @@ class Factory
      *
      * @param array $options
      * @return \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     public function create(array $options)
     {
@@ -181,7 +171,6 @@ class Factory
      *
      * @param array $options
      * @return array
-     * @since 2.0.0
      */
     private function _getExpandedOptions(array $options)
     {
@@ -195,7 +184,6 @@ class Factory
      * @return \Magento\Framework\Cache\FrontendInterface
      * @throws \LogicException
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     private function _applyDecorators(\Magento\Framework\Cache\FrontendInterface $frontend)
     {
@@ -222,7 +210,6 @@ class Factory
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getBackendOptions(array $cacheOptions)
     {
@@ -315,7 +302,6 @@ class Factory
      * Get options for database backend type
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getDbAdapterOptions()
     {
@@ -337,7 +323,6 @@ class Factory
      * @param array $fastOptions fast level backend type and options
      * @param array $cacheOptions all cache options
      * @return array
-     * @since 2.0.0
      */
     protected function _getTwoLevelsBackendOptions($fastOptions, $cacheOptions)
     {
@@ -384,7 +369,6 @@ class Factory
      * @param  array $cacheOptions
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getFrontendOptions(array $cacheOptions)
     {

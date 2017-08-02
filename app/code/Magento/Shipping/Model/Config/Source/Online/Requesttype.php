@@ -9,7 +9,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Source model for Shippers Request Type
- * @since 2.0.0
  */
 class Requesttype implements OptionSourceInterface
 {
@@ -17,7 +16,6 @@ class Requesttype implements OptionSourceInterface
      * Returns array to be used in packages request type on back-end
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

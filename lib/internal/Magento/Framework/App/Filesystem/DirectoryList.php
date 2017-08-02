@@ -9,7 +9,6 @@ use Magento\Framework\Code\Generator\Io;
 
 /**
  * A Magento application specific list of directories
- * @since 2.0.0
  */
 class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 {
@@ -138,7 +137,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public static function getDefaultConfig()
     {
@@ -172,7 +170,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function __construct($root, array $config = [])
     {

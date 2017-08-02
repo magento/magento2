@@ -14,7 +14,6 @@ use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -22,7 +21,6 @@ class InstallData implements InstallDataInterface
      * Authorization factory
      *
      * @var AuthorizationFactory
-     * @since 2.0.0
      */
     private $authFactory;
 
@@ -30,7 +28,6 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param AuthorizationFactory $authFactory
-     * @since 2.0.0
      */
     public function __construct(AuthorizationFactory $authFactory)
     {
@@ -39,7 +36,6 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

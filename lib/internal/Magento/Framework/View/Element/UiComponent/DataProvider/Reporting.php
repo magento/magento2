@@ -11,26 +11,22 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Class Reporting
- * @since 2.0.0
  */
 class Reporting implements ReportingInterface
 {
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $filterPool;
 
     /**
      * @param CollectionFactory $collectionFactory
      * @param FilterPool $filterPool
-     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -43,7 +39,6 @@ class Reporting implements ReportingInterface
     /**
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
-     * @since 2.0.0
      */
     public function search(SearchCriteriaInterface $searchCriteria)
     {

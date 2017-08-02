@@ -13,13 +13,11 @@ use Magento\Framework\Phrase;
 
 /**
  * Class for Image content validation
- * @since 2.0.0
  */
 class ImageContentValidator implements ImageContentValidatorInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $defaultMimeTypes = [
         'image/jpg',
@@ -30,13 +28,11 @@ class ImageContentValidator implements ImageContentValidatorInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $allowedMimeTypes;
 
     /**
      * @param array $allowedMimeTypes
-     * @since 2.0.0
      */
     public function __construct(
         array $allowedMimeTypes = []
@@ -50,7 +46,6 @@ class ImageContentValidator implements ImageContentValidatorInterface
      * @param ImageContentInterface $imageContent
      * @return bool
      * @throws InputException
-     * @since 2.0.0
      */
     public function isValid(ImageContentInterface $imageContent)
     {
@@ -77,7 +72,6 @@ class ImageContentValidator implements ImageContentValidatorInterface
      *
      * @param string $mimeType
      * @return bool
-     * @since 2.0.0
      */
     protected function isMimeTypeValid($mimeType)
     {
@@ -89,7 +83,6 @@ class ImageContentValidator implements ImageContentValidatorInterface
      *
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     protected function isNameValid($name)
     {

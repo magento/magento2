@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
  * @api
- * @since 2.0.0
  */
 class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMapper
 {
@@ -19,7 +18,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      * System configuration array
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_systemConfiguration;
 
@@ -27,7 +25,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      * List of already extended notes (used to break circular extends)
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_extendedNodesList = [];
 
@@ -35,13 +32,11 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      * Class that can convert relative paths from "extends" node to absolute
      *
      * @var \Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter
-     * @since 2.0.0
      */
     protected $_pathConverter;
 
     /**
      * @param \Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter $pathConverted
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter $pathConverted
@@ -54,7 +49,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function map(array $data)
     {
@@ -76,7 +70,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      *
      * @param string $path
      * @return void
-     * @since 2.0.0
      */
     protected function _traverseAndExtend($path)
     {
@@ -102,7 +95,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      *
      * @param string $path
      * @return array
-     * @since 2.0.0
      */
     protected function _getDataByPath($path)
     {
@@ -126,7 +118,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      * @param string $extendSourceNode
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function _extendNode($path, $extendSourceNode)
     {
@@ -164,7 +155,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      * @param array $arr1
      * @param array $arr2
      * @return array
-     * @since 2.0.0
      */
     protected function _mergeData($arr1, $arr2)
     {
@@ -185,7 +175,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      * @param string $path
      * @param array $newData
      * @return void
-     * @since 2.0.0
      */
     protected function _replaceData($path, $newData)
     {
@@ -207,7 +196,6 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
      *
      * @param string $path
      * @return string[]
-     * @since 2.0.0
      */
     protected function _transformPathToKeysList($path)
     {

@@ -11,7 +11,6 @@ use Magento\Framework\App\RequestInterface;
  * EAV Entity Attribute Date Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -20,7 +19,6 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param RequestInterface $request
      * @return array|string
-     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -36,7 +34,6 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -107,7 +104,6 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -126,7 +122,6 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param array|string $value
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -138,7 +133,6 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param string $format
      * @return string|array
-     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {

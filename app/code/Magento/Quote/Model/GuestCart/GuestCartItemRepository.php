@@ -13,19 +13,16 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Cart Item repository class for guest carts.
- * @since 2.0.0
  */
 class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemRepositoryInterface
 {
     /**
      * @var \Magento\Quote\Api\CartItemRepositoryInterface
-     * @since 2.0.0
      */
     protected $repository;
 
     /**
      * @var QuoteIdMaskFactory
-     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
@@ -34,7 +31,6 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
      *
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $repository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $repository,
@@ -46,7 +42,6 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($cartId)
     {
@@ -62,7 +57,6 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
@@ -74,7 +68,6 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($cartId, $itemId)
     {

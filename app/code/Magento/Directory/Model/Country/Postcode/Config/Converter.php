@@ -8,19 +8,16 @@ namespace Magento\Directory\Model\Country\Postcode\Config;
 /**
  * Class \Magento\Directory\Model\Country\Postcode\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\BooleanUtils
-     * @since 2.0.0
      */
     protected $booleanUtils;
 
     /**
      * @param \Magento\Framework\Stdlib\BooleanUtils $booleanUtils
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Stdlib\BooleanUtils $booleanUtils)
     {
@@ -32,7 +29,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {

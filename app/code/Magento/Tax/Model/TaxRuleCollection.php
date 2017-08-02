@@ -16,13 +16,11 @@ use Magento\Tax\Api\TaxRuleRepositoryInterface;
 
 /**
  * Tax rule collection for a grid backed by Services
- * @since 2.0.0
  */
 class TaxRuleCollection extends AbstractServiceCollection
 {
     /**
      * @var TaxRuleRepositoryInterface
-     * @since 2.0.0
      */
     protected $ruleService;
 
@@ -34,7 +32,6 @@ class TaxRuleCollection extends AbstractServiceCollection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
      * @param TaxRuleRepositoryInterface $ruleService
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -49,7 +46,6 @@ class TaxRuleCollection extends AbstractServiceCollection
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -70,7 +66,6 @@ class TaxRuleCollection extends AbstractServiceCollection
      *
      * @param TaxRuleInterface $taxRule Input data for creating the item.
      * @return \Magento\Framework\DataObject Collection item that represents a tax rule
-     * @since 2.0.0
      */
     protected function createTaxRuleCollectionItem(TaxRuleInterface $taxRule)
     {

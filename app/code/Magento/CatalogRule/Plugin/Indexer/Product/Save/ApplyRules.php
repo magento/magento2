@@ -10,19 +10,16 @@ use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 /**
  * Class \Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules
  *
- * @since 2.0.0
  */
 class ApplyRules
 {
     /**
      * @var ProductRuleProcessor
-     * @since 2.0.0
      */
     protected $productRuleProcessor;
 
     /**
      * @param ProductRuleProcessor $productRuleProcessor
-     * @since 2.0.0
      */
     public function __construct(ProductRuleProcessor $productRuleProcessor)
     {

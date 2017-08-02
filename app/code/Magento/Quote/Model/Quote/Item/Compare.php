@@ -12,7 +12,6 @@ use Magento\Framework\Serialize\JsonValidator;
 
 /**
  * Compare quote items
- * @since 2.0.0
  */
 class Compare
 {
@@ -48,7 +47,6 @@ class Compare
      *
      * @param mixed $value
      * @return mixed
-     * @since 2.0.0
      */
     protected function getOptionValues($value)
     {
@@ -70,7 +68,6 @@ class Compare
      * @param Item $target
      * @param Item $compared
      * @return bool
-     * @since 2.0.0
      */
     public function compare(Item $target, Item $compared)
     {
@@ -97,7 +94,6 @@ class Compare
      *
      * @param Item $item
      * @return array
-     * @since 2.0.0
      */
     public function getOptions(Item $item)
     {

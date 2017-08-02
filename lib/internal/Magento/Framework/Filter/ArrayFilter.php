@@ -8,13 +8,11 @@ namespace Magento\Framework\Filter;
 /**
  * Class \Magento\Framework\Filter\ArrayFilter
  *
- * @since 2.0.0
  */
 class ArrayFilter extends \Zend_Filter
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_columnFilters = [];
 
@@ -24,7 +22,6 @@ class ArrayFilter extends \Zend_Filter
      * @param \Zend_Filter_Interface $filter
      * @param string $column
      * @return null|\Zend_Filter
-     * @since 2.0.0
      */
     public function addFilter(\Zend_Filter_Interface $filter, $column = '')
     {
@@ -43,7 +40,6 @@ class ArrayFilter extends \Zend_Filter
      *
      * @param array $array
      * @return array
-     * @since 2.0.0
      */
     public function filter($array)
     {

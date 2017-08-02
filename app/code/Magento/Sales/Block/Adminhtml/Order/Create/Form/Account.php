@@ -18,7 +18,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Account extends AbstractForm
 {
@@ -26,7 +25,6 @@ class Account extends AbstractForm
      * Metadata form factory
      *
      * @var \Magento\Customer\Model\Metadata\FormFactory
-     * @since 2.0.0
      */
     protected $_metadataFormFactory;
 
@@ -34,13 +32,11 @@ class Account extends AbstractForm
      * Customer repository
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     * @since 2.0.0
      */
     protected $_extensibleDataObjectConverter;
 
@@ -56,7 +52,6 @@ class Account extends AbstractForm
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -88,7 +83,6 @@ class Account extends AbstractForm
      * Return Header CSS Class
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCssClass()
     {
@@ -99,7 +93,6 @@ class Account extends AbstractForm
      * Return header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -110,7 +103,6 @@ class Account extends AbstractForm
      * Prepare Form and add elements to form
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -151,7 +143,6 @@ class Account extends AbstractForm
      *
      * @param AbstractElement $element
      * @return $this
-     * @since 2.0.0
      */
     protected function _addAdditionalFormElementData(AbstractElement $element)
     {
@@ -168,7 +159,6 @@ class Account extends AbstractForm
      * Return Form Elements values
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFormValues()
     {

@@ -20,61 +20,51 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class StockRegistryProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class StockRegistryProvider implements StockRegistryProviderInterface
 {
     /**
      * @var StockRepositoryInterface
-     * @since 2.0.0
      */
     protected $stockRepository;
 
     /**
      * @var StockInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockFactory;
 
     /**
      * @var StockItemRepositoryInterface
-     * @since 2.0.0
      */
     protected $stockItemRepository;
 
     /**
      * @var StockItemInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockItemFactory;
 
     /**
      * @var StockStatusRepositoryInterface
-     * @since 2.0.0
      */
     protected $stockStatusRepository;
 
     /**
      * @var StockStatusInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockStatusFactory;
 
     /**
      * @var StockCriteriaInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockCriteriaFactory;
 
     /**
      * @var StockItemCriteriaInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockItemCriteriaFactory;
 
     /**
      * @var StockStatusCriteriaInterfaceFactory
-     * @since 2.0.0
      */
     protected $stockStatusCriteriaFactory;
 
@@ -95,7 +85,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         StockRepositoryInterface $stockRepository,
@@ -122,7 +111,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     /**
      * @param int|null $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
-     * @since 2.0.0
      */
     public function getStock($scopeId)
     {
@@ -145,7 +133,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
-     * @since 2.0.0
      */
     public function getStockItem($productId, $scopeId)
     {
@@ -168,7 +155,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
-     * @since 2.0.0
      */
     public function getStockStatus($productId, $scopeId)
     {

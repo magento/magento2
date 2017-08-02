@@ -7,7 +7,6 @@ namespace Magento\TaxImportExport\Controller\Adminhtml;
 
 /**
  * Adminhtml tax rate controller
- * @since 2.0.0
  */
 abstract class Rate extends \Magento\Backend\App\Action
 {
@@ -20,14 +19,12 @@ abstract class Rate extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

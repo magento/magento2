@@ -11,7 +11,6 @@ use Magento\Framework\Config\CacheInterface;
 
 /**
  * System / Cache Management / Cache type "Configuration"
- * @since 2.0.0
  */
 class Config extends TagScope implements CacheInterface
 {
@@ -27,13 +26,11 @@ class Config extends TagScope implements CacheInterface
 
     /**
      * @var \Magento\Framework\App\Cache\Type\FrontendPool
-     * @since 2.0.0
      */
     private $cacheFrontendPool;
 
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
@@ -44,7 +41,6 @@ class Config extends TagScope implements CacheInterface
      * Retrieve cache frontend instance being decorated
      *
      * @return \Magento\Framework\Cache\FrontendInterface
-     * @since 2.0.0
      */
     protected function _getFrontend()
     {
@@ -60,7 +56,6 @@ class Config extends TagScope implements CacheInterface
      * Retrieve cache tag name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTag()
     {

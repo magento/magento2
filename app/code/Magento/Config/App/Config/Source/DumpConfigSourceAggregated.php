@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class DumpConfigSourceAggregated aggregates configurations from all available sources
- * @since 2.2.0
+ * @since 2.1.3
  */
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
@@ -37,19 +37,19 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 
     /**
      * @var ConfigSourceInterface[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $sources;
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $excludedFields;
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $data;
 
@@ -88,7 +88,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param TypePool|null $typePool
      * @param array $rules Rules for filtration the configuration data.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         ExcludeList $excludeList,
@@ -106,7 +106,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($path = '')
     {
@@ -137,7 +137,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param string $path
      * @param array $data
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function filterChain($path, &$data)
     {
@@ -192,7 +192,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path
      * @return null|string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function filterPath($path)
     {
@@ -216,7 +216,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Sort sources ASC from higher priority to lower
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function sortSources()
     {
@@ -228,7 +228,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     /**
      * Retrieves list of field paths were excluded from config dump
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function getExcludedFields()
     {

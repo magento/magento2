@@ -18,7 +18,6 @@ use Magento\Framework\Exception\AuthenticationException;
 /**
  * Class \Magento\Integration\Model\CustomerTokenService
  *
- * @since 2.0.0
  */
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
@@ -26,7 +25,6 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Token Model
      *
      * @var TokenModelFactory
-     * @since 2.0.0
      */
     private $tokenModelFactory;
 
@@ -34,13 +32,11 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Customer Account Service
      *
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     private $accountManagement;
 
     /**
      * @var \Magento\Integration\Model\CredentialsValidator
-     * @since 2.0.0
      */
     private $validatorHelper;
 
@@ -48,13 +44,12 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Token Collection Factory
      *
      * @var TokenCollectionFactory
-     * @since 2.0.0
      */
     private $tokenModelCollectionFactory;
 
     /**
      * @var RequestThrottler
-     * @since 2.1.0
+     * @since 2.0.3
      */
     private $requestThrottler;
 
@@ -65,7 +60,6 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
-     * @since 2.0.0
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
@@ -81,7 +75,6 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function createCustomerAccessToken($username, $password)
     {
@@ -107,7 +100,6 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * @param int $customerId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function revokeCustomerAccessToken($customerId)
     {
@@ -129,8 +121,8 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.3
+     * @since 2.0.3
      */
     private function getRequestThrottler()
     {

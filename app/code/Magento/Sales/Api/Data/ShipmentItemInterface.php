@@ -11,7 +11,6 @@ namespace Magento\Sales\Api\Data;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A product is an item in a shipment.
  * @api
- * @since 2.0.0
  */
 interface ShipmentItemInterface extends
     \Magento\Sales\Api\Data\LineItemInterface,
@@ -73,7 +72,6 @@ interface ShipmentItemInterface extends
      * Gets the additional data for the shipment item.
      *
      * @return string|null Additional data.
-     * @since 2.0.0
      */
     public function getAdditionalData();
 
@@ -81,7 +79,6 @@ interface ShipmentItemInterface extends
      * Gets the description for the shipment item.
      *
      * @return string|null Description.
-     * @since 2.0.0
      */
     public function getDescription();
 
@@ -89,7 +86,6 @@ interface ShipmentItemInterface extends
      * Gets the ID for the shipment item.
      *
      * @return int|null Shipment item ID.
-     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -98,7 +94,6 @@ interface ShipmentItemInterface extends
      *
      * @param int $entityId
      * @return $this
-     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -106,7 +101,6 @@ interface ShipmentItemInterface extends
      * Gets the name for the shipment item.
      *
      * @return string|null Name.
-     * @since 2.0.0
      */
     public function getName();
 
@@ -114,7 +108,6 @@ interface ShipmentItemInterface extends
      * Gets the parent ID for the shipment item.
      *
      * @return int|null Parent ID.
-     * @since 2.0.0
      */
     public function getParentId();
 
@@ -122,7 +115,6 @@ interface ShipmentItemInterface extends
      * Gets the price for the shipment item.
      *
      * @return float|null Price.
-     * @since 2.0.0
      */
     public function getPrice();
 
@@ -130,7 +122,6 @@ interface ShipmentItemInterface extends
      * Gets the product ID for the shipment item.
      *
      * @return int|null Product ID.
-     * @since 2.0.0
      */
     public function getProductId();
 
@@ -138,7 +129,6 @@ interface ShipmentItemInterface extends
      * Gets the row total for the shipment item.
      *
      * @return float|null Row total.
-     * @since 2.0.0
      */
     public function getRowTotal();
 
@@ -146,7 +136,6 @@ interface ShipmentItemInterface extends
      * Gets the SKU for the shipment item.
      *
      * @return string|null SKU.
-     * @since 2.0.0
      */
     public function getSku();
 
@@ -154,7 +143,6 @@ interface ShipmentItemInterface extends
      * Gets the weight for the shipment item.
      *
      * @return float|null Weight.
-     * @since 2.0.0
      */
     public function getWeight();
 
@@ -163,7 +151,6 @@ interface ShipmentItemInterface extends
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setParentId($id);
 
@@ -172,7 +159,6 @@ interface ShipmentItemInterface extends
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setRowTotal($amount);
 
@@ -181,7 +167,6 @@ interface ShipmentItemInterface extends
      *
      * @param float $price
      * @return $this
-     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -190,7 +175,6 @@ interface ShipmentItemInterface extends
      *
      * @param float $weight
      * @return $this
-     * @since 2.0.0
      */
     public function setWeight($weight);
 
@@ -199,7 +183,6 @@ interface ShipmentItemInterface extends
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setProductId($id);
 
@@ -208,7 +191,6 @@ interface ShipmentItemInterface extends
      *
      * @param string $additionalData
      * @return $this
-     * @since 2.0.0
      */
     public function setAdditionalData($additionalData);
 
@@ -217,7 +199,6 @@ interface ShipmentItemInterface extends
      *
      * @param string $description
      * @return $this
-     * @since 2.0.0
      */
     public function setDescription($description);
 
@@ -226,7 +207,6 @@ interface ShipmentItemInterface extends
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -235,7 +215,6 @@ interface ShipmentItemInterface extends
      *
      * @param string $sku
      * @return $this
-     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -243,7 +222,6 @@ interface ShipmentItemInterface extends
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -252,7 +230,6 @@ interface ShipmentItemInterface extends
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes);
 }

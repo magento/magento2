@@ -11,13 +11,11 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Review\Controller\Adminhtml\Product\NewAction
  *
- * @since 2.0.0
  */
 class NewAction extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     public function execute()
     {

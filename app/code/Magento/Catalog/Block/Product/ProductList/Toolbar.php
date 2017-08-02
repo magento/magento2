@@ -15,7 +15,6 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Toolbar extends \Magento\Framework\View\Element\Template
 {
@@ -23,7 +22,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Products collection
      *
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected $_collection = null;
 
@@ -31,7 +29,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * List of available order fields
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_availableOrder = null;
 
@@ -39,7 +36,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * List of available view types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_availableMode = [];
 
@@ -47,7 +43,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Is enable View switcher
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_enableViewSwitcher = true;
 
@@ -55,7 +50,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Is Expanded
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isExpanded = true;
 
@@ -63,7 +57,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Default Order field
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_orderField = null;
 
@@ -71,7 +64,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Default direction
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_direction = ProductList::DEFAULT_SORT_DIRECTION;
 
@@ -79,19 +71,16 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Default View mode
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_viewMode = null;
 
     /**
      * @var bool $_paramsMemorizeAllowed
-     * @since 2.0.0
      */
     protected $_paramsMemorizeAllowed = true;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/list/toolbar.phtml';
 
@@ -99,7 +88,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
-     * @since 2.0.0
      */
     protected $_catalogConfig;
 
@@ -107,31 +95,26 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
-     * @since 2.0.0
      */
     protected $_catalogSession;
 
     /**
      * @var ToolbarModel
-     * @since 2.0.0
      */
     protected $_toolbarModel;
 
     /**
      * @var ProductList
-     * @since 2.0.0
      */
     protected $_productListHelper;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
-     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
-     * @since 2.0.0
      */
     protected $_postDataHelper;
 
@@ -144,7 +127,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param ProductList $productListHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -169,7 +151,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Disable list state params memorizing
      *
      * @return $this
-     * @since 2.0.0
      */
     public function disableParamsMemorizing()
     {
@@ -183,7 +164,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param string $param parameter name
      * @param mixed $value parameter value
      * @return $this
-     * @since 2.0.0
      */
     protected function _memorizeParam($param, $value)
     {
@@ -198,7 +178,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\Data\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     public function setCollection($collection)
     {
@@ -221,7 +200,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Return products collection instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -232,7 +210,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Return current page from request
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCurrentPage()
     {
@@ -243,7 +220,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Get grit products sort order field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentOrder()
     {
@@ -277,7 +253,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Retrieve current direction
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentDirection()
     {
@@ -305,7 +280,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultOrder($field)
     {
@@ -321,7 +295,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param string $dir
      * @return $this
-     * @since 2.0.0
      */
     public function setDefaultDirection($dir)
     {
@@ -335,7 +308,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Retrieve available Order fields list
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableOrders()
     {
@@ -348,7 +320,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param array $orders
      * @return $this
-     * @since 2.0.0
      */
     public function setAvailableOrders($orders)
     {
@@ -362,7 +333,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param string $order
      * @param string $value
      * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
-     * @since 2.0.0
      */
     public function addOrderToAvailableOrders($order, $value)
     {
@@ -376,7 +346,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param string $order
      * @return $this
-     * @since 2.0.0
      */
     public function removeOrderFromAvailableOrders($order)
     {
@@ -392,7 +361,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param string $order
      * @return bool
-     * @since 2.0.0
      */
     public function isOrderCurrent($order)
     {
@@ -404,7 +372,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param array $params Query parameters
      * @return string
-     * @since 2.0.0
      */
     public function getPagerUrl($params = [])
     {
@@ -419,7 +386,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getPagerEncodedUrl($params = [])
     {
@@ -430,7 +396,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Retrieve current View mode
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentMode()
     {
@@ -453,7 +418,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param string $mode
      * @return bool
-     * @since 2.0.0
      */
     public function isModeActive($mode)
     {
@@ -464,7 +428,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Retrieve available view modes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getModes()
     {
@@ -479,7 +442,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param array $modes
      * @return $this
-     * @since 2.0.0
      */
     public function setModes($modes)
     {
@@ -494,7 +456,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Disable view switcher
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
-     * @since 2.0.0
      */
     public function disableViewSwitcher()
     {
@@ -506,7 +467,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Enable view switcher
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
-     * @since 2.0.0
      */
     public function enableViewSwitcher()
     {
@@ -518,7 +478,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Is a enabled view switcher
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabledViewSwitcher()
     {
@@ -529,7 +488,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Disable Expanded
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
-     * @since 2.0.0
      */
     public function disableExpanded()
     {
@@ -541,7 +499,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Enable Expanded
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
-     * @since 2.0.0
      */
     public function enableExpanded()
     {
@@ -553,7 +510,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Check is Expanded
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isExpanded()
     {
@@ -564,7 +520,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Retrieve default per page values
      *
      * @return string (comma separated)
-     * @since 2.0.0
      */
     public function getDefaultPerPageValue()
     {
@@ -580,7 +535,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Retrieve available limits for current view mode
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAvailableLimit()
     {
@@ -591,7 +545,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Get specified products limit display per page
      *
      * @return string
-     * @since 2.0.0
      */
     public function getLimit()
     {
@@ -623,7 +576,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @param int $limit
      * @return bool
-     * @since 2.0.0
      */
     public function isLimitCurrent($limit)
     {
@@ -632,7 +584,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getFirstNum()
     {
@@ -642,7 +593,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getLastNum()
     {
@@ -652,7 +602,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getTotalNum()
     {
@@ -661,7 +610,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isFirstPage()
     {
@@ -670,7 +618,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getLastPageNum()
     {
@@ -681,7 +628,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Render pagination HTML
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPagerHtml()
     {
@@ -724,7 +670,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @param array $customOptions Optional parameter for passing custom selectors from template
      * @return string
-     * @since 2.0.0
      */
     public function getWidgetOptionsJson(array $customOptions = [])
     {
@@ -748,7 +693,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Get order field
      *
      * @return null|string
-     * @since 2.0.0
      */
     protected function getOrderField()
     {
@@ -762,7 +706,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Load Available Orders
      *
      * @return $this
-     * @since 2.0.0
      */
     private function loadAvailableOrders()
     {

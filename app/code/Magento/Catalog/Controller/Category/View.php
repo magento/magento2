@@ -13,7 +13,6 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class View extends \Magento\Framework\App\Action\Action
 {
@@ -21,7 +20,6 @@ class View extends \Magento\Framework\App\Action\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -29,7 +27,6 @@ class View extends \Magento\Framework\App\Action\Action
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
-     * @since 2.0.0
      */
     protected $_catalogSession;
 
@@ -37,31 +34,26 @@ class View extends \Magento\Framework\App\Action\Action
      * Catalog design
      *
      * @var \Magento\Catalog\Model\Design
-     * @since 2.0.0
      */
     protected $_catalogDesign;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     * @since 2.0.0
      */
     protected $categoryUrlPathGenerator;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -69,13 +61,11 @@ class View extends \Magento\Framework\App\Action\Action
      * Catalog Layer Resolver
      *
      * @var Resolver
-     * @since 2.0.0
      */
     private $layerResolver;
 
     /**
      * @var CategoryRepositoryInterface
-     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -93,7 +83,6 @@ class View extends \Magento\Framework\App\Action\Action
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -123,7 +112,6 @@ class View extends \Magento\Framework\App\Action\Action
      * Initialize requested category object
      *
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     protected function _initCategory()
     {
@@ -161,7 +149,6 @@ class View extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

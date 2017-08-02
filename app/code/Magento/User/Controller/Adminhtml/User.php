@@ -8,7 +8,6 @@ namespace Magento\User\Controller\Adminhtml;
 /**
  * Class \Magento\User\Controller\Adminhtml\User
  *
- * @since 2.0.0
  */
 abstract class User extends \Magento\Backend\App\AbstractAction
 {
@@ -23,7 +22,6 @@ abstract class User extends \Magento\Backend\App\AbstractAction
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -31,7 +29,6 @@ abstract class User extends \Magento\Backend\App\AbstractAction
      * User model factory
      *
      * @var \Magento\User\Model\UserFactory
-     * @since 2.0.0
      */
     protected $_userFactory;
 
@@ -39,7 +36,6 @@ abstract class User extends \Magento\Backend\App\AbstractAction
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -53,7 +49,6 @@ abstract class User extends \Magento\Backend\App\AbstractAction
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -78,7 +73,6 @@ abstract class User extends \Magento\Backend\App\AbstractAction
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     protected function _getAdminUserData(array $data)
     {

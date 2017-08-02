@@ -9,7 +9,6 @@ use Composer\Autoload\ClassLoader;
 
 /**
  * Wrapper designed to insulate the autoloader class provided by Composer
- * @since 2.0.0
  */
 class ClassLoaderWrapper implements AutoloaderInterface
 {
@@ -17,13 +16,11 @@ class ClassLoaderWrapper implements AutoloaderInterface
      * Using the autoloader class provided by Composer
      *
      * @var ClassLoader
-     * @since 2.0.0
      */
     protected $autoloader;
 
     /**
      * @param ClassLoader $autoloader
-     * @since 2.0.0
      */
     public function __construct(ClassLoader $autoloader)
     {
@@ -32,7 +29,6 @@ class ClassLoaderWrapper implements AutoloaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addPsr4($nsPrefix, $paths, $prepend = false)
     {
@@ -41,7 +37,6 @@ class ClassLoaderWrapper implements AutoloaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addPsr0($nsPrefix, $paths, $prepend = false)
     {
@@ -50,7 +45,6 @@ class ClassLoaderWrapper implements AutoloaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPsr0($nsPrefix, $paths)
     {
@@ -59,7 +53,6 @@ class ClassLoaderWrapper implements AutoloaderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPsr4($nsPrefix, $paths)
     {
@@ -69,7 +62,6 @@ class ClassLoaderWrapper implements AutoloaderInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function loadClass($className)
     {
@@ -79,7 +71,6 @@ class ClassLoaderWrapper implements AutoloaderInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function findFile($className)
     {

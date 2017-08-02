@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Hold
  *
- * @since 2.0.0
  */
 class Hold extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -23,7 +22,6 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
      * Hold order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

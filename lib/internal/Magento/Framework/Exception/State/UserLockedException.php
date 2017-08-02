@@ -9,7 +9,6 @@ use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * @api
- * @since 2.0.0
  */
 class UserLockedException extends AuthenticationException
 {

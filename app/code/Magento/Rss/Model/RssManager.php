@@ -12,20 +12,17 @@ use Magento\Framework\App\Rss\RssManagerInterface;
  * Rss Manager
  *
  * @api
- * @since 2.0.0
  */
 class RssManager implements RssManagerInterface
 {
     /**
      * @var \Magento\Framework\App\Rss\DataProviderInterface[]
-     * @since 2.0.0
      */
     protected $providers;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $dataProviders
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -41,7 +38,6 @@ class RssManager implements RssManagerInterface
      * @param string $type
      * @return DataProviderInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getProvider($type)
     {
@@ -66,7 +62,6 @@ class RssManager implements RssManagerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getProviders()
     {

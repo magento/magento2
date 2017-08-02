@@ -12,7 +12,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer address configuration
- * @since 2.0.0
  */
 class Config extends ConfigData
 {
@@ -26,7 +25,6 @@ class Config extends ConfigData
      * Customer address templates per store
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_types = [];
 
@@ -34,7 +32,6 @@ class Config extends ConfigData
      * Current store instance
      *
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_store = null;
 
@@ -42,25 +39,21 @@ class Config extends ConfigData
      * Default types per store, used for invalid code
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_defaultTypes = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Customer\Helper\Address
-     * @since 2.0.0
      */
     protected $_addressHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -74,7 +67,6 @@ class Config extends ConfigData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
@@ -96,7 +88,6 @@ class Config extends ConfigData
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return $this
-     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -108,7 +99,6 @@ class Config extends ConfigData
      * Retrieve store
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -122,7 +112,6 @@ class Config extends ConfigData
      * Retrieve address formats
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFormats()
     {
@@ -163,7 +152,6 @@ class Config extends ConfigData
      * Retrieve default address format
      *
      * @return DataObject
-     * @since 2.0.0
      */
     protected function _getDefaultFormat()
     {
@@ -191,7 +179,6 @@ class Config extends ConfigData
      *
      * @param string $typeCode
      * @return DataObject
-     * @since 2.0.0
      */
     public function getFormatByCode($typeCode)
     {

@@ -21,13 +21,11 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method string getCreatedAt()
  * @method string getUpdatedAt()
  * @method \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface getExtensionAttributes()
- * @since 2.0.0
  */
 class Track extends \Magento\Sales\Model\Order\Shipment\Track
 {
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
-     * @since 2.0.0
      */
     protected $_carrierFactory;
 
@@ -44,7 +42,6 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -76,7 +73,6 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * Retrieve detail for shipment track
      *
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getNumberDetail()
     {

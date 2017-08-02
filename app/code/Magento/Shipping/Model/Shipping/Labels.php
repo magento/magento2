@@ -19,19 +19,16 @@ use Magento\User\Model\User;
 /**
  * Shipping labels model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Labels extends \Magento\Shipping\Model\Shipping
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Shipping\Model\Shipment\Request
-     * @since 2.0.0
      */
     protected $_request;
 
@@ -48,7 +45,6 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Shipping\Model\Shipment\Request $request
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -86,7 +82,6 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function requestToShipment(Shipment $orderShipment)
     {
@@ -176,7 +171,6 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param $regionCode
      * @param $originStreet
      * @return void
-     * @since 2.0.0
      */
     protected function setShipperDetails(
         Request $request,
@@ -230,7 +224,6 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Shipping\Model\Shipment\Request $request
      * @param \Magento\Sales\Model\Order\Address $address
      * @return void
-     * @since 2.0.0
      */
     protected function setRecipientDetails(Request $request, Address $address)
     {

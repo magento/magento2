@@ -12,19 +12,16 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Class \Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter
  *
- * @since 2.0.0
  */
 class CollectionFilter
 {
     /**
      * @var \Magento\Search\Model\QueryFactory
-     * @since 2.0.0
      */
     protected $queryFactory;
 
     /**
      * @param QueryFactory $queryFactory
-     * @since 2.0.0
      */
     public function __construct(QueryFactory $queryFactory)
     {

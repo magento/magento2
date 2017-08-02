@@ -10,7 +10,6 @@ namespace Magento\Framework\Translate\Inline;
  * Controls and represents the  state of the inline translation processing.
  *
  * @api
- * @since 2.0.0
  */
 interface StateInterface
 {
@@ -18,7 +17,6 @@ interface StateInterface
      * Disable inline translation
      *
      * @return void
-     * @since 2.0.0
      */
     public function disable();
 
@@ -26,7 +24,6 @@ interface StateInterface
      * Enable inline translation
      *
      * @return void
-     * @since 2.0.0
      */
     public function enable();
 
@@ -34,7 +31,6 @@ interface StateInterface
      * Check if inline translation enabled/disabled
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEnabled();
 
@@ -46,7 +42,6 @@ interface StateInterface
      *
      * @param bool $status
      * @return void
-     * @since 2.0.0
      */
     public function suspend($status = false);
 
@@ -58,7 +53,6 @@ interface StateInterface
      *
      * @param bool $status
      * @return void
-     * @since 2.0.0
      */
     public function resume($status = true);
 }

@@ -10,7 +10,6 @@ use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 /**
  * Class \Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution
  *
- * @since 2.0.0
  */
 class InterceptorSubstitution implements ModificationInterface
 {
@@ -19,7 +18,6 @@ class InterceptorSubstitution implements ModificationInterface
      *
      * @param array $config
      * @return array
-     * @since 2.0.0
      */
     public function modify(array $config)
     {
@@ -55,7 +53,6 @@ class InterceptorSubstitution implements ModificationInterface
      *
      * @param array $arguments
      * @return array
-     * @since 2.0.0
      */
     private function getInterceptorsList(array $arguments)
     {
@@ -77,7 +74,6 @@ class InterceptorSubstitution implements ModificationInterface
      * @param array $preferences
      * @param array $interceptors
      * @return array
-     * @since 2.0.0
      */
     private function resolvePreferences(array $preferences, array $interceptors)
     {

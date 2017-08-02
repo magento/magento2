@@ -9,38 +9,32 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInformationManagementInterface
 {
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
      * @deprecated 2.2.0 This call was substituted to eliminate extra quote::save call
-     * @since 2.0.0
      */
     protected $billingAddressManagement;
 
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
-     * @since 2.0.0
      */
     protected $paymentMethodManagement;
 
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
-     * @since 2.0.0
      */
     protected $cartManagement;
 
     /**
      * @var PaymentDetailsFactory
-     * @since 2.0.0
      */
     protected $paymentDetailsFactory;
 
     /**
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
-     * @since 2.0.0
      */
     protected $cartTotalsRepository;
 
@@ -63,7 +57,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,
@@ -81,7 +74,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -108,7 +100,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function savePaymentInformation(
         $cartId,
@@ -136,7 +127,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function getPaymentInformation($cartId)
     {

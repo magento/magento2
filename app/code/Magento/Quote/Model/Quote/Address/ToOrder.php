@@ -14,31 +14,26 @@ use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 
 /**
  * Class ToOrder converter
- * @since 2.0.0
  */
 class ToOrder
 {
     /**
      * @var Copy
-     * @since 2.0.0
      */
     protected $objectCopyService;
 
     /**
      * @var OrderFactory
-     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -47,7 +42,6 @@ class ToOrder
      * @param Copy $objectCopyService
      * @param ManagerInterface $eventManager
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @since 2.0.0
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -65,7 +59,6 @@ class ToOrder
      * @param Address $object
      * @param array $data
      * @return OrderInterface
-     * @since 2.0.0
      */
     public function convert(Address $object, $data = [])
     {

@@ -11,13 +11,11 @@ use Magento\Customer\Model\Context;
  * Sales order view block
  *
  * @api
- * @since 2.0.0
  */
 class Shipment extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'order/shipment.phtml';
 
@@ -25,19 +23,16 @@ class Shipment extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentHelper;
 
@@ -47,7 +42,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -65,7 +59,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -76,7 +69,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -87,7 +79,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -98,7 +89,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
      * Return back url for logged in and guest users
      *
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -112,7 +102,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
      * Return back title for logged in and guest users
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getBackTitle()
     {
@@ -125,7 +114,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getInvoiceUrl($order)
     {
@@ -135,7 +123,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getViewUrl($order)
     {
@@ -145,7 +132,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getCreditmemoUrl($order)
     {
@@ -155,7 +141,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @param object $shipment
      * @return string
-     * @since 2.0.0
      */
     public function getPrintShipmentUrl($shipment)
     {
@@ -165,7 +150,6 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getPrintAllShipmentsUrl($order)
     {

@@ -16,67 +16,56 @@ use Magento\Framework\View\Result\Layout as ResultLayout;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Send extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerHelperView;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Wishlist\Model\Config
-     * @since 2.0.0
      */
     protected $_wishlistConfig;
 
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var WishlistSession
-     * @since 2.0.0
      */
     protected $wishlistSession;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -93,7 +82,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -129,7 +117,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -263,7 +250,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @param \Magento\Framework\View\Result\Layout $resultLayout
      * @return void
-     * @since 2.0.0
      */
     protected function addLayoutHandles(ResultLayout $resultLayout)
     {
@@ -279,7 +265,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param int $wishlistId
      * @param \Magento\Framework\View\Result\Layout $resultLayout
      * @return mixed
-     * @since 2.0.0
      */
     protected function getRssLink($wishlistId, ResultLayout $resultLayout)
     {
@@ -296,7 +281,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @param \Magento\Framework\View\Result\Layout $resultLayout
      * @return string
-     * @since 2.0.0
      */
     protected function getWishlistItems(ResultLayout $resultLayout)
     {

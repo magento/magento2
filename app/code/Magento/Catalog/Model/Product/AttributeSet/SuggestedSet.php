@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\Product\AttributeSet;
 
 /**
  * Suggested product attribute set
- * @since 2.0.0
  */
 class SuggestedSet
 {
@@ -15,7 +14,6 @@ class SuggestedSet
      * Set collection factory
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
-     * @since 2.0.0
      */
     protected $attributeSetCollectionFactory;
 
@@ -23,13 +21,11 @@ class SuggestedSet
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $resourceHelper;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
-     * @since 2.0.0
      */
     protected $product;
 
@@ -37,7 +33,6 @@ class SuggestedSet
      * @param \Magento\Catalog\Model\ResourceModel\Product $product
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product $product,
@@ -54,7 +49,6 @@ class SuggestedSet
      *
      * @param string $labelPart
      * @return array
-     * @since 2.0.0
      */
     public function getSuggestedSets($labelPart)
     {

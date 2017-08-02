@@ -9,61 +9,51 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
- * @since 2.0.0
  */
 class Node
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     private $left;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $right;
 
     /**
      * @var string|int
-     * @since 2.0.0
      */
     private $id;
 
     /**
      * @var string|int
-     * @since 2.0.0
      */
     private $pid;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     private $level;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $title;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     public $hasChild = false;
 
     /**
      * @var float|int
-     * @since 2.0.0
      */
     public $numChild = 0;
 
@@ -71,7 +61,6 @@ class Node
      * @param array $nodeData
      * @param array $keys
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function __construct($nodeData, $keys)
     {
@@ -100,7 +89,6 @@ class Node
     /**
      * @param string $name
      * @return null|array
-     * @since 2.0.0
      */
     public function getData($name)
     {
@@ -113,7 +101,6 @@ class Node
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getLevel()
     {
@@ -122,7 +109,6 @@ class Node
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getLeft()
     {
@@ -131,7 +117,6 @@ class Node
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getRight()
     {
@@ -140,7 +125,6 @@ class Node
 
     /**
      * @return string|int
-     * @since 2.0.0
      */
     public function getPid()
     {
@@ -149,7 +133,6 @@ class Node
 
     /**
      * @return string|int
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -160,7 +143,6 @@ class Node
      * Return true if node has child
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isParent()
     {

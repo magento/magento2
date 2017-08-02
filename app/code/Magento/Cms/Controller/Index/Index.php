@@ -9,20 +9,17 @@ namespace Magento\Cms\Controller\Index;
 /**
  * Class \Magento\Cms\Controller\Index\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -38,7 +35,6 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param string|null $coreRoute
      * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function execute($coreRoute = null)
     {

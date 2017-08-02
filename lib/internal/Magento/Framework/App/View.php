@@ -8,55 +8,46 @@ namespace Magento\Framework\App;
 /**
  * Class \Magento\Framework\App\View
  *
- * @since 2.0.0
  */
 class View implements ViewInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     protected $_layout;
 
     /**
      * @var \Magento\Framework\Config\ScopeInterface
-     * @since 2.0.0
      */
     protected $_configScope;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     protected $page;
 
     /**
      * @var ActionFlag
-     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var ResponseInterface
-     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_isLayoutLoaded = false;
 
@@ -68,7 +59,6 @@ class View implements ViewInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\View\Result\PageFactory $pageFactory
      * @param ActionFlag $actionFlag
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\LayoutInterface $layout,
@@ -92,7 +82,6 @@ class View implements ViewInterface
      * Retrieve current page object
      *
      * @return \Magento\Framework\View\Result\Page
-     * @since 2.0.0
      */
     public function getPage()
     {
@@ -103,7 +92,6 @@ class View implements ViewInterface
      * Retrieve current layout object
      *
      * @return \Magento\Framework\View\LayoutInterface
-     * @since 2.0.0
      */
     public function getLayout()
     {
@@ -112,7 +100,6 @@ class View implements ViewInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true, $addActionHandles = true)
     {
@@ -148,7 +135,6 @@ class View implements ViewInterface
      * Retrieve the default layout handle name for the current action
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultLayoutHandle()
     {
@@ -159,7 +145,6 @@ class View implements ViewInterface
      * Add layout handle by full controller action name
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addActionLayoutHandles()
     {
@@ -173,7 +158,6 @@ class View implements ViewInterface
      * @param array|null $parameters page parameters
      * @param string|null $defaultHandle
      * @return bool
-     * @since 2.0.0
      */
     public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null)
     {
@@ -184,7 +168,6 @@ class View implements ViewInterface
      * Load layout updates
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadLayoutUpdates()
     {
@@ -196,7 +179,6 @@ class View implements ViewInterface
      * Generate layout xml
      *
      * @return $this
-     * @since 2.0.0
      */
     public function generateLayoutXml()
     {
@@ -208,7 +190,6 @@ class View implements ViewInterface
      * Generate layout blocks
      *
      * @return $this
-     * @since 2.0.0
      */
     public function generateLayoutBlocks()
     {
@@ -221,7 +202,6 @@ class View implements ViewInterface
      *
      * @param   string $output
      * @return  $this
-     * @since 2.0.0
      */
     public function renderLayout($output = '')
     {
@@ -254,7 +234,6 @@ class View implements ViewInterface
      *
      * @param bool $value
      * @return void
-     * @since 2.0.0
      */
     public function setIsLayoutLoaded($value)
     {
@@ -265,7 +244,6 @@ class View implements ViewInterface
      * Returns is layout loaded
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLayoutLoaded()
     {

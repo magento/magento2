@@ -14,7 +14,6 @@ namespace Magento\Catalog\Model\Product;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Action extends \Magento\Framework\Model\AbstractModel
 {
@@ -22,25 +21,21 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * Product website factory
      *
      * @var \Magento\Catalog\Model\Product\WebsiteFactory
-     * @since 2.0.0
      */
     protected $_productWebsiteFactory;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor
-     * @since 2.0.0
      */
     protected $_productEavIndexerProcessor;
 
@@ -54,7 +49,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -78,7 +72,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -89,7 +82,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource instance wrapper
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Action
-     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -103,7 +95,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param array $attrData
      * @param int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function updateAttributes($productIds, $attrData, $storeId)
     {
@@ -134,7 +125,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param array $attributesData
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _hasIndexableAttributes($attributesData)
     {
@@ -151,7 +141,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute|string $attribute
      * @return bool
-     * @since 2.0.0
      */
     protected function _attributeIsIndexable($attribute)
     {
@@ -173,7 +162,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param array $websiteIds
      * @param string $type
      * @return void
-     * @since 2.0.0
      */
     public function updateWebsites($productIds, $websiteIds, $type)
     {

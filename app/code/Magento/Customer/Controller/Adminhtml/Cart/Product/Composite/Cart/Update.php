@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart\Update
  *
- * @since 2.0.0
  */
 class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
 {
@@ -17,7 +16,6 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
      * IFrame handler for submitted configuration for quote item
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

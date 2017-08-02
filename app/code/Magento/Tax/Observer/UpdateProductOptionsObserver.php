@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class \Magento\Tax\Observer\UpdateProductOptionsObserver
  *
- * @since 2.0.0
  */
 class UpdateProductOptionsObserver implements ObserverInterface
 {
@@ -19,20 +18,17 @@ class UpdateProductOptionsObserver implements ObserverInterface
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
-     * @since 2.0.0
      */
     protected $taxData;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
@@ -47,7 +43,6 @@ class UpdateProductOptionsObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

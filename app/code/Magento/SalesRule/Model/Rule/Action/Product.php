@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Rule\Action;
 /**
  * Class \Magento\SalesRule\Model\Rule\Action\Product
  *
- * @since 2.0.0
  */
 class Product extends \Magento\Rule\Model\Action\AbstractAction
 {
@@ -16,7 +15,6 @@ class Product extends \Magento\Rule\Model\Action\AbstractAction
      * Load attribute options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadAttributeOptions()
     {
@@ -28,7 +26,6 @@ class Product extends \Magento\Rule\Model\Action\AbstractAction
      * Load operator options
      *
      * @return $this
-     * @since 2.0.0
      */
     public function loadOperatorOptions()
     {
@@ -47,7 +44,6 @@ class Product extends \Magento\Rule\Model\Action\AbstractAction
      * Return html
      *
      * @return string
-     * @since 2.0.0
      */
     public function asHtml()
     {

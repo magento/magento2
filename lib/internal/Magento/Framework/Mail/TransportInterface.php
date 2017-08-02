@@ -9,7 +9,6 @@ namespace Magento\Framework\Mail;
  * Mail Transport interface
  *
  * @api
- * @since 2.0.0
  */
 interface TransportInterface
 {
@@ -18,7 +17,6 @@ interface TransportInterface
      *
      * @return void
      * @throws \Magento\Framework\Exception\MailException
-     * @since 2.0.0
      */
     public function sendMessage();
 

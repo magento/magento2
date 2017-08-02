@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Model for OAuth admin/customer token requests throttling.
- * @since 2.1.0
+ * @since 2.0.3
  */
 class RequestThrottler
 {
@@ -25,19 +25,19 @@ class RequestThrottler
 
     /**
      * @var RequestLogReader
-     * @since 2.1.0
+     * @since 2.0.3
      */
     private $requestLogReader;
 
     /**
      * @var RequestLogWriter
-     * @since 2.1.0
+     * @since 2.0.3
      */
     private $requestLogWriter;
 
     /**
      * @var RequestLogConfig
-     * @since 2.1.0
+     * @since 2.0.3
      */
     private $requestLogConfig;
 
@@ -47,7 +47,7 @@ class RequestThrottler
      * @param RequestLogReader $requestLogReader
      * @param RequestLogWriter $requestLogWriter
      * @param RequestLogConfig $requestLogConfig
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function __construct(
         RequestLogReader $requestLogReader,
@@ -66,7 +66,7 @@ class RequestThrottler
      * @param int $userType
      * @return void
      * @throws AuthenticationException
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function throttle($userName, $userType)
     {
@@ -86,7 +86,7 @@ class RequestThrottler
      * @param string $userName
      * @param int $userType
      * @return void
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function resetAuthenticationFailuresCount($userName, $userType)
     {
@@ -101,7 +101,7 @@ class RequestThrottler
      * @param string $userName
      * @param int $userType
      * @return void
-     * @since 2.1.0
+     * @since 2.0.3
      */
     public function logAuthenticationFailure($userName, $userType)
     {

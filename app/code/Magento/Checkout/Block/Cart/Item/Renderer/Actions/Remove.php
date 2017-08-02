@@ -10,13 +10,11 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Remove extends Generic
 {
     /**
      * @var Cart
-     * @since 2.0.0
      */
     protected $cartHelper;
 
@@ -25,7 +23,6 @@ class Remove extends Generic
      * @param Cart $cartHelper
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -41,7 +38,6 @@ class Remove extends Generic
      *
      * @return string
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getDeletePostJson()
     {

@@ -13,7 +13,6 @@ use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class View extends \Magento\Catalog\Block\Product\View
 {
@@ -21,7 +20,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * Review collection
      *
      * @var ReviewCollection
-     * @since 2.0.0
      */
     protected $_reviewsCollection;
 
@@ -29,7 +27,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * Review resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
-     * @since 2.0.0
      */
     protected $_reviewsColFactory;
 
@@ -47,7 +44,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -83,7 +79,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -101,7 +96,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param bool $displayIfNoReviews
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
@@ -124,7 +118,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * Get collection of reviews
      *
      * @return ReviewCollection
-     * @since 2.0.0
      */
     public function getReviewsCollection()
     {
@@ -145,7 +138,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * Force product view page behave like without options
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasOptions()
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * List of page asset instances associated with unique identifiers
- * @since 2.0.0
  */
 class Collection
 {
@@ -15,7 +14,6 @@ class Collection
      * Assets
      *
      * @var AssetInterface[]
-     * @since 2.0.0
      */
     protected $assets = [];
 
@@ -25,7 +23,6 @@ class Collection
      * @param string $identifier
      * @param AssetInterface $asset
      * @return void
-     * @since 2.0.0
      */
     public function add($identifier, AssetInterface $asset)
     {
@@ -37,7 +34,6 @@ class Collection
      * @param AssetInterface $asset
      * @param string $key
      * @return void
-     * @since 2.0.0
      */
     public function insert($identifier, AssetInterface $asset, $key)
     {
@@ -59,7 +55,6 @@ class Collection
      *
      * @param string $identifier
      * @return bool
-     * @since 2.0.0
      */
     public function has($identifier)
     {
@@ -71,7 +66,6 @@ class Collection
      *
      * @param string $identifier
      * @return void
-     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -82,7 +76,6 @@ class Collection
      * Retrieve all items in the collection
      *
      * @return AssetInterface[]
-     * @since 2.0.0
      */
     public function getAll()
     {

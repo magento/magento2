@@ -13,7 +13,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Collects all ConfigOptionsList class in modules and setup
- * @since 2.0.0
  */
 class ConfigOptionsListCollector
 {
@@ -21,7 +20,6 @@ class ConfigOptionsListCollector
      * Directory List
      *
      * @var DirectoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
@@ -29,7 +27,6 @@ class ConfigOptionsListCollector
      * Filesystem
      *
      * @var Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
@@ -37,7 +34,6 @@ class ConfigOptionsListCollector
      * Module list including enabled and disabled modules
      *
      * @var FullModuleList
-     * @since 2.0.0
      */
     private $fullModuleList;
 
@@ -45,7 +41,6 @@ class ConfigOptionsListCollector
      * Object manager provider
      *
      * @var ObjectManagerProvider
-     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -53,7 +48,6 @@ class ConfigOptionsListCollector
      * Service locator
      *
      * @var ServiceLocatorInterface
-     * @since 2.0.0
      */
     private $serviceLocator;
 
@@ -65,7 +59,6 @@ class ConfigOptionsListCollector
      * @param FullModuleList $fullModuleList
      * @param ObjectManagerProvider $objectManagerProvider
      * @param ServiceLocatorInterface $serviceLocator
-     * @since 2.0.0
      */
     public function __construct(
         DirectoryList $directoryList,
@@ -86,7 +79,6 @@ class ConfigOptionsListCollector
      * These classes should reside in <module>/Setup directories.
      *
      * @return \Magento\Framework\Setup\ConfigOptionsListInterface[]
-     * @since 2.0.0
      */
     public function collectOptionsLists()
     {

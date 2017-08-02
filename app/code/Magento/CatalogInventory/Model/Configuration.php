@@ -13,7 +13,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Configuration
- * @since 2.0.0
  */
 class Configuration implements StockConfigurationInterface
 {
@@ -104,7 +103,6 @@ class Configuration implements StockConfigurationInterface
 
     /**
      * @var ConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
@@ -112,13 +110,11 @@ class Configuration implements StockConfigurationInterface
      * Core store config
      *
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var MinsaleqtyHelper
-     * @since 2.0.0
      */
     protected $minsaleqtyHelper;
 
@@ -126,13 +122,11 @@ class Configuration implements StockConfigurationInterface
      * All product types registry in scope of quantity availability
      *
      * @var array
-     * @since 2.0.0
      */
     protected $isQtyTypeIds;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -141,7 +135,6 @@ class Configuration implements StockConfigurationInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param MinsaleqtyHelper $minsaleqtyHelper
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         ConfigInterface $config,
@@ -157,7 +150,6 @@ class Configuration implements StockConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDefaultScopeId()
     {
@@ -169,7 +161,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param int|null $filter
      * @return array
-     * @since 2.0.0
      */
     public function getIsQtyTypeIds($filter = null)
     {
@@ -193,7 +184,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param int $productTypeId
      * @return bool
-     * @since 2.0.0
      */
     public function isQty($productTypeId)
     {
@@ -206,7 +196,6 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function canSubtractQty($store = null)
     {
@@ -220,7 +209,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
-     * @since 2.0.0
      */
     public function getMinQty($store = null)
     {
@@ -235,7 +223,6 @@ class Configuration implements StockConfigurationInterface
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param int $customerGroupId
      * @return float
-     * @since 2.0.0
      */
     public function getMinSaleQty($store = null, $customerGroupId = null)
     {
@@ -245,7 +232,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float|null
-     * @since 2.0.0
      */
     public function getMaxSaleQty($store = null)
     {
@@ -259,7 +245,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
-     * @since 2.0.0
      */
     public function getNotifyStockQty($store = null)
     {
@@ -276,7 +261,6 @@ class Configuration implements StockConfigurationInterface
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getEnableQtyIncrements($store = null)
     {
@@ -290,7 +274,6 @@ class Configuration implements StockConfigurationInterface
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getQtyIncrements($store = null)
     {
@@ -306,7 +289,6 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getBackorders($store = null)
     {
@@ -322,7 +304,6 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return int
-     * @since 2.0.0
      */
     public function getManageStock($store = null)
     {
@@ -339,7 +320,6 @@ class Configuration implements StockConfigurationInterface
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCanBackInStock($store = null)
     {
@@ -355,7 +335,6 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isShowOutOfStock($store = null)
     {
@@ -371,7 +350,6 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isAutoReturnEnabled($store = null)
     {
@@ -388,7 +366,6 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayProductStockStatus($store = null)
     {
@@ -403,7 +380,6 @@ class Configuration implements StockConfigurationInterface
      * @param string $field
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string|null
-     * @since 2.0.0
      */
     public function getDefaultConfigValue($field, $store = null)
     {
@@ -432,7 +408,6 @@ class Configuration implements StockConfigurationInterface
      * Retrieve inventory item options (used in config)
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getConfigItemOptions()
     {

@@ -10,26 +10,22 @@ use Magento\Framework\App\Rss\UrlBuilderInterface;
 /**
  * Class UrlBuilder
  * @package Magento\Rss\Model
- * @since 2.0.0
  */
 class UrlBuilder implements UrlBuilderInterface
 {
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\UrlInterface $urlBuilder,
@@ -42,7 +38,6 @@ class UrlBuilder implements UrlBuilderInterface
     /**
      * @param array $queryParams
      * @return string
-     * @since 2.0.0
      */
     public function getUrl(array $queryParams = [])
     {

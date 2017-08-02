@@ -11,7 +11,6 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 /**
  * Class \Magento\Multishipping\Controller\Checkout\Addresses
  *
- * @since 2.0.0
  */
 class Addresses extends \Magento\Multishipping\Controller\Checkout
 {
@@ -19,7 +18,6 @@ class Addresses extends \Magento\Multishipping\Controller\Checkout
      * Multishipping checkout select address page
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -17,7 +17,6 @@ namespace Magento\Eav\Model\Entity;
  * @method \Magento\Eav\Model\Entity\Store setIncrementPrefix(string $value)
  * @method string getIncrementLastId()
  * @method \Magento\Eav\Model\Entity\Store setIncrementLastId(string $value)
- * @since 2.0.0
  */
 class Store extends \Magento\Framework\Model\AbstractModel
 {
@@ -26,7 +25,6 @@ class Store extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -40,7 +38,6 @@ class Store extends \Magento\Framework\Model\AbstractModel
      * @param int $storeId
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function loadByEntityStore($entityTypeId, $storeId)
     {

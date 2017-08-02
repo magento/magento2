@@ -12,26 +12,22 @@ use Zend\View\Model\JsonModel;
 
 /**
  * Controller for other components grid on select version page
- * @since 2.0.0
  */
 class OtherComponentsGrid extends AbstractActionController
 {
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
-     * @since 2.0.0
      */
     private $composerInformation;
 
     /**
      * @var \Magento\Composer\InfoCommand
-     * @since 2.0.0
      */
     private $infoCommand;
 
     /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Framework\Composer\MagentoComposerApplicationFactory $magentoComposerApplicationFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
@@ -60,7 +56,6 @@ class OtherComponentsGrid extends AbstractActionController
      *
      * @return JsonModel
      * @throws \RuntimeException
-     * @since 2.0.0
      */
     public function componentsAction()
     {

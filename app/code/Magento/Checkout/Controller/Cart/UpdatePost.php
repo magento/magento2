@@ -9,7 +9,6 @@ namespace Magento\Checkout\Controller\Cart;
 /**
  * Class \Magento\Checkout\Controller\Cart\UpdatePost
  *
- * @since 2.0.0
  */
 class UpdatePost extends \Magento\Checkout\Controller\Cart
 {
@@ -17,7 +16,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
      * Empty customer's shopping cart
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _emptyShoppingCart()
     {
@@ -34,7 +32,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
      * Update customer's shopping cart
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _updateShoppingCart()
     {
@@ -72,7 +69,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
      * Update shopping cart data action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

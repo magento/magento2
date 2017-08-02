@@ -11,20 +11,17 @@ use Magento\Store\Model\ScopeInterface;
  * Cms page content block
  *
  * @api
- * @since 2.0.0
  */
 class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
-     * @since 2.0.0
      */
     protected $_filterProvider;
 
     /**
      * @var \Magento\Cms\Model\Page
-     * @since 2.0.0
      */
     protected $_page;
 
@@ -32,7 +29,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -40,13 +36,11 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Page factory
      *
      * @var \Magento\Cms\Model\PageFactory
-     * @since 2.0.0
      */
     protected $_pageFactory;
 
     /**
      * @var \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     protected $pageConfig;
 
@@ -60,7 +54,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -84,7 +77,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Retrieve Page instance
      *
      * @return \Magento\Cms\Model\Page
-     * @since 2.0.0
      */
     public function getPage()
     {
@@ -105,7 +97,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Prepare global layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -132,7 +123,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * @param \Magento\Cms\Model\Page $page
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     protected function _addBreadcrumbs(\Magento\Cms\Model\Page $page)
     {
@@ -173,7 +163,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Prepare HTML content
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -185,7 +174,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

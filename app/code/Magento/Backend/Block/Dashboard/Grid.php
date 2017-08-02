@@ -10,13 +10,11 @@ namespace Magento\Backend\Block\Dashboard;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'dashboard/grid.phtml';
 
@@ -24,7 +22,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Setting default for every grid on dashboard
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

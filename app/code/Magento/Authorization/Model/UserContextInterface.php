@@ -10,7 +10,6 @@ namespace Magento\Authorization\Model;
  * Interface for current user identification.
  *
  * @api
- * @since 2.0.0
  */
 interface UserContextInterface
 {
@@ -28,7 +27,6 @@ interface UserContextInterface
      *
      * @return int|null
      * @api
-     * @since 2.0.0
      */
     public function getUserId();
 
@@ -37,7 +35,6 @@ interface UserContextInterface
      *
      * @return int|null
      * @api
-     * @since 2.0.0
      */
     public function getUserType();
 }

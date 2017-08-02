@@ -11,13 +11,11 @@ use Magento\Rule\Model\Action\AbstractAction;
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\NewActionHtml
  *
- * @since 2.0.0
  */
 class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

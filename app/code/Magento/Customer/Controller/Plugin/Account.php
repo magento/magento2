@@ -15,26 +15,22 @@ use Magento\Framework\Controller\ResultInterface;
 /**
  * Class \Magento\Customer\Controller\Plugin\Account
  *
- * @since 2.0.0
  */
 class Account
 {
     /**
      * @var Session
-     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $allowedActions = [];
 
     /**
      * @param Session $customerSession
      * @param array $allowedActions List of actions that are allowed for not authorized users
-     * @since 2.0.0
      */
     public function __construct(
         Session $customerSession,

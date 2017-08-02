@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 /**
  * Gift Message helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Message extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -29,7 +28,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * Next id for edit gift message block
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_nextId = 0;
 
@@ -37,31 +35,26 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * Inner cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_innerCache = [];
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $_layoutFactory;
 
     /**
      * @var \Magento\GiftMessage\Model\MessageFactory
-     * @since 2.0.0
      */
     protected $_giftMessageFactory;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
@@ -69,13 +62,11 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * Pages to skip message checks
      *
      * @var array
-     * @since 2.0.0
      */
     protected $skipMessageCheck = [];
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $_storeManager;
 
@@ -88,7 +79,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param array $skipMessageCheck
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -118,7 +108,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\DataObject $entity
      * @param bool $dontDisplayContainer
      * @return string
-     * @since 2.0.0
      */
     public function getInline($type, \Magento\Framework\DataObject $entity, $dontDisplayContainer = false)
     {
@@ -135,7 +124,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $pageType
      * @return bool
-     * @since 2.0.0
      */
     protected function skipPage($pageType)
     {
@@ -150,7 +138,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isMessagesAllowed($type, \Magento\Framework\DataObject $entity, $store = null)
     {
@@ -211,7 +198,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $productConfig
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
-     * @since 2.0.0
      */
     protected function _getDependenceFromStoreConfig($productConfig, $store = null)
     {
@@ -231,7 +217,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\DataObject $entity
      * @return string|null
-     * @since 2.0.0
      */
     public function getEscapedGiftMessage(\Magento\Framework\DataObject $entity)
     {
@@ -247,7 +232,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\DataObject $entity
      * @return \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     public function getGiftMessageForEntity(\Magento\Framework\DataObject $entity)
     {
@@ -265,7 +249,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return mixed
-     * @since 2.0.0
      */
     public function getCached($key)
     {
@@ -280,7 +263,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @return bool
-     * @since 2.0.0
      */
     public function isCached($key)
     {
@@ -293,7 +275,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $key
      * @param mixed $value
      * @return $this
-     * @since 2.0.0
      */
     public function setCached($key, $value)
     {
@@ -308,7 +289,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getAvailableForQuoteItems($quote, $store = null)
     {
@@ -327,7 +307,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getAvailableForAddressItems($items, $store = null)
     {
@@ -344,7 +323,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $messageId
      * @return \Magento\GiftMessage\Model\Message
-     * @since 2.0.0
      */
     public function getGiftMessage($messageId = null)
     {

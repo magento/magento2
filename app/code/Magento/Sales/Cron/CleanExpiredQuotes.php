@@ -9,7 +9,6 @@ use Magento\Store\Model\StoresConfig;
 
 /**
  * Class CleanExpiredQuotes
- * @since 2.0.0
  */
 class CleanExpiredQuotes
 {
@@ -17,26 +16,22 @@ class CleanExpiredQuotes
 
     /**
      * @var StoresConfig
-     * @since 2.0.0
      */
     protected $storesConfig;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
-     * @since 2.0.0
      */
     protected $quoteCollectionFactory;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $expireQuotesFilterFields = [];
 
     /**
      * @param StoresConfig $storesConfig
      * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         StoresConfig $storesConfig,
@@ -50,7 +45,6 @@ class CleanExpiredQuotes
      * Clean expired quotes (cron process)
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -77,7 +71,6 @@ class CleanExpiredQuotes
      * Retrieve expire quotes additional fields to filter
      *
      * @return array
-     * @since 2.0.0
      */
     protected function getExpireQuotesAdditionalFilterFields()
     {
@@ -89,7 +82,6 @@ class CleanExpiredQuotes
      *
      * @param array $fields
      * @return void
-     * @since 2.0.0
      */
     public function setExpireQuotesAdditionalFilterFields(array $fields)
     {

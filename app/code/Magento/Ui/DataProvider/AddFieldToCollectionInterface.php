@@ -9,7 +9,6 @@ use Magento\Framework\Data\Collection;
 
 /**
  * AddFieldToCollection interface
- * @since 2.0.0
  */
 interface AddFieldToCollectionInterface
 {
@@ -20,7 +19,6 @@ interface AddFieldToCollectionInterface
      * @param string $field
      * @param string|null $alias
      * @return void
-     * @since 2.0.0
      */
     public function addField(Collection $collection, $field, $alias = null);
 }

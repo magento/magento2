@@ -13,14 +13,12 @@ use Magento\Framework\Registry;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\View
  *
- * @since 2.0.0
  */
 class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
 
     /**
      * @var PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -29,7 +27,6 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -45,7 +42,6 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
      * Invoice information page
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

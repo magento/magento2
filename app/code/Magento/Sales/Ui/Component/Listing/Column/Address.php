@@ -13,13 +13,11 @@ use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
 /**
  * Class Address
- * @since 2.0.0
  */
 class Address extends Column
 {
     /**
      * @var Escaper
-     * @since 2.0.0
      */
     protected $escaper;
 
@@ -29,7 +27,6 @@ class Address extends Column
      * @param Escaper $escaper
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -47,7 +44,6 @@ class Address extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

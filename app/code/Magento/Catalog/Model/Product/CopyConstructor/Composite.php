@@ -12,20 +12,17 @@ use Magento\Catalog\Model\Product\CopyConstructorInterface;
  * Performs duplication process by applying product type convertors
  *
  * @api
- * @since 2.0.0
  */
 class Composite implements CopyConstructorInterface
 {
     /**
      * @var CopyConstructorInterface[]
-     * @since 2.0.0
      */
     protected $constructors;
 
     /**
      * @param CopyConstructorFactory $factory
      * @param string[] $constructors
-     * @since 2.0.0
      */
     public function __construct(CopyConstructorFactory $factory, array $constructors = [])
     {
@@ -40,7 +37,6 @@ class Composite implements CopyConstructorInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
      * @return void
-     * @since 2.0.0
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {

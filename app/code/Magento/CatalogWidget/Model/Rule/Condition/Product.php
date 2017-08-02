@@ -14,19 +14,16 @@ use Magento\Catalog\Model\ProductCategoryList;
 /**
  * Class Product
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected $elementName = 'parameters';
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $joinedAttributes = [];
 
@@ -34,7 +31,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -51,7 +47,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param array $data
      * @param ProductCategoryList $categoryList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -83,7 +78,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function loadAttributeOptions()
     {
@@ -107,7 +101,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -120,7 +113,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     public function addToCollection($collection)
     {
@@ -153,7 +145,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     protected function addGlobalAttribute(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
@@ -187,7 +178,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     protected function addNotGlobalAttribute(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
@@ -222,7 +212,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getMappedSqlField()
     {

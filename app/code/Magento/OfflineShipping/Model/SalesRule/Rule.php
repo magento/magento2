@@ -13,7 +13,6 @@ namespace Magento\OfflineShipping\Model\SalesRule;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Rule
 {

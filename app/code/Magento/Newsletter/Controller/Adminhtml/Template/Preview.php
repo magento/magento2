@@ -9,7 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Template;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Template\Preview
  *
- * @since 2.0.0
  */
 class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
@@ -17,7 +16,6 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template
      * Preview Newsletter template
      *
      * @return void|$this
-     * @since 2.0.0
      */
     public function execute()
     {

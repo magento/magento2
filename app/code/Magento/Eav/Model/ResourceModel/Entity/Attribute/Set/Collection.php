@@ -10,7 +10,6 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,7 +33,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $typeId
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setEntityTypeFilter($typeId)
     {
@@ -46,7 +43,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert collection items to select options array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -57,7 +53,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert collection items to select options hash array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionHash()
     {

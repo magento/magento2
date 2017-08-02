@@ -11,25 +11,21 @@ use Magento\Framework\Exception\StateException;
 /**
  * Class \Magento\Catalog\Model\Product\Attribute\SetManagement
  *
- * @since 2.0.0
  */
 class SetManagement implements \Magento\Catalog\Api\AttributeSetManagementInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeSetManagementInterface
-     * @since 2.0.0
      */
     protected $attributeSetManagement;
 
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface
-     * @since 2.0.0
      */
     protected $attributeSetRepository;
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @since 2.0.0
      */
     protected $eavConfig;
 
@@ -37,7 +33,6 @@ class SetManagement implements \Magento\Catalog\Api\AttributeSetManagementInterf
      * @param \Magento\Eav\Api\AttributeSetManagementInterface $attributeSetManagement
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetManagementInterface $attributeSetManagement,
@@ -51,7 +46,6 @@ class SetManagement implements \Magento\Catalog\Api\AttributeSetManagementInterf
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function create(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet, $skeletonId)
     {
@@ -67,7 +61,6 @@ class SetManagement implements \Magento\Catalog\Api\AttributeSetManagementInterf
      * @param int $skeletonId
      * @return void
      * @throws StateException
-     * @since 2.0.0
      */
     protected function validateSkeletonSet($skeletonId)
     {

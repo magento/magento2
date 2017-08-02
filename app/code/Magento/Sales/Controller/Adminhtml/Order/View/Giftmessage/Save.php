@@ -9,13 +9,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage;
 /**
  * Class \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

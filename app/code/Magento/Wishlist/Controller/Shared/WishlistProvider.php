@@ -11,31 +11,26 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 /**
  * Class \Magento\Wishlist\Controller\Shared\WishlistProvider
  *
- * @since 2.0.0
  */
 class WishlistProvider implements WishlistProviderInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Wishlist\Model\WishlistFactory
-     * @since 2.0.0
      */
     protected $wishlistFactory;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Wishlist\Model\Wishlist
-     * @since 2.0.0
      */
     protected $wishlist;
 
@@ -43,7 +38,6 @@ class WishlistProvider implements WishlistProviderInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -59,7 +53,6 @@ class WishlistProvider implements WishlistProviderInterface
      * Retrieve current wishlist
      * @param string $wishlistId
      * @return \Magento\Wishlist\Model\Wishlist
-     * @since 2.0.0
      */
     public function getWishlist($wishlistId = null)
     {

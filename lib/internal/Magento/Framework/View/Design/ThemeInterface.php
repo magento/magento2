@@ -9,7 +9,6 @@ namespace Magento\Framework\View\Design;
  * Interface ThemeInterface
  *
  * @api
- * @since 2.0.0
  */
 interface ThemeInterface
 {
@@ -42,7 +41,6 @@ interface ThemeInterface
      * Retrieve code of an area a theme belongs to
      *
      * @return string
-     * @since 2.0.0
      */
     public function getArea();
 
@@ -50,7 +48,6 @@ interface ThemeInterface
      * Retrieve theme path unique within an area
      *
      * @return string
-     * @since 2.0.0
      */
     public function getThemePath();
 
@@ -58,7 +55,6 @@ interface ThemeInterface
      * Retrieve theme path unique across areas
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFullPath();
 
@@ -66,7 +62,6 @@ interface ThemeInterface
      * Retrieve parent theme instance
      *
      * @return ThemeInterface|null
-     * @since 2.0.0
      */
     public function getParentTheme();
 
@@ -74,7 +69,6 @@ interface ThemeInterface
      * Get code of the theme
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCode();
 
@@ -82,7 +76,6 @@ interface ThemeInterface
      * Check if theme is physical
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isPhysical();
 
@@ -91,7 +84,6 @@ interface ThemeInterface
      * Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
      *
      * @return ThemeInterface[]
-     * @since 2.0.0
      */
     public function getInheritedThemes();
 
@@ -99,7 +91,6 @@ interface ThemeInterface
      * Get theme id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId();
 }

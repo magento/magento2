@@ -13,37 +13,31 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Class \Magento\Framework\App\Action\AbstractAction
  *
- * @since 2.0.0
  */
 abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
-     * @since 2.0.0
      */
     protected $resultRedirectFactory;
 
     /**
      * @var \Magento\Framework\Controller\ResultFactory
-     * @since 2.0.0
      */
     protected $resultFactory;
 
     /**
      * @param Context $context
-     * @since 2.0.0
      */
     public function __construct(
         Context $context
@@ -59,7 +53,6 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @since 2.0.0
      */
     abstract public function dispatch(RequestInterface $request);
 
@@ -67,7 +60,6 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * Retrieve request object
      *
      * @return \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     public function getRequest()
     {
@@ -78,7 +70,6 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * Retrieve response object
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     public function getResponse()
     {

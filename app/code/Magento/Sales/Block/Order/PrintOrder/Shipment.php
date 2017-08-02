@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Sales order details block
  *
  * @api
- * @since 2.0.0
  */
 class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -19,7 +18,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * Tracks for Shippings
      *
      * @var array
-     * @since 2.0.0
      */
     protected $tracks = [];
 
@@ -27,7 +25,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * Order shipments collection
      *
      * @var array|\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection
-     * @since 2.0.0
      */
     protected $shipmentsCollection;
 
@@ -35,19 +32,16 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -57,7 +51,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -76,7 +69,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * Load all tracks and save it to local cache by shipments
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -99,7 +91,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -110,7 +101,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -119,7 +109,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPrintUrl()
     {
@@ -128,7 +117,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentInfoHtml()
     {
@@ -137,7 +125,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -146,7 +133,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return array|null
-     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -156,7 +142,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param AbstractBlock $renderer
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareItem(AbstractBlock $renderer)
     {
@@ -169,7 +154,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve order shipments collection
      *
      * @return array|\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection
-     * @since 2.0.0
      */
     public function getShipmentsCollection()
     {
@@ -181,7 +165,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return array
-     * @since 2.0.0
      */
     public function getShipmentTracks($shipment)
     {
@@ -197,7 +180,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return string
-     * @since 2.0.0
      */
     public function getShipmentAddressFormattedHtml($shipment)
     {
@@ -213,7 +195,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param \Magento\Sales\Model\Order $order
      * @return string
-     * @since 2.0.0
      */
     public function getBillingAddressFormattedHtml($order)
     {
@@ -229,7 +210,6 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return array
-     * @since 2.0.0
      */
     public function getShipmentItems($shipment)
     {

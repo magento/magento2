@@ -12,7 +12,6 @@ namespace Magento\Framework\TestFramework\Unit\Listener;
 /**
  * Class \Magento\Framework\TestFramework\Unit\Listener\GarbageCleanup
  *
- * @since 2.0.0
  */
 class GarbageCleanup implements \PHPUnit_Framework_TestListener
 {
@@ -20,7 +19,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
@@ -30,7 +28,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
     {
@@ -40,7 +37,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
@@ -50,7 +46,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addRiskyTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
@@ -60,7 +55,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
@@ -69,7 +63,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
     {
@@ -78,7 +71,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
     {
@@ -88,7 +80,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function startTest(\PHPUnit_Framework_Test $test)
     {
@@ -97,7 +88,6 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function endTest(\PHPUnit_Framework_Test $test, $time)
     {

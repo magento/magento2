@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Report;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Data\Collection
 {
@@ -21,7 +20,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * From value
      *
      * @var \DateTime
-     * @since 2.0.0
      */
     protected $_from;
 
@@ -29,7 +27,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * To value
      *
      * @var \DateTime
-     * @since 2.0.0
      */
     protected $_to;
 
@@ -37,7 +34,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Report period
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_period;
 
@@ -45,7 +41,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Intervals
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_intervals;
 
@@ -53,7 +48,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Intervals
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_reports;
 
@@ -61,7 +55,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Page size
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_pageSize;
 
@@ -69,7 +62,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Array of store ids
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_storeIds;
 
@@ -77,19 +69,16 @@ class Collection extends \Magento\Framework\Data\Collection
      * Set the resource report collection class
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_reportCollection = null;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -97,7 +86,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -115,7 +103,6 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param int $period
      * @return $this
-     * @since 2.0.0
      */
     public function setPeriod($period)
     {
@@ -130,7 +117,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \DateTimeInterface $fromDate
      * @param \DateTimeInterface $toDate
      * @return $this
-     * @since 2.0.0
      */
     public function setInterval(\DateTimeInterface $fromDate, \DateTimeInterface $toDate)
     {
@@ -144,7 +130,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get intervals
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getIntervals()
     {
@@ -185,7 +170,6 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param \DateTime $dateStart
      * @return array
-     * @since 2.0.0
      */
     protected function _getDayInterval(\DateTime $dateStart)
     {
@@ -208,7 +192,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \DateTime $dateEnd
      * @param bool $firstInterval
      * @return array
-     * @since 2.0.0
      */
     protected function _getMonthInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
     {
@@ -252,7 +235,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \DateTime $dateEnd
      * @param bool $firstInterval
      * @return array
-     * @since 2.0.0
      */
     protected function _getYearInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
     {
@@ -281,7 +263,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Return date periods
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPeriods()
     {
@@ -294,7 +275,6 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param array $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {
@@ -307,7 +287,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @codeCoverageIgnore
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -318,7 +297,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get size
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSize()
     {
@@ -331,7 +309,6 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param int $size
      * @return $this
-     * @since 2.0.0
      */
     public function setPageSize($size)
     {
@@ -344,7 +321,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @codeCoverageIgnore
      *
      * @return int
-     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -357,7 +333,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param int $fromDate
      * @param int $toDate
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected function _getReport($fromDate, $toDate)
     {
@@ -373,7 +348,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get Reports based on intervals
      *
      * @return array
-     * @since 2.0.0
      */
     public function getReports()
     {
@@ -399,7 +373,6 @@ class Collection extends \Magento\Framework\Data\Collection
      * @return $this
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

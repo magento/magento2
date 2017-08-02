@@ -9,7 +9,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Request object
- * @since 2.0.0
  */
 class Request extends DataObject
 {

@@ -11,31 +11,26 @@ use Magento\Framework\ObjectManager\RelationsInterface;
 
 /**
  * Provides object manager configuration when in compiled mode
- * @since 2.0.0
  */
 class Compiled implements ConfigInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     private $arguments;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $virtualTypes;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $preferences;
 
     /**
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct($data)
     {
@@ -55,7 +50,6 @@ class Compiled implements ConfigInterface
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setRelations(RelationsInterface $relations)
     {
@@ -69,7 +63,6 @@ class Compiled implements ConfigInterface
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setCache(ConfigCacheInterface $cache)
     {
@@ -80,7 +73,6 @@ class Compiled implements ConfigInterface
      *
      * @param string $type
      * @return array
-     * @since 2.0.0
      */
     public function getArguments($type)
     {
@@ -100,7 +92,6 @@ class Compiled implements ConfigInterface
      * @param string $type
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isShared($type)
     {
@@ -112,7 +103,6 @@ class Compiled implements ConfigInterface
      *
      * @param string $instanceName
      * @return mixed
-     * @since 2.0.0
      */
     public function getInstanceType($instanceName)
     {
@@ -128,7 +118,6 @@ class Compiled implements ConfigInterface
      * @param string $type
      * @return string
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function getPreference($type)
     {
@@ -144,7 +133,6 @@ class Compiled implements ConfigInterface
      *
      * @param array $configuration
      * @return void
-     * @since 2.0.0
      */
     public function extend(array $configuration)
     {
@@ -163,7 +151,6 @@ class Compiled implements ConfigInterface
      * Retrieve all virtual types
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVirtualTypes()
     {
@@ -174,7 +161,6 @@ class Compiled implements ConfigInterface
      * Returns list on preferences
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPreferences()
     {

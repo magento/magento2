@@ -10,13 +10,11 @@ namespace Magento\Payment\Model\Config;
 /**
  * Class \Magento\Payment\Model\Config\Converter
  *
- * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -33,7 +31,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMXPath $xpath
      * @return array
-     * @since 2.0.0
      */
     protected function convertCreditCards(\DOMXPath $xpath)
     {
@@ -74,7 +71,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $left
      * @param array $right
      * @return int
-     * @since 2.0.0
      */
     private function _compareCcTypes($left, $right)
     {
@@ -86,7 +82,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMXPath $xpath
      * @return array
-     * @since 2.0.0
      */
     protected function convertGroups(\DOMXPath $xpath)
     {
@@ -115,7 +110,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMXPath $xpath
      * @return array
-     * @since 2.0.0
      */
     protected function convertMethods(\DOMXPath $xpath)
     {

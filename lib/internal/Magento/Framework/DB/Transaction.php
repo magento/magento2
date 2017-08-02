@@ -9,7 +9,6 @@ namespace Magento\Framework\DB;
 
 /**
  * @todo need collect connection by name
- * @since 2.0.0
  */
 class Transaction
 {
@@ -17,7 +16,6 @@ class Transaction
      * Objects which will be involved to transaction
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_objects = [];
 
@@ -25,7 +23,6 @@ class Transaction
      * Transaction objects array with alias key
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_objectsByAlias = [];
 
@@ -33,7 +30,6 @@ class Transaction
      * Callbacks array.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_beforeCommitCallbacks = [];
 
@@ -41,7 +37,6 @@ class Transaction
      * Begin transaction for all involved object resources
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _startTransaction()
     {
@@ -55,7 +50,6 @@ class Transaction
      * Commit transaction for all resources
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _commitTransaction()
     {
@@ -69,7 +63,6 @@ class Transaction
      * Rollback transaction
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _rollbackTransaction()
     {
@@ -83,7 +76,6 @@ class Transaction
      * Run all configured object callbacks
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _runCallbacks()
     {
@@ -99,7 +91,6 @@ class Transaction
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $alias
      * @return $this
-     * @since 2.0.0
      */
     public function addObject(\Magento\Framework\Model\AbstractModel $object, $alias = '')
     {
@@ -115,7 +106,6 @@ class Transaction
      *
      * @param callback $callback
      * @return $this
-     * @since 2.0.0
      */
     public function addCommitCallback($callback)
     {
@@ -128,7 +118,6 @@ class Transaction
      *
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function save()
     {
@@ -166,7 +155,6 @@ class Transaction
      *
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function delete()
     {

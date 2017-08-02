@@ -16,7 +16,6 @@ namespace Magento\Framework\View\Element\Html\Link;
  * @method null|array                      getAttributes()
  * @method null|bool                       getCurrent()
  * @method \Magento\Framework\View\Element\Html\Link\Current setCurrent(bool $value)
- * @since 2.0.0
  */
 class Current extends \Magento\Framework\View\Element\Template
 {
@@ -24,7 +23,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * Default path
      *
      * @var \Magento\Framework\App\DefaultPathInterface
-     * @since 2.0.0
      */
     protected $_defaultPath;
 
@@ -34,7 +32,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,7 +46,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * Get href URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHref()
     {
@@ -60,7 +56,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * Get current mca
      *
      * @return string
-     * @since 2.0.0
      */
     private function getMca()
     {
@@ -83,7 +78,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * Check if link leads to URL equivalent to URL of currently displayed page
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCurrent()
     {
@@ -94,7 +88,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -141,7 +134,6 @@ class Current extends \Magento\Framework\View\Element\Template
      * Generate attributes' HTML code
      *
      * @return string
-     * @since 2.0.0
      */
     private function getAttributesHtml()
     {

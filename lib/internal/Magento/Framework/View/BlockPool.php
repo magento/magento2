@@ -10,14 +10,12 @@ use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Class BlockPool
- * @since 2.0.0
  */
 class BlockPool
 {
     /**
      * Block factory
      * @var \Magento\Framework\View\Element\BlockFactory
-     * @since 2.0.0
      */
     protected $blockFactory;
 
@@ -25,7 +23,6 @@ class BlockPool
      * Blocks
      *
      * @var array
-     * @since 2.0.0
      */
     protected $blocks = [];
 
@@ -33,7 +30,6 @@ class BlockPool
      * Constructor
      *
      * @param BlockFactory $blockFactory
-     * @since 2.0.0
      */
     public function __construct(BlockFactory $blockFactory)
     {
@@ -48,7 +44,6 @@ class BlockPool
      * @param array $arguments [optional]
      * @return BlockPool
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function add($name, $class, array $arguments = [])
     {
@@ -70,7 +65,6 @@ class BlockPool
      *
      * @param string $name
      * @return BlockInterface|null
-     * @since 2.0.0
      */
     public function get($name = null)
     {

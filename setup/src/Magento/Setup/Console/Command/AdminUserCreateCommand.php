@@ -17,26 +17,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class \Magento\Setup\Console\Command\AdminUserCreateCommand
  *
- * @since 2.0.0
  */
 class AdminUserCreateCommand extends AbstractSetupCommand
 {
     /**
      * @var InstallerFactory
-     * @since 2.0.0
      */
     private $installerFactory;
 
     /**
      * @var UserValidationRules
-     * @since 2.0.0
      */
     private $validationRules;
 
     /**
      * @param InstallerFactory $installerFactory
      * @param UserValidationRules $validationRules
-     * @since 2.0.0
      */
     public function __construct(InstallerFactory $installerFactory, UserValidationRules $validationRules)
     {
@@ -49,7 +45,6 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -61,7 +56,6 @@ class AdminUserCreateCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -82,7 +76,6 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      * Get list of arguments for the command
      *
      * @return InputOption[]
-     * @since 2.0.0
      */
     public function getOptionsList()
     {
@@ -110,7 +103,6 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      *
      * @param InputInterface $input
      * @return string[]
-     * @since 2.0.0
      */
     public function validate(InputInterface $input)
     {

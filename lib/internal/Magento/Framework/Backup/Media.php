@@ -9,7 +9,6 @@ namespace Magento\Framework\Backup;
  * Class to work media folder and database backups
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Media extends Snapshot
 {
@@ -18,7 +17,6 @@ class Media extends Snapshot
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function rollback()
     {
@@ -31,7 +29,6 @@ class Media extends Snapshot
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
-     * @since 2.0.0
      */
     public function create()
     {
@@ -44,7 +41,6 @@ class Media extends Snapshot
      *
      * @return string
      * @see BackupInterface::getType()
-     * @since 2.0.0
      */
     public function getType()
     {
@@ -55,7 +51,6 @@ class Media extends Snapshot
      * Add all folders and files except media and db backup to ignore list
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareIgnoreList()
     {

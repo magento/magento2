@@ -7,7 +7,6 @@ namespace Magento\Backend\Model\Authorization;
 
 /**
  * @api
- * @since 2.0.0
  */
 class RoleLocator implements \Magento\Framework\Authorization\RoleLocatorInterface
 {
@@ -15,13 +14,11 @@ class RoleLocator implements \Magento\Framework\Authorization\RoleLocatorInterfa
      * Authentication service
      *
      * @var \Magento\Backend\Model\Auth\Session
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @param \Magento\Backend\Model\Auth\Session $session
-     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\Model\Auth\Session $session)
     {
@@ -32,7 +29,6 @@ class RoleLocator implements \Magento\Framework\Authorization\RoleLocatorInterfa
      * Retrieve current role
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getAclRoleId()
     {
