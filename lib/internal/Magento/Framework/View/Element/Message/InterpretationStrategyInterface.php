@@ -7,6 +7,11 @@ namespace Magento\Framework\View\Element\Message;
 
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Interface \Magento\Framework\View\Element\Message\InterpretationStrategyInterface
+ *
+ * @since 2.0.0
+ */
 interface InterpretationStrategyInterface
 {
     /**
@@ -14,6 +19,7 @@ interface InterpretationStrategyInterface
      *
      * @param MessageInterface $message
      * @return string
+     * @since 2.0.0
      */
     public function interpret(MessageInterface $message);
 }

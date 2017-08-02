@@ -7,11 +7,13 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price;
 
 /**
  * Adminhtml tier price item renderer
+ * @since 2.0.0
  */
 class Tier extends Group\AbstractGroup
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit/price/tier.phtml';
 
@@ -19,6 +21,7 @@ class Tier extends Group\AbstractGroup
      * Retrieve list of initial customer groups
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getInitialCustomerGroups()
     {
@@ -30,6 +33,7 @@ class Tier extends Group\AbstractGroup
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     protected function _sortValues($data)
     {
@@ -44,6 +48,7 @@ class Tier extends Group\AbstractGroup
      * @param array $b
      * @return int
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _sortTierPrices($a, $b)
     {
@@ -65,6 +70,7 @@ class Tier extends Group\AbstractGroup
      * Add "Add tier" button to layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

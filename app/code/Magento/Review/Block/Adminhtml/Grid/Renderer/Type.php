@@ -9,6 +9,7 @@ namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
  * Adminhtml review grid item renderer for item type
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,6 +18,7 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      *
      * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

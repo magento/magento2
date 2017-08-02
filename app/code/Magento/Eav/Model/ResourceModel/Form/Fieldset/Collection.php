@@ -17,11 +17,13 @@ use Psr\Log\LoggerInterface as Logger;
  * Eav Form Fieldset Resource Collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -29,6 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store scope ID
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId;
 
@@ -41,6 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param mixed $connection
      * @param AbstractDb $resource
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -60,6 +64,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -71,6 +76,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param Type|int $type
      * @return $this
+     * @since 2.0.0
      */
     public function addTypeFilter($type)
     {
@@ -86,6 +92,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setSortOrder()
     {
@@ -97,6 +104,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve label store scope
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -112,6 +120,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -123,6 +132,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize select object
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

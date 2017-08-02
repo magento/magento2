@@ -9,17 +9,24 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Block\Product\ProductList\Promotion
+ *
+ * @since 2.0.0
+ */
 class Promotion extends \Magento\Catalog\Block\Product\ListProduct
 {
     /**
      * Product collection factory
      *
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -31,6 +38,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param CollectionFactory $productCollectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -54,6 +62,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
 
     /**
      * @return Collection
+     * @since 2.0.0
      */
     protected function _getProductCollection()
     {

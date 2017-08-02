@@ -8,10 +8,16 @@ namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\View\Element\Template;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * Class \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic
+ *
+ * @since 2.0.0
+ */
 class Generic extends Template
 {
     /**
      * @var AbstractItem
+     * @since 2.0.0
      */
     protected $item;
 
@@ -20,6 +26,7 @@ class Generic extends Template
      *
      * @return AbstractItem
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getItem()
     {
@@ -32,6 +39,7 @@ class Generic extends Template
      * @param AbstractItem $item
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setItem(AbstractItem $item)
     {
@@ -44,6 +52,7 @@ class Generic extends Template
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isProductVisibleInSiteVisibility()
     {
@@ -55,6 +64,7 @@ class Generic extends Template
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isVirtual()
     {

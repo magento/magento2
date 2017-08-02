@@ -13,6 +13,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
 
 /**
  * Class Render
+ * @since 2.0.0
  */
 class Render implements ElementInterface
 {
@@ -26,6 +27,7 @@ class Render implements ElementInterface
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function compile(
         CompilerInterface $compiler,

@@ -13,6 +13,7 @@ use Magento\Framework\View\File\CollectorInterface;
 
 /**
  * Decorator that filters out view files that belong to modules, output of which is prohibited
+ * @since 2.0.0
  */
 class ModuleOutput implements CollectorInterface
 {
@@ -20,6 +21,7 @@ class ModuleOutput implements CollectorInterface
      * Subject
      *
      * @var CollectorInterface
+     * @since 2.0.0
      */
     private $subject;
 
@@ -27,6 +29,7 @@ class ModuleOutput implements CollectorInterface
      * Module manager
      *
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     private $moduleManager;
 
@@ -35,6 +38,7 @@ class ModuleOutput implements CollectorInterface
      *
      * @param CollectorInterface $subject
      * @param Manager $moduleManager
+     * @since 2.0.0
      */
     public function __construct(
         CollectorInterface $subject,
@@ -52,6 +56,7 @@ class ModuleOutput implements CollectorInterface
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
+     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

@@ -7,8 +7,9 @@ namespace Magento\Vault\Model;
 
 /**
  * Class CreditCardTokenFactory
- * @deprecated
+ * @deprecated 2.2.0
  * @see PaymentTokenFactoryInterface
+ * @since 2.2.0
  */
 class CreditCardTokenFactory extends AbstractPaymentTokenFactory
 {
@@ -19,6 +20,7 @@ class CreditCardTokenFactory extends AbstractPaymentTokenFactory
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getType()
     {

@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
 
 /**
  * Adminhtml newsletter queue grid block action item renderer
+ * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -14,6 +15,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -21,6 +23,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -34,6 +37,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -59,6 +63,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getEscapedValue($value)
     {
@@ -68,6 +73,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * @param array $actions
      * @return string
+     * @since 2.0.0
      */
     protected function _actionsToHtml(array $actions)
     {

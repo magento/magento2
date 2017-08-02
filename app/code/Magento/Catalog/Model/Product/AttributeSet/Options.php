@@ -5,16 +5,23 @@
  */
 namespace Magento\Catalog\Model\Product\AttributeSet;
 
+/**
+ * Class \Magento\Catalog\Model\Product\AttributeSet\Options
+ *
+ * @since 2.0.0
+ */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var null|array
+     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product $product
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory,
@@ -26,6 +33,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
 
     /**
      * @return array|null
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

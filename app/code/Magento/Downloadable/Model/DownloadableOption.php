@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * @codeCoverageIgnore
  * @api
+ * @since 2.0.0
  */
 class DownloadableOption extends AbstractExtensibleModel implements DownloadableOptionInterface
 {
@@ -18,6 +19,7 @@ class DownloadableOption extends AbstractExtensibleModel implements Downloadable
      * Returns the list of downloadable links
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getDownloadableLinks()
     {
@@ -29,6 +31,7 @@ class DownloadableOption extends AbstractExtensibleModel implements Downloadable
      *
      * @param int[] $downloadableLinks
      * @return $this
+     * @since 2.0.0
      */
     public function setDownloadableLinks($downloadableLinks)
     {
@@ -39,6 +42,7 @@ class DownloadableOption extends AbstractExtensibleModel implements Downloadable
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Downloadable\Api\Data\DownloadableOptionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -50,6 +54,7 @@ class DownloadableOption extends AbstractExtensibleModel implements Downloadable
      *
      * @param \Magento\Downloadable\Api\Data\DownloadableOptionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Downloadable\Api\Data\DownloadableOptionExtensionInterface $extensionAttributes

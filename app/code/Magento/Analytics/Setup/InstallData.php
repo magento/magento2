@@ -13,11 +13,13 @@ use Magento\Analytics\Model\NotificationTime;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.2.0
  */
 class InstallData implements InstallDataInterface
 {
     /**
      * @var NotificationTime
+     * @since 2.2.0
      */
     private $notificationTime;
 
@@ -25,6 +27,7 @@ class InstallData implements InstallDataInterface
      * InstallData constructor.
      *
      * @param NotificationTime $notificationTime
+     * @since 2.2.0
      */
     public function __construct(
         NotificationTime $notificationTime
@@ -35,6 +38,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.2.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -7,15 +7,22 @@
  */
 namespace Magento\Catalog\Model\Plugin\ProductRepository;
 
+/**
+ * Class \Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper
+ *
+ * @since 2.0.0
+ */
 class TransactionWrapper
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.0.0
      */
     protected $resourceModel;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product $resourceModel
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product $resourceModel
@@ -31,6 +38,7 @@ class TransactionWrapper
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundSave(
         \Magento\Catalog\Api\ProductRepositoryInterface $subject,
@@ -57,6 +65,7 @@ class TransactionWrapper
      * @return bool
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundDelete(
         \Magento\Catalog\Api\ProductRepositoryInterface $subject,
@@ -82,6 +91,7 @@ class TransactionWrapper
      * @return bool
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundDeleteById(
         \Magento\Catalog\Api\ProductRepositoryInterface $subject,

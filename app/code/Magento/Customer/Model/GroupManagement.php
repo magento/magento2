@@ -19,6 +19,7 @@ use Magento\Customer\Model\GroupFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 {
@@ -32,36 +33,43 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var GroupFactory
+     * @since 2.0.0
      */
     protected $groupFactory;
 
     /**
      * @var GroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var GroupInterfaceFactory
+     * @since 2.0.0
      */
     protected $groupDataFactory;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -73,6 +81,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
      * @param GroupInterfaceFactory $groupDataFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
+     * @since 2.0.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -94,6 +103,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isReadonly($groupId)
     {
@@ -108,6 +118,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDefaultGroup($storeId = null)
     {
@@ -134,6 +145,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getNotLoggedInGroup()
     {
@@ -142,6 +154,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLoggedInGroups()
     {
@@ -164,6 +177,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAllCustomersGroup()
     {

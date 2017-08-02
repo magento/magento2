@@ -7,17 +7,20 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * Class Factory
- * @deprecated
+ * @deprecated 2.1.0
+ * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -28,6 +31,7 @@ class Factory
      * Return newly created instance of the category collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @since 2.0.0
      */
     public function create()
     {

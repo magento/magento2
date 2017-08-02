@@ -7,6 +7,11 @@ namespace Magento\Bundle\Model\ResourceModel\Selection\Plugin;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Bundle\Model\ResourceModel\Selection\Plugin\Collection
+ *
+ * @since 2.1.0
+ */
 class Collection
 {
     /**
@@ -18,6 +23,7 @@ class Collection
      * @param null|string|bool|int|Store $store
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function aroundAddStoreFilter(
         \Magento\Bundle\Model\ResourceModel\Selection\Collection $subject,

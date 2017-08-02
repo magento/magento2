@@ -5,11 +5,17 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Class \Magento\Sales\Model\Order\Creditmemo\Total\Grand
+ *
+ * @since 2.0.0
+ */
 class Grand extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {
     /**
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
+     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

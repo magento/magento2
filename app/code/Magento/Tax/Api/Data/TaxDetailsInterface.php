@@ -9,6 +9,7 @@ namespace Magento\Tax\Api\Data;
 /**
  * Tax details interface.
  * @api
+ * @since 2.0.0
  */
 interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,6 +17,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get subtotal
      *
      * @return float
+     * @since 2.0.0
      */
     public function getSubtotal();
 
@@ -24,6 +26,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $subtotal
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotal($subtotal);
 
@@ -31,6 +34,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get tax amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getTaxAmount();
 
@@ -39,6 +43,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $taxAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxAmount($taxAmount);
 
@@ -46,6 +51,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get discount amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -54,6 +60,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $discountTaxCompensationAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($discountTaxCompensationAmount);
 
@@ -61,6 +68,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get applied taxes
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxInterface[] | null
+     * @since 2.0.0
      */
     public function getAppliedTaxes();
 
@@ -69,6 +77,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
      * @return $this
+     * @since 2.0.0
      */
     public function setAppliedTaxes(array $appliedTaxes = null);
 
@@ -76,6 +85,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get TaxDetails items
      *
      * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface[] | null
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -84,6 +94,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Tax\Api\Data\TaxDetailsItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items = null);
 
@@ -91,6 +102,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\TaxDetailsExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -99,6 +111,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Tax\Api\Data\TaxDetailsExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxDetailsExtensionInterface $extensionAttributes);
 }

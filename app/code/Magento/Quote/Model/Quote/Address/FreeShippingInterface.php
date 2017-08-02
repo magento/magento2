@@ -7,6 +7,7 @@ namespace Magento\Quote\Model\Quote\Address;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface FreeShippingInterface
 {
@@ -14,6 +15,7 @@ interface FreeShippingInterface
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\CartItemInterface[] $items
      * @return bool
+     * @since 2.0.0
      */
     public function isFreeShipping(\Magento\Quote\Model\Quote $quote, $items);
 }

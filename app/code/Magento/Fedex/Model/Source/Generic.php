@@ -5,10 +5,16 @@
  */
 namespace Magento\Fedex\Model\Source;
 
+/**
+ * Class \Magento\Fedex\Model\Source\Generic
+ *
+ * @since 2.0.0
+ */
 class Generic implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Fedex\Model\Carrier
+     * @since 2.0.0
      */
     protected $_shippingFedex;
 
@@ -16,11 +22,13 @@ class Generic implements \Magento\Framework\Option\ArrayInterface
      * Carrier code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code = '';
 
     /**
      * @param \Magento\Fedex\Model\Carrier $shippingFedex
+     * @since 2.0.0
      */
     public function __construct(\Magento\Fedex\Model\Carrier $shippingFedex)
     {
@@ -31,6 +39,7 @@ class Generic implements \Magento\Framework\Option\ArrayInterface
      * Returns array to be used in multiselect on back-end
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

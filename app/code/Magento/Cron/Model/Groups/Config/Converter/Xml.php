@@ -7,6 +7,7 @@ namespace Magento\Cron\Model\Groups\Config\Converter;
 
 /**
  * Converts cron parameters from XML files
+ * @since 2.0.0
  */
 class Xml implements \Magento\Framework\Config\ConverterInterface
 {
@@ -16,6 +17,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      * @param mixed $source
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function convert($source)
     {

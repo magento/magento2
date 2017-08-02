@@ -13,18 +13,21 @@ use Magento\Framework\Filesystem;
  * Database saving file helper
  *
  * @api
+ * @since 2.0.0
  */
 class Database extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Database storage model
      * @var null|\Magento\MediaStorage\Model\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_databaseModel = null;
 
     /**
      * Storage resource model
      * @var null|\Magento\MediaStorage\Model\ResourceModel\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_resourceModel = null;
 
@@ -32,6 +35,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Db usage flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_useDb = null;
 
@@ -39,21 +43,25 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Media dir
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_mediaBaseDirectory;
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
+     * @since 2.0.0
      */
     protected $_dbStorageFactory;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\File
+     * @since 2.0.0
      */
     protected $_fileStorage;
 
@@ -62,6 +70,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $dbStorageFactory
      * @param \Magento\MediaStorage\Model\File\Storage\File $fileStorage
      * @param Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -79,6 +88,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if we use DB storage
      *
      * @return bool
+     * @since 2.0.0
      */
     public function checkDbUsage()
     {
@@ -97,6 +107,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Get database storage model
      *
      * @return \Magento\MediaStorage\Model\File\Storage\Database
+     * @since 2.0.0
      */
     public function getStorageDatabaseModel()
     {
@@ -111,6 +122,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Get file storage model
      *
      * @return \Magento\MediaStorage\Model\File\Storage\File
+     * @since 2.0.0
      */
     public function getStorageFileModel()
     {
@@ -121,6 +133,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Get storage model
      *
      * @return \Magento\MediaStorage\Model\ResourceModel\File\Storage\Database
+     * @since 2.0.0
      */
     public function getResourceStorageModel()
     {
@@ -135,6 +148,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return void
+     * @since 2.0.0
      */
     public function saveFile($filename)
     {
@@ -149,6 +163,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $oldName
      * @param string $newName
      * @return void
+     * @since 2.0.0
      */
     public function renameFile($oldName, $newName)
     {
@@ -166,6 +181,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $oldName
      * @param string $newName
      * @return void
+     * @since 2.0.0
      */
     public function copyFile($oldName, $newName)
     {
@@ -182,6 +198,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename can be both full path or partial (like in DB)
      * @return bool|null
+     * @since 2.0.0
      */
     public function fileExists($filename)
     {
@@ -198,6 +215,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $directory - can be both full path or partial (like in DB)
      * @param string $filename - not just a filename. Can have directory chunks. return will have this form
      * @return string
+     * @since 2.0.0
      */
     public function getUniqueFilename($directory, $filename)
     {
@@ -221,6 +239,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return bool|int
+     * @since 2.0.0
      */
     public function saveFileToFilesystem($filename)
     {
@@ -241,6 +260,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $fullPath
      * @return string
+     * @since 2.0.0
      */
     public function getMediaRelativePath($fullPath)
     {
@@ -253,6 +273,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $folderName
      * @return void
+     * @since 2.0.0
      */
     public function deleteFolder($folderName)
     {
@@ -266,6 +287,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return void
+     * @since 2.0.0
      */
     public function deleteFile($filename)
     {
@@ -286,6 +308,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $result
      * @return string
+     * @since 2.0.0
      */
     public function saveUploadedFile($result)
     {
@@ -313,6 +336,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return string
+     * @since 2.0.0
      */
     protected function _removeAbsPathFromFileName($filename)
     {
@@ -323,6 +347,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      * Return Media base dir
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaBaseDir()
     {

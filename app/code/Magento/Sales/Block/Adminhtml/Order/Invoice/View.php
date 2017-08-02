@@ -13,6 +13,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -20,6 +21,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Admin session
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_session;
 
@@ -27,6 +29,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -34,6 +37,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Backend session
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_backendSession;
 
@@ -42,6 +46,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -60,6 +65,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -165,6 +171,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Check whether order is under payment review
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isPaymentReview()
     {
@@ -176,6 +183,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -186,6 +194,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeaderText()
     {
@@ -211,6 +220,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get back url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -227,6 +237,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get capture url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCaptureUrl()
     {
@@ -237,6 +248,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get void url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVoidUrl()
     {
@@ -247,6 +259,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get cancel url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCancelUrl()
     {
@@ -257,6 +270,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get email url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEmailUrl()
     {
@@ -270,6 +284,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get credit memo url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreditMemoUrl()
     {
@@ -283,6 +298,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Get print url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPrintUrl()
     {
@@ -294,6 +310,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function updateBackButtonUrl($flag)
     {
@@ -315,6 +332,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param string $resourceId
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAllowedAction($resourceId)
     {

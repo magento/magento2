@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 /**
  * Configurable regular price interface
  * @api
+ * @since 2.0.0
  */
 interface ConfigurableRegularPriceInterface extends BasePriceProviderInterface
 {
@@ -19,6 +20,7 @@ interface ConfigurableRegularPriceInterface extends BasePriceProviderInterface
      * Get max regular amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMaxRegularAmount();
 
@@ -26,6 +28,7 @@ interface ConfigurableRegularPriceInterface extends BasePriceProviderInterface
      * Get min regular amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMinRegularAmount();
 }

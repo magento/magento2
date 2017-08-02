@@ -10,22 +10,26 @@ use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 
 /**
  * Class InvoiceCommentCreation
+ * @since 2.2.0
  */
 class CommentCreation implements InvoiceCommentCreationInterface
 {
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $comment;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $isVisibleOnFront;
 
     /**
      * @var \Magento\Sales\Api\Data\InvoiceCommentCreationExtensionInterface
+     * @since 2.2.0
      */
     private $extensionAttributes;
 
@@ -33,6 +37,7 @@ class CommentCreation implements InvoiceCommentCreationInterface
      * Gets the comment for the invoice.
      *
      * @return string Comment.
+     * @since 2.2.0
      */
     public function getComment()
     {
@@ -44,6 +49,7 @@ class CommentCreation implements InvoiceCommentCreationInterface
      *
      * @param string $comment
      * @return $this
+     * @since 2.2.0
      */
     public function setComment($comment)
     {
@@ -55,6 +61,7 @@ class CommentCreation implements InvoiceCommentCreationInterface
      * Gets the is-visible-on-storefront flag value for the invoice.
      *
      * @return int Is-visible-on-storefront flag value.
+     * @since 2.2.0
      */
     public function getIsVisibleOnFront()
     {
@@ -66,6 +73,7 @@ class CommentCreation implements InvoiceCommentCreationInterface
      *
      * @param int $isVisibleOnFront
      * @return $this
+     * @since 2.2.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
@@ -77,6 +85,7 @@ class CommentCreation implements InvoiceCommentCreationInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\InvoiceCommentCreationExtensionInterface|null
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -88,6 +97,7 @@ class CommentCreation implements InvoiceCommentCreationInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceCommentCreationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\InvoiceCommentCreationExtensionInterface $extensionAttributes

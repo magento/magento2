@@ -7,21 +7,25 @@ namespace Magento\Sales\Model\ResourceModel;
 
 /**
  * Class Metadata
+ * @since 2.0.0
  */
 class Metadata
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $resourceClassName;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $modelClassName;
 
@@ -29,6 +33,7 @@ class Metadata
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $resourceClassName
      * @param string $modelClassName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -42,6 +47,7 @@ class Metadata
 
     /**
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @since 2.0.0
      */
     public function getMapper()
     {
@@ -50,6 +56,7 @@ class Metadata
 
     /**
      * @return \Magento\Framework\Api\ExtensibleDataInterface
+     * @since 2.0.0
      */
     public function getNewInstance()
     {

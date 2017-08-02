@@ -11,20 +11,28 @@ use Magento\Persistent\Helper\Data as PersistentHelper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Model\AddressAdditionalDataProcessor;
 
+/**
+ * Class \Magento\Persistent\Model\Checkout\AddressDataProcessorPlugin
+ *
+ * @since 2.0.0
+ */
 class AddressDataProcessorPlugin
 {
     /**
      * @var PersistentSession
+     * @since 2.0.0
      */
     private $persistentSession;
 
     /**
      * @var PersistentHelper
+     * @since 2.0.0
      */
     private $persistentHelper;
 
     /**
      * @var CheckoutSession
+     * @since 2.0.0
      */
     private $checkoutSession;
 
@@ -32,6 +40,7 @@ class AddressDataProcessorPlugin
      * @param PersistentHelper $persistentHelper
      * @param PersistentSession $persistentSession
      * @param CheckoutSession $checkoutSession
+     * @since 2.0.0
      */
     public function __construct(
         PersistentHelper $persistentHelper,
@@ -50,6 +59,7 @@ class AddressDataProcessorPlugin
      * @param AddressAdditionalData $additionalData
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeProcess(AddressAdditionalDataProcessor $subject, AddressAdditionalData $additionalData)
     {

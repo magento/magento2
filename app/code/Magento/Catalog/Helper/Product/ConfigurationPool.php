@@ -7,27 +7,32 @@ namespace Magento\Catalog\Helper\Product;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ConfigurationPool
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface[]
+     * @since 2.0.0
      */
     private $_instances = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $instancesByType = [];
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $instancesByType
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $instancesByType)
     {
@@ -39,6 +44,7 @@ class ConfigurationPool
      * @param string $className
      * @return \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function get($className)
     {
@@ -61,6 +67,7 @@ class ConfigurationPool
     /**
      * @param string $productType
      * @return Configuration\ConfigurationInterface
+     * @since 2.0.0
      */
     public function getByProductType($productType)
     {

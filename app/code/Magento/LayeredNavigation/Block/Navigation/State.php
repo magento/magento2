@@ -11,11 +11,13 @@ use Magento\Framework\View\Element\Template;
  * Layered navigation state
  *
  * @api
+ * @since 2.0.0
  */
 class State extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'layer/state.phtml';
 
@@ -23,6 +25,7 @@ class State extends \Magento\Framework\View\Element\Template
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     protected $_catalogLayer;
 
@@ -30,6 +33,7 @@ class State extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -44,6 +48,7 @@ class State extends \Magento\Framework\View\Element\Template
      * Retrieve active filters
      *
      * @return array
+     * @since 2.0.0
      */
     public function getActiveFilters()
     {
@@ -58,6 +63,7 @@ class State extends \Magento\Framework\View\Element\Template
      * Retrieve Clear Filters URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getClearUrl()
     {
@@ -76,6 +82,7 @@ class State extends \Magento\Framework\View\Element\Template
      * Retrieve Layer object
      *
      * @return \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     public function getLayer()
     {

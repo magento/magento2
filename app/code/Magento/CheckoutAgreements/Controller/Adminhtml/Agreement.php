@@ -5,6 +5,11 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 
+/**
+ * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
+ *
+ * @since 2.0.0
+ */
 abstract class Agreement extends \Magento\Backend\App\Action
 {
     /**
@@ -18,6 +23,7 @@ abstract class Agreement extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -25,6 +31,7 @@ abstract class Agreement extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -36,6 +43,7 @@ abstract class Agreement extends \Magento\Backend\App\Action
      * Initialize action
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initAction()
     {

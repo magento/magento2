@@ -11,6 +11,7 @@ use Magento\Setup\Model\WebLogger;
 
 /**
  * Factory for progress indicator model
+ * @since 2.0.0
  */
 class ProgressFactory
 {
@@ -19,6 +20,7 @@ class ProgressFactory
      *
      * @param WebLogger $logger
      * @return Progress
+     * @since 2.0.0
      */
     public function createFromLog(WebLogger $logger)
     {

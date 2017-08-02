@@ -7,6 +7,11 @@ namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role
+ *
+ * @since 2.0.0
+ */
 abstract class Role extends \Magento\Backend\App\AbstractAction
 {
     /**
@@ -20,6 +25,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -27,6 +33,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * Factory for user role model
      *
      * @var \Magento\Authorization\Model\RoleFactory
+     * @since 2.0.0
      */
     protected $_roleFactory;
 
@@ -34,6 +41,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * User model factory
      *
      * @var \Magento\User\Model\UserFactory
+     * @since 2.0.0
      */
     protected $_userFactory;
 
@@ -41,6 +49,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * Rules model factory
      *
      * @var \Magento\Authorization\Model\RulesFactory
+     * @since 2.0.0
      */
     protected $_rulesFactory;
 
@@ -48,11 +57,13 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * Backend auth session
      *
      * @var \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     protected $_authSession;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
+     * @since 2.0.0
      */
     protected $_filterManager;
 
@@ -64,6 +75,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -87,6 +99,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      * Preparing layout for output
      *
      * @return Role
+     * @since 2.0.0
      */
     protected function _initAction()
     {
@@ -103,6 +116,7 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
      *
      * @param string $requestVariable
      * @return \Magento\Authorization\Model\Role
+     * @since 2.0.0
      */
     protected function _initRole($requestVariable = 'rid')
     {

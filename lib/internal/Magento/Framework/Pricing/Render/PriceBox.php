@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\Template;
  *
  * @method bool hasListClass()
  * @method string getListClass()
+ * @since 2.0.0
  */
 class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInterface
 {
@@ -25,16 +26,19 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
 
     /**
      * @var SaleableInterface
+     * @since 2.0.0
      */
     protected $saleableItem;
 
     /**
      * @var PriceInterface
+     * @since 2.0.0
      */
     protected $price;
 
     /**
      * @var RendererPool
+     * @since 2.0.0
      */
     protected $rendererPool;
 
@@ -44,6 +48,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * @param PriceInterface    $price
      * @param RendererPool      $rendererPool
      * @param array             $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -60,6 +65,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -73,6 +79,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * Get Key for caching block content
      *
      * @return string
+     * @since 2.1.0
      */
     public function getCacheKey()
     {
@@ -83,6 +90,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * Get block cache life time
      *
      * @return int
+     * @since 2.1.0
      */
     protected function getCacheLifetime()
     {
@@ -91,6 +99,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     
     /**
      * @return SaleableInterface
+     * @since 2.0.0
      */
     public function getSaleableItem()
     {
@@ -99,6 +108,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
 
     /**
      * @return PriceInterface
+     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -111,6 +121,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * @param null|string $defaultPrefix
      * @param null|string $defaultSuffix
      * @return string
+     * @since 2.0.0
      */
     public function getPriceId($defaultPrefix = null, $defaultSuffix = null)
     {
@@ -129,6 +140,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      *
      * @param string $priceCode
      * @return PriceInterface
+     * @since 2.0.0
      */
     public function getPriceType($priceCode)
     {
@@ -139,6 +151,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * @param AmountInterface $amount
      * @param array $arguments
      * @return string
+     * @since 2.0.0
      */
     public function renderAmount(AmountInterface $amount, array $arguments = [])
     {
@@ -152,6 +165,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * @param AmountInterface $amount
      * @param array $arguments
      * @return AmountRenderInterface
+     * @since 2.0.0
      */
     protected function getAmountRender(AmountInterface $amount, array $arguments = [])
     {
@@ -165,6 +179,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
 
     /**
      * @return RendererPool
+     * @since 2.0.0
      */
     public function getRendererPool()
     {
@@ -175,6 +190,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      * Return unique ID(s) for each object in system
      *
      * @return array
+     * @since 2.1.0
      */
     public function getIdentities()
     {

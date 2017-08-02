@@ -14,6 +14,7 @@ use Magento\Review\Model\Review;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -21,6 +22,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Customer view template name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'customer/view.phtml';
 
@@ -28,6 +30,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Catalog product model
      *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -35,6 +38,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Review model
      *
      * @var \Magento\Review\Model\ReviewFactory
+     * @since 2.0.0
      */
     protected $_reviewFactory;
 
@@ -42,6 +46,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Rating option model
      *
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
+     * @since 2.0.0
      */
     protected $_voteFactory;
 
@@ -49,11 +54,13 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
+     * @since 2.0.0
      */
     protected $_ratingFactory;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -65,6 +72,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -90,6 +98,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Initialize review id
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -101,6 +110,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get product data
      *
      * @return Product
+     * @since 2.0.0
      */
     public function getProductData()
     {
@@ -115,6 +125,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get review data
      *
      * @return Review
+     * @since 2.0.0
      */
     public function getReviewData()
     {
@@ -128,6 +139,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Return review customer url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -138,6 +150,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get review rating collection
      *
      * @return VoteCollection
+     * @since 2.0.0
      */
     public function getRating()
     {
@@ -160,6 +173,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get rating summary
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRatingSummary()
     {
@@ -175,6 +189,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get total reviews
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTotalReviews()
     {
@@ -193,6 +208,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param string $date
      * @return string
+     * @since 2.0.0
      */
     public function dateFormat($date)
     {
@@ -206,6 +222,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
+     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
@@ -220,6 +237,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

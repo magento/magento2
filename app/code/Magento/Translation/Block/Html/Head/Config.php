@@ -13,21 +13,25 @@ use Magento\Framework\Translate\Inline as Inline;
  * Block responsible for including Inline Translation config on the page
  *
  * @api
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var \Magento\Translation\Model\FileManager
+     * @since 2.0.0
      */
     private $fileManager;
 
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var Inline
+     * @since 2.0.0
      */
     private $inline;
 
@@ -38,6 +42,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      * @param \Magento\Translation\Model\FileManager $fileManager
      * @param Inline $inline
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -56,6 +61,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      * Include RequireJs configuration as an asset on the page
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -67,6 +73,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * Include RequireJs inline translation configuration as an asset on the page
      * @return void
+     * @since 2.0.0
      */
     private function addInlineTranslationConfig()
     {

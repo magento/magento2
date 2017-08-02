@@ -10,16 +10,19 @@ use Magento\Catalog\Model\Layer\Filter\DataProvider\Category as CategoryDataProv
 
 /**
  * Layer category filter
+ * @since 2.0.0
  */
 class Category extends AbstractFilter
 {
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     private $escaper;
 
     /**
      * @var CategoryDataProvider
+     * @since 2.0.0
      */
     private $dataProvider;
 
@@ -32,6 +35,7 @@ class Category extends AbstractFilter
      * @param \Magento\Framework\Escaper $escaper
      * @param CategoryManagerFactory $categoryManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -59,6 +63,7 @@ class Category extends AbstractFilter
      *
      * @param   \Magento\Framework\App\RequestInterface $request
      * @return  $this
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -83,6 +88,7 @@ class Category extends AbstractFilter
      * Get filter value for reset current filter state
      *
      * @return mixed|null
+     * @since 2.0.0
      */
     public function getResetValue()
     {
@@ -93,6 +99,7 @@ class Category extends AbstractFilter
      * Get filter name
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -103,6 +110,7 @@ class Category extends AbstractFilter
      * Get data array for building category filter items
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getItemsData()
     {

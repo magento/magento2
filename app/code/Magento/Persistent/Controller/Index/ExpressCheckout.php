@@ -10,6 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class ExpressCheckout extends Index
 {
@@ -17,6 +18,7 @@ class ExpressCheckout extends Index
      * Add appropriate session message and redirect to shopping cart
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

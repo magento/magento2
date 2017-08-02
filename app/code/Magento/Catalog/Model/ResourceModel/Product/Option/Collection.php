@@ -15,16 +15,19 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var JoinProcessorInterface
+     * @since 2.1.0
      */
     protected $joinProcessor;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -32,6 +35,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -39,6 +43,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Option value factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
+     * @since 2.0.0
      */
     protected $_optionValueCollectionFactory;
 
@@ -53,6 +58,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -76,6 +82,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -90,6 +97,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function getOptions($storeId)
     {
@@ -103,6 +111,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addTitleToResult($storeId)
     {
@@ -138,6 +147,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addPriceToResult($storeId)
     {
@@ -183,6 +193,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addValuesToResult($storeId = null)
     {
@@ -227,6 +238,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|\Magento\Catalog\Model\Product|int $product
      * @return $this
+     * @since 2.0.0
      */
     public function addProductToFilter($product)
     {
@@ -246,6 +258,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @return void
      * @throws \Exception
+     * @since 2.1.0
      */
     protected function _initSelect()
     {
@@ -265,6 +278,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 2.1.0
      */
     public function getProductOptions($productId, $storeId, $requiredOnly = false)
     {
@@ -295,6 +309,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $required
      * @return $this
+     * @since 2.0.0
      */
     public function addRequiredFilter($required = true)
     {
@@ -307,6 +322,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $optionIds
      * @return $this
+     * @since 2.0.0
      */
     public function addIdsToFilter($optionIds)
     {
@@ -318,6 +334,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Call of protected method reset
      *
      * @return $this
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -326,6 +343,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return JoinProcessorInterface
+     * @since 2.1.0
      */
     private function getJoinProcessor()
     {

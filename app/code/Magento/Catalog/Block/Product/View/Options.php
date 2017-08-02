@@ -16,11 +16,13 @@ use Magento\Catalog\Model\Product;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Options extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $_product;
 
@@ -28,6 +30,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * Product option
      *
      * @var \Magento\Catalog\Model\Product\Option
+     * @since 2.0.0
      */
     protected $_option;
 
@@ -35,6 +38,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry = null;
 
@@ -42,21 +46,25 @@ class Options extends \Magento\Framework\View\Element\Template
      * Catalog product
      *
      * @var Product
+     * @since 2.0.0
      */
     protected $_catalogProduct;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
+     * @since 2.0.0
      */
     protected $pricingHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.0.0
      */
     protected $_catalogData;
 
@@ -69,6 +77,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -94,6 +103,7 @@ class Options extends \Magento\Framework\View\Element\Template
      *
      * @return Product
      * @throws \LogicExceptions
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -112,6 +122,7 @@ class Options extends \Magento\Framework\View\Element\Template
      *
      * @param Product $product
      * @return \Magento\Catalog\Block\Product\View\Options
+     * @since 2.0.0
      */
     public function setProduct(Product $product = null)
     {
@@ -122,6 +133,7 @@ class Options extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     public function getGroupOfOption($type)
     {
@@ -134,6 +146,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * Get product options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -142,6 +155,7 @@ class Options extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function hasOptions()
     {
@@ -156,6 +170,7 @@ class Options extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product\Option\Value|\Magento\Catalog\Model\Product\Option $option
      * @return array
+     * @since 2.0.0
      */
     protected function _getPriceConfiguration($option)
     {
@@ -203,6 +218,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * Get json representation of
      *
      * @return string
+     * @since 2.0.0
      */
     public function getJsonConfig()
     {
@@ -240,6 +256,7 @@ class Options extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return string
+     * @since 2.0.0
      */
     public function getOptionHtml(\Magento\Catalog\Model\Product\Option $option)
     {
@@ -258,6 +275,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * @param string $prefix
      * @param bool $forceSetAll
      * @return array
+     * @since 2.0.0
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {

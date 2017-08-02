@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
@@ -23,6 +24,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Downloadable catalog product configuration
      *
      * @var \Magento\Downloadable\Helper\Catalog\Product\Configuration
+     * @since 2.0.0
      */
     protected $_downloadableProductConfiguration = null;
 
@@ -39,6 +41,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -72,6 +75,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Retrieves item links options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getLinks()
     {
@@ -85,6 +89,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Return title of links section
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLinksTitle()
     {
@@ -95,6 +100,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Get list of all options for product
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptionList()
     {
@@ -105,6 +111,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Get list of all options for product
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
+     * @since 2.0.0
      */
     public function getOption($item)
     {

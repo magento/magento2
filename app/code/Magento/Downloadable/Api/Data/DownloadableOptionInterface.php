@@ -8,6 +8,7 @@ namespace Magento\Downloadable\Api\Data;
 /**
  * Downloadable Option
  * @api
+ * @since 2.0.0
  */
 interface DownloadableOptionInterface
 {
@@ -17,6 +18,7 @@ interface DownloadableOptionInterface
      * Returns the list of downloadable links
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getDownloadableLinks();
 
@@ -25,6 +27,7 @@ interface DownloadableOptionInterface
      *
      * @param int[] $downloadableLinks
      * @return $this
+     * @since 2.0.0
      */
     public function setDownloadableLinks($downloadableLinks);
 }

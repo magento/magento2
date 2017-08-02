@@ -8,12 +8,18 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
      * Remove role action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|void
+     * @since 2.0.0
      */
     public function execute()
     {

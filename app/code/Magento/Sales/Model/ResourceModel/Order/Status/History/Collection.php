@@ -14,6 +14,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  * Flat sales order status history collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection implements OrderStatusHistorySearchResultInterface
 {
@@ -21,6 +22,7 @@ class Collection extends AbstractCollection implements OrderStatusHistorySearchR
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_status_history_collection';
 
@@ -28,6 +30,7 @@ class Collection extends AbstractCollection implements OrderStatusHistorySearchR
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'order_status_history_collection';
 
@@ -35,6 +38,7 @@ class Collection extends AbstractCollection implements OrderStatusHistorySearchR
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,6 +55,7 @@ class Collection extends AbstractCollection implements OrderStatusHistorySearchR
      *
      * @param AbstractModel $instance
      * @return \Magento\Sales\Model\Order\Status\History|null
+     * @since 2.0.0
      */
     public function getUnnotifiedForInstance($instance)
     {

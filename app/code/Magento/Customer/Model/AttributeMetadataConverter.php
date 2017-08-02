@@ -12,26 +12,31 @@ use Magento\Eav\Api\Data\AttributeDefaultValueInterface;
 
 /**
  * Converter for AttributeMetadata
+ * @since 2.0.0
  */
 class AttributeMetadataConverter
 {
     /**
      * @var OptionInterfaceFactory
+     * @since 2.0.0
      */
     private $optionFactory;
 
     /**
      * @var ValidationRuleInterfaceFactory
+     * @since 2.0.0
      */
     private $validationRuleFactory;
 
     /**
      * @var AttributeMetadataInterfaceFactory
+     * @since 2.0.0
      */
     private $attributeMetadataFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -42,6 +47,7 @@ class AttributeMetadataConverter
      * @param ValidationRuleInterfaceFactory $validationRuleFactory
      * @param AttributeMetadataInterfaceFactory $attributeMetadataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         OptionInterfaceFactory $optionFactory,
@@ -60,6 +66,7 @@ class AttributeMetadataConverter
      *
      * @param \Magento\Customer\Model\Attribute $attribute
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
+     * @since 2.0.0
      */
     public function createMetadataAttribute($attribute)
     {

@@ -7,16 +7,19 @@ namespace Magento\Catalog\Model\Product;
 
 /**
  * Price model for external catalogs
+ * @since 2.0.0
  */
 class CatalogPriceFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -29,6 +32,7 @@ class CatalogPriceFactory
      * @param string $name
      * @return \Magento\Catalog\Model\Product\CatalogPriceInterface
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function create($name)
     {

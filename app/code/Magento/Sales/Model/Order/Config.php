@@ -9,11 +9,13 @@ namespace Magento\Sales\Model\Order;
  * Order configuration model
  *
  * @api
+ * @since 2.0.0
  */
 class Config
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\Collection
+     * @since 2.0.0
      */
     protected $collection;
 
@@ -21,31 +23,37 @@ class Config
      * Statuses per state array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $stateStatuses;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $statuses;
 
     /**
      * @var Status
+     * @since 2.0.0
      */
     protected $orderStatusFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
+     * @since 2.0.0
      */
     protected $orderStatusCollectionFactory;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $maskStatusesMapping = [
         \Magento\Framework\App\Area::AREA_FRONTEND => [
@@ -60,6 +68,7 @@ class Config
      * @param \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory
      * @param \Magento\Framework\App\State $state
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
@@ -73,6 +82,7 @@ class Config
 
     /**
      * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
+     * @since 2.0.0
      */
     protected function _getCollection()
     {
@@ -85,6 +95,7 @@ class Config
     /**
      * @param string $state
      * @return Status|null
+     * @since 2.0.0
      */
     protected function _getState($state)
     {
@@ -101,6 +112,7 @@ class Config
      *
      * @param   string $state
      * @return  string
+     * @since 2.0.0
      */
     public function getStateDefaultStatus($state)
     {
@@ -118,6 +130,7 @@ class Config
      *
      * @param   string $code
      * @return  string
+     * @since 2.0.0
      */
     public function getStatusLabel($code)
     {
@@ -132,6 +145,7 @@ class Config
      * @param string $area
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     protected function maskStatusForArea($area, $code)
     {
@@ -146,6 +160,7 @@ class Config
      *
      * @param   string $state
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function getStateLabel($state)
     {
@@ -160,6 +175,7 @@ class Config
      * Retrieve all statuses
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStatuses()
     {
@@ -171,6 +187,7 @@ class Config
      * Order states getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStates()
     {
@@ -191,6 +208,7 @@ class Config
      * @param mixed $state
      * @param bool $addLabels
      * @return array
+     * @since 2.0.0
      */
     public function getStateStatuses($state, $addLabels = true)
     {
@@ -225,6 +243,7 @@ class Config
      * Retrieve states which are visible on front end
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVisibleOnFrontStatuses()
     {
@@ -235,6 +254,7 @@ class Config
      * Get order statuses, invisible on frontend
      *
      * @return array
+     * @since 2.0.0
      */
     public function getInvisibleOnFrontStatuses()
     {
@@ -247,6 +267,7 @@ class Config
      *
      * @param bool $visibility
      * @return array
+     * @since 2.0.0
      */
     protected function _getStatuses($visibility)
     {
@@ -269,6 +290,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
+     * @since 2.2.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

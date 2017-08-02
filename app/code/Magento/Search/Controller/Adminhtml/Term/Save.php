@@ -11,16 +11,23 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends TermController
 {
     /**
      * @var QueryFactory
+     * @since 2.0.0
      */
     private $queryFactory;
 
     /**
      * @param Context $context
      * @param QueryFactory $queryFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -35,6 +42,7 @@ class Save extends TermController
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -65,6 +73,7 @@ class Save extends TermController
      *
      * @return \Magento\Search\Model\Query
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     private function loadQuery()
     {
@@ -95,6 +104,7 @@ class Save extends TermController
      *
      * @param array $data
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     private function proceedToEdit($data)
     {

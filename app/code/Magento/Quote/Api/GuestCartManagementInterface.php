@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Cart Management interface for guest carts.
  * @api
+ * @since 2.0.0
  */
 interface GuestCartManagementInterface
 {
@@ -18,6 +19,7 @@ interface GuestCartManagementInterface
      *
      * @return string Cart ID.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     * @since 2.0.0
      */
     public function createEmptyCart();
 
@@ -28,6 +30,7 @@ interface GuestCartManagementInterface
      * @param int $customerId The customer ID.
      * @param int $storeId
      * @return boolean
+     * @since 2.0.0
      */
     public function assignCustomer($cartId, $customerId, $storeId);
 
@@ -38,6 +41,7 @@ interface GuestCartManagementInterface
      * @param PaymentInterface|null $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
+     * @since 2.0.0
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null);
 }

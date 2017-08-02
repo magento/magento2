@@ -14,12 +14,18 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\Checkout;
 
+/**
+ * Class \Magento\Paypal\Block\Express\Form
+ *
+ * @since 2.0.0
+ */
 class Form extends \Magento\Payment\Block\Form
 {
     /**
      * Payment method code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_methodCode = Config::METHOD_WPP_EXPRESS;
 
@@ -27,31 +33,37 @@ class Form extends \Magento\Payment\Block\Form
      * Paypal data
      *
      * @var Data
+     * @since 2.0.0
      */
     protected $_paypalData;
 
     /**
      * @var ConfigFactory
+     * @since 2.0.0
      */
     protected $_paypalConfigFactory;
 
     /**
      * @var ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var null
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isScopePrivate;
 
     /**
      * @var CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
@@ -62,6 +74,7 @@ class Form extends \Magento\Payment\Block\Form
      * @param Data $paypalData
      * @param CurrentCustomer $currentCustomer
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -84,6 +97,7 @@ class Form extends \Magento\Payment\Block\Form
      * Set template and redirect message
      *
      * @return null
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -107,6 +121,7 @@ class Form extends \Magento\Payment\Block\Form
      * Payment method code getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMethodCode()
     {
@@ -117,6 +132,7 @@ class Form extends \Magento\Payment\Block\Form
      * Get initialized mark template
      *
      * @return Template
+     * @since 2.0.0
      */
     protected function _getMarkTemplate()
     {
@@ -131,6 +147,7 @@ class Form extends \Magento\Payment\Block\Form
      * @param Template $mark
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _initializeRedirectTemplateWithMark(Template $mark)
     {
@@ -150,6 +167,7 @@ class Form extends \Magento\Payment\Block\Form
      * Get billing agreement code
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getBillingAgreementCode()
     {

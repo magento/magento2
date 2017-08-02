@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Template;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Review extends Template implements IdentityInterface
 {
@@ -20,6 +21,7 @@ class Review extends Template implements IdentityInterface
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -27,6 +29,7 @@ class Review extends Template implements IdentityInterface
      * Review resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
+     * @since 2.0.0
      */
     protected $_reviewsColFactory;
 
@@ -35,6 +38,7 @@ class Review extends Template implements IdentityInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,6 +57,7 @@ class Review extends Template implements IdentityInterface
      * Get current product id
      *
      * @return null|int
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -64,6 +69,7 @@ class Review extends Template implements IdentityInterface
      * Get URL for ajax call
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductReviewUrl()
     {
@@ -80,6 +86,7 @@ class Review extends Template implements IdentityInterface
      * Set tab title
      *
      * @return void
+     * @since 2.0.0
      */
     public function setTabTitle()
     {
@@ -93,6 +100,7 @@ class Review extends Template implements IdentityInterface
      * Get size of reviews collection
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCollectionSize()
     {
@@ -112,6 +120,7 @@ class Review extends Template implements IdentityInterface
      * Return unique ID(s) for each object in system
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

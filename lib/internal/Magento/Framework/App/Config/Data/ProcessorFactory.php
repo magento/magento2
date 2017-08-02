@@ -7,20 +7,28 @@
  */
 namespace Magento\Framework\App\Config\Data;
 
+/**
+ * Class \Magento\Framework\App\Config\Data\ProcessorFactory
+ *
+ * @since 2.0.0
+ */
 class ProcessorFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var ProcessorInterface[]
+     * @since 2.0.0
      */
     protected $_pool;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,6 +42,7 @@ class ProcessorFactory
      * @return ProcessorInterface
      * @throws \InvalidArgumentException In case the given classname is not an instance of ProcessorInterface
      * @api
+     * @since 2.0.0
      */
     public function get($processorModel)
     {

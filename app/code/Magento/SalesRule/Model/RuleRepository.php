@@ -15,55 +15,68 @@ use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
  * Sales rule CRUD class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.0.0
      */
     protected $ruleFactory;
 
     /**
      * @var \Magento\SalesRule\Api\Data\RuleInterfaceFactory
+     * @since 2.0.0
      */
     protected $ruleDataFactory;
 
     /**
      * @var \Magento\SalesRule\Api\Data\ConditionInterfaceFactory
+     * @since 2.0.0
      */
     protected $conditionDataFactory;
 
     /**
      * @var \Magento\SalesRule\Model\Converter\ToDataModel
+     * @since 2.0.0
      */
     protected $toDataModelConverter;
 
     /**
      * @var \Magento\SalesRule\Model\Converter\ToModel
+     * @since 2.0.0
      */
     protected $toModelConverter;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
+     * @since 2.0.0
      */
     protected $ruleCollectionFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -79,6 +92,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -106,6 +120,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule)
     {
@@ -118,6 +133,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getById($id)
     {
@@ -135,6 +151,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -166,6 +183,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -183,8 +201,9 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated
+     * @deprecated 2.2.0
      * @return void
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,
@@ -205,8 +224,9 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

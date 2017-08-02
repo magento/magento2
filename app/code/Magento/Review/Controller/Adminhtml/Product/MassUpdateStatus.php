@@ -9,10 +9,16 @@ use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\MassUpdateStatus
+ *
+ * @since 2.0.0
+ */
 class MassUpdateStatus extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

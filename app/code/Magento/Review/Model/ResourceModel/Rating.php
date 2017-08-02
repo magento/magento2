@@ -11,6 +11,7 @@ namespace Magento\Review\Model\ResourceModel;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,16 +21,19 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -40,6 +44,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -60,6 +65,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,6 +76,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {
@@ -84,6 +91,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Review\Model\Rating $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -108,6 +116,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Review\Model\Rating $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -143,6 +152,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param  int $ratingId
      * @return array
+     * @since 2.0.0
      */
     public function getStores($ratingId)
     {
@@ -161,6 +171,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Review\Model\Rating $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -179,6 +190,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function processRatingCodes(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -202,6 +214,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function processRatingStores(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -227,6 +240,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $table
      * @param array $storeIds
      * @return void
+     * @since 2.0.0
      */
     protected function deleteRatingData($ratingId, $table, array $storeIds)
     {
@@ -249,6 +263,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $table
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     protected function insertRatingData($table, array $data)
     {
@@ -272,6 +287,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -296,6 +312,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Review\Model\Rating $object
      * @param boolean $onlyForCurrentStore
      * @return array
+     * @since 2.0.0
      */
     public function getEntitySummary($object, $onlyForCurrentStore = true)
     {
@@ -337,6 +354,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Review\Model\Rating $object
      * @return array
+     * @since 2.0.0
      */
     protected function _getEntitySummaryData($object)
     {
@@ -392,6 +410,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Review\Model\Rating $object
      * @param boolean $onlyForCurrentStore
      * @return array
+     * @since 2.0.0
      */
     public function getReviewSummary($object, $onlyForCurrentStore = true)
     {
@@ -463,6 +482,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $entityCode
      * @return int
+     * @since 2.0.0
      */
     public function getEntityIdByCode($entityCode)
     {
@@ -481,6 +501,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $productId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteAggregatedRatingsByProductId($productId)
     {

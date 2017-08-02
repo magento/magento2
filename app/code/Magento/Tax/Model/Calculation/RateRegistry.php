@@ -10,12 +10,18 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rate as TaxRateModel;
 use Magento\Tax\Model\Calculation\RateFactory as TaxRateModelFactory;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\RateRegistry
+ *
+ * @since 2.0.0
+ */
 class RateRegistry
 {
     /**
      * Tax rate model factory
      *
      * @var  TaxRateModelFactory
+     * @since 2.0.0
      */
     private $taxRateModelFactory;
 
@@ -23,6 +29,7 @@ class RateRegistry
      * Tax rate models
      *
      * @var TaxRateModel[]
+     * @since 2.0.0
      */
     private $taxRateRegistryById = [];
 
@@ -30,6 +37,7 @@ class RateRegistry
      * Constructor
      *
      * @param TaxRateModelFactory $taxModelRateFactory
+     * @since 2.0.0
      */
     public function __construct(
         TaxRateModelFactory $taxModelRateFactory
@@ -42,6 +50,7 @@ class RateRegistry
      *
      * @param TaxRateModel $taxRateModel
      * @return void
+     * @since 2.0.0
      */
     public function registerTaxRate(TaxRateModel $taxRateModel)
     {
@@ -54,6 +63,7 @@ class RateRegistry
      * @param int $taxRateId
      * @return TaxRateModel
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function retrieveTaxRate($taxRateId)
     {
@@ -75,6 +85,7 @@ class RateRegistry
      *
      * @param int $taxRateId
      * @return void
+     * @since 2.0.0
      */
     public function removeTaxRate($taxRateId)
     {

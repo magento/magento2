@@ -9,6 +9,7 @@ use Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable;
 
 /**
  * Class BmlSortOrder
+ * @since 2.1.0
  */
 class BmlSortOrder extends AbstractEnable
 {
@@ -16,6 +17,7 @@ class BmlSortOrder extends AbstractEnable
      * Getting the name of a UI attribute
      *
      * @return string
+     * @since 2.1.0
      */
     protected function getDataAttributeName()
     {

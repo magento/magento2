@@ -8,16 +8,19 @@ namespace Magento\Framework\App\View\Deployment\Version\Storage;
 
 /**
  * Persistence of deployment version of static files in a local file
+ * @since 2.0.0
  */
 class File implements \Magento\Framework\App\View\Deployment\Version\StorageInterface
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     private $directory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $fileName;
 
@@ -25,6 +28,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
      * @param \Magento\Framework\Filesystem $filesystem
      * @param string $directoryCode
      * @param string $fileName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -37,6 +41,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load()
     {
@@ -48,6 +53,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save($data)
     {

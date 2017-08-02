@@ -7,15 +7,22 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Class \Magento\Framework\App\RequestFactory
+ *
+ * @since 2.0.0
+ */
 class RequestFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -27,6 +34,7 @@ class RequestFactory
      *
      * @param array $arguments
      * @return RequestInterface
+     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

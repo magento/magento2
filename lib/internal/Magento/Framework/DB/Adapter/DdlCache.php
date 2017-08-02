@@ -11,6 +11,7 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 
 /**
  * Cache segment for DDL operations in database adapter
+ * @since 2.0.0
  */
 class DdlCache extends TagScope
 {
@@ -28,6 +29,7 @@ class DdlCache extends TagScope
      * Constructor
      *
      * @param FrontendPool $cacheFrontendPool
+     * @since 2.0.0
      */
     public function __construct(FrontendPool $cacheFrontendPool)
     {

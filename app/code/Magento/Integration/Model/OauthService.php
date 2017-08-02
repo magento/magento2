@@ -18,51 +18,61 @@ use Magento\Framework\Exception\IntegrationException;
  * Integration oAuth service.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 {
     /**
      * @var  \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var  ConsumerFactory
+     * @since 2.0.0
      */
     protected $_consumerFactory;
 
     /**
      * @var  TokenFactory
+     * @since 2.0.0
      */
     protected $_tokenFactory;
 
     /**
      * @var  IntegrationOauthHelper
+     * @since 2.0.0
      */
     protected $_dataHelper;
 
     /**
      * @var  \Magento\Framework\HTTP\ZendClient
+     * @since 2.0.0
      */
     protected $_httpClient;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var OauthHelper
+     * @since 2.0.0
      */
     protected $_oauthHelper;
 
     /**
      * @var TokenProvider
+     * @since 2.0.0
      */
     protected $_tokenProvider;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.1.0
      */
     private $_dateHelper;
 
@@ -77,6 +87,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param OauthHelper $oauthHelper
      * @param TokenProvider $tokenProvider
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -103,7 +114,8 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
      *
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getDateHelper()
     {
@@ -116,6 +128,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function createConsumer($consumerData)
     {
@@ -136,6 +149,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function createAccessToken($consumerId, $clearExistingToken = false)
     {
@@ -160,6 +174,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAccessToken($consumerId)
     {
@@ -177,6 +192,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadConsumer($consumerId)
     {
@@ -193,6 +209,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function loadConsumerByKey($key)
     {
@@ -209,6 +226,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function postToConsumer($consumerId, $endpointUrl)
     {
@@ -252,6 +270,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteConsumer($consumerId)
     {
@@ -263,6 +282,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteIntegrationToken($consumerId)
     {
@@ -282,6 +302,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
      * @param int $consumerId
      * @return ConsumerModel
      * @throws \Magento\Framework\Exception\IntegrationException
+     * @since 2.0.0
      */
     protected function _loadConsumerById($consumerId)
     {

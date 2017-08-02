@@ -7,6 +7,7 @@ namespace Magento\Cms\Block\Widget\Page;
 
 /**
  * Widget to display link to CMS page
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento\Widget\Block\BlockInterface
 {
@@ -14,6 +15,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Prepared href attribute
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_href;
 
@@ -21,6 +23,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Prepared title attribute
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_title;
 
@@ -28,11 +31,13 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Prepared anchor text
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_anchorText;
 
     /**
      * @var \Magento\Cms\Model\ResourceModel\Page
+     * @since 2.0.0
      */
     protected $_resourcePage;
 
@@ -40,6 +45,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * Cms page
      *
      * @var \Magento\Cms\Helper\Page
+     * @since 2.0.0
      */
     protected $_cmsPage;
 
@@ -48,6 +54,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * @param \Magento\Cms\Model\ResourceModel\Page $resourcePage
      * @param \Magento\Cms\Helper\Page $cmsPage
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -65,6 +72,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * or retrieve such using passed page id.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -85,6 +93,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * as parameter or retrieve page title from DB using passed identifier or page id.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -110,6 +119,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      * if title will be blank string, page identifier will be used.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {

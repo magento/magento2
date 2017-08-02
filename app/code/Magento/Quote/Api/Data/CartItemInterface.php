@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CartItemInterface
  * @api
+ * @since 2.0.0
  */
 interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -36,6 +37,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns the item ID.
      *
      * @return int|null Item ID. Otherwise, null.
+     * @since 2.0.0
      */
     public function getItemId();
 
@@ -44,6 +46,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param int $itemId
      * @return $this
+     * @since 2.0.0
      */
     public function setItemId($itemId);
 
@@ -51,6 +54,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns the product SKU.
      *
      * @return string|null Product SKU. Otherwise, null.
+     * @since 2.0.0
      */
     public function getSku();
 
@@ -59,6 +63,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku);
 
@@ -66,6 +71,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns the product quantity.
      *
      * @return float Product quantity.
+     * @since 2.0.0
      */
     public function getQty();
 
@@ -74,6 +80,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     public function setQty($qty);
 
@@ -81,6 +88,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns the product name.
      *
      * @return string|null Product name. Otherwise, null.
+     * @since 2.0.0
      */
     public function getName();
 
@@ -89,6 +97,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -96,6 +105,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns the product price.
      *
      * @return float|null Product price. Otherwise, null.
+     * @since 2.0.0
      */
     public function getPrice();
 
@@ -104,6 +114,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -111,6 +122,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns the product type.
      *
      * @return string|null Product type. Otherwise, null.
+     * @since 2.0.0
      */
     public function getProductType();
 
@@ -119,6 +131,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $productType
      * @return $this
+     * @since 2.0.0
      */
     public function setProductType($productType);
 
@@ -126,6 +139,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns Quote id.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getQuoteId();
 
@@ -134,6 +148,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param string $quoteId
      * @return $this
+     * @since 2.0.0
      */
     public function setQuoteId($quoteId);
 
@@ -141,6 +156,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Returns product option
      *
      * @return \Magento\Quote\Api\Data\ProductOptionInterface|null
+     * @since 2.0.0
      */
     public function getProductOption();
 
@@ -149,6 +165,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param \Magento\Quote\Api\Data\ProductOptionInterface $productOption
      * @return $this
+     * @since 2.0.0
      */
     public function setProductOption(\Magento\Quote\Api\Data\ProductOptionInterface $productOption);
 
@@ -156,6 +173,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\CartItemExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -164,6 +182,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      *
      * @param \Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes);
 }

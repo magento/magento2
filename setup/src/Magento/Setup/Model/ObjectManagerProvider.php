@@ -18,27 +18,32 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
  * Links Zend Framework's service locator and Magento object manager.
  * Guaranties single object manager per application run.
  * Hides complexity of creating Magento object manager
+ * @since 2.0.0
  */
 class ObjectManagerProvider
 {
     /**
      * @var ServiceLocatorInterface
+     * @since 2.0.0
      */
     private $serviceLocator;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var Bootstrap
+     * @since 2.2.0
      */
     private $bootstrap;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
      * @param Bootstrap $bootstrap
+     * @since 2.0.0
      */
     public function __construct(
         ServiceLocatorInterface $serviceLocator,
@@ -53,6 +58,7 @@ class ObjectManagerProvider
      *
      * @return ObjectManagerInterface
      * @throws \Magento\Setup\Exception
+     * @since 2.0.0
      */
     public function get()
     {
@@ -71,6 +77,7 @@ class ObjectManagerProvider
      * Creates cli commands and initialize them with application instance
      *
      * @return void
+     * @since 2.2.0
      */
     private function createCliCommands()
     {
@@ -87,6 +94,7 @@ class ObjectManagerProvider
      * Causes object manager to be reinitialized the next time it is retrieved.
      *
      * @return void
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -98,6 +106,7 @@ class ObjectManagerProvider
      *
      * @param ObjectManagerInterface $objectManager
      * @return void
+     * @since 2.0.0
      */
     public function setObjectManager(ObjectManagerInterface $objectManager)
     {
@@ -109,6 +118,7 @@ class ObjectManagerProvider
      *
      * @param array $initParams
      * @return \Magento\Framework\App\ObjectManagerFactory
+     * @since 2.0.0
      */
     public function getObjectManagerFactory($initParams = [])
     {

@@ -9,11 +9,13 @@ namespace Magento\Paypal\Block\Payflow\Link;
  * Payflow link iframe block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Payment\Block\Form
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'payflowlink/info.phtml';
 
@@ -21,6 +23,7 @@ class Form extends \Magento\Payment\Block\Form
      * Get frame action URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrameActionUrl()
     {

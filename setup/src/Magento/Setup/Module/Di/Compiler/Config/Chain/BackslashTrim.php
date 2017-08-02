@@ -8,6 +8,11 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim
+ *
+ * @since 2.0.0
+ */
 class BackslashTrim implements ModificationInterface
 {
     /**
@@ -15,6 +20,7 @@ class BackslashTrim implements ModificationInterface
      *
      * @param array $config
      * @return array
+     * @since 2.0.0
      */
     public function modify(array $config)
     {
@@ -33,6 +39,7 @@ class BackslashTrim implements ModificationInterface
      *
      * @param array $arguments
      * @return array
+     * @since 2.0.0
      */
     private function resolveInstancesNames(array $arguments)
     {
@@ -49,6 +56,7 @@ class BackslashTrim implements ModificationInterface
      *
      * @param array $argument
      * @return array
+     * @since 2.0.0
      */
     private function resolveArguments(&$argument)
     {

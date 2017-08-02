@@ -6,6 +6,11 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Sold
+ *
+ * @since 2.0.0
+ */
 class Sold extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
@@ -19,6 +24,7 @@ class Sold extends \Magento\Reports\Controller\Adminhtml\Report\Product
      * Sold Products Report Action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

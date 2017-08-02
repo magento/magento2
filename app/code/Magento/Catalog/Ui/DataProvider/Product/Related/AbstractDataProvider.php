@@ -20,36 +20,43 @@ use Magento\Store\Api\StoreRepositoryInterface;
  * Class AbstractDataProvider
  *
  * @api
+ * @since 2.1.0
  */
 abstract class AbstractDataProvider extends ProductDataProvider
 {
     /**
      * @var RequestInterface
+     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.1.0
      */
     protected $productRepository;
 
     /**
      * @var StoreRepositoryInterface
+     * @since 2.1.0
      */
     protected $storeRepository;
 
     /**
      * @var ProductLinkRepositoryInterface
+     * @since 2.1.0
      */
     protected $productLinkRepository;
 
     /**
      * @var ProductInterface
+     * @since 2.1.0
      */
     private $product;
 
     /**
      * @var StoreInterface
+     * @since 2.1.0
      */
     private $store;
 
@@ -67,6 +74,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -103,11 +111,13 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * Retrieve link type
      *
      * @return string
+     * @since 2.1.0
      */
     abstract protected function getLinkType();
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getCollection()
     {
@@ -136,6 +146,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      *
      * @param Collection $collection
      * @return Collection
+     * @since 2.1.0
      */
     protected function addCollectionFilters(Collection $collection)
     {
@@ -164,6 +175,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * Retrieve product
      *
      * @return ProductInterface|null
+     * @since 2.1.0
      */
     protected function getProduct()
     {
@@ -182,6 +194,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * Retrieve store
      *
      * @return StoreInterface|null
+     * @since 2.1.0
      */
     protected function getStore()
     {

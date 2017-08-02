@@ -13,22 +13,26 @@ use Magento\Catalog\Model\ResourceModel\ProductFrontendAction;
  * Find deprecated frontend actions (@see \Magento\Catalog\Api\Data\ProductFrontendActionInterface)
  * Frontend actions deprecates by lifetime.
  * For each scope we have own lifetime.
+ * @since 2.2.0
  */
 class FrontendActionsFlush
 {
     /**
      * @var ProductFrontendAction
+     * @since 2.2.0
      */
     private $productFrontendActionResource;
 
     /**
      * @var FrontendStorageConfigurationPool
+     * @since 2.2.0
      */
     private $frontendStorageConfigurationPool;
 
     /**
      * @param ProductFrontendAction $productFrontendActionResource
      * @param FrontendStorageConfigurationPool $frontendStorageConfigurationPool
+     * @since 2.2.0
      */
     public function __construct(
         ProductFrontendAction $productFrontendActionResource,
@@ -45,6 +49,7 @@ class FrontendActionsFlush
      *
      * @param string $namespace
      * @return int
+     * @since 2.2.0
      */
     private function getLifeTimeByNamespace($namespace)
     {
@@ -66,6 +71,7 @@ class FrontendActionsFlush
      * recently_viewed_product, recently_compared_product, etc...
      *
      * @return array
+     * @since 2.2.0
      */
     private function getUniqueNamespaces()
     {
@@ -79,6 +85,7 @@ class FrontendActionsFlush
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function execute()
     {

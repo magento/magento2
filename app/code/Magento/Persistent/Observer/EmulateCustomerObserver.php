@@ -9,6 +9,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class EmulateCustomer
+ * @since 2.0.0
  */
 class EmulateCustomerObserver implements ObserverInterface
 {
@@ -16,6 +17,7 @@ class EmulateCustomerObserver implements ObserverInterface
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -23,6 +25,7 @@ class EmulateCustomerObserver implements ObserverInterface
      * Persistent session
      *
      * @var \Magento\Persistent\Helper\Session
+     * @since 2.0.0
      */
     protected $_persistentSession;
 
@@ -30,6 +33,7 @@ class EmulateCustomerObserver implements ObserverInterface
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
+     * @since 2.0.0
      */
     protected $_persistentData;
 
@@ -37,11 +41,13 @@ class EmulateCustomerObserver implements ObserverInterface
      * Customer repository
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @since 2.1.0
      */
     protected $addressRepository;
 
@@ -53,6 +59,7 @@ class EmulateCustomerObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -75,6 +82,7 @@ class EmulateCustomerObserver implements ObserverInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

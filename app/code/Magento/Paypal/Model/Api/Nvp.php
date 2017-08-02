@@ -19,6 +19,7 @@ use Magento\Payment\Model\Method\Logger;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 {
@@ -54,6 +55,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Capture type (make authorization close or remain open)
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_captureTypeComplete = 'Complete';
 
@@ -61,6 +63,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Capture type (make authorization close or remain open)
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_captureTypeNotcomplete = 'NotComplete';
 
@@ -68,6 +71,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Global public interface map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_globalMap = [
         // each call
@@ -173,6 +177,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Filter callback for preparing internal amounts to NVP request
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_exportToRequestFilters = [
         'AMT' => 'formatPrice',
@@ -194,6 +199,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Filter callback for preparing internal amounts to NVP request
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_importFromRequestFilters = [
         'REDIRECTREQUIRED' => '_filterToBool',
@@ -205,6 +211,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Request map for each API call
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_eachCallRequest = ['VERSION', 'USER', 'PWD', 'SIGNATURE', 'BUTTONSOURCE'];
 
@@ -212,6 +219,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * SetExpressCheckout request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_setExpressCheckoutRequest = [
         'PAYMENTACTION',
@@ -244,6 +252,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * SetExpressCheckout response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_setExpressCheckoutResponse = ['TOKEN'];
 
@@ -251,6 +260,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetExpressCheckoutDetails request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_getExpressCheckoutDetailsRequest = ['TOKEN', 'SUBJECT'];
 
@@ -258,6 +268,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoExpressCheckoutPayment request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doExpressCheckoutPaymentRequest = [
         'TOKEN',
@@ -279,6 +290,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoExpressCheckoutPayment response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doExpressCheckoutPaymentResponse = [
         'TRANSACTIONID',
@@ -292,6 +304,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoDirectPayment request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doDirectPaymentRequest = [
         'PAYMENTACTION',
@@ -322,6 +335,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoDirectPayment response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doDirectPaymentResponse = [
         'TRANSACTIONID',
@@ -336,6 +350,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoReauthorization request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doReauthorizationRequest = ['AUTHORIZATIONID', 'AMT', 'CURRENCYCODE'];
 
@@ -343,6 +358,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoReauthorization response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doReauthorizationResponse = [
         'AUTHORIZATIONID',
@@ -355,6 +371,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoCapture request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doCaptureRequest = ['AUTHORIZATIONID', 'COMPLETETYPE', 'AMT', 'CURRENCYCODE', 'NOTE', 'INVNUM'];
 
@@ -362,6 +379,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoCapture response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doCaptureResponse = ['TRANSACTIONID', 'CURRENCYCODE', 'AMT', 'PAYMENTSTATUS', 'PENDINGREASON'];
 
@@ -369,6 +387,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoAuthorization request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doAuthorizationRequest = ['TRANSACTIONID', 'AMT', 'CURRENCYCODE'];
 
@@ -376,6 +395,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoAuthorization response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doAuthorizationResponse = ['TRANSACTIONID', 'AMT'];
 
@@ -383,6 +403,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoVoid request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doVoidRequest = ['AUTHORIZATIONID', 'NOTE'];
 
@@ -390,6 +411,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetTransactionDetailsRequest
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_getTransactionDetailsRequest = ['TRANSACTIONID'];
 
@@ -397,6 +419,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetTransactionDetailsResponse
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_getTransactionDetailsResponse = [
         'PAYERID',
@@ -414,6 +437,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * RefundTransaction request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_refundTransactionRequest = ['TRANSACTIONID', 'REFUNDTYPE', 'CURRENCYCODE', 'NOTE'];
 
@@ -421,6 +445,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * RefundTransaction response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_refundTransactionResponse = ['REFUNDTRANSACTIONID', 'GROSSREFUNDAMT'];
 
@@ -428,6 +453,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * ManagePendingTransactionStatus request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_managePendingTransactionStatusRequest = ['TRANSACTIONID', 'ACTION'];
 
@@ -435,6 +461,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * ManagePendingTransactionStatus response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_managePendingTransactionStatusResponse = ['TRANSACTIONID', 'STATUS'];
 
@@ -442,6 +469,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetPalDetails response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_getPalDetailsResponse = ['PAL'];
 
@@ -449,6 +477,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Map for billing address import/export
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_billingAddressMap = [
         'BUSINESS' => 'company',
@@ -473,12 +502,14 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Merging with $_billingAddressMap
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_billingAddressMapRequest = [];
 
     /**
      * Map for shipping address import/export (extends billing address mapper)
      * @var array
+     * @since 2.0.0
      */
     protected $_shippingAddressMap = [
         'SHIPTOCOUNTRYCODE' => 'country_id',
@@ -494,6 +525,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Map for callback request
      * @var array
+     * @since 2.0.0
      */
     protected $_callbackRequestMap = [
         'SHIPTOCOUNTRY' => 'country_id',
@@ -507,6 +539,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Payment information response specifically to be collected after some requests
      * @var string[]
+     * @since 2.0.0
      */
     protected $_paymentInformationResponse = [
         'PAYERID',
@@ -526,6 +559,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Line items export mapping settings
      * @var array
+     * @since 2.0.0
      */
     protected $_lineItemTotalExportMap = [
         Cart::AMOUNT_SUBTOTAL => 'ITEMAMT',
@@ -536,6 +570,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Line items export mapping settings
      * @var array
+     * @since 2.0.0
      */
     protected $_lineItemExportItemsFormat = [
         'id' => 'L_NUMBER%d',
@@ -547,6 +582,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Shipping options export to request mapping settings
      * @var array
+     * @since 2.0.0
      */
     protected $_shippingOptionsExportItemsFormat = [
         'is_default' => 'L_SHIPPINGOPTIONISDEFAULT%d',
@@ -560,6 +596,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * init Billing Agreement request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_customerBillingAgreementRequest = ['RETURNURL', 'CANCELURL', 'BILLINGTYPE'];
 
@@ -567,6 +604,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * init Billing Agreement response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_customerBillingAgreementResponse = ['TOKEN'];
 
@@ -574,6 +612,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Billing Agreement details request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_billingAgreementCustomerDetailsRequest = ['TOKEN'];
 
@@ -581,6 +620,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Billing Agreement details response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_billingAgreementCustomerDetailsResponse = [
         'EMAIL',
@@ -594,6 +634,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Create Billing Agreement request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_createBillingAgreementRequest = ['TOKEN'];
 
@@ -601,6 +642,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Create Billing Agreement response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_createBillingAgreementResponse = ['BILLINGAGREEMENTID'];
 
@@ -608,6 +650,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Update Billing Agreement request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_updateBillingAgreementRequest = [
         'REFERENCEID',
@@ -620,6 +663,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Update Billing Agreement response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_updateBillingAgreementResponse = [
         'REFERENCEID',
@@ -632,6 +676,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Do Reference Transaction request map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doReferenceTransactionRequest = [
         'REFERENCEID',
@@ -649,6 +694,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Do Reference Transaction response map
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_doReferenceTransactionResponse = ['BILLINGAGREEMENTID', 'TRANSACTIONID'];
 
@@ -656,6 +702,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_debugReplacePrivateDataKeys = [
         'ACCT',
@@ -673,6 +720,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Map of credit card types supported by this API
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_supportedCcTypes = [
         'VI' => 'Visa',
@@ -687,6 +735,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Required fields in the response
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_requiredResponseParams = [self::DO_DIRECT_PAYMENT => ['ACK', 'CORRELATIONID', 'AMT']];
 
@@ -694,6 +743,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Warning codes recollected after each API call
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_callWarnings = [];
 
@@ -701,6 +751,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Error codes recollected after each API call
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_callErrors = [];
 
@@ -708,26 +759,31 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Whether to return raw response information after each call
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_rawResponseNeeded = false;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory
+     * @since 2.0.0
      */
     protected $_countryFactory;
 
     /**
      * @var \Magento\Paypal\Model\Api\ProcessableExceptionFactory
+     * @since 2.0.0
      */
     protected $_processableExceptionFactory;
 
     /**
      * @var \Magento\Framework\Exception\LocalizedExceptionFactory
+     * @since 2.0.0
      */
     protected $_frameworkExceptionFactory;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @since 2.0.0
      */
     protected $_curlFactory;
 
@@ -735,6 +791,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * API call HTTP headers
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_headers = [];
 
@@ -750,6 +807,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
@@ -774,6 +832,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * API endpoint getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getApiEndpoint()
     {
@@ -785,6 +844,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Return Paypal Api version
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVersion()
     {
@@ -795,6 +855,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Retrieve billing agreement type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBillingAgreementType()
     {
@@ -808,6 +869,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
+     * @since 2.0.0
      */
     public function callSetExpressCheckout()
     {
@@ -839,6 +901,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetExpressCheckoutDetails
+     * @since 2.0.0
      */
     public function callGetExpressCheckoutDetails()
     {
@@ -854,6 +917,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoExpressCheckoutPayment
+     * @since 2.0.0
      */
     public function callDoExpressCheckoutPayment()
     {
@@ -876,6 +940,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Process a credit card payment
      *
      * @return void
+     * @since 2.0.0
      */
     public function callDoDirectPayment()
     {
@@ -893,6 +958,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoReferenceTransaction
+     * @since 2.0.0
      */
     public function callDoReferenceTransaction()
     {
@@ -907,6 +973,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsFraudDetected()
     {
@@ -917,6 +984,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Made additional request to PayPal to get authorization id
      *
      * @return void
+     * @since 2.0.0
      */
     public function callDoReauthorization()
     {
@@ -930,6 +998,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoCapture
+     * @since 2.0.0
      */
     public function callDoCapture()
     {
@@ -945,6 +1014,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return $this
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoAuthorization
+     * @since 2.0.0
      */
     public function callDoAuthorization()
     {
@@ -961,6 +1031,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoVoid
+     * @since 2.0.0
      */
     public function callDoVoid()
     {
@@ -973,6 +1044,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * @since 2.0.0
      */
     public function callGetTransactionDetails()
     {
@@ -986,6 +1058,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_RefundTransaction
+     * @since 2.0.0
      */
     public function callRefundTransaction()
     {
@@ -1002,6 +1075,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_ManagePendingTransactionStatus
+     * @since 2.0.0
      */
     public function callManagePendingTransactionStatus()
     {
@@ -1019,6 +1093,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @return void
      * @link https://www.x.com/docs/DOC-1300
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration
+     * @since 2.0.0
      */
     public function callGetPalDetails()
     {
@@ -1031,6 +1106,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetCustomerBillingAgreement
+     * @since 2.0.0
      */
     public function callSetCustomerBillingAgreement()
     {
@@ -1044,6 +1120,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @return void
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetBillingAgreementCustomerDetails
+     * @since 2.0.0
      */
     public function callGetBillingAgreementCustomerDetails()
     {
@@ -1056,6 +1133,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Create Billing Agreement call
      *
      * @return void
+     * @since 2.0.0
      */
     public function callCreateBillingAgreement()
     {
@@ -1068,6 +1146,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Billing Agreement Update call
      *
      * @return void
+     * @since 2.0.0
      */
     public function callUpdateBillingAgreement()
     {
@@ -1088,6 +1167,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $request
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function prepareShippingOptionsCallbackAddress(array $request)
     {
@@ -1102,6 +1182,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Prepare response for shipping options callback
      *
      * @return string
+     * @since 2.0.0
      */
     public function formatShippingOptionsCallback()
     {
@@ -1119,6 +1200,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param string $methodName
      * @param array $request
      * @return array
+     * @since 2.0.0
      */
     protected function _addMethodToRequest($methodName, $request)
     {
@@ -1132,6 +1214,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $response
      * @return array
+     * @since 2.0.0
      */
     protected function _postProcessResponse($response)
     {
@@ -1161,6 +1244,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function call($methodName, array $request)
     {
@@ -1248,6 +1332,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setRawResponseNeeded($flag)
     {
@@ -1262,6 +1347,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @return void
      * @throws \Magento\Paypal\Model\Api\ProcessableException|\Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _handleCallErrors($response)
     {
@@ -1316,6 +1402,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param string $shortErrorMessage
      * @param string $longErrorMessage
      * @return string
+     * @since 2.0.0
      */
     protected function _formatErrorMessage($errorCode, $shortErrorMessage, $longErrorMessage)
     {
@@ -1331,6 +1418,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param int $errorCode
      * @return bool
+     * @since 2.0.0
      */
     protected function _isProcessableError($errorCode)
     {
@@ -1348,6 +1436,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $response
      * @return array
+     * @since 2.0.0
      */
     protected function _extractErrorsFromResponse($response)
     {
@@ -1374,6 +1463,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $response
      * @return bool success flag
+     * @since 2.0.0
      */
     protected function _isCallSuccessful($response)
     {
@@ -1401,6 +1491,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param string $method
      * @param array $response
      * @return bool
+     * @since 2.0.0
      */
     protected function _validateResponse($method, $response)
     {
@@ -1418,6 +1509,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Parse an NVP response string into an associative array
      * @param string $nvpstr
      * @return array
+     * @since 2.0.0
      */
     protected function _deformatNVP($nvpstr)
     {
@@ -1448,6 +1540,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param array $request
      * @param int $i
      * @return true|null
+     * @since 2.0.0
      */
     protected function _exportLineItems(array &$request, $i = 0)
     {
@@ -1463,6 +1556,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     protected function _exportAddressses($data)
     {
@@ -1487,6 +1581,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param \Magento\Framework\DataObject $address
      * @return void
+     * @since 2.0.0
      */
     protected function _applyStreetAndRegionWorkarounds(\Magento\Framework\DataObject $address)
     {
@@ -1517,6 +1612,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $to
      * @return array
+     * @since 2.0.0
      */
     protected function _importAddresses(array $to)
     {
@@ -1554,6 +1650,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _filterCcType($value)
     {
@@ -1568,6 +1665,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param mixed $value
      * @return bool|mixed
+     * @since 2.0.0
      */
     protected function _filterToBool($value)
     {
@@ -1584,6 +1682,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _filterBillFailedLater($value)
     {
@@ -1595,6 +1694,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _filterPeriodUnit($value)
     {
@@ -1619,6 +1719,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _filterInitialAmountMayFail($value)
     {
@@ -1630,6 +1731,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _filterBillingAgreementStatus($value)
     {
@@ -1649,6 +1751,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param string $value
      * @return string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _filterPaymentStatusFromNvpToInfo($value)
     {
@@ -1689,6 +1792,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $value
      * @return string|null
+     * @since 2.0.0
      */
     protected function _filterPaymentReviewAction($value)
     {
@@ -1706,6 +1810,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Return capture type
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCaptureCompleteType()
     {
@@ -1717,6 +1822,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param string $methodName Current method name
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareEachCallRequest($methodName)
     {
@@ -1736,6 +1842,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param &array $requestFields
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareExpressCheckoutCallRequest(&$requestFields)
     {

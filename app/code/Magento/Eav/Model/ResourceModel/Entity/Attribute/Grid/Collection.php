@@ -11,11 +11,13 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  * Eav Resource Attribute Set Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registryManager;
 
@@ -28,6 +30,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\C
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -46,6 +49,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\C
      *  Add filter by entity type id to collection
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|$this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

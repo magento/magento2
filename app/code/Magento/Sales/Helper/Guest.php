@@ -11,6 +11,7 @@ use Magento\Framework\App as App;
 /**
  * Sales module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -18,36 +19,43 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @since 2.0.0
      */
     protected $cookieManager;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.0.0
      */
     protected $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
+     * @since 2.0.0
      */
     protected $resultRedirectFactory;
 
@@ -68,6 +76,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     private $_storeManager;
 
@@ -83,6 +92,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         App\Helper\Context $context,
@@ -117,6 +127,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function loadValidOrder(App\RequestInterface $request)
     {
@@ -198,6 +209,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\View\Result\Page $resultPage
      * @return void
+     * @since 2.0.0
      */
     public function getBreadcrumbs(\Magento\Framework\View\Result\Page $resultPage)
     {
@@ -221,6 +233,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $cookieValue
      * @return void
+     * @since 2.0.0
      */
     private function setGuestViewCookie($cookieValue)
     {

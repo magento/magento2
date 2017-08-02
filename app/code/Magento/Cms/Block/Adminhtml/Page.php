@@ -7,6 +7,7 @@ namespace Magento\Cms\Block\Adminhtml;
 
 /**
  * Adminhtml cms pages content block
+ * @since 2.0.0
  */
 class Page extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -14,6 +15,7 @@ class Page extends \Magento\Backend\Block\Widget\Grid\Container
      * Block constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,6 +37,7 @@ class Page extends \Magento\Backend\Block\Widget\Grid\Container
      *
      * @param string $resourceId
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAllowedAction($resourceId)
     {

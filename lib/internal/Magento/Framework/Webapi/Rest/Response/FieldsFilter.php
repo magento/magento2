@@ -10,18 +10,23 @@ use Magento\Framework\Webapi\Rest\Request as RestRequest;
 
 /**
  * Class to handle partial service response
+ * @since 2.0.0
  */
 class FieldsFilter
 {
     const FILTER_PARAMETER = 'fields';
 
-    /** @var RestRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request
+     * @since 2.0.0
+     */
     protected $_request;
 
     /**
      * Initialize dependencies
      *
      * @param RestRequest $request
+     * @since 2.0.0
      */
     public function __construct(RestRequest $request)
     {
@@ -33,6 +38,7 @@ class FieldsFilter
      *
      * @param array $response
      * @return array partial response array or empty array if invalid filter criteria is provided
+     * @since 2.0.0
      */
     public function filter($response)
     {
@@ -78,6 +84,7 @@ class FieldsFilter
      * </pre>
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function parse($filterString)
     {
@@ -148,6 +155,7 @@ class FieldsFilter
      * @param array $responseArray
      * @param array $filter
      * @return array
+     * @since 2.0.0
      */
     protected function applyFilter(array $responseArray, array $filter)
     {
@@ -170,6 +178,7 @@ class FieldsFilter
      * @param array $array1
      * @param array $array2
      * @return array
+     * @since 2.0.0
      */
     protected function recursiveArrayIntersectKey(array $array1, array $array2)
     {

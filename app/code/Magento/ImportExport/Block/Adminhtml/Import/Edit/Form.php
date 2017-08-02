@@ -12,6 +12,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * Import edit form block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -19,16 +20,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Basic import model
      *
      * @var \Magento\ImportExport\Model\Import
+     * @since 2.0.0
      */
     protected $_importModel;
 
     /**
      * @var \Magento\ImportExport\Model\Source\Import\EntityFactory
+     * @since 2.0.0
      */
     protected $_entityFactory;
 
     /**
      * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory
+     * @since 2.0.0
      */
     protected $_behaviorFactory;
 
@@ -40,6 +44,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory
      * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -61,6 +66,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -228,6 +234,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get download sample file html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getDownloadSampleFileHtml()
     {

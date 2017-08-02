@@ -9,6 +9,7 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
  * Shipping table rates collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Directory/country table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_countryTable;
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Directory/country_region table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_regionTable;
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model and item
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +49,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize select, add country iso3 code and region name
      *
      * @return void
+     * @since 2.0.0
      */
     public function _initSelect()
     {
@@ -71,6 +76,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $websiteId
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection
+     * @since 2.0.0
      */
     public function setWebsiteFilter($websiteId)
     {
@@ -82,6 +88,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $conditionName
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection
+     * @since 2.0.0
      */
     public function setConditionFilter($conditionName)
     {
@@ -93,6 +100,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $countryId
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection
+     * @since 2.0.0
      */
     public function setCountryFilter($countryId)
     {

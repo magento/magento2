@@ -9,6 +9,11 @@ namespace Magento\Catalog\Model\Layer;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Category
+ *
+ * @since 2.0.0
+ */
 class Category extends \Magento\Catalog\Model\Layer
 {
     /**
@@ -20,6 +25,7 @@ class Category extends \Magento\Catalog\Model\Layer
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,

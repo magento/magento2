@@ -9,6 +9,7 @@ namespace Magento\Review\Model\ResourceModel\Review;
  * Review collection resource model
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_reviewTable = null;
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review detail table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_reviewDetailTable = null;
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review status table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_reviewStatusTable = null;
 
@@ -37,6 +41,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review entity table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_reviewEntityTable = null;
 
@@ -44,12 +49,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review store table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_reviewStoreTable = null;
 
     /**
      * Add store data flag
      * @var bool
+     * @since 2.0.0
      */
     protected $_addStoreDataFlag = false;
 
@@ -57,6 +64,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Review data
      *
      * @var \Magento\Review\Helper\Data
+     * @since 2.0.0
      */
     protected $_reviewData = null;
 
@@ -64,6 +72,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Rating option model
      *
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
+     * @since 2.0.0
      */
     protected $_voteFactory;
 
@@ -71,6 +80,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Core model store manager interface
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -84,6 +94,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -107,6 +118,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define module
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -117,6 +129,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -134,6 +147,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|string $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function addCustomerFilter($customerId)
     {
@@ -146,6 +160,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|int[] $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeId)
     {
@@ -163,6 +178,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add stores data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreData()
     {
@@ -176,6 +192,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int|string $entity
      * @param int $pkValue
      * @return $this
+     * @since 2.0.0
      */
     public function addEntityFilter($entity, $pkValue)
     {
@@ -210,6 +227,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|string $status
      * @return $this
+     * @since 2.0.0
      */
     public function addStatusFilter($status)
     {
@@ -228,6 +246,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function setDateOrder($dir = 'DESC')
     {
@@ -239,6 +258,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add rate votes
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addRateVotes()
     {
@@ -260,6 +280,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add reviews total count
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addReviewsTotalCount()
     {
@@ -280,6 +301,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param boolean $printQuery
      * @param boolean $logQuery
      * @return $this
+     * @since 2.0.0
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -298,6 +320,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add store data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addStoreData()
     {
@@ -330,6 +353,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get review table
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getReviewTable()
     {
@@ -343,6 +367,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get review detail table
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getReviewDetailTable()
     {
@@ -356,6 +381,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get review status table
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getReviewStatusTable()
     {
@@ -369,6 +395,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get review entity table
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getReviewEntityTable()
     {
@@ -382,6 +409,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get review store table
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getReviewStoreTable()
     {

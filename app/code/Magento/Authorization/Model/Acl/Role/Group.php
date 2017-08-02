@@ -7,6 +7,7 @@ namespace Magento\Authorization\Model\Acl\Role;
 
 /**
  * Acl Group model
+ * @since 2.0.0
  */
 class Group extends \Magento\Authorization\Model\Acl\Role\Generic
 {

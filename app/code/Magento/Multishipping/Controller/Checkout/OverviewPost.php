@@ -14,21 +14,25 @@ use Magento\Framework\Exception\PaymentException;
  * Class OverviewPost
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @since 2.0.0
      */
     protected $formKeyValidator;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
+     * @since 2.0.0
      */
     protected $agreementsValidator;
 
@@ -40,6 +44,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -66,6 +71,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,22 +10,26 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
 /**
  * Class Relation
+ * @since 2.0.0
  */
 class Relation implements RelationInterface
 {
     /**
      * @var Item
+     * @since 2.0.0
      */
     protected $creditmemoItemResource;
 
     /**
      * @var Comment
+     * @since 2.0.0
      */
     protected $creditmemoCommentResource;
 
     /**
      * @param Item $creditmemoItemResource
      * @param Comment $creditmemoCommentResource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item $creditmemoItemResource,
@@ -41,6 +45,7 @@ class Relation implements RelationInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @throws \Exception
      * @return void
+     * @since 2.0.0
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {

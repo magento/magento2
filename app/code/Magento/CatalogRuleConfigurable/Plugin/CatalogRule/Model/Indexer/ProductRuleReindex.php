@@ -11,18 +11,26 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProduct
 
 /**
  * Class ReindexProduct. Add configurable sub-products to reindex
+ * @since 2.0.0
  */
 class ProductRuleReindex
 {
-    /** @var Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @since 2.0.0
+     */
     private $configurable;
 
-    /** @var ConfigurableProductsProvider */
+    /**
+     * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider
+     * @since 2.0.0
+     */
     private $configurableProductsProvider;
 
     /**
      * @param Configurable $configurable
      * @param ConfigurableProductsProvider $configurableProductsProvider
+     * @since 2.0.0
      */
     public function __construct(
         Configurable $configurable,
@@ -38,6 +46,7 @@ class ProductRuleReindex
      * @param int $id
      *
      * @return void
+     * @since 2.0.0
      */
     public function aroundExecuteRow(
         \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer $subject,
@@ -57,6 +66,7 @@ class ProductRuleReindex
      * @param array $ids
      *
      * @return void
+     * @since 2.0.0
      */
     public function aroundExecuteList(
         \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer $subject,
@@ -76,6 +86,7 @@ class ProductRuleReindex
      * @param \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer $subject
      *
      * @return array
+     * @since 2.0.0
      */
     private function reindexSubProducts(
         array $configurableIds,

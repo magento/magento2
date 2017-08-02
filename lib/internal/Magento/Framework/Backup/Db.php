@@ -10,16 +10,19 @@ namespace Magento\Framework\Backup;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Db extends AbstractBackup
 {
     /**
      * @var \Magento\Framework\Backup\Db\BackupFactory
+     * @since 2.0.0
      */
     protected $_backupFactory;
 
     /**
      * @param \Magento\Framework\Backup\Db\BackupFactory $backupFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Backup\Db\BackupFactory $backupFactory)
     {
@@ -30,6 +33,7 @@ class Db extends AbstractBackup
      * Implements Rollback functionality for Db
      *
      * @return bool
+     * @since 2.0.0
      */
     public function rollback()
     {
@@ -57,6 +61,7 @@ class Db extends AbstractBackup
      *
      * @param string $line
      * @return bool
+     * @since 2.0.0
      */
     protected function _isLineLastInCommand($line)
     {
@@ -78,6 +83,7 @@ class Db extends AbstractBackup
      * Implements Create Backup functionality for Db
      *
      * @return bool
+     * @since 2.0.0
      */
     public function create()
     {
@@ -108,6 +114,7 @@ class Db extends AbstractBackup
      * Get database size
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDBSize()
     {
@@ -119,6 +126,7 @@ class Db extends AbstractBackup
      * Get Backup Type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {

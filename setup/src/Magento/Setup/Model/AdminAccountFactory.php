@@ -11,15 +11,22 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Class \Magento\Setup\Model\AdminAccountFactory
+ *
+ * @since 2.0.0
+ */
 class AdminAccountFactory
 {
     /**
      * @var ServiceLocatorInterface
+     * @since 2.0.0
      */
     protected $serviceLocator;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
+     * @since 2.0.0
      */
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
@@ -30,6 +37,7 @@ class AdminAccountFactory
      * @param AdapterInterface $connection
      * @param array $data
      * @return AdminAccount
+     * @since 2.0.0
      */
     public function create(AdapterInterface $connection, $data)
     {

@@ -9,6 +9,7 @@ use Magento\Sales\Model\Order;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Totals extends \Magento\Framework\View\Element\Template
 {
@@ -19,11 +20,13 @@ class Totals extends \Magento\Framework\View\Element\Template
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_totals;
 
     /**
      * @var Order|null
+     * @since 2.0.0
      */
     protected $_order = null;
 
@@ -31,6 +34,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -38,6 +42,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -52,6 +57,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Initialize self totals and children blocks totals before html building
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -68,6 +74,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Get order object
      *
      * @return Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -86,6 +93,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     /**
      * @param Order $order
      * @return $this
+     * @since 2.0.0
      */
     public function setOrder($order)
     {
@@ -97,6 +105,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Get totals source object
      *
      * @return Order
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -107,6 +116,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * Initialize order totals array
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initTotals()
     {
@@ -182,6 +192,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * @param   \Magento\Framework\DataObject $total
      * @param   null|string $after
      * @return  $this
+     * @since 2.0.0
      */
     public function addTotal(\Magento\Framework\DataObject $total, $after = null)
     {
@@ -220,6 +231,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * @param   \Magento\Framework\DataObject $total
      * @param   null|string $before
      * @return  $this
+     * @since 2.0.0
      */
     public function addTotalBefore(\Magento\Framework\DataObject $total, $before = null)
     {
@@ -257,6 +269,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      *
      * @param string $code
      * @return mixed
+     * @since 2.0.0
      */
     public function getTotal($code)
     {
@@ -271,6 +284,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      *
      * @param   string $code
      * @return  $this
+     * @since 2.0.0
      */
     public function removeTotal($code)
     {
@@ -289,6 +303,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      * @param   array $order
      * @return  $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function applySortOrder($order)
     {
@@ -300,6 +315,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      *
      * @param array|null $area
      * @return array
+     * @since 2.0.0
      */
     public function getTotals($area = null)
     {
@@ -323,6 +339,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      *
      * @param   \Magento\Framework\DataObject $total
      * @return  string
+     * @since 2.0.0
      */
     public function formatValue($total)
     {

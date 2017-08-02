@@ -6,7 +6,8 @@
 namespace Magento\Framework\Json;
 
 /**
- * @deprecated @see \Magento\Framework\Serialize\Serializer\Json::serialize
+ * @deprecated 2.2.0 @see \Magento\Framework\Serialize\Serializer\Json::serialize
+ * @since 2.0.0
  */
 class Encoder implements EncoderInterface
 {
@@ -14,11 +15,13 @@ class Encoder implements EncoderInterface
      * Translator
      *
      * @var \Magento\Framework\Translate\InlineInterface
+     * @since 2.0.0
      */
     protected $translateInline;
 
     /**
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Translate\InlineInterface $translateInline)
     {
@@ -30,6 +33,7 @@ class Encoder implements EncoderInterface
      *
      * @param mixed $data
      * @return string
+     * @since 2.0.0
      */
     public function encode($data)
     {

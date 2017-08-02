@@ -12,6 +12,11 @@ use Magento\Framework\Registry;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Order\InvoiceRepository;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+ *
+ * @since 2.0.0
+ */
 abstract class View extends \Magento\Backend\App\Action
 {
     /**
@@ -23,16 +28,19 @@ abstract class View extends \Magento\Backend\App\Action
 
     /**
      * @var Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var InvoiceRepositoryInterface
+     * @since 2.1.0
      */
     protected $invoiceRepository;
 
@@ -40,6 +48,7 @@ abstract class View extends \Magento\Backend\App\Action
      * @param Context $context
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -55,6 +64,7 @@ abstract class View extends \Magento\Backend\App\Action
      * Invoice information page
      *
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -71,6 +81,7 @@ abstract class View extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Sales\Model\Order\Invoice|bool
+     * @since 2.0.0
      */
     protected function getInvoice()
     {
@@ -89,7 +100,8 @@ abstract class View extends \Magento\Backend\App\Action
     /**
      * @return InvoiceRepository
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getInvoiceRepository()
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\Acl\Role;
 
 /**
  * Acl role registry. Contains list of roles and their relations.
+ * @since 2.0.0
  */
 class Registry extends \Zend_Acl_Role_Registry
 {
@@ -17,6 +18,7 @@ class Registry extends \Zend_Acl_Role_Registry
      * @param array|\Zend_Acl_Role_Interface|string $parents
      * @return $this
      * @throws \Zend_Acl_Role_Registry_Exception
+     * @since 2.0.0
      */
     public function addParent($role, $parents)
     {

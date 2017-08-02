@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Data base session save handler
+ * @since 2.0.0
  */
 class DbTable extends \SessionHandler
 {
@@ -18,6 +19,7 @@ class DbTable extends \SessionHandler
      * Session data table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_sessionTable;
 
@@ -25,6 +27,7 @@ class DbTable extends \SessionHandler
      * Database write connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $connection;
 
@@ -32,6 +35,7 @@ class DbTable extends \SessionHandler
      * Constructor
      *
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -45,6 +49,7 @@ class DbTable extends \SessionHandler
      *
      * @return void
      * @throws \Magento\Framework\Exception\SessionException
+     * @since 2.0.0
      */
     protected function checkConnection()
     {
@@ -63,6 +68,7 @@ class DbTable extends \SessionHandler
      * @param string $sessionName ignored
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function open($savePath, $sessionName)
     {
@@ -73,6 +79,7 @@ class DbTable extends \SessionHandler
      * Close session
      *
      * @return bool
+     * @since 2.0.0
      */
     public function close()
     {
@@ -84,6 +91,7 @@ class DbTable extends \SessionHandler
      *
      * @param string $sessionId
      * @return string
+     * @since 2.0.0
      */
     public function read($sessionId)
     {
@@ -111,6 +119,7 @@ class DbTable extends \SessionHandler
      * @param string $sessionId
      * @param string $sessionData
      * @return bool
+     * @since 2.0.0
      */
     public function write($sessionId, $sessionData)
     {
@@ -137,6 +146,7 @@ class DbTable extends \SessionHandler
      *
      * @param string $sessionId
      * @return bool
+     * @since 2.0.0
      */
     public function destroy($sessionId)
     {
@@ -151,6 +161,7 @@ class DbTable extends \SessionHandler
      * @param int $maxLifeTime
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function gc($maxLifeTime)
     {

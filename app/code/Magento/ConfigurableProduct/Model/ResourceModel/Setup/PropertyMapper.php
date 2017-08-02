@@ -9,6 +9,11 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Setup;
 
 use Magento\Eav\Model\Entity\Setup\PropertyMapperAbstract;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ResourceModel\Setup\PropertyMapper
+ *
+ * @since 2.0.0
+ */
 class PropertyMapper extends PropertyMapperAbstract
 {
     /**
@@ -20,6 +25,7 @@ class PropertyMapper extends PropertyMapperAbstract
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @return array
+     * @since 2.0.0
      */
     public function map(array $input, $entityTypeId)
     {

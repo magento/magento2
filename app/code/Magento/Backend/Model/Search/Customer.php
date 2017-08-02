@@ -20,6 +20,7 @@ namespace Magento\Backend\Model\Search;
  * @method Customer setResults(array $results)
  * @method array getResults()
  * @api
+ * @since 2.0.0
  */
 class Customer extends \Magento\Framework\DataObject
 {
@@ -27,26 +28,31 @@ class Customer extends \Magento\Framework\DataObject
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_adminhtmlData = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Customer\Helper\View
+     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
@@ -58,6 +64,7 @@ class Customer extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Customer\Helper\View $customerViewHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
@@ -77,6 +84,7 @@ class Customer extends \Magento\Framework\DataObject
      * Load search results
      *
      * @return $this
+     * @since 2.0.0
      */
     public function load()
     {

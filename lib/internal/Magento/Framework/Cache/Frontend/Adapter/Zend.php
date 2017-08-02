@@ -7,16 +7,19 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 /**
  * Adapter for Magento -> Zend cache frontend interfaces
+ * @since 2.0.0
  */
 class Zend implements \Magento\Framework\Cache\FrontendInterface
 {
     /**
      * @var \Zend_Cache_Core
+     * @since 2.0.0
      */
     protected $_frontend;
 
     /**
      * @param \Zend_Cache_Core $frontend
+     * @since 2.0.0
      */
     public function __construct(\Zend_Cache_Core $frontend)
     {
@@ -25,6 +28,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function test($identifier)
     {
@@ -33,6 +37,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load($identifier)
     {
@@ -41,6 +46,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -49,6 +55,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($identifier)
     {
@@ -59,6 +66,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      * {@inheritdoc}
      *
      * @throws \InvalidArgumentException Exception is thrown when non-supported cleaning mode is specified
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
@@ -81,6 +89,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBackend()
     {
@@ -89,6 +98,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLowLevelFrontend()
     {
@@ -100,6 +110,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      *
      * @param string $identifier
      * @return string
+     * @since 2.0.0
      */
     protected function _unifyId($identifier)
     {
@@ -111,6 +122,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      *
      * @param array $ids
      * @return array
+     * @since 2.0.0
      */
     protected function _unifyIds(array $ids)
     {

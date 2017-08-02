@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Cron;
 
 /**
  * Job Queue
+ * @since 2.0.0
  */
 class Queue
 {
@@ -20,16 +21,19 @@ class Queue
 
     /**
      * @var Queue\Reader
+     * @since 2.0.0
      */
     protected $reader;
 
     /**
      * @var Queue\Writer
+     * @since 2.0.0
      */
     protected $writer;
 
     /**
      * @var JobFactory
+     * @since 2.0.0
      */
     protected $jobFactory;
 
@@ -39,6 +43,7 @@ class Queue
      * @param Queue\Reader $reader
      * @param Queue\Writer $writer
      * @param JobFactory $jobFactory
+     * @since 2.0.0
      */
     public function __construct(Queue\Reader $reader, Queue\Writer $writer, JobFactory $jobFactory)
     {
@@ -51,6 +56,7 @@ class Queue
      * Peek at job queue
      *
      * @return array
+     * @since 2.0.0
      */
     public function peek()
     {
@@ -71,6 +77,7 @@ class Queue
      *
      * @return AbstractJob|null
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     public function popQueuedJob()
     {
@@ -101,6 +108,7 @@ class Queue
      * Returns if job queue is empty
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEmpty()
     {
@@ -111,6 +119,7 @@ class Queue
     /**
      * @param array $jobs
      * @return void
+     * @since 2.0.0
      */
     public function addJobs(array $jobs)
     {
@@ -128,6 +137,7 @@ class Queue
      * @param object $job
      * @return void
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function validateJobDeclaration($job)
     {

@@ -9,11 +9,13 @@ namespace Magento\GoogleOptimizer\Block\Code;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Page extends \Magento\GoogleOptimizer\Block\AbstractCode
 {
     /**
      * @var \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected $_page;
 
@@ -24,6 +26,7 @@ class Page extends \Magento\GoogleOptimizer\Block\AbstractCode
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
      * @param \Magento\Cms\Model\Page $page
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -42,6 +45,7 @@ class Page extends \Magento\GoogleOptimizer\Block\AbstractCode
      * Get cms page entity
      *
      * @return \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected function _getEntity()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Class ConfigurableItemOptionValue
+ * @since 2.0.0
  */
 class ConfigurableItemOptionValue extends AbstractExtensibleModel implements ConfigurableItemOptionValueInterface
 {
@@ -17,6 +18,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getOptionId()
     {
@@ -25,6 +27,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setOptionId($value)
     {
@@ -33,6 +36,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getOptionValue()
     {
@@ -41,6 +45,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setOptionValue($value)
     {
@@ -51,6 +56,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -62,6 +68,7 @@ class ConfigurableItemOptionValue extends AbstractExtensibleModel implements Con
      *
      * @param \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueExtensionInterface $extensionAttributes

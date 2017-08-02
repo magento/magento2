@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -17,6 +18,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Session quote
      *
      * @var \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected $_sessionQuote;
 
@@ -24,6 +26,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -38,6 +41,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -88,6 +92,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * {@inheritdoc}
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -104,6 +109,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Prepare header html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderHtml()
     {
@@ -117,6 +123,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Get header width
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHeaderWidth()
     {
@@ -127,6 +134,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Retrieve quote session object
      *
      * @return \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -137,6 +145,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Get cancel url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCancelUrl()
     {
@@ -153,6 +162,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      * Get URL for back (reset) button
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {

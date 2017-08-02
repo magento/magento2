@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order Shipments grid
  *
  * @api
+ * @since 2.0.0
  */
 class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -17,6 +18,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -26,6 +28,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -40,6 +43,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      * Retrieve order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -48,6 +52,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -56,6 +61,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -64,6 +70,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -75,6 +82,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {

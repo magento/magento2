@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -17,6 +18,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -27,6 +29,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -37,6 +40,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Retrieve invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -47,6 +51,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get save url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -57,6 +62,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Check shipment availability for current invoice
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCreateShipment()
     {
@@ -72,6 +78,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Check invoice shipment type mismatch
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasInvoiceShipmentTypeMismatch()
     {
@@ -87,6 +94,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Check shipment availability for partially item
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShipPartiallyItem()
     {
@@ -101,6 +109,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Return forced creating of shipment flag
      *
      * @return int
+     * @since 2.0.0
      */
     public function getForcedShipmentCreate()
     {

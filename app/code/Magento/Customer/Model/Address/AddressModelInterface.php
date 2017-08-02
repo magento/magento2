@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Address;
  * Interface AddressInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface AddressModelInterface
 {
@@ -18,6 +19,7 @@ interface AddressModelInterface
      *
      * @param int $number
      * @return string
+     * @since 2.0.0
      */
     public function getStreetLine($number);
 
@@ -27,6 +29,7 @@ interface AddressModelInterface
      * To be used in controllers for views data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function explodeStreetAddress();
 }

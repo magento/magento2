@@ -10,6 +10,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Template
 {
@@ -17,6 +18,7 @@ class Form extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -24,6 +26,7 @@ class Form extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,6 +41,7 @@ class Form extends \Magento\Backend\Block\Template
      * Indicates that block can display gift message form
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplayGiftmessageForm()
     {

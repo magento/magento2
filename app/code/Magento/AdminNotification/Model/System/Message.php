@@ -8,11 +8,13 @@ namespace Magento\AdminNotification\Model\System;
 /**
  * @codeCoverageIgnore
  * @api
+ * @since 2.0.0
  */
 class Message extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -23,6 +25,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Check whether
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -33,6 +36,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Retrieve message text
      *
      * @return string
+     * @since 2.0.0
      */
     public function getText()
     {
@@ -43,6 +47,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Retrieve message severity
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSeverity()
     {
@@ -53,6 +58,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Retrieve unique message identity
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentity()
     {

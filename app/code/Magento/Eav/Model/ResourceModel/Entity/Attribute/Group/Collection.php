@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Group;
  * Eav attribute group resource collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,6 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $setId
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeSetFilter($setId)
     {
@@ -45,6 +48,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $direction
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setSortOrder($direction = self::SORT_ORDER_ASC)
     {

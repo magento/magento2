@@ -11,6 +11,11 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Service\InvoiceService;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
@@ -22,16 +27,19 @@ class NewAction extends \Magento\Backend\App\Action
 
     /**
      * @var Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var InvoiceService
+     * @since 2.0.0
      */
     private $invoiceService;
 
@@ -40,6 +48,7 @@ class NewAction extends \Magento\Backend\App\Action
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
      * @param InvoiceService $invoiceService
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -58,6 +67,7 @@ class NewAction extends \Magento\Backend\App\Action
      *
      * @param int $orderId
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     protected function _redirectToOrder($orderId)
     {
@@ -71,6 +81,7 @@ class NewAction extends \Magento\Backend\App\Action
      * Invoice create page
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

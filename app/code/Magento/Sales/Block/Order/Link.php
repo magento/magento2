@@ -10,10 +10,14 @@ namespace Magento\Sales\Block\Order;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link\Current
 {
-    /** @var \Magento\Framework\Registry  */
+    /**
+     * @var \Magento\Framework\Registry
+     * @since 2.0.0
+     */
     protected $_registry;
 
     /**
@@ -21,6 +25,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link\Current
      * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -36,6 +41,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link\Current
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     private function getOrder()
     {
@@ -46,6 +52,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link\Current
      * @inheritdoc
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -56,6 +63,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link\Current
      * @inheritdoc
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

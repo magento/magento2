@@ -9,10 +9,16 @@ namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\Api\ArrayObjectSearch;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Text
+ *
+ * @since 2.0.0
+ */
 class Text extends AbstractData
 {
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $_string;
 
@@ -25,6 +31,7 @@ class Text extends AbstractData
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -42,6 +49,7 @@ class Text extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -52,6 +60,7 @@ class Text extends AbstractData
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -106,6 +115,7 @@ class Text extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -114,6 +124,7 @@ class Text extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -122,6 +133,7 @@ class Text extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {

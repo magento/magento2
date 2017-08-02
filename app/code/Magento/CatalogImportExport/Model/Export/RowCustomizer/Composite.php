@@ -12,22 +12,26 @@ use Magento\Framework\ObjectManagerInterface;
  * Class Composite
  *
  * @api
+ * @since 2.0.0
  */
 class Composite implements RowCustomizerInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $customizers;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $customizers
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $customizers = [])
     {
@@ -41,6 +45,7 @@ class Composite implements RowCustomizerInterface
      * @param mixed $collection
      * @param int[] $productIds
      * @return mixed|void
+     * @since 2.0.0
      */
     public function prepareData($collection, $productIds)
     {
@@ -54,6 +59,7 @@ class Composite implements RowCustomizerInterface
      *
      * @param array $columns
      * @return array
+     * @since 2.0.0
      */
     public function addHeaderColumns($columns)
     {
@@ -69,6 +75,7 @@ class Composite implements RowCustomizerInterface
      * @param array $dataRow
      * @param int $productId
      * @return array
+     * @since 2.0.0
      */
     public function addData($dataRow, $productId)
     {
@@ -84,6 +91,7 @@ class Composite implements RowCustomizerInterface
      * @param array $additionalRowsCount
      * @param int $productId
      * @return array|mixed
+     * @since 2.0.0
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {

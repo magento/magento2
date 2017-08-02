@@ -9,20 +9,28 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite
+ *
+ * @since 2.2.0
+ */
 class RequestCheckerComposite implements RequestCheckerInterface
 {
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.2.0
      */
     private $categoryRepository;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var RequestCheckerInterface[]
+     * @since 2.2.0
      */
     private $queryCheckers;
 
@@ -31,6 +39,7 @@ class RequestCheckerComposite implements RequestCheckerInterface
      * @param StoreManagerInterface $storeManager
      * @param RequestCheckerInterface[] $queryCheckers
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
@@ -54,6 +63,7 @@ class RequestCheckerComposite implements RequestCheckerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isApplicable(RequestInterface $request)
     {

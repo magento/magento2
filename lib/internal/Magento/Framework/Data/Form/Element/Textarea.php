@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Textarea
+ *
+ * @since 2.0.0
+ */
 class Textarea extends AbstractElement
 {
     /**
@@ -30,6 +35,7 @@ class Textarea extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -52,6 +58,7 @@ class Textarea extends AbstractElement
      * Return the HTML attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -77,6 +84,7 @@ class Textarea extends AbstractElement
      * Return the element as HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

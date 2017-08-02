@@ -19,36 +19,43 @@ use Magento\Ui\Component\Form;
 /**
  * Class adds a grid with samples
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class Samples extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 2.1.0
      */
     protected $locator;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @var TypeUpload
+     * @since 2.1.0
      */
     protected $typeUpload;
 
     /**
      * @var Data\Samples
+     * @since 2.1.0
      */
     protected $samplesData;
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -59,6 +66,7 @@ class Samples extends AbstractModifier
      * @param UrlInterface $urlBuilder
      * @param TypeUpload $typeUpload
      * @param Data\Samples $samplesData
+     * @since 2.1.0
      */
     public function __construct(
         LocatorInterface $locator,
@@ -78,6 +86,7 @@ class Samples extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -92,6 +101,7 @@ class Samples extends AbstractModifier
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -136,6 +146,7 @@ class Samples extends AbstractModifier
 
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getDynamicRows()
     {
@@ -156,6 +167,7 @@ class Samples extends AbstractModifier
 
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getRecord()
     {
@@ -193,6 +205,7 @@ class Samples extends AbstractModifier
 
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getTitleColumn()
     {
@@ -218,6 +231,7 @@ class Samples extends AbstractModifier
 
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getSampleColumn()
     {

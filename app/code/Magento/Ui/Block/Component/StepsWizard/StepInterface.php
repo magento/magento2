@@ -9,6 +9,7 @@ namespace Magento\Ui\Block\Component\StepsWizard;
  * Interface for multi-step wizard blocks
  *
  * @api
+ * @since 2.0.0
  */
 interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
 {
@@ -16,6 +17,7 @@ interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
      * Get step caption
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCaption();
 
@@ -23,6 +25,7 @@ interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
      * Get step content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent();
 
@@ -30,6 +33,7 @@ interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
      * Get step component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName();
 
@@ -37,6 +41,7 @@ interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
      * Get Component Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getParentComponentName();
 }

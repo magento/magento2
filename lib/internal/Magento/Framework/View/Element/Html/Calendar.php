@@ -13,6 +13,7 @@ use Magento\Framework\Locale\Bundle\DataBundle;
  * Prepares localization data for calendar
  *
  * @api
+ * @since 2.0.0
  */
 class Calendar extends \Magento\Framework\View\Element\Template
 {
@@ -20,6 +21,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      * Date model
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
@@ -27,11 +29,13 @@ class Calendar extends \Magento\Framework\View\Element\Template
      * JSON Encoder
      *
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $encoder;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -43,6 +47,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Json\EncoderInterface $encoder
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -61,6 +66,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -162,6 +168,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      * Return offset of current timezone with GMT in seconds
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTimezoneOffsetSeconds()
     {
@@ -173,6 +180,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return int
+     * @since 2.0.0
      */
     public function getStoreTimestamp($store = null)
     {
@@ -183,6 +191,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      * Getter for yearRange option in datepicker
      *
      * @return string
+     * @since 2.0.0
      */
     public function getYearRange()
     {

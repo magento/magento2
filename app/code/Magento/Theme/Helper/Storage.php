@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -55,6 +56,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Current directory path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_currentPath;
 
@@ -62,6 +64,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Current storage root path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_storageRoot;
 
@@ -69,21 +72,25 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Magento filesystem
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @since 2.0.0
      */
     protected $_themeFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
+     * @since 2.0.0
      */
     protected $mediaDirectoryWrite;
 
@@ -92,6 +99,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -112,6 +120,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function convertPathToId($path)
     {
@@ -124,6 +133,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function convertIdToPath($value)
     {
@@ -140,6 +150,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $filename
      * @param int $maxLength
      * @return string
+     * @since 2.0.0
      */
     public function getShortFilename($filename, $maxLength = 20)
     {
@@ -150,6 +161,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Get storage root directory
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStorageRoot()
     {
@@ -167,6 +179,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Theme\Model\Theme
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _getTheme()
     {
@@ -183,6 +196,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getStorageType()
     {
@@ -201,6 +215,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Relative url to static content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRelativeUrl()
     {
@@ -219,6 +234,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Get current path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentPath()
     {
@@ -242,6 +258,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function getThumbnailDirectory($path)
     {
@@ -254,6 +271,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $imageName
      * @return string
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getThumbnailPath($imageName)
     {
@@ -268,6 +286,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Request params for selected theme
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRequestParams()
     {
@@ -286,6 +305,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string[]
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getAllowedExtensionsByType()
     {
@@ -299,6 +319,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getStorageTypeName()
     {
@@ -311,6 +332,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Get session model
      *
      * @return \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     public function getSession()
     {

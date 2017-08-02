@@ -12,42 +12,50 @@ use Magento\Framework\Validator\AbstractValidator;
  * Class Validator
  *
  * @api
+ * @since 2.0.0
  */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
     /**
      * @var RowValidatorInterface[]|AbstractValidator[]
+     * @since 2.0.0
      */
     protected $validators = [];
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
+     * @since 2.0.0
      */
     protected $context;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_uniqueAttributes;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_rowData;
 
-    /*
+    /**
      * @var string|null
+     * @since 2.1.0
      */
     protected $invalidAttribute;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param RowValidatorInterface[] $validators
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -61,6 +69,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param mixed $attrCode
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     protected function textValidation($attrCode, $type)
     {
@@ -83,6 +92,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param array $possibleOptions
      * @param string $value
      * @return bool
+     * @since 2.2.0
      */
     private function validateOption($attrCode, $possibleOptions, $value)
     {
@@ -106,6 +116,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param mixed $attrCode
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     protected function numericValidation($attrCode, $type)
     {
@@ -134,6 +145,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param array $attributeParams
      * @param array $rowData
      * @return bool
+     * @since 2.0.0
      */
     public function isRequiredAttributeValid($attrCode, array $attributeParams, array $rowData)
     {
@@ -158,6 +170,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
@@ -239,6 +252,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * @param string|null $attribute
      * @return void
+     * @since 2.1.0
      */
     protected function setInvalidAttribute($attribute)
     {
@@ -247,6 +261,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getInvalidAttribute()
     {
@@ -256,6 +271,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function isValidAttributes()
     {
@@ -281,6 +297,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -301,6 +318,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      *
      * @param array $rowData
      * @return int
+     * @since 2.0.0
      */
     public function getRowScope(array $rowData)
     {
@@ -313,6 +331,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
+     * @since 2.0.0
      */
     public function init($context)
     {

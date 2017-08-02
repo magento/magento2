@@ -10,12 +10,14 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -23,6 +25,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -32,6 +35,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,6 +52,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * Get theme that is edited currently
      *
      * @return \Magento\Theme\Model\Theme
+     * @since 2.0.0
      */
     protected function _getCurrentTheme()
     {
@@ -58,6 +63,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * Return Tab title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -68,6 +74,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * Can show tab in tabs
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -78,6 +85,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * Tab is hidden
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isHidden()
     {

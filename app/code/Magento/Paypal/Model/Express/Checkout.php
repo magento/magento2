@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Checkout
 {
@@ -48,6 +49,7 @@ class Checkout
 
     /**
      * @var \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     protected $_quote;
 
@@ -55,6 +57,7 @@ class Checkout
      * Config instance
      *
      * @var PaypalConfig
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -62,6 +65,7 @@ class Checkout
      * API instance
      *
      * @var \Magento\Paypal\Model\Api\Nvp
+     * @since 2.0.0
      */
     protected $_api;
 
@@ -69,6 +73,7 @@ class Checkout
      * Api Model Type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_apiType = \Magento\Paypal\Model\Api\Nvp::class;
 
@@ -76,6 +81,7 @@ class Checkout
      * Payment method type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_methodType = PaypalConfig::METHOD_WPP_EXPRESS;
 
@@ -83,6 +89,7 @@ class Checkout
      * State helper variable
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_redirectUrl = '';
 
@@ -90,6 +97,7 @@ class Checkout
      * State helper variable
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_pendingPaymentMessage = '';
 
@@ -97,11 +105,13 @@ class Checkout
      * State helper variable
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_checkoutRedirectUrl = '';
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -109,6 +119,7 @@ class Checkout
      * Redirect urls supposed to be set to support giropay
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_giropayUrls = [];
 
@@ -116,6 +127,7 @@ class Checkout
      * Create Billing Agreement flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isBARequested = false;
 
@@ -123,6 +135,7 @@ class Checkout
      * Flag for Bill Me Later mode
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isBml = false;
 
@@ -130,6 +143,7 @@ class Checkout
      * Customer ID
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_customerId;
 
@@ -137,6 +151,7 @@ class Checkout
      * Billing agreement that might be created during order placing
      *
      * @var \Magento\Paypal\Model\Billing\Agreement
+     * @since 2.0.0
      */
     protected $_billingAgreement;
 
@@ -144,11 +159,13 @@ class Checkout
      * Order
      *
      * @var \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
+     * @since 2.0.0
      */
     protected $_configCacheType;
 
@@ -156,6 +173,7 @@ class Checkout
      * Checkout data
      *
      * @var \Magento\Checkout\Helper\Data
+     * @since 2.0.0
      */
     protected $_checkoutData;
 
@@ -163,6 +181,7 @@ class Checkout
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxData;
 
@@ -170,101 +189,121 @@ class Checkout
      * Customer data
      *
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $_customerUrl;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Paypal\Model\Info
+     * @since 2.0.0
      */
     protected $_paypalInfo;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_coreUrl;
 
     /**
      * @var \Magento\Paypal\Model\CartFactory
+     * @since 2.0.0
      */
     protected $_cartFactory;
 
     /**
      * @var \Magento\Checkout\Model\Type\OnepageFactory
+     * @since 2.0.0
      */
     protected $_checkoutOnepageFactory;
 
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
+     * @since 2.0.0
      */
     protected $_agreementFactory;
 
     /**
      * @var \Magento\Paypal\Model\Api\Type\Factory
+     * @since 2.0.0
      */
     protected $_apiTypeFactory;
 
     /**
      * @var \Magento\Framework\DataObject\Copy
+     * @since 2.0.0
      */
     protected $_objectCopyService;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $_customerRepository;
 
     /**
      * @var \Magento\Customer\Model\AccountManagement
+     * @since 2.0.0
      */
     protected $_accountManagement;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $_messageManager;
 
     /**
      * @var OrderSender
+     * @since 2.0.0
      */
     protected $orderSender;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
+     * @since 2.0.0
      */
     protected $quoteManagement;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
+     * @since 2.0.0
      */
     protected $totalsCollector;
 
@@ -296,6 +335,7 @@ class Checkout
      * @param array $params
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -368,6 +408,7 @@ class Checkout
      * Spares API calls of getting "pal" variable, by putting it into cache per store view
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutShortcutImageUrl()
     {
@@ -405,6 +446,7 @@ class Checkout
      * @param string $cancelUrl  - payment cancellation result
      * @param string $pendingUrl - pending payment result
      * @return $this
+     * @since 2.0.0
      */
     public function prepareGiropayUrls($successUrl, $cancelUrl, $pendingUrl)
     {
@@ -417,6 +459,7 @@ class Checkout
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setIsBillingAgreementRequested($flag)
     {
@@ -429,6 +472,7 @@ class Checkout
      *
      * @param bool $isBml
      * @return $this
+     * @since 2.0.0
      */
     public function setIsBml($isBml)
     {
@@ -441,6 +485,7 @@ class Checkout
      *
      * @param CustomerDataObject $customerData
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerData(CustomerDataObject $customerData)
     {
@@ -456,6 +501,7 @@ class Checkout
      * @param Address|null $billingAddress
      * @param Address|null $shippingAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerWithAddressChange(
         CustomerDataObject $customerData,
@@ -478,6 +524,7 @@ class Checkout
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function start($returnUrl, $cancelUrl, $button = null)
     {
@@ -587,6 +634,7 @@ class Checkout
      * Check whether system can skip order review page before placing order
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canSkipOrderReviewStep()
     {
@@ -603,6 +651,7 @@ class Checkout
      * @param string $token
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function returnFromPaypal($token)
     {
@@ -687,6 +736,7 @@ class Checkout
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function prepareOrderReview($token = null)
     {
@@ -711,6 +761,7 @@ class Checkout
      * @param array $request
      * @return string
      * @throws \Exception
+     * @since 2.0.0
      */
     public function getShippingOptionsCallbackResponse(array $request)
     {
@@ -748,6 +799,7 @@ class Checkout
      *
      * @param string $methodCode
      * @return void
+     * @since 2.0.0
      */
     public function updateShippingMethod($methodCode)
     {
@@ -776,6 +828,7 @@ class Checkout
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function place($token, $shippingMethodCode = null)
     {
@@ -822,6 +875,7 @@ class Checkout
      * Make sure addresses will be saved without validation errors
      *
      * @return void
+     * @since 2.0.0
      */
     private function ignoreAddressValidation()
     {
@@ -840,6 +894,7 @@ class Checkout
      * Determine whether redirect somewhere specifically is required
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRedirectUrl()
     {
@@ -850,6 +905,7 @@ class Checkout
      * Get created billing agreement
      *
      * @return \Magento\Paypal\Model\Billing\Agreement|null
+     * @since 2.0.0
      */
     public function getBillingAgreement()
     {
@@ -860,6 +916,7 @@ class Checkout
      * Return order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -870,6 +927,7 @@ class Checkout
      * Get checkout method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutMethod()
     {
@@ -892,6 +950,7 @@ class Checkout
      * @param Address $address
      * @param array $exportedAddress
      * @return void
+     * @since 2.0.0
      */
     protected function _setExportedAddressData($address, $exportedAddress)
     {
@@ -913,6 +972,7 @@ class Checkout
      * Set create billing agreement flag to api call
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _setBillingAgreementRequest()
     {
@@ -938,6 +998,7 @@ class Checkout
 
     /**
      * @return \Magento\Paypal\Model\Api\Nvp
+     * @since 2.0.0
      */
     protected function _getApi()
     {
@@ -958,6 +1019,7 @@ class Checkout
      * @return array|false
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _prepareShippingOptions(Address $address, $mayReturnEmpty = false, $calculateTax = false)
     {
@@ -1039,6 +1101,7 @@ class Checkout
      * @param \Magento\Framework\DataObject $option1
      * @param \Magento\Framework\DataObject $option2
      * @return int
+     * @since 2.0.0
      */
     protected static function cmpShippingOptions(DataObject $option1, DataObject $option2)
     {
@@ -1057,6 +1120,7 @@ class Checkout
      * @param Address $address
      * @param string $selectedCode
      * @return string
+     * @since 2.0.0
      */
     protected function _matchShippingMethodCode(Address $address, $selectedCode)
     {
@@ -1078,6 +1142,7 @@ class Checkout
      * @param bool|null $button
      * @param string $token
      * @return void
+     * @since 2.0.0
      */
     protected function _setRedirectUrl($button, $token)
     {
@@ -1090,6 +1155,7 @@ class Checkout
      * Get customer session object
      *
      * @return \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     public function getCustomerSession()
     {
@@ -1101,6 +1167,7 @@ class Checkout
      * @param \Magento\Paypal\Model\Cart $cart
      * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
+     * @since 2.0.0
      */
     private function setShippingOptions(PaypalCart $cart, Address $address = null)
     {
@@ -1131,6 +1198,7 @@ class Checkout
      * Prepare quote for guest checkout order submit
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function prepareGuestQuote()
     {

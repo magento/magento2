@@ -5,10 +5,8 @@
  */
 namespace Magento\Paypal\Model\Report\Settlement;
 
-/*
- * Model for report rows
- */
 /**
+ * Model for report rows
  * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row _getResource()
  * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row getResource()
  * @method int getReportId()
@@ -45,6 +43,7 @@ namespace Magento\Paypal\Model\Report\Settlement;
  * @method Row setConsumerId(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Row extends \Magento\Framework\Model\AbstractModel
 {
@@ -52,6 +51,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      * Assoc array event code => label
      *
      * @var array
+     * @since 2.0.0
      */
     private $eventLabelsList = [];
 
@@ -59,6 +59,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      * Cast amount relation
      *
      * @var array
+     * @since 2.0.0
      */
     private $castAmountRelation = [
         'fee_amount' => 'fee_debit_or_credit',
@@ -69,6 +70,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -81,6 +83,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getReferenceType($code)
     {
@@ -98,6 +101,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getTransactionEvent($code)
     {
@@ -111,6 +115,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getDebitCreditText($code)
     {
@@ -126,6 +131,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $key
      * @return float|null
+     * @since 2.0.0
      */
     public function getCastedAmount($key)
     {
@@ -147,6 +153,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      * Get full list of codes with their description
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTransactionEvents()
     {

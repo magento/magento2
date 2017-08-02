@@ -10,6 +10,7 @@ namespace Magento\Sales\Api;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 2.0.0
  */
 interface TransactionRepositoryInterface
 {
@@ -22,6 +23,7 @@ interface TransactionRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\TransactionSearchResultInterface Transaction search result interface.
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -30,6 +32,7 @@ interface TransactionRepositoryInterface
      *
      * @param int $id The transaction ID.
      * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     * @since 2.0.0
      */
     public function get($id);
 
@@ -38,6 +41,7 @@ interface TransactionRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\TransactionInterface $entity The transaction.
      * @return bool
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\TransactionInterface $entity);
 
@@ -46,6 +50,7 @@ interface TransactionRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\TransactionInterface $entity The transaction.
      * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\TransactionInterface $entity);
 
@@ -53,6 +58,7 @@ interface TransactionRepositoryInterface
      * Creates new Transaction instance.
      *
      * @return \Magento\Sales\Api\Data\TransactionInterface Transaction interface.
+     * @since 2.0.0
      */
     public function create();
 }

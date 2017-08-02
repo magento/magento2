@@ -8,12 +8,18 @@ namespace Magento\Search\Model;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Search\Api\Data\SynonymGroupInterface;
 
+/**
+ * Class \Magento\Search\Model\SynonymGroup
+ *
+ * @since 2.1.0
+ */
 class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 {
     /**
      * Init resource model
      *
      * @return void
+     * @since 2.1.0
      */
     protected function _construct()
     {
@@ -22,6 +28,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getGroupId()
     {
@@ -30,6 +37,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function setGroupId($groupId)
     {
@@ -39,6 +47,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getWebsiteId()
     {
@@ -47,6 +56,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -56,6 +66,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getStoreId()
     {
@@ -64,6 +75,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function setStoreId($storeId)
     {
@@ -73,6 +85,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getSynonymGroup()
     {
@@ -81,6 +94,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function setSynonymGroup($synonymGroup)
     {
@@ -92,6 +106,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
      *  sets the 'scope_id' to website:storeviewid
      *
      * @return void
+     * @since 2.1.0
      */
     public function setScope()
     {

@@ -19,6 +19,7 @@ use Magento\Store\Model\WebsiteRepository;
  * The processor for deleting different entities.
  *
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class Delete implements ProcessorInterface
 {
@@ -26,6 +27,7 @@ class Delete implements ProcessorInterface
      * The calculator for data differences.
      *
      * @var DataDifferenceCalculator
+     * @since 2.2.0
      */
     private $dataDifferenceCalculator;
 
@@ -33,6 +35,7 @@ class Delete implements ProcessorInterface
      * The repository for websites.
      *
      * @var WebsiteRepository
+     * @since 2.2.0
      */
     private $websiteRepository;
 
@@ -40,6 +43,7 @@ class Delete implements ProcessorInterface
      * The repository for stores.
      *
      * @var StoreRepository
+     * @since 2.2.0
      */
     private $storeRepository;
 
@@ -47,6 +51,7 @@ class Delete implements ProcessorInterface
      * The collection of store groups.
      *
      * @var Collection
+     * @since 2.2.0
      */
     private $groupCollection;
 
@@ -54,6 +59,7 @@ class Delete implements ProcessorInterface
      * The application registry.
      *
      * @var Registry
+     * @since 2.2.0
      */
     private $registry;
 
@@ -61,6 +67,7 @@ class Delete implements ProcessorInterface
      * The event manager.
      *
      * @var ManagerInterface
+     * @since 2.2.0
      */
     private $eventManager;
 
@@ -71,6 +78,7 @@ class Delete implements ProcessorInterface
      * @param WebsiteRepository $websiteRepository The repository for websites
      * @param StoreRepository $storeRepository The repository for stores
      * @param Collection $groupCollection The collection of store groups
+     * @since 2.2.0
      */
     public function __construct(
         Registry $registry,
@@ -92,6 +100,7 @@ class Delete implements ProcessorInterface
      * Deletes entities from application according to the data set.
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function run(array $data)
     {
@@ -145,6 +154,7 @@ class Delete implements ProcessorInterface
      *
      * @param array $items The websites to delete
      * @return void
+     * @since 2.2.0
      */
     private function deleteWebsites(array $items)
     {
@@ -161,6 +171,7 @@ class Delete implements ProcessorInterface
      *
      * @param array $items The stores to delete
      * @return void
+     * @since 2.2.0
      */
     private function deleteStores(array $items)
     {
@@ -180,6 +191,7 @@ class Delete implements ProcessorInterface
      *
      * @param array $items The groups to delete
      * @return void
+     * @since 2.2.0
      */
     private function deleteGroups(array $items)
     {

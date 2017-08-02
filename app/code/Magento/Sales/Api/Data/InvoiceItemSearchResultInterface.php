@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
+ * @since 2.0.0
  */
 interface InvoiceItemSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -17,6 +18,7 @@ interface InvoiceItemSearchResultInterface extends \Magento\Framework\Api\Search
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\InvoiceItemInterface[] Array of collection items.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -25,6 +27,7 @@ interface InvoiceItemSearchResultInterface extends \Magento\Framework\Api\Search
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

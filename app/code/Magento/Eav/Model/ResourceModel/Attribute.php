@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
  * EAV attribute resource model (Using Forms)
  *
  * @api
+ * @since 2.0.0
  */
 abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
@@ -22,6 +23,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      * If realization doesn't demand this functionality, let this function just return null
      *
      * @return string|null
+     * @since 2.0.0
      */
     abstract protected function _getEavWebsiteTable();
 
@@ -31,6 +33,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      * Get table, where dependency between form name and attribute ids are stored
      *
      * @return string|null
+     * @since 2.0.0
      */
     abstract protected function _getFormAttributeTable();
 
@@ -39,6 +42,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -56,6 +60,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      * @param mixed $value
      * @param AbstractModel $object
      * @return Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -86,6 +91,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -144,6 +150,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      *
      * @param \Magento\Eav\Model\Attribute $object
      * @return array
+     * @since 2.0.0
      */
     public function getScopeValues(\Magento\Eav\Model\Attribute $object)
     {
@@ -172,6 +179,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @since 2.0.0
      */
     public function getUsedInForms(AbstractModel $object)
     {

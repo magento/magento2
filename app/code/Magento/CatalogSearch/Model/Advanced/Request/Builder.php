@@ -9,6 +9,7 @@ use Magento\Framework\Search\Request\Builder as RequestBuilder;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Builder extends RequestBuilder
 {
@@ -17,6 +18,7 @@ class Builder extends RequestBuilder
      * @param array|string $attributeValue
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function bindRequestValue($attributeCode, $attributeValue)
     {

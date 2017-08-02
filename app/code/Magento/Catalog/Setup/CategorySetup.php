@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Type;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class CategorySetup extends EavSetup
 {
@@ -24,6 +25,7 @@ class CategorySetup extends EavSetup
      * Category model factory
      *
      * @var CategoryFactory
+     * @since 2.0.0
      */
     private $categoryFactory;
 
@@ -45,6 +47,7 @@ class CategorySetup extends EavSetup
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param CategoryFactory $categoryFactory
+     * @since 2.0.0
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
@@ -63,6 +66,7 @@ class CategorySetup extends EavSetup
      * @param array $data
      * @return \Magento\Catalog\Model\Category
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function createCategory($data = [])
     {
@@ -74,6 +78,7 @@ class CategorySetup extends EavSetup
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getDefaultEntities()
     {

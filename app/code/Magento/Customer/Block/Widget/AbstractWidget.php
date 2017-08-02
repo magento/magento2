@@ -8,15 +8,22 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class \Magento\Customer\Block\Widget\AbstractWidget
+ *
+ * @since 2.0.0
+ */
 class AbstractWidget extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var CustomerMetadataInterface
+     * @since 2.0.0
      */
     protected $customerMetadata;
 
     /**
      * @var \Magento\Customer\Helper\Address
+     * @since 2.0.0
      */
     protected $_addressHelper;
 
@@ -25,6 +32,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -41,6 +49,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
     /**
      * @param string $key
      * @return null|string
+     * @since 2.0.0
      */
     public function getConfig($key)
     {
@@ -49,6 +58,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFieldIdFormat()
     {
@@ -60,6 +70,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFieldNameFormat()
     {
@@ -72,6 +83,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
     /**
      * @param string $field
      * @return string
+     * @since 2.0.0
      */
     public function getFieldId($field)
     {
@@ -81,6 +93,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
     /**
      * @param string $field
      * @return string
+     * @since 2.0.0
      */
     public function getFieldName($field)
     {
@@ -92,6 +105,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
      *
      * @param string $attributeCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface|null
+     * @since 2.0.0
      */
     protected function _getAttribute($attributeCode)
     {

@@ -17,6 +17,7 @@ namespace Magento\Framework\App\Area;
  * for areas with dynamic front names.
  *
  * @api
+ * @since 2.0.0
  */
 interface FrontNameResolverInterface
 {
@@ -25,6 +26,7 @@ interface FrontNameResolverInterface
      *
      * @param bool $checkHost if true, return front name only if it is valid for the current host
      * @return string|bool
+     * @since 2.0.0
      */
     public function getFrontName($checkHost = false);
 }

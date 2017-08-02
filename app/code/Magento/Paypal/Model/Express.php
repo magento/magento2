@@ -20,21 +20,25 @@ use Magento\Store\Model\ScopeInterface;
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Express extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_code = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Paypal\Block\Express\Form::class;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
@@ -42,6 +46,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isGateway = false;
 
@@ -49,6 +54,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canOrder = true;
 
@@ -56,6 +62,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canAuthorize = true;
 
@@ -63,6 +70,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canCapture = true;
 
@@ -70,6 +78,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canCapturePartial = true;
 
@@ -77,6 +86,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canRefund = true;
 
@@ -84,6 +94,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canRefundInvoicePartial = true;
 
@@ -91,6 +102,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canVoid = true;
 
@@ -98,6 +110,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canUseInternal = false;
 
@@ -105,6 +118,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canUseCheckout = true;
 
@@ -112,6 +126,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canFetchTransactionInfo = true;
 
@@ -119,6 +134,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Availability option
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canReviewPayment = true;
 
@@ -126,6 +142,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Website Payments Pro instance
      *
      * @var \Magento\Paypal\Model\Pro
+     * @since 2.0.0
      */
     protected $_pro;
 
@@ -133,6 +150,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Payment additional information key for payment action
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_isOrderPaymentActionKey = 'is_order_action';
 
@@ -140,41 +158,49 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Payment additional information key for number of used authorizations
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_authorizationCountKey = 'authorization_count';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_urlBuilder;
 
     /**
      * @var \Magento\Paypal\Model\CartFactory
+     * @since 2.0.0
      */
     protected $_cartFactory;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Framework\Exception\LocalizedExceptionFactory
+     * @since 2.0.0
      */
     protected $_exception;
 
     /**
      * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     * @since 2.0.0
      */
     protected $transactionRepository;
 
     /**
      * @var Transaction\BuilderInterface
+     * @since 2.0.0
      */
     protected $transactionBuilder;
 
@@ -198,6 +224,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -253,6 +280,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Set processable error codes to API model
      *
      * @return \Magento\Paypal\Model\Api\Nvp
+     * @since 2.0.0
      */
     protected function _setApiProcessableErrors()
     {
@@ -278,6 +306,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Store\Model\Store|int $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -293,6 +322,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Can be used in regular checkout
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canUseCheckout()
     {
@@ -314,6 +344,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param string $currencyCode
      * @return bool
+     * @since 2.0.0
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -325,6 +356,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @see \Magento\Sales\Model\Payment::place()
      * @return string
+     * @since 2.0.0
      */
     public function getConfigPaymentAction()
     {
@@ -335,6 +367,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Check whether payment method can be used
      * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -348,6 +381,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param int|null $storeId
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getConfigData($field, $storeId = null)
     {
@@ -364,6 +398,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -441,6 +476,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -453,6 +489,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -479,6 +516,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -574,6 +612,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -586,6 +625,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
+     * @since 2.0.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -597,6 +637,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Whether payment can be reviewed
      * @return bool
+     * @since 2.0.0
      */
     public function canReviewPayment()
     {
@@ -608,6 +649,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Payment\Model\Info|Payment $payment
      * @return bool
+     * @since 2.0.0
      */
     public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -620,6 +662,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Payment\Model\InfoInterface|Payment $payment
      * @return bool
+     * @since 2.0.0
      */
     public function denyPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -633,6 +676,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
      * @see Quote\Payment::getCheckoutRedirectUrl()
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutRedirectUrl()
     {
@@ -645,6 +689,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
+     * @since 2.0.0
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
@@ -653,6 +698,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * @return Api\Nvp
+     * @since 2.0.0
      */
     public function getApi()
     {
@@ -665,6 +711,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param array|\Magento\Framework\DataObject $data
      * @return \Magento\Payment\Model\Info
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
@@ -688,6 +735,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param Payment $payment
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     protected function _placeOrder(Payment $payment, $amount)
     {
@@ -737,6 +785,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param Nvp $api
      * @param Payment $payment
      * @return void
+     * @since 2.0.0
      */
     protected function _importToPayment($api, $payment)
     {
@@ -766,6 +815,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @internal param \Magento\Framework\DataObject $payment
+     * @since 2.0.0
      */
     public function canVoid()
     {
@@ -784,6 +834,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * Check capture availability
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCapture()
     {
@@ -817,6 +868,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject $payment
      * @param string $parentTransactionId
      * @return \Magento\Paypal\Model\Api\AbstractApi
+     * @since 2.0.0
      */
     protected function _callDoAuthorize($amount, $payment, $parentTransactionId)
     {
@@ -848,6 +900,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param Transaction $transaction
      * @param int $period
      * @return bool
+     * @since 2.0.0
      */
     protected function _isTransactionExpired(Transaction $transaction, $period)
     {
@@ -878,6 +931,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param int|null $storeId
      * @return bool
+     * @since 2.0.0
      */
     public function isActive($storeId = null)
     {
@@ -894,6 +948,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param OrderPaymentInterface $payment
      * @return false|\Magento\Sales\Api\Data\TransactionInterface
+     * @since 2.0.0
      */
     protected function getOrderTransaction($payment)
     {

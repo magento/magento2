@@ -12,11 +12,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Job that handles module commands. E.g. "module:enable", "module:disable"
+ * @since 2.0.0
  */
 class JobModule extends AbstractJob
 {
     /**
      * @var string $cmdString
+     * @since 2.0.0
      */
     protected $cmdString;
 
@@ -29,6 +31,7 @@ class JobModule extends AbstractJob
      * @param Status $status
      * @param string $name
      * @param array $params
+     * @since 2.0.0
      */
     public function __construct(
         AbstractSetupCommand $command,
@@ -50,6 +53,7 @@ class JobModule extends AbstractJob
      *
      * @param string $name
      * @return void
+     * @since 2.0.0
      */
     private function setCommandString($name)
     {
@@ -65,6 +69,7 @@ class JobModule extends AbstractJob
      *
      * @throws \RuntimeException
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

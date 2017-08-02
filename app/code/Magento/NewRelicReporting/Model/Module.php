@@ -6,12 +6,18 @@
 
 namespace Magento\NewRelicReporting\Model;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Module
+ *
+ * @since 2.0.0
+ */
 class Module extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Initialize module status model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

@@ -9,11 +9,13 @@ namespace Magento\Directory\Model\Currency\Import;
  * Configured currency import services
  *
  * @api
+ * @since 2.0.0
  */
 class Config
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     private $_servicesConfig;
 
@@ -22,6 +24,7 @@ class Config
      *
      * @param array $servicesConfig
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(array $servicesConfig)
     {
@@ -43,6 +46,7 @@ class Config
      * Retrieve unique names of all available currency import services
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAvailableServices()
     {
@@ -54,6 +58,7 @@ class Config
      *
      * @param string $serviceName
      * @return string|null
+     * @since 2.0.0
      */
     public function getServiceClass($serviceName)
     {
@@ -68,6 +73,7 @@ class Config
      *
      * @param string $serviceName
      * @return \Magento\Framework\Phrase|null
+     * @since 2.0.0
      */
     public function getServiceLabel($serviceName)
     {

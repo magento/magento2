@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
 {
     /**
@@ -18,6 +23,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
      * Index page
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

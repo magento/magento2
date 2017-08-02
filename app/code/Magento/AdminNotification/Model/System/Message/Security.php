@@ -10,6 +10,7 @@ use Magento\Store\Model\Store;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Security implements \Magento\Framework\Notification\MessageInterface
 {
@@ -22,6 +23,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * File path for verification
      *
      * @var string
+     * @since 2.0.0
      */
     private $_filePath = 'app/etc/config.php';
 
@@ -29,26 +31,31 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Time out for HTTP verification request
      *
      * @var int
+     * @since 2.0.0
      */
     private $_verificationTimeOut = 2;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $_backendConfig;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @since 2.0.0
      */
     protected $_curlFactory;
 
@@ -57,6 +64,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -74,6 +82,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Check verification result and return true if system must to show notification message
      *
      * @return bool
+     * @since 2.0.0
      */
     private function _canShowNotification()
     {
@@ -94,6 +103,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * If file is accessible return true or false
      *
      * @return bool
+     * @since 2.0.0
      */
     private function _isFileAccessible()
     {
@@ -114,6 +124,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Retrieve unique message identity
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentity()
     {
@@ -124,6 +135,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Check whether
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -134,6 +146,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getText()
     {
@@ -147,6 +160,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message severity
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSeverity()
     {

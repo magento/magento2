@@ -7,21 +7,25 @@ namespace Magento\Cms\Block\Adminhtml\Page;
 
 /**
  * Adminhtml cms pages grid
+ * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected $_cmsPage;
 
     /**
      * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
+     * @since 2.0.0
      */
     protected $pageLayoutBuilder;
 
@@ -32,6 +36,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
      * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,6 +54,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,6 +68,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection
      *
      * @return \Magento\Backend\Block\Widget\Grid
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -77,6 +84,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare columns
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -163,6 +171,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * After load collection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _afterLoadCollection()
     {
@@ -177,6 +186,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\DataObject $column
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _filterStoreCondition($collection, \Magento\Framework\DataObject $column)
     {
@@ -192,6 +202,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

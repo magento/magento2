@@ -5,20 +5,28 @@
  */
 namespace Magento\Framework\Image;
 
+/**
+ * Class \Magento\Framework\Image\AdapterFactory
+ *
+ * @since 2.0.0
+ */
 class AdapterFactory
 {
     /**
      * @var Adapter\ConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $adapterMap;
 
@@ -26,6 +34,7 @@ class AdapterFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Adapter\ConfigInterface $config
      * @param array $adapterMap
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -43,6 +52,7 @@ class AdapterFactory
      * @param string $adapterAlias
      * @return \Magento\Framework\Image\Adapter\AdapterInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($adapterAlias = null)
     {

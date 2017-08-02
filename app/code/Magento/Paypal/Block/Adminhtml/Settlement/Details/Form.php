@@ -7,16 +7,19 @@ namespace Magento\Paypal\Block\Adminhtml\Settlement\Details;
 
 /**
  * Settlement reports transaction details
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement
+     * @since 2.0.0
      */
     protected $_settlement;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -27,6 +30,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Paypal\Model\Report\Settlement $settlement
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -46,6 +50,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

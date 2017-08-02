@@ -20,26 +20,31 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 /**
  * Class Pdfcreditmemos
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
 {
     /**
      * @var FileFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var Creditmemo
+     * @since 2.0.0
      */
     protected $pdfCreditmemo;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -50,6 +55,7 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocume
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
      * @param Creditmemo $pdfCreditmemo
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -71,6 +77,7 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocume
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|ResultInterface
+     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 /**
  * Catalog Product Website Resource Model
+ * @since 2.0.0
  */
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -14,6 +15,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -21,6 +23,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -35,6 +38,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define resource table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -48,6 +52,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $productIds
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function removeProducts($websiteIds, $productIds)
     {
@@ -81,6 +86,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $productIds
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function addProducts($websiteIds, $productIds)
     {
@@ -117,6 +123,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $productIds
      * @return array
+     * @since 2.0.0
      */
     public function getWebsites($productIds)
     {

@@ -9,11 +9,13 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class IsActive
+ * @since 2.0.0
  */
 class IsActive implements OptionSourceInterface
 {
     /**
      * @var \Magento\Cms\Model\Page
+     * @since 2.0.0
      */
     protected $cmsPage;
 
@@ -21,6 +23,7 @@ class IsActive implements OptionSourceInterface
      * Constructor
      *
      * @param \Magento\Cms\Model\Page $cmsPage
+     * @since 2.0.0
      */
     public function __construct(\Magento\Cms\Model\Page $cmsPage)
     {
@@ -31,6 +34,7 @@ class IsActive implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

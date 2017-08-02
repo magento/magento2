@@ -7,11 +7,13 @@ namespace Magento\Sales\Block\Status\Grid\Column;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class State extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**
      * @var \Magento\Sales\Model\Order\Config
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -19,6 +21,7 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Sales\Model\Order\Config $config
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -34,6 +37,7 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
      * Add decorated status to column
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFrameCallback()
     {
@@ -49,6 +53,7 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
      * @param bool $isExport
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function decorateState($value, $row, $column, $isExport)
     {

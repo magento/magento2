@@ -7,15 +7,22 @@ namespace Magento\Framework\View\Design\Theme\Label;
 
 use Magento\Framework\Option\ArrayInterface;
 
+/**
+ * Class \Magento\Framework\View\Design\Theme\Label\Options
+ *
+ * @since 2.1.0
+ */
 class Options implements ArrayInterface
 {
     /**
      * @var ListInterface
+     * @since 2.1.0
      */
     protected $list;
 
     /**
      * @param ListInterface $list
+     * @since 2.1.0
      */
     public function __construct(ListInterface $list)
     {
@@ -26,6 +33,7 @@ class Options implements ArrayInterface
      * Return list of themes
      *
      * @return array
+     * @since 2.1.0
      */
     public function toOptionArray()
     {

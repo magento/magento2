@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NotFoundException;
 /**
  * Class Index
  * @package Magento\Rss\Controller\Feed
+ * @since 2.0.0
  */
 class Index extends \Magento\Rss\Controller\Adminhtml\Feed
 {
@@ -19,6 +20,7 @@ class Index extends \Magento\Rss\Controller\Adminhtml\Feed
      *
      * @return void
      * @throws NotFoundException
+     * @since 2.0.0
      */
     public function execute()
     {

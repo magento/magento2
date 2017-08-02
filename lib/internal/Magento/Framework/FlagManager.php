@@ -9,6 +9,7 @@ use Magento\Framework\Flag\FlagResource;
 
 /**
  * Service that allows to handle a flag object as a scalar value.
+ * @since 2.2.0
  */
 class FlagManager
 {
@@ -17,6 +18,7 @@ class FlagManager
      *
      * @var FlagFactory
      * @see Flag
+     * @since 2.2.0
      */
     private $flagFactory;
 
@@ -24,6 +26,7 @@ class FlagManager
      * The flag resource.
      *
      * @var FlagResource
+     * @since 2.2.0
      */
     private $flagResource;
 
@@ -31,6 +34,7 @@ class FlagManager
      *
      * @param FlagFactory $flagFactory The factory of flags
      * @param FlagResource $flagResource The flag resource
+     * @since 2.2.0
      */
     public function __construct(
         FlagFactory $flagFactory,
@@ -45,6 +49,7 @@ class FlagManager
      *
      * @param string $code The code of flag
      * @return string|int|float|bool|array|null
+     * @since 2.2.0
      */
     public function getFlagData($code)
     {
@@ -57,6 +62,7 @@ class FlagManager
      * @param string $code The code of flag
      * @param string|int|float|bool|array|null $value The value of flag
      * @return bool
+     * @since 2.2.0
      */
     public function saveFlag($code, $value)
     {
@@ -72,6 +78,7 @@ class FlagManager
      *
      * @param string $code The code of flag
      * @return bool
+     * @since 2.2.0
      */
     public function deleteFlag($code)
     {
@@ -89,6 +96,7 @@ class FlagManager
      *
      * @param string $code
      * @return Flag
+     * @since 2.2.0
      */
     private function getFlagObject($code)
     {

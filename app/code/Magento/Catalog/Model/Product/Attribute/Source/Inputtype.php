@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Source\Inputtype
+ *
+ * @since 2.0.0
+ */
 class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -24,12 +30,14 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager = null;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Event\ManagerInterface $eventManager, \Magento\Framework\Registry $coreRegistry)
     {
@@ -42,6 +50,7 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

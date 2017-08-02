@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
  * Backend model for attribute with multiple values
  *
  * @api
+ * @since 2.0.0
  */
 class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -17,6 +18,7 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
      *
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -37,6 +39,7 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
+     * @since 2.0.0
      */
     public function validate($object)
     {

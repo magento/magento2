@@ -17,6 +17,7 @@ use Magento\Downloadable\Model\ResourceModel\Link as Resource;
  * @method Link setProductId(int $value)
  *
  * @api
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {
@@ -60,6 +61,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -85,6 +87,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -94,6 +97,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -105,6 +109,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Retrieve base temporary path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseTmpPath()
     {
@@ -115,6 +120,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Retrieve Base files path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBasePath()
     {
@@ -125,6 +131,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Retrieve base sample temporary path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseSampleTmpPath()
     {
@@ -135,6 +142,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Retrieve base sample path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseSamplePath()
     {
@@ -147,6 +155,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @param int $productId
      * @param int $storeId
      * @return array
+     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -156,6 +165,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -165,6 +175,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -174,6 +185,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getIsShareable()
     {
@@ -183,6 +195,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -192,6 +205,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getNumberOfDownloads()
     {
@@ -201,6 +215,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getLinkType()
     {
@@ -210,6 +225,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getLinkFile()
     {
@@ -220,6 +236,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Return file content
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null
+     * @since 2.0.0
      */
     public function getLinkFileContent()
     {
@@ -229,6 +246,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getLinkUrl()
     {
@@ -238,6 +256,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getSampleType()
     {
@@ -247,6 +266,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getSampleFile()
     {
@@ -257,6 +277,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * Return sample file content when type is 'file'
      *
      * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null relative file path
+     * @since 2.0.0
      */
     public function getSampleFileContent()
     {
@@ -266,6 +287,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getSampleUrl()
     {
@@ -277,6 +299,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * @param string $title
      * @return $this
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -286,6 +309,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -295,6 +319,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * @param int $isShareable
      * @return $this
+     * @since 2.0.0
      */
     public function setIsShareable($isShareable)
     {
@@ -306,6 +331,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -318,6 +344,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param int $numberOfDownloads
      * @return $this
+     * @since 2.0.0
      */
     public function setNumberOfDownloads($numberOfDownloads)
     {
@@ -327,6 +354,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * @param string $linkType
      * @return $this
+     * @since 2.0.0
      */
     public function setLinkType($linkType)
     {
@@ -338,6 +366,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param string $linkFile
      * @return $this
+     * @since 2.0.0
      */
     public function setLinkFile($linkFile)
     {
@@ -349,6 +378,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent
      * @return $this
+     * @since 2.0.0
      */
     public function setLinkFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent = null)
     {
@@ -360,6 +390,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param string $linkUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setLinkUrl($linkUrl)
     {
@@ -369,6 +400,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**
      * @param string $sampleType
      * @return $this
+     * @since 2.0.0
      */
     public function setSampleType($sampleType)
     {
@@ -380,6 +412,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param string $sampleFile
      * @return $this
+     * @since 2.0.0
      */
     public function setSampleFile($sampleFile)
     {
@@ -391,6 +424,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
      * @return $this
+     * @since 2.0.0
      */
     public function setSampleFileContent(
         \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null
@@ -403,6 +437,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param string $sampleUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setSampleUrl($sampleUrl)
     {
@@ -413,6 +448,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * {@inheritdoc}
      *
      * @return \Magento\Downloadable\Api\Data\LinkExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -424,6 +460,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      *
      * @param \Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes)
     {

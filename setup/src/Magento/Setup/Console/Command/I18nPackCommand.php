@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for i18n language packaging
+ * @since 2.0.0
  */
 class I18nPackCommand extends Command
 {
@@ -38,6 +39,7 @@ class I18nPackCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -75,6 +77,7 @@ class I18nPackCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

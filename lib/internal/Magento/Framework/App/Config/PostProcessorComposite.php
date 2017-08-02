@@ -10,14 +10,19 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 /**
  * @inheritdoc
  * @package Magento\Framework\App\Config
+ * @since 2.2.0
  */
 class PostProcessorComposite implements PostProcessorInterface
 {
-    /** @var  PostProcessorInterface[] */
+    /**
+     * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface[]
+     * @since 2.2.0
+     */
     private $processors;
 
     /**
      * @param array $processors
+     * @since 2.2.0
      */
     public function __construct(array $processors = [])
     {
@@ -27,6 +32,7 @@ class PostProcessorComposite implements PostProcessorInterface
     /**
      * @param array $config
      * @return array
+     * @since 2.2.0
      */
     public function process(array $config)
     {

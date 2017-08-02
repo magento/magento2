@@ -7,17 +7,24 @@ namespace Magento\Review\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Review\Observer\CatalogBlockProductCollectionBeforeToHtmlObserver
+ *
+ * @since 2.0.0
+ */
 class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInterface
 {
     /**
      * Review model
      *
      * @var \Magento\Review\Model\ReviewFactory
+     * @since 2.0.0
      */
     protected $_reviewFactory;
 
     /**
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Review\Model\ReviewFactory $reviewFactory
@@ -30,6 +37,7 @@ class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInter
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

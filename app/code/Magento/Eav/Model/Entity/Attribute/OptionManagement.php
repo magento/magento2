@@ -10,15 +10,22 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
+/**
+ * Class \Magento\Eav\Model\Entity\Attribute\OptionManagement
+ *
+ * @since 2.0.0
+ */
 class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInterface
 {
     /**
      * @var \Magento\Eav\Model\AttributeRepository
+     * @since 2.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @since 2.0.0
      */
     protected $resourceModel;
 
@@ -26,6 +33,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param \Magento\Eav\Model\AttributeRepository $attributeRepository
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceModel
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\AttributeRepository $attributeRepository,
@@ -37,6 +45,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function add($entityType, $attributeCode, $option)
     {
@@ -76,6 +85,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete($entityType, $attributeCode, $optionId)
     {
@@ -107,6 +117,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems($entityType, $attributeCode)
     {
@@ -129,6 +140,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param int $optionId
      * @throws NoSuchEntityException
      * @return void
+     * @since 2.1.0
      */
     protected function validateOption($attribute, $optionId)
     {
@@ -142,6 +154,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     /**
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @return string
+     * @since 2.1.0
      */
     private function getOptionId($option)
     {

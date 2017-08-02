@@ -11,6 +11,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * Interface to build select for retrieving configurable options.
+ * @since 2.2.0
  */
 interface OptionSelectBuilderInterface
 {
@@ -21,6 +22,7 @@ interface OptionSelectBuilderInterface
      * @param int $productId
      * @param ScopeInterface $scope
      * @return Select
+     * @since 2.2.0
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope);
 }

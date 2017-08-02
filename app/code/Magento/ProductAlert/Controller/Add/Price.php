@@ -15,15 +15,22 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Add\Price
+ *
+ * @since 2.0.0
+ */
 class Price extends AddController
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var  \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -32,6 +39,7 @@ class Price extends AddController
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -49,6 +57,7 @@ class Price extends AddController
      *
      * @param string $url
      * @return bool
+     * @since 2.0.0
      */
     protected function isInternal($url)
     {
@@ -62,6 +71,7 @@ class Price extends AddController
 
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -6,12 +6,18 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
+/**
+ * Class \Magento\Indexer\Controller\Adminhtml\Indexer\MassOnTheFly
+ *
+ * @since 2.0.0
+ */
 class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
     /**
      * Turn mview off for the given indexers
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

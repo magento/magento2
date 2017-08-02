@@ -14,6 +14,7 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
  * Class Store
+ * @since 2.0.0
  */
 class Store extends Column
 {
@@ -21,6 +22,7 @@ class Store extends Column
      * Escaper
      *
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
@@ -28,6 +30,7 @@ class Store extends Column
      * System store
      *
      * @var SystemStore
+     * @since 2.0.0
      */
     protected $systemStore;
 
@@ -35,11 +38,13 @@ class Store extends Column
      * Store manager
      *
      * @var StoreManager
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $storeKey;
 
@@ -51,6 +56,7 @@ class Store extends Column
      * @param array $components
      * @param array $data
      * @param string $storeKey
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -72,6 +78,7 @@ class Store extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -89,6 +96,7 @@ class Store extends Column
      *
      * @param array $item
      * @return string
+     * @since 2.0.0
      */
     protected function prepareItem(array $item)
     {
@@ -126,6 +134,7 @@ class Store extends Column
      * Prepare component configuration
      *
      * @return void
+     * @since 2.1.0
      */
     public function prepare()
     {
@@ -140,7 +149,8 @@ class Store extends Column
      *
      * @return StoreManager
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getStoreManager()
     {

@@ -6,30 +6,40 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+/**
+ * Class \Magento\Bundle\Model\Product\OptionList
+ *
+ * @since 2.0.0
+ */
 class OptionList
 {
     /**
      * @var \Magento\Bundle\Api\Data\OptionInterfaceFactory
+     * @since 2.0.0
      */
     protected $optionFactory;
 
     /**
      * @var Type
+     * @since 2.0.0
      */
     protected $type;
 
     /**
      * @var LinksList
+     * @since 2.0.0
      */
     protected $linkList;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -39,6 +49,7 @@ class OptionList
      * @param LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Bundle\Model\Product\Type $type,
@@ -57,6 +68,7 @@ class OptionList
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     * @since 2.0.0
      */
     public function getItems(\Magento\Catalog\Api\Data\ProductInterface $product)
     {

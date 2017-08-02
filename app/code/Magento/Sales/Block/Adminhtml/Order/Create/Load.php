@@ -10,11 +10,13 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Load extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\View\Helper\Js
+     * @since 2.0.0
      */
     protected $_jsHelper = null;
 
@@ -22,6 +24,7 @@ class Load extends \Magento\Framework\View\Element\Template
      * Json encoder
      *
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -30,6 +33,7 @@ class Load extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\View\Helper\Js $adminhtmlJs
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -46,6 +50,7 @@ class Load extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

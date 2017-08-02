@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Dashboard;
  * Adminhtml dashboard google chart block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
@@ -21,6 +22,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * All series
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_allSeries = [];
 
@@ -28,6 +30,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Axis labels
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_axisLabels = [];
 
@@ -35,6 +38,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Axis maps
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_axisMaps = [];
 
@@ -42,6 +46,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Data rows
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_dataRows = [];
 
@@ -49,6 +54,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Simple encoding chars
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_simpleEncoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -56,6 +62,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Extended encoding chars
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_extendedEncoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.';
 
@@ -63,6 +70,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Chart width
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_width = '780';
 
@@ -70,6 +78,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Chart height
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_height = '384';
 
@@ -77,6 +86,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Google chart api data encoding
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_encoding = 'e';
 
@@ -84,11 +94,13 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Html identifier
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_htmlId = '';
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'dashboard/graph.phtml';
 
@@ -96,6 +108,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Adminhtml dashboard data
      *
      * @var \Magento\Backend\Helper\Dashboard\Data
+     * @since 2.0.0
      */
     protected $_dashboardData = null;
 
@@ -104,6 +117,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -119,6 +133,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Get tab template
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getTabTemplate()
     {
@@ -130,6 +145,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param array $rows
      * @return void
+     * @since 2.0.0
      */
     public function setDataRows($rows)
     {
@@ -142,6 +158,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @param string $seriesId
      * @param array $options
      * @return void
+     * @since 2.0.0
      */
     public function addSeries($seriesId, array $options)
     {
@@ -153,6 +170,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param string $seriesId
      * @return array|false
+     * @since 2.0.0
      */
     public function getSeries($seriesId)
     {
@@ -167,6 +185,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Get all series
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllSeries()
     {
@@ -182,6 +201,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function getChartUrl($directUrl = true)
     {
@@ -451,6 +471,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @param array $attributes
      * @param bool $single
      * @return array
+     * @since 2.0.0
      */
     protected function getRowsData($attributes, $single = false)
     {
@@ -474,6 +495,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @param string $axis
      * @param array $labels
      * @return void
+     * @since 2.0.0
      */
     public function setAxisLabels($axis, $labels)
     {
@@ -485,6 +507,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param string $htmlId
      * @return void
+     * @since 2.0.0
      */
     public function setHtmlId($htmlId)
     {
@@ -495,6 +518,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Get html id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -506,6 +530,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param int $number
      * @return int
+     * @since 2.0.0
      */
     protected function _getPow($number)
     {
@@ -521,6 +546,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Return chart width
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getWidth()
     {
@@ -531,6 +557,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Return chart height
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getHeight()
     {
@@ -540,6 +567,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * @param \Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper
      * @return void
+     * @since 2.0.0
      */
     public function setDataHelper(\Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper)
     {
@@ -550,6 +578,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Prepare chart data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareData()
     {

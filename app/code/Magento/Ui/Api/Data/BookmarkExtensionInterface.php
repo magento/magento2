@@ -9,6 +9,7 @@ namespace Magento\Ui\Api\Data;
  * Bookmark extension interface
  *
  * @api
+ * @since 2.0.0
  */
 interface BookmarkExtensionInterface extends \Magento\Framework\Api\ExtensionAttributesInterface
 {

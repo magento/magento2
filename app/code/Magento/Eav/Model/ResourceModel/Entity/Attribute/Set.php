@@ -5,6 +5,11 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
+/**
+ * Class \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
+ *
+ * @since 2.0.0
+ */
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -14,11 +19,13 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory
+     * @since 2.0.0
      */
     protected $_attrGroupFactory;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
@@ -29,6 +36,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string|null $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -46,6 +54,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -57,6 +66,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -94,6 +104,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -115,6 +126,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Eav\Model\Entity\Attribute\Set $object
      * @param string $attributeSetName
      * @return bool
+     * @since 2.0.0
      */
     public function validate($object, $attributeSetName)
     {
@@ -142,6 +154,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $attributeIds
      * @param int $setId
      * @return array
+     * @since 2.0.0
      */
     public function getSetInfo(array $attributeIds, $setId = null)
     {
@@ -187,6 +200,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $setId
      * @return int|null
+     * @since 2.0.0
      */
     public function getDefaultGroupId($setId)
     {
@@ -210,6 +224,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $setId
      * @return array
+     * @since 2.0.0
      */
     protected function fetchAttributeSetData($setId = null)
     {

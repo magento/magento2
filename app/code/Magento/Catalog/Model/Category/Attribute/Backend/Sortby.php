@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
  * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -18,6 +19,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -25,6 +27,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Construct
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -39,6 +42,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -89,6 +93,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -111,6 +116,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function afterLoad($object)
     {

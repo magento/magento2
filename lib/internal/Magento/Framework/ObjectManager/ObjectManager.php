@@ -12,10 +12,16 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Class \Magento\Framework\ObjectManager\ObjectManager
+ *
+ * @since 2.0.0
+ */
 class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 {
     /**
      * @var \Magento\Framework\ObjectManager\FactoryInterface
+     * @since 2.0.0
      */
     protected $_factory;
 
@@ -23,11 +29,13 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      * List of shared instances
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_sharedInstances = [];
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -35,6 +43,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
      * @param array &$sharedInstances
+     * @since 2.0.0
      */
     public function __construct(FactoryInterface $factory, ConfigInterface $config, &$sharedInstances = [])
     {
@@ -50,6 +59,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      * @param string $type
      * @param array $arguments
      * @return mixed
+     * @since 2.0.0
      */
     public function create($type, array $arguments = [])
     {
@@ -61,6 +71,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      *
      * @param string $type
      * @return mixed
+     * @since 2.0.0
      */
     public function get($type)
     {
@@ -78,6 +89,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      *
      * @param array $configuration
      * @return void
+     * @since 2.0.0
      */
     public function configure(array $configuration)
     {

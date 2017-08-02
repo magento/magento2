@@ -10,6 +10,7 @@ namespace Magento\Sales\Cron;
  *
  * Performs handling of cron jobs related to sending emails to customers
  * after creation/modification of Order, Invoice, Shipment or Creditmemo.
+ * @since 2.0.0
  */
 class SendEmails
 {
@@ -17,11 +18,13 @@ class SendEmails
      * Global configuration storage.
      *
      * @var \Magento\Sales\Model\EmailSenderHandler
+     * @since 2.0.0
      */
     protected $emailSenderHandler;
 
     /**
      * @param \Magento\Sales\Model\EmailSenderHandler $emailSenderHandler
+     * @since 2.0.0
      */
     public function __construct(\Magento\Sales\Model\EmailSenderHandler $emailSenderHandler)
     {
@@ -40,6 +43,7 @@ class SendEmails
      * in global settings.
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

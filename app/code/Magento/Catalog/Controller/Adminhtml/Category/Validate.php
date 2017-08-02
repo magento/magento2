@@ -7,11 +7,13 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 /**
  * Catalog category validate
+ * @since 2.1.0
  */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.1.0
      */
     protected $resultJsonFactory;
 
@@ -20,6 +22,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -33,6 +36,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Category
      * AJAX category validation action
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.1.0
      */
     public function execute()
     {

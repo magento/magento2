@@ -7,6 +7,11 @@ namespace Magento\Framework\System;
 
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Class \Magento\Framework\System\Dirs
+ *
+ * @since 2.0.0
+ */
 class Dirs
 {
     /**
@@ -15,6 +20,7 @@ class Dirs
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public static function rm($dirname)
     {
@@ -74,6 +80,7 @@ class Dirs
      * @param int $mode
      * @return true
      * @throws \Exception
+     * @since 2.0.0
      */
     public static function mkdirStrict($path, $recursive = true, $mode = 0777)
     {
@@ -97,6 +104,7 @@ class Dirs
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public static function copyFileStrict($source, $dest)
     {

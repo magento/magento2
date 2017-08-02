@@ -10,6 +10,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Class RulesApplier
  * @package Magento\SalesRule\Model\Validator
+ * @since 2.0.0
  */
 class RulesApplier
 {
@@ -17,11 +18,13 @@ class RulesApplier
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\SalesRule\Model\Utility
+     * @since 2.0.0
      */
     protected $validatorUtility;
 
@@ -29,6 +32,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Utility $utility
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
@@ -49,6 +53,7 @@ class RulesApplier
      * @param mixed $couponCode
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function applyRules($item, $rules, $skipValidation, $couponCode)
     {
@@ -92,6 +97,7 @@ class RulesApplier
      * @param Address $address
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return $this
+     * @since 2.0.0
      */
     public function addDiscountDescription($address, $rule)
     {
@@ -121,6 +127,7 @@ class RulesApplier
      * @param \Magento\Quote\Model\Quote\Address $address
      * @param mixed $couponCode
      * @return $this
+     * @since 2.0.0
      */
     protected function applyRule($item, $rule, $address, $couponCode)
     {
@@ -137,6 +144,7 @@ class RulesApplier
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @since 2.0.0
      */
     protected function getDiscountData($item, $rule)
     {
@@ -163,6 +171,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
+     * @since 2.0.0
      */
     protected function setDiscountData($discountData, $item)
     {
@@ -181,6 +190,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param mixed $couponCode
      * @return $this
+     * @since 2.0.0
      */
     public function maintainAddressCouponCode($address, $rule, $couponCode)
     {
@@ -203,6 +213,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param float $qty
      * @return $this
+     * @since 2.0.0
      */
     protected function eventFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
@@ -232,6 +243,7 @@ class RulesApplier
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param int[] $appliedRuleIds
      * @return $this
+     * @since 2.0.0
      */
     public function setAppliedRuleIds(\Magento\Quote\Model\Quote\Item\AbstractItem $item, array $appliedRuleIds)
     {

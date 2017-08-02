@@ -8,21 +8,29 @@ namespace Magento\Sales\Model\CronJob;
 use Magento\Store\Model\StoresConfig;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Sales\Model\CronJob\CleanExpiredOrders
+ *
+ * @since 2.0.0
+ */
 class CleanExpiredOrders
 {
     /**
      * @var StoresConfig
+     * @since 2.0.0
      */
     protected $storesConfig;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @since 2.0.0
      */
     protected $orderCollectionFactory;
 
     /**
      * @param StoresConfig $storesConfig
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         StoresConfig $storesConfig,
@@ -36,6 +44,7 @@ class CleanExpiredOrders
      * Clean expired quotes (cron process)
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

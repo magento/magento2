@@ -15,6 +15,11 @@ use Magento\Downloadable\Model\Sample as SampleConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Downloadable\Model\File\ContentUploader
+ *
+ * @since 2.0.0
+ */
 class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data\File\ContentUploaderInterface
 {
     /**
@@ -26,26 +31,31 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
      * Filename prefix for temporary files
      *
      * @var string
+     * @since 2.0.0
      */
     protected $filePrefix = 'magento_api';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $systemTmpDirectory;
 
     /**
      * @var LinkConfig
+     * @since 2.0.0
      */
     protected $linkConfig;
 
     /**
      * @var SampleConfig
+     * @since 2.0.0
      */
     protected $sampleConfig;
 
@@ -56,6 +66,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
      * @param Filesystem $filesystem
      * @param LinkConfig $linkConfig
      * @param SampleConfig $sampleConfig
+     * @since 2.0.0
      */
     public function __construct(
         Database $coreFileStorageDb,
@@ -79,6 +90,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
      *
      * @param ContentInterface $fileContent
      * @return array
+     * @since 2.0.0
      */
     protected function decodeContent(ContentInterface $fileContent)
     {
@@ -98,6 +110,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
      * Generate temporary file name
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getTmpFileName()
     {
@@ -106,6 +119,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function upload(ContentInterface $fileContent, $contentType)
     {
@@ -129,6 +143,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
      * @param string $contentType
      * @return string
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function getDestinationDirectory($contentType)
     {

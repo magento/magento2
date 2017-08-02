@@ -7,11 +7,13 @@ namespace Magento\Customer\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
+     * @since 2.2.0
      */
     private $expirableSectionNames;
 
@@ -19,6 +21,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      * @param array $expirableSectionNames
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -32,6 +35,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     /**
      * Get CookieLifeTime
      * @return null|string scopeCode
+     * @since 2.0.0
      */
     public function getCookieLifeTime()
     {
@@ -46,6 +50,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      *
      * @param string $route
      * @return string Customer data url.
+     * @since 2.0.0
      */
     public function getCustomerDataUrl($route)
     {
@@ -58,6 +63,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      * Once this period has expired the corresponding section must be invalidated and reloaded.
      *
      * @return int section lifetime in minutes
+     * @since 2.2.0
      */
     public function getExpirableSectionLifetime()
     {
@@ -68,6 +74,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      * Retrieve the list of sections that can expire.
      *
      * @return array
+     * @since 2.2.0
      */
     public function getExpirableSectionNames()
     {

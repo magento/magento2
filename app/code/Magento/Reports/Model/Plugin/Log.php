@@ -7,20 +7,28 @@
  */
 namespace Magento\Reports\Model\Plugin;
 
+/**
+ * Class \Magento\Reports\Model\Plugin\Log
+ *
+ * @since 2.0.0
+ */
 class Log
 {
     /**
      * @var \Magento\Reports\Model\Event
+     * @since 2.0.0
      */
     protected $_reportEvent;
 
     /**
      * @var \Magento\Reports\Model\Product\Index\Compared
+     * @since 2.0.0
      */
     protected $_comparedProductIdx;
 
     /**
      * @var \Magento\Reports\Model\Product\Index\Viewed
+     * @since 2.0.0
      */
     protected $_viewedProductIdx;
 
@@ -28,6 +36,7 @@ class Log
      * @param \Magento\Reports\Model\Event $reportEvent
      * @param \Magento\Reports\Model\Product\Index\Compared $comparedProductIdx
      * @param \Magento\Reports\Model\Product\Index\Viewed $viewedProductIdx
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Reports\Model\Event $reportEvent,
@@ -49,6 +58,7 @@ class Log
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @see Global Log Clean Settings
+     * @since 2.0.0
      */
     public function afterClean(\Magento\Customer\Model\ResourceModel\Visitor $subject, $logResourceModel)
     {

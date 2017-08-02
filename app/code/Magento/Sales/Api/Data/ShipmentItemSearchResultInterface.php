@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A product is an item in a shipment.
  * @api
+ * @since 2.0.0
  */
 interface ShipmentItemSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -18,6 +19,7 @@ interface ShipmentItemSearchResultInterface extends \Magento\Framework\Api\Searc
      * Gets collection items.
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemInterface[] Array of collection items.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -26,6 +28,7 @@ interface ShipmentItemSearchResultInterface extends \Magento\Framework\Api\Searc
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

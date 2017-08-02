@@ -7,11 +7,13 @@ namespace Magento\AdminNotification\Model\System\Message\Media;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractSynchronization implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\Flag
+     * @since 2.0.0
      */
     protected $_syncFlag;
 
@@ -19,6 +21,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Message identity
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_identity;
 
@@ -26,11 +29,13 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Is displayed flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isDisplayed = null;
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage\Flag $fileStorage
+     * @since 2.0.0
      */
     public function __construct(\Magento\MediaStorage\Model\File\Storage\Flag $fileStorage)
     {
@@ -41,6 +46,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Check if message should be displayed
      *
      * @return bool
+     * @since 2.0.0
      */
     abstract protected function _shouldBeDisplayed();
 
@@ -48,6 +54,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Retrieve unique message identity
      *
      * @return string
+     * @since 2.0.0
      */
     public function getIdentity()
     {
@@ -58,6 +65,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Check whether
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isDisplayed()
     {
@@ -76,6 +84,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Retrieve message severity
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSeverity()
     {

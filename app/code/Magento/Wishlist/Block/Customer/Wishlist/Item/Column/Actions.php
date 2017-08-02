@@ -13,6 +13,7 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Actions extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
 {

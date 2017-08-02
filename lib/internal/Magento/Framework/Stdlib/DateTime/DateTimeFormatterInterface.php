@@ -7,6 +7,7 @@ namespace Magento\Framework\Stdlib\DateTime;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface DateTimeFormatterInterface
 {
@@ -17,6 +18,7 @@ interface DateTimeFormatterInterface
      * @param string|int|array|null $format
      * @param string|null $locale
      * @return string
+     * @since 2.0.0
      */
     public function formatObject($object, $format = null, $locale = null);
 }

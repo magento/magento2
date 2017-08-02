@@ -13,6 +13,7 @@ namespace Magento\Shipping\Block\Adminhtml\View;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
@@ -20,6 +21,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -27,6 +29,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -41,6 +44,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -51,6 +55,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -61,6 +66,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @since 2.0.0
      */
     public function getSource()
     {

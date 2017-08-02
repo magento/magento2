@@ -14,6 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * Application provides ability to configure multiple connections to persistent storage.
  * This class provides access to all these connections.
  * @api
+ * @since 2.0.0
  */
 class ResourceConnection
 {
@@ -29,6 +30,7 @@ class ResourceConnection
      * Instances of actual connections
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface[]
+     * @since 2.0.0
      */
     protected $connections = [];
 
@@ -36,6 +38,7 @@ class ResourceConnection
      * Mapped tables cache array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $mappedTableNames;
 
@@ -43,6 +46,7 @@ class ResourceConnection
      * Resource config
      *
      * @var ResourceConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
@@ -50,16 +54,19 @@ class ResourceConnection
      * Resource connection adapter factory
      *
      * @var ConnectionFactoryInterface
+     * @since 2.0.0
      */
     protected $connectionFactory;
 
     /**
      * @var DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $tablePrefix;
 
@@ -68,6 +75,7 @@ class ResourceConnection
      * @param ConnectionFactoryInterface $connectionFactory
      * @param DeploymentConfig $deploymentConfig
      * @param string $tablePrefix
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConfigInterface $resourceConfig,
@@ -88,6 +96,7 @@ class ResourceConnection
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
@@ -98,6 +107,7 @@ class ResourceConnection
     /**
      * @param string $resourceName
      * @return void
+     * @since 2.2.0
      */
     public function closeConnection($resourceName = self::DEFAULT_CONNECTION)
     {
@@ -113,6 +123,7 @@ class ResourceConnection
      * @param string $connectionName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
+     * @since 2.0.0
      */
     public function getConnectionByName($connectionName)
     {
@@ -138,6 +149,7 @@ class ResourceConnection
     /**
      * @param string $connectionName
      * @return string
+     * @since 2.2.0
      */
     private function getProcessConnectionName($connectionName)
     {
@@ -151,6 +163,7 @@ class ResourceConnection
      * @param string $connectionName
      * @return  string
      * @api
+     * @since 2.0.0
      */
     public function getTableName($modelEntity, $connectionName = self::DEFAULT_CONNECTION)
     {
@@ -182,6 +195,7 @@ class ResourceConnection
      *
      * @param string $tableName
      * @return string
+     * @since 2.1.0
      */
     public function getTablePlaceholder($tableName)
     {
@@ -196,6 +210,7 @@ class ResourceConnection
      * @param string $time  Either "before" or "after"
      * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
+     * @since 2.0.0
      */
     public function getTriggerName($tableName, $time, $event)
     {
@@ -209,6 +224,7 @@ class ResourceConnection
      * @param string $mappedName
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setMappedTableName($tableName, $mappedName)
     {
@@ -221,6 +237,7 @@ class ResourceConnection
      *
      * @param string $tableName
      * @return bool|string
+     * @since 2.0.0
      */
     public function getMappedTableName($tableName)
     {
@@ -238,6 +255,7 @@ class ResourceConnection
      * @param string|string[] $fields
      * @param string $indexType
      * @return string
+     * @since 2.0.0
      */
     public function getIdxName(
         $tableName,
@@ -260,6 +278,7 @@ class ResourceConnection
      * @param string $refTableName  the reference table name
      * @param string $refColumnName the reference table column name
      * @return string
+     * @since 2.0.0
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
@@ -275,6 +294,7 @@ class ResourceConnection
      * Get table prefix
      *
      * @return string
+     * @since 2.0.0
      */
     private function getTablePrefix()
     {

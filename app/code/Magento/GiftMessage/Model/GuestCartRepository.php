@@ -14,22 +14,26 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Shopping cart gift message repository object for guest
+ * @since 2.0.0
  */
 class GuestCartRepository implements GuestCartRepositoryInterface
 {
     /**
      * @var CartRepository
+     * @since 2.0.0
      */
     protected $repository;
 
     /**
      * @var QuoteIdMaskFactory
+     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @param CartRepository $repository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @since 2.0.0
      */
     public function __construct(
         CartRepository $repository,
@@ -41,6 +45,7 @@ class GuestCartRepository implements GuestCartRepositoryInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function get($cartId)
     {
@@ -51,6 +56,7 @@ class GuestCartRepository implements GuestCartRepositoryInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function save($cartId, MessageInterface $giftMessage)
     {

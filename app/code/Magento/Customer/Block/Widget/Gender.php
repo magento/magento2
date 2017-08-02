@@ -14,16 +14,19 @@ use Magento\Customer\Api\Data\OptionInterface;
  * Block to render customer's gender attribute
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Gender extends AbstractWidget
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -36,6 +39,7 @@ class Gender extends AbstractWidget
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -55,6 +59,7 @@ class Gender extends AbstractWidget
      * Initialize block
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -65,6 +70,7 @@ class Gender extends AbstractWidget
     /**
      * Check if gender attribute enabled in system
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -74,6 +80,7 @@ class Gender extends AbstractWidget
     /**
      * Check if gender attribute marked as required
      * @return bool
+     * @since 2.0.0
      */
     public function isRequired()
     {
@@ -84,6 +91,7 @@ class Gender extends AbstractWidget
      * Get current customer from session
      *
      * @return CustomerInterface
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -93,6 +101,7 @@ class Gender extends AbstractWidget
     /**
      * Returns options from gender attribute
      * @return OptionInterface[]
+     * @since 2.0.0
      */
     public function getGenderOptions()
     {

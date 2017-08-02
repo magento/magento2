@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Session\Config;
 
+/**
+ * Interface \Magento\Framework\Session\Config\ConfigInterface
+ *
+ * @since 2.0.0
+ */
 interface ConfigInterface
 {
     /**
@@ -14,6 +19,7 @@ interface ConfigInterface
      *
      * @param array $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions($options);
 
@@ -21,6 +27,7 @@ interface ConfigInterface
      * Get all options set
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -30,6 +37,7 @@ interface ConfigInterface
      * @param string $option
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setOption($option, $value);
 
@@ -38,6 +46,7 @@ interface ConfigInterface
      *
      * @param string $option
      * @return mixed
+     * @since 2.0.0
      */
     public function getOption($option);
 
@@ -45,6 +54,7 @@ interface ConfigInterface
      * Convert config to array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toArray();
 
@@ -53,6 +63,7 @@ interface ConfigInterface
      *
      * @param string $name
      * @return $this
+     * @since 2.0.0
      */
     public function setName($name);
 
@@ -60,6 +71,7 @@ interface ConfigInterface
      * Get session.name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -68,6 +80,7 @@ interface ConfigInterface
      *
      * @param string $savePath
      * @return $this
+     * @since 2.0.0
      */
     public function setSavePath($savePath);
 
@@ -75,6 +88,7 @@ interface ConfigInterface
      * Set session.save_path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSavePath();
 
@@ -83,6 +97,7 @@ interface ConfigInterface
      *
      * @param int $cookieLifetime
      * @return $this
+     * @since 2.0.0
      */
     public function setCookieLifetime($cookieLifetime);
 
@@ -90,6 +105,7 @@ interface ConfigInterface
      * Get session.cookie_lifetime
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCookieLifetime();
 
@@ -98,6 +114,7 @@ interface ConfigInterface
      *
      * @param string $cookiePath
      * @return $this
+     * @since 2.0.0
      */
     public function setCookiePath($cookiePath);
 
@@ -105,6 +122,7 @@ interface ConfigInterface
      * Get session.cookie_path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCookiePath();
 
@@ -113,6 +131,7 @@ interface ConfigInterface
      *
      * @param string $cookieDomain
      * @return $this
+     * @since 2.0.0
      */
     public function setCookieDomain($cookieDomain);
 
@@ -120,6 +139,7 @@ interface ConfigInterface
      * Get session.cookie_domain
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCookieDomain();
 
@@ -128,6 +148,7 @@ interface ConfigInterface
      *
      * @param bool $cookieSecure
      * @return $this
+     * @since 2.0.0
      */
     public function setCookieSecure($cookieSecure);
 
@@ -136,6 +157,7 @@ interface ConfigInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCookieSecure();
 
@@ -144,6 +166,7 @@ interface ConfigInterface
      *
      * @param bool $cookieHttpOnly
      * @return $this
+     * @since 2.0.0
      */
     public function setCookieHttpOnly($cookieHttpOnly);
 
@@ -152,6 +175,7 @@ interface ConfigInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCookieHttpOnly();
 
@@ -160,6 +184,7 @@ interface ConfigInterface
      *
      * @param bool $useCookies
      * @return $this
+     * @since 2.0.0
      */
     public function setUseCookies($useCookies);
 
@@ -168,6 +193,7 @@ interface ConfigInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getUseCookies();
 }

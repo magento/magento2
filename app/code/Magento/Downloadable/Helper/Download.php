@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * Downloadable Products Download Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -37,6 +38,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Type of link
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_linkType = self::LINK_TYPE_FILE;
 
@@ -44,6 +46,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Resource file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_resourceFile = null;
 
@@ -51,6 +54,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Resource open handle
      *
      * @var \Magento\Framework\Filesystem\File\ReadInterface
+     * @since 2.0.0
      */
     protected $_handle = null;
 
@@ -58,6 +62,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Remote server headers
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_urlHeaders = [];
 
@@ -65,6 +70,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * MIME Content-type for a file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_contentType = 'application/octet-stream';
 
@@ -72,6 +78,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * File name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_fileName = 'download';
 
@@ -79,6 +86,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_coreFileStorageDb;
 
@@ -86,25 +94,32 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Downloadable file
      *
      * @var \Magento\Downloadable\Helper\File
+     * @since 2.0.0
      */
     protected $_downloadableFile;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
-    /** @var Filesystem\File\ReadFactory */
+    /**
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
+     * @since 2.0.0
+     */
     protected $fileReadFactory;
 
     /**
      * Working Directory (valid for LINK_TYPE_FILE only).
      * @var \Magento\Framework\Filesystem\Directory\Read
+     * @since 2.0.0
      */
     protected $_workingDirectory;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $_session;
 
@@ -115,6 +130,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param Filesystem\File\ReadFactory $fileReadFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -137,6 +153,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Framework\Filesystem\File\ReadInterface
      * @throws CoreException|\Exception
+     * @since 2.0.0
      */
     protected function _getHandle()
     {
@@ -172,6 +189,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve file size in bytes
      *
      * @return int
+     * @since 2.0.0
      */
     public function getFileSize()
     {
@@ -182,6 +200,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Return MIME type of a file.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -207,6 +226,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Return name of the file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFilename()
     {
@@ -241,6 +261,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $linkType
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function setResource($resourceFile, $linkType = self::LINK_TYPE_FILE)
     {
@@ -263,6 +284,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Output file contents
      *
      * @return void
+     * @since 2.0.0
      */
     public function output()
     {
@@ -279,6 +301,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @param mixed $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getContentDisposition($store = null)
     {

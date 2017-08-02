@@ -11,16 +11,19 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerInterfa
 
 /**
  * @api Instantiate save handler when implementing custom Indexer\Action
+ * @since 2.0.0
  */
 class SaveHandlerFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -34,6 +37,7 @@ class SaveHandlerFactory
      * @param array $arguments
      * @throws \InvalidArgumentException
      * @return IndexerInterface
+     * @since 2.0.0
      */
     public function create($saveHandlerClass, $arguments = [])
     {

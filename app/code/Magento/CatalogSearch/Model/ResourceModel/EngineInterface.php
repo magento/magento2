@@ -11,6 +11,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface EngineInterface
 {
@@ -30,6 +31,7 @@ interface EngineInterface
      * Retrieve allowed visibility values for current engine
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedVisibility();
 
@@ -37,6 +39,7 @@ interface EngineInterface
      * Define if current search engine supports advanced index
      *
      * @return bool
+     * @since 2.0.0
      */
     public function allowAdvancedIndex();
 
@@ -46,6 +49,7 @@ interface EngineInterface
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     public function processAttributeValue($attribute, $value);
 
@@ -55,6 +59,7 @@ interface EngineInterface
      * @param array $index
      * @param string $separator
      * @return string
+     * @since 2.0.0
      */
     public function prepareEntityIndex($index, $separator = ' ');
 }

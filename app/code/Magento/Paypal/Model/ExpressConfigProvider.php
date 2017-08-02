@@ -15,6 +15,7 @@ use Magento\Paypal\Helper\Data as PaypalHelper;
 /**
  * Class ExpressConfigProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ExpressConfigProvider implements ConfigProviderInterface
 {
@@ -22,26 +23,31 @@ class ExpressConfigProvider implements ConfigProviderInterface
 
     /**
      * @var ResolverInterface
+     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var PaypalHelper
+     * @since 2.0.0
      */
     protected $paypalHelper;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $methodCodes = [
         Config::METHOD_WPP_BML,
@@ -52,16 +58,19 @@ class ExpressConfigProvider implements ConfigProviderInterface
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod[]
+     * @since 2.0.0
      */
     protected $methods = [];
 
     /**
      * @var PaymentHelper
+     * @since 2.0.0
      */
     protected $paymentHelper;
 
     /**
      * @var UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -74,6 +83,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
      * @param PaypalHelper $paypalHelper
      * @param PaymentHelper $paymentHelper
      * @param UrlInterface $urlBuilder
+     * @since 2.0.0
      */
     public function __construct(
         ConfigFactory $configFactory,
@@ -97,6 +107,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -147,6 +158,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
 
     /**
      * @return bool
+     * @since 2.1.0
      */
     protected function isInContextCheckout()
     {
@@ -160,6 +172,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
      *
      * @param string $code
      * @return mixed
+     * @since 2.0.0
      */
     protected function getMethodRedirectUrl($code)
     {
@@ -171,6 +184,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
      *
      * @param string $code
      * @return null|string
+     * @since 2.0.0
      */
     protected function getBillingAgreementCode($code)
     {

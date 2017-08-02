@@ -8,6 +8,11 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
+/**
+ * Class \Magento\Integration\Controller\Adminhtml\Integration\TokensDialog
+ *
+ * @since 2.0.0
+ */
 class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
@@ -16,6 +21,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
      * @param boolean $isReauthorize Is a re-authorization flow
      * @param string $integrationName Integration name
      * @return void
+     * @since 2.0.0
      */
     protected function _setActivationSuccessMsg($isReauthorize, $integrationName)
     {
@@ -34,6 +40,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
      * Show tokens popup for simple tokens
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

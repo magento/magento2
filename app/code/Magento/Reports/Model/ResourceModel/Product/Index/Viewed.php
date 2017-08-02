@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Viewed extends \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
 {
@@ -21,6 +22,7 @@ class Viewed extends \Magento\Reports\Model\ResourceModel\Product\Index\Abstract
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {

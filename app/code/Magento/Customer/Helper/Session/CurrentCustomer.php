@@ -15,41 +15,49 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Class CurrentCustomer
+ * @since 2.0.0
  */
 class CurrentCustomer
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     protected $layout;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @since 2.0.0
      */
     protected $customerFactory;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @var \Magento\Framework\App\ViewInterface
+     * @since 2.0.0
      */
     protected $view;
 
@@ -61,6 +69,7 @@ class CurrentCustomer
      * @param RequestInterface $request
      * @param ModuleManager $moduleManager
      * @param ViewInterface $view
+     * @since 2.0.0
      */
     public function __construct(
         CustomerSession $customerSession,
@@ -84,6 +93,7 @@ class CurrentCustomer
      * Returns customer Data with customer group only
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected function getDepersonalizedCustomer()
     {
@@ -96,6 +106,7 @@ class CurrentCustomer
      * Returns customer Data from service
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected function getCustomerFromService()
     {
@@ -106,6 +117,7 @@ class CurrentCustomer
      * Returns current customer according to session and context
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -124,6 +136,7 @@ class CurrentCustomer
      * Returns customer id from session
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -135,6 +148,7 @@ class CurrentCustomer
      *
      * @param int|null $customerId
      * @return void
+     * @since 2.0.0
      */
     public function setCustomerId($customerId)
     {

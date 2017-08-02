@@ -9,6 +9,7 @@ use Magento\Deploy\Package\Package;
 
 /**
  * Deployment strategy interface
+ * @since 2.2.0
  */
 interface StrategyInterface
 {
@@ -17,6 +18,7 @@ interface StrategyInterface
      *
      * @param array $options
      * @return Package[]
+     * @since 2.2.0
      */
     public function deploy(array $options);
 }

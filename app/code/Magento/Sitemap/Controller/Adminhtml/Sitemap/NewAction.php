@@ -6,12 +6,18 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+/**
+ * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**
      * Create new sitemap
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

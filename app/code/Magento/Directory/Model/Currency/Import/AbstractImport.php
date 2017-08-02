@@ -11,6 +11,7 @@ namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractImport implements \Magento\Directory\Model\Currency\Import\ImportInterface
 {
@@ -18,16 +19,19 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
      * Messages
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messages = [];
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @since 2.0.0
      */
     public function __construct(\Magento\Directory\Model\CurrencyFactory $currencyFactory)
     {
@@ -38,6 +42,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
      * Retrieve currency codes
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getCurrencyCodes()
     {
@@ -48,6 +53,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
      * Retrieve default currency codes
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getDefaultCurrencyCodes()
     {
@@ -60,6 +66,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
      * @param   string $currencyFrom
      * @param   string $currencyTo
      * @return  float
+     * @since 2.0.0
      */
     abstract protected function _convert($currencyFrom, $currencyTo);
 
@@ -68,6 +75,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
      *
      * @param   array $rates
      * @return  \Magento\Directory\Model\Currency\Import\AbstractImport
+     * @since 2.0.0
      */
     protected function _saveRates($rates)
     {
@@ -81,6 +89,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
      * Import rates
      *
      * @return $this
+     * @since 2.0.0
      */
     public function importRates()
     {
@@ -91,6 +100,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function fetchRates()
     {
@@ -122,6 +132,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
     /**
      * @param float|int $number
      * @return float|int
+     * @since 2.0.0
      */
     protected function _numberFormat($number)
     {
@@ -130,6 +141,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getMessages()
     {

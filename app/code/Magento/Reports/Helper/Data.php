@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -27,6 +28,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Item factory
      *
      * @var \Magento\Reports\Model\ItemFactory
+     * @since 2.0.0
      */
     protected $_itemFactory;
 
@@ -35,6 +37,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Reports\Model\ItemFactory $itemFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -52,6 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $period
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getIntervals($from, $to, $period = self::REPORT_PERIOD_TYPE_DAY)
     {
@@ -89,6 +93,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $to
      * @param string $periodType
      * @return void
+     * @since 2.0.0
      */
     public function prepareIntervalsCollection($collection, $from, $to, $periodType = self::REPORT_PERIOD_TYPE_DAY)
     {

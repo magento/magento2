@@ -9,22 +9,26 @@ namespace Magento\Framework\Url;
  * Class ScopeResolver
  *
  * URL scope resolver.
+ * @since 2.0.0
  */
 class ScopeResolver implements \Magento\Framework\Url\ScopeResolverInterface
 {
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.0.0
      */
     protected $scopeResolver;
 
     /**
      * @var null|string
+     * @since 2.0.0
      */
     protected $areaCode;
 
     /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param string|null $areaCode
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ScopeResolverInterface $scopeResolver, $areaCode = null)
     {
@@ -34,6 +38,7 @@ class ScopeResolver implements \Magento\Framework\Url\ScopeResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getScope($scopeId = null)
     {
@@ -51,6 +56,7 @@ class ScopeResolver implements \Magento\Framework\Url\ScopeResolverInterface
      * Retrieve array of URL scopes.
      *
      * @return \Magento\Framework\Url\ScopeInterface[]
+     * @since 2.0.0
      */
     public function getScopes()
     {
@@ -59,6 +65,7 @@ class ScopeResolver implements \Magento\Framework\Url\ScopeResolverInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAreaCode()
     {

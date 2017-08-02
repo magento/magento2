@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView
+ *
+ * @since 2.0.0
+ */
 class StoreView extends StoreGroup
 {
     /**
@@ -12,6 +17,7 @@ class StoreView extends StoreGroup
      *
      * @param \Magento\Framework\Model\AbstractModel $store
      * @return bool
+     * @since 2.0.0
      */
     protected function validate(\Magento\Framework\Model\AbstractModel $store)
     {

@@ -8,19 +8,27 @@ namespace Magento\Swagger\Controller\Index;
 /**
  * Class Index
  * @package Magento\Swagger\Controller\Index
+ * @since 2.0.0
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
-    /** @var \Magento\Framework\View\Page\Config */
+    /**
+     * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
+     */
     private $pageConfig;
 
-    /** @var \Magento\Framework\View\Result\PageFactory */
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
+     */
     private $pageFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Result\PageFactory $pageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -34,6 +42,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

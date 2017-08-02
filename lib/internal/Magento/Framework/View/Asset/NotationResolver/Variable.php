@@ -10,6 +10,7 @@ use Magento\Framework\View\Asset;
 
 /**
  * Variable resolver to allow specific placeholders in CSS files
+ * @since 2.0.0
  */
 class Variable
 {
@@ -25,11 +26,13 @@ class Variable
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     private $assetRepo;
 
     /**
      * @param Asset\Repository $assetRepo
+     * @since 2.0.0
      */
     public function __construct(Asset\Repository $assetRepo)
     {
@@ -41,6 +44,7 @@ class Variable
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function convertVariableNotation($path)
     {
@@ -62,6 +66,7 @@ class Variable
      *
      * @param string $placeholder
      * @return string
+     * @since 2.0.0
      */
     public function getPlaceholderValue($placeholder)
     {

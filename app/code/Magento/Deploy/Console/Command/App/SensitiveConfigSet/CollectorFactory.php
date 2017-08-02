@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class CollectorFactory creates instance of CollectorInterface
+ * @since 2.2.0
  */
 class CollectorFactory
 {
@@ -27,11 +28,13 @@ class CollectorFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $types = [];
 
@@ -40,6 +43,7 @@ class CollectorFactory
      * @param array $types List of collector class names this factory can create.
      *                     Every class should implement
      *                     \Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorInterface
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -60,6 +64,7 @@ class CollectorFactory
      * @param string $type
      * @return CollectorInterface
      * @throws LocalizedException If collector type not exist in registered types array.
+     * @since 2.2.0
      */
     public function create($type)
     {

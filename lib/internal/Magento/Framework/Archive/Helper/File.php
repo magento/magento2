@@ -11,12 +11,18 @@ namespace Magento\Framework\Archive\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Framework\Archive\Helper\File
+ *
+ * @since 2.0.0
+ */
 class File
 {
     /**
      * Full path to directory where file located
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_fileLocation;
 
@@ -24,6 +30,7 @@ class File
      * File name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_fileName;
 
@@ -31,6 +38,7 @@ class File
      * Full path (directory + filename) to file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_filePath;
 
@@ -38,6 +46,7 @@ class File
      * File permissions that will be set if file opened in write mode
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_chmod;
 
@@ -45,6 +54,7 @@ class File
      * File handler
      *
      * @var resource
+     * @since 2.0.0
      */
     protected $_fileHandler;
 
@@ -52,6 +62,7 @@ class File
      * Whether file has been opened in write mode
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isInWriteMode;
 
@@ -59,6 +70,7 @@ class File
      * Set file path via constructor
      *
      * @param string $filePath
+     * @since 2.0.0
      */
     public function __construct($filePath)
     {
@@ -71,6 +83,7 @@ class File
 
     /**
      * Close file if it's not closed before object destruction
+     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -87,6 +100,7 @@ class File
      * @return void
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function open($mode = 'w+', $chmod = null)
     {
@@ -136,6 +150,7 @@ class File
      *
      * @param string $data
      * @return void
+     * @since 2.0.0
      */
     public function write($data)
     {
@@ -148,6 +163,7 @@ class File
      *
      * @param int $length
      * @return string|boolean
+     * @since 2.0.0
      */
     public function read($length = 4096)
     {
@@ -164,6 +180,7 @@ class File
      * Check whether end of file reached
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function eof()
     {
@@ -175,6 +192,7 @@ class File
      * Close file
      *
      * @return void
+     * @since 2.0.0
      */
     public function close()
     {
@@ -193,6 +211,7 @@ class File
      * @param string $mode
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function _open($mode)
     {
@@ -211,6 +230,7 @@ class File
      * @param string $data
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function _write($data)
     {
@@ -229,6 +249,7 @@ class File
      * @param int $length
      * @return string
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function _read($length)
     {
@@ -247,6 +268,7 @@ class File
      * Implementation of EOF indicator
      *
      * @return boolean
+     * @since 2.0.0
      */
     protected function _eof()
     {
@@ -257,6 +279,7 @@ class File
      * Implementation of file closing
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _close()
     {
@@ -268,6 +291,7 @@ class File
      *
      * @param string $mode
      * @return int
+     * @since 2.0.0
      */
     protected function _isWritableMode($mode)
     {
@@ -279,6 +303,7 @@ class File
      *
      * @param string $mode
      * @return bool
+     * @since 2.0.0
      */
     protected function _isReadableMode($mode)
     {
@@ -290,6 +315,7 @@ class File
      *
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function _checkFileOpened()
     {

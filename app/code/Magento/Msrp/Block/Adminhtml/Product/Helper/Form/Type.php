@@ -7,10 +7,14 @@ namespace Magento\Msrp\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Product form MSRP field helper
+ * @since 2.0.0
  */
 class Type extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price
 {
-    /** @var \Magento\Msrp\Model\Config*/
+    /**
+     * @var \Magento\Msrp\Model\Config
+     * @since 2.0.0
+     */
     protected $config;
 
     /**
@@ -22,6 +26,7 @@ class Type extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Msrp\Model\Config $config
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -47,6 +52,7 @@ class Type extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toHtml()
     {

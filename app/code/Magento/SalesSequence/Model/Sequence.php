@@ -12,6 +12,7 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
  * Class Sequence represents sequence in logic
  *
  * @api
+ * @since 2.0.0
  */
 class Sequence implements SequenceInterface
 {
@@ -22,21 +23,25 @@ class Sequence implements SequenceInterface
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $lastIncrementId;
 
     /**
      * @var Meta
+     * @since 2.0.0
      */
     private $meta;
 
     /**
      * @var false|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     private $connection;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $pattern;
 
@@ -44,6 +49,7 @@ class Sequence implements SequenceInterface
      * @param Meta $meta
      * @param AppResource $resource
      * @param string $pattern
+     * @since 2.0.0
      */
     public function __construct(
         Meta $meta,
@@ -59,6 +65,7 @@ class Sequence implements SequenceInterface
      * Retrieve current value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentValue()
     {
@@ -78,6 +85,7 @@ class Sequence implements SequenceInterface
      * Retrieve next value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNextValue()
     {
@@ -90,6 +98,7 @@ class Sequence implements SequenceInterface
      * Calculate current value depends on start value
      *
      * @return string
+     * @since 2.0.0
      */
     private function calculateCurrentValue()
     {

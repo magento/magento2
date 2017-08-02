@@ -10,6 +10,7 @@ use Magento\Setup\Module\Dependency\Report\WriterInterface;
 
 /**
  * Abstract csv file writer for reports
+ * @since 2.0.0
  */
 abstract class AbstractWriter implements WriterInterface
 {
@@ -17,6 +18,7 @@ abstract class AbstractWriter implements WriterInterface
      * Csv write object
      *
      * @var \Magento\Framework\File\Csv
+     * @since 2.0.0
      */
     protected $writer;
 
@@ -24,6 +26,7 @@ abstract class AbstractWriter implements WriterInterface
      * Writer constructor
      *
      * @param \Magento\Framework\File\Csv $writer
+     * @since 2.0.0
      */
     public function __construct($writer)
     {
@@ -34,6 +37,7 @@ abstract class AbstractWriter implements WriterInterface
      * Template method. Main algorithm
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function write(array $options, ConfigInterface $config)
     {
@@ -48,6 +52,7 @@ abstract class AbstractWriter implements WriterInterface
      * @param array $options
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function checkOptions($options)
     {
@@ -61,6 +66,7 @@ abstract class AbstractWriter implements WriterInterface
      *
      * @param \Magento\Setup\Module\Dependency\Report\Data\ConfigInterface $config
      * @return array
+     * @since 2.0.0
      */
     abstract protected function prepareData($config);
 
@@ -70,6 +76,7 @@ abstract class AbstractWriter implements WriterInterface
      * @param string $filename
      * @param array $data
      * @return void
+     * @since 2.0.0
      */
     protected function writeToFile($filename, $data)
     {

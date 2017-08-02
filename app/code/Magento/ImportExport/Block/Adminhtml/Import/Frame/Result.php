@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template;
  * Import frame result block.
  *
  * @api
+ * @since 2.0.0
  */
 class Result extends \Magento\Backend\Block\Template
 {
@@ -25,6 +26,7 @@ class Result extends \Magento\Backend\Block\Template
      *     'addClassName'    add specified class name to element
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_actions = [
         'clear' => [],
@@ -40,11 +42,13 @@ class Result extends \Magento\Backend\Block\Template
      * Validation messages.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messages = ['error' => [], 'success' => [], 'notice' => []];
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -52,6 +56,7 @@ class Result extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -69,6 +74,7 @@ class Result extends \Magento\Backend\Block\Template
      * @param string $elementId
      * @param mixed $value OPTIONAL
      * @return $this
+     * @since 2.0.0
      */
     public function addAction($actionName, $elementId, $value = null)
     {
@@ -93,6 +99,7 @@ class Result extends \Magento\Backend\Block\Template
      *
      * @param string $message Error message
      * @return $this
+     * @since 2.0.0
      */
     public function addError($message)
     {
@@ -112,6 +119,7 @@ class Result extends \Magento\Backend\Block\Template
      * @param string[]|string $message Message text
      * @param bool $appendImportButton OPTIONAL Append import button to message?
      * @return $this
+     * @since 2.0.0
      */
     public function addNotice($message, $appendImportButton = false)
     {
@@ -131,6 +139,7 @@ class Result extends \Magento\Backend\Block\Template
      * @param string[]|string $message Message text
      * @param bool $appendImportButton OPTIONAL Append import button to message?
      * @return $this
+     * @since 2.0.0
      */
     public function addSuccess($message, $appendImportButton = false)
     {
@@ -148,6 +157,7 @@ class Result extends \Magento\Backend\Block\Template
      * Import button HTML for append to message.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImportButtonHtml()
     {
@@ -166,6 +176,7 @@ class Result extends \Magento\Backend\Block\Template
      * Import start action URL.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getImportStartUrl()
     {
@@ -176,6 +187,7 @@ class Result extends \Magento\Backend\Block\Template
      * Messages getter.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMessages()
     {
@@ -186,6 +198,7 @@ class Result extends \Magento\Backend\Block\Template
      * Messages rendered HTML getter.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMessagesHtml()
     {
@@ -206,6 +219,7 @@ class Result extends \Magento\Backend\Block\Template
      * Return response as JSON.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getResponseJson()
     {

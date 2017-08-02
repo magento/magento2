@@ -7,6 +7,7 @@ namespace Magento\Framework\DB\Ddl;
 
 /**
  * Class Sequence represents DDL for manage sequences
+ * @since 2.0.0
  */
 class Sequence
 {
@@ -18,6 +19,7 @@ class Sequence
      * @param string $columnType Type of sequence_value column
      * @param bool|true $unsigned Flag to set sequence_value as UNSIGNED field
      * @return string
+     * @since 2.0.0
      */
     public function getCreateSequenceDdl(
         $name,
@@ -38,6 +40,7 @@ class Sequence
      *
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     public function dropSequence($name)
     {

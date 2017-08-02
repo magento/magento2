@@ -12,17 +12,20 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class GridProcessAddressChange
+ * @since 2.0.0
  */
 class GridProcessAddressChange implements ObserverInterface
 {
 
     /**
      * @var GridPool
+     * @since 2.0.0
      */
     protected $gridPool;
 
     /**
      * @param GridPool $gridPool
+     * @since 2.0.0
      */
     public function __construct(
         GridPool $gridPool
@@ -36,6 +39,7 @@ class GridProcessAddressChange implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

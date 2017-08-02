@@ -14,6 +14,7 @@ namespace Magento\Framework\DB\Statement;
  * transmitted using 'addtional' property (\Magento\Framework\DataObject) as a container.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Parameter
 {
@@ -21,6 +22,7 @@ class Parameter
      * Actual parameter value
      *
      * @var mixed
+     * @since 2.0.0
      */
     protected $_value = null;
 
@@ -31,30 +33,35 @@ class Parameter
      * BLOB data to query placeholders. If FALSE, then specific settings from $_dataType, $_length,
      * $_driverOptions will be used.
      * @var bool
+     * @since 2.0.0
      */
     protected $_isBlob = false;
 
-    /*
+    /**
      * Data type to set to DB driver during parameter bind
      * @var mixed
+     * @since 2.0.0
      */
     protected $_dataType = null;
 
-    /*
+    /**
      * Length to set to DB driver during parameter bind
      * @var mixed
+     * @since 2.0.0
      */
     protected $_length = null;
 
-    /*
+    /**
      * Specific driver options to set to DB driver during parameter bind
      * @var mixed
+     * @since 2.0.0
      */
     protected $_driverOptions = null;
 
-    /*
+    /**
      * Additional information to be used by DB adapter internally
      * @var \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected $_additional = null;
 
@@ -62,6 +69,7 @@ class Parameter
      * Inits instance
      *
      * @param mixed $value
+     * @since 2.0.0
      */
     public function __construct($value)
     {
@@ -75,6 +83,7 @@ class Parameter
      *
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -86,6 +95,7 @@ class Parameter
      * Gets parameter value.
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -101,6 +111,7 @@ class Parameter
      *
      * @param bool $isBlob
      * @return $this
+     * @since 2.0.0
      */
     public function setIsBlob($isBlob)
     {
@@ -116,6 +127,7 @@ class Parameter
      *
      * @see setIsBlob
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsBlob()
     {
@@ -127,6 +139,7 @@ class Parameter
      *
      * @param mixed $dataType
      * @return $this
+     * @since 2.0.0
      */
     public function setDataType($dataType)
     {
@@ -138,6 +151,7 @@ class Parameter
      * Gets data type option to be used during binding parameter value.
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getDataType()
     {
@@ -149,6 +163,7 @@ class Parameter
      *
      * @param mixed $length
      * @return $this
+     * @since 2.0.0
      */
     public function setLength($length)
     {
@@ -160,6 +175,7 @@ class Parameter
      * Gets length option to be used during binding parameter value.
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getLength()
     {
@@ -171,6 +187,7 @@ class Parameter
      *
      * @param mixed $driverOptions
      * @return $this
+     * @since 2.0.0
      */
     public function setDriverOptions($driverOptions)
     {
@@ -182,6 +199,7 @@ class Parameter
      * Gets driver options to be used during binding parameter value.
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getDriverOptions()
     {
@@ -194,6 +212,7 @@ class Parameter
      *
      * @param \Magento\Framework\DataObject $additional
      * @return $this
+     * @since 2.0.0
      */
     public function setAdditional($additional)
     {
@@ -205,6 +224,7 @@ class Parameter
      * Gets additional information for concrete DB adapter.
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getAdditional()
     {
@@ -215,6 +235,7 @@ class Parameter
      * Returns representation of a object to be used in string contexts
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -225,6 +246,7 @@ class Parameter
      * Returns representation of a object to be used in string contexts
      *
      * @return string
+     * @since 2.0.0
      */
     public function toString()
     {

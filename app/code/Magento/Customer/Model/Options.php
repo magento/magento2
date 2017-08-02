@@ -8,23 +8,31 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Customer\Model\Options
+ *
+ * @since 2.0.0
+ */
 class Options
 {
     /**
      * Customer address
      *
      * @var AddressHelper
+     * @since 2.0.0
      */
     protected $addressHelper;
 
     /**
      * @var Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
     /**
      * @param AddressHelper $addressHelper
      * @param Escaper $escaper
+     * @since 2.0.0
      */
     public function __construct(
         AddressHelper $addressHelper,
@@ -39,6 +47,7 @@ class Options
      *
      * @param null $store
      * @return array|bool
+     * @since 2.0.0
      */
     public function getNamePrefixOptions($store = null)
     {
@@ -50,6 +59,7 @@ class Options
      *
      * @param null $store
      * @return array|bool
+     * @since 2.0.0
      */
     public function getNameSuffixOptions($store = null)
     {
@@ -61,6 +71,7 @@ class Options
      *
      * @param string $options
      * @return array|bool
+     * @since 2.0.0
      */
     protected function _prepareNamePrefixSuffixOptions($options)
     {

@@ -13,21 +13,25 @@ namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Framework\Filter\Input\MaliciousCode
+     * @since 2.0.0
      */
     protected $_maliciousCode;
 
     /**
      * @var \Magento\Email\Model\TemplateFactory
+     * @since 2.0.0
      */
     protected $_emailFactory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $profilerName = 'email_template_proccessing';
 
@@ -36,6 +40,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param \Magento\Email\Model\TemplateFactory $emailFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -52,6 +57,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -91,6 +97,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Get either default or any store view
      *
      * @return \Magento\Store\Model\Store|null
+     * @since 2.0.0
      */
     protected function getAnyStoreView()
     {

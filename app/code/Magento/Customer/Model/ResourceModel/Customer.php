@@ -15,11 +15,13 @@ use Magento\Framework\Exception\AlreadyExistsException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Validator\Factory
+     * @since 2.0.0
      */
     protected $_validatorFactory;
 
@@ -27,21 +29,25 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var NotificationStorage
+     * @since 2.1.0
      */
     private $notificationStorage;
 
@@ -54,6 +60,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -78,6 +85,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * Retrieve customer entity default attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getDefaultAttributes()
     {
@@ -98,6 +106,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\DataObject $customer)
     {
@@ -160,6 +169,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Customer\Model\Customer $customer
      * @return void
      * @throws \Magento\Framework\Validator\Exception
+     * @since 2.0.0
      */
     protected function _validate($customer)
     {
@@ -178,6 +188,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * Retrieve notification storage
      *
      * @return NotificationStorage
+     * @since 2.1.0
      */
     private function getNotificationStorage()
     {
@@ -192,6 +203,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @param \Magento\Framework\DataObject $customer
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\DataObject $customer)
     {
@@ -208,6 +220,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Framework\DataObject $object
      * @param string|int $rowId
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadRowSelect($object, $rowId)
     {
@@ -226,6 +239,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param string $email
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function loadByEmail(\Magento\Customer\Model\Customer $customer, $email)
     {
@@ -264,6 +278,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Customer\Model\Customer $customer
      * @param string $newPassword
      * @return $this
+     * @since 2.0.0
      */
     public function changePassword(\Magento\Customer\Model\Customer $customer, $newPassword)
     {
@@ -275,6 +290,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * Check whether there are email duplicates of customers in global scope
      *
      * @return bool
+     * @since 2.0.0
      */
     public function findEmailDuplicates()
     {
@@ -301,6 +317,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @param int $customerId
      * @return bool
+     * @since 2.0.0
      */
     public function checkCustomerId($customerId)
     {
@@ -327,6 +344,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @param int $customerId
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteId($customerId)
     {
@@ -347,6 +365,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function setNewIncrementId(\Magento\Framework\DataObject $object)
     {
@@ -368,6 +387,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Customer\Model\Customer $customer
      * @param string $passwordLinkToken
      * @return $this
+     * @since 2.0.0
      */
     public function changeResetPasswordLinkToken(\Magento\Customer\Model\Customer $customer, $passwordLinkToken)
     {

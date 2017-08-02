@@ -9,6 +9,7 @@ namespace Magento\Framework\Search\Request;
  * Aggregation Bucket Interface
  *
  * @api
+ * @since 2.0.0
  */
 interface BucketInterface
 {
@@ -29,6 +30,7 @@ interface BucketInterface
      * Get Type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 
@@ -36,6 +38,7 @@ interface BucketInterface
      * Get Field
      *
      * @return string
+     * @since 2.0.0
      */
     public function getField();
 
@@ -43,6 +46,7 @@ interface BucketInterface
      * Get Metrics
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMetrics();
 
@@ -50,6 +54,7 @@ interface BucketInterface
      * Get Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 }

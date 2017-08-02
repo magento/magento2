@@ -22,6 +22,7 @@ use Magento\Customer\Api\Data\GroupExtensionInterface;
  * Customer group CRUD class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 {
@@ -32,46 +33,55 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
     /**
      * @var \Magento\Customer\Model\GroupRegistry
+     * @since 2.0.0
      */
     protected $groupRegistry;
 
     /**
      * @var \Magento\Customer\Model\GroupFactory
+     * @since 2.0.0
      */
     protected $groupFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
+     * @since 2.0.0
      */
     protected $groupDataFactory;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Group
+     * @since 2.0.0
      */
     protected $groupResourceModel;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $dataObjectProcessor;
 
     /**
      * @var \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
+     * @since 2.0.0
      */
     private $taxClassRepository;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $extensionAttributesJoinProcessor;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -85,6 +95,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Model\GroupRegistry $groupRegistry,
@@ -110,6 +121,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Customer\Api\Data\GroupInterface $group)
     {
@@ -161,6 +173,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getById($id)
     {
@@ -175,6 +188,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -215,11 +229,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -238,9 +253,10 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
+     * @since 2.0.0
      */
     protected function translateField($field)
     {
@@ -263,6 +279,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\StateException If customer group cannot be deleted
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function delete(GroupInterface $group)
     {
@@ -277,6 +294,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException If customer group cannot be deleted
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -300,6 +318,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     private function _validate($group)
     {
@@ -320,6 +339,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @param \Magento\Customer\Api\Data\GroupInterface $group The original group parameters
      * @return void
      * @throws InputException Thrown if the tax class model is invalid
+     * @since 2.0.0
      */
     protected function _verifyTaxClassModel($taxClassId, $group)
     {
@@ -337,8 +357,9 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

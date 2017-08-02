@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Transaction\Grid;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection
 {
@@ -15,6 +16,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transa
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registryManager = null;
 
@@ -27,6 +29,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transa
      * @param \Magento\Framework\Registry $registryManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -54,6 +57,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transa
      * Resource initialization
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

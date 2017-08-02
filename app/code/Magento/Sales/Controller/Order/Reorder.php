@@ -8,6 +8,11 @@ namespace Magento\Sales\Controller\Order;
 
 use Magento\Sales\Controller\OrderInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Order\Reorder
+ *
+ * @since 2.0.0
+ */
 class Reorder extends \Magento\Sales\Controller\AbstractController\Reorder implements OrderInterface
 {
 }

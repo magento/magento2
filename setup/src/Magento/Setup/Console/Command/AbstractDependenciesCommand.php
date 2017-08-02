@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Abstract class for dependency report commands
+ * @since 2.0.0
  */
 abstract class AbstractDependenciesCommand extends Command
 {
@@ -36,6 +37,7 @@ abstract class AbstractDependenciesCommand extends Command
      * Object Manager
      *
      * @var ObjectManager
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -43,6 +45,7 @@ abstract class AbstractDependenciesCommand extends Command
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -52,6 +55,7 @@ abstract class AbstractDependenciesCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -74,6 +78,7 @@ abstract class AbstractDependenciesCommand extends Command
      *
      * @param string $outputPath
      * @return void
+     * @since 2.0.0
      */
     abstract protected function buildReport($outputPath);
 
@@ -81,11 +86,13 @@ abstract class AbstractDependenciesCommand extends Command
      * Get the default output report filename
      *
      * @return string
+     * @since 2.0.0
      */
     abstract protected function getDefaultOutputFilename();
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

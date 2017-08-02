@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ScopedAttributeInterface
 {

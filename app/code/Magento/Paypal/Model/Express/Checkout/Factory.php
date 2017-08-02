@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model\Express\Checkout;
 
 /**
  * Factory class for \Magento\Paypal\Model\Express\Checkout
+ * @since 2.0.0
  */
 class Factory
 {
@@ -14,6 +15,7 @@ class Factory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -21,6 +23,7 @@ class Factory
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -33,6 +36,7 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Paypal\Model\Express\Checkout
+     * @since 2.0.0
      */
     public function create($className, array $data = [])
     {

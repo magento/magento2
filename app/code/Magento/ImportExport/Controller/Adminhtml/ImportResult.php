@@ -12,6 +12,7 @@ use Magento\ImportExport\Model\History as ModelHistory;
 
 /**
  * Import controller
+ * @since 2.0.0
  */
 abstract class ImportResult extends Import
 {
@@ -24,16 +25,19 @@ abstract class ImportResult extends Import
 
     /**
      * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
+     * @since 2.0.0
      */
     protected $reportProcessor;
 
     /**
      * @var \Magento\ImportExport\Model\History
+     * @since 2.0.0
      */
     protected $historyModel;
 
     /**
      * @var \Magento\ImportExport\Helper\Report
+     * @since 2.0.0
      */
     protected $reportHelper;
 
@@ -42,6 +46,7 @@ abstract class ImportResult extends Import
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -59,6 +64,7 @@ abstract class ImportResult extends Import
      * @param \Magento\Framework\View\Element\AbstractBlock $resultBlock
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return $this
+     * @since 2.0.0
      */
     protected function addErrorMessages(
         \Magento\Framework\View\Element\AbstractBlock $resultBlock,
@@ -103,6 +109,7 @@ abstract class ImportResult extends Import
     /**
      * @param \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface $errorAggregator
      * @return array
+     * @since 2.0.0
      */
     protected function getErrorMessages(ProcessingErrorAggregatorInterface $errorAggregator)
     {
@@ -117,6 +124,7 @@ abstract class ImportResult extends Import
     /**
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError[]
+     * @since 2.0.0
      */
     protected function getSystemExceptions(ProcessingErrorAggregatorInterface $errorAggregator)
     {
@@ -126,6 +134,7 @@ abstract class ImportResult extends Import
     /**
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return string
+     * @since 2.0.0
      */
     protected function createErrorReport(ProcessingErrorAggregatorInterface $errorAggregator)
     {
@@ -143,6 +152,7 @@ abstract class ImportResult extends Import
     /**
      * @param string $fileName
      * @return string
+     * @since 2.0.0
      */
     protected function createDownloadUrlImportHistoryFile($fileName)
     {

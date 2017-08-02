@@ -7,10 +7,16 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
+/**
+ * Class \Magento\Email\Model\Template\Config\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convert($source)
     {

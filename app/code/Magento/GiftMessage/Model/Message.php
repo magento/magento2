@@ -15,12 +15,14 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\GiftMessage\Model\ResourceModel\Message getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Message extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\GiftMessage\Api\Data\MessageInterface
 {
     /**
      * @var \Magento\GiftMessage\Model\TypeFactory
+     * @since 2.0.0
      */
     protected $_typeFactory;
 
@@ -33,6 +35,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\GiftMessage\Model\ResourceModel\Message $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -58,6 +61,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,6 +73,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param string $type
      * @return mixed
+     * @since 2.0.0
      */
     public function getEntityModelByType($type)
     {
@@ -79,6 +84,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Checks if the gift message is empty
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMessageEmpty()
     {
@@ -89,6 +95,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getGiftMessageId()
     {
@@ -97,6 +104,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setGiftMessageId($id)
     {
@@ -105,6 +113,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -113,6 +122,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCustomerId($id)
     {
@@ -121,6 +131,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSender()
     {
@@ -129,6 +140,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setSender($sender)
     {
@@ -137,6 +149,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRecipient()
     {
@@ -145,6 +158,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRecipient($recipient)
     {
@@ -153,6 +167,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -161,6 +176,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setMessage($message)
     {
@@ -171,6 +187,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\GiftMessage\Api\Data\MessageExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -182,6 +199,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      *
      * @param \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes)
     {

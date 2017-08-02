@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote;
  * Checks possibility of payment method to be used in storefront
  *
  * @api
+ * @since 2.0.0
  */
 class CanUseCheckout implements SpecificationInterface
 {
@@ -21,6 +22,7 @@ class CanUseCheckout implements SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param Quote $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {

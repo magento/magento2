@@ -11,13 +11,22 @@ namespace Magento\SendFriend\Controller\Product;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\SendFriend\Controller\Product\Sendmail
+ *
+ * @since 2.0.0
+ */
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
-    /** @var  \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @since 2.0.0
+     */
     protected $categoryRepository;
 
     /**
      * @var \Magento\Catalog\Model\Session
+     * @since 2.0.0
      */
     protected $catalogSession;
 
@@ -29,6 +38,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Model\Session $catalogSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -49,6 +59,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

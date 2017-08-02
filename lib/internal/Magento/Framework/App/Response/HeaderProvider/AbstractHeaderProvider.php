@@ -8,19 +8,27 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 
 /**
  * Class to be used for setting headers with static values
+ * @since 2.1.0
  */
 abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.1.0
+     */
     protected $headerName = '';
 
-    /** @var string */
+    /**
+     * @var string
+     * @since 2.1.0
+     */
     protected $headerValue = '';
 
     /**
      * Whether the header should be attached to the response
      *
      * @return bool
+     * @since 2.1.0
      */
     public function canApply()
     {
@@ -31,6 +39,7 @@ abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response
      * Get header name
      *
      * @return string
+     * @since 2.1.0
      */
     public function getName()
     {
@@ -41,6 +50,7 @@ abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response
      * Get header value
      *
      * @return string
+     * @since 2.1.0
      */
     public function getValue()
     {

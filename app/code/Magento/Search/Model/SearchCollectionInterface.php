@@ -8,6 +8,7 @@ namespace Magento\Search\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface SearchCollectionInterface extends \Traversable, \Countable
 {
@@ -16,6 +17,7 @@ interface SearchCollectionInterface extends \Traversable, \Countable
      *
      * @param string $term
      * @return self
+     * @since 2.0.0
      */
     public function addSearchFilter($term);
 }

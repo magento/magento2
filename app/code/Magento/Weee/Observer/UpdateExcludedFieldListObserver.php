@@ -7,15 +7,22 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\UpdateExcludedFieldListObserver
+ *
+ * @since 2.0.0
+ */
 class UpdateExcludedFieldListObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Weee\Model\Tax
+     * @since 2.0.0
      */
     protected $weeeTax;
 
     /**
      * @param \Magento\Weee\Model\Tax $weeeTax
+     * @since 2.0.0
      */
     public function __construct(\Magento\Weee\Model\Tax $weeeTax)
     {
@@ -27,6 +34,7 @@ class UpdateExcludedFieldListObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

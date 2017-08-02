@@ -13,15 +13,22 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts
+ *
+ * @since 2.0.0
+ */
 class Alerts extends \Magento\Backend\Block\Widget\Tab
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/tab/alert.phtml';
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -64,6 +71,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAccordionHtml()
     {
@@ -74,6 +82,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
      * Tab is hidden
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShowTab()
     {

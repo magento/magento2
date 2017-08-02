@@ -15,27 +15,32 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 /**
  * Class DownloadCustomOption
  * @package Magento\Sales\Controller\Download
+ * @since 2.0.0
  */
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Sales\Model\Download
+     * @since 2.0.0
      */
     protected $download;
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $unserialize;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -45,6 +50,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @param \Magento\Sales\Model\Download $download
      * @param \Magento\Framework\Unserialize\Unserialize $unserialize
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -68,6 +74,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @return void|\Magento\Framework\Controller\Result\Forward
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -119,6 +126,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     protected function endExecute()
     {

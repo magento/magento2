@@ -9,11 +9,13 @@ use Magento\Framework\Module\Manager as ModuleManager;
 
 /**
  * Class ModuleIterator
+ * @since 2.2.0
  */
 class ModuleIterator extends \IteratorIterator
 {
     /**
      * @var ModuleManager
+     * @since 2.2.0
      */
     private $moduleManager;
 
@@ -22,6 +24,7 @@ class ModuleIterator extends \IteratorIterator
      *
      * @param ModuleManager $moduleManager
      * @param \Traversable $iterator
+     * @since 2.2.0
      */
     public function __construct(
         ModuleManager $moduleManager,
@@ -35,6 +38,7 @@ class ModuleIterator extends \IteratorIterator
      * Returns module with module status
      *
      * @return array
+     * @since 2.2.0
      */
     public function current()
     {

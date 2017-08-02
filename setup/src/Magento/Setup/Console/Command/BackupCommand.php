@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command to backup code base and user data
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class BackupCommand extends AbstractSetupCommand
 {
@@ -33,6 +34,7 @@ class BackupCommand extends AbstractSetupCommand
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -40,6 +42,7 @@ class BackupCommand extends AbstractSetupCommand
      * Handler for maintenance mode
      *
      * @var MaintenanceMode
+     * @since 2.0.0
      */
     private $maintenanceMode;
 
@@ -47,6 +50,7 @@ class BackupCommand extends AbstractSetupCommand
      * Factory for BackupRollback
      *
      * @var BackupRollbackFactory
+     * @since 2.0.0
      */
     private $backupRollbackFactory;
 
@@ -54,6 +58,7 @@ class BackupCommand extends AbstractSetupCommand
      * Existing deployment config
      *
      * @var DeploymentConfig
+     * @since 2.0.0
      */
     private $deploymentConfig;
 
@@ -63,6 +68,7 @@ class BackupCommand extends AbstractSetupCommand
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
      * @param DeploymentConfig $deploymentConfig
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
@@ -78,6 +84,7 @@ class BackupCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -109,6 +116,7 @@ class BackupCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -157,6 +165,7 @@ class BackupCommand extends AbstractSetupCommand
      * Sets area code to start a session for database backup and rollback
      *
      * @return void
+     * @since 2.0.0
      */
     private function setAreaCode()
     {

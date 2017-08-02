@@ -7,12 +7,18 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Class \Magento\Framework\App\Config\DataFactory
+ *
+ * @since 2.0.0
+ */
 class DataFactory
 {
     /**
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -20,12 +26,14 @@ class DataFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -40,6 +48,7 @@ class DataFactory
      *
      * @param array $data
      * @return DataInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

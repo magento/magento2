@@ -12,47 +12,56 @@ use Magento\Framework\Exception\StateException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface
+     * @since 2.0.0
      */
     protected $setRepository;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
-     * @deprecated please use instead \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
+     * @deprecated 2.2.0 please use instead \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     protected $attributeCollection;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Eav\Model\ConfigFactory
+     * @since 2.0.0
      */
     protected $entityTypeFactory;
 
     /**
      * @var \Magento\Eav\Api\AttributeGroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var AttributeRepository
+     * @since 2.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @since 2.0.0
      */
     protected $attributeResource;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
+     * @since 2.2.0
      */
     private $attributeCollectionFactory;
 
@@ -67,6 +76,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $attributeResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory|null $attributeCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
@@ -91,6 +101,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
     {
@@ -128,6 +139,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function unassign($attributeSetId, $attributeCode)
     {
@@ -159,6 +171,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAttributes($entityType, $attributeSetId)
     {

@@ -23,6 +23,7 @@ namespace Magento\Framework\View\Layout\Condition;
  * </uiComponent>
  *
  * "visibilityCondition" just another optional child element of ui component declaration
+ * @since 2.2.0
  */
 interface VisibilityConditionInterface
 {
@@ -33,11 +34,13 @@ interface VisibilityConditionInterface
      * @param array $arguments Attributes from element node.
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isVisible(array $arguments);
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getName();
 }

@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class CompilerFactory
+ * @since 2.0.0
  */
 class CompilerFactory
 {
@@ -18,6 +19,7 @@ class CompilerFactory
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,6 +27,7 @@ class CompilerFactory
      * Instance name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -33,6 +36,7 @@ class CompilerFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $instanceName)
     {
@@ -46,6 +50,7 @@ class CompilerFactory
      * @param array $arguments
      * @return CompilerInterface
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

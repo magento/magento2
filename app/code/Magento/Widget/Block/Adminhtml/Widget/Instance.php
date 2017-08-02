@@ -13,6 +13,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Instance extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -20,6 +21,7 @@ class Instance extends \Magento\Backend\Block\Widget\Grid\Container
      * Block constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

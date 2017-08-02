@@ -17,26 +17,37 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogRule\Observer\ProcessAdminFinalPriceObserver
+ *
+ * @since 2.0.0
+ */
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {
     /**
      * Core registry
      *
      * @var Registry
+     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
+     * @since 2.0.0
      */
     protected $resourceRuleFactory;
 
-    /** @var RulePricesStorage  */
+    /**
+     * @var \Magento\CatalogRule\Observer\RulePricesStorage
+     * @since 2.0.0
+     */
     protected $rulePricesStorage;
 
     /**
@@ -44,6 +55,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      * @param Registry $coreRegistry
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param TimezoneInterface $localeDate
+     * @since 2.0.0
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
@@ -62,6 +74,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

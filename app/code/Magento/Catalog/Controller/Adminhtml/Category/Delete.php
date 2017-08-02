@@ -6,14 +6,23 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Delete
+ *
+ * @since 2.0.0
+ */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
 {
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @since 2.0.0
+     */
     protected $categoryRepository;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -27,6 +36,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
      * Delete category action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

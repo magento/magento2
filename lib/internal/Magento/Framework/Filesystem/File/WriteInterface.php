@@ -7,6 +7,7 @@ namespace Magento\Framework\Filesystem\File;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface WriteInterface extends ReadInterface
 {
@@ -16,6 +17,7 @@ interface WriteInterface extends ReadInterface
      * @param string $data
      * @return int
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function write($data);
 
@@ -27,6 +29,7 @@ interface WriteInterface extends ReadInterface
      * @param string $enclosure
      * @return int
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function writeCsv(array $data, $delimiter = ',', $enclosure = '"');
 
@@ -35,6 +38,7 @@ interface WriteInterface extends ReadInterface
      *
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function flush();
 
@@ -43,6 +47,7 @@ interface WriteInterface extends ReadInterface
      *
      * @param int $lockMode
      * @return bool
+     * @since 2.0.0
      */
     public function lock($lockMode = LOCK_EX);
 
@@ -50,6 +55,7 @@ interface WriteInterface extends ReadInterface
      * File unlocking
      *
      * @return bool
+     * @since 2.0.0
      */
     public function unlock();
 }

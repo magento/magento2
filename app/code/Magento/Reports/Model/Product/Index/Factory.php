@@ -7,6 +7,7 @@ namespace Magento\Reports\Model\Product\Index;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Factory
 {
@@ -16,6 +17,7 @@ class Factory
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_typeClasses = [
         self::TYPE_COMPARED => \Magento\Reports\Model\Product\Index\Compared::class,
@@ -24,11 +26,13 @@ class Factory
 
     /**
      * @var \Magento\Reports\Model\Product\Index\Abstract[]
+     * @since 2.0.0
      */
     protected $_instances;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -39,6 +43,7 @@ class Factory
      * @param string $type
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function get($type)
     {

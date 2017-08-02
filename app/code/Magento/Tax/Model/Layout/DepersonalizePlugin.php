@@ -10,37 +10,44 @@ use Magento\PageCache\Model\DepersonalizeChecker;
 
 /**
  * Class DepersonalizePlugin
+ * @since 2.0.0
  */
 class DepersonalizePlugin
 {
     /**
      * @var DepersonalizeChecker
+     * @since 2.0.0
      */
     protected $depersonalizeChecker;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $defaultTaxShippingAddress;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $defaultTaxBillingAddress;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $customerTaxClassId;
 
     /**
      * @param DepersonalizeChecker $depersonalizeChecker
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(
         DepersonalizeChecker $depersonalizeChecker,
@@ -55,6 +62,7 @@ class DepersonalizePlugin
      *
      * @param \Magento\Framework\View\LayoutInterface $subject
      * @return array
+     * @since 2.0.0
      */
     public function beforeGenerateXml(\Magento\Framework\View\LayoutInterface $subject)
     {
@@ -72,6 +80,7 @@ class DepersonalizePlugin
      * @param \Magento\Framework\View\LayoutInterface $subject
      * @param \Magento\Framework\View\LayoutInterface $result
      * @return \Magento\Framework\View\LayoutInterface
+     * @since 2.0.0
      */
     public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
     {

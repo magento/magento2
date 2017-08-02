@@ -13,6 +13,7 @@ use Magento\Framework\Exception\InputException;
  * Interface ImageProcessorInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface ImageProcessorInterface
 {
@@ -25,6 +26,7 @@ interface ImageProcessorInterface
      * @param string $entityType entity type
      * @param CustomAttributesDataInterface $previousCustomerData
      * @return CustomAttributesDataInterface
+     * @since 2.0.0
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
@@ -39,6 +41,7 @@ interface ImageProcessorInterface
      * @param ImageContentInterface $imageContent
      * @return string Relative path of the file where image was saved
      * @throws InputException
+     * @since 2.0.0
      */
     public function processImageContent($entityType, $imageContent);
 }

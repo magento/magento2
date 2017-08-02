@@ -15,11 +15,13 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * @var StoreResolverInterface
+     * @since 2.2.0
      */
     private $storeResolver;
 
@@ -33,6 +35,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
      * @param StoreResolverInterface|null $storeResolver
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -52,6 +55,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     /**
      * @param null|int|array $entityIds
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
+     * @since 2.0.0
      */
     protected function reindex($entityIds = null)
     {
@@ -68,6 +72,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Retrieve table name for custom option temporary aggregation data
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getConfigurableOptionAggregateTable()
     {
@@ -78,6 +83,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Retrieve table name for custom option prices data
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getConfigurableOptionPriceTable()
     {
@@ -88,6 +94,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Prepare table structure for custom option temporary aggregation data
      *
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
+     * @since 2.0.0
      */
     protected function _prepareConfigurableOptionAggregateTable()
     {
@@ -99,6 +106,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Prepare table structure for custom option prices data
      *
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
+     * @since 2.0.0
      */
     protected function _prepareConfigurableOptionPriceTable()
     {
@@ -112,6 +120,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      *
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _applyConfigurableOption()
     {

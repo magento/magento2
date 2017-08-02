@@ -18,31 +18,37 @@ use Magento\Catalog\Model\Product;
 /**
  * Class CustomAttributeFilter
  * Applies filters by custom attributes to base select
+ * @since 2.2.0
  */
 class CustomAttributeFilter
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var ConditionManager
+     * @since 2.2.0
      */
     private $conditionManager;
 
     /**
      * @var EavConfig
+     * @since 2.2.0
      */
     private $eavConfig;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.2.0
      */
     private $storeManager;
 
     /**
      * @var AliasResolver
+     * @since 2.2.0
      */
     private $aliasResolver;
 
@@ -52,6 +58,7 @@ class CustomAttributeFilter
      * @param EavConfig $eavConfig
      * @param StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -76,6 +83,7 @@ class CustomAttributeFilter
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
      * @throws \DomainException
+     * @since 2.2.0
      */
     public function apply(Select $select, FilterInterface ... $filters)
     {
@@ -136,6 +144,7 @@ class CustomAttributeFilter
      * @param string $mainTable
      * @param string $joinTable
      * @return array
+     * @since 2.2.0
      */
     private function getJoinConditions($attrId, $mainTable, $joinTable)
     {
@@ -161,6 +170,7 @@ class CustomAttributeFilter
      * @param string $field
      * @return int|null
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     private function getAttributeIdByCode($field)
     {
@@ -175,6 +185,7 @@ class CustomAttributeFilter
      * @param Select $select
      * @return string|null
      * @throws \Zend_Db_Select_Exception
+     * @since 2.2.0
      */
     private function extractTableAliasFromSelect(Select $select)
     {

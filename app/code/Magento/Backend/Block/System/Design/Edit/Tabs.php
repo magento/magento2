@@ -5,10 +5,16 @@
  */
 namespace Magento\Backend\Block\System\Design\Edit;
 
+/**
+ * Class \Magento\Backend\Block\System\Design\Edit\Tabs
+ *
+ * @since 2.0.0
+ */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -20,6 +26,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

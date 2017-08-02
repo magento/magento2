@@ -9,6 +9,7 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 
 /**
  * Php parser adapter
+ * @since 2.0.0
  */
 class Php extends AbstractAdapter
 {
@@ -16,6 +17,7 @@ class Php extends AbstractAdapter
      * Phrase collector
      *
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
+     * @since 2.0.0
      */
     protected $_phraseCollector;
 
@@ -23,6 +25,7 @@ class Php extends AbstractAdapter
      * Adapter construct
      *
      * @param \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector $phraseCollector
+     * @since 2.0.0
      */
     public function __construct(PhraseCollector $phraseCollector)
     {
@@ -31,6 +34,7 @@ class Php extends AbstractAdapter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _parse()
     {

@@ -16,21 +16,25 @@ namespace Magento\Catalog\Model\Layer;
  *
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
+ * @since 2.0.0
  */
 class Context implements ContextInterface
 {
     /**
      * @var ItemCollectionProviderInterface
+     * @since 2.0.0
      */
     protected $collectionProvider;
 
     /**
      * @var StateKeyInterface
+     * @since 2.0.0
      */
     protected $stateKey;
 
     /**
      * @var CollectionFilterInterface
+     * @since 2.0.0
      */
     protected $collectionFilter;
 
@@ -38,6 +42,7 @@ class Context implements ContextInterface
      * @param ItemCollectionProviderInterface $collectionProvider
      * @param StateKeyInterface $stateKey
      * @param CollectionFilterInterface $collectionFilter
+     * @since 2.0.0
      */
     public function __construct(
         ItemCollectionProviderInterface $collectionProvider,
@@ -51,6 +56,7 @@ class Context implements ContextInterface
 
     /**
      * @return ItemCollectionProviderInterface
+     * @since 2.0.0
      */
     public function getCollectionProvider()
     {
@@ -59,6 +65,7 @@ class Context implements ContextInterface
 
     /**
      * @return StateKeyInterface
+     * @since 2.0.0
      */
     public function getStateKey()
     {
@@ -67,6 +74,7 @@ class Context implements ContextInterface
 
     /**
      * @return CollectionFilterInterface
+     * @since 2.0.0
      */
     public function getCollectionFilter()
     {

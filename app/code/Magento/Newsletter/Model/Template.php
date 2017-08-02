@@ -35,6 +35,7 @@ namespace Magento\Newsletter\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
@@ -42,6 +43,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Mail object
      *
      * @var \Zend_Mail
+     * @since 2.0.0
      */
     protected $_mail;
 
@@ -49,6 +51,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Store manager to emulate design
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -56,6 +59,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Http-request, used to determine current store in multi-store mode
      *
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
@@ -63,6 +67,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Filter factory
      *
      * @var \Magento\Newsletter\Model\Template\FilterFactory
+     * @since 2.0.0
      */
     protected $_filterFactory;
 
@@ -84,6 +89,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory ,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -126,6 +132,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -137,6 +144,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -172,6 +180,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Processing object before save data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -184,6 +193,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Getter for template type
      *
      * @return int|string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -195,6 +205,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      *
      * @param array $variables
      * @return string
+     * @since 2.0.0
      */
     public function getProcessedTemplateSubject(array $variables)
     {
@@ -209,6 +220,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Retrieve template text wrapper
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemplateText()
     {
@@ -228,6 +240,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
 
     /**
      * @return \Magento\Newsletter\Model\Template\FilterFactory
+     * @since 2.0.0
      */
     protected function getFilterFactory()
     {
@@ -238,6 +251,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Check if template can be added to newsletter queue
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isValidForSend()
     {

@@ -22,37 +22,44 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * List Of filters
      * @var array
+     * @since 2.0.0
      */
     private $filters = [];
 
     /**
      * @var \Magento\Search\Api\SearchInterface
+     * @since 2.1.0
      */
     private $search;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
+     * @since 2.0.0
      */
     private $temporaryStorageFactory;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var SearchResultFactory
+     * @since 2.1.0
      */
     private $searchResultFactory;
 
     /**
      * @var FilterBuilder
+     * @since 2.1.0
      */
     private $filterBuilder;
 
@@ -87,6 +94,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param MetadataPool|null $metadataPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -155,6 +163,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param array $fields
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function addFieldsToFilter($fields)
     {
@@ -166,6 +175,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function _renderFiltersBefore()
     {
@@ -206,6 +216,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @param string $attributeCode
      * @return string
+     * @since 2.0.0
      */
     private function getAttributeCode($attributeCode)
     {
@@ -223,6 +234,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attributeCode
      * @param array|string $attributeValue
      * @return void
+     * @since 2.1.0
      */
     private function addAttributeToSearch($attributeCode, $attributeValue)
     {
@@ -249,6 +261,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attributeCode
      * @param array|string $attributeValue
      * @return void
+     * @since 2.1.0
      */
     private function addRangeAttributeToSearch($attributeCode, $attributeValue)
     {
@@ -264,6 +277,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return \Magento\Search\Api\SearchInterface
+     * @since 2.1.0
      */
     private function getSearch()
     {
@@ -276,6 +290,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return SearchCriteriaBuilder
+     * @since 2.1.0
      */
     private function getSearchCriteriaBuilder()
     {
@@ -288,6 +303,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return FilterBuilder
+     * @since 2.1.0
      */
     private function getFilterBuilder()
     {

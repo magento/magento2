@@ -13,37 +13,44 @@ use Magento\Framework\App\Config;
  * Information Expert in store groups handling
  *
  * @package Magento\Store\Model
+ * @since 2.0.0
  */
 class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 {
     /**
      * @var GroupFactory
+     * @since 2.0.0
      */
     protected $groupFactory;
 
     /**
      * @var \Magento\Store\Api\Data\GroupInterface[]
+     * @since 2.0.0
      */
     protected $entities = [];
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $allLoaded = false;
 
     /**
      * @var \Magento\Store\Model\ResourceModel\Group\CollectionFactory
+     * @since 2.0.0
      */
     protected $groupCollectionFactory;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $appConfig;
 
     /**
      * @param GroupFactory $groupFactory
      * @param \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
+     * @since 2.0.0
      */
     public function __construct(
         GroupFactory $groupFactory,
@@ -55,6 +62,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($id)
     {
@@ -75,6 +83,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList()
     {
@@ -94,6 +103,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function clean()
     {
@@ -104,8 +114,9 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return Config
+     * @since 2.2.0
      */
     private function getAppConfig()
     {

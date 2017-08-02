@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\OrderInterface;
  * Interface OrderStateResolverInterface
  *
  * @api
+ * @since 2.2.0
  */
 interface OrderStateResolverInterface
 {
@@ -22,6 +23,7 @@ interface OrderStateResolverInterface
      * @param OrderInterface $order
      * @param array $arguments
      * @return string
+     * @since 2.2.0
      */
     public function getStateForOrder(OrderInterface $order, array $arguments = []);
 }

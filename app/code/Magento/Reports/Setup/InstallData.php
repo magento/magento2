@@ -13,6 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
@@ -20,6 +21,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      * Page factory
      *
      * @var PageFactory
+     * @since 2.0.0
      */
     private $pageFactory;
 
@@ -27,6 +29,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      * Init
      *
      * @param PageFactory $pageFactory
+     * @since 2.0.0
      */
     public function __construct(PageFactory $pageFactory)
     {
@@ -35,6 +38,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

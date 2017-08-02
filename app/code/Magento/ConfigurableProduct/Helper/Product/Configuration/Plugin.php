@@ -6,6 +6,11 @@
  */
 namespace Magento\ConfigurableProduct\Helper\Product\Configuration;
 
+/**
+ * Class \Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin
+ *
+ * @since 2.0.0
+ */
 class Plugin
 {
     /**
@@ -17,6 +22,7 @@ class Plugin
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundGetOptions(
         \Magento\Catalog\Helper\Product\Configuration $subject,

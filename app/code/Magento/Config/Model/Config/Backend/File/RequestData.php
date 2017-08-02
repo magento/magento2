@@ -5,6 +5,11 @@
  */
 namespace Magento\Config\Model\Config\Backend\File;
 
+/**
+ * Class \Magento\Config\Model\Config\Backend\File\RequestData
+ *
+ * @since 2.0.0
+ */
 class RequestData implements \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface
 {
     /**
@@ -12,6 +17,7 @@ class RequestData implements \Magento\Config\Model\Config\Backend\File\RequestDa
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function getTmpName($path)
     {
@@ -23,6 +29,7 @@ class RequestData implements \Magento\Config\Model\Config\Backend\File\RequestDa
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function getName($path)
     {
@@ -35,6 +42,7 @@ class RequestData implements \Magento\Config\Model\Config\Backend\File\RequestDa
      * @param string $paramName
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     protected function _getParam($paramName, $path)
     {

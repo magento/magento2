@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item\Option;
 
+/**
+ * Interface \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+ *
+ * @since 2.0.0
+ */
 interface OptionInterface
 {
     /**
      * Retrieve value associated with this option
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue();
 }

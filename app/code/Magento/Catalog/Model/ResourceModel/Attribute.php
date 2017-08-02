@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Attribute\LockValidatorInterface;
  * Catalog attribute resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
@@ -19,16 +20,19 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var LockValidatorInterface
+     * @since 2.0.0
      */
     protected $attrLockValidator;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -39,6 +43,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -58,6 +63,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -73,6 +79,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -85,6 +92,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      *
      * @param  \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _clearUselessAttributeValues(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -113,6 +121,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteEntity(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -165,6 +174,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\View\Layout;
 
+/**
+ * Interface \Magento\Framework\View\Layout\GeneratorInterface
+ *
+ * @since 2.0.0
+ */
 interface GeneratorInterface
 {
     /**
@@ -13,6 +18,7 @@ interface GeneratorInterface
      * @param Reader\Context $readerContext
      * @param Generator\Context $generatorContext
      * @return $this
+     * @since 2.0.0
      */
     public function process(Reader\Context $readerContext, Generator\Context $generatorContext);
 
@@ -20,6 +26,7 @@ interface GeneratorInterface
      * Return type of generator
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 }

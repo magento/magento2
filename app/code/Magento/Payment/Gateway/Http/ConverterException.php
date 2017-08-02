@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class ConverterException
  * @package Magento\Payment\Gateway\Http
  * @api
+ * @since 2.0.0
  */
 class ConverterException extends LocalizedException
 {

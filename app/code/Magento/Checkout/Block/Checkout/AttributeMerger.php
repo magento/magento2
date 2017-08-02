@@ -10,12 +10,18 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 
+/**
+ * Class \Magento\Checkout\Block\Checkout\AttributeMerger
+ *
+ * @since 2.0.0
+ */
 class AttributeMerger
 {
     /**
      * Map form element
      *
      * @var array
+     * @since 2.0.0
      */
     protected $formElementMap = [
         'checkbox'    => 'Magento_Ui/js/form/element/select',
@@ -31,6 +37,7 @@ class AttributeMerger
      * Map template
      *
      * @var array
+     * @since 2.0.0
      */
     protected $templateMap = [
         'image' => 'media',
@@ -41,6 +48,7 @@ class AttributeMerger
      * Map input_validation and validation rule from js
      *
      * @var array
+     * @since 2.0.0
      */
     protected $inputValidationMap = [
         'alpha' => 'validate-alpha',
@@ -53,26 +61,31 @@ class AttributeMerger
 
     /**
      * @var AddressHelper
+     * @since 2.0.0
      */
     private $addressHelper;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     private $customerSession;
 
     /**
      * @var CustomerRepository
+     * @since 2.0.0
      */
     private $customerRepository;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     private $customer;
 
     /**
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     private $directoryHelper;
 
@@ -80,6 +93,7 @@ class AttributeMerger
      * List of codes of countries that must be shown on the top of country list
      *
      * @var array
+     * @since 2.0.0
      */
     private $topCountryCodes;
 
@@ -88,6 +102,7 @@ class AttributeMerger
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
      * @param DirectoryHelper $directoryHelper
+     * @since 2.0.0
      */
     public function __construct(
         AddressHelper $addressHelper,
@@ -110,6 +125,7 @@ class AttributeMerger
      * @param string $dataScopePrefix
      * @param array $fields
      * @return array
+     * @since 2.0.0
      */
     public function merge($elements, $providerName, $dataScopePrefix, array $fields = [])
     {
@@ -140,6 +156,7 @@ class AttributeMerger
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function getFieldConfig(
         $attributeCode,
@@ -224,6 +241,7 @@ class AttributeMerger
      * @param array $mainSource
      * @param array $additionalSource
      * @return array
+     * @since 2.0.0
      */
     protected function mergeConfigurationNode($nodeName, array $mainSource, array $additionalSource)
     {
@@ -239,6 +257,7 @@ class AttributeMerger
      * @param array $attributeConfig
      * @param array $additionalConfig field configuration provided via layout XML
      * @return bool
+     * @since 2.0.0
      */
     protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = [])
     {
@@ -262,6 +281,7 @@ class AttributeMerger
      * @param string $providerName name of the storage container used by UI component
      * @param string $dataScopePrefix
      * @return array
+     * @since 2.0.0
      */
     protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
     {
@@ -312,6 +332,7 @@ class AttributeMerger
     /**
      * @param string $attributeCode
      * @return null|string
+     * @since 2.0.0
      */
     protected function getDefaultValue($attributeCode)
     {
@@ -348,6 +369,7 @@ class AttributeMerger
 
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @since 2.0.0
      */
     protected function getCustomer()
     {
@@ -368,6 +390,7 @@ class AttributeMerger
      * @param array $attributeConfig
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
@@ -379,7 +402,8 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected function orderCountryOptions(array $countryOptions)
     {

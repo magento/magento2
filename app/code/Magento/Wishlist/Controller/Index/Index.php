@@ -9,16 +9,23 @@ use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -33,6 +40,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @return \Magento\Framework\View\Result\Page
      * @throws NotFoundException
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Item;
  * Item option resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Main table and field initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

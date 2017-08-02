@@ -11,6 +11,11 @@
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column\Renderer;
 
+/**
+ * Class \Magento\Backup\Block\Adminhtml\Grid\Column\Renderer\Download
+ *
+ * @since 2.0.0
+ */
 class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
@@ -18,6 +23,7 @@ class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param \Magento\Framework\DataObject $row
      * @return mixed
+     * @since 2.0.0
      */
     public function _getValue(\Magento\Framework\DataObject $row)
     {

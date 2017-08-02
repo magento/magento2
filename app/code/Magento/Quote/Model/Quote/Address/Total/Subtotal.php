@@ -9,17 +9,24 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Quote\Model\Quote\Item;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\Total\Subtotal
+ *
+ * @since 2.0.0
+ */
 class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
      * Sales data
      *
      * @var \Magento\Quote\Model\QuoteValidator
+     * @since 2.0.0
      */
     protected $quoteValidator = null;
 
     /**
      * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     * @since 2.0.0
      */
     public function __construct(\Magento\Quote\Model\QuoteValidator $quoteValidator)
     {
@@ -33,6 +40,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
+     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -81,6 +89,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param Address $address
      * @param AddressItem|Item $item
      * @return bool
+     * @since 2.0.0
      */
     protected function _initItem($address, $item)
     {
@@ -132,6 +141,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param int $finalPrice
      * @param int $originalPrice
      * @return $this
+     * @since 2.0.0
      */
     protected function _calculateRowTotal($item, $finalPrice, $originalPrice)
     {
@@ -149,6 +159,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param Address $address
      * @param  AddressItem|Item $item
      * @return $this
+     * @since 2.0.0
      */
     protected function _removeItem($address, $item)
     {
@@ -173,6 +184,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param Address\Total $total
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -187,6 +199,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Get Subtotal label
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getLabel()
     {

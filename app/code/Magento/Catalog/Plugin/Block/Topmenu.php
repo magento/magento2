@@ -11,6 +11,7 @@ use Magento\Framework\Data\Tree\Node;
 
 /**
  * Plugin for top menu block
+ * @since 2.1.0
  */
 class Topmenu
 {
@@ -18,21 +19,25 @@ class Topmenu
      * Catalog category
      *
      * @var \Magento\Catalog\Helper\Category
+     * @since 2.1.0
      */
     protected $catalogCategory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @since 2.1.0
      */
     private $collectionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Layer\Resolver
+     * @since 2.1.0
      */
     private $layerResolver;
 
@@ -43,6 +48,7 @@ class Topmenu
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
@@ -65,6 +71,7 @@ class Topmenu
      * @param int $limit
      * @return void
      * @SuppressWarnings("PMD.UnusedFormalParameter")
+     * @since 2.1.0
      */
     public function beforeGetHtml(
         \Magento\Theme\Block\Html\Topmenu $subject,
@@ -109,6 +116,7 @@ class Topmenu
      *
      * @param \Magento\Theme\Block\Html\Topmenu $subject
      * @return void
+     * @since 2.1.0
      */
     public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject)
     {
@@ -130,6 +138,7 @@ class Topmenu
      * Get current Category from catalog layer
      *
      * @return \Magento\Catalog\Model\Category
+     * @since 2.1.0
      */
     private function getCurrentCategory()
     {
@@ -148,6 +157,7 @@ class Topmenu
      * @param \Magento\Catalog\Model\Category $category
      * @param \Magento\Catalog\Model\Category $currentCategory
      * @return array
+     * @since 2.1.0
      */
     private function getCategoryAsArray($category, $currentCategory)
     {
@@ -167,6 +177,7 @@ class Topmenu
      * @param int $rootId
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     protected function getCategoryTree($storeId, $rootId)
     {

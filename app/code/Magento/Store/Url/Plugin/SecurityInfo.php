@@ -10,16 +10,19 @@ use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Plugin for \Magento\Framework\Url\SecurityInfo
+ * @since 2.0.0
  */
 class SecurityInfo
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -34,6 +37,7 @@ class SecurityInfo
      * @param string $url
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundIsSecure(\Magento\Framework\Url\SecurityInfo $subject, \Closure $proceed, $url)
     {

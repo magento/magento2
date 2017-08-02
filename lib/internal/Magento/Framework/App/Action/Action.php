@@ -20,11 +20,13 @@ use Magento\Framework\Exception\NotFoundException;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class Action extends AbstractAction
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -33,41 +35,49 @@ abstract class Action extends AbstractAction
      * Should be defined for proper working session.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_sessionNamespace;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     protected $_redirect;
 
     /**
      * @var \Magento\Framework\App\ViewInterface
+     * @since 2.0.0
      */
     protected $_view;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @param Context $context
+     * @since 2.0.0
      */
     public function __construct(Context $context)
     {
@@ -87,6 +97,7 @@ abstract class Action extends AbstractAction
      * @param RequestInterface $request
      * @return ResponseInterface
      * @throws NotFoundException
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -132,6 +143,7 @@ abstract class Action extends AbstractAction
      * @param string|null $module
      * @param array|null $params
      * @return void
+     * @since 2.0.0
      */
     protected function _forward($action, $controller = null, $module = null, array $params = null)
     {
@@ -162,6 +174,7 @@ abstract class Action extends AbstractAction
      * @param   string $path
      * @param   array $arguments
      * @return  ResponseInterface
+     * @since 2.0.0
      */
     protected function _redirect($path, $arguments = [])
     {
@@ -171,6 +184,7 @@ abstract class Action extends AbstractAction
 
     /**
      * @return \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     public function getActionFlag()
     {

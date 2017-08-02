@@ -9,17 +9,24 @@
  */
 namespace Magento\Theme\Model\Theme\Domain;
 
+/**
+ * Class \Magento\Theme\Model\Theme\Domain\Virtual
+ *
+ * @since 2.0.0
+ */
 class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInterface
 {
     /**
      * Virtual theme model instance
      *
      * @var \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected $_theme;
 
     /**
      * @var \Magento\Theme\Model\ThemeFactory $themeFactory
+     * @since 2.0.0
      */
     protected $_themeFactory;
 
@@ -27,11 +34,13 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * Staging theme model instance
      *
      * @var \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected $_stagingTheme;
 
     /**
      * @var \Magento\Theme\Model\CopyService
+     * @since 2.0.0
      */
     protected $_themeCopyService;
 
@@ -39,6 +48,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * Theme customization config
      *
      * @var \Magento\Theme\Model\Config\Customization
+     * @since 2.0.0
      */
     protected $_customizationConfig;
 
@@ -47,6 +57,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Theme\Model\CopyService $themeCopyService
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\ThemeInterface $theme,
@@ -64,6 +75,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * Get 'staging' theme
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function getStagingTheme()
     {
@@ -81,6 +93,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * Get 'physical' theme
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     public function getPhysicalTheme()
     {
@@ -101,6 +114,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * Check if theme is assigned to ANY store
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAssigned()
     {
@@ -111,6 +125,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      * Create 'staging' theme associated with current 'virtual' theme
      *
      * @return \Magento\Framework\View\Design\ThemeInterface
+     * @since 2.0.0
      */
     protected function _createStagingTheme()
     {

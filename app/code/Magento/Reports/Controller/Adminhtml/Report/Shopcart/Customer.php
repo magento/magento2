@@ -6,12 +6,18 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\Customer
+ *
+ * @since 2.0.0
+ */
 class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**
      * Customer shopping carts action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

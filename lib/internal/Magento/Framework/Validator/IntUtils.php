@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * Class \Magento\Framework\Validator\IntUtils
+ *
+ * @since 2.0.0
+ */
 class IntUtils extends \Zend_Validate_Int implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

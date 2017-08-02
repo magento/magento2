@@ -8,6 +8,7 @@ namespace Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset;
 /**
  * Form fieldset renderer
  * @api
+ * @since 2.0.0
  */
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
@@ -16,11 +17,13 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Form element which re-rendering
      *
      * @var \Magento\Framework\Data\Form\Element\Fieldset
+     * @since 2.0.0
      */
     protected $_element;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'store/switcher/form/renderer/fieldset/element.phtml';
 
@@ -28,6 +31,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Retrieve an element
      *
      * @return \Magento\Framework\Data\Form\Element\Fieldset
+     * @since 2.0.0
      */
     public function getElement()
     {
@@ -39,6 +43,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -50,6 +55,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      * Return html for store switcher hint
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHintHtml()
     {

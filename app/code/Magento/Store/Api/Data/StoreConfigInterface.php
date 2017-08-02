@@ -9,6 +9,7 @@ namespace Magento\Store\Api\Data;
  * StoreConfig interface
  *
  * @api
+ * @since 2.0.0
  */
 interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,6 +17,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get store id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId();
 
@@ -24,6 +26,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id);
 
@@ -31,6 +34,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get store code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode();
 
@@ -39,6 +43,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code);
 
@@ -46,6 +51,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get website id of the store
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteId();
 
@@ -54,6 +60,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId);
 
@@ -61,6 +68,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get store locale
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLocale();
 
@@ -69,6 +77,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $locale
      * @return $this
+     * @since 2.0.0
      */
     public function setLocale($locale);
 
@@ -76,6 +85,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get base currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseCurrencyCode();
 
@@ -84,6 +94,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $baseCurrencyCode
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseCurrencyCode($baseCurrencyCode);
 
@@ -91,6 +102,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get default display currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultDisplayCurrencyCode();
 
@@ -99,6 +111,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $defaultDisplayCurrencyCode
      * @return $this
+     * @since 2.0.0
      */
     public function setDefaultDisplayCurrencyCode($defaultDisplayCurrencyCode);
 
@@ -106,6 +119,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get timezone of the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTimezone();
 
@@ -114,6 +128,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $timezone
      * @return $this
+     * @since 2.0.0
      */
     public function setTimezone($timezone);
 
@@ -121,6 +136,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Return the unit of weight
      *
      * @return string
+     * @since 2.0.0
      */
     public function getWeightUnit();
 
@@ -129,6 +145,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $weightUnit
      * @return $this
+     * @since 2.0.0
      */
     public function setWeightUnit($weightUnit);
 
@@ -136,6 +153,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get base URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl();
 
@@ -144,6 +162,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $baseUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseUrl($baseUrl);
 
@@ -151,6 +170,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get base link URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseLinkUrl();
 
@@ -159,6 +179,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $baseLinkUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseLinkUrl($baseLinkUrl);
 
@@ -166,6 +187,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get base static URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseStaticUrl();
 
@@ -174,6 +196,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $baseStaticUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseStaticUrl($baseStaticUrl);
 
@@ -181,6 +204,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get base media URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseMediaUrl();
 
@@ -189,6 +213,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $baseMediaUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseMediaUrl($baseMediaUrl);
 
@@ -196,6 +221,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get secure base URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSecureBaseUrl();
 
@@ -204,6 +230,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $secureBaseUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setSecureBaseUrl($secureBaseUrl);
 
@@ -211,6 +238,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get secure base link URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSecureBaseLinkUrl();
 
@@ -219,6 +247,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $secureBaseLinkUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setSecureBaseLinkUrl($secureBaseLinkUrl);
 
@@ -226,6 +255,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get secure base static URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSecureBaseStaticUrl();
 
@@ -234,6 +264,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $secureBaseStaticUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setSecureBaseStaticUrl($secureBaseStaticUrl);
 
@@ -241,6 +272,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Get secure base media URL for the store
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSecureBaseMediaUrl();
 
@@ -249,6 +281,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param string $secureBaseMediaUrl
      * @return $this
+     * @since 2.0.0
      */
     public function setSecureBaseMediaUrl($secureBaseMediaUrl);
 
@@ -256,6 +289,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Store\Api\Data\StoreConfigExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -264,6 +298,7 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @param \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes

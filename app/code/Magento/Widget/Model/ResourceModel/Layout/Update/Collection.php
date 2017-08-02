@@ -7,11 +7,13 @@ namespace Magento\Widget\Model\ResourceModel\Layout\Update;
 
 /**
  * Layout update collection model
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -19,6 +21,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Name prefix of events that are dispatched by model
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'layout_update_collection';
 
@@ -26,6 +29,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Name of event parameter
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'layout_update_collection';
 
@@ -37,6 +41,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -55,6 +60,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -70,6 +76,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $themeId
      * @return $this
+     * @since 2.0.0
      */
     public function addThemeFilter($themeId)
     {
@@ -84,6 +91,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeId)
     {
@@ -97,6 +105,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Join with layout link table
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinWithLink()
     {
@@ -119,6 +128,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $fields
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinLeftWithLink($fields = [])
     {
@@ -140,6 +150,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $days
      * @return $this
+     * @since 2.0.0
      */
     public function addUpdatedDaysBeforeFilter($days)
     {
@@ -163,6 +174,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get layouts without links
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addNoLinksFilter()
     {
@@ -176,6 +188,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Delete updates in collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function delete()
     {

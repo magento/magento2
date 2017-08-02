@@ -7,6 +7,11 @@ namespace Magento\WebapiSecurity\Model\Plugin;
 
 use Magento\Webapi\Model\Config\Converter;
 
+/**
+ * Class \Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity
+ *
+ * @since 2.1.0
+ */
 class AnonymousResourceSecurity
 {
     /**
@@ -16,11 +21,13 @@ class AnonymousResourceSecurity
 
     /**
      * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @since 2.1.0
      */
     protected $config;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $resources;
 
@@ -29,6 +36,7 @@ class AnonymousResourceSecurity
      *
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param array $resources
+     * @since 2.1.0
      */
     public function __construct(\Magento\Framework\App\Config\ReinitableConfigInterface $config, $resources)
     {
@@ -43,6 +51,7 @@ class AnonymousResourceSecurity
      * @param array $nodes
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function afterConvert(Converter $subject, $nodes)
     {
@@ -80,6 +89,7 @@ class AnonymousResourceSecurity
      * @param string $requestType
      * @param array $source
      * @return array|null
+     * @since 2.1.0
      */
     private function getNode($route, $requestType, $source)
     {

@@ -14,6 +14,7 @@ namespace Magento\Newsletter\Model\ResourceModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 2.0.0
  */
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,6 +22,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
@@ -28,6 +30,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -42,6 +45,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +57,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Newsletter\Model\Template $template
      * @return boolean
+     * @since 2.0.0
      */
     public function checkUsageInQueue(\Magento\Newsletter\Model\Template $template)
     {
@@ -79,6 +84,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Newsletter\Model\Template $template
      * @return boolean
+     * @since 2.0.0
      */
     public function checkCodeUsage(\Magento\Newsletter\Model\Template $template)
     {
@@ -113,6 +119,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

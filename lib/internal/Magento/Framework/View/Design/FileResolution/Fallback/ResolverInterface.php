@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Interface for resolvers of view files using fallback rules
+ * @since 2.0.0
  */
 interface ResolverInterface
 {
@@ -24,6 +25,7 @@ interface ResolverInterface
      * @param string|null $locale
      * @param string|null $module
      * @return string|bool
+     * @since 2.0.0
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null);
 }

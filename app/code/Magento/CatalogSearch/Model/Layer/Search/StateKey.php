@@ -9,10 +9,16 @@ namespace Magento\CatalogSearch\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Layer\Search\StateKey
+ *
+ * @since 2.0.0
+ */
 class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements StateKeyInterface
 {
     /**
      * @var \Magento\Search\Model\QueryFactory
+     * @since 2.0.0
      */
     protected $queryFactory;
 
@@ -20,6 +26,7 @@ class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Search\Model\QueryFactory $queryFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -33,6 +40,7 @@ class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @return string|void
+     * @since 2.0.0
      */
     public function toString($category)
     {

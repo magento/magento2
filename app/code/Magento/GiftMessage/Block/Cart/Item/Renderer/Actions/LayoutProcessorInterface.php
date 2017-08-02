@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
  * @see \Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions
  *
  * @api
+ * @since 2.0.0
  */
 interface LayoutProcessorInterface
 {
@@ -24,6 +25,7 @@ interface LayoutProcessorInterface
      * @param array $jsLayout
      * @param AbstractItem $item
      * @return array
+     * @since 2.0.0
      */
     public function process($jsLayout, AbstractItem $item);
 }

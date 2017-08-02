@@ -7,12 +7,18 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option
+ *
+ * @since 2.0.0
+ */
 class Option extends \Magento\Backend\Block\Widget
 {
     /**
      * Form element
      *
      * @var AbstractElement|null
+     * @since 2.0.0
      */
     protected $_element = null;
 
@@ -20,11 +26,13 @@ class Option extends \Magento\Backend\Block\Widget
      * List of bundle product options
      *
      * @var array|null
+     * @since 2.0.0
      */
     protected $_options = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'product/edit/bundle/option.phtml';
 
@@ -32,16 +40,19 @@ class Option extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Bundle\Model\Source\Option\Type
+     * @since 2.0.0
      */
     protected $_optionTypes;
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
+     * @since 2.0.0
      */
     protected $_yesno;
 
@@ -51,6 +62,7 @@ class Option extends \Magento\Backend\Block\Widget
      * @param \Magento\Bundle\Model\Source\Option\Type $optionTypes
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -71,6 +83,7 @@ class Option extends \Magento\Backend\Block\Widget
      * Sets block template and necessary data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,6 +93,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFieldId()
     {
@@ -88,6 +102,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getFieldName()
     {
@@ -98,6 +113,7 @@ class Option extends \Magento\Backend\Block\Widget
      * Retrieve Product object
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -110,6 +126,7 @@ class Option extends \Magento\Backend\Block\Widget
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -120,6 +137,7 @@ class Option extends \Magento\Backend\Block\Widget
     /**
      * @param AbstractElement $element
      * @return $this
+     * @since 2.0.0
      */
     public function setElement(AbstractElement $element)
     {
@@ -129,6 +147,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return AbstractElement|null
+     * @since 2.0.0
      */
     public function getElement()
     {
@@ -137,6 +156,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isMultiWebsites()
     {
@@ -145,6 +165,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -185,6 +206,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {
@@ -193,6 +215,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCloseSearchButtonHtml()
     {
@@ -201,6 +224,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAddSelectionButtonHtml()
     {
@@ -211,6 +235,7 @@ class Option extends \Magento\Backend\Block\Widget
      * Retrieve list of bundle product options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -240,6 +265,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getAddButtonId()
     {
@@ -249,6 +275,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getOptionDeleteButtonHtml()
     {
@@ -257,6 +284,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSelectionHtml()
     {
@@ -265,6 +293,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getTypeSelectHtml()
     {
@@ -287,6 +316,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getRequireSelectHtml()
     {
@@ -305,6 +335,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isDefaultStore()
     {

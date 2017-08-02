@@ -7,21 +7,25 @@ namespace Magento\Theme\Model\Config;
 
 /**
  * Theme customization config model
+ * @since 2.0.0
  */
 class Customization
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\View\DesignInterface
+     * @since 2.0.0
      */
     protected $_design;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
+     * @since 2.0.0
      */
     protected $themeProvider;
 
@@ -30,6 +34,7 @@ class Customization
      *
      * @var array
      * @see self::_prepareThemeCustomizations()
+     * @since 2.0.0
      */
     protected $_assignedTheme;
 
@@ -38,6 +43,7 @@ class Customization
      *
      * @var array
      * @see self::_prepareThemeCustomizations()
+     * @since 2.0.0
      */
     protected $_unassignedTheme;
 
@@ -45,6 +51,7 @@ class Customization
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -61,6 +68,7 @@ class Customization
      *
      * @see self::_prepareThemeCustomizations()
      * @return array
+     * @since 2.0.0
      */
     public function getAssignedThemeCustomizations()
     {
@@ -75,6 +83,7 @@ class Customization
      *
      * @see self::_prepareThemeCustomizations()
      * @return array
+     * @since 2.0.0
      */
     public function getUnassignedThemeCustomizations()
     {
@@ -88,6 +97,7 @@ class Customization
      * Return stores grouped by assigned themes
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStoresByThemes()
     {
@@ -110,6 +120,7 @@ class Customization
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param null|\Magento\Store\Model\Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function isThemeAssignedToStore($theme, $store = null)
     {
@@ -124,6 +135,7 @@ class Customization
      * Check if there are any themes assigned
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasThemeAssigned()
     {
@@ -136,6 +148,7 @@ class Customization
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param \Magento\Store\Model\Store $store
      * @return bool
+     * @since 2.0.0
      */
     protected function _isThemeAssignedToSpecificStore($theme, $store)
     {
@@ -147,6 +160,7 @@ class Customization
      *
      * @param \Magento\Store\Model\Store $store
      * @return int
+     * @since 2.0.0
      */
     protected function _getConfigurationThemeId($store)
     {
@@ -164,6 +178,7 @@ class Customization
      * It can be set to website or as default theme and be used by store-view via config fallback mechanism.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareThemeCustomizations()
     {

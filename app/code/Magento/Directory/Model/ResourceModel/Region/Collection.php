@@ -16,6 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -23,6 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Locale region name table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_regionNameTable;
 
@@ -30,16 +32,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Country table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_countryTable;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var AllowedCountries
+     * @since 2.2.0
      */
     private $allowedCountriesReader;
 
@@ -51,6 +56,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -70,6 +76,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define main, country, locale region name tables
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -86,6 +93,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize select object
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -106,7 +114,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return Allowed Countries reader
      *
      * @return \Magento\Directory\Model\AllowedCountries
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getAllowedCountriesReader()
     {
@@ -123,6 +132,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
+     * @since 2.2.0
      */
     public function addAllowedCountriesFilter($store = null)
     {
@@ -141,6 +151,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $countryId
      * @return $this
+     * @since 2.0.0
      */
     public function addCountryFilter($countryId)
     {
@@ -159,6 +170,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $countryCode
      * @return $this
+     * @since 2.0.0
      */
     public function addCountryCodeFilter($countryCode)
     {
@@ -178,6 +190,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $regionCode
      * @return $this
+     * @since 2.0.0
      */
     public function addRegionCodeFilter($regionCode)
     {
@@ -196,6 +209,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $regionName
      * @return $this
+     * @since 2.0.0
      */
     public function addRegionNameFilter($regionName)
     {
@@ -214,6 +228,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|array $region
      * @return $this
+     * @since 2.0.0
      */
     public function addRegionCodeOrNameFilter($region)
     {
@@ -231,6 +246,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Convert collection items to select options array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -9,6 +9,7 @@ namespace Magento\Bundle\Api\Data;
 /**
  * Interface BundleOptionInterface
  * @api
+ * @since 2.0.0
  */
 interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -16,6 +17,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get bundle option id.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getOptionId();
 
@@ -24,6 +26,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $optionId
      * @return int
+     * @since 2.0.0
      */
     public function setOptionId($optionId);
 
@@ -31,6 +34,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get bundle option quantity.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getOptionQty();
 
@@ -39,6 +43,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $optionQty
      * @return int
+     * @since 2.0.0
      */
     public function setOptionQty($optionQty);
 
@@ -46,6 +51,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get bundle option selection ids.
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getOptionSelections();
 
@@ -54,6 +60,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int[] $optionSelections
      * @return int[]
+     * @since 2.0.0
      */
     public function setOptionSelections(array $optionSelections);
 
@@ -61,6 +68,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Bundle\Api\Data\BundleOptionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -69,6 +77,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Bundle\Api\Data\BundleOptionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Bundle\Api\Data\BundleOptionExtensionInterface $extensionAttributes

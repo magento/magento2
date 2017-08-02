@@ -6,15 +6,22 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Management
+ *
+ * @since 2.0.0
+ */
 class Management implements \Magento\Catalog\Api\ProductAttributeManagementInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeManagementInterface
+     * @since 2.0.0
      */
     protected $eavAttributeManagement;
 
     /**
      * @param \Magento\Eav\Api\AttributeManagementInterface $eavAttributeManagement
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeManagementInterface $eavAttributeManagement
@@ -24,6 +31,7 @@ class Management implements \Magento\Catalog\Api\ProductAttributeManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function assign($attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
     {
@@ -38,6 +46,7 @@ class Management implements \Magento\Catalog\Api\ProductAttributeManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function unassign($attributeSetId, $attributeCode)
     {
@@ -46,6 +55,7 @@ class Management implements \Magento\Catalog\Api\ProductAttributeManagementInter
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAttributes($attributeSetId)
     {

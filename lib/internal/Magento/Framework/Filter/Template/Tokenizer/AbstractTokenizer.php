@@ -7,6 +7,7 @@ namespace Magento\Framework\Filter\Template\Tokenizer;
 
 /**
  * Template constructions tokenizer
+ * @since 2.0.0
  */
 abstract class AbstractTokenizer
 {
@@ -14,6 +15,7 @@ abstract class AbstractTokenizer
      * Current index in string
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_currentIndex;
 
@@ -21,6 +23,7 @@ abstract class AbstractTokenizer
      * String for tokenize
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_string;
 
@@ -30,6 +33,7 @@ abstract class AbstractTokenizer
      * If index out of bounds returns false
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function next()
     {
@@ -47,6 +51,7 @@ abstract class AbstractTokenizer
      * If index out of bounds returns false
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function prev()
     {
@@ -65,6 +70,7 @@ abstract class AbstractTokenizer
      *
      * @param int $distance number of characters to backtrack
      * @return bool
+     * @since 2.0.0
      */
     public function back($distance)
     {
@@ -80,6 +86,7 @@ abstract class AbstractTokenizer
      * Return current char
      *
      * @return string
+     * @since 2.0.0
      */
     public function char()
     {
@@ -91,6 +98,7 @@ abstract class AbstractTokenizer
      *
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     public function setString($value)
     {
@@ -102,6 +110,7 @@ abstract class AbstractTokenizer
      * Move char index to begin of string
      *
      * @return void
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -112,6 +121,7 @@ abstract class AbstractTokenizer
      * Return true if current char is white-space
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isWhiteSpace()
     {
@@ -122,6 +132,7 @@ abstract class AbstractTokenizer
      * Tokenize string
      *
      * @return array
+     * @since 2.0.0
      */
     abstract public function tokenize();
 }

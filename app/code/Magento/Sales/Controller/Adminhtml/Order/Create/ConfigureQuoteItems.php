@@ -5,12 +5,18 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureQuoteItems
+ *
+ * @since 2.0.0
+ */
 class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Ajax handler to response configuration fieldset of composite product in quote items
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

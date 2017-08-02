@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class Generator
  * @package Magento\Setup\Module\Di\Code
+ * @since 2.0.0
  */
 class Generator extends FrameworkGenerator
 {
@@ -21,6 +22,7 @@ class Generator extends FrameworkGenerator
      * List of class methods
      *
      * @var array
+     * @since 2.0.0
      */
     private $classMethods = [];
 
@@ -29,6 +31,7 @@ class Generator extends FrameworkGenerator
      * @param FrameworkGenerator\Io $ioObject
      * @param array $generatedEntities
      * @param DefinedClasses $definedClasses
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManagerInterface,
@@ -47,6 +50,7 @@ class Generator extends FrameworkGenerator
      * @param string $entityName
      * @param string $className
      * @return \Magento\Framework\Code\Generator\EntityAbstract
+     * @since 2.0.0
      */
     protected function createGeneratorInstance($generatorClass, $entityName, $className)
     {
@@ -61,6 +65,7 @@ class Generator extends FrameworkGenerator
      * @param array $classesToGenerate
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     public function generateList($classesToGenerate)
     {
@@ -76,6 +81,7 @@ class Generator extends FrameworkGenerator
      *
      * @param array $methods
      * @return void
+     * @since 2.0.0
      */
     private function setClassMethods($methods)
     {
@@ -85,6 +91,7 @@ class Generator extends FrameworkGenerator
     /**
      * Clear class methods
      * @return void
+     * @since 2.0.0
      */
     private function clearClassMethods()
     {

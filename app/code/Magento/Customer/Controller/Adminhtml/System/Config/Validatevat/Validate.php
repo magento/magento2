@@ -7,16 +7,23 @@ namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat\Validate
+ *
+ * @since 2.0.0
+ */
 class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**
      * @var JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param JsonFactory $resultJsonFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -30,6 +37,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Vali
      * Check whether vat is valid
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -14,12 +14,14 @@ use Magento\Framework\App\ResponseInterface;
  * and be able to set it to the HTTP response
  *
  * @api
+ * @since 2.0.0
  */
 interface ResultInterface
 {
     /**
      * @param int $httpCode
      * @return $this
+     * @since 2.0.0
      */
     public function setHttpResponseCode($httpCode);
 
@@ -33,6 +35,7 @@ interface ResultInterface
      * @param string $value
      * @param boolean $replace
      * @return $this
+     * @since 2.0.0
      */
     public function setHeader($name, $value, $replace = false);
 
@@ -41,6 +44,7 @@ interface ResultInterface
      *
      * @param ResponseInterface $response
      * @return $this
+     * @since 2.0.0
      */
     public function renderResult(ResponseInterface $response);
 }

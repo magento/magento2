@@ -18,46 +18,55 @@ namespace Magento\Eav\Model\Entity;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var Attribute\Set
+     * @since 2.0.0
      */
     protected $attributeSetEntity;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $resourceHelper;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
+     * @since 2.0.0
      */
     protected $universalFactory;
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface
+     * @since 2.0.0
      */
     protected $transactionManager;
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor
+     * @since 2.0.0
      */
     protected $objectRelationProcessor;
 
@@ -70,6 +79,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor $objectRelationProcessor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -93,6 +103,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     public function getEavConfig()
     {
@@ -101,6 +112,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     public function getResource()
     {
@@ -109,6 +121,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return Attribute\Set
+     * @since 2.0.0
      */
     public function getAttributeSetEntity()
     {
@@ -117,6 +130,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     public function getLocaleFormat()
     {
@@ -125,6 +139,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Eav\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     public function getResourceHelper()
     {
@@ -133,6 +148,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Validator\UniversalFactory
+     * @since 2.0.0
      */
     public function getUniversalFactory()
     {
@@ -141,6 +157,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor
+     * @since 2.0.0
      */
     public function getObjectRelationProcessor()
     {
@@ -149,6 +166,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface
+     * @since 2.0.0
      */
     public function getTransactionManager()
     {

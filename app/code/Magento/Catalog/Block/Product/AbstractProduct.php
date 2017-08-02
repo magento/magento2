@@ -8,14 +8,16 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Class AbstractProduct
  * @api
- * @deprecated
+ * @deprecated 2.2.0
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AbstractProduct extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_priceBlock = [];
 
@@ -23,6 +25,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Flag which allow/disallow to use link for as low as price
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_useLinkForAsLowAs = true;
 
@@ -30,6 +33,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Default product amount per row
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_defaultColumnCount = 3;
 
@@ -37,6 +41,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Product amount per row depending on custom page layout of category
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_columnCountLayoutDepend = [];
 
@@ -44,6 +49,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -51,6 +57,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxData;
 
@@ -58,52 +65,62 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     protected $_catalogConfig;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $_mathRandom;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
+     * @since 2.0.0
      */
     protected $_cartHelper;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected $_wishlistHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
+     * @since 2.0.0
      */
     protected $_compareProduct;
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $_imageHelper;
 
     /**
      * @var ReviewRendererInterface
+     * @since 2.0.0
      */
     protected $reviewRenderer;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var ImageBuilder
+     * @since 2.2.0
      */
     protected $imageBuilder;
 
     /**
      * @param Context $context
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Block\Product\Context $context, array $data = [])
     {
@@ -128,6 +145,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return string
+     * @since 2.0.0
      */
     public function getAddToCartUrl($product, $additional = [])
     {
@@ -154,6 +172,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
      * @return string
+     * @since 2.0.0
      */
     public function getSubmitUrl($product, $additional = [])
     {
@@ -173,6 +192,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getAddToWishlistParams($product)
     {
@@ -183,6 +203,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Retrieve Add Product to Compare Products List URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAddToCompareUrl()
     {
@@ -194,6 +215,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return int|null
+     * @since 2.0.0
      */
     public function getMinimalQty($product)
     {
@@ -209,6 +231,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
+     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
@@ -222,6 +245,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Retrieve currently viewed product object
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -238,6 +262,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @since 2.0.0
      */
     protected function _addProductAttributesAndPrices(
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
@@ -256,6 +281,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional the route params
      * @return string
+     * @since 2.0.0
      */
     public function getProductUrl($product, $additional = [])
     {
@@ -274,6 +300,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @since 2.0.0
      */
     public function hasProductUrl($product)
     {
@@ -293,6 +320,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Retrieve product amount per row
      *
      * @return int
+     * @since 2.0.0
      */
     public function getColumnCount()
     {
@@ -313,6 +341,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param string $pageLayout
      * @param int $columnCount
      * @return \Magento\Catalog\Block\Product\ListProduct
+     * @since 2.0.0
      */
     public function addColumnCountLayoutDepend($pageLayout, $columnCount)
     {
@@ -325,6 +354,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param string $pageLayout
      * @return \Magento\Catalog\Block\Product\ListProduct
+     * @since 2.0.0
      */
     public function removeColumnCountLayoutDepend($pageLayout)
     {
@@ -340,6 +370,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param string $pageLayout
      * @return int|boolean
+     * @since 2.0.0
      */
     public function getColumnCountLayoutDepend($pageLayout)
     {
@@ -354,6 +385,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Retrieve current page layout
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPageLayout()
     {
@@ -367,6 +399,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCanShowProductPrice($product)
     {
@@ -377,6 +410,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Get if it is necessary to show product stock status
      *
      * @return bool
+     * @since 2.0.0
      */
     public function displayProductStockStatus()
     {
@@ -391,6 +425,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param int $length
      * @param string|null $chars
      * @return string
+     * @since 2.0.0
      */
     public function getRandomString($length, $chars = null)
     {
@@ -402,6 +437,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getProductPrice(\Magento\Catalog\Model\Product $product)
     {
@@ -420,6 +456,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param string $renderZone
      * @param array $arguments
      * @return string
+     * @since 2.0.0
      */
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,
@@ -445,6 +482,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Whether redirect to cart enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isRedirectToCartEnabled()
     {
@@ -459,6 +497,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return mixed
+     * @since 2.0.0
      */
     public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
     {
@@ -473,6 +512,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     /**
      * @param null $type
      * @return bool|\Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     public function getDetailsRenderer($type = null)
     {
@@ -488,6 +528,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Framework\View\Element\RendererList
+     * @since 2.0.0
      */
     protected function getDetailsRendererList()
     {
@@ -505,6 +546,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param string $imageId
      * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
+     * @since 2.0.0
      */
     public function getImage($product, $imageId, $attributes = [])
     {

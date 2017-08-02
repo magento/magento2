@@ -9,6 +9,7 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeInterface
  * @api
+ * @since 2.0.0
  */
 interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -50,6 +51,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Retrieve id of the attribute.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getAttributeId();
 
@@ -58,6 +60,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param int $attributeId
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeId($attributeId);
 
@@ -65,6 +68,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Retrieve code of the attribute.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeCode();
 
@@ -73,6 +77,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $attributeCode
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode);
 
@@ -80,6 +85,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Frontend HTML for input element.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrontendInput();
 
@@ -88,6 +94,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $frontendInput
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendInput($frontendInput);
 
@@ -95,6 +102,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Retrieve entity type id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTypeId();
 
@@ -103,6 +111,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $entityTypeId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityTypeId($entityTypeId);
 
@@ -111,6 +120,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsRequired();
 
@@ -119,6 +129,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param bool $isRequired
      * @return $this
+     * @since 2.0.0
      */
     public function setIsRequired($isRequired);
 
@@ -126,6 +137,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Return options of the attribute (key => value pairs for select)
      *
      * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]|null
+     * @since 2.0.0
      */
     public function getOptions();
 
@@ -134,6 +146,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null);
 
@@ -141,6 +154,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Whether current attribute has been defined by a user.
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getIsUserDefined();
 
@@ -149,6 +163,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param bool $isUserDefined
      * @return $this
+     * @since 2.0.0
      */
     public function setIsUserDefined($isUserDefined);
 
@@ -156,6 +171,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Return frontend label for default store
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDefaultFrontendLabel();
 
@@ -164,6 +180,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $defaultFrontendLabel
      * @return $this
+     * @since 2.0.0
      */
     public function setDefaultFrontendLabel($defaultFrontendLabel);
 
@@ -171,6 +188,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Return frontend label for each store
      *
      * @return \Magento\Eav\Api\Data\AttributeFrontendLabelInterface[]
+     * @since 2.0.0
      */
     public function getFrontendLabels();
 
@@ -179,6 +197,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param \Magento\Eav\Api\Data\AttributeFrontendLabelInterface[] $frontendLabels
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendLabels(array $frontendLabels = null);
 
@@ -186,6 +205,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Get the note attribute for the element.
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getNote();
 
@@ -194,6 +214,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $note
      * @return $this
+     * @since 2.0.0
      */
     public function setNote($note);
 
@@ -201,6 +222,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Get backend type.
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getBackendType();
 
@@ -209,6 +231,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $backendType
      * @return $this
+     * @since 2.0.0
      */
     public function setBackendType($backendType);
 
@@ -216,6 +239,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Get backend model
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getBackendModel();
 
@@ -224,6 +248,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $backendModel
      * @return $this
+     * @since 2.0.0
      */
     public function setBackendModel($backendModel);
 
@@ -231,6 +256,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Get source model
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSourceModel();
 
@@ -239,6 +265,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $sourceModel
      * @return $this
+     * @since 2.0.0
      */
     public function setSourceModel($sourceModel);
 
@@ -246,6 +273,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Get default value for the element.
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getDefaultValue();
 
@@ -254,6 +282,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $defaultValue
      * @return $this
+     * @since 2.0.0
      */
     public function setDefaultValue($defaultValue);
 
@@ -261,6 +290,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Whether this is a unique attribute
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getIsUnique();
 
@@ -269,6 +299,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $isUnique
      * @return $this
+     * @since 2.0.0
      */
     public function setIsUnique($isUnique);
 
@@ -276,6 +307,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Retrieve frontend class of attribute
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getFrontendClass();
 
@@ -284,6 +316,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param string $frontendClass
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendClass($frontendClass);
 
@@ -291,6 +324,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      * Retrieve validation rules.
      *
      * @return \Magento\Eav\Api\Data\AttributeValidationRuleInterface[]|null
+     * @since 2.0.0
      */
     public function getValidationRules();
 
@@ -299,11 +333,13 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
      *
      * @param \Magento\Eav\Api\Data\AttributeValidationRuleInterface[] $validationRules
      * @return $this
+     * @since 2.0.0
      */
     public function setValidationRules(array $validationRules = null);
 
     /**
      * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 }

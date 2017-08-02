@@ -7,6 +7,7 @@ namespace Magento\Framework\View;
 
 /**
  * Factory class for Layout
+ * @since 2.0.0
  */
 class LayoutFactory
 {
@@ -14,6 +15,7 @@ class LayoutFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -21,6 +23,7 @@ class LayoutFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName;
 
@@ -29,6 +32,7 @@ class LayoutFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -44,6 +48,7 @@ class LayoutFactory
      * @param array $data
      * @return LayoutInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

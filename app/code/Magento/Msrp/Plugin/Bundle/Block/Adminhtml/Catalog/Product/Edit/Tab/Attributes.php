@@ -7,12 +7,18 @@ namespace Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 use Magento\Msrp\Model\Product\Attribute\Source\Type\Price;
 
+/**
+ * Class \Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes
+ *
+ * @since 2.0.0
+ */
 class Attributes
 {
     /**
      * @param \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes $subject
      * @param \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes $result
      * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes
+     * @since 2.0.0
      */
     public function afterSetForm(
         \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes $subject,

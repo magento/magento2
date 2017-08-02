@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CartInterface
  * @api
+ * @since 2.0.0
  */
 interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -64,6 +65,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the cart/quote ID.
      *
      * @return int Cart/quote ID.
+     * @since 2.0.0
      */
     public function getId();
 
@@ -72,6 +74,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id);
 
@@ -79,6 +82,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the cart creation date and time.
      *
      * @return string|null Cart creation date and time. Otherwise, null.
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -87,6 +91,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $createdAt
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -94,6 +99,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the cart last update date and time.
      *
      * @return string|null Cart last update date and time. Otherwise, null.
+     * @since 2.0.0
      */
     public function getUpdatedAt();
 
@@ -102,6 +108,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $updatedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt);
 
@@ -109,6 +116,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the cart conversion date and time.
      *
      * @return string|null Cart conversion date and time. Otherwise, null.
+     * @since 2.0.0
      */
     public function getConvertedAt();
 
@@ -117,6 +125,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $convertedAt
      * @return $this
+     * @since 2.0.0
      */
     public function setConvertedAt($convertedAt);
 
@@ -124,6 +133,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Determines whether the cart is still active.
      *
      * @return bool|null Active status flag value. Otherwise, null.
+     * @since 2.0.0
      */
     public function getIsActive();
 
@@ -132,6 +142,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $isActive
      * @return $this
+     * @since 2.0.0
      */
     public function setIsActive($isActive);
 
@@ -141,6 +152,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * A virtual cart contains virtual items.
      *
      * @return bool|null Virtual flag value. Otherwise, null.
+     * @since 2.0.0
      */
     public function getIsVirtual();
 
@@ -148,6 +160,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Lists items in the cart.
      *
      * @return \Magento\Quote\Api\Data\CartItemInterface[]|null Array of items. Otherwise, null.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -156,6 +169,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items = null);
 
@@ -163,6 +177,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the number of different items or products in the cart.
      *
      * @return int|null Number of different items or products in the cart. Otherwise, null.
+     * @since 2.0.0
      */
     public function getItemsCount();
 
@@ -171,6 +186,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $itemsCount
      * @return $this
+     * @since 2.0.0
      */
     public function setItemsCount($itemsCount);
 
@@ -178,6 +194,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the total quantity of all cart items.
      *
      * @return float|null Total quantity of all cart items. Otherwise, null.
+     * @since 2.0.0
      */
     public function getItemsQty();
 
@@ -186,6 +203,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $itemQty
      * @return $this
+     * @since 2.0.0
      */
     public function setItemsQty($itemQty);
 
@@ -193,6 +211,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns information about the customer who is assigned to the cart.
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface Information about the customer who is assigned to the cart.
+     * @since 2.0.0
      */
     public function getCustomer();
 
@@ -201,6 +220,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer = null);
 
@@ -208,6 +228,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the cart billing address.
      *
      * @return \Magento\Quote\Api\Data\AddressInterface|null Cart billing address. Otherwise, null.
+     * @since 2.0.0
      */
     public function getBillingAddress();
 
@@ -216,6 +237,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $billingAddress = null);
 
@@ -223,6 +245,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the reserved order ID for the cart.
      *
      * @return int|null Reserved order ID. Otherwise, null.
+     * @since 2.0.0
      */
     public function getReservedOrderId();
 
@@ -231,6 +254,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $reservedOrderId
      * @return $this
+     * @since 2.0.0
      */
     public function setReservedOrderId($reservedOrderId);
 
@@ -238,6 +262,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns the original order ID for the cart.
      *
      * @return int|null Original order ID. Otherwise, null.
+     * @since 2.0.0
      */
     public function getOrigOrderId();
 
@@ -246,6 +271,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $origOrderId
      * @return $this
+     * @since 2.0.0
      */
     public function setOrigOrderId($origOrderId);
 
@@ -253,6 +279,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Returns information about quote currency, such as code, exchange rate, and so on.
      *
      * @return \Magento\Quote\Api\Data\CurrencyInterface|null Quote currency information. Otherwise, null.
+     * @since 2.0.0
      */
     public function getCurrency();
 
@@ -261,6 +288,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Quote\Api\Data\CurrencyInterface $currency
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrency(\Magento\Quote\Api\Data\CurrencyInterface $currency = null);
 
@@ -268,6 +296,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * True for guest customers, false for logged in customers
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getCustomerIsGuest();
 
@@ -276,6 +305,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $customerIsGuest
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerIsGuest($customerIsGuest);
 
@@ -283,6 +313,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Customer notice text
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getCustomerNote();
 
@@ -291,6 +322,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerNote
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerNote($customerNote);
 
@@ -298,6 +330,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Send customer notification flag
      *
      * @return bool|null
+     * @since 2.0.0
      */
     public function getCustomerNoteNotify();
 
@@ -306,6 +339,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param bool $customerNoteNotify
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerNoteNotify($customerNoteNotify);
 
@@ -313,6 +347,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get customer tax class ID.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerTaxClassId();
 
@@ -321,6 +356,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $customerTaxClassId
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerTaxClassId($customerTaxClassId);
 
@@ -328,6 +364,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get store identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId();
 
@@ -336,6 +373,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId);
 
@@ -343,6 +381,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\CartExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -351,6 +390,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Quote\Api\Data\CartExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CartExtensionInterface $extensionAttributes);
 }

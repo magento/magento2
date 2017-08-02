@@ -12,6 +12,7 @@ use Magento\Framework\UrlInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Columns extends AbstractComponent
 {
@@ -21,6 +22,7 @@ class Columns extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

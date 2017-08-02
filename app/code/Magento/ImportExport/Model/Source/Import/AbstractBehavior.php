@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\Source\Import;
  * Source import behavior model
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterface
 {
@@ -17,6 +18,7 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
      *
      * @abstract
      * @return array
+     * @since 2.0.0
      */
     abstract public function toArray();
 
@@ -24,6 +26,7 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
      * Prepare and return array of option values
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -42,6 +45,7 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
      *
      * @abstract
      * @return string
+     * @since 2.0.0
      */
     abstract public function getCode();
 
@@ -51,6 +55,7 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
      * @param string $entityCode
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getNotes($entityCode)
     {

@@ -23,11 +23,13 @@ namespace Magento\Review\Model\Rating;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -36,6 +38,7 @@ class Option extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function addVote()
     {
@@ -46,6 +49,7 @@ class Option extends \Magento\Framework\Model\AbstractModel
     /**
      * @param mixed $id
      * @return $this
+     * @since 2.0.0
      */
     public function setId($id)
     {

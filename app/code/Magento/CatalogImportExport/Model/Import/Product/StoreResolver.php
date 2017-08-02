@@ -5,12 +5,18 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
+ *
+ * @since 2.0.0
+ */
 class StoreResolver
 {
     /**
      * Store manager instance.
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -18,6 +24,7 @@ class StoreResolver
      * Website code-to-ID
      *
      * @var array
+     * @since 2.0.0
      */
     protected $websiteCodeToId = [];
 
@@ -25,6 +32,7 @@ class StoreResolver
      * Website code to store code-to-ID pairs which it consists.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $websiteCodeToStoreIds = [];
 
@@ -32,6 +40,7 @@ class StoreResolver
      * All stores code-ID pairs.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $storeCodeToId = [];
 
@@ -39,11 +48,13 @@ class StoreResolver
      * Store ID to its website stores IDs.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $storeIdToWebsiteStoreIds = [];
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
@@ -54,6 +65,7 @@ class StoreResolver
      * Initialize website values.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initWebsites()
     {
@@ -68,6 +80,7 @@ class StoreResolver
     /**
      * @param null|string $code
      * @return array|string|null
+     * @since 2.0.0
      */
     public function getWebsiteCodeToId($code = null)
     {
@@ -83,6 +96,7 @@ class StoreResolver
     /**
      * @param null|string $code
      * @return array|string|null
+     * @since 2.0.0
      */
     public function getWebsiteCodeToStoreIds($code = null)
     {
@@ -99,6 +113,7 @@ class StoreResolver
      * Initialize stores hash.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initStores()
     {
@@ -112,6 +127,7 @@ class StoreResolver
     /**
      * @param null|string $code
      * @return array|string|null
+     * @since 2.0.0
      */
     public function getStoreCodeToId($code = null)
     {
@@ -127,6 +143,7 @@ class StoreResolver
     /**
      * @param null|string $code
      * @return array|string|null
+     * @since 2.0.0
      */
     public function getStoreIdToWebsiteStoreIds($code = null)
     {

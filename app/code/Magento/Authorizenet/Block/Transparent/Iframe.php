@@ -9,16 +9,19 @@ use Magento\Payment\Block\Transparent\Iframe as TransparentIframe;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Iframe extends TransparentIframe
 {
     /**
      * @var \Magento\Authorizenet\Helper\DataFactory
+     * @since 2.0.0
      */
     protected $dataFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     private $messageManager;
 
@@ -30,6 +33,7 @@ class Iframe extends TransparentIframe
      * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -48,6 +52,7 @@ class Iframe extends TransparentIframe
      *
      * @param string $area
      * @return \Magento\Authorizenet\Helper\Backend\Data|\Magento\Authorizenet\Helper\Data
+     * @since 2.0.0
      */
     public function getHelper($area)
     {
@@ -56,6 +61,7 @@ class Iframe extends TransparentIframe
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -67,6 +73,7 @@ class Iframe extends TransparentIframe
      * Add success message
      *
      * @return void
+     * @since 2.0.0
      */
     private function addSuccessMessage()
     {

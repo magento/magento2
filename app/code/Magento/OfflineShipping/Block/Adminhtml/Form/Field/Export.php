@@ -9,11 +9,13 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
  * Export CSV button for shipping table rates
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Export extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_backendUrl;
 
@@ -23,6 +25,7 @@ class Export extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Backend\Helper\Data $helper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -37,6 +40,7 @@ class Export extends \Magento\Framework\Data\Form\Element\AbstractElement
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {

@@ -9,6 +9,7 @@ namespace Magento\Store\Model\ResourceModel;
  * Store group resource model
  *
  * @api
+ * @since 2.0.0
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +17,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -41,6 +44,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
+     * @since 2.2.0
      */
     protected function _initUniqueFields()
     {
@@ -54,6 +58,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $websiteId
      * @param int $groupId
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateWebsiteDefaultGroup($websiteId, $groupId)
     {
@@ -78,6 +83,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
+     * @since 2.0.0
      */
     protected function _changeWebsite(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -108,6 +114,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $groupId
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateStoreWebsite($groupId, $websiteId)
     {
@@ -123,6 +130,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $groupId
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     protected function _saveDefaultStore($groupId, $storeId)
     {
@@ -140,6 +148,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $countAdmin
      * @return int
+     * @since 2.0.0
      */
     public function countAll($countAdmin = false)
     {

@@ -7,10 +7,16 @@
  */
 namespace Magento\Catalog\Model\Attribute;
 
+/**
+ * Class \Magento\Catalog\Model\Attribute\LockValidatorComposite
+ *
+ * @since 2.0.0
+ */
 class LockValidatorComposite implements LockValidatorInterface
 {
     /**
      * @var LockValidatorInterface[]
+     * @since 2.0.0
      */
     protected $validators = [];
 
@@ -18,6 +24,7 @@ class LockValidatorComposite implements LockValidatorInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $validators
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $validators = [])
     {
@@ -37,6 +44,7 @@ class LockValidatorComposite implements LockValidatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {

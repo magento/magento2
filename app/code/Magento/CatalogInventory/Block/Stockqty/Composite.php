@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Product stock qty block for abstract composite product
+ * @since 2.0.0
  */
 abstract class Composite extends DefaultStockqty
 {
@@ -17,6 +18,7 @@ abstract class Composite extends DefaultStockqty
      * Child products cache
      *
      * @var Product[]
+     * @since 2.0.0
      */
     private $_childProducts;
 
@@ -24,6 +26,7 @@ abstract class Composite extends DefaultStockqty
      * Retrieve child products
      *
      * @return Product[]
+     * @since 2.0.0
      */
     abstract protected function _getChildProducts();
 
@@ -31,6 +34,7 @@ abstract class Composite extends DefaultStockqty
      * Retrieve child products (using cache)
      *
      * @return Product[]
+     * @since 2.0.0
      */
     public function getChildProducts()
     {
@@ -44,6 +48,7 @@ abstract class Composite extends DefaultStockqty
      * Retrieve id of details table placeholder in template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDetailsPlaceholderId()
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductAttributeTypeInterface extends ExtensibleDataInterface
 {
@@ -21,6 +22,7 @@ interface ProductAttributeTypeInterface extends ExtensibleDataInterface
      * Get value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValue();
 
@@ -29,6 +31,7 @@ interface ProductAttributeTypeInterface extends ExtensibleDataInterface
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value);
 
@@ -36,6 +39,7 @@ interface ProductAttributeTypeInterface extends ExtensibleDataInterface
      * Get type label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel();
 
@@ -44,6 +48,7 @@ interface ProductAttributeTypeInterface extends ExtensibleDataInterface
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label);
 
@@ -51,6 +56,7 @@ interface ProductAttributeTypeInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -59,6 +65,7 @@ interface ProductAttributeTypeInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductAttributeTypeExtensionInterface $extensionAttributes

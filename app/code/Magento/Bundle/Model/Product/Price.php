@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -30,6 +31,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Flag which indicates - is min/max prices have been calculated by index
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isPricesCalculatedByIndex;
 
@@ -37,6 +39,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -44,6 +47,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -63,6 +67,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory,
@@ -100,6 +105,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsPricesCalculatedByIndex()
     {
@@ -111,6 +117,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return float
+     * @since 2.0.0
      */
     public function getPrice($product)
     {
@@ -127,6 +134,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Catalog\Model\Product $product
      * @param null|float $qty
      * @return float
+     * @since 2.0.0
      */
     public function getTotalBundleItemsPrice($product, $qty = null)
     {
@@ -163,6 +171,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @since 2.0.0
      */
     protected function getBundleSelectionIds(\Magento\Catalog\Model\Product $product)
     {
@@ -182,6 +191,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   float                     $qty
      * @param   \Magento\Catalog\Model\Product $product
      * @return  float
+     * @since 2.0.0
      */
     public function getFinalPrice($qty, $product)
     {
@@ -210,6 +220,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Catalog\Model\Product $childProduct
      * @param float                      $childProductQty
      * @return float
+     * @since 2.0.0
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
     {
@@ -227,6 +238,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getTotalPrices($product, $which = null, $includeTax = null, $takeTierPrice = true)
     {
@@ -381,6 +393,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
+     * @since 2.0.0
      */
     public function getOptions($product)
     {
@@ -406,6 +419,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @return float
      *
      * @see \Magento\Bundle\Model\Product\Price::getSelectionFinalTotalPrice()
+     * @since 2.0.0
      */
     public function getSelectionPrice($bundleProduct, $selectionProduct, $selectionQty = null, $multiplyQty = true)
     {
@@ -419,6 +433,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Catalog\Model\Product $selectionProduct
      * @param float                    $qty
      * @return float
+     * @since 2.0.0
      */
     public function getSelectionPreFinalPrice($bundleProduct, $selectionProduct, $qty = null)
     {
@@ -436,6 +451,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param  bool                       $multiplyQty
      * @param  bool                       $takeTierPrice
      * @return float
+     * @since 2.0.0
      */
     public function getSelectionFinalTotalPrice(
         $bundleProduct,
@@ -488,6 +504,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   float                    $qty
      * @param   float                    $finalPrice
      * @return  float
+     * @since 2.0.0
      */
     protected function _applyTierPrice($product, $qty, $finalPrice)
     {
@@ -513,6 +530,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @return  float|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getTierPrice($qty, $product)
     {
@@ -610,6 +628,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param string $specialPriceTo
      * @param mixed  $store
      * @return float
+     * @since 2.0.0
      */
     public function calculateSpecialPrice(
         $finalPrice,
@@ -635,6 +654,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param float|string $price
      * @param int          $bundleQty
      * @return float
+     * @since 2.0.0
      */
     public function getLowestPrice($bundleProduct, $price, $bundleQty = 1)
     {

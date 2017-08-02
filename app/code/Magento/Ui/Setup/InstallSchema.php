@@ -12,6 +12,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
@@ -23,6 +24,7 @@ class InstallSchema implements InstallSchemaInterface
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

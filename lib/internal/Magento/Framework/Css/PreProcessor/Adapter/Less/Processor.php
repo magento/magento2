@@ -16,26 +16,31 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class Processor
+ * @since 2.0.0
  */
 class Processor implements ContentProcessorInterface
 {
     /**
      * @var LoggerInterface
+     * @since 2.0.0
      */
     private $logger;
 
     /**
      * @var State
+     * @since 2.0.0
      */
     private $appState;
 
     /**
      * @var Source
+     * @since 2.0.0
      */
     private $assetSource;
 
     /**
      * @var Temporary
+     * @since 2.0.0
      */
     private $temporaryFile;
 
@@ -46,6 +51,7 @@ class Processor implements ContentProcessorInterface
      * @param State $appState
      * @param Source $assetSource
      * @param Temporary $temporaryFile
+     * @since 2.0.0
      */
     public function __construct(
         LoggerInterface $logger,
@@ -62,6 +68,7 @@ class Processor implements ContentProcessorInterface
     /**
      * @inheritdoc
      * @throws ContentProcessorException
+     * @since 2.0.0
      */
     public function processContent(File $asset)
     {

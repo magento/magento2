@@ -10,22 +10,26 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Interpreter that instantiates object by a class name
+ * @since 2.0.0
  */
 class DataObject implements InterpreterInterface
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var string|null
+     * @since 2.0.0
      */
     private $expectedClass;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string|null $expectedClass
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, $expectedClass = null)
     {
@@ -38,6 +42,7 @@ class DataObject implements InterpreterInterface
      * @return object
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

@@ -9,6 +9,7 @@ namespace Magento\Authorization\Setup;
  * Resource Setup Model
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class AuthorizationFactory
 {
@@ -16,6 +17,7 @@ class AuthorizationFactory
      * Role model factory
      *
      * @var \Magento\Authorization\Model\RoleFactory
+     * @since 2.0.0
      */
     protected $_roleCollectionFactory;
 
@@ -23,6 +25,7 @@ class AuthorizationFactory
      * Factory for rules model
      *
      * @var \Magento\Authorization\Model\RulesFactory
+     * @since 2.0.0
      */
     protected $_rulesCollectionFactory;
 
@@ -30,6 +33,7 @@ class AuthorizationFactory
      * Role model factory
      *
      * @var \Magento\Authorization\Model\RoleFactory
+     * @since 2.0.0
      */
     protected $_roleFactory;
 
@@ -37,6 +41,7 @@ class AuthorizationFactory
      * Rules model factory
      *
      * @var \Magento\Authorization\Model\RulesFactory
+     * @since 2.0.0
      */
     protected $_rulesFactory;
 
@@ -47,6 +52,7 @@ class AuthorizationFactory
      * @param \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $roleCollectionFactory,
@@ -64,6 +70,7 @@ class AuthorizationFactory
      * Creates role collection
      *
      * @return \Magento\Authorization\Model\ResourceModel\Role\Collection
+     * @since 2.0.0
      */
     public function createRoleCollection()
     {
@@ -74,6 +81,7 @@ class AuthorizationFactory
      * Creates rules collection
      *
      * @return \Magento\Authorization\Model\ResourceModel\Rules\Collection
+     * @since 2.0.0
      */
     public function createRulesCollection()
     {
@@ -84,6 +92,7 @@ class AuthorizationFactory
      * Creates role model
      *
      * @return \Magento\Authorization\Model\Role
+     * @since 2.0.0
      */
     public function createRole()
     {
@@ -94,6 +103,7 @@ class AuthorizationFactory
      * Creates rules model
      *
      * @return \Magento\Authorization\Model\Rules
+     * @since 2.0.0
      */
     public function createRules()
     {

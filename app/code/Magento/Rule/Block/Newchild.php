@@ -7,12 +7,18 @@ namespace Magento\Rule\Block;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Rule\Block\Newchild
+ *
+ * @since 2.0.0
+ */
 class Newchild extends \Magento\Framework\View\Element\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {

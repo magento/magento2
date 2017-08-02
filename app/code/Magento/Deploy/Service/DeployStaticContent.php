@@ -16,31 +16,37 @@ use Psr\Log\LoggerInterface;
  * Main service for static content deployment
  *
  * Aggregates services to deploy static files, static files bundles, translations and minified templates
+ * @since 2.2.0
  */
 class DeployStaticContent
 {
     /**
      * @var DeployStrategyFactory
+     * @since 2.2.0
      */
     private $deployStrategyFactory;
 
     /**
      * @var QueueFactory
+     * @since 2.2.0
      */
     private $queueFactory;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var StorageInterface
+     * @since 2.2.0
      */
     private $versionStorage;
 
@@ -52,6 +58,7 @@ class DeployStaticContent
      * @param StorageInterface $versionStorage
      * @param DeployStrategyFactory $deployStrategyFactory
      * @param QueueFactory $queueFactory
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -72,6 +79,7 @@ class DeployStaticContent
      *
      * @param array $options
      * @return void
+     * @since 2.2.0
      */
     public function deploy(array $options)
     {
@@ -135,6 +143,7 @@ class DeployStaticContent
     /**
      * @param array $options
      * @return int
+     * @since 2.2.0
      */
     private function getProcessesAmount(array $options)
     {
@@ -144,6 +153,7 @@ class DeployStaticContent
     /**
      * @param array $options
      * @return bool
+     * @since 2.2.0
      */
     private function isRefreshContentVersionOnly(array $options)
     {

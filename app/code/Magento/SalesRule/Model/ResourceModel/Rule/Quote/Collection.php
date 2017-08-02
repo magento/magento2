@@ -7,12 +7,18 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule\Quote;
 
+/**
+ * Class \Magento\SalesRule\Model\ResourceModel\Rule\Quote\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection extends \Magento\SalesRule\Model\ResourceModel\Rule\Collection
 {
     /**
      * Add websites for load
      *
      * @return $this
+     * @since 2.0.0
      */
     public function _initSelect()
     {

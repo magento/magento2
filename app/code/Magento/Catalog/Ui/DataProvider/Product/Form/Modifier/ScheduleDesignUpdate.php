@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * Class ScheduleDesignUpdateMetaProvider customizes Schedule Design Update panel
  *
  * @api
+ * @since 2.1.0
  */
 class ScheduleDesignUpdate extends AbstractModifier
 {
@@ -23,11 +24,13 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * @var ArrayManager
+     * @since 2.1.0
      */
     protected $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
+     * @since 2.1.0
      */
     public function __construct(ArrayManager $arrayManager)
     {
@@ -36,6 +39,7 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -45,6 +49,7 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function modifyData(array $data)
     {
@@ -56,6 +61,7 @@ class ScheduleDesignUpdate extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     protected function customizeDateRangeField(array $meta)
     {

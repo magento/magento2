@@ -14,6 +14,7 @@ use Magento\Customer\Model\Address;
 
 /**
  * Customer Observer Model
+ * @since 2.0.0
  */
 class BeforeAddressSaveObserver implements ObserverInterface
 {
@@ -24,17 +25,20 @@ class BeforeAddressSaveObserver implements ObserverInterface
 
     /**
      * @var HelperAddress
+     * @since 2.0.0
      */
     protected $_customerAddress;
 
     /**
      * @var Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(
         HelperAddress $customerAddress,
@@ -49,6 +53,7 @@ class BeforeAddressSaveObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

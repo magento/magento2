@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Message collection factory
+ * @since 2.0.0
  */
 class CollectionFactory
 {
@@ -16,11 +17,13 @@ class CollectionFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -32,6 +35,7 @@ class CollectionFactory
      *
      * @param array $data
      * @return Collection
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

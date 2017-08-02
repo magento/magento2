@@ -18,21 +18,25 @@ namespace Magento\Backend\Block\Widget;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Context extends \Magento\Backend\Block\Template\Context
 {
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
+     * @since 2.0.0
      */
     protected $buttonList;
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
+     * @since 2.0.0
      */
     protected $buttonToolbar;
 
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
@@ -71,6 +75,7 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param Button\ToolbarInterface $toolbar
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -147,6 +152,7 @@ class Context extends \Magento\Backend\Block\Template\Context
      * Get button list
      *
      * @return \Magento\Backend\Block\Widget\Button\ButtonList
+     * @since 2.0.0
      */
     public function getButtonList()
     {
@@ -157,6 +163,7 @@ class Context extends \Magento\Backend\Block\Template\Context
      * Get button toolbar
      *
      * @return \Magento\Backend\Block\Widget\Button\ToolbarInterface
+     * @since 2.0.0
      */
     public function getButtonToolbar()
     {

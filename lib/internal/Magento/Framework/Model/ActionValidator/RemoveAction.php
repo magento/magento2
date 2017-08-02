@@ -12,22 +12,26 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class RemoveAction
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $protectedModels;
 
     /**
      * @param \Magento\Framework\Registry $registry
      * @param array $protectedModels
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Registry $registry, array $protectedModels = [])
     {
@@ -40,6 +44,7 @@ class RemoveAction
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed(AbstractModel $model)
     {
@@ -58,6 +63,7 @@ class RemoveAction
      * Get clean model name without Interceptor and Proxy part and slashes
      * @param object $object
      * @return mixed
+     * @since 2.0.0
      */
     protected function getBaseClassName($object)
     {

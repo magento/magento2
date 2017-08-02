@@ -9,11 +9,13 @@ use Magento\Sales\Model\ResourceModel\Report\Bestsellers as BestsellersReport;
 
 /**
  * Sales Mysql resource helper model
+ * @since 2.0.0
  */
 class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $_reportsResourceHelper;
 
@@ -21,6 +23,7 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Reports\Model\ResourceModel\Helper $reportsResourceHelper
      * @param string $modulePrefix
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -39,6 +42,7 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
      * @param string $mainTable
      * @param string $aggregationTable
      * @return $this
+     * @since 2.0.0
      */
     public function getBestsellersReportUpdateRatingPos(
         $aggregation,

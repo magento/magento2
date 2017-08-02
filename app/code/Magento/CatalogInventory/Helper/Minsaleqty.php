@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * MinSaleQty value manipulation helper
+ * @since 2.0.0
  */
 class Minsaleqty
 {
@@ -20,26 +21,31 @@ class Minsaleqty
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
     /**
      * @var GroupManagementInterface
+     * @since 2.0.0
      */
     protected $groupManagement;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $minSaleQtyCache = [];
 
@@ -48,6 +54,7 @@ class Minsaleqty
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param GroupManagementInterface $groupManagement
      * @param Json|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -66,6 +73,7 @@ class Minsaleqty
      *
      * @param int|float|string|null $qty
      * @return float|null
+     * @since 2.0.0
      */
     protected function fixQty($qty)
     {
@@ -77,6 +85,7 @@ class Minsaleqty
      *
      * @param int|float|string|array $value
      * @return string
+     * @since 2.0.0
      */
     protected function serializeValue($value)
     {
@@ -104,6 +113,7 @@ class Minsaleqty
      *
      * @param int|float|string $value
      * @return array
+     * @since 2.0.0
      */
     protected function unserializeValue($value)
     {
@@ -121,6 +131,7 @@ class Minsaleqty
      *
      * @param string|array $value
      * @return bool
+     * @since 2.0.0
      */
     protected function isEncodedArrayFieldValue($value)
     {
@@ -144,6 +155,7 @@ class Minsaleqty
      *
      * @param array $value
      * @return array
+     * @since 2.0.0
      */
     protected function encodeArrayFieldValue(array $value)
     {
@@ -160,6 +172,7 @@ class Minsaleqty
      *
      * @param array $value
      * @return array
+     * @since 2.0.0
      */
     protected function decodeArrayFieldValue(array $value)
     {
@@ -185,6 +198,7 @@ class Minsaleqty
      * @param int $customerGroupId
      * @param null|string|bool|int|Store $store
      * @return float|null
+     * @since 2.0.0
      */
     public function getConfigValue($customerGroupId, $store = null)
     {
@@ -218,6 +232,7 @@ class Minsaleqty
      *
      * @param string|array $value
      * @return array
+     * @since 2.0.0
      */
     public function makeArrayFieldValue($value)
     {
@@ -233,6 +248,7 @@ class Minsaleqty
      *
      * @param string|array $value
      * @return string
+     * @since 2.0.0
      */
     public function makeStorableArrayFieldValue($value)
     {
@@ -247,6 +263,7 @@ class Minsaleqty
      * Return the all customer group id
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getAllCustomersGroupId()
     {

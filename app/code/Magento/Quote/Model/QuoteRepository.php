@@ -22,62 +22,74 @@ use Magento\Quote\Model\QuoteRepository\LoadHandler;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 {
     /**
      * @var Quote[]
+     * @since 2.0.0
      */
     protected $quotesById = [];
 
     /**
      * @var Quote[]
+     * @since 2.0.0
      */
     protected $quotesByCustomerId = [];
 
     /**
      * @var QuoteFactory
+     * @since 2.0.0
      */
     protected $quoteFactory;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected $quoteCollection;
 
     /**
      * @var \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultsDataFactory;
 
     /**
      * @var JoinProcessorInterface
+     * @since 2.0.0
      */
     private $extensionAttributesJoinProcessor;
 
     /**
      * @var SaveHandler
+     * @since 2.1.0
      */
     private $saveHandler;
 
     /**
      * @var LoadHandler
+     * @since 2.1.0
      */
     private $loadHandler;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
+     * @since 2.2.0
      */
     private $quoteCollectionFactory;
 
@@ -92,6 +104,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory|null $quoteCollectionFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         QuoteFactory $quoteFactory,
@@ -114,6 +127,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
@@ -127,6 +141,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -141,6 +156,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
@@ -153,6 +169,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -165,6 +182,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Quote\Api\Data\CartInterface $quote)
     {
@@ -185,6 +203,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Quote\Api\Data\CartInterface $quote)
     {
@@ -204,6 +223,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param int[] $sharedStoreIds
      * @throws NoSuchEntityException
      * @return Quote
+     * @since 2.0.0
      */
     protected function loadQuote($loadMethod, $loadField, $identifier, array $sharedStoreIds = [])
     {
@@ -221,6 +241,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -246,8 +267,9 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param FilterGroup $filterGroup The filter group.
      * @param QuoteCollection $collection The quote collection.
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
      * @throws InputException The specified filter group or quote collection does not exist.
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)
     {
@@ -266,7 +288,8 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     /**
      * Get new SaveHandler dependency for application code.
      * @return SaveHandler
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getSaveHandler()
     {
@@ -278,7 +301,8 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * @return LoadHandler
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getLoadHandler()
     {

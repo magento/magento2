@@ -13,6 +13,7 @@ use Magento\Sales\Model\AbstractModel;
  * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment getResource()
+ * @since 2.0.0
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {
@@ -20,11 +21,13 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Creditmemo instance
      *
      * @var \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     protected $_creditmemo;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -38,6 +41,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -65,6 +69,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -78,6 +83,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
+     * @since 2.0.0
      */
     public function setCreditmemo(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -91,6 +97,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -101,6 +108,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Get store object
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -116,6 +124,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Returns comment
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComment()
     {
@@ -126,6 +135,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Returns created_at
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -134,6 +144,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -144,6 +155,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Returns is_customer_notified
      *
      * @return int
+     * @since 2.0.0
      */
     public function getIsCustomerNotified()
     {
@@ -154,6 +166,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Returns is_visible_on_front
      *
      * @return int
+     * @since 2.0.0
      */
     public function getIsVisibleOnFront()
     {
@@ -164,6 +177,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * Returns parent_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -172,6 +186,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -180,6 +195,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setIsCustomerNotified($isCustomerNotified)
     {
@@ -188,6 +204,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
@@ -196,6 +213,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setComment($comment)
     {
@@ -206,6 +224,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -217,6 +236,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoCommentExtensionInterface $extensionAttributes

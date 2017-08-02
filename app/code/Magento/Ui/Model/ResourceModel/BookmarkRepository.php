@@ -20,26 +20,31 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Class BookmarkRepository
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class BookmarkRepository implements BookmarkRepositoryInterface
 {
     /**
      * @var \Magento\Ui\Api\Data\BookmarkInterfaceFactory
+     * @since 2.0.0
      */
     protected $bookmarkFactory;
 
     /**
      * @var \Magento\Ui\Model\ResourceModel\Bookmark
+     * @since 2.0.0
      */
     protected $bookmarkResourceModel;
 
     /**
      * @var \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var CollectionProcessorInterface
+     * @since 2.2.0
      */
     private $collectionProcessor;
 
@@ -48,6 +53,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param Bookmark $bookmarkResourceModel
      * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface | null $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
@@ -68,6 +74,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param BookmarkInterface $bookmark
      * @return BookmarkInterface
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     public function save(BookmarkInterface $bookmark)
     {
@@ -85,6 +92,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param int $bookmarkId
      * @return BookmarkInterface
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function getById($bookmarkId)
     {
@@ -102,6 +110,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return \Magento\Framework\Api\SearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -129,6 +138,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param BookmarkInterface $bookmark
      * @return bool true on success
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function delete(BookmarkInterface $bookmark)
     {
@@ -147,6 +157,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @return bool true on success
      * @throws NoSuchEntityException
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function deleteById($bookmarkId)
     {
@@ -159,8 +170,9 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -173,8 +185,9 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

@@ -9,22 +9,26 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class UnionExpression
+ * @since 2.1.0
  */
 class UnionExpression extends Expression
 {
     /**
      * @var Select[]
+     * @since 2.1.0
      */
     protected $parts;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $type;
 
     /**
      * @param Select[] $parts
      * @param string $type
+     * @since 2.1.0
      */
     public function __construct(array $parts, $type = Select::SQL_UNION)
     {
@@ -34,6 +38,7 @@ class UnionExpression extends Expression
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function __toString()
     {

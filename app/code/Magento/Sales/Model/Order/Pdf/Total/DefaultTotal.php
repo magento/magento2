@@ -12,21 +12,25 @@ namespace Magento\Sales\Model\Order\Pdf\Total;
  * Sales Order Total PDF model
  *
  * @method \Magento\Sales\Model\Order getOrder()
+ * @since 2.0.0
  */
 class DefaultTotal extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxHelper;
 
     /**
      * @var \Magento\Tax\Model\Calculation
+     * @since 2.0.0
      */
     protected $_taxCalculation;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory
+     * @since 2.0.0
      */
     protected $_taxOrdersFactory;
 
@@ -37,6 +41,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxHelper,
@@ -61,6 +66,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
      * )
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTotalsForDisplay()
     {
@@ -93,6 +99,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getFullTaxInfo()
     {
@@ -141,6 +148,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
      * Check if we can display total information in PDF
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplay()
     {
@@ -152,6 +160,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
      * Get Total amount from source
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -162,6 +171,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
      * Get title description from source
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getTitleDescription()
     {

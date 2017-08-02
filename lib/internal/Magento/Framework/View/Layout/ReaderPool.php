@@ -9,16 +9,19 @@ use Magento\Framework\View\Layout;
 
 /**
  * Class Pool
+ * @since 2.0.0
  */
 class ReaderPool implements ReaderInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $readers;
 
     /**
      * @var Layout\ReaderInterface[]
+     * @since 2.0.0
      */
     protected $nodeReaders = [];
 
@@ -26,6 +29,7 @@ class ReaderPool implements ReaderInterface
      * Object Manager
      *
      * @var \Magento\Framework\View\Layout\ReaderFactory
+     * @since 2.0.0
      */
     protected $readerFactory;
 
@@ -34,6 +38,7 @@ class ReaderPool implements ReaderInterface
      *
      * @param Layout\ReaderFactory $readerFactory
      * @param array $readers
+     * @since 2.0.0
      */
     public function __construct(
         Layout\ReaderFactory $readerFactory,
@@ -48,6 +53,7 @@ class ReaderPool implements ReaderInterface
      *
      * @param Layout\ReaderInterface $reader
      * @return $this
+     * @since 2.0.0
      */
     public function addReader(Layout\ReaderInterface $reader)
     {
@@ -61,6 +67,7 @@ class ReaderPool implements ReaderInterface
      * {@inheritdoc}
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -72,6 +79,7 @@ class ReaderPool implements ReaderInterface
      *
      * @param array $readers
      * @return void
+     * @since 2.0.0
      */
     protected function prepareReader($readers)
     {
@@ -90,6 +98,7 @@ class ReaderPool implements ReaderInterface
      * @param Reader\Context $readerContext
      * @param Layout\Element $element
      * @return $this
+     * @since 2.0.0
      */
     public function interpret(Reader\Context $readerContext, Layout\Element $element)
     {

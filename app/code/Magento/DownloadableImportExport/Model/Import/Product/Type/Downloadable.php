@@ -15,6 +15,7 @@ use \Magento\Store\Model\Store;
  * Class Downloadable
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -105,6 +106,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Validation failure message template definitions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messageTemplates = [
         self::ERROR_OPTIONS_NOT_FOUND => 'Options for downloadable products not found',
@@ -118,6 +120,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Entity model parameters.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $parameters = [];
 
@@ -125,6 +128,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Ids products
      *
      * @var array
+     * @since 2.0.0
      */
     protected $productIds = [];
 
@@ -132,6 +136,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Array of cached options.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $cachedOptions = [
         'link' => [],
@@ -142,6 +147,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of empty sample
      *
      * @var array
+     * @since 2.0.0
      */
     protected $dataSample = [
         'sample_id' => null,
@@ -156,6 +162,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of empty sample title
      *
      * @var array
+     * @since 2.0.0
      */
     protected $dataSampleTitle = [
         'sample_id' => null,
@@ -167,6 +174,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of empty link
      *
      * @var array
+     * @since 2.0.0
      */
     protected $dataLink = [
         'link_id' => null,
@@ -186,6 +194,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of empty link title
      *
      * @var array
+     * @since 2.0.0
      */
     protected $dataLinkTitle = [
         'link_id' => null,
@@ -197,6 +206,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of empty link price
      *
      * @var array
+     * @since 2.0.0
      */
     protected $dataLinkPrice = [
         'price_id' => null,
@@ -209,6 +219,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Option link mapping.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $optionLinkMapping = [
         'sortorder' => 'sort_order',
@@ -222,6 +233,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Option sample mapping.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $optionSampleMapping = [
         'sortorder' => 'sort_order',
@@ -231,16 +243,19 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     /**
      * Num row parsing file
+     * @since 2.0.0
      */
     protected $rowNum;
 
     /**
      * @var \Magento\DownloadableImportExport\Helper\Uploader
+     * @since 2.0.0
      */
     protected $uploaderHelper;
 
     /**
      * @var \Magento\DownloadableImportExport\Helper\Data
+     * @since 2.0.0
      */
     protected $downloadableHelper;
 
@@ -254,6 +269,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
      * @param MetadataPool $metadataPool
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -275,6 +291,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Save product type specific data.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @since 2.0.0
      */
     public function saveData()
     {
@@ -309,6 +326,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
@@ -333,6 +351,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return bool
+     * @since 2.0.0
      */
     protected function isRowValidSample(array $rowData)
     {
@@ -355,6 +374,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return bool
+     * @since 2.0.0
      */
     protected function isRowValidLink(array $rowData)
     {
@@ -379,6 +399,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $options
      * @return bool
+     * @since 2.0.0
      */
     protected function isTitle(array $options)
     {
@@ -398,6 +419,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @param bool $withDefaultValue
      * @return array
+     * @since 2.0.0
      */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
@@ -411,6 +433,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return array
+     * @since 2.0.0
      */
     protected function addAdditionalAttributes(array $rowData)
     {
@@ -432,6 +455,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $attribute
      * @param mixed $defaultValue
      * @return string
+     * @since 2.0.0
      */
     protected function linksAdditionalAttributes(array $rowData, $attribute, $defaultValue)
     {
@@ -457,6 +481,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return string
+     * @since 2.0.0
      */
     protected function sampleGroupTitle(array $rowData)
     {
@@ -483,6 +508,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     protected function parseOptions(array $rowData, $entityId)
     {
@@ -508,6 +534,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $base
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function fillDataSample(array $base, array $options)
     {
@@ -544,6 +571,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $base
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function fillDataLink(array $base, array $options)
     {
@@ -572,6 +600,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function fillDataTitleLink(array $options)
     {
@@ -619,6 +648,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function uploadSampleFiles(array $options)
     {
@@ -637,6 +667,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $options
      * @return array
+     * @since 2.0.0
      */
     protected function uploadLinkFiles(array $options)
     {
@@ -657,6 +688,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Save options in base
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @since 2.0.0
      */
     protected function saveOptions()
     {
@@ -674,6 +706,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Save sample options
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function saveSampleOptions()
     {
@@ -695,6 +728,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Save link options
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function saveLinkOptions()
     {
@@ -724,6 +758,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $rowCol
      * @param int $entityId
      * @return array
+     * @since 2.0.0
      */
     protected function prepareSampleData($rowCol, $entityId = null)
     {
@@ -748,6 +783,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $rowCol
      * @param string $entityId
      * @return array
+     * @since 2.0.0
      */
     protected function prepareLinkData($rowCol, $entityId = null)
     {
@@ -771,6 +807,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $values
      * @return array
+     * @since 2.0.0
      */
     protected function parseLinkOption(array $values)
     {
@@ -804,6 +841,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $values
      * @return array
+     * @since 2.0.0
      */
     protected function parseSampleOption($values)
     {
@@ -833,6 +871,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param string $type
      * @param bool $renameFileOff
      * @return string
+     * @since 2.0.0
      */
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
     {
@@ -849,6 +888,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Clear cached values between bunches
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @since 2.0.0
      */
     protected function clear()
     {

@@ -10,16 +10,23 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Reviews\Grid
+ *
+ * @since 2.0.0
+ */
 class Grid extends Action
 {
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
+     * @since 2.0.0
      */
     protected $productBuilder;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -33,6 +40,7 @@ class Grid extends Action
      * Get product reviews grid
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

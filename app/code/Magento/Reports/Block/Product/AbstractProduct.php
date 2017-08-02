@@ -9,6 +9,7 @@ namespace Magento\Reports\Block\Product;
  * Reports Recently Products Abstract Block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -16,6 +17,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Product Index model type
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_indexType;
 
@@ -23,16 +25,19 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Product Index Collection
      *
      * @var \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
+     * @since 2.0.0
      */
     protected $_collection;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $_productVisibility;
 
     /**
      * @var \Magento\Reports\Model\Product\Index\Factory
+     * @since 2.0.0
      */
     protected $_indexFactory;
 
@@ -41,6 +46,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Reports\Model\Product\Index\Factory $indexFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -61,6 +67,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Retrieve page size
      *
      * @return int
+     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -74,6 +81,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Retrieve product ids, that must not be included in collection
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getProductsToSkip()
     {
@@ -84,6 +92,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Public method for retrieve Product Index model
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @since 2.0.0
      */
     public function getModel()
     {
@@ -100,6 +109,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Retrieve Index Product Collection
      *
      * @return \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
+     * @since 2.0.0
      */
     public function getItemsCollection()
     {
@@ -139,6 +149,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * Retrieve count of product index items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCount()
     {

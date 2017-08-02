@@ -10,21 +10,25 @@ namespace Magento\Wishlist\Helper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class Rss extends \Magento\Wishlist\Helper\Data
 {
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected $_customer;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @since 2.0.0
      */
     protected $_customerFactory;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $_customerRepository;
 
@@ -41,6 +45,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -75,6 +80,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * Retrieve Wishlist model
      *
      * @return \Magento\Wishlist\Model\Wishlist
+     * @since 2.0.0
      */
     public function getWishlist()
     {
@@ -97,6 +103,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * Retrieve Customer instance
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -118,6 +125,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * Is allow RSS
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isRssAllow()
     {

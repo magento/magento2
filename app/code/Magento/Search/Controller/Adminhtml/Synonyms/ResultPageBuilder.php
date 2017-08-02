@@ -8,26 +8,31 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 /**
  * Result page builder class
  *
+ * @since 2.1.0
  */
 class ResultPageBuilder
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @since 2.1.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Search\Model\EngineResolver $engineResolver
+     * @since 2.1.0
      */
     protected $engineResolver;
 
     /**
      * @var \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+     * @since 2.1.0
      */
     protected $searchFeatureConfig;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.1.0
      */
     protected $messageManager;
 
@@ -38,6 +43,7 @@ class ResultPageBuilder
      * @param \Magento\Search\Model\EngineResolver $engineResolver
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
@@ -55,6 +61,7 @@ class ResultPageBuilder
      * Build the initial page layout, menu and breadcrumb trail
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.1.0
      */
     public function build()
     {
@@ -73,6 +80,7 @@ class ResultPageBuilder
      * Checks if 'synonyms' feature is supported by configured search engine. If not supported displays a notice
      *
      * @return void
+     * @since 2.1.0
      */
     protected function checkSearchEngineSupport()
     {

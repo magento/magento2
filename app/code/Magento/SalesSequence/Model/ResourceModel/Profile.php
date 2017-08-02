@@ -13,6 +13,7 @@ use Magento\SalesSequence\Model\ProfileFactory;
  * Class Profile represents profile data for sequence as prefix, suffix, start value etc.
  *
  * @api
+ * @since 2.0.0
  */
 class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,6 +21,7 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_sequence_profile';
 
@@ -27,6 +29,7 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,6 +38,7 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var ProfileFactory
+     * @since 2.0.0
      */
     protected $profileFactory;
 
@@ -42,6 +46,7 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param DatabaseContext $context
      * @param ProfileFactory $profileFactory
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         DatabaseContext $context,
@@ -58,6 +63,7 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $metadataId
      * @return \Magento\SalesSequence\Model\Profile
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function loadActiveProfile($metadataId)
     {

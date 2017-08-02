@@ -13,6 +13,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
@@ -23,6 +24,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -134,6 +136,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
      * Retrieve additional element types
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAdditionalElementTypes()
     {

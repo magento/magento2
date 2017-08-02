@@ -13,6 +13,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue\Preview;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -21,6 +22,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return \Magento\Backend\Block\Widget\Form
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

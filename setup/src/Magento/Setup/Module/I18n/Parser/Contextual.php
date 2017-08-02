@@ -9,6 +9,7 @@ use Magento\Setup\Module\I18n;
 
 /**
  * Contextual Parser
+ * @since 2.0.0
  */
 class Contextual extends AbstractParser
 {
@@ -16,6 +17,7 @@ class Contextual extends AbstractParser
      * Context
      *
      * @var \Magento\Setup\Module\I18n\Context
+     * @since 2.0.0
      */
     protected $_context;
 
@@ -25,6 +27,7 @@ class Contextual extends AbstractParser
      * @param I18n\FilesCollector $filesCollector
      * @param I18n\Factory $factory
      * @param I18n\Context $context
+     * @since 2.0.0
      */
     public function __construct(I18n\FilesCollector $filesCollector, I18n\Factory $factory, I18n\Context $context)
     {
@@ -38,6 +41,7 @@ class Contextual extends AbstractParser
      *
      * @param array $options
      * @return void
+     * @since 2.0.0
      */
     protected function _parseByTypeOptions($options)
     {
@@ -60,6 +64,7 @@ class Contextual extends AbstractParser
      * @param string $contextType
      * @param string $contextValue
      * @return void
+     * @since 2.0.0
      */
     protected function _addPhrase($phraseData, $contextType, $contextValue)
     {

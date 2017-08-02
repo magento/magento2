@@ -5,33 +5,65 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+ *
+ * @since 2.0.0
+ */
 class UrlRewriteHandler
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+     * @since 2.0.0
+     */
     protected $childrenCategoriesProvider;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     * @since 2.0.0
+     */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
+     * @since 2.0.0
+     */
     protected $productUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     * @since 2.0.0
+     */
     protected $urlPersist;
 
-    /** @var array */
+    /**
+     * @var array
+     * @since 2.0.0
+     */
     protected $isSkippedProduct;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
+     */
     protected $productCollectionFactory;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator
+     * @since 2.2.0
+     */
     private $categoryBasedProductRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     * @since 2.2.0
+     */
     private $mergeDataProviderPrototype;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json */
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
+     */
     private $serializer;
 
     /**
@@ -43,6 +75,7 @@ class UrlRewriteHandler
      * @param \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator $categoryBasedProductRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -79,6 +112,7 @@ class UrlRewriteHandler
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return array
+     * @since 2.0.0
      */
     public function generateProductUrlRewrites(\Magento\Catalog\Model\Category $category)
     {
@@ -132,6 +166,7 @@ class UrlRewriteHandler
      * @param bool $saveRewriteHistory
      * @param int|null $rootCategoryId
      * @return array
+     * @since 2.0.0
      */
     private function getCategoryProductsUrlRewrites(
         \Magento\Catalog\Model\Category $category,
@@ -171,6 +206,7 @@ class UrlRewriteHandler
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @return void
+     * @since 2.0.0
      */
     public function deleteCategoryRewritesForChildren(\Magento\Catalog\Model\Category $category)
     {

@@ -21,6 +21,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 /**
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -28,26 +29,31 @@ class InstallData implements InstallDataInterface
      * Indexer collection factory
      *
      * @var CollectionFactory
+     * @since 2.0.0
      */
     private $statesFactory;
 
     /**
      * @var ConfigInterface
+     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var EncryptorInterface
+     * @since 2.0.0
      */
     private $encryptor;
 
     /**
      * @var EncoderInterface
+     * @since 2.0.0
      */
     private $encoder;
 
     /**
      * @var StateFactory
+     * @since 2.0.0
      */
     private $stateFactory;
 
@@ -60,6 +66,7 @@ class InstallData implements InstallDataInterface
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
      * @internal param StateFactory $stateFactory
+     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -80,6 +87,7 @@ class InstallData implements InstallDataInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

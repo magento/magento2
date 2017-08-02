@@ -16,6 +16,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class UrnResolver
 {
@@ -25,6 +26,7 @@ class UrnResolver
      * @param string $schema
      * @return string
      * @throws NotFoundException
+     * @since 2.0.0
      */
     public function getRealPath($schema)
     {
@@ -66,6 +68,7 @@ class UrnResolver
      * @return resource
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function registerEntityLoader($public, $system, $context)
     {

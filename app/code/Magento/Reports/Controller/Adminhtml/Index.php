@@ -13,6 +13,7 @@ namespace Magento\Reports\Controller\Adminhtml;
 
 /**
  * @api
+ * @since 2.0.0
  */
 abstract class Index extends \Magento\Backend\App\Action
 {
@@ -25,12 +26,14 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

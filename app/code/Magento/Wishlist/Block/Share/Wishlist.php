@@ -13,6 +13,7 @@ namespace Magento\Wishlist\Block\Share;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
@@ -20,11 +21,13 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Customer instance
      *
      * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected $_customer = null;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -33,6 +36,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -53,6 +57,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @return $this
      *
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -65,6 +70,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve Shared Wishlist Customer instance
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     public function getWishlistCustomer()
     {
@@ -79,6 +85,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve Page Header
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getHeader()
     {

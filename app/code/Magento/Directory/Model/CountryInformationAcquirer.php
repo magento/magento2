@@ -9,31 +9,37 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Currency information acquirer class
+ * @since 2.0.0
  */
 class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInformationAcquirerInterface
 {
     /**
      * @var \Magento\Directory\Model\Data\CountryInformationFactory
+     * @since 2.0.0
      */
     protected $countryInformationFactory;
 
     /**
      * @var \Magento\Directory\Model\Data\RegionInformationFactory
+     * @since 2.0.0
      */
     protected $regionInformationFactory;
 
     /**
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -43,6 +49,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Directory\Model\Data\CountryInformationFactory $countryInformationFactory,
@@ -60,6 +67,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCountriesInfo()
     {
@@ -86,6 +94,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCountryInfo($countryId)
     {
@@ -119,6 +128,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
      * @param array $regions
      * @param string $storeLocale
      * @return \Magento\Directory\Model\Data\CountryInformation
+     * @since 2.0.0
      */
     protected function setCountryInfo($country, $regions, $storeLocale)
     {

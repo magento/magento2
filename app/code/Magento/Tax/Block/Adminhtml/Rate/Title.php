@@ -12,31 +12,37 @@ use Magento\Tax\Controller\RegistryConstants;
  * Tax Rate Titles Renderer
  *
  * @author Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Title extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_titles;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'rate/title.phtml';
 
     /**
      * @var \Magento\Store\Model\StoreFactory
+     * @since 2.0.0
      */
     protected $_storeFactory;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Tax\Api\TaxRateRepositoryInterface
+     * @since 2.0.0
      */
     protected $_taxRateRepository;
 
@@ -48,6 +54,7 @@ class Title extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -66,6 +73,7 @@ class Title extends \Magento\Framework\View\Element\Template
      * Return the tax rate titles associated with a store view.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTitles()
     {
@@ -93,6 +101,7 @@ class Title extends \Magento\Framework\View\Element\Template
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getStores()
     {

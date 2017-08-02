@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface CartTotalRepositoryInterface
  * @api
+ * @since 2.0.0
  */
 interface CartTotalRepositoryInterface
 {
@@ -17,6 +18,7 @@ interface CartTotalRepositoryInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\TotalsInterface Quote totals data.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @since 2.0.0
      */
     public function get($cartId);
 }

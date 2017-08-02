@@ -9,6 +9,11 @@ namespace Magento\Downloadable\Controller\Download;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Downloadable\Controller\Download\LinkSample
+ *
+ * @since 2.0.0
+ */
 class LinkSample extends \Magento\Downloadable\Controller\Download
 {
     /**
@@ -16,6 +21,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
      *
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -8,12 +8,18 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
 use Magento\Reports\Model\Flag;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Shipping
+ *
+ * @since 2.0.0
+ */
 class Shipping extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Shipping report action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

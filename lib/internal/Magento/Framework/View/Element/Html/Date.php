@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\Html;
 
 /**
  * Date element block
+ * @since 2.0.0
  */
 class Date extends \Magento\Framework\View\Element\Template
 {
@@ -15,6 +16,7 @@ class Date extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -70,6 +72,7 @@ class Date extends \Magento\Framework\View\Element\Template
      * Convert special characters to HTML entities
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEscapedValue()
     {
@@ -85,6 +88,7 @@ class Date extends \Magento\Framework\View\Element\Template
      * {@inheritdoc}
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtml()
     {

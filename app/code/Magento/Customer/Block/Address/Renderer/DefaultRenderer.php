@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Address format renderer default
+ * @since 2.0.0
  */
 class DefaultRenderer extends AbstractBlock implements RendererInterface
 {
@@ -19,26 +20,31 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      * Format type object
      *
      * @var \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var ElementFactory
+     * @since 2.0.0
      */
     protected $_elementFactory;
 
     /**
      * @var \Magento\Directory\Model\CountryFactory
+     * @since 2.0.0
      */
     protected $_countryFactory;
 
     /**
      * @var \Magento\Customer\Api\AddressMetadataInterface
+     * @since 2.0.0
      */
     protected $_addressMetadataService;
 
     /**
      * @var Mapper
+     * @since 2.0.0
      */
     protected $addressMapper;
 
@@ -51,6 +57,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      * @param \Magento\Customer\Api\AddressMetadataInterface $metadataService
      * @param Mapper $addressMapper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -72,6 +79,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      * Retrieve format type object
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -83,6 +91,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      *
      * @param  \Magento\Framework\DataObject $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType(\Magento\Framework\DataObject $type)
     {
@@ -94,6 +103,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      * @param AddressModelInterface|null $address
      * @return string
      * All new code should use renderArray based on Metadata service
+     * @since 2.0.0
      */
     public function getFormat(AddressModelInterface $address = null)
     {
@@ -110,6 +120,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function render(AddressModelInterface $address, $format = null)
     {
@@ -119,6 +130,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFormatArray($addressAttributes = null)
     {
@@ -137,6 +149,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function renderArray($addressAttributes, $format = null)
     {

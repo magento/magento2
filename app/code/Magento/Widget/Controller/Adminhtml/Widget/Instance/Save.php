@@ -6,12 +6,18 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
      * Save action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

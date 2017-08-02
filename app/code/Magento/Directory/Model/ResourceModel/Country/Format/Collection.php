@@ -9,6 +9,7 @@ namespace Magento\Directory\Model\ResourceModel\Country\Format;
  * Country formats collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,6 +32,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string|\Magento\Directory\Model\Country $country
      * @return \Magento\Directory\Model\ResourceModel\Country\Format\Collection
+     * @since 2.0.0
      */
     public function setCountryFilter($country)
     {

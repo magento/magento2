@@ -9,20 +9,28 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\PrintShipment
+ *
+ * @since 2.0.0
+ */
 abstract class PrintShipment extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var OrderViewAuthorizationInterface
+     * @since 2.0.0
      */
     protected $orderAuthorization;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -31,6 +39,7 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -48,6 +57,7 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
      * Print Shipment Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

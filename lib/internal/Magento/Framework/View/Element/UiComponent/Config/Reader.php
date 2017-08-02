@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Class Reader
+ * @since 2.0.0
  */
 class Reader implements UiReaderInterface
 {
@@ -20,6 +21,7 @@ class Reader implements UiReaderInterface
      * DOM document merger
      *
      * @var DomMergerInterface
+     * @since 2.0.0
      */
     protected $domMerger;
 
@@ -27,6 +29,7 @@ class Reader implements UiReaderInterface
      * XML converter
      *
      * @var ConverterInterface
+     * @since 2.0.0
      */
     protected $converter;
 
@@ -36,6 +39,7 @@ class Reader implements UiReaderInterface
      * @param FileCollectorInterface $fileCollector
      * @param ConverterInterface $converter
      * @param DomMergerInterface $domMerger
+     * @since 2.0.0
      */
     public function __construct(
         FileCollectorInterface $fileCollector,
@@ -53,6 +57,7 @@ class Reader implements UiReaderInterface
      * @param array $fileList
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function readFiles(array $fileList)
     {
@@ -66,6 +71,7 @@ class Reader implements UiReaderInterface
      *
      * @param string $xmlContent
      * @return void
+     * @since 2.0.0
      */
     public function addXMLContent($xmlContent)
     {
@@ -77,6 +83,7 @@ class Reader implements UiReaderInterface
      *
      * @param \DOMNode $node
      * @return void
+     * @since 2.0.0
      */
     public function addNode(\DOMNode $node)
     {
@@ -89,6 +96,7 @@ class Reader implements UiReaderInterface
      * @param string|null $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function read($scope = null)
     {
@@ -99,6 +107,7 @@ class Reader implements UiReaderInterface
      * Get content from the merged files
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContent()
     {
@@ -109,6 +118,7 @@ class Reader implements UiReaderInterface
      * Get DOM document
      *
      * @return \DOMDocument
+     * @since 2.0.0
      */
     public function getDOMDocument()
     {

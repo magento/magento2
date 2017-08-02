@@ -7,6 +7,7 @@ namespace Magento\Store\Model;
 
 /**
  * Normalizes scope types to the chosen form, plural or singular.
+ * @since 2.2.0
  */
 class ScopeTypeNormalizer
 {
@@ -45,6 +46,7 @@ class ScopeTypeNormalizer
      * @param string $scopeType The type of scope
      * @param bool $plural The flag for choosing returned form of scope, in the plural or not. Used plural by default.
      * @return string
+     * @since 2.2.0
      */
     public function normalize($scopeType, $plural = true)
     {

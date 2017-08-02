@@ -10,6 +10,7 @@ use Composer\IO\BufferIO;
 
 /**
  * Class creates BufferIO instance
+ * @since 2.0.0
  */
 class BufferIoFactory
 {
@@ -17,6 +18,7 @@ class BufferIoFactory
      * Creates BufferIO instance
      *
      * @return BufferIO
+     * @since 2.0.0
      */
     public function create()
     {

@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Response\Renderer\Xml
+ *
+ * @since 2.0.0
+ */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -24,13 +29,17 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const DEFAULT_ENTITY_ITEM_NAME = 'item';
 
-    /** @var \Magento\Framework\Xml\Generator */
+    /**
+     * @var \Magento\Framework\Xml\Generator
+     * @since 2.0.0
+     */
     protected $_xmlGenerator;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Xml\Generator $xmlGenerator
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Xml\Generator $xmlGenerator)
     {
@@ -41,6 +50,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      * Get XML renderer MIME type.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMimeType()
     {
@@ -52,6 +62,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      *
      * @param object|array|int|string|bool|float|null $data
      * @return string
+     * @since 2.0.0
      */
     public function render($data)
     {
@@ -71,6 +82,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      * @param bool $isRoot
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _formatData($data, $isRoot = false)
     {
@@ -102,6 +114,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     protected function _formatValue($value)
     {
@@ -120,6 +133,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      *
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     protected function _prepareKey($key)
     {

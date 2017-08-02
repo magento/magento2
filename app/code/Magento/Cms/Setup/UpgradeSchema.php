@@ -11,11 +11,13 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Upgrade the Cms module DB scheme
+ * @since 2.1.0
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -29,6 +31,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @return $this
+     * @since 2.1.0
      */
     protected function addMetaTitleField(SchemaSetupInterface $setup)
     {

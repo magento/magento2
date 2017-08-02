@@ -14,11 +14,13 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
 
 /**
  * Customer Address Postal/Zip Code Attribute Data Model
+ * @since 2.0.0
  */
 class Postcode extends AbstractData
 {
     /**
      * @var DirectoryHelper
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
@@ -31,6 +33,7 @@ class Postcode extends AbstractData
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param DirectoryHelper $directoryHelper
+     * @since 2.0.0
      */
     public function __construct(
         MagentoTimezone $localeDate,
@@ -60,6 +63,7 @@ class Postcode extends AbstractData
      *
      * @param array|null|string $value
      * @return array|bool
+     * @since 2.0.0
      */
     public function validateValue($value)
     {
@@ -83,6 +87,7 @@ class Postcode extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -91,6 +96,7 @@ class Postcode extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -99,6 +105,7 @@ class Postcode extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function restoreValue($value)
     {
@@ -107,6 +114,7 @@ class Postcode extends AbstractData
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {

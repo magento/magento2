@@ -9,6 +9,7 @@ namespace Magento\Framework\Session;
 
 /**
  * Session validator interface
+ * @since 2.0.0
  */
 interface ValidatorInterface
 {
@@ -18,6 +19,7 @@ interface ValidatorInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @return void
      * @throws \Magento\Framework\Exception\SessionException
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Session\SessionManagerInterface $session);
 }

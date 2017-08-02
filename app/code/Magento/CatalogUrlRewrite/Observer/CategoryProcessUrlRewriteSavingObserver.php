@@ -15,22 +15,38 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved
+ * @since 2.0.0
  */
 class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     * @since 2.0.0
+     */
     private $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
+     * @since 2.2.0
+     */
     private $urlRewriteBunchReplacer;
 
-    /** @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+     * @since 2.0.0
+     */
     private $urlRewriteHandler;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
+     * @since 2.2.0
+     */
     private $databaseMapPool;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     * @since 2.2.0
+     */
     private $dataUrlRewriteClassNames;
 
     /**
@@ -39,6 +55,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param UrlRewriteBunchReplacer $urlRewriteBunchReplacer
      * @param DatabaseMapPool $databaseMapPool
      * @param string[] $dataUrlRewriteClassNames
+     * @since 2.0.0
      */
     public function __construct(
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
@@ -63,6 +80,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -97,6 +115,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      *
      * @param Category $category
      * @return void
+     * @since 2.2.0
      */
     private function resetUrlRewritesDataMaps($category)
     {

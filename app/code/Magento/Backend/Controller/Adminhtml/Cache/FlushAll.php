@@ -6,12 +6,18 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache\FlushAll
+ *
+ * @since 2.0.0
+ */
 class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * Flush cache storage
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -8,6 +8,7 @@ namespace Magento\Eav\Model;
 /**
  * EAV entity model
  *
+ * @since 2.0.0
  */
 class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
@@ -29,6 +30,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param Entity\Context $context
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(\Magento\Eav\Model\Entity\Context $context, $data = [])
     {

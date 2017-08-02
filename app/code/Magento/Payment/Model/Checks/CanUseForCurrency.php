@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote;
  * Checks possibility to use payment method with particular currency
  *
  * @api
+ * @since 2.0.0
  */
 class CanUseForCurrency implements SpecificationInterface
 {
@@ -22,6 +23,7 @@ class CanUseForCurrency implements SpecificationInterface
      * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
+     * @since 2.0.0
      */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {

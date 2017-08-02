@@ -12,13 +12,20 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Join processor helper class
+ * @since 2.0.0
  */
 class JoinProcessorHelper
 {
-    /** @var Config */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config
+     * @since 2.0.0
+     */
     private $config;
 
-    /** @var JoinDataInterfaceFactory */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory
+     * @since 2.0.0
+     */
     private $joinDataInterfaceFactory;
 
     /**
@@ -26,6 +33,7 @@ class JoinProcessorHelper
      *
      * @param Config $config
      * @param JoinDataInterfaceFactory $joinDataInterfaceFactory
+     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -41,6 +49,7 @@ class JoinProcessorHelper
      * @param string $attributeCode
      * @param array $selectFields
      * @return array
+     * @since 2.0.0
      */
     public function getSelectFieldsMap($attributeCode, $selectFields)
     {
@@ -70,6 +79,7 @@ class JoinProcessorHelper
      *
      * @param string $attributeCode
      * @return string
+     * @since 2.0.0
      */
     public function getReferenceTableAlias($attributeCode)
     {
@@ -80,6 +90,7 @@ class JoinProcessorHelper
      * Returns config data values
      *
      * @return array|mixed|null
+     * @since 2.0.0
      */
     public function getConfigData()
     {
@@ -90,6 +101,7 @@ class JoinProcessorHelper
      * JoinDataInterface getter
      *
      * @return JoinDataInterface
+     * @since 2.0.0
      */
     public function getJoinDataInterface()
     {

@@ -14,6 +14,7 @@ namespace Magento\Paypal\Model;
  * Aware of all PayPal payment methods
  * Collects and provides access to PayPal-specific payment data
  * Provides business logic information about payment flow
+ * @since 2.0.0
  */
 class Info
 {
@@ -78,6 +79,7 @@ class Info
      * All payment information map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_paymentMap = [
         self::PAYER_ID => self::PAYPAL_PAYER_ID,
@@ -102,6 +104,7 @@ class Info
      * System information map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_systemMap = [
         self::PAYMENT_STATUS => self::PAYMENT_STATUS_GLOBAL,
@@ -168,6 +171,7 @@ class Info
      * Map of payment information available to customer
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_paymentPublicMap = ['paypal_payer_email', self::BUYER_TAX_ID, self::BUYER_TAX_ID_TYPE];
 
@@ -175,6 +179,7 @@ class Info
      * Rendered payment map cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_paymentMapFull = [];
 
@@ -182,6 +187,7 @@ class Info
      * Cache for storing label translations
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_labelCodesCache = [];
 
@@ -266,6 +272,7 @@ class Info
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param bool $labelValuesOnly
      * @return array
+     * @since 2.0.0
      */
     public function getPaymentInfo(\Magento\Payment\Model\InfoInterface $payment, $labelValuesOnly = false)
     {
@@ -290,6 +297,7 @@ class Info
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param bool $labelValuesOnly
      * @return array
+     * @since 2.0.0
      */
     public function getPublicPaymentInfo(\Magento\Payment\Model\InfoInterface $payment, $labelValuesOnly = false)
     {
@@ -302,6 +310,7 @@ class Info
      * @param array|\Magento\Framework\DataObject|callback $from
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return void
+     * @since 2.0.0
      */
     public function importToPayment($from, \Magento\Payment\Model\InfoInterface $payment)
     {
@@ -319,6 +328,7 @@ class Info
      * @param array|\Magento\Framework\DataObject|callback $to
      * @param array|null $map
      * @return array|\Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function &exportFromPayment(\Magento\Payment\Model\InfoInterface $payment, $to, array $map = null)
     {
@@ -336,6 +346,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public static function isPaymentReviewRequired(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -352,6 +363,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public static function isFraudReviewAllowed(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -367,6 +379,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public static function isPaymentCompleted(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -379,6 +392,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public static function isPaymentSuccessful(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -409,6 +423,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * @since 2.0.0
      */
     public static function isPaymentFailed(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -433,6 +448,7 @@ class Info
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_IPNandPDTVariables
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public static function explainPendingReason($code)
     {
@@ -480,6 +496,7 @@ class Info
      * @return string
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_IPNandPDTVariables
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * @since 2.0.0
      */
     public static function explainReasonCode($code)
     {
@@ -524,6 +541,7 @@ class Info
      *
      * @param string $code
      * @return bool;
+     * @since 2.0.0
      */
     public static function isReversalDisputable($code)
     {
@@ -548,6 +566,7 @@ class Info
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param bool $labelValuesOnly
      * @return array
+     * @since 2.0.0
      */
     protected function _getFullInfo(array $keys, \Magento\Payment\Model\InfoInterface $payment, $labelValuesOnly)
     {
@@ -584,6 +603,7 @@ class Info
      *
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     protected function _getLabel($key)
     {
@@ -617,6 +637,7 @@ class Info
      *
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     public static function getCaseTypeLabel($key)
     {
@@ -636,6 +657,7 @@ class Info
      * @param string $key
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _getValue($value, $key)
     {
@@ -672,6 +694,7 @@ class Info
      * @param string $value
      * @return string
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_AVSResponseCodes
+     * @since 2.0.0
      */
     protected function _getAvsLabel($value)
     {
@@ -712,6 +735,7 @@ class Info
      * @param string $value
      * @return string
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_AVSResponseCodes
+     * @since 2.0.0
      */
     protected function _getCvv2Label($value)
     {
@@ -743,6 +767,7 @@ class Info
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     protected function _getBuyerIdTypeValue($code)
     {

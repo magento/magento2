@@ -8,12 +8,18 @@ namespace Magento\Multishipping\Controller\Checkout;
 
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Success
+ *
+ * @since 2.0.0
+ */
 class Success extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * Multishipping checkout success page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

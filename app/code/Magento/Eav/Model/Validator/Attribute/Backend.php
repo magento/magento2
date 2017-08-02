@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Validator\Attribute;
  * Validation EAV entity via EAV attributes' backend models
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Backend extends \Magento\Framework\Validator\AbstractValidator
 {
@@ -18,6 +19,7 @@ class Backend extends \Magento\Framework\Validator\AbstractValidator
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function isValid($entity)
     {

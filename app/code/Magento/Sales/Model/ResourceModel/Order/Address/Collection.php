@@ -12,6 +12,7 @@ use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  * Flat sales order payment collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection implements OrderAddressSearchResultInterface
 {
@@ -19,6 +20,7 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_address_collection';
 
@@ -26,6 +28,7 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'order_address_collection';
 
@@ -33,6 +36,7 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,6 +50,7 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
      * Redeclare after load method for dispatch event
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {

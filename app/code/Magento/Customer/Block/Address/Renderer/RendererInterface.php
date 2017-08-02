@@ -12,6 +12,7 @@ use Magento\Customer\Model\Address\AddressModelInterface;
  * Address renderer interface
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 interface RendererInterface
 {
@@ -20,6 +21,7 @@ interface RendererInterface
      *
      * @param \Magento\Framework\DataObject $type
      * @return void
+     * @since 2.0.0
      */
     public function setType(\Magento\Framework\DataObject $type);
 
@@ -27,6 +29,7 @@ interface RendererInterface
      * Retrieve format type object
      *
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getType();
 
@@ -37,6 +40,7 @@ interface RendererInterface
      * @param string|null $format
      * @return mixed
      * All new code should use renderArray based on Metadata service
+     * @since 2.0.0
      */
     public function render(AddressModelInterface $address, $format = null);
 
@@ -45,6 +49,7 @@ interface RendererInterface
      *
      * @param null|array $addressAttributes
      * @return Format
+     * @since 2.0.0
      */
     public function getFormatArray($addressAttributes = null);
 
@@ -54,6 +59,7 @@ interface RendererInterface
      * @param array $addressAttributes
      * @param Format|null $format
      * @return string
+     * @since 2.0.0
      */
     public function renderArray($addressAttributes, $format = null);
 }

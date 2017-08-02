@@ -7,25 +7,34 @@
  */
 namespace Magento\GoogleOptimizer\Block;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\AbstractCode
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractCode extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var Entity name in registry
+     * @since 2.0.0
      */
     protected $_registryName;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry;
 
     /**
      * @var \Magento\GoogleOptimizer\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\GoogleOptimizer\Helper\Code
+     * @since 2.0.0
      */
     protected $_codeHelper;
 
@@ -35,6 +44,7 @@ abstract class AbstractCode extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -54,6 +64,7 @@ abstract class AbstractCode extends \Magento\Framework\View\Element\Template
      *
      * @return \Magento\GoogleOptimizer\Model\Code
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function _getGoogleExperiment()
     {
@@ -64,6 +75,7 @@ abstract class AbstractCode extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -74,6 +86,7 @@ abstract class AbstractCode extends \Magento\Framework\View\Element\Template
      * Return script code
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getScriptCode()
     {
@@ -90,6 +103,7 @@ abstract class AbstractCode extends \Magento\Framework\View\Element\Template
      *
      * @return mixed
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function _getEntity()
     {

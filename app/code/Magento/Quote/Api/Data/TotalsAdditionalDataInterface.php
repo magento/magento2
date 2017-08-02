@@ -10,6 +10,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 /**
  * Additional data for totals collection.
  * @api
+ * @since 2.0.0
  */
 interface TotalsAdditionalDataInterface extends CustomAttributesDataInterface
 {
@@ -17,6 +18,7 @@ interface TotalsAdditionalDataInterface extends CustomAttributesDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -25,6 +27,7 @@ interface TotalsAdditionalDataInterface extends CustomAttributesDataInterface
      *
      * @param \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface $extensionAttributes
      * @return void
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface $extensionAttributes

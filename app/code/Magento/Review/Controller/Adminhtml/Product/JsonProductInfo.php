@@ -14,10 +14,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\JsonProductInfo
+ *
+ * @since 2.0.0
+ */
 class JsonProductInfo extends ProductController
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -27,6 +33,7 @@ class JsonProductInfo extends ProductController
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -41,6 +48,7 @@ class JsonProductInfo extends ProductController
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -13,6 +13,7 @@ use Magento\Framework\View\Layout\Generator\Structure;
 
 /**
  * Class Json
+ * @since 2.0.0
  */
 class Json extends AbstractContentType
 {
@@ -20,6 +21,7 @@ class Json extends AbstractContentType
      * Generator structure instance
      *
      * @var Structure
+     * @since 2.0.0
      */
     private $structure;
 
@@ -27,6 +29,7 @@ class Json extends AbstractContentType
      * Encoder
      *
      * @var Encoder
+     * @since 2.0.0
      */
     private $encoder;
 
@@ -37,6 +40,7 @@ class Json extends AbstractContentType
      * @param TemplateEnginePool $templateEnginePool
      * @param Encoder $encoder
      * @param Structure $structure
+     * @since 2.0.0
      */
     public function __construct(
         FileSystem $filesystem,
@@ -57,6 +61,7 @@ class Json extends AbstractContentType
      * @return string
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function render(UiComponentInterface $component, $template = '')
     {

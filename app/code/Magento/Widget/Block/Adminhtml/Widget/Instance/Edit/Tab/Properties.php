@@ -14,6 +14,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 /**
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -22,6 +23,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Widget config parameters
      *
      * @var array
+     * @since 2.0.0
      */
     protected $hiddenParameters = [
         'template'
@@ -31,6 +33,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Prepare label for tab
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -41,6 +44,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -51,6 +55,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Returns status flag about this tab can be showen or not
      *
      * @return true
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -61,6 +66,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Returns status flag about this tab hidden or not
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -81,6 +87,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Getter
      *
      * @return \Magento\Widget\Model\Widget\Instance
+     * @since 2.0.0
      */
     public function getWidgetInstance()
     {
@@ -92,6 +99,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      * Set widget type and widget parameters if available
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _preparelayout()
     {
@@ -108,6 +116,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      *
      * @param \Magento\Framework\DataObject $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @since 2.0.0
      */
     protected function _addField($parameter)
     {

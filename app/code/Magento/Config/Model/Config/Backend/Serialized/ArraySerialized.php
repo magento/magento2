@@ -12,6 +12,7 @@ namespace Magento\Config\Model\Config\Backend\Serialized;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
 {
@@ -19,6 +20,7 @@ class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
      * Unset array element with '__empty' key
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {

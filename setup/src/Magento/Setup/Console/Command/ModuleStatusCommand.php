@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for displaying status of modules
+ * @since 2.0.0
  */
 class ModuleStatusCommand extends AbstractSetupCommand
 {
@@ -18,6 +19,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
      * Object manager provider
      *
      * @var ObjectManagerProvider
+     * @since 2.0.0
      */
     private $objectManagerProvider;
 
@@ -25,6 +27,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
      * Inject dependencies
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -34,6 +37,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -44,6 +48,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

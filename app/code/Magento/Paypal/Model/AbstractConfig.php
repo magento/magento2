@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AbstractConfig
+ * @since 2.0.0
  */
 abstract class AbstractConfig implements ConfigInterface
 {
@@ -36,6 +37,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Current payment method code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_methodCode;
 
@@ -43,26 +45,31 @@ abstract class AbstractConfig implements ConfigInterface
      * Current store id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $pathPattern;
 
     /**
      * @var ProductMetadataInterface
+     * @since 2.1.0
      */
     protected $productMetadata;
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $bnCode = 'Magento_Cart_%s';
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -72,6 +79,7 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * @var MethodInterface
+     * @since 2.0.0
      */
     protected $methodInstance;
 
@@ -80,6 +88,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @param MethodInterface $method
      * @return $this
+     * @since 2.0.0
      */
     public function setMethodInstance($method)
     {
@@ -92,6 +101,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @param string|MethodInterface $method
      * @return $this
+     * @since 2.0.0
      */
     public function setMethod($method)
     {
@@ -107,6 +117,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Payment method instance code getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMethodCode()
     {
@@ -118,6 +129,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -133,6 +145,7 @@ abstract class AbstractConfig implements ConfigInterface
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getValue($key, $storeId = null)
     {
@@ -160,6 +173,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @param string $methodCode
      * @return void
+     * @since 2.0.0
      */
     public function setMethodCode($methodCode)
     {
@@ -171,6 +185,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @param string $pathPattern
      * @return void
+     * @since 2.0.0
      */
     public function setPathPattern($pathPattern)
     {
@@ -182,6 +197,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @param string $fieldName
      * @return string|null
+     * @since 2.0.0
      */
     protected function _getSpecificConfigPath($fieldName)
     {
@@ -198,6 +214,7 @@ abstract class AbstractConfig implements ConfigInterface
      * @param string $key Underscored key
      * @param string $value Old value
      * @return string Modified value or old value
+     * @since 2.0.0
      */
     protected function _prepareValue($key, $value)
     {
@@ -216,6 +233,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Check whether only Unilateral payments (Accelerated Boarding) possible for Express method or not
      *
      * @return bool
+     * @since 2.0.0
      */
     public function shouldUseUnilateralPayments()
     {
@@ -226,6 +244,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Check whether WPP API credentials are available for this method
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isWppApiAvailabe()
     {
@@ -241,6 +260,7 @@ abstract class AbstractConfig implements ConfigInterface
      * @param null $methodCode
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMethodAvailable($methodCode = null)
     {
@@ -257,6 +277,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @todo: refactor this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function isMethodActive($method)
     {
@@ -322,6 +343,7 @@ abstract class AbstractConfig implements ConfigInterface
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function isMethodSupportedForCountry($method = null, $countryCode = null)
     {
@@ -332,6 +354,7 @@ abstract class AbstractConfig implements ConfigInterface
      * BN code getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBuildNotationCode()
     {
@@ -343,7 +366,8 @@ abstract class AbstractConfig implements ConfigInterface
      * The getter function to get the ProductMetadata
      *
      * @return ProductMetadataInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getProductMetadata()
     {

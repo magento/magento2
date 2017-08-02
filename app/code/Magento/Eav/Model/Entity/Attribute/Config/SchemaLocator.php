@@ -9,18 +9,25 @@ namespace Magento\Eav\Model\Entity\Attribute\Config;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator
+ *
+ * @since 2.0.0
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Schema file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_schema;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
@@ -32,6 +39,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @return string|null
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getSchema()
     {
@@ -43,6 +51,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @return string|null
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getPerFileSchema()
     {

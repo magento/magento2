@@ -11,21 +11,25 @@ use Magento\Customer\Model\Context;
  * Shopping cart block
  *
  * @api
+ * @since 2.0.0
  */
 class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Url
+     * @since 2.0.0
      */
     protected $_catalogUrlBuilder;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
+     * @since 2.0.0
      */
     protected $_cartHelper;
 
@@ -38,6 +42,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -60,6 +65,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @codeCoverageIgnore
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +78,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function prepareItemUrls()
     {
@@ -112,6 +119,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @codeCoverageIgnore
      * @return bool
+     * @since 2.0.0
      */
     public function hasError()
     {
@@ -121,6 +129,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @codeCoverageIgnore
      * @return int
+     * @since 2.0.0
      */
     public function getItemsSummaryQty()
     {
@@ -130,6 +139,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @codeCoverageIgnore
      * @return bool
+     * @since 2.0.0
      */
     public function isWishlistActive()
     {
@@ -149,6 +159,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @codeCoverageIgnore
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutUrl()
     {
@@ -157,6 +168,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getContinueShoppingUrl()
     {
@@ -175,6 +187,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @return bool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsVirtual()
     {
@@ -186,6 +199,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @param string $alias Container block alias in layout
      * @return array
+     * @since 2.0.0
      */
     public function getMethods($alias)
     {
@@ -202,6 +216,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param string $name Block name in layout
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getMethodHtml($name)
     {
@@ -216,6 +231,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * Return customer quote items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -229,6 +245,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @codeCoverageIgnore
      * @return int
+     * @since 2.0.0
      */
     public function getItemsCount()
     {
@@ -239,6 +256,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * Render pagination HTML
      *
      * @return string
+     * @since 2.2.0
      */
     public function getPagerHtml()
     {

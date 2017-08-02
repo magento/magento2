@@ -7,10 +7,16 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\AbstractAggregateCalculator
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractAggregateCalculator extends AbstractCalculator
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -87,6 +93,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function calculateWithTaxNotInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -177,6 +184,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
      * @param bool $round
      * @param QuoteDetailsItemInterface $item
      * @return float
+     * @since 2.0.0
      */
     abstract protected function roundAmount(
         $amount,

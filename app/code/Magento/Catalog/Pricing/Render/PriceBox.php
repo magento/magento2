@@ -18,16 +18,19 @@ use Magento\Framework\View\Element\Template\Context;
  *
  * @method string getPriceElementIdPrefix()
  * @method string getIdSuffix()
+ * @since 2.0.0
  */
 class PriceBox extends PriceBoxRender
 {
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $mathRandom;
 
@@ -40,6 +43,7 @@ class PriceBox extends PriceBoxRender
      * @param Random $mathRandom
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -60,6 +64,7 @@ class PriceBox extends PriceBoxRender
      *
      * @param mixed $valueToEncode
      * @return string
+     * @since 2.0.0
      */
     public function jsonEncode($valueToEncode)
     {
@@ -72,6 +77,7 @@ class PriceBox extends PriceBoxRender
      * @param int $length
      * @param string|null $chars
      * @return string
+     * @since 2.0.0
      */
     public function getRandomString($length, $chars = null)
     {
@@ -84,6 +90,7 @@ class PriceBox extends PriceBoxRender
      * @param Product $product
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getCanDisplayQty(Product $product)
     {

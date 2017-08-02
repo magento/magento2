@@ -9,6 +9,7 @@ use Magento\Framework\Data\Graph;
 
 /**
  * Build circular dependencies by modules map
+ * @since 2.0.0
  */
 class Circular
 {
@@ -16,6 +17,7 @@ class Circular
      * Map where the key is the vertex and the value are the adjacent vertices(dependencies) of this vertex
      *
      * @var array
+     * @since 2.0.0
      */
     protected $dependencies = [];
 
@@ -23,6 +25,7 @@ class Circular
      * Modules circular dependencies map
      *
      * @var array
+     * @since 2.0.0
      */
     protected $circularDependencies = [];
 
@@ -30,6 +33,7 @@ class Circular
      * Graph object
      *
      * @var \Magento\Framework\Data\Graph
+     * @since 2.0.0
      */
     protected $graph;
 
@@ -38,6 +42,7 @@ class Circular
      *
      * @param array $dependencies Key is the vertex and the value are the adjacent vertices(dependencies) of this vertex
      * @return array
+     * @since 2.0.0
      */
     public function buildCircularDependencies($dependencies)
     {
@@ -61,6 +66,7 @@ class Circular
      *
      * @param array $dependencies
      * @return void
+     * @since 2.0.0
      */
     protected function init($dependencies)
     {
@@ -75,6 +81,7 @@ class Circular
      * @param string $vertex
      * @param array $path nesting path
      * @return void
+     * @since 2.0.0
      */
     protected function expandDependencies($vertex, $path = [])
     {
@@ -110,6 +117,7 @@ class Circular
      *
      * @param array $modules
      * @return void
+     * @since 2.0.0
      */
     protected function buildCircular($modules)
     {
@@ -127,6 +135,7 @@ class Circular
      *
      * @param array $circularDependencies
      * @return array
+     * @since 2.0.0
      */
     protected function divideByModules($circularDependencies)
     {

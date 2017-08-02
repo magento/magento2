@@ -11,6 +11,7 @@ namespace Magento\Cookie\Block\Html;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Notices extends \Magento\Framework\View\Element\Template
 {
@@ -19,6 +20,7 @@ class Notices extends \Magento\Framework\View\Element\Template
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getPrivacyPolicyLink()
     {

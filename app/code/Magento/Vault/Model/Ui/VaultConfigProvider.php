@@ -15,6 +15,7 @@ use Magento\Vault\Api\PaymentMethodListInterface;
  * Provides information about vault payemnt methods availability on storefront
  *
  * @api
+ * @since 2.1.0
  */
 class VaultConfigProvider implements ConfigProviderInterface
 {
@@ -22,21 +23,25 @@ class VaultConfigProvider implements ConfigProviderInterface
 
     /**
      * @var string
+     * @since 2.1.0
      */
     private static $vaultCode = 'vault';
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var SessionManagerInterface
+     * @since 2.1.0
      */
     private $session;
 
     /**
      * @var PaymentMethodListInterface
+     * @since 2.2.0
      */
     private $vaultPaymentList;
 
@@ -44,6 +49,7 @@ class VaultConfigProvider implements ConfigProviderInterface
      * VaultConfigProvider constructor.
      * @param StoreManagerInterface $storeManager
      * @param SessionManagerInterface $session
+     * @since 2.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -57,6 +63,7 @@ class VaultConfigProvider implements ConfigProviderInterface
      * Retrieve assoc array of checkout configuration
      *
      * @return array
+     * @since 2.1.0
      */
     public function getConfig()
     {
@@ -79,7 +86,8 @@ class VaultConfigProvider implements ConfigProviderInterface
     /**
      * Get vault payment list instance
      * @return PaymentMethodListInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getVaultPaymentList()
     {

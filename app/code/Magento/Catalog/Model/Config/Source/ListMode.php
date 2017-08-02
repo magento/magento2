@@ -5,12 +5,18 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\ListMode
+ *
+ * @since 2.0.0
+ */
 class ListMode implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

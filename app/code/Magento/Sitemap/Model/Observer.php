@@ -9,6 +9,7 @@ namespace Magento\Sitemap\Model;
  * Sitemap module observer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Observer
 {
@@ -41,26 +42,31 @@ class Observer
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
+     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -70,6 +76,7 @@ class Observer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -91,6 +98,7 @@ class Observer
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function scheduledGenerateSitemaps()
     {

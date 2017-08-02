@@ -7,22 +7,32 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\UpdateProductOptionsObserver
+ *
+ * @since 2.0.0
+ */
 class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
      * Weee data
      *
      * @var \Magento\Weee\Helper\Data
+     * @since 2.0.0
      */
     protected $weeeData = null;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     * @since 2.0.0
+     */
     protected $registry;
 
     /**
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $taxData;
 
@@ -30,6 +40,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param \Magento\Tax\Helper\Data $taxData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
@@ -47,6 +58,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -109,6 +121,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
      *
      * @param  int|null $storeId
      * @return string
+     * @since 2.0.0
      */
     protected function getWhichCalcPriceToUse($storeId = null)
     {

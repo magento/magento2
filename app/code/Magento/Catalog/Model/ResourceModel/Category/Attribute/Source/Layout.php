@@ -9,16 +9,19 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Source;
  * Catalog category landing page attribute source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_cmsLayouts;
 
     /**
      * @param array $cmsLayouts
+     * @since 2.0.0
      */
     public function __construct(array $cmsLayouts = [])
     {
@@ -29,6 +32,7 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Return cms layout update options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllOptions()
     {

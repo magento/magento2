@@ -13,11 +13,13 @@ namespace Magento\Config\Model\Config\Backend\Image;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Pdf extends \Magento\Config\Model\Config\Backend\Image
 {
     /**
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getAllowedExtensions()
     {

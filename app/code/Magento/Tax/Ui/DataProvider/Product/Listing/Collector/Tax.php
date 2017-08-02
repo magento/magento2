@@ -17,6 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Collect enough information about product tax
  * In order to allow rendering product on front, we should prepare all cases for all prices
  * This means that we should calculate taxes for each type of price for each product
+ * @since 2.2.0
  */
 class Tax implements ProductRenderCollectorInterface
 {
@@ -34,21 +35,25 @@ class Tax implements ProductRenderCollectorInterface
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.2.0
      */
     private $priceCurrency;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface
+     * @since 2.2.0
      */
     private $priceInfoExtensionFactory;
 
     /**
      * @var PriceInfoInterfaceFactory
+     * @since 2.2.0
      */
     private $priceInfoFactory;
 
     /**
      * @var FormattedPriceInfoBuilder
+     * @since 2.2.0
      */
     private $formattedPriceInfoBuilder;
 
@@ -57,6 +62,7 @@ class Tax implements ProductRenderCollectorInterface
      * @param \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory
      * @param PriceInfoInterfaceFactory $priceInfoFactory
      * @param FormattedPriceInfoBuilder $formattedPriceInfoBuilder
+     * @since 2.2.0
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
@@ -72,6 +78,7 @@ class Tax implements ProductRenderCollectorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {

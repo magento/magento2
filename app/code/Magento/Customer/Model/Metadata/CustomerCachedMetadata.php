@@ -9,11 +9,13 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 /**
  * Cached customer attribute metadata service
+ * @since 2.0.0
  */
 class CustomerCachedMetadata extends CachedMetadata implements CustomerMetadataInterface
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $entityType = 'customer';
 
@@ -22,6 +24,7 @@ class CustomerCachedMetadata extends CachedMetadata implements CustomerMetadataI
      *
      * @param CustomerMetadata $metadata
      * @param AttributeMetadataCache|null $attributeMetadataCache
+     * @since 2.0.0
      */
     public function __construct(
         CustomerMetadata $metadata,

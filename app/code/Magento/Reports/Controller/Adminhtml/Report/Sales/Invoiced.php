@@ -8,12 +8,18 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
 use Magento\Reports\Model\Flag;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Invoiced
+ *
+ * @since 2.0.0
+ */
 class Invoiced extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Invoice report action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

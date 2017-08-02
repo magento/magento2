@@ -7,13 +7,20 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\System\Config;
 
 /**
  * Flat category on/off backend
+ * @since 2.0.0
  */
 class Mode extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Indexer\Model\Indexer\State */
+    /**
+     * @var \Magento\Indexer\Model\Indexer\State
+     * @since 2.0.0
+     */
     protected $indexerState;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
+     */
     protected $indexerRegistry;
 
     /**
@@ -26,6 +33,7 @@ class Mode extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -47,6 +55,7 @@ class Mode extends \Magento\Framework\App\Config\Value
      * Set after commit callback
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -58,6 +67,7 @@ class Mode extends \Magento\Framework\App\Config\Value
      * Process flat enabled mode change
      *
      * @return void
+     * @since 2.0.0
      */
     public function processValue()
     {

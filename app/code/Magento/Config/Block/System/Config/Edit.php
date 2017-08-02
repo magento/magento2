@@ -14,6 +14,7 @@ namespace Magento\Config\Block\System\Config;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
@@ -23,6 +24,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Form block class name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_formBlockName;
 
@@ -30,6 +32,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Block template File
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Config::system/config/edit.phtml';
 
@@ -37,6 +40,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Configuration structure
      *
      * @var \Magento\Config\Model\Config\Structure
+     * @since 2.0.0
      */
     protected $_configStructure;
 
@@ -44,6 +48,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,6 +63,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Prepare layout object
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -91,6 +97,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve rendered save buttons
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveButtonHtml()
     {
@@ -101,6 +108,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve config save url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {

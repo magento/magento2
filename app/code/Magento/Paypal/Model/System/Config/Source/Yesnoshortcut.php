@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
 
 /**
  * Used in creating options for Yes|No config value selection
+ * @since 2.0.0
  */
 class Yesnoshortcut implements \Magento\Framework\Option\ArrayInterface
 {
@@ -14,6 +15,7 @@ class Yesnoshortcut implements \Magento\Framework\Option\ArrayInterface
      * Options getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

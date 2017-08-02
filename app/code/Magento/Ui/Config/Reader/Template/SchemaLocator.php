@@ -9,6 +9,7 @@ use Magento\Framework\Module\Dir;
 
 /**
  * Config schema locator interface
+ * @since 2.2.0
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -16,11 +17,13 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Path to corresponding XSD file with validation rules for merged config
      *
      * @var string
+     * @since 2.2.0
      */
     private $schema;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
@@ -29,6 +32,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSchema()
     {
@@ -37,6 +41,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getPerFileSchema()
     {

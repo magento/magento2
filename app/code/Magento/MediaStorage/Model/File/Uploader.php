@@ -10,6 +10,7 @@ namespace Magento\MediaStorage\Model\File;
  * Core file uploader model
  *
  * @api
+ * @since 2.0.0
  */
 class Uploader extends \Magento\Framework\File\Uploader
 {
@@ -17,6 +18,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      * Flag, that defines should DB processing be skipped
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_skipDbProcessing = false;
 
@@ -24,6 +26,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      * Core file storage
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
+     * @since 2.0.0
      */
     protected $_coreFileStorage = null;
 
@@ -31,11 +34,13 @@ class Uploader extends \Magento\Framework\File\Uploader
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_coreFileStorageDb = null;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
+     * @since 2.0.0
      */
     protected $_validator;
 
@@ -44,6 +49,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
+     * @since 2.0.0
      */
     public function __construct(
         $fileId,
@@ -62,6 +68,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      *
      * @param  array $result
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave($result)
     {
@@ -83,6 +90,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      *
      * @param null|bool $flag
      * @return bool|\Magento\MediaStorage\Model\File\Uploader
+     * @since 2.0.0
      */
     public function skipDbProcessing($flag = null)
     {
@@ -98,6 +106,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      *
      * @param string $extension
      * @return boolean
+     * @since 2.0.0
      */
     public function checkAllowedExtension($extension)
     {
@@ -113,6 +122,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      * Get file size
      *
      * @return int
+     * @since 2.0.0
      */
     public function getFileSize()
     {
@@ -123,6 +133,7 @@ class Uploader extends \Magento\Framework\File\Uploader
      * Validate file
      *
      * @return array
+     * @since 2.0.0
      */
     public function validateFile()
     {

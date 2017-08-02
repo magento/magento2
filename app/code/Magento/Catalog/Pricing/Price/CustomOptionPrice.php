@@ -15,6 +15,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 /**
  * Class OptionPrice
  *
+ * @since 2.0.0
  */
 class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterface
 {
@@ -25,6 +26,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $priceOptions;
 
@@ -32,6 +34,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * Code of parent adjustment to be skipped from calculation
      *
      * @var string
+     * @since 2.0.0
      */
     protected $excludeAdjustment = null;
 
@@ -41,6 +44,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $excludeAdjustment
+     * @since 2.0.0
      */
     public function __construct(
         SaleableInterface $saleableItem,
@@ -59,6 +63,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -117,6 +122,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface|bool|float
+     * @since 2.0.0
      */
     public function getCustomAmount($amount = null, $exclude = null, $context = [])
     {
@@ -134,6 +140,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      *
      * @param bool $getMin
      * @return float
+     * @since 2.0.0
      */
     public function getCustomOptionRange($getMin)
     {
@@ -153,6 +160,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * Return price for select custom options
      *
      * @return float
+     * @since 2.0.0
      */
     public function getSelectedOptions()
     {
@@ -181,6 +189,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      *
      * @param array $values
      * @return float
+     * @since 2.0.0
      */
     protected function processOptions(array $values)
     {
@@ -204,6 +213,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * Get Product Options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {

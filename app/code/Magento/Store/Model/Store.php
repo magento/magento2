@@ -33,6 +33,7 @@ use Magento\Store\Api\Data\StoreInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 2.0.0
  */
 class Store extends AbstractExtensibleModel implements
     AppScopeInterface,
@@ -129,6 +130,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
+     * @since 2.0.0
      */
     protected $_configCacheType;
 
@@ -136,6 +138,7 @@ class Store extends AbstractExtensibleModel implements
      * Cache flag
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_cacheTag = true;
 
@@ -143,6 +146,7 @@ class Store extends AbstractExtensibleModel implements
      * Event prefix for model events
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'store';
 
@@ -150,6 +154,7 @@ class Store extends AbstractExtensibleModel implements
      * Event object name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'store';
 
@@ -157,6 +162,7 @@ class Store extends AbstractExtensibleModel implements
      * Price filter
      *
      * @var \Magento\Directory\Model\Currency\Filter
+     * @since 2.0.0
      */
     protected $_priceFilter;
 
@@ -164,6 +170,7 @@ class Store extends AbstractExtensibleModel implements
      * Store configuration cache
      *
      * @var array|null
+     * @since 2.0.0
      */
     protected $_configCache = null;
 
@@ -171,6 +178,7 @@ class Store extends AbstractExtensibleModel implements
      * Base nodes of store configuration cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_configCacheBaseNodes = [];
 
@@ -178,6 +186,7 @@ class Store extends AbstractExtensibleModel implements
      * Directory cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_dirCache = [];
 
@@ -185,6 +194,7 @@ class Store extends AbstractExtensibleModel implements
      * URL cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_urlCache = [];
 
@@ -192,6 +202,7 @@ class Store extends AbstractExtensibleModel implements
      * Base URL cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_baseUrlCache = [];
 
@@ -199,6 +210,7 @@ class Store extends AbstractExtensibleModel implements
      * Session entity
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $_session;
 
@@ -206,6 +218,7 @@ class Store extends AbstractExtensibleModel implements
      * Flag that shows that backend URLs are secure
      *
      * @var boolean|null
+     * @since 2.0.0
      */
     protected $_isAdminSecure = null;
 
@@ -213,6 +226,7 @@ class Store extends AbstractExtensibleModel implements
      * Flag that shows that frontend URLs are secure
      *
      * @var boolean|null
+     * @since 2.0.0
      */
     protected $_isFrontSecure = null;
 
@@ -220,6 +234,7 @@ class Store extends AbstractExtensibleModel implements
      * Store frontend name
      *
      * @var string|null
+     * @since 2.0.0
      */
     protected $_frontendName = null;
 
@@ -227,6 +242,7 @@ class Store extends AbstractExtensibleModel implements
      * Readonly flag
      *
      * @var bool
+     * @since 2.0.0
      */
     private $_isReadOnly = false;
 
@@ -234,21 +250,25 @@ class Store extends AbstractExtensibleModel implements
      * Url model for current store
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_isCustomEntryPoint = false;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Config\Model\ResourceModel\Config\Data
+     * @since 2.0.0
      */
     protected $_configDataResource;
 
@@ -256,6 +276,7 @@ class Store extends AbstractExtensibleModel implements
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -263,6 +284,7 @@ class Store extends AbstractExtensibleModel implements
      * Filesystem instance
      *
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
@@ -270,51 +292,61 @@ class Store extends AbstractExtensibleModel implements
      * Store Config
      *
      * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
+     * @since 2.0.0
      */
     protected $_sidResolver;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_currencyInstalled;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $_httpContext;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $currencyFactory;
 
     /**
      * @var \Magento\Store\Api\GroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Store\Api\WebsiteRepositoryInterface
+     * @since 2.0.0
      */
     protected $websiteRepository;
 
     /**
      * @var \Magento\Store\Model\Information
+     * @since 2.0.0
      */
     protected $information;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $_storeManager;
 
     /**
      * @var \Magento\Framework\Url\ModifierInterface
+     * @since 2.1.0
      */
     private $urlModifier;
 
@@ -345,6 +377,7 @@ class Store extends AbstractExtensibleModel implements
      * @param array $data optional generic object data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -402,6 +435,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @return string[]
+     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -414,6 +448,7 @@ class Store extends AbstractExtensibleModel implements
      * Init not serializable fields
      *
      * @return void
+     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -429,6 +464,7 @@ class Store extends AbstractExtensibleModel implements
      * Initialize object
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -439,6 +475,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store session object
      *
      * @return \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -453,6 +490,7 @@ class Store extends AbstractExtensibleModel implements
      * Validation rules for store
      *
      * @return \Zend_Validate_Interface|null
+     * @since 2.0.0
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -481,6 +519,7 @@ class Store extends AbstractExtensibleModel implements
      * @param   mixed $key
      * @param   string $field
      * @return  $this
+     * @since 2.0.0
      */
     public function load($key, $field = null)
     {
@@ -495,6 +534,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve Store code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -503,6 +543,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -511,6 +552,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -519,6 +561,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -530,6 +573,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param   string $path
      * @return  string|null
+     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -545,6 +589,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param Website $website
      * @return void
+     * @since 2.0.0
      */
     public function setWebsite(Website $website)
     {
@@ -555,6 +600,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store website
      *
      * @return Website|bool
+     * @since 2.0.0
      */
     public function getWebsite()
     {
@@ -570,6 +616,7 @@ class Store extends AbstractExtensibleModel implements
      * @param   string $route
      * @param   array $params
      * @return  string
+     * @since 2.0.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -592,6 +639,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getBaseUrl($type = UrlInterface::URL_TYPE_LINK, $secure = null)
     {
@@ -661,6 +709,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve base media directory path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseMediaDir()
     {
@@ -671,6 +720,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve base static directory path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseStaticDir()
     {
@@ -682,6 +732,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param   string $url
      * @return  string
+     * @since 2.0.0
      */
     protected function _updatePathUseRewrites($url)
     {
@@ -700,6 +751,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if used entry point is custom
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isCustomEntryPoint()
     {
@@ -715,6 +767,7 @@ class Store extends AbstractExtensibleModel implements
      * @param Filesystem $filesystem
      * @param bool $secure
      * @return string|bool
+     * @since 2.0.0
      */
     protected function _getMediaScriptUrl(Filesystem $filesystem, $secure)
     {
@@ -730,6 +783,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param   string $url
      * @return  string
+     * @since 2.0.0
      */
     protected function _updatePathUseStoreView($url)
     {
@@ -743,6 +797,7 @@ class Store extends AbstractExtensibleModel implements
      * Returns whether url forming scheme prepends url path with store view code
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isUseStoreInUrl()
     {
@@ -754,6 +809,7 @@ class Store extends AbstractExtensibleModel implements
      * Get store identifier
      *
      * @return  int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -764,6 +820,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if frontend URLs should be secure
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isFrontUrlSecure()
     {
@@ -776,6 +833,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isUrlSecure()
     {
@@ -786,6 +844,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if request was secure
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isCurrentlySecure()
     {
@@ -815,6 +874,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store base currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -829,6 +889,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store base currency
      *
      * @return Currency
+     * @since 2.0.0
      */
     public function getBaseCurrency()
     {
@@ -844,6 +905,7 @@ class Store extends AbstractExtensibleModel implements
      * Get default store currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultCurrencyCode()
     {
@@ -855,6 +917,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store default currency
      *
      * @return Currency
+     * @since 2.0.0
      */
     public function getDefaultCurrency()
     {
@@ -871,6 +934,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param   string $code
      * @return  string
+     * @since 2.0.0
      */
     public function setCurrentCurrencyCode($code)
     {
@@ -888,6 +952,7 @@ class Store extends AbstractExtensibleModel implements
      * Get current store currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentCurrencyCode()
     {
@@ -918,6 +983,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param bool $skipBaseNotAllowed
      * @return array
+     * @since 2.0.0
      */
     public function getAvailableCurrencyCodes($skipBaseNotAllowed = false)
     {
@@ -951,6 +1017,7 @@ class Store extends AbstractExtensibleModel implements
      * Array of installed currencies for the scope
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllowedCurrencies()
     {
@@ -961,6 +1028,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store current currency
      *
      * @return Currency
+     * @since 2.0.0
      */
     public function getCurrentCurrency()
     {
@@ -983,6 +1051,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve current currency rate
      *
      * @return float
+     * @since 2.0.0
      */
     public function getCurrentCurrencyRate()
     {
@@ -993,6 +1062,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve root category identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRootCategoryId()
     {
@@ -1007,6 +1077,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param Group $group
      * @return Store
+     * @since 2.0.0
      */
     public function setGroup(Group $group)
     {
@@ -1018,6 +1089,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve group model
      *
      * @return Group|bool
+     * @since 2.0.0
      */
     public function getGroup()
     {
@@ -1031,6 +1103,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve website identifier
      *
      * @return string|int|null
+     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -1040,8 +1113,9 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Reinit Stores on after save
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return $this
+     * @since 2.2.0
      */
     public function afterSave()
     {
@@ -1051,6 +1125,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -1061,6 +1136,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve group identifier
      *
      * @return string|int|null
+     * @since 2.0.0
      */
     public function getGroupId()
     {
@@ -1071,6 +1147,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store group identifier
      *
      * @return string|int|null
+     * @since 2.0.0
      */
     public function getStoreGroupId()
     {
@@ -1079,6 +1156,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function setStoreGroupId($storeGroupId)
     {
@@ -1089,6 +1167,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve default group identifier
      *
      * @return string|int|null
+     * @since 2.0.0
      */
     public function getDefaultGroupId()
     {
@@ -1099,6 +1178,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store can be deleted
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isCanDelete()
     {
@@ -1113,6 +1193,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store is default
      *
      * @return boolean
+     * @since 2.1.0
      */
     public function isDefault()
     {
@@ -1129,6 +1210,7 @@ class Store extends AbstractExtensibleModel implements
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getCurrentUrl($fromStore = true)
     {
@@ -1183,6 +1265,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store is active
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isActive()
     {
@@ -1193,6 +1276,7 @@ class Store extends AbstractExtensibleModel implements
      * Protect delete from non admin area
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -1204,6 +1288,7 @@ class Store extends AbstractExtensibleModel implements
      * Rewrite in order to clear configuration cache
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterDelete()
     {
@@ -1228,6 +1313,7 @@ class Store extends AbstractExtensibleModel implements
      * Reinit and reset Config Data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function resetConfig()
     {
@@ -1244,6 +1330,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param bool $value
      * @return bool
+     * @since 2.0.0
      */
     public function isReadOnly($value = null)
     {
@@ -1257,6 +1344,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store group name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrontendName()
     {
@@ -1272,6 +1360,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve formatted store address from config
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormattedAddress()
     {
@@ -1282,6 +1371,7 @@ class Store extends AbstractExtensibleModel implements
      * Get identities
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -1290,6 +1380,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getStorePath()
     {
@@ -1299,6 +1390,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getScopeType()
     {
@@ -1307,6 +1399,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getScopeTypeName()
     {
@@ -1315,6 +1408,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -1323,6 +1417,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
@@ -1334,7 +1429,8 @@ class Store extends AbstractExtensibleModel implements
      * Gets URL modifier.
      *
      * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getUrlModifier()
     {

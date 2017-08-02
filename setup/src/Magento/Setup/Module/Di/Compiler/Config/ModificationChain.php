@@ -6,15 +6,22 @@
 
 namespace Magento\Setup\Module\Di\Compiler\Config;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\ModificationChain
+ *
+ * @since 2.0.0
+ */
 class ModificationChain implements ModificationInterface
 {
     /**
      * @var ModificationInterface[]
+     * @since 2.0.0
      */
     private $modificationsList;
 
     /**
      * @param array $modificationsList
+     * @since 2.0.0
      */
     public function __construct(array $modificationsList = [])
     {
@@ -34,6 +41,7 @@ class ModificationChain implements ModificationInterface
      *
      * @param array $config
      * @return array
+     * @since 2.0.0
      */
     public function modify(array $config)
     {

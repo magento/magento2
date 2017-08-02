@@ -5,12 +5,18 @@
  */
 namespace Magento\Catalog\Controller\Index;
 
+/**
+ * Class \Magento\Catalog\Controller\Index\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Index action
      *
      * @return $this
+     * @since 2.0.0
      */
     public function execute()
     {

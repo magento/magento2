@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Api\Search;
 
+/**
+ * Class \Magento\Framework\Api\Search\SearchCriteriaFactory
+ *
+ * @since 2.0.0
+ */
 class SearchCriteriaFactory
 {
     /**
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -18,12 +24,14 @@ class SearchCriteriaFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -38,6 +46,7 @@ class SearchCriteriaFactory
      *
      * @param array $data
      * @return SearchCriteriaInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

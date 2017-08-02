@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Item;
  * Adminhtml sales order item renderer
  *
  * @api
+ * @since 2.0.0
  */
 class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
@@ -18,6 +19,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Message helper
      *
      * @var \Magento\GiftMessage\Helper\Message
+     * @since 2.0.0
      */
     protected $_messageHelper;
 
@@ -25,6 +27,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Checkout helper
      *
      * @var \Magento\Checkout\Helper\Data
+     * @since 2.0.0
      */
     protected $_checkoutHelper;
 
@@ -32,6 +35,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Giftmessage object
      *
      * @var \Magento\GiftMessage\Model\Message
+     * @since 2.0.0
      */
     protected $_giftMessage = [];
 
@@ -43,6 +47,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -62,6 +67,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Get order item
      *
      * @return Item
+     * @since 2.0.0
      */
     public function getItem()
     {
@@ -73,6 +79,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      *
      * @param string $id
      * @return string
+     * @since 2.0.0
      */
     public function getFieldId($id)
     {
@@ -83,6 +90,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Retrieve field html id prefix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFieldIdPrefix()
     {
@@ -93,6 +101,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Indicate that block can display container
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplayContainer()
     {
@@ -103,6 +112,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Retrieve default value for giftmessage sender
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultSender()
     {
@@ -121,6 +131,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Retrieve default value for giftmessage recipient
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultRecipient()
     {
@@ -150,6 +161,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      *
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     public function getFieldName($name)
     {
@@ -160,6 +172,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Initialize gift message for entity
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initMessage()
     {
@@ -182,6 +195,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Retrieve gift message for entity
      *
      * @return \Magento\GiftMessage\Model\Message
+     * @since 2.0.0
      */
     public function getMessage()
     {
@@ -196,6 +210,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Retrieve save url
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -209,6 +224,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Retrieve block html id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -219,6 +235,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * Indicates that block can display giftmessages form
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplayGiftmessage()
     {
@@ -234,6 +251,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      *
      * @param Item $item
      * @return string
+     * @since 2.0.0
      */
     public function displaySubtotalInclTax($item)
     {
@@ -248,6 +266,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      *
      * @param Item|\Magento\Framework\DataObject $item
      * @return string
+     * @since 2.0.0
      */
     public function displayPriceInclTax(\Magento\Framework\DataObject $item)
     {
@@ -263,6 +282,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * @param null $field
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.1.0
      */
     public function getColumnHtml(\Magento\Framework\DataObject $item, $column, $field = null)
     {
@@ -300,6 +320,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
 
     /**
      * @return array
+     * @since 2.1.0
      */
     public function getColumns()
     {

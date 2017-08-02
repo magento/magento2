@@ -18,6 +18,7 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
  * Bundle option price
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class BundleSelectionPrice extends AbstractPrice
 {
@@ -28,6 +29,7 @@ class BundleSelectionPrice extends AbstractPrice
 
     /**
      * @var \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     protected $bundleProduct;
 
@@ -35,21 +37,25 @@ class BundleSelectionPrice extends AbstractPrice
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var DiscountCalculator
+     * @since 2.0.0
      */
     protected $discountCalculator;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $useRegularPrice;
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $selection;
 
@@ -57,6 +63,7 @@ class BundleSelectionPrice extends AbstractPrice
      * Code of parent adjustment to be skipped from calculation
      *
      * @var string
+     * @since 2.0.0
      */
     protected $excludeAdjustment = null;
 
@@ -70,6 +77,7 @@ class BundleSelectionPrice extends AbstractPrice
      * @param DiscountCalculator $discountCalculator
      * @param bool $useRegularPrice
      * @param array $excludeAdjustment
+     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -95,6 +103,7 @@ class BundleSelectionPrice extends AbstractPrice
      * Get the price value for one of selection product
      *
      * @return bool|float
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -145,6 +154,7 @@ class BundleSelectionPrice extends AbstractPrice
      * Get Price Amount object
      *
      * @return AmountInterface
+     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -171,6 +181,7 @@ class BundleSelectionPrice extends AbstractPrice
 
     /**
      * @return SaleableInterface
+     * @since 2.0.0
      */
     public function getProduct()
     {

@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductAttributeSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -15,6 +16,7 @@ interface ProductAttributeSearchResultsInterface extends \Magento\Framework\Api\
      * Get attributes list.
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface[]
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -23,6 +25,7 @@ interface ProductAttributeSearchResultsInterface extends \Magento\Framework\Api\
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 }

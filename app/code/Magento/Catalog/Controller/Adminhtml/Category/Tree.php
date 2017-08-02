@@ -6,15 +6,22 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Tree
+ *
+ * @since 2.0.0
+ */
 class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -22,6 +29,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -38,6 +46,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
      * Retrieve category tree
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,20 +11,28 @@ use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Dynamic\Algorithm\Improved
+ *
+ * @since 2.0.0
+ */
 class Improved implements AlgorithmInterface
 {
     /**
      * @var Algorithm
+     * @since 2.0.0
      */
     private $algorithm;
 
     /**
      * @var DataProviderInterface
+     * @since 2.0.0
      */
     private $dataProvider;
 
     /**
      * @var OptionsInterface
+     * @since 2.0.0
      */
     private $options;
 
@@ -32,6 +40,7 @@ class Improved implements AlgorithmInterface
      * @param DataProviderInterface $dataProvider
      * @param Algorithm $algorithm
      * @param OptionsInterface $options
+     * @since 2.0.0
      */
     public function __construct(
         DataProviderInterface $dataProvider,
@@ -45,6 +54,7 @@ class Improved implements AlgorithmInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems(
         BucketInterface $bucket,

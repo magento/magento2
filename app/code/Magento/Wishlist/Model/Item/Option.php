@@ -14,22 +14,26 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  * @method int getProductId()
  *
  * @api
+ * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
     /**
      * @var Item
+     * @since 2.0.0
      */
     protected $_item;
 
     /**
      * @var Product|null
+     * @since 2.0.0
      */
     protected $_product;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -40,6 +44,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -57,6 +62,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,6 +73,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Checks that item option model has data changes
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _hasModelChanged()
     {
@@ -82,6 +89,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      *
      * @param   Item $item
      * @return  $this
+     * @since 2.0.0
      */
     public function setItem($item)
     {
@@ -94,6 +102,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Get option item
      *
      * @return Item
+     * @since 2.0.0
      */
     public function getItem()
     {
@@ -105,6 +114,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      *
      * @param   Product $product
      * @return  $this
+     * @since 2.0.0
      */
     public function setProduct($product)
     {
@@ -117,6 +127,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Get option product
      *
      * @return Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -131,6 +142,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Get option value
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -141,6 +153,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Initialize item identifier before save data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -154,6 +167,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      * Clone option object
      *
      * @return $this
+     * @since 2.0.0
      */
     public function __clone()
     {

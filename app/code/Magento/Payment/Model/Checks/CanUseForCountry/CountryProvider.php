@@ -14,16 +14,19 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
  * This class may be extended if logic fo country selection should be modified.
  *
  * @api
+ * @since 2.0.0
  */
 class CountryProvider
 {
     /**
      * @var DirectoryHelper
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @param DirectoryHelper $directoryHelper
+     * @since 2.0.0
      */
     public function __construct(DirectoryHelper $directoryHelper)
     {
@@ -35,6 +38,7 @@ class CountryProvider
      *
      * @param Quote $quote
      * @return int
+     * @since 2.0.0
      */
     public function getCountry(Quote $quote)
     {

@@ -9,16 +9,19 @@ use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Authentication
 {
     /**
      * @var \Magento\Backend\Model\Auth
+     * @since 2.0.0
      */
     protected $_auth;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $_openActions = [
         'forgotpassword',
@@ -30,41 +33,49 @@ class Authentication
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
+     * @since 2.0.0
      */
     protected $_actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $backendUrl;
 
     /**
      * @var \Magento\Backend\App\BackendAppList
+     * @since 2.0.0
      */
     protected $backendAppList;
 
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
+     * @since 2.0.0
      */
     protected $resultRedirectFactory;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @since 2.0.0
      */
     protected $formKeyValidator;
 
@@ -78,6 +89,7 @@ class Authentication
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -108,6 +120,7 @@ class Authentication
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function aroundDispatch(
         \Magento\Backend\App\AbstractAction $subject,
@@ -148,6 +161,7 @@ class Authentication
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return void
+     * @since 2.0.0
      */
     protected function _processNotLoggedInUser(\Magento\Framework\App\RequestInterface $request)
     {
@@ -192,6 +206,7 @@ class Authentication
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
+     * @since 2.0.0
      */
     protected function _performLogin(\Magento\Framework\App\RequestInterface $request)
     {
@@ -218,6 +233,7 @@ class Authentication
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
+     * @since 2.0.0
      */
     protected function _redirectIfNeededAfterLogin(\Magento\Framework\App\RequestInterface $request)
     {

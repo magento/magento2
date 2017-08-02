@@ -9,11 +9,13 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
  * Adminhtml credit memo items grid
  *
  * @api
+ * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_canReturnToStock;
 
@@ -21,6 +23,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Sales data
      *
      * @var \Magento\Sales\Helper\Data
+     * @since 2.0.0
      */
     protected $_salesData;
 
@@ -31,6 +34,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,6 +52,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Prepare child blocks
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -98,6 +103,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -108,6 +114,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     public function getSource()
     {
@@ -118,6 +125,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order totals block settings
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalData()
     {
@@ -128,6 +136,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve order total bar block data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOrderTotalbarData()
     {
@@ -146,6 +155,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve credit memo model instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -156,6 +166,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check if allow to edit qty
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canEditQty()
     {
@@ -169,6 +180,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get update button html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdateButtonHtml()
     {
@@ -179,6 +191,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get update url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdateUrl()
     {
@@ -195,6 +208,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Whether to show 'Return to stock' column in creaditmemo grid
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canReturnItemsToStock()
     {
@@ -226,6 +240,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Check allow to send new credit memo email
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canSendCreditmemoEmail()
     {

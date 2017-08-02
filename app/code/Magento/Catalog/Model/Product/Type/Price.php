@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Price
 {
@@ -27,6 +28,7 @@ class Price
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected static $attributeCache = [];
 
@@ -34,6 +36,7 @@ class Price
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -41,11 +44,13 @@ class Price
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -53,6 +58,7 @@ class Price
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -60,31 +66,37 @@ class Price
      * Rule factory
      *
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
+     * @since 2.0.0
      */
     protected $_ruleFactory;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var GroupManagementInterface
+     * @since 2.0.0
      */
     protected $_groupManagement;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
+     * @since 2.0.0
      */
     protected $tierPriceFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var ProductTierPriceExtensionFactory
+     * @since 2.2.0
      */
     private $tierPriceExtensionFactory;
 
@@ -102,6 +114,7 @@ class Price
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory,
@@ -133,6 +146,7 @@ class Price
      *
      * @param Product $product
      * @return float
+     * @since 2.0.0
      */
     public function getPrice($product)
     {
@@ -146,6 +160,7 @@ class Price
      * @param float|null $qty
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBasePrice($product, $qty = null)
     {
@@ -162,6 +177,7 @@ class Price
      * @param float|null $qty
      * @param Product $product
      * @return float
+     * @since 2.0.0
      */
     public function getFinalPrice($qty, $product)
     {
@@ -190,6 +206,7 @@ class Price
      * @return float
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
     {
@@ -203,6 +220,7 @@ class Price
      * @param string $key
      * @param bool $returnRawData
      * @return array
+     * @since 2.0.0
      */
     protected function getExistingPrices($product, $key, $returnRawData = false)
     {
@@ -227,6 +245,7 @@ class Price
      * Returns the website to use for group or tier prices, based on the price scope setting
      *
      * @return int|mixed
+     * @since 2.0.0
      */
     protected function getWebsiteForPriceScope()
     {
@@ -246,6 +265,7 @@ class Price
      * @param   float $qty
      * @param   float $finalPrice
      * @return  float
+     * @since 2.0.0
      */
     protected function _applyTierPrice($product, $qty, $finalPrice)
     {
@@ -268,6 +288,7 @@ class Price
      * @return  float|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getTierPrice($qty, $product)
     {
@@ -347,6 +368,7 @@ class Price
      * Gets the CUST_GROUP_ALL id
      *
      * @return int
+     * @since 2.0.0
      */
     protected function getAllCustomerGroupsId()
     {
@@ -359,6 +381,7 @@ class Price
      *
      * @param Product $product
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
+     * @since 2.0.0
      */
     public function getTierPrices($product)
     {
@@ -392,6 +415,7 @@ class Price
      * @param Product $product
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
+     * @since 2.0.0
      */
     public function setTierPrices($product, array $tierPrices = null)
     {
@@ -429,6 +453,7 @@ class Price
     /**
      * @param Product $product
      * @return int
+     * @since 2.0.0
      */
     protected function _getCustomerGroupId($product)
     {
@@ -444,6 +469,7 @@ class Price
      * @param   Product $product
      * @param   float $finalPrice
      * @return  float
+     * @since 2.0.0
      */
     protected function _applySpecialPrice($product, $finalPrice)
     {
@@ -461,6 +487,7 @@ class Price
      *
      * @param   Product $product
      * @return  int
+     * @since 2.0.0
      */
     public function getTierPriceCount($product)
     {
@@ -474,6 +501,7 @@ class Price
      * @param   float $qty
      * @param   Product $product
      * @return  array|float
+     * @since 2.0.0
      */
     public function getFormatedTierPrice($qty, $product)
     {
@@ -496,6 +524,7 @@ class Price
      *
      * @param   Product $product
      * @return  array || float
+     * @since 2.0.0
      */
     public function getFormatedPrice($product)
     {
@@ -510,6 +539,7 @@ class Price
      * @param float $finalPrice
      * @return float
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _applyOptionsPrice($product, $qty, $finalPrice)
     {
@@ -543,6 +573,7 @@ class Price
      * @param   integer|null $gId
      * @param   int|null $productId
      * @return  float
+     * @since 2.0.0
      */
     public function calculatePrice(
         $basePrice,
@@ -595,6 +626,7 @@ class Price
      * @param string $specialPriceTo
      * @param int|string|Store $store
      * @return float
+     * @since 2.0.0
      */
     public function calculateSpecialPrice(
         $finalPrice,
@@ -615,6 +647,7 @@ class Price
      * Check is tier price value fixed or percent of original price
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isTierPriceFixed()
     {

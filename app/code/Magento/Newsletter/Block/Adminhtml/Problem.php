@@ -12,16 +12,19 @@ use Magento\Newsletter\Model\ResourceModel\Problem\Collection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Problem extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'problem/list.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection
+     * @since 2.0.0
      */
     protected $_problemCollection;
 
@@ -29,6 +32,7 @@ class Problem extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param Collection $problemCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -42,6 +46,7 @@ class Problem extends \Magento\Backend\Block\Template
     /**
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -54,6 +59,7 @@ class Problem extends \Magento\Backend\Block\Template
      * Prepare for the newsletter block layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -83,6 +89,7 @@ class Problem extends \Magento\Backend\Block\Template
      * Get the html element for unsubscribe button
      *
      * @return $string
+     * @since 2.0.0
      */
     public function getUnsubscribeButtonHtml()
     {
@@ -93,6 +100,7 @@ class Problem extends \Magento\Backend\Block\Template
      * Get the html element for delete button
      *
      * @return $string
+     * @since 2.0.0
      */
     public function getDeleteButtonHtml()
     {
@@ -104,6 +112,7 @@ class Problem extends \Magento\Backend\Block\Template
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getShowButtons()
     {

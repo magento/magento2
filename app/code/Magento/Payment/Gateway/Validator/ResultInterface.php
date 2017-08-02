@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
  * Interface ResultInterface
  * @package Magento\Payment\Gateway\Validator
  * @api
+ * @since 2.0.0
  */
 interface ResultInterface
 {
@@ -18,6 +19,7 @@ interface ResultInterface
      * Returns validation result
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isValid();
 
@@ -25,6 +27,7 @@ interface ResultInterface
      * Returns list of fails description
      *
      * @return Phrase[]
+     * @since 2.0.0
      */
     public function getFailsDescription();
 }

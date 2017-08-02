@@ -11,12 +11,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Provide configurable sub-products for price calculation
  * @api
+ * @since 2.2.0
  */
 interface ConfigurableOptionsProviderInterface
 {
     /**
      * @param ProductInterface $product
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
+     * @since 2.2.0
      */
     public function getProducts(\Magento\Catalog\Api\Data\ProductInterface $product);
 }

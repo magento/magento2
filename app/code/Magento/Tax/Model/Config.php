@@ -15,6 +15,7 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 2.0.0
  */
 class Config
 {
@@ -117,6 +118,7 @@ class Config
 
     /**
      * @var bool|null
+     * @since 2.0.0
      */
     protected $_priceIncludesTax = null;
 
@@ -124,11 +126,13 @@ class Config
      * Flag which notify what we need use shipping prices exclude tax for calculations
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_needUseShippingExcludeTax = false;
 
     /**
      * @var $_shippingPriceIncludeTax bool
+     * @since 2.0.0
      */
     protected $_shippingPriceIncludeTax = null;
 
@@ -136,11 +140,13 @@ class Config
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -152,6 +158,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function priceIncludesTax($store = null)
     {
@@ -170,6 +177,7 @@ class Config
      *
      * @param bool|null $value
      * @return $this
+     * @since 2.0.0
      */
     public function setPriceIncludesTax($value)
     {
@@ -186,6 +194,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function applyTaxAfterDiscount($store = null)
     {
@@ -204,6 +213,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getPriceDisplayType($store = null)
     {
@@ -219,6 +229,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function discountTax($store = null)
     {
@@ -235,6 +246,7 @@ class Config
      *
      * @param   null|int|string|Store $store
      * @return  string
+     * @since 2.0.0
      */
     public function getCalculationSequence($store = null)
     {
@@ -259,6 +271,7 @@ class Config
      *
      * @param   bool $flag
      * @return  \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     public function setNeedUseShippingExcludeTax($flag)
     {
@@ -271,6 +284,7 @@ class Config
      *
      * @return bool $flag
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getNeedUseShippingExcludeTax()
     {
@@ -282,6 +296,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  string
+     * @since 2.0.0
      */
     public function getAlgorithm($store = null)
     {
@@ -297,6 +312,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getShippingTaxClass($store = null)
     {
@@ -312,6 +328,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  int
+     * @since 2.0.0
      */
     public function getShippingPriceDisplayType($store = null)
     {
@@ -327,6 +344,7 @@ class Config
      *
      * @param   null|string|bool|int|Store $store
      * @return  bool
+     * @since 2.0.0
      */
     public function shippingPriceIncludesTax($store = null)
     {
@@ -345,6 +363,7 @@ class Config
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingPriceIncludeTax($flag)
     {
@@ -355,6 +374,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartPricesInclTax($store = null)
     {
@@ -368,6 +388,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartPricesExclTax($store = null)
     {
@@ -381,6 +402,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartPricesBoth($store = null)
     {
@@ -394,6 +416,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartSubtotalInclTax($store = null)
     {
@@ -407,6 +430,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartSubtotalExclTax($store = null)
     {
@@ -420,6 +444,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartSubtotalBoth($store = null)
     {
@@ -433,6 +458,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartShippingInclTax($store = null)
     {
@@ -446,6 +472,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartShippingExclTax($store = null)
     {
@@ -459,6 +486,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartShippingBoth($store = null)
     {
@@ -472,7 +500,8 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -486,7 +515,8 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -500,7 +530,8 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -514,6 +545,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartTaxWithGrandTotal($store = null)
     {
@@ -527,6 +559,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartFullSummary($store = null)
     {
@@ -540,6 +573,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displayCartZeroTax($store = null)
     {
@@ -553,6 +587,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesPricesInclTax($store = null)
     {
@@ -566,6 +601,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesPricesExclTax($store = null)
     {
@@ -579,6 +615,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesPricesBoth($store = null)
     {
@@ -592,6 +629,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesSubtotalInclTax($store = null)
     {
@@ -605,6 +643,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesSubtotalExclTax($store = null)
     {
@@ -618,6 +657,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesSubtotalBoth($store = null)
     {
@@ -631,6 +671,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesShippingInclTax($store = null)
     {
@@ -644,6 +685,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesShippingExclTax($store = null)
     {
@@ -657,6 +699,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesShippingBoth($store = null)
     {
@@ -670,7 +713,8 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -684,7 +728,8 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -698,7 +743,8 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function displaySalesDiscountBoth($store = null)
     {
@@ -712,6 +758,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesTaxWithGrandTotal($store = null)
     {
@@ -725,6 +772,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesFullSummary($store = null)
     {
@@ -738,6 +786,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function displaySalesZeroTax($store = null)
     {
@@ -753,6 +802,7 @@ class Config
      *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function crossBorderTradeEnabled($store = null)
     {
@@ -772,6 +822,7 @@ class Config
      *
      * @param null|string|Store $store
      * @return bool
+     * @since 2.2.0
      */
     public function isWrongApplyDiscountSettingIgnored($store = null)
     {
@@ -787,6 +838,7 @@ class Config
      *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function isWrongDisplaySettingsIgnored($store = null)
     {
@@ -802,6 +854,7 @@ class Config
      *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @since 2.0.0
      */
     public function isWrongDiscountSettingsIgnored($store = null)
     {
@@ -817,6 +870,7 @@ class Config
      *
      * @param null|string|bool|int|Store $store
      * @return string
+     * @since 2.0.0
      */
     public function getInfoUrl($store = null)
     {
@@ -834,6 +888,7 @@ class Config
      * @param null|int|string|Store $store
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function needPriceConversion($store = null)
     {

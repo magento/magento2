@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Price;
  * Abstract action reindex class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractAction
 {
@@ -16,11 +17,13 @@ abstract class AbstractAction
      * Default Product Type Price indexer resource model
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @since 2.0.0
      */
     protected $_defaultIndexerResource;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected $_connection;
 
@@ -28,11 +31,13 @@ abstract class AbstractAction
      * Core config model
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -40,21 +45,25 @@ abstract class AbstractAction
      * Currency factory
      *
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $_dateTime;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
+     * @since 2.0.0
      */
     protected $_catalogProductType;
 
@@ -62,16 +71,19 @@ abstract class AbstractAction
      * Indexer price factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory
+     * @since 2.0.0
      */
     protected $_indexerPriceFactory;
 
     /**
      * @var array|null
+     * @since 2.0.0
      */
     protected $_indexers;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @since 2.2.0
      */
     private $productResource;
 
@@ -84,6 +96,7 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -111,6 +124,7 @@ abstract class AbstractAction
      *
      * @param array|int $ids
      * @return void
+     * @since 2.0.0
      */
     abstract public function execute($ids);
 
@@ -119,6 +133,7 @@ abstract class AbstractAction
      *
      * @param array $processIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @since 2.0.0
      */
     protected function _syncData(array $processIds = [])
     {
@@ -150,6 +165,7 @@ abstract class AbstractAction
      * Prepare website current dates table
      *
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @since 2.0.0
      */
     protected function _prepareWebsiteDateTable()
     {
@@ -212,6 +228,7 @@ abstract class AbstractAction
      *
      * @param int|array $entityIds the entity ids limitation
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @since 2.0.0
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {
@@ -308,6 +325,7 @@ abstract class AbstractAction
      * Retrieve price indexers per product type
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface[]
+     * @since 2.0.0
      */
     public function getTypeIndexers()
     {
@@ -340,6 +358,7 @@ abstract class AbstractAction
      * @param string $productTypeId
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     protected function _getIndexer($productTypeId)
     {
@@ -357,6 +376,7 @@ abstract class AbstractAction
      * @param string $destTable
      * @param null|string $where
      * @return void
+     * @since 2.0.0
      */
     protected function _insertFromTable($sourceTable, $destTable, $where = null)
     {
@@ -380,6 +400,7 @@ abstract class AbstractAction
      *
      * @param string $table
      * @return void
+     * @since 2.0.0
      */
     protected function _emptyTable($table)
     {
@@ -392,6 +413,7 @@ abstract class AbstractAction
      * @param array $changedIds
      * @return array Affected ids
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _reindexRows($changedIds = [])
     {
@@ -467,6 +489,7 @@ abstract class AbstractAction
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @since 2.0.0
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
@@ -507,6 +530,7 @@ abstract class AbstractAction
      * This method is used during both partial and full reindex to identify the table.
      *
      * @return string
+     * @since 2.2.0
      */
     protected function getIndexTargetTable()
     {
@@ -515,6 +539,7 @@ abstract class AbstractAction
 
     /**
      * @return string
+     * @since 2.1.0
      */
     protected function getProductIdFieldName()
     {
@@ -525,7 +550,8 @@ abstract class AbstractAction
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getProductResource()
     {

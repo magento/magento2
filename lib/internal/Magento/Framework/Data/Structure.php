@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * An associative data structure, that features "nested set" parent-child relations
+ * @since 2.0.0
  */
 class Structure
 {
@@ -23,6 +24,7 @@ class Structure
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_elements = [];
 
@@ -30,6 +32,7 @@ class Structure
      * Set elements in constructor
      *
      * @param array $elements
+     * @since 2.0.0
      */
     public function __construct(array $elements = null)
     {
@@ -44,6 +47,7 @@ class Structure
      * @param array $elements
      * @return void
      * @throws LocalizedException if any format issues identified
+     * @since 2.0.0
      */
     public function importElements(array $elements)
     {
@@ -82,6 +86,7 @@ class Structure
      * @param string $elementId
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function _assertParentRelation($elementId)
     {
@@ -131,6 +136,7 @@ class Structure
      * Dump all elements
      *
      * @return array
+     * @since 2.0.0
      */
     public function exportElements()
     {
@@ -144,6 +150,7 @@ class Structure
      * @param array $data
      * @return void
      * @throws LocalizedException if an element with this id already exists
+     * @since 2.0.0
      */
     public function createElement($elementId, array $data)
     {
@@ -163,6 +170,7 @@ class Structure
      *
      * @param string $elementId
      * @return array|bool
+     * @since 2.0.0
      */
     public function getElement($elementId)
     {
@@ -174,6 +182,7 @@ class Structure
      *
      * @param string $elementId
      * @return bool
+     * @since 2.0.0
      */
     public function hasElement($elementId)
     {
@@ -189,6 +198,7 @@ class Structure
      * @param string $elementId
      * @param bool $recursive
      * @return bool
+     * @since 2.0.0
      */
     public function unsetElement($elementId, $recursive = true)
     {
@@ -216,6 +226,7 @@ class Structure
      * @param mixed $value
      * @throws \InvalidArgumentException
      * @return $this
+     * @since 2.0.0
      */
     public function setAttribute($elementId, $attribute, $value)
     {
@@ -238,6 +249,7 @@ class Structure
      * @param string $elementId
      * @param string $attribute
      * @return mixed
+     * @since 2.0.0
      */
     public function getAttribute($elementId, $attribute)
     {
@@ -255,6 +267,7 @@ class Structure
      * @param string $newId
      * @return $this
      * @throws LocalizedException if trying to overwrite another element
+     * @since 2.0.0
      */
     public function renameElement($oldId, $newId)
     {
@@ -298,6 +311,7 @@ class Structure
      * @see _insertChild() for position explanation
      * @return void
      * @throws LocalizedException if attempting to set parent as child to its child (recursively)
+     * @since 2.0.0
      */
     public function setAsChild($elementId, $parentId, $alias = '', $position = null)
     {
@@ -330,6 +344,7 @@ class Structure
      * @param string $elementId ID of an element or its parent element
      * @param string|null $alias
      * @return $this
+     * @since 2.0.0
      */
     public function unsetChild($elementId, $alias = null)
     {
@@ -359,6 +374,7 @@ class Structure
      * @param int|null $position
      * @return int
      * @see _insertChild() for position explanation
+     * @since 2.0.0
      */
     public function reorderChild($parentId, $childId, $position)
     {
@@ -397,6 +413,7 @@ class Structure
      * @param string $siblingId
      * @param int $offset
      * @return int
+     * @since 2.0.0
      */
     public function reorderToSibling($parentId, $childId, $siblingId, $offset)
     {
@@ -418,6 +435,7 @@ class Structure
      * @param string $siblingId
      * @param int $delta
      * @return int
+     * @since 2.0.0
      */
     private function _getRelativeOffset($parentId, $siblingId, $delta)
     {
@@ -437,6 +455,7 @@ class Structure
      * @param string $parentId
      * @param string $alias
      * @return string|bool
+     * @since 2.0.0
      */
     public function getChildId($parentId, $alias)
     {
@@ -453,6 +472,7 @@ class Structure
      *
      * @param string $parentId
      * @return array
+     * @since 2.0.0
      */
     public function getChildren($parentId)
     {
@@ -466,6 +486,7 @@ class Structure
      *
      * @param string $childId
      * @return string|bool
+     * @since 2.0.0
      */
     public function getParentId($childId)
     {
@@ -478,6 +499,7 @@ class Structure
      * @param string $parentId
      * @param string $childId
      * @return string|bool
+     * @since 2.0.0
      */
     public function getChildAlias($parentId, $childId)
     {
@@ -493,6 +515,7 @@ class Structure
      * @param string $childId
      * @param string $groupName
      * @return bool
+     * @since 2.0.0
      */
     public function addToParentGroup($childId, $groupName)
     {
@@ -515,6 +538,7 @@ class Structure
      * @param string $parentId Name of an element containing group
      * @param string $groupName
      * @return array
+     * @since 2.0.0
      */
     public function getGroupChildNames($parentId, $groupName)
     {
@@ -536,6 +560,7 @@ class Structure
      * @param string $childId
      * @return int
      * @throws LocalizedException if specified elements have no parent-child relation
+     * @since 2.0.0
      */
     protected function _getChildOffset($parentId, $childId)
     {
@@ -554,6 +579,7 @@ class Structure
      * @param string $childId
      * @param string $potentialParentId
      * @return bool
+     * @since 2.0.0
      */
     private function _isParentRecursively($childId, $potentialParentId)
     {
@@ -585,6 +611,7 @@ class Structure
      * @param string $alias
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function _insertChild($targetParentId, $elementId, $offset, $alias)
     {
@@ -634,6 +661,7 @@ class Structure
      * @param string $elementId
      * @return void
      * @throws LocalizedException if doesn't exist
+     * @since 2.0.0
      */
     private function _assertElementExists($elementId)
     {
@@ -648,6 +676,7 @@ class Structure
      * @param array $value
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     private function _assertArray($value)
     {

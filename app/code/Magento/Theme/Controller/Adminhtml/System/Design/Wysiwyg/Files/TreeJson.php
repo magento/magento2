@@ -6,12 +6,18 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\TreeJson
+ *
+ * @since 2.0.0
+ */
 class TreeJson extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * Tree json action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

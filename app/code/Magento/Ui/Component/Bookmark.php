@@ -12,6 +12,7 @@ use Magento\Ui\Api\BookmarkRepositoryInterface;
 
 /**
  * Class Bookmark
+ * @since 2.0.0
  */
 class Bookmark extends AbstractComponent
 {
@@ -19,16 +20,19 @@ class Bookmark extends AbstractComponent
 
     /**
      * @var BookmarkRepositoryInterface
+     * @since 2.0.0
      */
     protected $bookmarkRepository;
 
     /**
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var BookmarkManagementInterface
+     * @since 2.0.0
      */
     protected $bookmarkManagement;
 
@@ -38,6 +42,7 @@ class Bookmark extends AbstractComponent
      * @param BookmarkManagementInterface $bookmarkManagement
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -55,6 +60,7 @@ class Bookmark extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -65,6 +71,7 @@ class Bookmark extends AbstractComponent
      * Register component
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {

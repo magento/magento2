@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface AttributeGroupInterface
  * @api
+ * @since 2.0.0
  */
 interface AttributeGroupInterface extends ExtensibleDataInterface
 {
@@ -23,6 +24,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      * Retrieve id
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttributeGroupId();
 
@@ -31,6 +33,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      *
      * @param string $attributeGroupId
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeGroupId($attributeGroupId);
 
@@ -38,6 +41,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      * Retrieve name
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getAttributeGroupName();
 
@@ -46,6 +50,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      *
      * @param string $attributeGroupName
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeGroupName($attributeGroupName);
 
@@ -53,6 +58,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      * Retrieve attribute set id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getAttributeSetId();
 
@@ -61,6 +67,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      *
      * @param int $attributeSetId
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeSetId($attributeSetId);
 
@@ -68,6 +75,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Eav\Api\Data\AttributeGroupExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -76,6 +84,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes

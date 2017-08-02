@@ -8,26 +8,31 @@ namespace Magento\Paypal\Helper\Shortcut;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @since 2.0.0
  */
 class Validator implements ValidatorInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
+     * @since 2.0.0
      */
     private $_paypalConfigFactory;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     private $_registry;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @since 2.0.0
      */
     private $_productTypeConfig;
 
     /**
      * @var \Magento\Payment\Helper\Data
+     * @since 2.0.0
      */
     private $_paymentData;
 
@@ -36,6 +41,7 @@ class Validator implements ValidatorInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Payment\Helper\Data $paymentData
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
@@ -55,6 +61,7 @@ class Validator implements ValidatorInterface
      * @param string $code
      * @param bool $isInCatalog
      * @return bool
+     * @since 2.0.0
      */
     public function validate($code, $isInCatalog)
     {
@@ -69,6 +76,7 @@ class Validator implements ValidatorInterface
      * @param string $paymentCode Payment method code
      * @param bool $isInCatalog
      * @return bool
+     * @since 2.0.0
      */
     public function isContextAvailable($paymentCode, $isInCatalog)
     {
@@ -89,6 +97,7 @@ class Validator implements ValidatorInterface
      *
      * @param bool $isInCatalog
      * @return bool
+     * @since 2.0.0
      */
     public function isPriceOrSetAvailable($isInCatalog)
     {
@@ -115,6 +124,7 @@ class Validator implements ValidatorInterface
      *
      * @param string $paymentCode
      * @return bool
+     * @since 2.0.0
      */
     public function isMethodAvailable($paymentCode)
     {

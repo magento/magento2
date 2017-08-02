@@ -7,31 +7,37 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Data
 {
     /**
      * @var float
+     * @since 2.0.0
      */
     protected $amount;
 
     /**
      * @var float
+     * @since 2.0.0
      */
     protected $baseAmount;
 
     /**
      * @var float
+     * @since 2.0.0
      */
     protected $originalAmount;
 
     /**
      * @var float
+     * @since 2.0.0
      */
     protected $baseOriginalAmount;
 
     /**
      * Constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -44,6 +50,7 @@ class Data
     /**
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setAmount($amount)
     {
@@ -53,6 +60,7 @@ class Data
 
     /**
      * @return float
+     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -62,6 +70,7 @@ class Data
     /**
      * @param float $baseAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAmount($baseAmount)
     {
@@ -71,6 +80,7 @@ class Data
 
     /**
      * @return float
+     * @since 2.0.0
      */
     public function getBaseAmount()
     {
@@ -80,6 +90,7 @@ class Data
     /**
      * @param float $originalAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setOriginalAmount($originalAmount)
     {
@@ -91,6 +102,7 @@ class Data
      * Get discount for original price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getOriginalAmount()
     {
@@ -100,6 +112,7 @@ class Data
     /**
      * @param float $baseOriginalAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseOriginalAmount($baseOriginalAmount)
     {
@@ -111,6 +124,7 @@ class Data
      * Get discount for original price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getBaseOriginalAmount()
     {

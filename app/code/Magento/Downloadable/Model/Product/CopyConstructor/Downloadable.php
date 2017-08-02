@@ -5,15 +5,22 @@
  */
 namespace Magento\Downloadable\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable
+ *
+ * @since 2.0.0
+ */
 class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Json\Helper\Data $jsonHelper)
     {
@@ -26,6 +33,7 @@ class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInte
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
      * @return void
+     * @since 2.0.0
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {

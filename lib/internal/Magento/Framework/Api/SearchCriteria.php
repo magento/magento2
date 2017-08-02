@@ -9,6 +9,7 @@ namespace Magento\Framework\Api;
 /**
  * Data Object for SearchCriteria
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInterface
 {
@@ -24,6 +25,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      * Get a list of filter groups.
      *
      * @return \Magento\Framework\Api\Search\FilterGroup[]
+     * @since 2.0.0
      */
     public function getFilterGroups()
     {
@@ -35,6 +37,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      * Get sort order.
      *
      * @return \Magento\Framework\Api\SortOrder[]|null
+     * @since 2.0.0
      */
     public function getSortOrders()
     {
@@ -45,6 +48,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      * Get page size.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getPageSize()
     {
@@ -55,6 +59,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      * Get current page.
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCurrentPage()
     {
@@ -66,6 +71,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      *
      * @param \Magento\Framework\Api\Search\FilterGroup[] $filterGroups
      * @return $this
+     * @since 2.0.0
      */
     public function setFilterGroups(array $filterGroups = null)
     {
@@ -77,6 +83,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      *
      * @param \Magento\Framework\Api\SortOrder[] $sortOrders
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrders(array $sortOrders = null)
     {
@@ -88,6 +95,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      *
      * @param int $pageSize
      * @return $this
+     * @since 2.0.0
      */
     public function setPageSize($pageSize)
     {
@@ -99,6 +107,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      *
      * @param int $currentPage
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrentPage($currentPage)
     {

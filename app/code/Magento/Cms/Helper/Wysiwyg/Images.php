@@ -9,18 +9,21 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper
+ * @since 2.0.0
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Current directory path
      * @var string
+     * @since 2.0.0
      */
     protected $_currentPath;
 
     /**
      * Current directory URL
      * @var string
+     * @since 2.0.0
      */
     protected $_currentUrl;
 
@@ -28,11 +31,13 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Currenty selected store ID if applicable
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId = null;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
+     * @since 2.0.0
      */
     protected $_directory;
 
@@ -40,6 +45,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
+     * @since 2.0.0
      */
     protected $_backendData;
 
@@ -47,6 +53,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -57,6 +64,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -77,6 +85,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($store)
     {
@@ -88,6 +97,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Images Storage root directory
      *
      * @return string
+     * @since 2.0.0
      */
     public function getStorageRoot()
     {
@@ -98,6 +108,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Images Storage base URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl()
     {
@@ -108,6 +119,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Ext Tree node key name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTreeNodeName()
     {
@@ -119,6 +131,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $path Path to file/directory
      * @return string
+     * @since 2.0.0
      */
     public function convertPathToId($path)
     {
@@ -131,6 +144,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $id
      * @return string
+     * @since 2.0.0
      */
     public function convertIdToPath($id)
     {
@@ -145,6 +159,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Check whether using static URLs is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isUsingStaticUrlsAllowed()
     {
@@ -163,6 +178,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $filename Filename transferred via Ajax
      * @param bool $renderAsTag Leave image HTML as is or transform it to controller directive
      * @return string
+     * @since 2.0.0
      */
     public function getImageHtmlDeclaration($filename, $renderAsTag = false)
     {
@@ -189,6 +205,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getCurrentPath()
     {
@@ -219,6 +236,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Return URL based on current selected directory or root directory for startup
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentUrl()
     {
@@ -239,6 +257,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $string
      * @return string
+     * @since 2.0.0
      */
     public function idEncode($string)
     {
@@ -250,6 +269,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $string
      * @return string
+     * @since 2.0.0
      */
     public function idDecode($string)
     {
@@ -263,6 +283,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $filename
      * @param int $maxLength Maximum filename
      * @return string Truncated filename
+     * @since 2.0.0
      */
     public function getShortFilename($filename, $maxLength = 20)
     {

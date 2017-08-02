@@ -11,11 +11,13 @@ namespace Magento\Quote\Model;
  *
  * @method string getMaskedId()
  * @method QuoteIdMask setMaskedId()
+ * @since 2.0.0
  */
 class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\Framework\Math\Random
+     * @since 2.0.0
      */
     protected $randomDataGenerator;
 
@@ -26,6 +28,7 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -43,6 +46,7 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +57,7 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
      * Initialize quote identifier before save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {

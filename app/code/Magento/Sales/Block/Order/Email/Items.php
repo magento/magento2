@@ -13,6 +13,7 @@ namespace Magento\Sales\Block\Order\Email;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {

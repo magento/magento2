@@ -8,6 +8,7 @@ namespace Magento\Framework\Mail;
 
 /**
  * Factory class for \Magento\Framework\Mail\TransportInterface
+ * @since 2.0.0
  */
 class TransportInterfaceFactory
 {
@@ -15,6 +16,7 @@ class TransportInterfaceFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -22,6 +24,7 @@ class TransportInterfaceFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -30,6 +33,7 @@ class TransportInterfaceFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -44,6 +48,7 @@ class TransportInterfaceFactory
      *
      * @param array $data
      * @return \Magento\Framework\Mail\TransportInterface
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

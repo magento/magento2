@@ -10,12 +10,18 @@ namespace Magento\Framework\Event\Invoker;
 
 use Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\Framework\Event\Invoker\InvokerDefault
+ *
+ * @since 2.0.0
+ */
 class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
 {
     /**
      * Observer model factory
      *
      * @var \Magento\Framework\Event\ObserverFactory
+     * @since 2.0.0
      */
     protected $_observerFactory;
 
@@ -23,12 +29,14 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
      * Application state
      *
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @param \Magento\Framework\Event\ObserverFactory $observerFactory
      * @param \Magento\Framework\App\State $appState
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Event\ObserverFactory $observerFactory,
@@ -44,6 +52,7 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
      * @param array $configuration
      * @param Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function dispatch(array $configuration, Observer $observer)
     {
@@ -65,6 +74,7 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
      * @param Observer $observer
      * @return $this
      * @throws \LogicException
+     * @since 2.0.0
      */
     protected function _callObserverMethod($object, $observer)
     {

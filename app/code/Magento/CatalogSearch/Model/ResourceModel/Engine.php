@@ -7,6 +7,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
+ * @since 2.0.0
  */
 class Engine implements EngineInterface
 {
@@ -28,11 +29,13 @@ class Engine implements EngineInterface
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $catalogProductVisibility;
 
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
+     * @since 2.0.0
      */
     private $indexScopeResolver;
 
@@ -41,6 +44,7 @@ class Engine implements EngineInterface
      *
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
@@ -54,6 +58,7 @@ class Engine implements EngineInterface
      * Retrieve allowed visibility values for current engine
      *
      * @return int[]
+     * @since 2.0.0
      */
     public function getAllowedVisibility()
     {
@@ -64,6 +69,7 @@ class Engine implements EngineInterface
      * Define if current search engine supports advanced index
      *
      * @return bool
+     * @since 2.0.0
      */
     public function allowAdvancedIndex()
     {
@@ -75,6 +81,7 @@ class Engine implements EngineInterface
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     private function isTermFilterableAttribute($attribute)
     {
@@ -86,6 +93,7 @@ class Engine implements EngineInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function processAttributeValue($attribute, $value)
     {
@@ -108,6 +116,7 @@ class Engine implements EngineInterface
      * @param array $index
      * @param string $separator
      * @return string
+     * @since 2.0.0
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {
@@ -120,6 +129,7 @@ class Engine implements EngineInterface
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function isAvailable()
     {

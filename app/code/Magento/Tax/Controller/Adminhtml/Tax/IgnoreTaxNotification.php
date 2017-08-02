@@ -9,10 +9,16 @@ namespace Magento\Tax\Controller\Adminhtml\Tax;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification
+ *
+ * @since 2.0.0
+ */
 class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @since 2.0.0
      */
     protected $_cacheTypeList;
 
@@ -21,6 +27,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService
      * @param \Magento\Tax\Api\Data\TaxClassInterfaceFactory $taxClassDataObjectFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -36,6 +43,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
      * Set tax ignore notification flag and redirect back
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

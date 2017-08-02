@@ -7,22 +7,26 @@ namespace Magento\Rule\Model\Condition;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Combine extends AbstractCondition
 {
     /**
      * @var \Magento\Rule\Model\ConditionFactory
+     * @since 2.0.0
      */
     protected $_conditionFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @param Context $context
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(Context $context, array $data = [])
     {
@@ -56,6 +60,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadAggregatorOptions()
     {
@@ -65,6 +70,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAggregatorSelectOptions()
     {
@@ -77,6 +83,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAggregatorName()
     {
@@ -85,6 +92,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return object
+     * @since 2.0.0
      */
     public function getAggregatorElement()
     {
@@ -113,6 +121,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function loadValueOptions()
     {
@@ -123,6 +132,7 @@ class Combine extends AbstractCondition
     /**
      * @param object $condition
      * @return $this
+     * @since 2.0.0
      */
     public function addCondition($condition)
     {
@@ -143,6 +153,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getValueElementType()
     {
@@ -167,6 +178,7 @@ class Combine extends AbstractCondition
      * @param array $arrAttributes
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function asArray(array $arrAttributes = [])
     {
@@ -184,6 +196,7 @@ class Combine extends AbstractCondition
      * @param string $containerKey
      * @param string $itemKey
      * @return string
+     * @since 2.0.0
      */
     public function asXml($containerKey = 'conditions', $itemKey = 'condition')
     {
@@ -206,6 +219,7 @@ class Combine extends AbstractCondition
      * @param string $key
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function loadArray($arr, $key = 'conditions')
     {
@@ -232,6 +246,7 @@ class Combine extends AbstractCondition
     /**
      * @param array|string $xml
      * @return $this
+     * @since 2.0.0
      */
     public function loadXml($xml)
     {
@@ -248,6 +263,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function asHtml()
     {
@@ -264,6 +280,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     public function getNewChildElement()
     {
@@ -283,6 +300,7 @@ class Combine extends AbstractCondition
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function asHtmlRecursive()
     {
@@ -303,6 +321,7 @@ class Combine extends AbstractCondition
      * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function asString($format = '')
     {
@@ -313,6 +332,7 @@ class Combine extends AbstractCondition
     /**
      * @param int $level
      * @return string
+     * @since 2.0.0
      */
     public function asStringRecursive($level = 0)
     {
@@ -326,6 +346,7 @@ class Combine extends AbstractCondition
     /**
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @since 2.0.0
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
@@ -337,6 +358,7 @@ class Combine extends AbstractCondition
      *
      * @param int $entityId
      * @return mixed
+     * @since 2.0.0
      */
     public function validateByEntityId($entityId)
     {
@@ -348,6 +370,7 @@ class Combine extends AbstractCondition
      *
      * @param int|\Magento\Framework\Model\AbstractModel $entity
      * @return bool
+     * @since 2.0.0
      */
     protected function _isValid($entity)
     {
@@ -376,6 +399,7 @@ class Combine extends AbstractCondition
     /**
      * @param \Magento\Framework\Data\Form $form
      * @return $this
+     * @since 2.0.0
      */
     public function setJsFormObject($form)
     {
@@ -390,6 +414,7 @@ class Combine extends AbstractCondition
      * Get conditions, if current prefix is undefined use 'conditions' key
      *
      * @return array
+     * @since 2.0.0
      */
     public function getConditions()
     {
@@ -402,6 +427,7 @@ class Combine extends AbstractCondition
      *
      * @param array $conditions
      * @return $this
+     * @since 2.0.0
      */
     public function setConditions($conditions)
     {
@@ -413,6 +439,7 @@ class Combine extends AbstractCondition
      * Getter for "Conditions Combination" select option for recursive combines
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getRecursiveChildSelectOption()
     {

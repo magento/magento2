@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  * Layer price filter based on Search API
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Price extends AbstractFilter
 {
@@ -19,26 +20,31 @@ class Price extends AbstractFilter
 
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
+     * @since 2.0.0
      */
     private $dataProvider;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @since 2.0.0
      */
     private $priceCurrency;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     private $customerSession;
 
     /**
      * @var \Magento\Framework\Search\Dynamic\Algorithm
+     * @since 2.0.0
      */
     private $priceAlgorithm;
 
@@ -56,6 +62,7 @@ class Price extends AbstractFilter
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -87,6 +94,7 @@ class Price extends AbstractFilter
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     * @since 2.0.0
      */
     public function getResource()
     {
@@ -98,6 +106,7 @@ class Price extends AbstractFilter
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setCurrencyRate($rate)
     {
@@ -110,6 +119,7 @@ class Price extends AbstractFilter
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -151,6 +161,7 @@ class Price extends AbstractFilter
      * Retrieve active currency rate for filter
      *
      * @return float
+     * @since 2.0.0
      */
     public function getCurrencyRate()
     {
@@ -172,6 +183,7 @@ class Price extends AbstractFilter
      * @param float|string $fromPrice
      * @param float|string $toPrice
      * @return float|\Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
@@ -195,6 +207,7 @@ class Price extends AbstractFilter
      * @return array
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _getItemsData()
     {
@@ -222,6 +235,7 @@ class Price extends AbstractFilter
     /**
      * @param float $from
      * @return float
+     * @since 2.0.0
      */
     protected function getTo($from)
     {
@@ -236,6 +250,7 @@ class Price extends AbstractFilter
     /**
      * @param float $from
      * @return float
+     * @since 2.0.0
      */
     protected function getFrom($from)
     {
@@ -251,6 +266,7 @@ class Price extends AbstractFilter
      * @param string $key
      * @param int $count
      * @return array
+     * @since 2.0.0
      */
     private function prepareData($key, $count)
     {

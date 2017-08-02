@@ -8,16 +8,19 @@ namespace Magento\Msrp\Block;
 /**
  * @api
  * @method string getOriginalBlockName()
+ * @since 2.0.0
  */
 class Total extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Msrp\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Msrp\Model\Quote\Msrp
+     * @since 2.0.0
      */
     protected $msrp;
 
@@ -26,6 +29,7 @@ class Total extends \Magento\Framework\View\Element\Template
      * @param \Magento\Msrp\Model\Config $config
      * @param \Magento\Msrp\Model\Quote\Msrp $msrp
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,6 +44,7 @@ class Total extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

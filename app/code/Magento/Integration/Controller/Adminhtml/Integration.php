@@ -12,6 +12,7 @@ use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
  * Controller for integrations management.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class Integration extends Action
 {
@@ -35,29 +36,49 @@ abstract class Integration extends Action
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_registry;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
+     */
     protected $_logger;
 
-    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     * @since 2.0.0
+     */
     protected $_integrationService;
 
-    /** @var \Magento\Integration\Api\OauthServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\OauthServiceInterface
+     * @since 2.0.0
+     */
     protected $_oauthService;
 
-    /** @var \Magento\Framework\Json\Helper\Data */
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
+     */
     protected $jsonHelper;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     * @since 2.0.0
+     */
     protected $_integrationData;
 
-    /** @var \Magento\Integration\Model\ResourceModel\Integration\Collection */
+    /**
+     * @var \Magento\Integration\Model\ResourceModel\Integration\Collection
+     * @since 2.0.0
+     */
     protected $_integrationCollection;
 
     /**
      * @var \Magento\Framework\Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
@@ -71,6 +92,7 @@ abstract class Integration extends Action
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -101,6 +123,7 @@ abstract class Integration extends Action
      * @param string $path
      * @param array $arguments
      * @return $this|\Magento\Backend\App\AbstractAction
+     * @since 2.0.0
      */
     protected function _redirect($path, $arguments = [])
     {
@@ -118,6 +141,7 @@ abstract class Integration extends Action
      * Restore saved form resources
      *
      * @return void
+     * @since 2.1.0
      */
     protected function restoreResourceAndSaveToRegistry()
     {

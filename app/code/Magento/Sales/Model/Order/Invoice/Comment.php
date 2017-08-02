@@ -12,6 +12,7 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment getResource()
+ * @since 2.0.0
  */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
@@ -19,11 +20,13 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Invoice instance
      *
      * @var \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     protected $_invoice;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -37,6 +40,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -64,6 +68,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -75,6 +80,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
+     * @since 2.0.0
      */
     public function setInvoice(\Magento\Sales\Model\Order\Invoice $invoice)
     {
@@ -86,6 +92,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Retrieve invoice instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
+     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -96,6 +103,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Get store object
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -109,6 +117,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Returns comment
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComment()
     {
@@ -119,6 +128,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Returns created_at
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -127,6 +137,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -137,6 +148,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Returns is_customer_notified
      *
      * @return int
+     * @since 2.0.0
      */
     public function getIsCustomerNotified()
     {
@@ -147,6 +159,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Returns is_visible_on_front
      *
      * @return int
+     * @since 2.0.0
      */
     public function getIsVisibleOnFront()
     {
@@ -157,6 +170,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * Returns parent_id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -167,6 +181,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -175,6 +190,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setIsCustomerNotified($isCustomerNotified)
     {
@@ -183,6 +199,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
@@ -191,6 +208,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setComment($comment)
     {
@@ -201,6 +219,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -212,6 +231,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface $extensionAttributes

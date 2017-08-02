@@ -15,31 +15,37 @@ use Magento\Framework\View\Helper\PathPattern;
 
 /**
  * Source of modular view files introduced by a theme
+ * @since 2.0.0
  */
 class ThemeModular implements CollectorInterface
 {
     /**
      * @var PathPattern
+     * @since 2.0.0
      */
     private $pathPatternHelper;
 
     /**
      * @var FileFactory
+     * @since 2.0.0
      */
     private $fileFactory;
 
     /**
      * @var ReadFactory
+     * @since 2.0.0
      */
     private $readDirFactory;
 
     /**
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $componentRegistrar;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $subDir;
 
@@ -51,6 +57,7 @@ class ThemeModular implements CollectorInterface
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param PathPattern $pathPatternHelper
      * @param string $subDir
+     * @since 2.0.0
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -72,6 +79,7 @@ class ThemeModular implements CollectorInterface
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
+     * @since 2.0.0
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {

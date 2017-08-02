@@ -11,12 +11,18 @@
  */
 namespace Magento\Framework\Url\Helper;
 
+/**
+ * Class \Magento\Framework\Url\Helper\Data
+ *
+ * @since 2.0.0
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Retrieve current url in base64 encoding
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentBase64Url()
     {
@@ -26,6 +32,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $url
      * @return string
+     * @since 2.0.0
      */
     public function getEncodedUrl($url = null)
     {
@@ -41,6 +48,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  string $url
      * @param  array $param array( 'key' => value )
      * @return string
+     * @since 2.0.0
      */
     public function addRequestParam($url, $param)
     {
@@ -74,6 +82,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $paramKey
      * @param bool $caseSensitive
      * @return string
+     * @since 2.0.0
      */
     public function removeRequestParam($url, $paramKey, $caseSensitive = false)
     {

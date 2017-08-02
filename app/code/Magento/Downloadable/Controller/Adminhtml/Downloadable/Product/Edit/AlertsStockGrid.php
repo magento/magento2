@@ -6,6 +6,11 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\AlertsStockGrid
+ *
+ * @since 2.0.0
+ */
 class AlertsStockGrid extends \Magento\Catalog\Controller\Adminhtml\Product\AlertsStockGrid
 {
 }

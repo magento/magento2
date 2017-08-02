@@ -11,6 +11,7 @@ namespace Magento\CustomerImportExport\Model\Export;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -55,6 +56,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Permanent entity columns
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
 
@@ -62,6 +64,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Default addresses column names to appropriate customer attribute code
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_NAME_DEFAULT_BILLING => 'default_billing',
@@ -72,6 +75,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Customers whose addresses are exported
      *
      * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
+     * @since 2.0.0
      */
     protected $_customerCollection;
 
@@ -79,6 +83,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Customer addresses collection
      *
      * @var \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @since 2.0.0
      */
     protected $_addressCollection;
 
@@ -86,6 +91,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Customers whose address are exported
      *
      * @var Customer
+     * @since 2.0.0
      */
     protected $_customerEntity;
 
@@ -102,6 +108,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_customers = [];
 
@@ -117,6 +124,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -160,6 +168,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Initialize existent customers data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initCustomers()
     {
@@ -183,6 +192,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _getHeaderColumns()
     {
@@ -197,6 +207,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Get customers collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @since 2.0.0
      */
     protected function _getEntityCollection()
     {
@@ -207,6 +218,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Export process
      *
      * @return string
+     * @since 2.0.0
      */
     public function export()
     {
@@ -227,6 +239,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @param \Magento\Customer\Model\Address $item
      * @return void
+     * @since 2.0.0
      */
     public function exportItem($item)
     {
@@ -255,6 +268,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @param array $parameters
      * @return $this
+     * @since 2.0.0
      */
     public function setParameters(array $parameters)
     {
@@ -269,6 +283,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * EAV entity type code getter.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTypeCode()
     {

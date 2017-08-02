@@ -7,6 +7,7 @@ namespace Magento\Checkout\Model;
 
 /**
  * Class TotalsInformationManagement
+ * @since 2.0.0
  */
 class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInformationManagementInterface
 {
@@ -14,6 +15,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
      * Cart total repository.
      *
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
+     * @since 2.0.0
      */
     protected $cartTotalRepository;
 
@@ -21,6 +23,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $cartRepository;
 
@@ -28,6 +31,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalRepository
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
@@ -39,6 +43,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function calculate(
         $cartId,
@@ -65,6 +70,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
      * @param \Magento\Quote\Model\Quote $quote
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 2.0.0
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {

@@ -11,6 +11,11 @@
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Configuration\Item\Option
+ *
+ * @since 2.0.0
+ */
 class Option extends \Magento\Framework\DataObject implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
@@ -18,6 +23,7 @@ class Option extends \Magento\Framework\DataObject implements
      * Returns value of this option
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue()
     {

@@ -33,6 +33,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @api
+ * @since 2.0.0
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
@@ -52,6 +53,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Model event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'admin_user';
 
@@ -59,6 +61,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Admin role
      *
      * @var \Magento\Authorization\Model\Role
+     * @since 2.0.0
      */
     protected $_role;
 
@@ -66,6 +69,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Available resources flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_hasResources = true;
 
@@ -73,6 +77,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * User data
      *
      * @var \Magento\User\Helper\Data
+     * @since 2.0.0
      */
     protected $_userData = null;
 
@@ -80,6 +85,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Core store config
      *
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -87,6 +93,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Factory for validator composite object
      *
      * @var \Magento\Framework\Validator\DataObjectFactory
+     * @since 2.0.0
      */
     protected $_validatorObject;
 
@@ -94,31 +101,37 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Role model factory
      *
      * @var \Magento\Authorization\Model\RoleFactory
+     * @since 2.0.0
      */
     protected $_roleFactory;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @since 2.0.0
      */
     protected $_encryptor;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var UserValidationRules
+     * @since 2.0.0
      */
     protected $validationRules;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -138,6 +151,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param array $data
      * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -171,6 +185,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Initialize user model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -179,6 +194,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * @return string[]
+     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -201,6 +217,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -222,6 +239,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Processing data before model save
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -246,6 +264,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Whether the password saving is going to occur
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _willSavePassword()
     {
@@ -256,6 +275,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Add validation rules for particular fields
      *
      * @return \Zend_Validate_Interface
+     * @since 2.0.0
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -279,6 +299,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Existing user password confirmation will be validated only when password is set
      *
      * @return bool|string[]
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -299,6 +320,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * New password is compared to at least 4 previous passwords to prevent setting them again
      *
      * @return bool|string[]
+     * @since 2.1.0
      */
     protected function validatePasswordChange()
     {
@@ -324,6 +346,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Process data after model is saved
      *
      * @return $this
+     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -336,6 +359,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param   array $data
      * @return  $this
+     * @since 2.0.0
      */
     public function saveExtra($data)
     {
@@ -350,6 +374,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Retrieve user roles
      *
      * @return array
+     * @since 2.0.0
      */
     public function getRoles()
     {
@@ -360,6 +385,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Get admin role model
      *
      * @return \Magento\Authorization\Model\Role
+     * @since 2.0.0
      */
     public function getRole()
     {
@@ -377,6 +403,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Unassign user from his current role
      *
      * @return $this
+     * @since 2.0.0
      */
     public function deleteFromRole()
     {
@@ -388,6 +415,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check if such combination role/user exists
      *
      * @return bool
+     * @since 2.0.0
      */
     public function roleUserExists()
     {
@@ -399,6 +427,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Send email with reset password confirmation link
      *
      * @return $this
+     * @since 2.0.0
      */
     public function sendPasswordResetConfirmationEmail()
     {
@@ -419,7 +448,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Send email to when password is resetting
      *
      * @return $this
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     public function sendPasswordResetNotificationEmail()
     {
@@ -431,6 +461,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check changes and send notification emails
      *
      * @return $this
+     * @since 2.1.0
      */
     public function sendNotificationEmailsIfRequired()
     {
@@ -450,6 +481,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Create changes description string
      *
      * @return string
+     * @since 2.1.0
      */
     protected function createChangesDescriptionString()
     {
@@ -478,6 +510,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $changes
      * @param string $email
      * @return $this
+     * @since 2.1.0
      */
     protected function sendUserNotificationEmail($changes, $email = null)
     {
@@ -509,6 +542,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $separator
      * @return string
+     * @since 2.0.0
      */
     public function getName($separator = ' ')
     {
@@ -519,6 +553,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Get user ACL role
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAclRole()
     {
@@ -532,6 +567,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $password
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function authenticate($username, $password)
     {
@@ -570,6 +606,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $password
      * @return bool
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @since 2.0.0
      */
     public function verifyIdentity($password)
     {
@@ -594,6 +631,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param   string $username
      * @param   string $password
      * @return  $this
+     * @since 2.0.0
      */
     public function login($username, $password)
     {
@@ -607,6 +645,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Reload current user
      *
      * @return $this
+     * @since 2.0.0
      */
     public function reload()
     {
@@ -621,6 +660,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $username
      * @return $this
+     * @since 2.0.0
      */
     public function loadByUsername($username)
     {
@@ -637,6 +677,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param int|\Magento\User\Model\User $user
      * @return null|array
+     * @since 2.0.0
      */
     public function hasAssigned2Role($user)
     {
@@ -648,6 +689,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $password
      * @return string
+     * @since 2.0.0
      */
     protected function _getEncodedPassword($password)
     {
@@ -662,6 +704,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $newToken
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function changeResetPasswordLinkToken($newToken)
     {
@@ -678,6 +721,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check if current reset password link token is expired
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -708,6 +752,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check if user has available resources
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasAvailableResources()
     {
@@ -719,6 +764,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param bool $hasResources
      * @return $this
+     * @since 2.0.0
      */
     public function setHasAvailableResources($hasResources)
     {
@@ -728,6 +774,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFirstName()
     {
@@ -736,6 +783,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setFirstName($firstName)
     {
@@ -744,6 +792,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getLastName()
     {
@@ -752,6 +801,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setLastName($lastName)
     {
@@ -760,6 +810,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getEmail()
     {
@@ -768,6 +819,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setEmail($email)
     {
@@ -776,6 +828,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserName()
     {
@@ -784,6 +837,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setUserName($userName)
     {
@@ -792,6 +846,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPassword()
     {
@@ -800,6 +855,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setPassword($password)
     {
@@ -808,6 +864,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCreated()
     {
@@ -816,6 +873,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setCreated($created)
     {
@@ -824,6 +882,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getModified()
     {
@@ -832,6 +891,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setModified($modified)
     {
@@ -840,6 +900,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getIsActive()
     {
@@ -848,6 +909,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setIsActive($isActive)
     {
@@ -856,6 +918,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getInterfaceLocale()
     {
@@ -864,6 +927,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setInterfaceLocale($interfaceLocale)
     {
@@ -877,6 +941,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @return $this
      * @throws \Magento\Framework\Exception\State\UserLockedException
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @since 2.1.0
      */
     public function performIdentityCheck($passwordString)
     {

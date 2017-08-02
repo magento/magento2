@@ -7,6 +7,7 @@ namespace Magento\Framework\Translate\Inline;
 
 /**
  * Proxy class for \Magento\Framework\Translate\Inline
+ * @since 2.0.0
  */
 class Proxy extends \Magento\Framework\Translate\Inline implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
@@ -15,6 +16,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -22,6 +24,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Proxied instance name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -29,6 +32,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Proxied instance
      *
      * @var \Magento\Framework\Translate\Inline
+     * @since 2.0.0
      */
     protected $subject;
 
@@ -36,6 +40,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Instance shareability flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $isShared;
 
@@ -43,6 +48,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -56,6 +62,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -66,6 +73,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -76,6 +84,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Clone proxied instance
      *
      * @return void
+     * @since 2.0.0
      */
     public function __clone()
     {
@@ -86,6 +95,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Get proxied instance
      *
      * @return \Magento\Framework\Translate\Inline
+     * @since 2.0.0
      */
     protected function _getSubject()
     {
@@ -101,6 +111,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Check if Inline Translates is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -111,6 +122,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * Retrieve Inline Parser instance
      *
      * @return \Magento\Framework\Translate\Inline\ParserInterface
+     * @since 2.0.0
      */
     public function getParser()
     {
@@ -123,6 +135,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      * @param array|string &$body
      * @param bool $isJson
      * @return $this
+     * @since 2.0.0
      */
     public function processResponseBody(&$body, $isJson = false)
     {
@@ -134,6 +147,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      *
      * @param mixed|string|null $tagName
      * @return mixed
+     * @since 2.0.0
      */
     public function getAdditionalHtmlAttribute($tagName = null)
     {

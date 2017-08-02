@@ -13,6 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -20,6 +21,7 @@ class InstallData implements InstallDataInterface
      * Quote setup factory
      *
      * @var QuoteSetupFactory
+     * @since 2.0.0
      */
     private $quoteSetupFactory;
 
@@ -27,6 +29,7 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param QuoteSetupFactory $setupFactory
+     * @since 2.0.0
      */
     public function __construct(QuoteSetupFactory $setupFactory)
     {
@@ -35,6 +38,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

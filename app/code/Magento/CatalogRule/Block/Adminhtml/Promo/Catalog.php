@@ -13,11 +13,13 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

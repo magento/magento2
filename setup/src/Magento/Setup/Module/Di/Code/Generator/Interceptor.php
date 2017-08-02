@@ -9,12 +9,18 @@ namespace Magento\Setup\Module\Di\Code\Generator;
 
 use Magento\Framework\Interception\Code\Generator\Interceptor as FrameworkInterceptor;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Generator\Interceptor
+ *
+ * @since 2.0.0
+ */
 class Interceptor extends FrameworkInterceptor
 {
     /**
      * Intercepted methods list
      *
      * @var array
+     * @since 2.0.0
      */
     private $interceptedMethods = [];
 
@@ -24,6 +30,7 @@ class Interceptor extends FrameworkInterceptor
      * @param \ReflectionMethod $method
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function isInterceptedMethod(\ReflectionMethod $method)
     {
@@ -36,6 +43,7 @@ class Interceptor extends FrameworkInterceptor
      * @param array $interceptedMethods
      *
      * @return void
+     * @since 2.0.0
      */
     public function setInterceptedMethods($interceptedMethods)
     {

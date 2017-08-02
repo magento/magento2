@@ -20,6 +20,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @method \Magento\Eav\Model\Form\Element setAttributeId(int $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Element setSortOrder(int $value)
+ * @since 2.0.0
  */
 class Element extends \Magento\Framework\Model\AbstractModel
 {
@@ -27,11 +28,13 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'eav_form_element';
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
@@ -43,6 +46,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -61,6 +65,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,6 +77,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Element
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _getResource()
     {
@@ -83,6 +89,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Eav\Model\ResourceModel\Form\Element\Collection
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -94,6 +101,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -111,6 +119,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * Retrieve EAV Attribute instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute
+     * @since 2.0.0
      */
     public function getAttribute()
     {

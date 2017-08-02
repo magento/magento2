@@ -14,6 +14,7 @@ use Magento\Cms\Api\Data\PageInterface;
  * Cms page grid inline edit controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
@@ -22,13 +23,22 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     const ADMIN_RESOURCE = 'Magento_Cms::save';
 
-    /** @var PostDataProcessor */
+    /**
+     * @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor
+     * @since 2.0.0
+     */
     protected $dataProcessor;
 
-    /** @var PageRepository  */
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     * @since 2.0.0
+     */
     protected $pageRepository;
 
-    /** @var JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
+     */
     protected $jsonFactory;
 
     /**
@@ -36,6 +46,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param PostDataProcessor $dataProcessor
      * @param PageRepository $pageRepository
      * @param JsonFactory $jsonFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -51,6 +62,7 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -102,6 +114,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      *
      * @param array $postData
      * @return array
+     * @since 2.0.0
      */
     protected function filterPost($postData = [])
     {
@@ -121,6 +134,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param bool $error
      * @param array $messages
      * @return void
+     * @since 2.0.0
      */
     protected function validatePost(array $pageData, \Magento\Cms\Model\Page $page, &$error, array &$messages)
     {
@@ -138,6 +152,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param PageInterface $page
      * @param string $errorText
      * @return string
+     * @since 2.0.0
      */
     protected function getErrorWithPageId(PageInterface $page, $errorText)
     {
@@ -151,6 +166,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param array $extendedPageData
      * @param array $pageData
      * @return $this
+     * @since 2.0.0
      */
     public function setCmsPageData(\Magento\Cms\Model\Page $page, array $extendedPageData, array $pageData)
     {

@@ -7,11 +7,13 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml;
 
 /**
  * Admin tax rule content block
+ * @since 2.0.0
  */
 class Agreement extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

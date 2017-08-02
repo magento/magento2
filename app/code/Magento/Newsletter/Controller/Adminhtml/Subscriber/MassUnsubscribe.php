@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\MassUnsubscribe
+ *
+ * @since 2.0.0
+ */
 class MassUnsubscribe extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**
      * Unsubscribe one or more subscribers action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

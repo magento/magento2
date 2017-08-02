@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Attribute\Data;
  * EAV Entity Attribute Boolean Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Boolean extends \Magento\Eav\Model\Attribute\Data\Select
 {
@@ -17,6 +18,7 @@ class Boolean extends \Magento\Eav\Model\Attribute\Data\Select
      *
      * @param int $value
      * @return string
+     * @since 2.0.0
      */
     protected function _getOptionText($value)
     {

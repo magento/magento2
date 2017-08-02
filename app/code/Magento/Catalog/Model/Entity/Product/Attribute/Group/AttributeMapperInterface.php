@@ -9,6 +9,11 @@ namespace Magento\Catalog\Model\Entity\Product\Attribute\Group;
 
 use Magento\Eav\Model\Entity\Attribute;
 
+/**
+ * Interface \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface
+ *
+ * @since 2.0.0
+ */
 interface AttributeMapperInterface
 {
     /**
@@ -16,6 +21,7 @@ interface AttributeMapperInterface
      *
      * @param Attribute $attribute
      * @return array
+     * @since 2.0.0
      */
     public function map(Attribute $attribute);
 }

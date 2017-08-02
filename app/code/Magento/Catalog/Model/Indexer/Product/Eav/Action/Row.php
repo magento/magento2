@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
 
 /**
  * Class Row reindex action
+ * @since 2.0.0
  */
 class Row extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
 {
@@ -17,6 +18,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function execute($id = null)
     {

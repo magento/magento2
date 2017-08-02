@@ -14,31 +14,37 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class Result
+ * @since 2.0.0
  */
 class Result implements ResultInterface
 {
     /**
      * @var Template
+     * @since 2.0.0
      */
     protected $template;
 
     /**
      * @var CompilerInterface
+     * @since 2.0.0
      */
     protected $compiler;
 
     /**
      * @var UiComponentInterface
+     * @since 2.0.0
      */
     protected $component;
 
     /**
      * @var Structure
+     * @since 2.0.0
      */
     protected $structure;
 
     /**
      * @var LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -48,6 +54,7 @@ class Result implements ResultInterface
      * @param UiComponentInterface $component
      * @param Structure $structure
      * @param LoggerInterface $logger
+     * @since 2.0.0
      */
     public function __construct(
         Template $template,
@@ -67,6 +74,7 @@ class Result implements ResultInterface
      * Get result document root element \DOMElement
      *
      * @return \DOMElement
+     * @since 2.0.0
      */
     public function getDocumentElement()
     {
@@ -77,6 +85,7 @@ class Result implements ResultInterface
      * Append layout configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function appendLayoutConfiguration()
     {
@@ -88,6 +97,7 @@ class Result implements ResultInterface
      * Returns the string representation
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -115,6 +125,7 @@ class Result implements ResultInterface
      *
      * @param string $content
      * @return string
+     * @since 2.0.0
      */
     protected function wrapContent($content)
     {

@@ -8,11 +8,13 @@ namespace Magento\Developer\Block\Adminhtml\System\Config;
 
 /**
  * Frontend model for static compilation mode switcher
+ * @since 2.2.0
  */
 class WorkflowType extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

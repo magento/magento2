@@ -12,6 +12,7 @@ namespace Magento\Config\Model\Config\Source;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Yesnocustom implements \Magento\Framework\Option\ArrayInterface
 {
@@ -19,6 +20,7 @@ class Yesnocustom implements \Magento\Framework\Option\ArrayInterface
      * Options getter
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

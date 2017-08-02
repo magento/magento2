@@ -6,12 +6,18 @@
 
 namespace Magento\Paypal\Model\System\Config\Source;
 
+/**
+ * Class \Magento\Paypal\Model\System\Config\Source\BmlPosition
+ *
+ * @since 2.0.0
+ */
 class BmlPosition
 {
     /**
      * Bml positions source getter for Home Page
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlPositionsHP()
     {
@@ -25,6 +31,7 @@ class BmlPosition
      * Bml positions source getter for Catalog Category Page
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlPositionsCCP()
     {
@@ -38,6 +45,7 @@ class BmlPosition
      * Bml positions source getter for Catalog Product Page
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlPositionsCPP()
     {
@@ -51,6 +59,7 @@ class BmlPosition
      * Bml positions source getter for Checkout Cart Page
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBmlPositionsCheckout()
     {

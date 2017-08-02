@@ -9,21 +9,29 @@ namespace Magento\CatalogInventory\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
+/**
+ * Class \Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver
+ *
+ * @since 2.0.0
+ */
 class CheckoutAllSubmitAfterObserver implements ObserverInterface
 {
     /**
      * @var SubtractQuoteInventoryObserver
+     * @since 2.0.0
      */
     protected $subtractQuoteInventoryObserver;
 
     /**
      * @var ReindexQuoteInventoryObserver
+     * @since 2.0.0
      */
     protected $reindexQuoteInventoryObserver;
 
     /**
      * @param SubtractQuoteInventoryObserver $subtractQuoteInventoryObserver
      * @param ReindexQuoteInventoryObserver $reindexQuoteInventoryObserver
+     * @since 2.0.0
      */
     public function __construct(
         SubtractQuoteInventoryObserver $subtractQuoteInventoryObserver,
@@ -38,6 +46,7 @@ class CheckoutAllSubmitAfterObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

@@ -10,6 +10,7 @@ namespace Magento\Analytics\Model\Config\Source;
  *
  * Prepares and provides options for a selector of verticals which is located
  * in the corresponding configuration menu of the Admin area.
+ * @since 2.2.0
  */
 class Vertical implements \Magento\Framework\Option\ArrayInterface
 {
@@ -22,11 +23,13 @@ class Vertical implements \Magento\Framework\Option\ArrayInterface
      * It is supposed that the list may be changed in each Magento release.
      *
      * @var array
+     * @since 2.2.0
      */
     private $verticals;
 
     /**
      * @param array $verticals
+     * @since 2.2.0
      */
     public function __construct(array $verticals)
     {
@@ -35,6 +38,7 @@ class Vertical implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function toOptionArray()
     {

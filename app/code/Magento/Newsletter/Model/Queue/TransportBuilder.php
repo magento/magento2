@@ -7,12 +7,18 @@ namespace Magento\Newsletter\Model\Queue;
 
 use Magento\Email\Model\AbstractTemplate;
 
+/**
+ * Class \Magento\Newsletter\Model\Queue\TransportBuilder
+ *
+ * @since 2.0.0
+ */
 class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
     /**
      * Template data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $templateData = [];
 
@@ -21,6 +27,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      *
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     public function setTemplateData($data)
     {
@@ -31,6 +38,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
     /**
      * @param AbstractTemplate $template
      * @return void
+     * @since 2.0.0
      */
     protected function setTemplateFilter(AbstractTemplate $template)
     {
@@ -41,6 +49,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function prepareMessage()
     {

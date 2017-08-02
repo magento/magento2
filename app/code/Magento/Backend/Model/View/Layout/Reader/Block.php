@@ -12,6 +12,7 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 /**
  * Backend block structure reader with ACL support
  * @api
+ * @since 2.0.0
  */
 class Block extends Layout\Reader\Block
 {
@@ -24,6 +25,7 @@ class Block extends Layout\Reader\Block
      * @param InterpreterInterface $argumentInterpreter
      * @param Condition $conditionReader
      * @param string|null $scopeType
+     * @since 2.0.0
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,

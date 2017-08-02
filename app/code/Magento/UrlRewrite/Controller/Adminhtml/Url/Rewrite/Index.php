@@ -6,12 +6,18 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+/**
+ * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**
      * Show URL rewrites index page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -11,11 +11,13 @@ use Magento\Framework\DB\GenericMapper;
 /**
  * Class StockCriteriaMapper
  * @package Magento\CatalogInventory\Model\ResourceModel\Stock
+ * @since 2.0.0
  */
 class StockCriteriaMapper extends GenericMapper
 {
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function init()
     {

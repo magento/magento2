@@ -6,6 +6,11 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Billing\Agreement\Cancel
+ *
+ * @since 2.0.0
+ */
 class Cancel extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**
@@ -13,6 +18,7 @@ class Cancel extends \Magento\Paypal\Controller\Billing\Agreement
      * Set billing agreement status to 'Canceled'
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

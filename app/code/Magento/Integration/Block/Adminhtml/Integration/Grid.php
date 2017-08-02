@@ -12,6 +12,7 @@ use Magento\Backend\Block\Widget\Grid as BackendGrid;
 /**
  * @api
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Grid extends BackendGrid
 {
@@ -19,6 +20,7 @@ class Grid extends BackendGrid
      * Disable javascript callback on row clicking.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRowClickCallback()
     {
@@ -29,6 +31,7 @@ class Grid extends BackendGrid
      * Disable javascript callback on row init.
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRowInitCallback()
     {

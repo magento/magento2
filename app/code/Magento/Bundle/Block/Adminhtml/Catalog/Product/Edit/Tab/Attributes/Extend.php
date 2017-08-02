@@ -11,10 +11,16 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
+/**
+ * Class \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend
+ *
+ * @since 2.0.0
+ */
 class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     /**
      * Initialize block template
+     * @since 2.0.0
      */
     private $template = 'Magento_Bundle::catalog/product/edit/tab/attributes/extend.phtml';
 
@@ -26,11 +32,13 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Data\FormFactory
+     * @since 2.0.0
      */
     private $formFactory;
 
@@ -39,6 +47,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,6 +64,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,6 +77,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * Get Element Html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -78,6 +89,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * Execute method getElementHtml from parrent class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getParentElementHtml()
     {
@@ -86,6 +98,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -107,6 +120,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isDisabledField()
     {
@@ -119,6 +133,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -132,6 +147,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * @param string $switchAttributeCode
      * @return \Magento\Framework\Data\Form\Element\Select
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getExtendedElement($switchAttributeCode)
     {

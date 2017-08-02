@@ -12,11 +12,13 @@ use Magento\Ui\Model\UiComponentGenerator;
 /**
  * This block is wrapper for UI component, this done in order to save compatability with old
  * widgets mechanism
+ * @since 2.2.0
  */
 class Wrapper extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var UiComponentGenerator
+     * @since 2.2.0
      */
     private $uiComponentGenerator;
 
@@ -25,6 +27,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      * @param Template\Context $context
      * @param UiComponentGenerator $uiComponentGenerator
      * @param array $data
+     * @since 2.2.0
      */
     public function __construct(Template\Context $context, UiComponentGenerator $uiComponentGenerator, array $data = [])
     {
@@ -40,6 +43,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      * @param UiComponentInterface $uiComponent
      * @param array $widgetData
      * @return void
+     * @since 2.2.0
      */
     private function injectDataInDataSource(UiComponentInterface $uiComponent, array $widgetData)
     {
@@ -59,6 +63,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      * @param UiComponentInterface $uiComponent
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     private function addDataToChildComponents(UiComponentInterface $uiComponent, array $data)
     {
@@ -84,6 +89,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      *
      * @param array $data -> data, that can be injected to data source or to child components
      * @return string
+     * @since 2.2.0
      */
     public function renderApp($data = [])
     {

@@ -9,10 +9,16 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
 use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
 
+/**
+ * Class \Magento\Theme\Model\Data\Design\Config\Data
+ *
+ * @since 2.1.0
+ */
 class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 {
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getPath()
     {
@@ -21,6 +27,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getValue()
     {
@@ -29,6 +36,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getFieldConfig()
     {
@@ -37,6 +45,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setValue($value)
     {
@@ -45,6 +54,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setPath($path)
     {
@@ -53,6 +63,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setFieldConfig(array $config)
     {
@@ -61,6 +72,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function getExtensionAttributes()
     {
@@ -69,6 +81,7 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 
     /**
      * @inheritDoc
+     * @since 2.1.0
      */
     public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes)
     {

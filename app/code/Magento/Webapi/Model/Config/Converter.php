@@ -7,6 +7,7 @@ namespace Magento\Webapi\Model\Config;
 
 /**
  * Converter of webapi.xml content into array format.
+ * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -34,6 +35,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -116,6 +118,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMNodeList $parameters
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function convertMethodParameters($parameters)
     {
@@ -151,6 +154,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param string $url
      * @return string
+     * @since 2.0.0
      */
     protected function convertVersion($url)
     {

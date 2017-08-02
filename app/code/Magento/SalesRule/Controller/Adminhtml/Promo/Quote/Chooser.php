@@ -6,12 +6,18 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Chooser
+ *
+ * @since 2.0.0
+ */
 class Chooser extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * Chooser source action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

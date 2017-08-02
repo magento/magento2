@@ -9,6 +9,7 @@ namespace Magento\Framework\Backup\Filesystem;
  * Filesystem helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Helper
 {
@@ -53,6 +54,7 @@ class Helper
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 2.0.0
      */
     public function rm($path, $skipPaths = [], $removeRoot = false)
     {
@@ -81,6 +83,7 @@ class Helper
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getInfo($path, $infoOptions = self::INFO_ALL, $skipFiles = [])
     {

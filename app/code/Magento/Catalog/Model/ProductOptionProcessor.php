@@ -12,26 +12,35 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptionProcessor
+ *
+ * @since 2.0.0
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
+     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var CustomOptionFactory
+     * @since 2.0.0
      */
     protected $customOptionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     * @since 2.1.0
      */
     private $urlBuilder;
 
     /**
      * @param DataObjectFactory $objectFactory
      * @param CustomOptionFactory $customOptionFactory
+     * @since 2.0.0
      */
     public function __construct(
         DataObjectFactory $objectFactory,
@@ -43,6 +52,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
@@ -66,6 +76,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      *
      * @param ProductOptionInterface $productOption
      * @return array
+     * @since 2.0.0
      */
     protected function getCustomOptions(ProductOptionInterface $productOption)
     {
@@ -81,6 +92,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function convertToProductOption(DataObject $request)
     {
@@ -110,6 +122,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      *
      * @param array $optionValue
      * @return array
+     * @since 2.1.0
      */
     private function processFileOptionValue(array $optionValue)
     {
@@ -128,7 +141,8 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getUrlBuilder()
     {

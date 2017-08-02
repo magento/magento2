@@ -11,6 +11,7 @@ use Magento\Framework\App\RequestInterface;
  * EAV Entity Attribute Multiply select Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
 {
@@ -19,6 +20,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
      *
      * @param RequestInterface $request
      * @return array|string
+     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -34,6 +36,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
      *
      * @param array|string $value
      * @return $this
+     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -48,6 +51,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
      *
      * @param string $format
      * @return array|string
+     * @since 2.0.0
      */
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
