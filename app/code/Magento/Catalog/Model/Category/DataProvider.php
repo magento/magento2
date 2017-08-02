@@ -31,22 +31,26 @@ use Magento\Ui\DataProvider\EavValidationRules;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $requestScopeFieldName = 'store';
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $loadedData;
 
     /**
      * EAV attribute properties to fetch from meta storage
      * @var array
+     * @since 2.1.0
      */
     protected $metaProperties = [
         'dataType' => 'frontend_input',
@@ -63,6 +67,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Form element mapping
      *
      * @var array
+     * @since 2.1.0
      */
     protected $formElement = [
         'text' => 'input',
@@ -73,6 +78,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Elements with use config setting
      *
      * @var array
+     * @since 2.1.0
      */
     protected $elementsWithUseConfigSetting = [
         'available_sort_by',
@@ -84,6 +90,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * List of fields that should not be added into the form
      *
      * @var array
+     * @since 2.1.0
      */
     protected $ignoreFields = [
         'products_position',
@@ -92,46 +99,55 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var EavValidationRules
+     * @since 2.1.0
      */
     protected $eavValidationRules;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.1.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.1.0
      */
     protected $request;
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $eavConfig;
 
     /**
      * @var StoreManagerInterface
+     * @since 2.1.0
      */
     private $storeManager;
 
     /**
      * @var CategoryFactory
+     * @since 2.1.0
      */
     private $categoryFactory;
 
     /**
      * @var ScopeOverriddenValue
+     * @since 2.2.0
      */
     private $scopeOverriddenValue;
 
     /**
      * @var ArrayManager
+     * @since 2.2.0
      */
     private $arrayManager;
 
     /**
      * @var Filesystem
+     * @since 2.2.0
      */
     private $fileInfo;
 
@@ -151,6 +167,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.0
      */
     public function __construct(
         $name,
@@ -180,6 +197,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getMeta()
     {
@@ -199,6 +217,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Category $category
      * @param array $meta
      * @return array
+     * @since 2.2.0
      */
     private function addUseDefaultValueCheckbox(Category $category, array $meta)
     {
@@ -242,6 +261,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
+     * @since 2.1.0
      */
     public function prepareMeta($meta)
     {
@@ -259,6 +279,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $fieldsMap
      * @param array $fieldsMeta
      * @return array
+     * @since 2.1.0
      */
     private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
     {
@@ -277,6 +298,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get data
      *
      * @return array
+     * @since 2.1.0
      */
     public function getData()
     {
@@ -303,6 +325,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.1.0
      */
     public function getAttributesMeta(Type $entityType)
     {
@@ -350,6 +373,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $categoryData
      * @return array
+     * @since 2.1.0
      */
     protected function addUseConfigSettings($categoryData)
     {
@@ -373,7 +397,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Catalog\Model\Category $category
      * @param array $categoryData
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.1.0
      */
     protected function addUseDefaultSettings($category, $categoryData)
     {
@@ -393,6 +418,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return Category
      * @throws NoSuchEntityException
+     * @since 2.1.0
      */
     public function getCurrentCategory()
     {
@@ -420,6 +446,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param EavAttribute $attribute
      * @return string
+     * @since 2.1.0
      */
     public function getScopeLabel(EavAttribute $attribute)
     {
@@ -445,6 +472,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $categoryData
      * @return array
+     * @since 2.1.0
      */
     protected function filterFields($categoryData)
     {
@@ -457,6 +485,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Catalog\Model\Category $category
      * @param array $categoryData
      * @return array
+     * @since 2.2.0
      */
     private function convertValues($category, $categoryData)
     {
@@ -489,6 +518,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $result
      * @return array
+     * @since 2.1.0
      */
     public function getDefaultMetaData($result)
     {
@@ -502,6 +532,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @return array
+     * @since 2.1.0
      */
     protected function getFieldsMap()
     {
@@ -560,7 +591,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Retrieve scope overridden value
      *
      * @return ScopeOverriddenValue
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getScopeOverriddenValue()
     {
@@ -577,7 +609,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Retrieve array manager
      *
      * @return ArrayManager
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getArrayManager()
     {
@@ -595,7 +628,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return FileInfo
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getFileInfo()
     {

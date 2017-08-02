@@ -5,10 +5,16 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Total;
 
+/**
+ * Class \Magento\Sales\Model\Order\Pdf\Total\Factory
+ *
+ * @since 2.0.0
+ */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -16,11 +22,13 @@ class Factory
      * Default total model
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultTotalModel = \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -34,6 +42,7 @@ class Factory
      * @param array $arguments
      * @return \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function create($class = null, $arguments = [])
     {

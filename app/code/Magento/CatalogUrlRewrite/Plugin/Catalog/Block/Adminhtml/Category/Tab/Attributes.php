@@ -7,6 +7,7 @@ namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
 
 /**
  * Class Attributes
+ * @since 2.0.0
  */
 class Attributes
 {
@@ -15,6 +16,7 @@ class Attributes
      * @param array $result
      *
      * @return array
+     * @since 2.1.0
      */
     public function afterGetAttributesMeta(
         \Magento\Catalog\Model\Category\DataProvider $subject,

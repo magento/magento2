@@ -11,10 +11,16 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Controller\Customer as CustomerController;
 use Magento\Review\Model\ReviewFactory;
 
+/**
+ * Class \Magento\Review\Controller\Customer\View
+ *
+ * @since 2.0.0
+ */
 class View extends CustomerController
 {
     /**
      * @var \Magento\Review\Model\ReviewFactory
+     * @since 2.0.0
      */
     protected $reviewFactory;
 
@@ -22,6 +28,7 @@ class View extends CustomerController
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -36,6 +43,7 @@ class View extends CustomerController
      * Render review details
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

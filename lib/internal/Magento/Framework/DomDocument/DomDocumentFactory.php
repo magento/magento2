@@ -7,6 +7,7 @@ namespace Magento\Framework\DomDocument;
 
 /**
  * DOM document factory
+ * @since 2.0.0
  */
 class DomDocumentFactory
 {
@@ -14,6 +15,7 @@ class DomDocumentFactory
      * Create empty DOM document instance.
      *
      * @return \DOMDocument
+     * @since 2.0.0
      */
     public function create()
     {

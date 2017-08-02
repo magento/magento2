@@ -14,6 +14,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -21,6 +22,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product Visibility Filter to product collection flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_productVisible = false;
 
@@ -28,6 +30,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product Salable Filter to product collection flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_productSalable = false;
 
@@ -35,6 +38,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * If product out of stock, its item will be removed after load
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_productInStock = false;
 
@@ -42,6 +46,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product Ids array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_productIds = [];
 
@@ -49,6 +54,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store Ids array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storeIds = [];
 
@@ -56,6 +62,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add days in wishlist filter of product collection
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_addDaysInWishlist = false;
 
@@ -63,6 +70,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Sum of items collection qty
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_itemsQty;
 
@@ -70,6 +78,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Whether product name attribute value table is joined in select
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_isProductNameJoined = false;
 
@@ -77,6 +86,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Adminhtml sales
      *
      * @var \Magento\Sales\Helper\Admin
+     * @since 2.0.0
      */
     protected $_adminhtmlSales = null;
 
@@ -84,61 +94,73 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Catalog inventory data
      *
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockConfiguration = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var \Magento\Wishlist\Model\Config
+     * @since 2.0.0
      */
     protected $_wishlistConfig;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
+     * @since 2.0.0
      */
     protected $_productVisibility;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $_coreResource;
 
     /**
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory
+     * @since 2.0.0
      */
     protected $_optionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @since 2.0.0
      */
     protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
+     * @since 2.0.0
      */
     protected $_catalogConfFactory;
 
     /**
      * @var \Magento\Catalog\Model\Entity\AttributeFactory
+     * @since 2.0.0
      */
     protected $_catalogAttrFactory;
 
     /**
      * @var \Magento\Framework\App\State
+     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     protected $metadataPool;
 
@@ -163,6 +185,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -203,6 +226,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize resource model for collection
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {
@@ -214,6 +238,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get metadata pool object
      *
      * @return MetadataPool
+     * @since 2.1.0
      */
     protected function getMetadataPool()
     {
@@ -228,6 +253,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * After load processing
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -249,6 +275,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add options to items
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _assignOptions()
     {
@@ -271,6 +298,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add products to items and item options
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _assignProducts()
     {
@@ -331,6 +359,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param \Magento\Wishlist\Model\Wishlist $wishlist
      * @return $this
+     * @since 2.0.0
      */
     public function addWishlistFilter(\Magento\Wishlist\Model\Wishlist $wishlist)
     {
@@ -343,6 +372,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function addCustomerIdFilter($customerId)
     {
@@ -362,6 +392,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $storeIds
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeIds = [])
     {
@@ -378,6 +409,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add items store data to collection
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreData()
     {
@@ -394,6 +426,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Reset sort order
      *
      * @return $this
+     * @since 2.0.0
      */
     public function resetSortOrder()
     {
@@ -406,6 +439,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setVisibilityFilter($flag = true)
     {
@@ -419,6 +453,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setSalableFilter($flag = true)
     {
@@ -432,6 +467,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setInStockFilter($flag = true)
     {
@@ -443,6 +479,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Set flag of adding days in wishlist
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addDaysInWishlist()
     {
@@ -457,6 +494,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array $constraints
      * @return $this
+     * @since 2.0.0
      */
     public function addDaysFilter($constraints)
     {
@@ -491,6 +529,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Joins product name attribute value to use it in WHERE and ORDER clauses
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinProductNameTable()
     {
@@ -523,6 +562,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $productName
      * @return $this
+     * @since 2.0.0
      */
     public function addProductNameFilter($productName)
     {
@@ -537,6 +577,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderByProductName($dir)
     {
@@ -549,6 +590,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get sum of items collection qty
      *
      * @return int
+     * @since 2.0.0
      */
     public function getItemsQty()
     {
@@ -565,6 +607,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoadData()
     {

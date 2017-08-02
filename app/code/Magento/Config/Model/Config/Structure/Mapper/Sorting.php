@@ -11,6 +11,7 @@ namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
 {
@@ -19,6 +20,7 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     public function map(array $data)
     {
@@ -31,6 +33,7 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
     /**
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     protected function _processConfig($data)
     {
@@ -49,6 +52,7 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
      * @param array $elementA
      * @param array $elementB
      * @return int
+     * @since 2.0.0
      */
     protected function _cmp($elementA, $elementB)
     {

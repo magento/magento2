@@ -13,6 +13,7 @@ namespace Magento\Multishipping\Block\Checkout;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {
@@ -20,6 +21,7 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -32,6 +34,7 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
 
     /**
      * @return array|bool|string
+     * @since 2.0.0
      */
     public function getOrderIds()
     {
@@ -45,6 +48,7 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     /**
      * @param int $orderId
      * @return string
+     * @since 2.0.0
      */
     public function getViewOrderUrl($orderId)
     {
@@ -53,6 +57,7 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getContinueUrl()
     {

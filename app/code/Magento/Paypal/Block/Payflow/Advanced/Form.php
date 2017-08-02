@@ -9,11 +9,13 @@ namespace Magento\Paypal\Block\Payflow\Advanced;
  * Payflow Advanced iframe block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Paypal\Block\Payflow\Link\Form
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'payflowadvanced/info.phtml';
 
@@ -21,6 +23,7 @@ class Form extends \Magento\Paypal\Block\Payflow\Link\Form
      * Get frame action URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrameActionUrl()
     {

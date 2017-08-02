@@ -11,16 +11,19 @@ use Magento\Framework\View;
 
 /**
  * Class Builder
+ * @since 2.0.0
  */
 class Builder extends View\Layout\Builder
 {
     /**
      * @var \Magento\Framework\View\Page\Config
+     * @since 2.0.0
      */
     protected $pageConfig;
 
     /**
      * @var \Magento\Framework\View\Page\Layout\Reader
+     * @since 2.0.0
      */
     protected $pageLayoutReader;
 
@@ -30,6 +33,7 @@ class Builder extends View\Layout\Builder
      * @param Event\ManagerInterface $eventManager
      * @param Config $pageConfig
      * @param Layout\Reader $pageLayoutReader
+     * @since 2.0.0
      */
     public function __construct(
         View\LayoutInterface $layout,
@@ -48,6 +52,7 @@ class Builder extends View\Layout\Builder
      * Read page layout before generation generic layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function generateLayoutBlocks()
     {
@@ -58,6 +63,7 @@ class Builder extends View\Layout\Builder
     /**
      * Read page layout and write structure to ReadContext
      * @return void
+     * @since 2.0.0
      */
     protected function readPageLayout()
     {
@@ -70,6 +76,7 @@ class Builder extends View\Layout\Builder
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getPageLayout()
     {

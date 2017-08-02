@@ -12,6 +12,7 @@ use Magento\Setup\Model\PackagesData;
 
 /**
  * Module grid
+ * @since 2.2.0
  */
 class Module
 {
@@ -23,6 +24,7 @@ class Module
 
     /**
      * @var ComposerInformation
+     * @since 2.2.0
      */
     private $composerInformation;
 
@@ -30,11 +32,13 @@ class Module
      * Module package info
      *
      * @var \Magento\Framework\Module\PackageInfo
+     * @since 2.2.0
      */
     private $packageInfo;
 
     /**
      * @var \Magento\Setup\Model\ObjectManagerProvider
+     * @since 2.2.0
      */
     private $objectManagerProvider;
 
@@ -42,6 +46,7 @@ class Module
      * Full Module info
      *
      * @var \Magento\Framework\Module\FullModuleList
+     * @since 2.2.0
      */
     private $fullModuleList;
 
@@ -49,11 +54,13 @@ class Module
      * Module info
      *
      * @var ModuleList
+     * @since 2.2.0
      */
     private $moduleList;
 
     /**
      * @var PackagesData
+     * @since 2.2.0
      */
     private $packagesData;
 
@@ -63,6 +70,7 @@ class Module
      * @param ModuleList $moduleList
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param PackagesData $packagesData
+     * @since 2.2.0
      */
     public function __construct(
         ComposerInformation $composerInformation,
@@ -82,6 +90,7 @@ class Module
      * Get list of installed modules (composer + direct installation)
      *
      * @return array
+     * @since 2.2.0
      */
     public function getList()
     {
@@ -103,6 +112,7 @@ class Module
      * Get module list from composer
      *
      * @return array
+     * @since 2.2.0
      */
     private function getModuleListFromComposer()
     {
@@ -118,6 +128,7 @@ class Module
      * Get full module list
      *
      * @return array
+     * @since 2.2.0
      */
     private function getFullModuleList()
     {
@@ -131,6 +142,7 @@ class Module
      *
      * @param array $items
      * @return array
+     * @since 2.2.0
      */
     private function addRequiredBy(array $items)
     {
@@ -151,6 +163,7 @@ class Module
      *
      * @param array $moduleList
      * @return array
+     * @since 2.2.0
      */
     private function getModulesInfo(array $moduleList)
     {
@@ -174,6 +187,7 @@ class Module
      *
      * @param array $items
      * @return array
+     * @since 2.2.0
      */
     private function addGeneralInfo(array $items)
     {

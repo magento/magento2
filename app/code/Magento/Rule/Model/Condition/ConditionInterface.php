@@ -7,6 +7,7 @@ namespace Magento\Rule\Model\Condition;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ConditionInterface
 {
@@ -14,6 +15,7 @@ interface ConditionInterface
      * Get tables to join
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTablesToJoin();
 
@@ -21,6 +23,7 @@ interface ConditionInterface
      * Get field by attribute
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMappedSqlField();
 
@@ -28,6 +31,7 @@ interface ConditionInterface
      * Get argument value to bind
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getBindArgumentValue();
 }

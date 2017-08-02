@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Mview;
 
+/**
+ * Interface \Magento\Framework\Mview\ViewInterface
+ *
+ * @since 2.0.0
+ */
 interface ViewInterface
 {
     /**
      * Return view ID
      *
      * @return string
+     * @since 2.0.0
      */
     public function getId();
 
@@ -18,6 +24,7 @@ interface ViewInterface
      * Return view action class
      *
      * @return string
+     * @since 2.0.0
      */
     public function getActionClass();
 
@@ -25,6 +32,7 @@ interface ViewInterface
      * Return view group
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGroup();
 
@@ -32,6 +40,7 @@ interface ViewInterface
      * Return view subscriptions
      *
      * @return array
+     * @since 2.0.0
      */
     public function getSubscriptions();
 
@@ -41,6 +50,7 @@ interface ViewInterface
      * @param string $viewId
      * @return ViewInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function load($viewId);
 
@@ -49,6 +59,7 @@ interface ViewInterface
      *
      * @throws \Exception
      * @return ViewInterface
+     * @since 2.0.0
      */
     public function subscribe();
 
@@ -57,6 +68,7 @@ interface ViewInterface
      *
      * @throws \Exception
      * @return ViewInterface
+     * @since 2.0.0
      */
     public function unsubscribe();
 
@@ -65,6 +77,7 @@ interface ViewInterface
      *
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function update();
 
@@ -72,6 +85,7 @@ interface ViewInterface
      * Pause view updates and set version ID to changelog's end
      *
      * @return void
+     * @since 2.0.0
      */
     public function suspend();
 
@@ -79,6 +93,7 @@ interface ViewInterface
      * Resume view updates
      *
      * @return void
+     * @since 2.0.0
      */
     public function resume();
 
@@ -86,6 +101,7 @@ interface ViewInterface
      * Clear precessed changelog entries
      *
      * @return void
+     * @since 2.0.0
      */
     public function clearChangelog();
 
@@ -93,6 +109,7 @@ interface ViewInterface
      * Return related state object
      *
      * @return View\StateInterface
+     * @since 2.0.0
      */
     public function getState();
 
@@ -101,6 +118,7 @@ interface ViewInterface
      *
      * @param View\StateInterface $state
      * @return ViewInterface
+     * @since 2.0.0
      */
     public function setState(View\StateInterface $state);
 
@@ -108,6 +126,7 @@ interface ViewInterface
      * Check whether view is enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled();
 
@@ -115,6 +134,7 @@ interface ViewInterface
      * Check whether view is idle
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isIdle();
 
@@ -122,6 +142,7 @@ interface ViewInterface
      * Check whether view is working
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isWorking();
 
@@ -129,6 +150,7 @@ interface ViewInterface
      * Check whether view is paused
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSuspended();
 
@@ -136,6 +158,7 @@ interface ViewInterface
      * Return view updated datetime
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUpdated();
 
@@ -143,6 +166,7 @@ interface ViewInterface
      * Retrieve linked changelog
      *
      * @return View\ChangelogInterface
+     * @since 2.0.0
      */
     public function getChangelog();
 }

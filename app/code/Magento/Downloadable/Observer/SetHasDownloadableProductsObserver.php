@@ -7,15 +7,22 @@ namespace Magento\Downloadable\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Downloadable\Observer\SetHasDownloadableProductsObserver
+ *
+ * @since 2.0.0
+ */
 class SetHasDownloadableProductsObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession
@@ -28,6 +35,7 @@ class SetHasDownloadableProductsObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

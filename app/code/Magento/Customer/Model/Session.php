@@ -17,6 +17,7 @@ use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
  * @api
  * @method string getNoReferer()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -24,11 +25,13 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Customer object
      *
      * @var CustomerData
+     * @since 2.0.0
      */
     protected $_customer;
 
     /**
      * @var ResourceCustomer
+     * @since 2.0.0
      */
     protected $_customerResource;
 
@@ -36,6 +39,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Customer model
      *
      * @var Customer
+     * @since 2.0.0
      */
     protected $_customerModel;
 
@@ -43,6 +47,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Flag with customer id validations result
      *
      * @var bool|null
+     * @since 2.0.0
      */
     protected $_isCustomerIdChecked = null;
 
@@ -50,6 +55,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Customer URL
      *
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -57,51 +63,61 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Core url
      *
      * @var \Magento\Framework\Url\Helper\Data|null
+     * @since 2.0.0
      */
     protected $_coreUrl = null;
 
     /**
      * @var Share
+     * @since 2.0.0
      */
     protected $_configShare;
 
     /**
      * @var \Magento\Framework\Session\Generic
+     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var  CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var CustomerFactory
+     * @since 2.0.0
      */
     protected $_customerFactory;
 
     /**
      * @var \Magento\Framework\UrlFactory
+     * @since 2.0.0
      */
     protected $_urlFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $_httpContext;
 
     /**
      * @var GroupManagementInterface
+     * @since 2.0.0
      */
     protected $groupManagement;
 
     /**
      * @var \Magento\Framework\App\Response\Http
+     * @since 2.0.0
      */
     protected $response;
 
@@ -129,6 +145,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\App\Response\Http $response
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -183,6 +200,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Retrieve customer sharing configuration model
      *
      * @return Share
+     * @since 2.0.0
      */
     public function getCustomerConfigShare()
     {
@@ -194,6 +212,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param   CustomerData $customer
      * @return  $this
+     * @since 2.0.0
      */
     public function setCustomerData(CustomerData $customer)
     {
@@ -215,6 +234,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Retrieve customer model object
      *
      * @return CustomerData
+     * @since 2.0.0
      */
     public function getCustomerData()
     {
@@ -229,6 +249,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Returns Customer data object with the customer information
      *
      * @return CustomerData
+     * @since 2.0.0
      */
     public function getCustomerDataObject()
     {
@@ -241,6 +262,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param CustomerData $customerData
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerDataObject(CustomerData $customerData)
     {
@@ -255,6 +277,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param   Customer $customerModel
      * @return  $this
      * use setCustomerId() instead
+     * @since 2.0.0
      */
     public function setCustomer(Customer $customerModel)
     {
@@ -283,6 +306,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @return Customer
      * use getCustomerId() instead
+     * @since 2.0.0
      */
     public function getCustomer()
     {
@@ -298,6 +322,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param int|null $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerId($id)
     {
@@ -310,6 +335,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @api
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -323,6 +349,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Retrieve customer id from current session
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -334,6 +361,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param int|null $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function setId($customerId)
     {
@@ -345,6 +373,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param int|null $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerGroupId($id)
     {
@@ -357,6 +386,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * If customer is not logged in system, 'not logged in' group id will be returned
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCustomerGroupId()
     {
@@ -376,6 +406,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @api
      * @return bool
+     * @since 2.0.0
      */
     public function isLoggedIn()
     {
@@ -389,6 +420,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param int $customerId
      * @return bool
+     * @since 2.0.0
      */
     public function checkCustomerId($customerId)
     {
@@ -408,6 +440,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @param Customer $customer
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerAsLoggedIn($customer)
     {
@@ -421,6 +454,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @param CustomerData $customer
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerDataAsLoggedIn($customer)
     {
@@ -442,6 +476,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @api
      * @param   int $customerId
      * @return  bool
+     * @since 2.0.0
      */
     public function loginById($customerId)
     {
@@ -459,6 +494,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @api
      * @return $this
+     * @since 2.0.0
      */
     public function logout()
     {
@@ -475,6 +511,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param   bool|null $loginUrl
      * @return  bool
+     * @since 2.0.0
      */
     public function authenticate($loginUrl = null)
     {
@@ -507,6 +544,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param string $key
      * @param string $url
      * @return $this
+     * @since 2.0.0
      */
     protected function _setAuthUrl($key, $url)
     {
@@ -520,6 +558,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Logout without dispatching event
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _logout()
     {
@@ -536,6 +575,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param string $url
      * @return $this
+     * @since 2.0.0
      */
     public function setBeforeAuthUrl($url)
     {
@@ -547,6 +587,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param string $url
      * @return $this
+     * @since 2.0.0
      */
     public function setAfterAuthUrl($url)
     {
@@ -557,6 +598,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Reset core session hosts after reseting session ID
      *
      * @return $this
+     * @since 2.0.0
      */
     public function regenerateId()
     {
@@ -567,6 +609,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @return \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected function _createUrl()
     {

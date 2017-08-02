@@ -12,36 +12,43 @@ use Magento\Framework\Reflection\MethodsMap;
  * Data object helper.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class DataObjectHelper
 {
     /**
      * @var ObjectFactory
+     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @since 2.0.0
      */
     protected $objectProcessor;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
+     * @since 2.0.0
      */
     protected $typeProcessor;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     * @since 2.0.0
      */
     protected $extensionFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $joinProcessor;
 
     /**
      * @var MethodsMap
+     * @since 2.0.0
      */
     protected $methodsMapProcessor;
 
@@ -52,6 +59,7 @@ class DataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param MethodsMap $methodsMapProcessor
+     * @since 2.0.0
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -76,6 +84,7 @@ class DataObjectHelper
      * @param array $data
      * @param string $interfaceName
      * @return $this
+     * @since 2.0.0
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
@@ -94,6 +103,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
@@ -144,6 +154,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function setComplexValue(
         $dataObject,
@@ -226,6 +237,7 @@ class DataObjectHelper
      * @param mixed $secondDataObject
      * @return $this
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function mergeDataObjects(
         $interfaceName,
@@ -246,6 +258,7 @@ class DataObjectHelper
      * @param AttributeValue[] $attributeValues Array of custom attribute
      * @param string $type Data interface type
      * @return AttributeValue[]
+     * @since 2.0.0
      */
     public function getCustomAttributeValueByType(array $attributeValues, $type)
     {

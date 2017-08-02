@@ -16,6 +16,7 @@ use \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
  * Order status resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -23,6 +24,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Status labels table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $labelsTable;
 
@@ -30,6 +32,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Status state table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $stateTable;
 
@@ -37,6 +40,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Internal constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +57,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -83,6 +88,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Sales\Model\Order\Status $status
      * @return array
+     * @since 2.0.0
      */
     public function getStoreLabels(\Magento\Sales\Model\Order\Status $status)
     {
@@ -101,6 +107,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -129,6 +136,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param bool $isDefault
      * @param bool $visibleOnFront
      * @return $this
+     * @since 2.0.0
      */
     public function assignState($status, $state, $isDefault, $visibleOnFront = false)
     {
@@ -158,6 +166,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $state
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function unassignState($status, $state)
     {
@@ -198,6 +207,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $state
      * @return bool
+     * @since 2.0.0
      */
     public function checkIsStateLast($state)
     {
@@ -214,6 +224,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $status
      * @return bool
+     * @since 2.0.0
      */
     public function checkIsStatusUsed($status)
     {
@@ -232,6 +243,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $state
      * @param string $status
      * @return bool
+     * @since 2.0.0
      */
     protected function checkIsStateDefault($state, $status)
     {
@@ -251,6 +263,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $state
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function getStatusByState($state)
     {

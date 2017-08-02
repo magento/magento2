@@ -9,16 +9,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api Retrieve Fieldset when implementing custom Indexer\Action
+ * @since 2.0.0
  */
 class FieldsetPool
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -31,6 +34,7 @@ class FieldsetPool
      * @param string $fieldsetClass
      * @throws \InvalidArgumentException
      * @return FieldsetInterface
+     * @since 2.0.0
      */
     public function get($fieldsetClass)
     {

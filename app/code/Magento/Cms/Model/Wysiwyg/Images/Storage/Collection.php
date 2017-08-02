@@ -12,17 +12,20 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Wysiwyg Images storage collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -37,6 +40,7 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      *
      * @param string $filename
      * @return array
+     * @since 2.0.0
      */
     protected function _generateRow($filename)
     {

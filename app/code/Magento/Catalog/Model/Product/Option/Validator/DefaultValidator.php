@@ -9,12 +9,18 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 use Magento\Catalog\Model\Product\Option;
 use Zend_Validate_Exception;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator
+ *
+ * @since 2.0.0
+ */
 class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
      * Product option types
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $productOptionTypes;
 
@@ -22,12 +28,14 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      * Price types
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $priceTypes;
 
     /**
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
@@ -54,6 +62,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      * @param  \Magento\Catalog\Model\Product\Option $value
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @since 2.0.0
      */
     public function isValid($value)
     {
@@ -81,6 +90,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param Option $option
      * @return bool
+     * @since 2.0.0
      */
     protected function validateOptionRequiredFields(Option $option)
     {
@@ -99,6 +109,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      * @param string $title
      * @param int $storeId
      * @return bool
+     * @since 2.0.0
      */
     protected function isValidOptionTitle($title, $storeId)
     {
@@ -118,6 +129,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param Option $option
      * @return bool
+     * @since 2.0.0
      */
     protected function validateOptionType(Option $option)
     {
@@ -129,6 +141,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param Option $option
      * @return bool
+     * @since 2.0.0
      */
     protected function validateOptionValue(Option $option)
     {
@@ -140,6 +153,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param mixed $value
      * @return bool
+     * @since 2.0.0
      */
     protected function isEmpty($value)
     {
@@ -152,6 +166,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      * @param string $value
      * @param array $range
      * @return bool
+     * @since 2.0.0
      */
     protected function isInRange($value, array $range)
     {
@@ -163,6 +178,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param string $value
      * @return bool
+     * @since 2.0.0
      */
     protected function isNegative($value)
     {

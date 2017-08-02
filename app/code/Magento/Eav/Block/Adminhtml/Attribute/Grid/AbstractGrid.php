@@ -10,7 +10,8 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.0.0
  */
 abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,11 +19,13 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Block Module
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_module = 'adminhtml';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -36,6 +39,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare default grid column
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -100,6 +104,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

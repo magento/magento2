@@ -18,56 +18,67 @@ use Magento\Framework\Filesystem;
  * HTTP web application. Called from webroot index.php to serve web requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Http implements \Magento\Framework\AppInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\Event\Manager
+     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var AreaList
+     * @since 2.0.0
      */
     protected $_areaList;
 
     /**
      * @var Request\Http
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var ConfigLoaderInterface
+     * @since 2.0.0
      */
     protected $_configLoader;
 
     /**
      * @var State
+     * @since 2.0.0
      */
     protected $_state;
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var ResponseHttp
+     * @since 2.0.0
      */
     protected $_response;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.1.0
      */
     private $logger;
 
@@ -81,6 +92,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param State $state
      * @param Filesystem $filesystem,
      * @param \Magento\Framework\Registry $registry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -109,7 +121,8 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getLogger()
     {
@@ -124,6 +137,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @throws \InvalidArgumentException
      * @return ResponseInterface
+     * @since 2.0.0
      */
     public function launch()
     {
@@ -150,6 +164,7 @@ class Http implements \Magento\Framework\AppInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -167,6 +182,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param Bootstrap $bootstrap
      * @param \Exception $exception
      * @return bool
+     * @since 2.0.0
      */
     private function handleDeveloperMode(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -193,6 +209,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @param \Exception $exception
      * @return string
+     * @since 2.1.0
      */
     private function buildContentFromException(\Exception $exception)
     {
@@ -228,6 +245,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param \Exception $exception
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     private function redirectToSetup(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -252,6 +270,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param Bootstrap $bootstrap
      * @param \Exception &$exception
      * @return bool
+     * @since 2.0.0
      */
     private function handleBootstrapErrors(Bootstrap $bootstrap, \Exception &$exception)
     {
@@ -276,6 +295,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @param \Exception $exception
      * @return bool
+     * @since 2.0.0
      */
     private function handleSessionException(\Exception $exception)
     {
@@ -292,6 +312,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @param \Exception $exception
      * @return bool
+     * @since 2.0.0
      */
     private function handleInitException(\Exception $exception)
     {
@@ -309,6 +330,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param Bootstrap $bootstrap
      * @param \Exception $exception
      * @return bool
+     * @since 2.0.0
      */
     private function handleGenericReport(Bootstrap $bootstrap, \Exception $exception)
     {

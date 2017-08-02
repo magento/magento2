@@ -9,12 +9,14 @@ namespace Magento\Review\Block\Product\View;
  * Detailed Product Reviews
  *
  * @api
+ * @since 2.0.0
  */
 class ListView extends \Magento\Review\Block\Product\View
 {
     /**
      * Unused class property
      * @var false
+     * @since 2.0.0
      */
     protected $_forceHasOptions = false;
 
@@ -22,6 +24,7 @@ class ListView extends \Magento\Review\Block\Product\View
      * Get product id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -33,6 +36,7 @@ class ListView extends \Magento\Review\Block\Product\View
      * Prepare product review list toolbar
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -51,6 +55,7 @@ class ListView extends \Magento\Review\Block\Product\View
      * Add rate votes
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -63,6 +68,7 @@ class ListView extends \Magento\Review\Block\Product\View
      *
      * @param int $id
      * @return string
+     * @since 2.0.0
      */
     public function getReviewUrl($id)
     {

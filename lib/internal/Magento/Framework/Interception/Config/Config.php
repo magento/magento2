@@ -10,12 +10,18 @@ namespace Magento\Framework\Interception\Config;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
+/**
+ * Class \Magento\Framework\Interception\Config\Config
+ *
+ * @since 2.0.0
+ */
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
     /**
      * Type configuration
      *
      * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
+     * @since 2.0.0
      */
     protected $_omConfig;
 
@@ -23,6 +29,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * Class relations info
      *
      * @var \Magento\Framework\ObjectManager\RelationsInterface
+     * @since 2.0.0
      */
     protected $_relations;
 
@@ -30,6 +37,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * List of interceptable classes
      *
      * @var \Magento\Framework\ObjectManager\DefinitionInterface
+     * @since 2.0.0
      */
     protected $_classDefinitions;
 
@@ -37,6 +45,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * Cache
      *
      * @var \Magento\Framework\Cache\FrontendInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
@@ -44,6 +53,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * Cache identifier
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheId;
 
@@ -51,6 +61,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * Configuration reader
      *
      * @var \Magento\Framework\Config\ReaderInterface
+     * @since 2.0.0
      */
     protected $_reader;
 
@@ -58,6 +69,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * Inherited list of intercepted types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_intercepted = [];
 
@@ -65,16 +77,19 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * List of class types that can not be pluginized
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_serviceClassTypes = ['Interceptor'];
 
     /**
      * @var \Magento\Framework\Config\ScopeListInterface
+     * @since 2.0.0
      */
     protected $_scopeList;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -89,6 +104,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
@@ -122,6 +138,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      *
      * @param array $classDefinitions
      * @return void
+     * @since 2.0.0
      */
     public function initialize($classDefinitions = [])
     {
@@ -150,6 +167,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     protected function _inheritInterception($type)
     {
@@ -180,6 +198,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function hasPlugins($type)
     {

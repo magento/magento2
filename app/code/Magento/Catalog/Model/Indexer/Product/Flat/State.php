@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
 {
@@ -22,6 +23,7 @@ class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
 
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
+     * @since 2.0.0
      */
     protected $_productFlatIndexerHelper;
 
@@ -30,6 +32,7 @@ class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $flatIndexerHelper
      * @param bool $isAvailable
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -43,6 +46,7 @@ class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
 
     /**
      * @return \Magento\Catalog\Helper\Product\Flat\Indexer
+     * @since 2.0.0
      */
     public function getFlatIndexerHelper()
     {

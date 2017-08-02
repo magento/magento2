@@ -9,12 +9,14 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
  * Grid widget massaction single action item
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 2.2.0 in favour of UI component implementation
+ * @since 2.0.0
  */
 class Item extends \Magento\Backend\Block\Widget
 {
     /**
      * @var Extended
+     * @since 2.0.0
      */
     protected $_massaction = null;
 
@@ -23,6 +25,7 @@ class Item extends \Magento\Backend\Block\Widget
      *
      * @param  Extended $massaction
      * @return $this
+     * @since 2.0.0
      */
     public function setMassaction($massaction)
     {
@@ -34,6 +37,7 @@ class Item extends \Magento\Backend\Block\Widget
      * Retrieve parent massaction block
      *
      * @return Extended
+     * @since 2.0.0
      */
     public function getMassaction()
     {
@@ -46,6 +50,7 @@ class Item extends \Magento\Backend\Block\Widget
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function setAdditionalActionBlock($block)
     {
@@ -64,6 +69,7 @@ class Item extends \Magento\Backend\Block\Widget
     /**
      * @param array $config
      * @return \Magento\Framework\View\Element\BlockInterface
+     * @since 2.0.0
      */
     protected function _createFromConfig(array $config)
     {
@@ -83,6 +89,7 @@ class Item extends \Magento\Backend\Block\Widget
      * Retrieve additional action block for this item
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @since 2.0.0
      */
     public function getAdditionalActionBlock()
     {
@@ -93,6 +100,7 @@ class Item extends \Magento\Backend\Block\Widget
      * Retrieve additional action block HTML for this item
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalActionBlockHtml()
     {

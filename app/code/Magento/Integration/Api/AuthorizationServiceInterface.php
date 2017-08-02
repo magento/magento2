@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Interface for integration permissions management.
  *
  * @api
+ * @since 2.0.0
  */
 interface AuthorizationServiceInterface
 {
@@ -29,6 +30,7 @@ interface AuthorizationServiceInterface
      * @param string[] $resources List of resources which should be available to the specified user.
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function grantPermissions($integrationId, $resources);
 
@@ -38,6 +40,7 @@ interface AuthorizationServiceInterface
      * @param int $integrationId
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function grantAllPermissions($integrationId);
 
@@ -47,6 +50,7 @@ interface AuthorizationServiceInterface
      * @param int $integrationId
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function removePermissions($integrationId);
 }

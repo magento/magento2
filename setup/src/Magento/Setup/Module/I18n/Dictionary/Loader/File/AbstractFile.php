@@ -10,6 +10,7 @@ use Magento\Setup\Module\I18n\Factory;
 
 /**
  *  Abstract dictionary loader from file
+ * @since 2.0.0
  */
 abstract class AbstractFile implements FileInterface
 {
@@ -17,6 +18,7 @@ abstract class AbstractFile implements FileInterface
      * Domain abstract factory
      *
      * @var \Magento\Setup\Module\I18n\Factory
+     * @since 2.0.0
      */
     protected $_factory;
 
@@ -24,6 +26,7 @@ abstract class AbstractFile implements FileInterface
      * File handler
      *
      * @var resource
+     * @since 2.0.0
      */
     protected $_fileHandler;
 
@@ -31,6 +34,7 @@ abstract class AbstractFile implements FileInterface
      * Current row position
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_position;
 
@@ -38,6 +42,7 @@ abstract class AbstractFile implements FileInterface
      * Loader construct
      *
      * @param Factory $factory
+     * @since 2.0.0
      */
     public function __construct(Factory $factory)
     {
@@ -46,6 +51,7 @@ abstract class AbstractFile implements FileInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function load($file)
     {
@@ -78,6 +84,7 @@ abstract class AbstractFile implements FileInterface
      * @param string $file
      * @return void
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     protected function _openFile($file)
     {
@@ -90,6 +97,7 @@ abstract class AbstractFile implements FileInterface
      * Read file. Template method
      *
      * @return array
+     * @since 2.0.0
      */
     abstract protected function _readFile();
 
@@ -97,6 +105,7 @@ abstract class AbstractFile implements FileInterface
      * Close file handler
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _closeFile()
     {
@@ -107,6 +116,7 @@ abstract class AbstractFile implements FileInterface
      * Create dictionary
      *
      * @return \Magento\Setup\Module\I18n\Dictionary
+     * @since 2.0.0
      */
     protected function _createDictionary()
     {
@@ -119,6 +129,7 @@ abstract class AbstractFile implements FileInterface
      * @param array $data
      * @return \Magento\Setup\Module\I18n\Dictionary\Phrase
      * @throws \RuntimeException
+     * @since 2.0.0
      */
     protected function _createPhrase($data)
     {

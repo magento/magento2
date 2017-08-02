@@ -9,6 +9,7 @@ namespace Magento\Payment\Gateway\Response;
  * Interface HandlerInterface
  * @package Magento\Payment\Gateway\Response
  * @api
+ * @since 2.0.0
  */
 interface HandlerInterface
 {
@@ -18,6 +19,7 @@ interface HandlerInterface
      * @param array $handlingSubject
      * @param array $response
      * @return void
+     * @since 2.0.0
      */
     public function handle(array $handlingSubject, array $response);
 }

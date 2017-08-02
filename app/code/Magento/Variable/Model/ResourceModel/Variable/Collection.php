@@ -9,6 +9,7 @@ namespace Magento\Variable\Model\ResourceModel\Variable;
  * Custom variable collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Store Id
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_storeId = 0;
 
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *  Define resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,6 +38,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param integer $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -46,6 +50,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Getter
      *
      * @return integer
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -56,6 +61,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add store values to result
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addValuesToResult()
     {
@@ -72,6 +78,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

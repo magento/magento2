@@ -7,6 +7,7 @@ namespace Magento\Framework\DB\Ddl;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Trigger
 {
@@ -34,6 +35,7 @@ class Trigger
      * List of times available for trigger
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $listOfTimes = [self::TIME_BEFORE, self::TIME_AFTER];
 
@@ -41,6 +43,7 @@ class Trigger
      * List of events available for trigger
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $listOfEvents = [self::EVENT_INSERT, self::EVENT_UPDATE, self::EVENT_DELETE];
 
@@ -48,6 +51,7 @@ class Trigger
      * Name of trigger
      *
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
@@ -55,6 +59,7 @@ class Trigger
      * Time of trigger
      *
      * @var string
+     * @since 2.0.0
      */
     protected $time;
 
@@ -62,6 +67,7 @@ class Trigger
      * Time of trigger
      *
      * @var string
+     * @since 2.0.0
      */
     protected $event;
 
@@ -69,6 +75,7 @@ class Trigger
      * Table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $tableName;
 
@@ -76,6 +83,7 @@ class Trigger
      * List of statements for trigger body
      *
      * @var array
+     * @since 2.0.0
      */
     protected $statements = [];
 
@@ -85,6 +93,7 @@ class Trigger
      * @param string $name
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\DB\Ddl\Trigger
+     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -103,6 +112,7 @@ class Trigger
      *
      * @throws \Zend_Db_Exception
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -118,6 +128,7 @@ class Trigger
      * @param string $time
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\DB\Ddl\Trigger
+     * @since 2.0.0
      */
     public function setTime($time)
     {
@@ -134,6 +145,7 @@ class Trigger
      *
      * @throws \Zend_Db_Exception
      * @return string
+     * @since 2.0.0
      */
     public function getTime()
     {
@@ -149,6 +161,7 @@ class Trigger
      * @param string $event
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\DB\Ddl\Trigger
+     * @since 2.0.0
      */
     public function setEvent($event)
     {
@@ -167,6 +180,7 @@ class Trigger
      *
      * @throws \Zend_Db_Exception
      * @return string
+     * @since 2.0.0
      */
     public function getEvent()
     {
@@ -182,6 +196,7 @@ class Trigger
      * @param string $name
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\DB\Ddl\Trigger
+     * @since 2.0.0
      */
     public function setTable($name)
     {
@@ -199,6 +214,7 @@ class Trigger
      *
      * @throws \Zend_Db_Exception
      * @return string
+     * @since 2.0.0
      */
     public function getTable()
     {
@@ -214,6 +230,7 @@ class Trigger
      * @param string $statement
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\DB\Ddl\Trigger
+     * @since 2.0.0
      */
     public function addStatement($statement)
     {
@@ -235,6 +252,7 @@ class Trigger
      * Retrieve list of statements of trigger
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStatements()
     {
@@ -245,6 +263,7 @@ class Trigger
      * Retrieve list of times available for trigger
      *
      * @return array
+     * @since 2.0.0
      */
     public static function getListOfTimes()
     {
@@ -255,6 +274,7 @@ class Trigger
      * Retrieve list of events available for trigger
      *
      * @return array
+     * @since 2.0.0
      */
     public static function getListOfEvents()
     {

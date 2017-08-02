@@ -7,11 +7,13 @@ namespace Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
 
 /**
  * Resource Model for Agreement Collection
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_map = [
         'fields' => [
@@ -23,6 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Is store filter with admin store
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isStoreFilterWithAdmin = true;
 
@@ -30,6 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -44,6 +48,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int|\Magento\Store\Model\Store $store
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($store)
     {
@@ -86,6 +91,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $value
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setIsStoreFilterWithAdmin($value)
     {

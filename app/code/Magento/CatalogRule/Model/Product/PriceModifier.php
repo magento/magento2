@@ -11,15 +11,22 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\PriceModifierInterface;
 use Magento\CatalogRule\Model\RuleFactory;
 
+/**
+ * Class \Magento\CatalogRule\Model\Product\PriceModifier
+ *
+ * @since 2.0.0
+ */
 class PriceModifier implements PriceModifierInterface
 {
     /**
      * @var \Magento\CatalogRule\Model\RuleFactory
+     * @since 2.0.0
      */
     protected $ruleFactory;
 
     /**
      * @param RuleFactory $ruleFactory
+     * @since 2.0.0
      */
     public function __construct(RuleFactory $ruleFactory)
     {
@@ -32,6 +39,7 @@ class PriceModifier implements PriceModifierInterface
      * @param mixed $price
      * @param Product $product
      * @return mixed
+     * @since 2.0.0
      */
     public function modifyPrice($price, Product $product)
     {

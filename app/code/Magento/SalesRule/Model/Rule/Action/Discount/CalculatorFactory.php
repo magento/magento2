@@ -5,17 +5,24 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+/**
+ * Class \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory
+ *
+ * @since 2.0.0
+ */
 class CalculatorFactory
 {
     /**
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $_objectManager;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $classByType = [
         \Magento\SalesRule\Model\Rule::TO_PERCENT_ACTION =>
@@ -33,6 +40,7 @@ class CalculatorFactory
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $discountRules
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $discountRules = [])
     {
@@ -44,6 +52,7 @@ class CalculatorFactory
      * @param string $type
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\DiscountInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($type)
     {

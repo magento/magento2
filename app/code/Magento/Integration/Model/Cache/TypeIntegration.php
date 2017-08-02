@@ -8,6 +8,7 @@ namespace Magento\Integration\Model\Cache;
 
 /**
  * System / Cache Management / Cache type "Integration Api Configuration"
+ * @since 2.0.0
  */
 class TypeIntegration extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -23,6 +24,7 @@ class TypeIntegration extends \Magento\Framework\Cache\Frontend\Decorator\TagSco
 
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {

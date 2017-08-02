@@ -42,6 +42,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Search\Model\Query setIsQueryTextShort(bool $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Query extends AbstractModel implements QueryInterface
 {
@@ -49,6 +50,7 @@ class Query extends AbstractModel implements QueryInterface
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'search_query';
 
@@ -56,6 +58,7 @@ class Query extends AbstractModel implements QueryInterface
      * Event object key name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'search_query';
 
@@ -69,6 +72,7 @@ class Query extends AbstractModel implements QueryInterface
      * Core store config
      *
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -76,6 +80,7 @@ class Query extends AbstractModel implements QueryInterface
      * Store manager
      *
      * @var StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -83,6 +88,7 @@ class Query extends AbstractModel implements QueryInterface
      * Search collection factory
      *
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $_searchCollectionFactory;
 
@@ -90,6 +96,7 @@ class Query extends AbstractModel implements QueryInterface
      * Query collection factory
      *
      * @var QueryCollectionFactory
+     * @since 2.0.0
      */
     protected $_queryCollectionFactory;
 
@@ -105,6 +112,7 @@ class Query extends AbstractModel implements QueryInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -128,6 +136,7 @@ class Query extends AbstractModel implements QueryInterface
      * Init resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -138,6 +147,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve search collection
      *
      * @return Collection
+     * @since 2.0.0
      */
     public function getSearchCollection()
     {
@@ -148,6 +158,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve collection of suggest queries
      *
      * @return QueryCollection
+     * @since 2.0.0
      */
     public function getSuggestCollection()
     {
@@ -168,7 +179,8 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @deprecated "synonym for" feature has been removed
+     * @deprecated 2.1.0 "synonym for" feature has been removed
+     * @since 2.0.0
      */
     public function loadByQuery($text)
     {
@@ -181,6 +193,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
+     * @since 2.0.0
      */
     public function loadByQueryText($text)
     {
@@ -195,6 +208,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param int $storeId
      * @return void
+     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -205,6 +219,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve store Id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -218,6 +233,7 @@ class Query extends AbstractModel implements QueryInterface
      * Prepare save query for result
      *
      * @return $this
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -237,6 +253,7 @@ class Query extends AbstractModel implements QueryInterface
      * @return $this
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function saveIncrementalPopularity()
     {
@@ -252,6 +269,7 @@ class Query extends AbstractModel implements QueryInterface
      * @return $this
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function saveNumResults($numResults)
     {
@@ -265,6 +283,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve minimum query length
      *
      * @return int
+     * @since 2.0.0
      */
     public function getMinQueryLength()
     {
@@ -279,6 +298,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve maximum query length
      *
      * @return int
+     * @since 2.0.0
      */
     public function getMaxQueryLength()
     {
@@ -292,6 +312,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getQueryText()
     {
@@ -301,6 +322,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isQueryTextExceeded()
     {
@@ -310,6 +332,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function isQueryTextShort()
     {

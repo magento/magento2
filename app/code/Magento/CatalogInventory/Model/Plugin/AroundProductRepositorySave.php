@@ -13,10 +13,11 @@ use Magento\Framework\Exception\CouldNotSaveException;
 /**
  * Plugin is needed for backward compatibility
  *
- * @deprecated Stock data should be processed using the module API
+ * @deprecated 2.2.0 Stock data should be processed using the module API
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+ * @since 2.0.0
  */
 class AroundProductRepositorySave
 {
@@ -31,6 +32,7 @@ class AroundProductRepositorySave
      * @throws CouldNotSaveException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         ProductRepositoryInterface $subject,

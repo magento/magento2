@@ -17,25 +17,32 @@ use Magento\Framework\Exception\InputException;
  * Repository class for @see \Magento\Sales\Api\Data\OrderAddressInterface
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInterface
 {
     /**
      * @var Metadata
+     * @since 2.0.0
      */
     protected $metadata;
 
     /**
      * @var SearchResultFactory
+     * @since 2.0.0
      */
     protected $searchResultFactory = null;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderAddressInterface[]
+     * @since 2.0.0
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -43,6 +50,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         Metadata $metadata,
@@ -61,6 +69,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * @return \Magento\Sales\Api\Data\OrderAddressInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($id)
     {
@@ -86,6 +95,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -103,6 +113,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $entity
      * @return bool
      * @throws CouldNotDeleteException
+     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\OrderAddressInterface $entity)
     {
@@ -122,6 +133,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      *
      * @param int $id
      * @return bool
+     * @since 2.0.0
      */
     public function deleteById($id)
     {
@@ -136,6 +148,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $entity
      * @return \Magento\Sales\Api\Data\OrderAddressInterface
      * @throws CouldNotSaveException
+     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\OrderAddressInterface $entity)
     {
@@ -153,6 +166,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * Creates new order address instance.
      *
      * @return \Magento\Sales\Api\Data\OrderAddressInterface
+     * @since 2.0.0
      */
     public function create()
     {
@@ -162,8 +176,9 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

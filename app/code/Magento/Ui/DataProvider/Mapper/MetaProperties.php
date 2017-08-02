@@ -7,16 +7,19 @@ namespace Magento\Ui\DataProvider\Mapper;
 
 /**
  * Class MetaProperties
+ * @since 2.1.0
  */
 class MetaProperties implements MapperInterface
 {
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $mappings = [];
 
     /**
      * @param array $mappings
+     * @since 2.1.0
      */
     public function __construct(array $mappings)
     {
@@ -27,6 +30,7 @@ class MetaProperties implements MapperInterface
      * Retrieve mappings
      *
      * @return array
+     * @since 2.1.0
      */
     public function getMappings()
     {

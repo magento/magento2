@@ -7,6 +7,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductManagementInterface
 {
@@ -15,6 +16,7 @@ interface ProductManagementInterface
      *
      * @param null|int $status
      * @return int
+     * @since 2.0.0
      */
     public function getCount($status = null);
 }

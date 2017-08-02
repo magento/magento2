@@ -9,6 +9,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
  * Class Database
  *
  * @api
+ * @since 2.0.0
  */
 class Database extends \Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase
 {
@@ -16,6 +17,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'media_storage_file_storage_database';
 
@@ -23,6 +25,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Directory singleton
      *
      * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database
+     * @since 2.0.0
      */
     protected $_directoryModel = null;
 
@@ -30,16 +33,19 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Collect errors during sync process
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_errors = [];
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory
+     * @since 2.0.0
      */
     protected $_directoryFactory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Media
+     * @since 2.0.0
      */
     protected $_mediaHelper;
 
@@ -47,6 +53,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Store media base directory path
      *
      * @var string
+     * @since 2.1.0
      */
     protected $mediaBaseDirectory = null;
 
@@ -63,6 +70,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param string $connectionName
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -97,6 +105,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Retrieve directory model
      *
      * @return \Magento\MediaStorage\Model\File\Storage\Directory\Database
+     * @since 2.0.0
      */
     public function getDirectoryModel()
     {
@@ -113,6 +122,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Create tables for file and directory storages
      *
      * @return $this
+     * @since 2.0.0
      */
     public function init()
     {
@@ -126,6 +136,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Return storage name
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getStorageName()
     {
@@ -137,6 +148,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  string $filePath
      * @return $this
+     * @since 2.0.0
      */
     public function loadByFilename($filePath)
     {
@@ -150,6 +162,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Check if there was errors during sync process
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasErrors()
     {
@@ -160,6 +173,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Clear files and directories in storage
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clear()
     {
@@ -174,6 +188,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param  int $offset
      * @param  int $count
      * @return bool|array
+     * @since 2.0.0
      */
     public function exportDirectories($offset = 0, $count = 100)
     {
@@ -185,6 +200,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  array $dirs
      * @return \Magento\MediaStorage\Model\File\Storage\Directory\Database
+     * @since 2.0.0
      */
     public function importDirectories($dirs)
     {
@@ -197,6 +213,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param  int $offset
      * @param  int $count
      * @return array|bool
+     * @since 2.0.0
      */
     public function exportFiles($offset = 0, $count = 100)
     {
@@ -216,6 +233,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  array $files
      * @return $this
+     * @since 2.0.0
      */
     public function importFiles($files)
     {
@@ -256,6 +274,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  string $filename
      * @return $this
+     * @since 2.0.0
      */
     public function saveFile($filename)
     {
@@ -279,6 +298,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  string $filePath
      * @return bool
+     * @since 2.0.0
      */
     public function fileExists($filePath)
     {
@@ -291,6 +311,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param  string $oldFilePath
      * @param  string $newFilePath
      * @return $this
+     * @since 2.0.0
      */
     public function copyFile($oldFilePath, $newFilePath)
     {
@@ -310,6 +331,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param  string $oldFilePath
      * @param  string $newFilePath
      * @return $this
+     * @since 2.0.0
      */
     public function renameFile($oldFilePath, $newFilePath)
     {
@@ -340,6 +362,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param string $directory
      * @return array
+     * @since 2.0.0
      */
     public function getDirectoryFiles($directory)
     {
@@ -352,6 +375,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param string $path
      * @return $this
+     * @since 2.0.0
      */
     public function deleteFile($path)
     {
@@ -366,6 +390,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Retrieve media base directory path
      *
      * @return string
+     * @since 2.1.0
      */
     public function getMediaBaseDirectory()
     {

@@ -22,51 +22,61 @@ use \Magento\Sales\Model\Order\CreditmemoFactory;
  * @method string getCreditmemo()
  * @method int getInvoiceId()
  * @method int getOrderId()
+ * @since 2.0.0
  */
 class CreditmemoLoader extends DataObject
 {
     /**
      * @var CreditmemoRepositoryInterface;
+     * @since 2.0.0
      */
     protected $creditmemoRepository;
 
     /**
      * @var CreditmemoFactory;
+     * @since 2.0.0
      */
     protected $creditmemoFactory;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface
+     * @since 2.0.0
      */
     protected $invoiceRepository;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Backend\Model\Session
+     * @since 2.0.0
      */
     protected $backendSession;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockConfiguration;
 
@@ -82,6 +92,7 @@ class CreditmemoLoader extends DataObject
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         CreditmemoRepositoryInterface $creditmemoRepository,
@@ -111,6 +122,7 @@ class CreditmemoLoader extends DataObject
      * Get requested items qtys and return to stock flags
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getItemData()
     {
@@ -131,6 +143,7 @@ class CreditmemoLoader extends DataObject
      * Check if creditmeno can be created for order
      * @param \Magento\Sales\Model\Order $order
      * @return bool
+     * @since 2.0.0
      */
     protected function _canCreditmemo($order)
     {
@@ -155,6 +168,7 @@ class CreditmemoLoader extends DataObject
     /**
      * @param \Magento\Sales\Model\Order $order
      * @return $this|bool
+     * @since 2.0.0
      */
     protected function _initInvoice($order)
     {
@@ -174,6 +188,7 @@ class CreditmemoLoader extends DataObject
      *
      * @return \Magento\Sales\Model\Order\Creditmemo|false
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function load()
     {

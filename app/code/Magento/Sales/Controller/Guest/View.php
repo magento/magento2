@@ -10,15 +10,22 @@ use Magento\Sales\Helper\Guest as GuestHelper;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Guest\View
+ *
+ * @since 2.0.0
+ */
 class View extends Action\Action
 {
     /**
      * @var \Magento\Sales\Helper\Guest
+     * @since 2.0.0
      */
     protected $guestHelper;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -26,6 +33,7 @@ class View extends Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Sales\Helper\Guest $guestHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -39,6 +47,7 @@ class View extends Action\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

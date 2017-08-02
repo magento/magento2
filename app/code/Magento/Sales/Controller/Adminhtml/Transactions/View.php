@@ -9,12 +9,18 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Transactions\View
+ *
+ * @since 2.0.0
+ */
 class View extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
      * View Transaction Details action
      *
      * @return Page
+     * @since 2.0.0
      */
     public function execute()
     {

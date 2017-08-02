@@ -9,6 +9,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\AddComment
+ *
+ * @since 2.0.0
+ */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -22,6 +27,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
      * Add order comment action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

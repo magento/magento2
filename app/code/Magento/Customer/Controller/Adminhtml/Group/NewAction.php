@@ -8,12 +8,18 @@ namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Customer\Controller\RegistryConstants;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Group\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**
      * Initialize current group and set it in the registry.
      *
      * @return int
+     * @since 2.0.0
      */
     protected function _initGroup()
     {
@@ -27,6 +33,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
      * Edit or create customer group.
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

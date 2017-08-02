@@ -13,6 +13,7 @@ use Zend\Stdlib\JsonSerializable;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Phrase implements JsonSerializable
 {
@@ -20,6 +21,7 @@ class Phrase implements JsonSerializable
      * Default phrase renderer. Allows stacking renderers that "don't know about each other"
      *
      * @var RendererInterface
+     * @since 2.0.0
      */
     private static $renderer;
 
@@ -27,6 +29,7 @@ class Phrase implements JsonSerializable
      * String for rendering
      *
      * @var string
+     * @since 2.0.0
      */
     private $text;
 
@@ -34,6 +37,7 @@ class Phrase implements JsonSerializable
      * Arguments for placeholder values
      *
      * @var array
+     * @since 2.0.0
      */
     private $arguments;
 
@@ -42,6 +46,7 @@ class Phrase implements JsonSerializable
      *
      * @param RendererInterface $renderer
      * @return void
+     * @since 2.0.0
      */
     public static function setRenderer(RendererInterface $renderer)
     {
@@ -52,6 +57,7 @@ class Phrase implements JsonSerializable
      * Get default Phrase renderer
      *
      * @return RendererInterface
+     * @since 2.0.0
      */
     public static function getRenderer()
     {
@@ -66,6 +72,7 @@ class Phrase implements JsonSerializable
      *
      * @param string $text
      * @param array $arguments
+     * @since 2.0.0
      */
     public function __construct($text, array $arguments = [])
     {
@@ -77,6 +84,7 @@ class Phrase implements JsonSerializable
      * Get phrase base text
      *
      * @return string
+     * @since 2.0.0
      */
     public function getText()
     {
@@ -87,6 +95,7 @@ class Phrase implements JsonSerializable
      * Get phrase message arguments
      *
      * @return array
+     * @since 2.0.0
      */
     public function getArguments()
     {
@@ -97,6 +106,7 @@ class Phrase implements JsonSerializable
      * Render phrase
      *
      * @return string
+     * @since 2.0.0
      */
     public function render()
     {
@@ -111,6 +121,7 @@ class Phrase implements JsonSerializable
      * Defers rendering to the last possible moment (when converted to string)
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {
@@ -121,6 +132,7 @@ class Phrase implements JsonSerializable
      * Specify data which should be serialized to JSON
      *
      * @return string
+     * @since 2.0.0
      */
     public function jsonSerialize()
     {

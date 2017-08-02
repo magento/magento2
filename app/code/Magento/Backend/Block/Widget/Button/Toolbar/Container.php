@@ -13,6 +13,7 @@ use Magento\Backend\Block\Widget\Button\ContextInterface;
  * @method ContextInterface getContext()
  * @method ContextInterface setContext(ContextInterface $context)
  * @api
+ * @since 2.0.0
  */
 class Container extends \Magento\Framework\View\Element\AbstractBlock
 {
@@ -22,6 +23,7 @@ class Container extends \Magento\Framework\View\Element\AbstractBlock
      * @param string $blockName
      * @param string $blockClassName
      * @return \Magento\Backend\Block\Widget\Button
+     * @since 2.0.0
      */
     protected function createButton($blockName, $blockClassName = null)
     {
@@ -33,6 +35,7 @@ class Container extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

@@ -10,20 +10,28 @@ namespace Magento\PageCache\Controller;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\PageCache\Controller\Block
+ *
+ * @since 2.0.0
+ */
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Translate\InlineInterface
+     * @since 2.0.0
      */
     protected $translateInline;
 
     /**
      * @var Json
+     * @since 2.2.0
      */
     private $jsonSerializer;
 
     /**
      * @var Base64Json
+     * @since 2.2.0
      */
     private $base64jsonSerializer;
 
@@ -32,6 +40,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param Json $jsonSerializer
      * @param Base64Json $base64jsonSerializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -51,6 +60,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * Get blocks from layout by handles
      *
      * @return array [\Element\BlockInterface]
+     * @since 2.0.0
      */
     protected function _getBlocks()
     {

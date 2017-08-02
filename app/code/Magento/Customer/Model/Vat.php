@@ -15,6 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer VAT model
+ * @since 2.0.0
  */
 class Vat
 {
@@ -58,17 +59,20 @@ class Vat
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var PsrLogger
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param PsrLogger $logger
+     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -83,6 +87,7 @@ class Vat
      *
      * @param Store|string|int|null $store
      * @return string
+     * @since 2.0.0
      */
     public function getMerchantCountryCode($store = null)
     {
@@ -98,6 +103,7 @@ class Vat
      *
      * @param Store|string|int|null $store
      * @return string
+     * @since 2.0.0
      */
     public function getMerchantVatNumber($store = null)
     {
@@ -115,6 +121,7 @@ class Vat
      * @param DataObject $vatValidationResult
      * @param \Magento\Store\Model\Store|string|int $store
      * @return null|int
+     * @since 2.0.0
      */
     public function getCustomerGroupIdBasedOnVatNumber($customerCountryCode, $vatValidationResult, $store = null)
     {
@@ -158,6 +165,7 @@ class Vat
      * @param string $requesterVatNumber
      *
      * @return DataObject
+     * @since 2.0.0
      */
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
@@ -215,6 +223,7 @@ class Vat
      *
      * @param boolean $trace
      * @return \SoapClient
+     * @since 2.0.0
      */
     protected function createVatNumberValidationSoapClient($trace = false)
     {
@@ -232,6 +241,7 @@ class Vat
      * @return boolean
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function canCheckVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber)
     {
@@ -255,6 +265,7 @@ class Vat
      * @param DataObject $vatValidationResult
      * @param Store|string|int|null $store
      * @return null|string
+     * @since 2.0.0
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
     {
@@ -287,6 +298,7 @@ class Vat
      * @param string $countryCode
      * @param null|int $storeId
      * @return bool
+     * @since 2.0.0
      */
     public function isCountryInEU($countryCode, $storeId = null)
     {

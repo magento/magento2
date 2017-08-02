@@ -7,6 +7,11 @@ namespace Magento\Framework\Oauth\Helper;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Framework\Oauth\Helper\Request
+ *
+ * @since 2.0.0
+ */
 class Request
 {
     /**#@+
@@ -29,6 +34,7 @@ class Request
      *
      * @param RequestInterface $httpRequest
      * @return array
+     * @since 2.0.0
      */
     public function prepareRequest($httpRequest)
     {
@@ -46,6 +52,7 @@ class Request
      *
      * @param RequestInterface $httpRequest
      * @return string
+     * @since 2.0.0
      */
     public function getRequestUrl($httpRequest)
     {
@@ -71,6 +78,7 @@ class Request
      *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
      * )
      * </pre>
+     * @since 2.0.0
      */
     protected function _processRequest($authHeaderValue, $contentTypeHeader, $requestBodyString, $requestUrl)
     {
@@ -112,6 +120,7 @@ class Request
      * @param array &$protocolParams
      * @param array $queryString
      * @return void
+     * @since 2.0.0
      */
     protected function _fetchProtocolParamsFromQuery(&$protocolParams, $queryString)
     {
@@ -129,6 +138,7 @@ class Request
      *
      * @param string $attrName
      * @return bool
+     * @since 2.0.0
      */
     protected function _isProtocolParameter($attrName)
     {
@@ -141,6 +151,7 @@ class Request
      * @param string $authHeaderValue
      * @param array &$protocolParams
      * @return bool true if parameters from oauth headers are processed correctly
+     * @since 2.0.0
      */
     protected function _processHeader($authHeaderValue, &$protocolParams)
     {
@@ -169,6 +180,7 @@ class Request
      * @param array &$protocolParams
      * @param string $queryString
      * @return void
+     * @since 2.0.0
      */
     protected function _extractQueryStringParams(&$protocolParams, $queryString)
     {
@@ -189,6 +201,7 @@ class Request
      * @param \Exception $exception
      * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response OPTIONAL If NULL - will use internal getter
      * @return array
+     * @since 2.0.0
      */
     public function prepareErrorResponse(
         \Exception $exception,

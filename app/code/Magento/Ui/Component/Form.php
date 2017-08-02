@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends AbstractComponent
 {
@@ -18,6 +19,7 @@ class Form extends AbstractComponent
 
     /**
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
@@ -26,6 +28,7 @@ class Form extends AbstractComponent
      * @param FilterBuilder $filterBuilder
      * @param UiComponentInterface[] $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -45,6 +48,7 @@ class Form extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -53,6 +57,7 @@ class Form extends AbstractComponent
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataSourceData()
     {

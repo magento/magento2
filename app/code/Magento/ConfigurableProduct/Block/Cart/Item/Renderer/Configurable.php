@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * Shopping cart item render block for configurable products.
  *
  * @api
+ * @since 2.0.0
  */
 class Configurable extends Renderer implements IdentityInterface
 {
@@ -25,6 +26,7 @@ class Configurable extends Renderer implements IdentityInterface
      * Get item configurable child product
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getChildProduct()
     {
@@ -38,6 +40,7 @@ class Configurable extends Renderer implements IdentityInterface
      * Get item product name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductName()
     {
@@ -48,6 +51,7 @@ class Configurable extends Renderer implements IdentityInterface
      * Get list of all options for product
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptionList()
     {
@@ -56,6 +60,7 @@ class Configurable extends Renderer implements IdentityInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getProductForThumbnail()
     {
@@ -80,6 +85,7 @@ class Configurable extends Renderer implements IdentityInterface
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {

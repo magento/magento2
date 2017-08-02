@@ -6,12 +6,18 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\NewConditionHtml
+ *
+ * @since 2.0.0
+ */
 class NewConditionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * New condition html action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

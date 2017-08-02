@@ -7,12 +7,18 @@ namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * Class \Magento\Framework\Filesystem\Directory\ReadFactory
+ *
+ * @since 2.0.0
+ */
 class ReadFactory
 {
     /**
      * Pool of filesystem drivers
      *
      * @var DriverPool
+     * @since 2.0.0
      */
     private $driverPool;
 
@@ -20,6 +26,7 @@ class ReadFactory
      * Constructor
      *
      * @param DriverPool $driverPool
+     * @since 2.0.0
      */
     public function __construct(DriverPool $driverPool)
     {
@@ -32,6 +39,7 @@ class ReadFactory
      * @param string $path
      * @param string $driverCode
      * @return ReadInterface
+     * @since 2.0.0
      */
     public function create($path, $driverCode = DriverPool::FILE)
     {

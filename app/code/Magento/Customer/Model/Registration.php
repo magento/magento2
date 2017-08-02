@@ -7,6 +7,7 @@ namespace Magento\Customer\Model;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Registration
 {
@@ -14,6 +15,7 @@ class Registration
      * Check whether customers registration is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed()
     {

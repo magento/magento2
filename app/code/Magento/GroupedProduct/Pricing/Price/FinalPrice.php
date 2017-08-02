@@ -11,6 +11,7 @@ use Magento\Catalog\Pricing\Price\FinalPriceInterface;
 
 /**
  * Final price model
+ * @since 2.0.0
  */
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements FinalPriceInterface
 {
@@ -21,6 +22,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $minProduct;
 
@@ -28,6 +30,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Return minimal product price
      *
      * @return float
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -41,6 +44,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
      * Returns product with minimal price
      *
      * @return Product
+     * @since 2.0.0
      */
     public function getMinProduct()
     {

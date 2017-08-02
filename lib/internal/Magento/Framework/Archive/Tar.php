@@ -14,6 +14,11 @@ namespace Magento\Framework\Archive;
 use Magento\Framework\Archive\Helper\File;
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Archive\Tar
+ *
+ * @since 2.0.0
+ */
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
@@ -27,6 +32,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Keep file or directory for packing.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_currentFile;
 
@@ -34,6 +40,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Keep path to file or directory for packing.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_currentPath;
 
@@ -42,6 +49,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *   use test/fip.php instead test/test/fip.php;
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_skipRoot;
 
@@ -49,6 +57,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Tarball data writer
      *
      * @var File
+     * @since 2.0.0
      */
     protected $_writer;
 
@@ -56,6 +65,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Tarball data reader
      *
      * @var File
+     * @since 2.0.0
      */
     protected $_reader;
 
@@ -63,6 +73,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Path to file where tarball should be placed
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_destinationFilePath;
 
@@ -70,6 +81,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Initialize tarball writer
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initWriter()
     {
@@ -83,6 +95,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Returns string that is used for tar's header parsing
      *
      * @return string
+     * @since 2.0.0
      */
     protected static function _getFormatParseHeader()
     {
@@ -94,6 +107,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Destroy tarball writer
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _destroyWriter()
     {
@@ -109,6 +123,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Get tarball writer
      *
      * @return File
+     * @since 2.0.0
      */
     protected function _getWriter()
     {
@@ -123,6 +138,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Initialize tarball reader
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initReader()
     {
@@ -136,6 +152,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Destroy tarball reader
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _destroyReader()
     {
@@ -151,6 +168,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Get tarball reader
      *
      * @return File
+     * @since 2.0.0
      */
     protected function _getReader()
     {
@@ -166,6 +184,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @param bool $skipRoot
      * @return $this
+     * @since 2.0.0
      */
     protected function _setSkipRoot($skipRoot)
     {
@@ -178,6 +197,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @param string $file
      * @return $this
+     * @since 2.0.0
      */
     protected function _setCurrentFile($file)
     {
@@ -191,6 +211,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @param string $destinationFilePath
      * @return $this
+     * @since 2.0.0
      */
     protected function _setDestinationFilePath($destinationFilePath)
     {
@@ -202,6 +223,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Retrieve file which is packing.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCurrentFile()
     {
@@ -213,6 +235,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @param string $path
      * @return $this
+     * @since 2.0.0
      */
     protected function _setCurrentPath($path)
     {
@@ -229,6 +252,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Retrieve path to file which is packing.
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getCurrentPath()
     {
@@ -242,6 +266,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param bool $finalize
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {
@@ -279,6 +304,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Write current file to tarball
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _packAndWriteCurrentFile()
     {
@@ -316,6 +342,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _composeHeader($long = false)
     {
@@ -386,6 +413,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @return string[] list of files
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _unpackCurrentTar($destination)
     {
@@ -438,6 +466,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * Read and decode file header information from tarball
      *
      * @return array|bool
+     * @since 2.0.0
      */
     protected function _extractFileHeader()
     {
@@ -496,6 +525,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param array $fileHeader
      * @param string $destination
      * @return void
+     * @since 2.0.0
      */
     protected function _extractAndWriteFile($fileHeader, $destination)
     {
@@ -526,6 +556,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param bool $skipRoot
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function pack($source, $destination, $skipRoot = false)
     {
@@ -546,6 +577,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param string $source
      * @param string $destination
      * @return string
+     * @since 2.0.0
      */
     public function unpack($source, $destination)
     {
@@ -565,6 +597,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param string $source
      * @param string $destination
      * @return string
+     * @since 2.0.0
      */
     public function extract($file, $source, $destination)
     {

@@ -9,16 +9,19 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 
 /**
  * Sales transaction types option array
+ * @since 2.0.0
  */
 class TypeList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var TransactionRepositoryInterface
+     * @since 2.0.0
      */
     protected $transactionRepository;
 
     /**
      * @param TransactionRepositoryInterface $transactionRepository
+     * @since 2.0.0
      */
     public function __construct(TransactionRepositoryInterface $transactionRepository)
     {
@@ -29,6 +32,7 @@ class TypeList implements \Magento\Framework\Option\ArrayInterface
      * Return option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

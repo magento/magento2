@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib;
  * Internal dates
  *
  * @api
+ * @since 2.0.0
  */
 class DateTime
 {
@@ -43,6 +44,7 @@ class DateTime
      * @param boolean $includeTime
      * @return string|null
      * @api
+     * @since 2.0.0
      */
     public function formatDate($date, $includeTime = true)
     {
@@ -66,6 +68,7 @@ class DateTime
      *
      * @param string $date
      * @return boolean
+     * @since 2.0.0
      */
     public function isEmptyDate($date)
     {
@@ -80,6 +83,7 @@ class DateTime
      * @return string The given time in given format
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function gmDate($format, $time)
     {
@@ -93,6 +97,7 @@ class DateTime
      * @return int
      *
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function strToTime($timeStr)
     {

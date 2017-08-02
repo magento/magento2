@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Section pool
  *
  * @api
+ * @since 2.0.0
  */
 class SectionPool implements SectionPoolInterface
 {
@@ -19,6 +20,7 @@ class SectionPool implements SectionPoolInterface
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -26,11 +28,13 @@ class SectionPool implements SectionPoolInterface
      * Section map. Key is section name, value is section source object class
      *
      * @var array
+     * @since 2.0.0
      */
     protected $sectionSourceMap;
 
     /**
      * @var \Magento\Customer\CustomerData\Section\Identifier
+     * @since 2.0.0
      */
     protected $identifier;
 
@@ -40,6 +44,7 @@ class SectionPool implements SectionPoolInterface
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Customer\CustomerData\Section\Identifier $identifier
      * @param array $sectionSourceMap
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -53,6 +58,7 @@ class SectionPool implements SectionPoolInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSectionsData(array $sectionNames = null, $updateIds = false)
     {
@@ -67,6 +73,7 @@ class SectionPool implements SectionPoolInterface
      * @param array $sectionNames
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function getSectionDataByNames($sectionNames)
     {
@@ -84,6 +91,7 @@ class SectionPool implements SectionPoolInterface
      * Get all section sources
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getAllSectionData()
     {
@@ -100,6 +108,7 @@ class SectionPool implements SectionPoolInterface
      * @param string $name
      * @return SectionSourceInterface
      * @throws LocalizedException
+     * @since 2.0.0
      */
     protected function get($name)
     {

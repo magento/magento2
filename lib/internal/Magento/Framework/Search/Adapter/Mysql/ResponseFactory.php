@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * Response Factory
+ * @since 2.0.0
  */
 class ResponseFactory
 {
@@ -14,6 +15,7 @@ class ResponseFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -21,6 +23,7 @@ class ResponseFactory
      * Document Factory
      *
      * @var DocumentFactory
+     * @since 2.0.0
      */
     protected $documentFactory;
 
@@ -28,6 +31,7 @@ class ResponseFactory
      * Aggregation Factory
      *
      * @var AggregationFactory
+     * @since 2.0.0
      */
     protected $aggregationFactory;
 
@@ -35,6 +39,7 @@ class ResponseFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param DocumentFactory $documentFactory
      * @param AggregationFactory $aggregationFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -51,6 +56,7 @@ class ResponseFactory
      *
      * @param mixed $rawResponse
      * @return \Magento\Framework\Search\Response\QueryResponse
+     * @since 2.0.0
      */
     public function create($rawResponse)
     {

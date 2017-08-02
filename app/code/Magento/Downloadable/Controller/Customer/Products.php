@@ -11,16 +11,23 @@ namespace Magento\Downloadable\Controller\Customer;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Downloadable\Controller\Customer\Products
+ *
+ * @since 2.0.0
+ */
 class Products extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Action\Context $context, \Magento\Customer\Model\Session $customerSession)
     {
@@ -33,6 +40,7 @@ class Products extends \Magento\Framework\App\Action\Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @since 2.0.0
      */
     public function dispatch(RequestInterface $request)
     {
@@ -48,6 +56,7 @@ class Products extends \Magento\Framework\App\Action\Action
      * Display downloadable links bought by customer
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

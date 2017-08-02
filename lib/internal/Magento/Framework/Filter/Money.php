@@ -5,15 +5,22 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * Class \Magento\Framework\Filter\Money
+ *
+ * @since 2.0.0
+ */
 class Money implements \Zend_Filter_Interface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_format;
 
     /**
      * @param string $format
+     * @since 2.0.0
      */
     public function __construct($format)
     {
@@ -23,6 +30,7 @@ class Money implements \Zend_Filter_Interface
     /**
      * @param float $value
      * @return string
+     * @since 2.0.0
      */
     public function filter($value)
     {

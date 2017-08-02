@@ -9,16 +9,19 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
  * Bundle selection product block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Search extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'product/edit/bundle/option/search.phtml';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +32,7 @@ class Search extends \Magento\Backend\Block\Widget
      * Create search grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -46,6 +50,7 @@ class Search extends \Magento\Backend\Block\Widget
      * Prepare search grid
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

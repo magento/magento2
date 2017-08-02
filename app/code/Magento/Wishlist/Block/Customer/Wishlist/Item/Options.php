@@ -11,11 +11,13 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
  *
  * @api
  * @method \Magento\Wishlist\Model\Item getItem()
+ * @since 2.0.0
  */
 class Options extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
+     * @since 2.0.0
      */
     protected $_helperPool;
 
@@ -23,6 +25,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * List of product options rendering configurations by product type
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_optionsCfg = [
         'default' => [
@@ -36,6 +39,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -55,6 +59,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * Initialize block
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -69,6 +74,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $helperName
      * @param null|string $template
      * @return $this
+     * @since 2.0.0
      */
     public function addOptionsRenderCfg($productType, $helperName, $template = null)
     {
@@ -81,6 +87,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param string $productType
      * @return array|null
+     * @since 2.0.0
      */
     public function getOptionsRenderCfg($productType)
     {
@@ -97,6 +104,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve product configured options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getConfiguredOptions()
     {
@@ -127,6 +135,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve block template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemplate()
     {
@@ -151,6 +160,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * Render block html
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

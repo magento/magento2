@@ -9,6 +9,7 @@ namespace Magento\Paypal\Block\Payflow\Advanced;
  * Payflow Advanced iframe block
  *
  * @api
+ * @since 2.0.0
  */
 class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
 {
@@ -21,6 +22,7 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
      * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,6 +51,7 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
      * Set payment method code
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -60,6 +63,7 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
      * Get frame action URL
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFrameActionUrl()
     {
@@ -70,6 +74,7 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
      * Check sandbox mode
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isTestMode()
     {

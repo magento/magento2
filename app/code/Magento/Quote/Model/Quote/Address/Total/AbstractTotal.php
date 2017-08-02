@@ -11,6 +11,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @since 2.0.0
  */
 abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 {
@@ -18,11 +19,13 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * Total Code name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_address = null;
 
@@ -30,6 +33,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * Various abstract abilities
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canAddAmountToAddress = true;
 
@@ -37,6 +41,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * Various abstract abilities
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canSetAddressAmount = true;
 
@@ -44,6 +49,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * Key for item row total getting
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_itemRowTotalKey = null;
 
@@ -52,6 +58,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($code)
     {
@@ -63,6 +70,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * Retrieve total code name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -73,6 +81,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * Label getter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -86,6 +95,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
+     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -109,6 +119,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
      * @internal param \Magento\Quote\Model\Quote\Address $address
+     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -120,6 +131,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param   \Magento\Quote\Model\Quote\Address $address
      * @return $this
+     * @since 2.0.0
      */
     protected function _setAddress(\Magento\Quote\Model\Quote\Address $address)
     {
@@ -132,6 +144,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @return  \Magento\Quote\Model\Quote\Address
      * @throws   \Magento\Framework\Exception\LocalizedException if address not declared
+     * @since 2.0.0
      */
     protected function _getAddress()
     {
@@ -143,12 +156,14 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\Total
+     * @since 2.0.0
      */
     protected $total;
 
     /**
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
+     * @since 2.0.0
      */
     public function _setTotal(\Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -158,6 +173,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 
     /**
      * @return \Magento\Quote\Model\Quote\Address\Total
+     * @since 2.0.0
      */
     protected function _getTotal()
     {
@@ -169,6 +185,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param   float $amount
      * @return $this
+     * @since 2.0.0
      */
     protected function _setAmount($amount)
     {
@@ -184,6 +201,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @param float $baseAmount
      * @internal param float $amount
      * @return $this
+     * @since 2.0.0
      */
     protected function _setBaseAmount($baseAmount)
     {
@@ -198,6 +216,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param   float $amount
      * @return $this
+     * @since 2.0.0
      */
     protected function _addAmount($amount)
     {
@@ -212,6 +231,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param float $baseAmount
      * @return $this
+     * @since 2.0.0
      */
     protected function _addBaseAmount($baseAmount)
     {
@@ -226,6 +246,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return array
+     * @since 2.0.0
      */
     protected function _getAddressItems(\Magento\Quote\Model\Quote\Address $address)
     {
@@ -237,6 +258,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float|int
+     * @since 2.0.0
      */
     public function getItemRowTotal(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -251,6 +273,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float|int
+     * @since 2.0.0
      */
     public function getItemBaseRowTotal(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -266,6 +289,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsItemRowTotalCompoundable(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -283,6 +307,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @param   store $store
      * @return  array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function processConfigArray($config, $store)
     {

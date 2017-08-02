@@ -8,6 +8,11 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
+/**
+ * Class \Magento\Tax\Model\Sales\Total\Quote\Shipping
+ *
+ * @since 2.0.0
+ */
 class Shipping extends CommonTaxCollector
 {
     /**
@@ -17,6 +22,7 @@ class Shipping extends CommonTaxCollector
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
+     * @since 2.0.0
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -58,6 +64,7 @@ class Shipping extends CommonTaxCollector
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array|null
+     * @since 2.0.0
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

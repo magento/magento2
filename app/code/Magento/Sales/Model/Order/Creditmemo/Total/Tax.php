@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Class \Magento\Sales\Model\Order\Creditmemo\Total\Tax
+ *
+ * @since 2.0.0
+ */
 class Tax extends AbstractTotal
 {
     /**
@@ -14,6 +19,7 @@ class Tax extends AbstractTotal
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

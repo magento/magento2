@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class RequestGenerator
 {
@@ -26,17 +27,20 @@ class RequestGenerator
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     private $productAttributeCollectionFactory;
 
     /**
      * @var GeneratorResolver
+     * @since 2.2.0
      */
     private $generatorResolver;
 
     /**
      * @param CollectionFactory $productAttributeCollectionFactory
      * @param GeneratorResolver $generatorResolver
+     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $productAttributeCollectionFactory,
@@ -51,6 +55,7 @@ class RequestGenerator
      * Generate dynamic fields requests
      *
      * @return array
+     * @since 2.0.0
      */
     public function generate()
     {
@@ -70,6 +75,7 @@ class RequestGenerator
      * @param string $container
      * @param bool $useFulltext
      * @return array
+     * @since 2.0.0
      */
     private function generateRequest($attributeType, $container, $useFulltext)
     {
@@ -114,6 +120,7 @@ class RequestGenerator
      * Retrieve searchable attributes
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @since 2.0.0
      */
     protected function getSearchableAttributes()
     {
@@ -132,6 +139,7 @@ class RequestGenerator
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     private function generateAdvancedSearchRequest()
     {
@@ -237,6 +245,7 @@ class RequestGenerator
      * @param Attribute $attribute
      * @param array $request
      * @return array
+     * @since 2.2.0
      */
     private function processPriceAttribute($useFulltext, $attribute, $request)
     {

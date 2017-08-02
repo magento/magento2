@@ -7,6 +7,7 @@ namespace Magento\Payment\Block\Info;
 
 /**
  * Substitution payment info
+ * @since 2.0.0
  */
 class Substitution extends \Magento\Payment\Block\Info
 {
@@ -14,6 +15,7 @@ class Substitution extends \Magento\Payment\Block\Info
      * Add additional info block
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

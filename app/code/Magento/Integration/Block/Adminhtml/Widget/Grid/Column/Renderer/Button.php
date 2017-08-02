@@ -12,11 +12,13 @@ use Magento\Integration\Model\Integration;
 /**
  * Render HTML <button> tag.
  *
+ * @since 2.0.0
  */
 class Button extends AbstractRenderer
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -30,6 +32,7 @@ class Button extends AbstractRenderer
      *
      * @param \Magento\Framework\DataObject $row
      * @return bool
+     * @since 2.0.0
      */
     protected function _isConfigBasedIntegration(DataObject $row)
     {
@@ -46,6 +49,7 @@ class Button extends AbstractRenderer
      * @param \Magento\Framework\DataObject $row
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _isDisabled(DataObject $row)
     {
@@ -55,6 +59,7 @@ class Button extends AbstractRenderer
     /**
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     protected function _getDisabledAttribute(DataObject $row)
     {
@@ -70,6 +75,7 @@ class Button extends AbstractRenderer
      *
      * @param \Magento\Framework\DataObject $row
      * @return array
+     * @since 2.0.0
      */
     protected function _prepareAttributes(DataObject $row)
     {
@@ -99,6 +105,7 @@ class Button extends AbstractRenderer
      * Get list of available HTML attributes for this element.
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getValidAttributes()
     {
@@ -135,6 +142,7 @@ class Button extends AbstractRenderer
      *
      * @param array $attributes Array of attributes
      * @return string
+     * @since 2.0.0
      */
     protected function _getAttributesStr($attributes)
     {

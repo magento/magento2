@@ -6,12 +6,18 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
      * Widget Instances Grid
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

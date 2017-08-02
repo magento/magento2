@@ -17,41 +17,49 @@ use Magento\Setup\Model\SearchTermManagerFactory;
  * Search term description generator factory
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class SearchTermDescriptionGeneratorFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Setup\Fixtures\FixtureConfig
+     * @since 2.2.0
      */
     private $fixtureConfig;
 
     /**
      * @var \Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory
+     * @since 2.2.0
      */
     private $sentenceGeneratorFactory;
 
     /**
      * @var \Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory
+     * @since 2.2.0
      */
     private $paragraphGeneratorFactory;
 
     /**
      * @var \Magento\Setup\Model\Description\DescriptionGeneratorFactory
+     * @since 2.2.0
      */
     private $descriptionGeneratorFactory;
 
     /**
      * @var \Magento\Setup\Model\DictionaryFactory
+     * @since 2.2.0
      */
     private $dictionaryFactory;
 
     /**
      * @var \Magento\Setup\Model\SearchTermManagerFactory
+     * @since 2.2.0
      */
     private $searchTermManagerFactory;
 
@@ -65,6 +73,7 @@ class SearchTermDescriptionGeneratorFactory
      * @param DescriptionGeneratorFactory|null $descriptionGeneratorFactory
      * @param DictionaryFactory|null $dictionaryFactory
      * @param SearchTermManagerFactory|null $searchTermManagerFactory
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -97,6 +106,7 @@ class SearchTermDescriptionGeneratorFactory
      * @param int $totalProductsCount
      * @param string $defaultDescription
      * @return DescriptionGeneratorInterface
+     * @since 2.2.0
      */
     public function create(
         $descriptionConfig,
@@ -123,6 +133,7 @@ class SearchTermDescriptionGeneratorFactory
      * @param array|null $searchTermsConfig
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @return void
+     * @since 2.2.0
      */
     private function updateSearchTermConfig(&$searchTermsConfig)
     {
@@ -145,6 +156,7 @@ class SearchTermDescriptionGeneratorFactory
      *
      * @param array $descriptionConfig
      * @return \Magento\Setup\Model\Description\DescriptionGenerator
+     * @since 2.2.0
      */
     private function buildDescriptionGenerator(array $descriptionConfig)
     {
@@ -175,6 +187,7 @@ class SearchTermDescriptionGeneratorFactory
      * @param array $searchTermsConfig
      * @param int $totalProductsCount
      * @return \Magento\Setup\Model\SearchTermManager
+     * @since 2.2.0
      */
     private function buildSearchTermManager(array $searchTermsConfig, $totalProductsCount)
     {

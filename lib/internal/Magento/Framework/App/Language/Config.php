@@ -10,14 +10,19 @@ use Magento\Framework\Config\Dom;
 
 /**
  * Language pack configuration file
+ * @since 2.0.0
  */
 class Config
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     * @since 2.0.0
+     */
     protected $urnResolver;
 
     /**
      * @var \Magento\Framework\Config\DomFactory
+     * @since 2.0.0
      */
     protected $domFactory;
 
@@ -25,6 +30,7 @@ class Config
      * Data extracted from the configuration file
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data;
 
@@ -35,6 +41,7 @@ class Config
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @param \Magento\Framework\Config\DomFactory $domFactory
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function __construct(
         $source,
@@ -51,6 +58,7 @@ class Config
      * Get absolute path to validation scheme for language.xml
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getSchemaFile()
     {
@@ -62,6 +70,7 @@ class Config
      *
      * @param \DOMDocument $dom
      * @return array
+     * @since 2.0.0
      */
     protected function _extractData(\DOMDocument $dom)
     {
@@ -96,6 +105,7 @@ class Config
      * Language code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -106,6 +116,7 @@ class Config
      * Language vendor
      *
      * @return string
+     * @since 2.0.0
      */
     public function getVendor()
     {
@@ -116,6 +127,7 @@ class Config
      * Language package
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPackage()
     {
@@ -126,6 +138,7 @@ class Config
      * Sort order
      *
      * @return null|int
+     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -136,6 +149,7 @@ class Config
      * Declaration of Inheritances
      *
      * @return string[][]
+     * @since 2.0.0
      */
     public function getUses()
     {

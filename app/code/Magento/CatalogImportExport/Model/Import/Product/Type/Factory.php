@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
 /**
  * Import product type factory
+ * @since 2.0.0
  */
 class Factory
 {
@@ -14,11 +15,13 @@ class Factory
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -30,6 +33,7 @@ class Factory
      * @param array $arguments
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create($className, array $arguments = [])
     {

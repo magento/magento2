@@ -15,56 +15,67 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var Product\Type
+     * @since 2.0.0
      */
     protected $type;
 
     /**
      * @var \Magento\Bundle\Api\Data\OptionInterfaceFactory
+     * @since 2.0.0
      */
     protected $optionFactory;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Option
+     * @since 2.0.0
      */
     protected $optionResource;
 
     /**
      * @var \Magento\Store\Model\StoreManager
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Bundle\Api\ProductLinkManagementInterface
+     * @since 2.0.0
      */
     protected $linkManagement;
 
     /**
      * @var Product\OptionList
+     * @since 2.0.0
      */
     protected $productOptionList;
 
     /**
      * @var Product\LinksList
+     * @since 2.0.0
      */
     protected $linkList;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
@@ -79,6 +90,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param Product\LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -104,6 +116,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($sku, $optionId)
     {
@@ -134,6 +147,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList($sku)
     {
@@ -144,6 +158,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * @param ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     * @since 2.1.0
      */
     public function getListByProduct(ProductInterface $product)
     {
@@ -152,6 +167,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Bundle\Api\Data\OptionInterface $option)
     {
@@ -168,6 +184,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($sku, $optionId)
     {
@@ -179,6 +196,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -235,6 +253,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return $this
+     * @since 2.0.0
      */
     protected function updateOptionSelection(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -277,6 +296,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     private function getProduct($sku)
     {
@@ -294,6 +314,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $secondArray
      *
      * @return array
+     * @since 2.0.0
      */
     private function compareLinks(array $firstArray, array $secondArray)
     {
@@ -324,6 +345,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

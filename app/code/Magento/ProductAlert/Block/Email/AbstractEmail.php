@@ -14,6 +14,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Product Alert Abstract Email Block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
 {
@@ -21,6 +22,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Product collection array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_products = [];
 
@@ -28,21 +30,25 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Current Store scope object
      *
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_store;
 
     /**
      * @var \Magento\Framework\Filter\Input\MaliciousCode
+     * @since 2.0.0
      */
     protected $_maliciousCode;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $imageBuilder;
 
@@ -52,6 +58,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -71,6 +78,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     *
     * @param  string|array $content
     * @return string|array
+     * @since 2.0.0
     */
     public function getFilteredContent($content)
     {
@@ -82,6 +90,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      *
      * @param int|string|\Magento\Store\Model\Website|\Magento\Store\Model\Store $store
      * @return $this
+     * @since 2.0.0
      */
     public function setStore($store)
     {
@@ -101,6 +110,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Retrieve current store object
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -117,6 +127,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * @param boolean $format             Format price to currency format
      * @param boolean $includeContainer   Enclose into <span class="price"><span>
      * @return float
+     * @since 2.0.0
      */
     public function formatPrice($price, $format = true, $includeContainer = true)
     {
@@ -129,6 +140,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Reset product collection
      *
      * @return void
+     * @since 2.0.0
      */
     public function reset()
     {
@@ -140,6 +152,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @since 2.0.0
      */
     public function addProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -150,6 +163,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Retrieve product collection array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getProducts()
     {
@@ -160,6 +174,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Get store url params
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getUrlParams()
     {
@@ -168,6 +183,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Framework\Pricing\Render
+     * @since 2.0.0
      */
     protected function getPriceRender()
     {
@@ -186,6 +202,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * @param string $renderZone
      * @param array $arguments
      * @return string
+     * @since 2.0.0
      */
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,
@@ -218,6 +235,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * @param string $imageId
      * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
+     * @since 2.0.0
      */
     public function getImage($product, $imageId, $attributes = [])
     {

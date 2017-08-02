@@ -13,11 +13,13 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Controller disables some types of cache
+ * @since 2.0.0
  */
 class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
@@ -25,6 +27,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Mass action for cache disabling
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -41,6 +44,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Disable cache
      *
      * @return void
+     * @since 2.2.0
      */
     private function disableCache()
     {
@@ -73,7 +77,8 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Get State Instance
      *
      * @return State
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getState()
     {

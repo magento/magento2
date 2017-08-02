@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface ShipmentCommentCreationInterface
  * @api
+ * @since 2.2.0
  */
 interface ShipmentCommentCreationInterface extends ExtensibleDataInterface, CommentInterface
 {
@@ -17,6 +18,7 @@ interface ShipmentCommentCreationInterface extends ExtensibleDataInterface, Comm
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface|null
+     * @since 2.2.0
      */
     public function getExtensionAttributes();
 
@@ -25,6 +27,7 @@ interface ShipmentCommentCreationInterface extends ExtensibleDataInterface, Comm
      *
      * @param \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes

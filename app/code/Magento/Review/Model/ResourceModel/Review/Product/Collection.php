@@ -15,6 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -22,6 +23,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Entities alias
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_entitiesAlias = [];
 
@@ -29,6 +31,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Review store table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_reviewStoreTable;
 
@@ -36,6 +39,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add store data flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_addStoreDataFlag = false;
 
@@ -43,6 +47,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Filter by stores for the collection
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_storesIds = [];
 
@@ -50,6 +55,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
+     * @since 2.0.0
      */
     protected $_ratingFactory;
 
@@ -57,6 +63,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Rating option vote model
      *
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
+     * @since 2.0.0
      */
     protected $_voteFactory;
 
@@ -89,6 +96,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param MetadataPool|null $metadataPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -148,6 +156,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Define module
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -161,6 +170,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Initialize select
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -174,6 +184,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int|int[] $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreFilter($storeId = null)
     {
@@ -201,6 +212,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param array $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreFilter($storeId)
     {
@@ -226,6 +238,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param Select $select
      * @return $this
+     * @since 2.0.0
      */
     protected function _applyStoresFilterToSelect(Select $select = null)
     {
@@ -263,6 +276,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add stores data
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addStoreData()
     {
@@ -275,6 +289,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function addCustomerFilter($customerId)
     {
@@ -287,6 +302,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function addEntityFilter($entityId)
     {
@@ -299,6 +315,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param int $status
      * @return $this
+     * @since 2.0.0
      */
     public function addStatusFilter($status)
     {
@@ -311,6 +328,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function setDateOrder($dir = 'DESC')
     {
@@ -322,6 +340,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add review summary
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addReviewSummary()
     {
@@ -337,6 +356,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add rote votes
      *
      * @return $this
+     * @since 2.0.0
      */
     public function addRateVotes()
     {
@@ -355,6 +375,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join fields to entity
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _joinFields()
     {
@@ -382,6 +403,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param null|int|string $offset
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getAllIds($limit = null, $offset = null)
     {
@@ -398,6 +420,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Get result sorted ids
      *
      * @return array
+     * @since 2.0.0
      */
     public function getResultingIds()
     {
@@ -414,6 +437,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Render SQL for retrieve product count
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -429,6 +453,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 2.0.0
      */
     public function setOrder($attribute, $dir = 'DESC')
     {
@@ -462,6 +487,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $joinType
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -515,6 +541,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $colName
      * @return array
+     * @since 2.0.0
      */
     public function getColumnValues($colName)
     {
@@ -529,6 +556,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Action after load
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -543,6 +571,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add store data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _addStoreData()
     {
@@ -582,6 +611,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Redeclare parent method for store filters applying
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeLoad()
     {

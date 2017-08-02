@@ -10,6 +10,7 @@ namespace Magento\Framework\Url;
  * determine scope based on URLs.
  *
  * @api
+ * @since 2.0.0
  */
 interface ScopeInterface extends \Magento\Framework\App\ScopeInterface
 {
@@ -19,6 +20,7 @@ interface ScopeInterface extends \Magento\Framework\App\ScopeInterface
      * @param string $type
      * @param boolean|null $secure
      * @return string
+     * @since 2.0.0
      */
     public function getBaseUrl($type = '', $secure = null);
 
@@ -26,6 +28,7 @@ interface ScopeInterface extends \Magento\Framework\App\ScopeInterface
      * Check is URL should be secure
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isUrlSecure();
 }

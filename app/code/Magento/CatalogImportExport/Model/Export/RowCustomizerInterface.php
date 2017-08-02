@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Export;
  * Interface RowCustomizerInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface RowCustomizerInterface
 {
@@ -18,6 +19,7 @@ interface RowCustomizerInterface
      * @param mixed $collection
      * @param int[] $productIds
      * @return mixed
+     * @since 2.0.0
      */
     public function prepareData($collection, $productIds);
 
@@ -26,6 +28,7 @@ interface RowCustomizerInterface
      *
      * @param array $columns
      * @return mixed
+     * @since 2.0.0
      */
     public function addHeaderColumns($columns);
 
@@ -35,6 +38,7 @@ interface RowCustomizerInterface
      * @param array $dataRow
      * @param int $productId
      * @return mixed
+     * @since 2.0.0
      */
     public function addData($dataRow, $productId);
 
@@ -44,6 +48,7 @@ interface RowCustomizerInterface
      * @param array $additionalRowsCount
      * @param int $productId
      * @return mixed
+     * @since 2.0.0
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId);
 }

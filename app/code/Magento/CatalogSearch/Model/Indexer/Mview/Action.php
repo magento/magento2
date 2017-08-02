@@ -9,15 +9,22 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Indexer\Mview\Action
+ *
+ * @since 2.0.0
+ */
 class Action implements ActionInterface
 {
     /**
      * @var IndexerInterfaceFactory
+     * @since 2.0.0
      */
     private $indexerFactory;
 
     /**
      * @param IndexerInterfaceFactory $indexerFactory
+     * @since 2.0.0
      */
     public function __construct(IndexerInterfaceFactory $indexerFactory)
     {
@@ -30,6 +37,7 @@ class Action implements ActionInterface
      * @param int[] $ids
      * @return void
      * @api
+     * @since 2.0.0
      */
     public function execute($ids)
     {

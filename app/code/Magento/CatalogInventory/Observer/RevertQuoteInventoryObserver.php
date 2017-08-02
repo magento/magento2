@@ -12,26 +12,31 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
+ * @since 2.0.0
  */
 class RevertQuoteInventoryObserver implements ObserverInterface
 {
     /**
      * @var ProductQty
+     * @since 2.0.0
      */
     protected $productQty;
 
     /**
      * @var StockManagementInterface
+     * @since 2.0.0
      */
     protected $stockManagement;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @since 2.0.0
      */
     protected $stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @since 2.0.0
      */
     protected $priceIndexer;
 
@@ -41,6 +46,7 @@ class RevertQuoteInventoryObserver implements ObserverInterface
      * @param StockManagementInterface $stockManagement
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @since 2.0.0
      */
     public function __construct(
         ProductQty $productQty,
@@ -59,6 +65,7 @@ class RevertQuoteInventoryObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

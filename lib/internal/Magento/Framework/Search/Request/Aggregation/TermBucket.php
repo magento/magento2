@@ -9,21 +9,25 @@ use Magento\Framework\Search\Request\BucketInterface;
 
 /**
  * Term Buckets
+ * @since 2.0.0
  */
 class TermBucket implements BucketInterface
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $field;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $metrics;
 
@@ -32,6 +36,7 @@ class TermBucket implements BucketInterface
      * @param string $field
      * @param array $metrics
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct($name, $field, array $metrics)
     {
@@ -42,6 +47,7 @@ class TermBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -51,6 +57,7 @@ class TermBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -60,6 +67,7 @@ class TermBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getField()
     {
@@ -69,6 +77,7 @@ class TermBucket implements BucketInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getMetrics()
     {

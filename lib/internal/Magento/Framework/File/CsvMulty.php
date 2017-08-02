@@ -11,6 +11,11 @@
  */
 namespace Magento\Framework\File;
 
+/**
+ * Class \Magento\Framework\File\CsvMulty
+ *
+ * @since 2.0.0
+ */
 class CsvMulty extends \Magento\Framework\File\Csv
 {
     /**
@@ -20,6 +25,7 @@ class CsvMulty extends \Magento\Framework\File\Csv
      * @param   int $keyIndex
      * @param   int $valueIndex
      * @return  array
+     * @since 2.0.0
      */
     public function getDataPairs($file, $keyIndex = 0, $valueIndex = 1)
     {

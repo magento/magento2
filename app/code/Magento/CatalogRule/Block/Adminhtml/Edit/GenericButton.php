@@ -8,12 +8,18 @@ namespace Magento\CatalogRule\Block\Adminhtml\Edit;
 
 use Magento\CatalogRule\Controller\RegistryConstants;
 
+/**
+ * Class \Magento\CatalogRule\Block\Adminhtml\Edit\GenericButton
+ *
+ * @since 2.1.0
+ */
 class GenericButton
 {
     /**
      * Url Builder
      *
      * @var \Magento\Framework\UrlInterface
+     * @since 2.1.0
      */
     protected $urlBuilder;
 
@@ -21,6 +27,7 @@ class GenericButton
      * Registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.1.0
      */
     protected $registry;
 
@@ -29,6 +36,7 @@ class GenericButton
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -42,6 +50,7 @@ class GenericButton
      * Return the current Catalog Rule Id.
      *
      * @return int|null
+     * @since 2.1.0
      */
     public function getRuleId()
     {
@@ -55,6 +64,7 @@ class GenericButton
      * @param   string $route
      * @param   array $params
      * @return  string
+     * @since 2.1.0
      */
     public function getUrl($route = '', $params = [])
     {
@@ -66,6 +76,7 @@ class GenericButton
      *
      * @param string $name
      * @return string
+     * @since 2.1.0
      */
     public function canRender($name)
     {

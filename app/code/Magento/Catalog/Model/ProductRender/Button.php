@@ -12,11 +12,13 @@ use Magento\Catalog\Api\Data\ProductRender\ButtonExtensionInterface;
 
 /**
  * @inheritdoc
+ * @since 2.2.0
  */
 class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements ButtonInterface
 {
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setPostData($postData)
     {
@@ -25,6 +27,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getPostData()
     {
@@ -33,6 +36,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setUrl($url)
     {
@@ -41,6 +45,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getUrl()
     {
@@ -49,6 +54,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setRequiredOptions($requiredOptions)
     {
@@ -57,6 +63,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function hasRequiredOptions()
     {
@@ -65,6 +72,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -73,6 +81,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setExtensionAttributes(ButtonExtensionInterface $extensionAttributes)
     {

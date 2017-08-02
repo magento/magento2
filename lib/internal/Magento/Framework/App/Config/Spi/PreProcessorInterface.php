@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Config\Spi;
 
 /**
  * Allows to use custom callbacks and functions before applying fallback
+ * @since 2.2.0
  */
 interface PreProcessorInterface
 {
@@ -15,6 +16,7 @@ interface PreProcessorInterface
      *
      * @param array $config
      * @return array
+     * @since 2.2.0
      */
     public function process(array $config);
 }

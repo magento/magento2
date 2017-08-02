@@ -8,6 +8,7 @@ namespace Magento\Framework\Model\ResourceModel\Entity;
 /**
  * Class describing db table resource entity
  *
+ * @since 2.0.0
  */
 class Table extends \Magento\Framework\Model\ResourceModel\Entity\AbstractEntity
 {
@@ -15,6 +16,7 @@ class Table extends \Magento\Framework\Model\ResourceModel\Entity\AbstractEntity
      * Get table
      *
      * @return String
+     * @since 2.0.0
      */
     public function getTable()
     {

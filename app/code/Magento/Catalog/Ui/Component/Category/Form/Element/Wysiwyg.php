@@ -18,16 +18,19 @@ use Magento\Framework\View\LayoutInterface;
  * Catalog Wysiwyg
  *
  * @api
+ * @since 2.1.0
  */
 class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
 {
     /**
      * @var DataHelper
+     * @since 2.1.0
      */
     protected $backendHelper;
 
     /**
      * @var LayoutInterface
+     * @since 2.1.0
      */
     protected $layout;
 
@@ -43,6 +46,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      * @param array $config
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -68,6 +72,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      *
      * @param array $data
      * @return array
+     * @since 2.1.0
      */
     private function prepareData($data)
     {
@@ -81,6 +86,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      * Return wysiwyg button html
      *
      * @return string
+     * @since 2.1.0
      */
     private function getWysiwygButtonHtml()
     {

@@ -7,6 +7,7 @@ namespace Magento\Backend\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Cache extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -14,6 +15,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
      * Class constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +47,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
      * Get url for clean cache storage
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFlushStorageUrl()
     {
@@ -55,6 +58,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
      * Get url for clean cache storage
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFlushSystemUrl()
     {

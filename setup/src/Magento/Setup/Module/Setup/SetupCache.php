@@ -9,6 +9,7 @@ use Magento\Framework\Setup\DataCacheInterface;
 
 /**
  * In-memory cache of DB data
+ * @since 2.0.0
  */
 class SetupCache implements DataCacheInterface
 {
@@ -16,11 +17,13 @@ class SetupCache implements DataCacheInterface
      * Cache storage
      *
      * @var array
+     * @since 2.0.0
      */
     private $data = [];
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setRow($table, $parentId, $rowId, $value)
     {
@@ -29,6 +32,7 @@ class SetupCache implements DataCacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function setField($table, $parentId, $rowId, $field, $value)
     {
@@ -37,6 +41,7 @@ class SetupCache implements DataCacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($table, $parentId, $rowId, $field = null)
     {
@@ -53,6 +58,7 @@ class SetupCache implements DataCacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($table, $parentId, $rowId)
     {
@@ -63,6 +69,7 @@ class SetupCache implements DataCacheInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function has($table, $parentId, $rowId, $field = null)
     {

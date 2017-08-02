@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class StoreIsInactiveException extends LocalizedException
 {
@@ -17,6 +18,7 @@ class StoreIsInactiveException extends LocalizedException
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param int $code
+     * @since 2.0.0
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {

@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
  * Class Data
  * Helper class for getting options
  * @api
+ * @since 2.0.0
  */
 class Data
 {
@@ -19,11 +20,13 @@ class Data
      * Catalog Image Helper
      *
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Helper\Image $imageHelper)
     {
@@ -35,6 +38,7 @@ class Data
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Catalog\Model\Product\Image[]|null
+     * @since 2.0.0
      */
     public function getGalleryImages(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -72,6 +76,7 @@ class Data
      * @param \Magento\Catalog\Model\Product $currentProduct
      * @param array $allowedProducts
      * @return array
+     * @since 2.0.0
      */
     public function getOptions($currentProduct, $allowedProducts)
     {
@@ -97,6 +102,7 @@ class Data
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @since 2.0.0
      */
     public function getAllowAttributes($product)
     {

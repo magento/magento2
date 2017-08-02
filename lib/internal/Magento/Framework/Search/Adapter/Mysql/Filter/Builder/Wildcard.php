@@ -7,6 +7,11 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard
+ *
+ * @since 2.0.0
+ */
 class Wildcard implements FilterInterface
 {
     const CONDITION_LIKE = 'LIKE';
@@ -14,11 +19,13 @@ class Wildcard implements FilterInterface
 
     /**
      * @var ConditionManager
+     * @since 2.0.0
      */
     private $conditionManager;
 
     /**
      * @param ConditionManager $conditionManager
+     * @since 2.0.0
      */
     public function __construct(
         ConditionManager $conditionManager
@@ -28,6 +35,7 @@ class Wildcard implements FilterInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function buildFilter(
         \Magento\Framework\Search\Request\FilterInterface $filter,

@@ -8,6 +8,7 @@ namespace Magento\Tax\Api\Data;
 /**
  * Applied tax interface.
  * @api
+ * @since 2.0.0
  */
 interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -15,6 +16,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get tax rate key
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getTaxRateKey();
 
@@ -23,6 +25,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param string $taxRateKey
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxRateKey($taxRateKey);
 
@@ -30,6 +33,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get percent
      *
      * @return float
+     * @since 2.0.0
      */
     public function getPercent();
 
@@ -38,6 +42,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $percent
      * @return $this
+     * @since 2.0.0
      */
     public function setPercent($percent);
 
@@ -45,6 +50,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get amount
      *
      * @return float
+     * @since 2.0.0
      */
     public function getAmount();
 
@@ -53,6 +59,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setAmount($amount);
 
@@ -60,6 +67,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Get rates
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]|null
+     * @since 2.0.0
      */
     public function getRates();
 
@@ -68,6 +76,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
+     * @since 2.0.0
      */
     public function setRates(array $rates = null);
 
@@ -75,6 +84,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -83,6 +93,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes);
 }

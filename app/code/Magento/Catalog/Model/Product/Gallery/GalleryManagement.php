@@ -15,16 +15,19 @@ use Magento\Framework\Api\ImageContentValidatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var ImageContentValidatorInterface
+     * @since 2.0.0
      */
     protected $contentValidator;
 
@@ -33,6 +36,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param ImageContentValidatorInterface $contentValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -44,6 +48,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
@@ -84,6 +89,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function update($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
@@ -121,6 +127,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function remove($sku, $entryId)
     {
@@ -147,6 +154,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($sku, $entryId)
     {
@@ -168,6 +176,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList($sku)
     {

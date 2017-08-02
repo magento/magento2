@@ -14,6 +14,7 @@ use Magento\Paypal\Helper\Backend;
 
 /**
  * Class Reader
+ * @since 2.0.0
  */
 class Reader extends Filesystem
 {
@@ -21,6 +22,7 @@ class Reader extends Filesystem
      * List of identifier attributes for merging
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/rules/payment' => 'id',
@@ -39,6 +41,7 @@ class Reader extends Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @since 2.0.0
      */
     public function __construct(
         FileResolverInterface $fileResolver,
@@ -69,6 +72,7 @@ class Reader extends Filesystem
      *
      * @param string|null $scope
      * @return array
+     * @since 2.0.0
      */
     public function read($scope = null)
     {

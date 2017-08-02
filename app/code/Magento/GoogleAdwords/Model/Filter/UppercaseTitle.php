@@ -9,6 +9,7 @@ namespace Magento\GoogleAdwords\Model\Filter;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class UppercaseTitle implements \Zend_Filter_Interface
 {
@@ -17,6 +18,7 @@ class UppercaseTitle implements \Zend_Filter_Interface
      *
      * @param string $value
      * @return string
+     * @since 2.0.0
      */
     public function filter($value)
     {

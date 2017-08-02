@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
  * Customer log data logger.
  *
  * Saves and retrieves customer log data.
+ * @since 2.0.0
  */
 class Logger
 {
@@ -18,17 +19,20 @@ class Logger
      * Resource instance.
      *
      * @var Resource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var \Magento\Customer\Model\LogFactory
+     * @since 2.0.0
      */
     protected $logFactory;
 
     /**
      * @param ResourceConnection $resource
      * @param \Magento\Customer\Model\LogFactory $logFactory
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -45,6 +49,7 @@ class Logger
      * @param array $data
      * @return $this
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function log($customerId, array $data)
     {
@@ -71,6 +76,7 @@ class Logger
      *
      * @param int $customerId
      * @return Log
+     * @since 2.0.0
      */
     public function get($customerId = null)
     {
@@ -91,6 +97,7 @@ class Logger
      *
      * @param int $customerId
      * @return array
+     * @since 2.0.0
      */
     protected function loadLogData($customerId)
     {

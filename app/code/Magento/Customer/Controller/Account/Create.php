@@ -11,18 +11,28 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class \Magento\Customer\Controller\Account\Create
+ *
+ * @since 2.0.0
+ */
 class Create extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var Registration */
+    /**
+     * @var \Magento\Customer\Model\Registration
+     * @since 2.0.0
+     */
     protected $registration;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -31,6 +41,7 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
      * @param Registration $registration
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -48,6 +59,7 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
      * Customer register form page
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,11 +10,13 @@ namespace Magento\Backend\Block\Page;
  * Require Js block
  *
  * @api
+ * @since 2.0.0
  */
 class RequireJs extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
@@ -22,6 +24,7 @@ class RequireJs extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,6 +43,7 @@ class RequireJs extends \Magento\Framework\View\Element\Template
      * Retrieve Session Form Key
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormKey()
     {

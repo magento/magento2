@@ -7,6 +7,7 @@ namespace Magento\Checkout\Model;
 
 /**
  * Class AgreementsValidator
+ * @since 2.0.0
  */
 class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorInterface
 {
@@ -18,6 +19,7 @@ class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorIn
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isValid($agreementIds = [])
     {

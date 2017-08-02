@@ -5,6 +5,11 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+/**
+ * Class \Magento\SalesRule\Model\Rule\Action\Discount\ByFixed
+ *
+ * @since 2.0.0
+ */
 class ByFixed extends AbstractDiscount
 {
     /**
@@ -12,6 +17,7 @@ class ByFixed extends AbstractDiscount
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @since 2.0.0
      */
     public function calculate($rule, $item, $qty)
     {
@@ -29,6 +35,7 @@ class ByFixed extends AbstractDiscount
      * @param float $qty
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return float
+     * @since 2.0.0
      */
     public function fixQuantity($qty, $rule)
     {

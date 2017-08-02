@@ -8,6 +8,7 @@ namespace Magento\Framework\Webapi;
 
 /**
  * Interface to locate types for custom attributes
+ * @since 2.0.0
  */
 interface CustomAttributeTypeLocatorInterface
 {
@@ -17,6 +18,7 @@ interface CustomAttributeTypeLocatorInterface
      * @param string $attributeCode
      * @param string $serviceClass
      * @return string
+     * @since 2.0.0
      */
     public function getType($attributeCode, $serviceClass);
 
@@ -24,6 +26,7 @@ interface CustomAttributeTypeLocatorInterface
      * Get list of all Data Interface corresponding to complex custom attribute types
      *
      * @return string[] array of Data Interface class names
+     * @since 2.0.0
      */
     public function getAllServiceDataInterfaces();
 }

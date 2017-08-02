@@ -9,31 +9,37 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Reports Event observer model
+ * @since 2.0.0
  */
 class CustomerLoginObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Reports\Model\EventFactory
+     * @since 2.0.0
      */
     protected $_eventFactory;
 
     /**
      * @var \Magento\Reports\Model\Product\Index\ComparedFactory
+     * @since 2.0.0
      */
     protected $_productCompFactory;
 
     /**
      * @var \Magento\Reports\Model\Product\Index\ViewedFactory
+     * @since 2.0.0
      */
     protected $_productIndexFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     protected $_customerVisitor;
 
@@ -43,6 +49,7 @@ class CustomerLoginObserver implements ObserverInterface
      * @param \Magento\Reports\Model\Product\Index\ViewedFactory $productIndexFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Reports\Model\EventFactory $event,
@@ -64,6 +71,7 @@ class CustomerLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

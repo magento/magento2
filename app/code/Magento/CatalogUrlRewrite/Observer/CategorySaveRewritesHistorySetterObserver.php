@@ -9,11 +9,17 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Observer\CategorySaveRewritesHistorySetterObserver
+ *
+ * @since 2.0.0
+ */
 class CategorySaveRewritesHistorySetterObserver implements ObserverInterface
 {
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

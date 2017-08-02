@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
 /**
  * Provided logic will create temporary table based on memory table and will return new index table name.
+ * @since 2.2.0
  */
 class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\StrategyInterface
 {
@@ -18,6 +19,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
 
     /**
      * @var \Magento\Framework\Indexer\Table\Strategy
+     * @since 2.2.0
      */
     private $strategy;
 
@@ -25,6 +27,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
      * Application resource
      *
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
@@ -32,6 +35,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
      * TemporaryTableStrategy constructor.
      * @param \Magento\Framework\Indexer\Table\Strategy $strategy
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Indexer\Table\StrategyInterface $strategy,
@@ -43,6 +47,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getUseIdxTable()
     {
@@ -51,6 +56,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setUseIdxTable($value = false)
     {
@@ -59,6 +65,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getTableName($tablePrefix)
     {
@@ -69,6 +76,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
      * Create temporary index table based on memory table
      *
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function prepareTableName($tablePrefix)
     {

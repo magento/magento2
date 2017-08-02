@@ -13,15 +13,22 @@ use Magento\ImportExport\Model\Export as ExportModel;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Export\Export
+ *
+ * @since 2.0.0
+ */
 class Export extends ExportController
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.2.0
      */
     private $sessionManager;
 
@@ -29,6 +36,7 @@ class Export extends ExportController
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Session\SessionManagerInterface $sessionManager [optional]
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -45,6 +53,7 @@ class Export extends ExportController
      * Load data with filter applying and create file for download.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

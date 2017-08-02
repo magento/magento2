@@ -6,6 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\SuggestAttributeSets
+ *
+ * @since 2.0.0
+ */
 class SuggestAttributeSets extends \Magento\Backend\App\Action
 {
     /**
@@ -17,11 +22,13 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
     
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet
+     * @since 2.0.0
      */
     protected $suggestedSet;
 
@@ -29,6 +36,7 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -44,6 +52,7 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
      * Action for attribute set selector
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @since 2.0.0
      */
     public function execute()
     {

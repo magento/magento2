@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model\Connector\Http;
 
 /**
  * Represents JSON converter for http request and response body.
+ * @since 2.2.0
  */
 class JsonConverter implements ConverterInterface
 {
@@ -19,6 +20,7 @@ class JsonConverter implements ConverterInterface
      * @param string $body
      *
      * @return array
+     * @since 2.2.0
      */
     public function fromBody($body)
     {
@@ -30,6 +32,7 @@ class JsonConverter implements ConverterInterface
      * @param array $data
      *
      * @return string
+     * @since 2.2.0
      */
     public function toBody(array $data)
     {
@@ -38,6 +41,7 @@ class JsonConverter implements ConverterInterface
 
     /**
      * @return string
+     * @since 2.2.0
      */
     public function getContentTypeHeader()
     {

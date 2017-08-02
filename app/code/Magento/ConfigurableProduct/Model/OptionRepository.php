@@ -22,56 +22,67 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory
+     * @since 2.0.0
      */
     protected $optionValueFactory;
 
     /**
      * @var Product\Type\Configurable
+     * @since 2.0.0
      */
     protected $configurableType;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute
+     * @since 2.0.0
      */
     protected $optionResource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 2.0.0
      */
     protected $productAttributeRepository;
 
     /**
      * @var ConfigurableType\AttributeFactory
+     * @since 2.0.0
      */
     protected $configurableAttributeFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     * @since 2.0.0
      */
     private $configurableTypeResource;
 
     /**
      * @var MetadataPool
+     * @since 2.1.0
      */
     private $metadataPool;
 
     /**
      * @var Loader
+     * @since 2.1.0
      */
     private $optionLoader;
 
@@ -87,6 +98,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param Loader $optionLoader
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -112,6 +124,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($sku, $id)
     {
@@ -129,6 +142,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList($sku)
     {
@@ -139,6 +153,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(OptionInterface $option)
     {
@@ -165,6 +180,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($sku, $id)
     {
@@ -181,6 +197,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function save($sku, OptionInterface $option)
     {
@@ -228,6 +245,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param string $sku
      * @return ProductInterface
      * @throws InputException
+     * @since 2.0.0
      */
     private function getProduct($sku)
     {
@@ -246,6 +264,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param int $id
      * @return ProductInterface
      * @throws InputException
+     * @since 2.0.0
      */
     private function getProductById($id)
     {
@@ -265,6 +284,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @return void
      * @throws InputException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function validateNewOptionData(OptionInterface $option)
     {
@@ -292,6 +312,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @since 2.1.0
      */
     private function getMetadataPool()
     {

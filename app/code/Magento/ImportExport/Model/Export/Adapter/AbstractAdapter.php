@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Abstract adapter model
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractAdapter
 {
@@ -19,6 +20,7 @@ abstract class AbstractAdapter
      * Destination file path.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_destination;
 
@@ -26,11 +28,13 @@ abstract class AbstractAdapter
      * Header columns names.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_headerCols = null;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
+     * @since 2.0.0
      */
     protected $_directoryHandle;
 
@@ -41,6 +45,7 @@ abstract class AbstractAdapter
      * @param string|null $destination
      * @param string $destinationDirectoryCode
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -74,6 +79,7 @@ abstract class AbstractAdapter
      * Method called as last step of object instance creation. Can be overridden in child classes.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _init()
     {
@@ -84,6 +90,7 @@ abstract class AbstractAdapter
      * Get contents of export file
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContents()
     {
@@ -94,6 +101,7 @@ abstract class AbstractAdapter
      * MIME-type for 'Content-Type' header
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -104,6 +112,7 @@ abstract class AbstractAdapter
      * Return file extension for downloading
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFileExtension()
     {
@@ -116,6 +125,7 @@ abstract class AbstractAdapter
      * @param array $headerColumns
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setHeaderCols(array $headerColumns)
     {
@@ -127,6 +137,7 @@ abstract class AbstractAdapter
      *
      * @param array $rowData
      * @return $this
+     * @since 2.0.0
      */
     abstract public function writeRow(array $rowData);
 }

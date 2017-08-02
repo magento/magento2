@@ -12,6 +12,7 @@ use Zend\ServiceManager\ServiceManager;
  * Class CommandList contains predefined list of commands for Setup
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class CommandList
 {
@@ -19,6 +20,7 @@ class CommandList
      * Service Manager
      *
      * @var ServiceManager
+     * @since 2.0.0
      */
     private $serviceManager;
 
@@ -26,6 +28,7 @@ class CommandList
      * Constructor
      *
      * @param ServiceManager $serviceManager
+     * @since 2.0.0
      */
     public function __construct(ServiceManager $serviceManager)
     {
@@ -36,6 +39,7 @@ class CommandList
      * Gets list of setup command classes
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function getCommandsClasses()
     {
@@ -81,6 +85,7 @@ class CommandList
      *
      * @return \Symfony\Component\Console\Command\Command[]
      * @throws \Exception
+     * @since 2.0.0
      */
     public function getCommands()
     {

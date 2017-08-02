@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Dependency\Report\Circular\Data;
 
 /**
  * Chain
+ * @since 2.0.0
  */
 class Chain
 {
@@ -14,6 +15,7 @@ class Chain
      * Chain construct
      *
      * @param array $modules
+     * @since 2.0.0
      */
     public function __construct($modules)
     {
@@ -24,6 +26,7 @@ class Chain
      * Get modules
      *
      * @return array
+     * @since 2.0.0
      */
     public function getModules()
     {

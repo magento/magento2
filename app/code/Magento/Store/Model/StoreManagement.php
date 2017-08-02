@@ -10,16 +10,19 @@ use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class StoreManagement implements StoreManagementInterface
 {
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $storesFactory;
 
     /**
      * @param CollectionFactory $storesFactory
+     * @since 2.0.0
      */
     public function __construct(CollectionFactory $storesFactory)
     {
@@ -28,6 +31,7 @@ class StoreManagement implements StoreManagementInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCount()
     {

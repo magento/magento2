@@ -8,6 +8,11 @@ namespace Magento\Bundle\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 
+/**
+ * Class \Magento\Bundle\Model\BundleOption
+ *
+ * @since 2.0.0
+ */
 class BundleOption extends AbstractExtensibleModel implements BundleOptionInterface
 {
     /**#@+
@@ -21,6 +26,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getOptionId()
     {
@@ -30,6 +36,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getOptionQty()
     {
@@ -39,6 +46,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getOptionSelections()
     {
@@ -48,6 +56,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setOptionId($optionId)
     {
@@ -57,6 +66,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setOptionQty($optionQty)
     {
@@ -66,6 +76,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setOptionSelections(array $optionSelections)
     {
@@ -75,6 +86,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -84,6 +96,7 @@ class BundleOption extends AbstractExtensibleModel implements BundleOptionInterf
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\BundleOptionExtensionInterface $extensionAttributes)
     {

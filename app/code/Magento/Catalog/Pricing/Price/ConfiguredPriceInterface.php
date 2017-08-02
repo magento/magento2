@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 
 /**
  * Configured price interface
+ * @since 2.0.0
  */
 interface ConfiguredPriceInterface
 {
@@ -21,6 +22,7 @@ interface ConfiguredPriceInterface
     /**
      * @param ItemInterface $item
      * @return $this
+     * @since 2.0.0
      */
     public function setItem(ItemInterface $item);
 }

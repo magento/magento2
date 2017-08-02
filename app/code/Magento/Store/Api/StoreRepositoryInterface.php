@@ -12,6 +12,7 @@ use Magento\Store\Model\StoreIsInactiveException;
  * Store repository interface
  *
  * @api
+ * @since 2.0.0
  */
 interface StoreRepositoryInterface
 {
@@ -21,6 +22,7 @@ interface StoreRepositoryInterface
      * @param string $code
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($code);
 
@@ -31,6 +33,7 @@ interface StoreRepositoryInterface
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
      * @throws StoreIsInactiveException
+     * @since 2.0.0
      */
     public function getActiveStoreByCode($code);
 
@@ -41,6 +44,7 @@ interface StoreRepositoryInterface
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
      * @throws StoreIsInactiveException
+     * @since 2.0.0
      */
     public function getActiveStoreById($id);
 
@@ -50,6 +54,7 @@ interface StoreRepositoryInterface
      * @param int $id
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
+     * @since 2.0.0
      */
     public function getById($id);
 
@@ -57,6 +62,7 @@ interface StoreRepositoryInterface
      * Retrieve list of all stores
      *
      * @return \Magento\Store\Api\Data\StoreInterface[]
+     * @since 2.0.0
      */
     public function getList();
 
@@ -64,6 +70,7 @@ interface StoreRepositoryInterface
      * Clear cached entities
      *
      * @return void
+     * @since 2.0.0
      */
     public function clean();
 }

@@ -7,21 +7,25 @@ namespace Magento\Setup\Validator;
 
 /**
  * Class to validate list of IPs for maintenance commands
+ * @since 2.0.0
  */
 class IpValidator
 {
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $none;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $validIps;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $invalidIps;
 
@@ -32,6 +36,7 @@ class IpValidator
      * @param bool $noneAllowed
      * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function validateIps(array $ips, $noneAllowed)
     {
@@ -63,6 +68,7 @@ class IpValidator
      *
      * @param string[] $ips
      * @return void
+     * @since 2.0.0
      */
     private function filterIps(array $ips)
     {

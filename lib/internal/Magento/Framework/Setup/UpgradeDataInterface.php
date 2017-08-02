@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * Interface for data upgrades of a module
  *
  * @api
+ * @since 2.0.0
  */
 interface UpgradeDataInterface
 {
@@ -18,6 +19,7 @@ interface UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @since 2.0.0
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context);
 }

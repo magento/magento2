@@ -9,6 +9,7 @@ namespace Magento\Bundle\Pricing\Price;
 /**
  * Regular price interface
  * @api
+ * @since 2.0.0
  */
 interface RegularPriceInterface extends \Magento\Framework\Pricing\Price\BasePriceProviderInterface
 {
@@ -16,6 +17,7 @@ interface RegularPriceInterface extends \Magento\Framework\Pricing\Price\BasePri
      * Get Minimal Price Amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMinimalPrice();
 
@@ -23,6 +25,7 @@ interface RegularPriceInterface extends \Magento\Framework\Pricing\Price\BasePri
      * Get Maximal Price Amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMaximalPrice();
 }

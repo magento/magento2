@@ -19,26 +19,31 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
 {
     /**
      * @var FileFactory
+     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var Invoice
+     * @since 2.0.0
      */
     protected $pdfInvoice;
 
     /**
      * @var CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -49,6 +54,7 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocuments
      * @param DateTime $dateTime
      * @param FileFactory $fileFactory
      * @param Invoice $pdfInvoice
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -70,6 +76,7 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocuments
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|ResultInterface
+     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

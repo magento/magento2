@@ -8,6 +8,7 @@ namespace Magento\Backend\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Dashboard extends \Magento\Backend\Block\Template
 {
@@ -18,11 +19,13 @@ class Dashboard extends \Magento\Backend\Block\Template
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'dashboard/index.phtml';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -59,6 +62,7 @@ class Dashboard extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getSwitchUrl()
     {

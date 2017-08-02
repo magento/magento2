@@ -17,6 +17,7 @@ use Magento\Search\Model\Query as QueryModel;
  * Search query resource model
 
  * @api
+ * @since 2.0.0
  */
 class Query extends AbstractDb
 {
@@ -24,11 +25,13 @@ class Query extends AbstractDb
      * Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -37,6 +40,7 @@ class Query extends AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -55,6 +59,7 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function loadByQueryText(AbstractModel $object, $value)
     {
@@ -85,6 +90,7 @@ class Query extends AbstractDb
      * @param null|string $field
      * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @SuppressWarnings("unused")
+     * @since 2.0.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -102,7 +108,8 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param string $value
      * @return $this
-     * @deprecated "synonym for" feature has been removed
+     * @deprecated 2.1.0 "synonym for" feature has been removed
+     * @since 2.0.0
      */
     public function loadByQuery(AbstractModel $object, $value)
     {
@@ -113,6 +120,7 @@ class Query extends AbstractDb
     /**
      * @param AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     public function _beforeSave(AbstractModel $object)
     {
@@ -124,6 +132,7 @@ class Query extends AbstractDb
      * Init resource data
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -137,6 +146,7 @@ class Query extends AbstractDb
      * @return void
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function saveIncrementalPopularity(QueryModel $query)
     {
@@ -160,6 +170,7 @@ class Query extends AbstractDb
      * @return void
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function saveNumResults(QueryModel $query)
     {

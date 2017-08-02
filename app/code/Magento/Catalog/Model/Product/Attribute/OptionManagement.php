@@ -8,15 +8,22 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\OptionManagement
+ *
+ * @since 2.0.0
+ */
 class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeOptionManagementInterface
+     * @since 2.0.0
      */
     protected $eavOptionManagement;
 
     /**
      * @param \Magento\Eav\Api\AttributeOptionManagementInterface $eavOptionManagement
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Api\AttributeOptionManagementInterface $eavOptionManagement
@@ -26,6 +33,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems($attributeCode)
     {
@@ -37,6 +45,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function add($attributeCode, $option)
     {
@@ -49,6 +58,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete($attributeCode, $optionId)
     {

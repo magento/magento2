@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel\Report;
  * Invoice report resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Invoiced extends AbstractReport
 {
@@ -16,6 +17,7 @@ class Invoiced extends AbstractReport
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,6 +30,7 @@ class Invoiced extends AbstractReport
      * @param string|int|\DateTime|array|null $from
      * @param string|int|\DateTime|array|null $to
      * @return $this
+     * @since 2.0.0
      */
     public function aggregate($from = null, $to = null)
     {
@@ -46,6 +49,7 @@ class Invoiced extends AbstractReport
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _aggregateByInvoiceCreatedAt($from, $to)
     {
@@ -169,6 +173,7 @@ class Invoiced extends AbstractReport
      * @param string|null $from
      * @param string|null $to
      * @return $this
+     * @since 2.0.0
      */
     protected function _aggregateByOrderCreatedAt($from, $to)
     {

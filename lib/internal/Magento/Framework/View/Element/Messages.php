@@ -11,6 +11,7 @@ use Magento\Framework\Message\MessageInterface;
  * Class Messages
  *
  * @api
+ * @since 2.0.0
  */
 class Messages extends Template
 {
@@ -18,6 +19,7 @@ class Messages extends Template
      * Messages collection
      *
      * @var \Magento\Framework\Message\Collection
+     * @since 2.0.0
      */
     protected $messages;
 
@@ -25,6 +27,7 @@ class Messages extends Template
      * Store first level html tag name for messages html output
      *
      * @var string
+     * @since 2.0.0
      */
     protected $firstLevelTagName = 'div';
 
@@ -32,6 +35,7 @@ class Messages extends Template
      * Store second level html tag name for messages html output
      *
      * @var string
+     * @since 2.0.0
      */
     protected $secondLevelTagName = 'div';
 
@@ -39,6 +43,7 @@ class Messages extends Template
      * Store content wrapper html tag name for messages html output
      *
      * @var string
+     * @since 2.0.0
      */
     protected $contentWrapTagName = 'div';
 
@@ -46,6 +51,7 @@ class Messages extends Template
      * Storage for used types of message storages
      *
      * @var array
+     * @since 2.0.0
      */
     protected $usedStorageTypes = [];
 
@@ -53,6 +59,7 @@ class Messages extends Template
      * Grouped message types
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $messageTypes = [
         MessageInterface::TYPE_ERROR,
@@ -65,6 +72,7 @@ class Messages extends Template
      * Message singleton
      *
      * @var \Magento\Framework\Message\Factory
+     * @since 2.0.0
      */
     protected $messageFactory;
 
@@ -72,6 +80,7 @@ class Messages extends Template
      * Message model factory
      *
      * @var \Magento\Framework\Message\CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -79,11 +88,13 @@ class Messages extends Template
      * Message manager
      *
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var Message\InterpretationStrategyInterface
+     * @since 2.0.0
      */
     private $interpretationStrategy;
 
@@ -96,6 +107,7 @@ class Messages extends Template
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param Message\InterpretationStrategyInterface $interpretationStrategy
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -117,6 +129,7 @@ class Messages extends Template
      *
      * @param   \Magento\Framework\Message\Collection $messages
      * @return  $this
+     * @since 2.0.0
      */
     public function setMessages(\Magento\Framework\Message\Collection $messages)
     {
@@ -129,6 +142,7 @@ class Messages extends Template
      *
      * @param \Magento\Framework\Message\Collection $messages
      * @return $this
+     * @since 2.0.0
      */
     public function addMessages(\Magento\Framework\Message\Collection $messages)
     {
@@ -142,6 +156,7 @@ class Messages extends Template
      * Retrieve messages collection
      *
      * @return \Magento\Framework\Message\Collection
+     * @since 2.0.0
      */
     public function getMessageCollection()
     {
@@ -156,6 +171,7 @@ class Messages extends Template
      *
      * @param MessageInterface $message
      * @return $this
+     * @since 2.0.0
      */
     public function addMessage(MessageInterface $message)
     {
@@ -168,6 +184,7 @@ class Messages extends Template
      *
      * @param   string $message
      * @return  $this
+     * @since 2.0.0
      */
     public function addError($message)
     {
@@ -180,6 +197,7 @@ class Messages extends Template
      *
      * @param   string $message
      * @return  $this
+     * @since 2.0.0
      */
     public function addWarning($message)
     {
@@ -192,6 +210,7 @@ class Messages extends Template
      *
      * @param   string $message
      * @return  $this
+     * @since 2.0.0
      */
     public function addNotice($message)
     {
@@ -204,6 +223,7 @@ class Messages extends Template
      *
      * @param   string $message
      * @return  $this
+     * @since 2.0.0
      */
     public function addSuccess($message)
     {
@@ -216,6 +236,7 @@ class Messages extends Template
      *
      * @param   string $type
      * @return  MessageInterface[]
+     * @since 2.0.0
      */
     public function getMessagesByType($type)
     {
@@ -226,6 +247,7 @@ class Messages extends Template
      * Return grouped message types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getMessageTypes()
     {
@@ -236,6 +258,7 @@ class Messages extends Template
      * Retrieve messages in HTML format grouped by type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGroupedHtml()
     {
@@ -249,6 +272,7 @@ class Messages extends Template
      *
      * @param null|string|array|\Magento\Framework\DataObject &$html
      * @return void
+     * @since 2.0.0
      */
     protected function _dispatchRenderGroupedAfterEvent(&$html)
     {
@@ -266,6 +290,7 @@ class Messages extends Template
      * Render messages in HTML format grouped by type
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _renderMessagesByType()
     {
@@ -296,6 +321,7 @@ class Messages extends Template
      * Render block HTML
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -312,6 +338,7 @@ class Messages extends Template
      *
      * @param string $tagName
      * @return void
+     * @since 2.0.0
      */
     public function setFirstLevelTagName($tagName)
     {
@@ -323,6 +350,7 @@ class Messages extends Template
      *
      * @param string $tagName
      * @return void
+     * @since 2.0.0
      */
     public function setSecondLevelTagName($tagName)
     {
@@ -333,6 +361,7 @@ class Messages extends Template
      * Get cache key informative items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -344,6 +373,7 @@ class Messages extends Template
      *
      * @param string $type
      * @return void
+     * @since 2.0.0
      */
     public function addStorageType($type)
     {

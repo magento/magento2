@@ -13,6 +13,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class BeforeEntitySave
+ * @since 2.1.0
  */
 class BeforeEntitySave implements ObserverInterface
 {
@@ -22,6 +23,7 @@ class BeforeEntitySave implements ObserverInterface
      * @param Observer $observer
      * @throws \Magento\Framework\Validator\Exception
      * @return void
+     * @since 2.1.0
      */
     public function execute(Observer $observer)
     {

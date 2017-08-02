@@ -14,6 +14,7 @@ use Magento\Framework\Validator\StringLength;
  * Class for adding validation rules to an Admin user
  *
  * @api
+ * @since 2.0.0
  */
 class UserValidationRules
 {
@@ -27,6 +28,7 @@ class UserValidationRules
      *
      * @param \Magento\Framework\Validator\DataObject $validator
      * @return \Magento\Framework\Validator\DataObject
+     * @since 2.0.0
      */
     public function addUserInfoRules(\Magento\Framework\Validator\DataObject $validator)
     {
@@ -62,6 +64,7 @@ class UserValidationRules
      *
      * @param \Magento\Framework\Validator\DataObject $validator
      * @return \Magento\Framework\Validator\DataObject
+     * @since 2.0.0
      */
     public function addPasswordRules(\Magento\Framework\Validator\DataObject $validator)
     {
@@ -98,6 +101,7 @@ class UserValidationRules
      * @param \Magento\Framework\Validator\DataObject $validator
      * @param string $passwordConfirmation
      * @return \Magento\Framework\Validator\DataObject
+     * @since 2.0.0
      */
     public function addPasswordConfirmationRule(
         \Magento\Framework\Validator\DataObject $validator,

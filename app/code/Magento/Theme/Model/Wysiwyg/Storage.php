@@ -11,6 +11,11 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Theme\Model\Wysiwyg\Storage
+ *
+ * @since 2.0.0
+ */
 class Storage
 {
     /**
@@ -47,31 +52,37 @@ class Storage
      * Storage helper
      *
      * @var \Magento\Theme\Helper\Storage
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Framework\Image\AdapterFactory
+     * @since 2.0.0
      */
     protected $_imageFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
+     * @since 2.0.0
      */
     protected $mediaWriteDirectory;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
+     * @since 2.0.0
      */
     protected $urlEncoder;
 
     /**
      * @var \Magento\Framework\Url\DecoderInterface
+     * @since 2.0.0
      */
     protected $urlDecoder;
 
@@ -84,6 +95,7 @@ class Storage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -107,6 +119,7 @@ class Storage
      * @param string $targetPath
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function uploadFile($targetPath)
     {
@@ -142,6 +155,7 @@ class Storage
      *
      * @param string $source
      * @return bool|string Resized filepath or false if errors were occurred
+     * @since 2.0.0
      */
     public function _createThumbnail($source)
     {
@@ -180,6 +194,7 @@ class Storage
      * @param string $path
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function createFolder($name, $path)
     {
@@ -215,6 +230,7 @@ class Storage
      *
      * @param string $file
      * @return \Magento\Theme\Model\Wysiwyg\Storage
+     * @since 2.0.0
      */
     public function deleteFile($file)
     {
@@ -237,6 +253,7 @@ class Storage
      * @param string $currentPath
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getDirsCollection($currentPath)
     {
@@ -257,6 +274,7 @@ class Storage
      * Get files collection
      *
      * @return array
+     * @since 2.0.0
      */
     public function getFilesCollection()
     {
@@ -289,6 +307,7 @@ class Storage
      * Get directories tree array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTreeArray()
     {
@@ -310,6 +329,7 @@ class Storage
      * @param string $path
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function deleteDirectory($path)
     {

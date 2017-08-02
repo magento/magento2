@@ -7,6 +7,7 @@ namespace Magento\Integration\Model\ResourceModel\Oauth\Token;
 
 /**
  * OAuth token resource collection model
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -14,6 +15,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize collection model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -29,6 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Method use for show applications list (token-consumer)
      *
      * @return $this
+     * @since 2.0.0
      */
     public function joinConsumerAsApplication()
     {
@@ -47,6 +50,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $adminId
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByAdminId($adminId)
     {
@@ -59,6 +63,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByCustomerId($customerId)
     {
@@ -71,6 +76,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $consumerId
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByConsumerId($consumerId)
     {
@@ -83,6 +89,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByType($type)
     {
@@ -95,6 +102,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param array|int $tokenId
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterById($tokenId)
     {
@@ -107,6 +115,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param bool|int $flag
      * @return $this
+     * @since 2.0.0
      */
     public function addFilterByRevoked($flag)
     {

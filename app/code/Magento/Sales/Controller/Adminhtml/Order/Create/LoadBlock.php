@@ -10,10 +10,16 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\LoadBlock
+ *
+ * @since 2.0.0
+ */
 class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * @var RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
@@ -24,6 +30,7 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param RawFactory $resultRawFactory
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -47,6 +54,7 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Loading page block
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

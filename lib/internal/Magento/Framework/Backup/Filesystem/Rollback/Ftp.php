@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\DriverInterface;
  * Rollback worker for rolling back via ftp
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Ftp extends AbstractRollback
 {
@@ -18,6 +19,7 @@ class Ftp extends AbstractRollback
      * Ftp client
      *
      * @var \Magento\Framework\System\Ftp
+     * @since 2.0.0
      */
     protected $_ftpClient;
 
@@ -28,6 +30,7 @@ class Ftp extends AbstractRollback
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see AbstractRollback::run()
+     * @since 2.0.0
      */
     public function run()
     {
@@ -58,6 +61,7 @@ class Ftp extends AbstractRollback
      *
      * @return void
      * @throws \Magento\Framework\Backup\Exception\FtpConnectionFailed
+     * @since 2.0.0
      */
     protected function _initFtpClient()
     {
@@ -76,6 +80,7 @@ class Ftp extends AbstractRollback
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _validateFtp()
     {
@@ -109,6 +114,7 @@ class Ftp extends AbstractRollback
      *
      * @param string $tmpDir
      * @return void
+     * @since 2.0.0
      */
     protected function _unpackSnapshot($tmpDir)
     {
@@ -121,6 +127,7 @@ class Ftp extends AbstractRollback
     /**
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _createTmpDir()
     {
@@ -141,6 +148,7 @@ class Ftp extends AbstractRollback
      * Delete magento and all files from ftp
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _cleanupFtp()
     {
@@ -171,6 +179,7 @@ class Ftp extends AbstractRollback
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     protected function _uploadBackupToFtp($tmpDir)
     {

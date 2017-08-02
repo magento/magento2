@@ -9,6 +9,7 @@ namespace Magento\Cron\Model\ResourceModel\Schedule;
  * Schedules Collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize resource collection
      *
      * @return void
+     * @since 2.0.0
      */
     public function _construct()
     {

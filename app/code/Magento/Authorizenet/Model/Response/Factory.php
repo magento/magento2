@@ -7,6 +7,7 @@ namespace Magento\Authorizenet\Model\Response;
 
 /**
  * Factory class for @see \Magento\Authorizenet\Model\Response
+ * @since 2.0.0
  */
 class Factory
 {
@@ -14,6 +15,7 @@ class Factory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -21,6 +23,7 @@ class Factory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName;
 
@@ -29,6 +32,7 @@ class Factory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class Factory
      *
      * @param array $data
      * @return \Magento\Authorizenet\Model\Response
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

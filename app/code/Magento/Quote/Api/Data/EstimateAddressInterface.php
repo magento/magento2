@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface EstimateAddressInterface
  * @api
+ * @since 2.0.0
  */
 interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -28,6 +29,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      * Get region name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRegion();
 
@@ -36,6 +38,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      *
      * @param string $region
      * @return $this
+     * @since 2.0.0
      */
     public function setRegion($region);
 
@@ -43,6 +46,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      * Get region id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRegionId();
 
@@ -51,6 +55,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      *
      * @param int $regionId
      * @return $this
+     * @since 2.0.0
      */
     public function setRegionId($regionId);
 
@@ -58,6 +63,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      * Get country id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCountryId();
 
@@ -66,6 +72,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      *
      * @param string $countryId
      * @return $this
+     * @since 2.0.0
      */
     public function setCountryId($countryId);
 
@@ -73,6 +80,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      * Get postcode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPostcode();
 
@@ -81,6 +89,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      *
      * @param string $postcode
      * @return $this
+     * @since 2.0.0
      */
     public function setPostcode($postcode);
 
@@ -88,6 +97,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\EstimateAddressExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -96,6 +106,7 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
      *
      * @param \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes

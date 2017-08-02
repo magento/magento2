@@ -6,12 +6,18 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+/**
+ * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\AjaxMarkAsRead
+ *
+ * @since 2.0.0
+ */
 class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
     /**
      * Mark notification as read (AJAX action)
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

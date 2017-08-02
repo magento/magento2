@@ -9,6 +9,7 @@ use Magento\Framework\Shell\CommandRendererInterface;
 
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
+ * @since 2.0.0
  */
 class Shell implements ShellInterface
 {
@@ -16,17 +17,20 @@ class Shell implements ShellInterface
      * Logger instance
      *
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var CommandRendererInterface
+     * @since 2.0.0
      */
     private $commandRenderer;
 
     /**
      * @param CommandRendererInterface $commandRenderer
      * @param \Psr\Log\LoggerInterface $logger Logger instance to be used to log commands and their output
+     * @since 2.0.0
      */
     public function __construct(
         CommandRendererInterface $commandRenderer,
@@ -43,6 +47,7 @@ class Shell implements ShellInterface
      * @param string[] $arguments Argument values to substitute markers with
      * @return string Output of an executed command
      * @throws \Magento\Framework\Exception\LocalizedException If a command returns non-zero exit code
+     * @since 2.0.0
      */
     public function execute($command, array $arguments = [])
     {
@@ -72,6 +77,7 @@ class Shell implements ShellInterface
      *
      * @param string $message
      * @return void
+     * @since 2.0.0
      */
     protected function log($message)
     {

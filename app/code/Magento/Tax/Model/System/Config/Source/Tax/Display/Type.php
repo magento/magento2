@@ -11,15 +11,22 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
+/**
+ * Class \Magento\Tax\Model\System\Config\Source\Tax\Display\Type
+ *
+ * @since 2.0.0
+ */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_options;
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -8,25 +8,34 @@ namespace Magento\Integration\Model\Oauth\Nonce;
 use Magento\Framework\Oauth\ConsumerInterface;
 use Magento\Framework\Oauth\NonceGeneratorInterface;
 
+/**
+ * Class \Magento\Integration\Model\Oauth\Nonce\Generator
+ *
+ * @since 2.0.0
+ */
 class Generator implements NonceGeneratorInterface
 {
     /**
      * @var \Magento\Framework\Oauth\Helper\Oauth
+     * @since 2.0.0
      */
     protected $_oauthHelper;
 
     /**
      * @var  \Magento\Integration\Model\Oauth\NonceFactory
+     * @since 2.0.0
      */
     protected $_nonceFactory;
 
     /**
      * @var  int
+     * @since 2.0.0
      */
     protected $_nonceLength;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_date;
 
@@ -40,6 +49,7 @@ class Generator implements NonceGeneratorInterface
      * @param \Magento\Integration\Model\Oauth\NonceFactory $nonceFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param int $nonceLength - Length of the generated nonce
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Oauth\Helper\Oauth $oauthHelper,
@@ -55,6 +65,7 @@ class Generator implements NonceGeneratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function generateNonce(ConsumerInterface $consumer = null)
     {
@@ -63,6 +74,7 @@ class Generator implements NonceGeneratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function generateTimestamp()
     {
@@ -71,6 +83,7 @@ class Generator implements NonceGeneratorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function validateNonce(ConsumerInterface $consumer, $nonce, $timestamp)
     {

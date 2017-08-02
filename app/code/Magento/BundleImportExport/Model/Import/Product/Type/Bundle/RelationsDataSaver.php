@@ -9,16 +9,19 @@ namespace Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
  * A bundle product relations (options, selections, etc.) data saver.
  *
  * Performs saving of a bundle product relations data during import operations.
+ * @since 2.2.0
  */
 class RelationsDataSaver
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.2.0
      */
     private $resource;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource
@@ -32,6 +35,7 @@ class RelationsDataSaver
      * @param array $options
      *
      * @return void
+     * @since 2.2.0
      */
     public function saveOptions(array $options)
     {
@@ -54,6 +58,7 @@ class RelationsDataSaver
      * @param array $optionValues
      *
      * @return void
+     * @since 2.2.0
      */
     public function saveOptionValues(array $optionValues)
     {
@@ -72,6 +77,7 @@ class RelationsDataSaver
      * @param array $selections
      *
      * @return void
+     * @since 2.2.0
      */
     public function saveSelections(array $selections)
     {

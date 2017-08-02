@@ -21,6 +21,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Import extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -107,6 +108,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Entity adapter.
      *
      * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity
+     * @since 2.0.0
      */
     protected $_entityAdapter;
 
@@ -114,51 +116,61 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import export data
      *
      * @var \Magento\ImportExport\Helper\Data
+     * @since 2.0.0
      */
     protected $_importExportData = null;
 
     /**
      * @var \Magento\ImportExport\Model\Import\ConfigInterface
+     * @since 2.0.0
      */
     protected $_importConfig;
 
     /**
      * @var \Magento\ImportExport\Model\Import\Entity\Factory
+     * @since 2.0.0
      */
     protected $_entityFactory;
 
     /**
      * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @since 2.0.0
      */
     protected $_importData;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory
+     * @since 2.0.0
      */
     protected $_csvFactory;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory
+     * @since 2.0.0
      */
     protected $_httpFactory;
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @since 2.0.0
      */
     protected $_uploaderFactory;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory
+     * @since 2.0.0
      */
     protected $_behaviorFactory;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -179,6 +191,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -218,6 +231,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\Magento\ImportExport\Model\Import\AbstractEntity
+     * @since 2.0.0
      */
     protected function _getEntityAdapter()
     {
@@ -261,6 +275,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param string $sourceFile Full path to source file
      * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @since 2.0.0
      */
     protected function _getSourceAdapter($sourceFile)
     {
@@ -276,6 +291,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param ProcessingErrorAggregatorInterface $validationResult
      * @return string[]
+     * @since 2.0.0
      */
     public function getOperationResultMessages(ProcessingErrorAggregatorInterface $validationResult)
     {
@@ -320,6 +336,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
+     * @since 2.0.0
      */
     public static function getAttributeType(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
@@ -337,6 +354,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * DB data source model getter.
      *
      * @return \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @since 2.0.0
      */
     public function getDataSourceModel()
     {
@@ -348,6 +366,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @static
      * @return string
+     * @since 2.0.0
      */
     public static function getDefaultBehavior()
     {
@@ -359,6 +378,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
+     * @since 2.0.0
      */
     public function getEntity()
     {
@@ -372,6 +392,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Returns number of checked entities.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProcessedEntitiesCount()
     {
@@ -382,6 +403,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Returns number of checked rows.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProcessedRowsCount()
     {
@@ -392,6 +414,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import/Export working directory (source files, result files, lock files etc.).
      *
      * @return string
+     * @since 2.0.0
      */
     public function getWorkingDir()
     {
@@ -403,6 +426,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function importSource()
     {
@@ -438,6 +462,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function processImport()
     {
@@ -448,6 +473,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import possibility getter.
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isImportAllowed()
     {
@@ -457,6 +483,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getErrorAggregator()
     {
@@ -468,6 +495,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string Source file path
+     * @since 2.0.0
      */
     public function uploadSource()
     {
@@ -531,6 +559,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param string $sourceFile
      * @return $this
+     * @since 2.0.0
      */
     protected function _removeBom($sourceFile)
     {
@@ -550,6 +579,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param \Magento\ImportExport\Model\Import\AbstractSource $source
      * @return bool
+     * @since 2.0.0
      */
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
@@ -589,6 +619,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Invalidate indexes by process codes.
      *
      * @return $this
+     * @since 2.0.0
      */
     public function invalidateIndex()
     {
@@ -623,6 +654,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getEntityBehaviors()
     {
@@ -655,6 +687,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * )
      *
      * @return array
+     * @since 2.0.0
      */
     public function getUniqueEntityBehaviors()
     {
@@ -675,6 +708,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param string|null $entity
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function isReportEntityType($entity = null)
     {
@@ -708,6 +742,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param array $result
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
     {
@@ -743,6 +778,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of created items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCreatedItemsCount()
     {
@@ -753,6 +789,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of updated items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getUpdatedItemsCount()
     {
@@ -763,6 +800,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of deleted items
      *
      * @return int
+     * @since 2.0.0
      */
     public function getDeletedItemsCount()
     {

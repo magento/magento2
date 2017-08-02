@@ -12,16 +12,19 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Billing address management service for guest carts.
+ * @since 2.0.0
  */
 class GuestBillingAddressManagement implements GuestBillingAddressManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
+     * @since 2.0.0
      */
     private $quoteIdMaskFactory;
 
     /**
      * @var BillingAddressManagementInterface
+     * @since 2.0.0
      */
     private $billingAddressManagement;
 
@@ -30,6 +33,7 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
      *
      * @param BillingAddressManagementInterface $billingAddressManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @since 2.0.0
      */
     public function __construct(
         BillingAddressManagementInterface $billingAddressManagement,
@@ -41,6 +45,7 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
@@ -51,6 +56,7 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function get($cartId)
     {

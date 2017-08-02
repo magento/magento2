@@ -5,10 +5,16 @@
  */
 namespace Magento\Tax\Model\Config\Source;
 
+/**
+ * Class \Magento\Tax\Model\Config\Source\Catalog
+ *
+ * @since 2.0.0
+ */
 class Catalog implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

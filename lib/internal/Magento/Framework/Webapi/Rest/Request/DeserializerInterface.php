@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Webapi\Rest\Request;
 
+/**
+ * Interface \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
+ *
+ * @since 2.0.0
+ */
 interface DeserializerInterface
 {
     /**
@@ -14,6 +19,7 @@ interface DeserializerInterface
      *
      * @param string $body Posted content from request
      * @return array|null Return NULL if content is invalid
+     * @since 2.0.0
      */
     public function deserialize($body);
 }

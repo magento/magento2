@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Class \Magento\Framework\Mview\View\CollectionFactory
+ *
+ * @since 2.0.0
+ */
 class CollectionFactory extends AbstractFactory
 {
     /**

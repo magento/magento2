@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -22,6 +23,7 @@ class InstallData implements InstallDataInterface
      * Page factory
      *
      * @var PageFactory
+     * @since 2.0.0
      */
     private $pageFactory;
 
@@ -29,6 +31,7 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param PageFactory $pageFactory
+     * @since 2.0.0
      */
     public function __construct(PageFactory $pageFactory)
     {
@@ -38,6 +41,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -383,6 +387,7 @@ EOD;
      * Create page
      *
      * @return Page
+     * @since 2.0.0
      */
     public function createPage()
     {

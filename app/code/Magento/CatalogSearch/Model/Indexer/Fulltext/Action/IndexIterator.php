@@ -10,89 +10,106 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
- * @deprecated No more used
+ * @deprecated 2.2.0 No more used
  * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
  * @api
+ * @since 2.1.0
  */
 class IndexIterator implements \Iterator
 {
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
+     * @since 2.1.0
      */
     private $dataProvider;
 
     /**
      * @var int
+     * @since 2.1.0
      */
     private $storeId;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $staticFields;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $productIds;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $dynamicFields;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute
+     * @since 2.1.0
      */
     private $visibility;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $allowedVisibility;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute
+     * @since 2.1.0
      */
     private $status;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $statusIds;
 
     /**
      * @var int
+     * @since 2.1.0
      */
     private $lastProductId = 0;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $products = [];
 
     /**
      * @var null
+     * @since 2.1.0
      */
     private $current = null;
 
     /**
      * @var bool
+     * @since 2.1.0
      */
     private $isValid = true;
 
     /**
      * @var null
+     * @since 2.1.0
      */
     private $key = null;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $productAttributes = [];
 
     /**
      * @var array
+     * @since 2.1.0
      */
     private $productRelations = [];
 
@@ -110,6 +127,7 @@ class IndexIterator implements \Iterator
      * @param array $statusIds
      *
      * @SuppressWarnings(Magento.TypeDuplication)
+     * @since 2.1.0
      */
     public function __construct(
         DataProvider $dataProvider,
@@ -136,7 +154,8 @@ class IndexIterator implements \Iterator
     /**
      * {@inheritDoc}
      *
-     * @deprecated Since class is deprecated
+     * @deprecated 2.2.0 Since class is deprecated
+     * @since 2.1.0
      */
     public function current()
     {
@@ -146,7 +165,8 @@ class IndexIterator implements \Iterator
     /**
      * {@inheritDoc}
      *
-     * @deprecated Since class is deprecated
+     * @deprecated 2.2.0 Since class is deprecated
+     * @since 2.1.0
      */
     public function next()
     {
@@ -244,7 +264,8 @@ class IndexIterator implements \Iterator
     /**
      * {@inheritDoc}
      *
-     * @deprecated Since class is deprecated
+     * @deprecated 2.2.0 Since class is deprecated
+     * @since 2.1.0
      */
     public function key()
     {
@@ -254,7 +275,8 @@ class IndexIterator implements \Iterator
     /**
      * {@inheritDoc}
      *
-     * @deprecated Since class is deprecated
+     * @deprecated 2.2.0 Since class is deprecated
+     * @since 2.1.0
      */
     public function valid()
     {
@@ -264,7 +286,8 @@ class IndexIterator implements \Iterator
     /**
      * {@inheritDoc}
      *
-     * @deprecated Since class is deprecated
+     * @deprecated 2.2.0 Since class is deprecated
+     * @since 2.1.0
      */
     public function rewind()
     {

@@ -26,136 +26,163 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CheckoutHelper
+     * @since 2.0.0
      */
     private $checkoutHelper;
 
     /**
      * @var CheckoutSession
+     * @since 2.0.0
      */
     private $checkoutSession;
 
     /**
      * @var CustomerRepository
+     * @since 2.0.0
      */
     private $customerRepository;
 
     /**
      * @var CustomerSession
+     * @since 2.0.0
      */
     private $customerSession;
 
     /**
      * @var CustomerUrlManager
+     * @since 2.0.0
      */
     private $customerUrlManager;
 
     /**
      * @var HttpContext
+     * @since 2.0.0
      */
     private $httpContext;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     private $quoteRepository;
 
     /**
      * @var QuoteItemRepository
+     * @since 2.0.0
      */
     private $quoteItemRepository;
 
     /**
      * @var ShippingMethodManager
+     * @since 2.0.0
      */
     private $shippingMethodManager;
 
     /**
      * @var ConfigurationPool
+     * @since 2.0.0
      */
     private $configurationPool;
 
     /**
      * @param QuoteIdMaskFactory
+     * @since 2.0.0
      */
     protected $quoteIdMaskFactory;
 
     /**
      * @var LocaleFormat
+     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var \Magento\Customer\Model\Address\Mapper
+     * @since 2.0.0
      */
     protected $addressMapper;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
+     * @since 2.0.0
      */
     protected $addressConfig;
 
     /**
      * @var FormKey
+     * @since 2.0.0
      */
     protected $formKey;
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Framework\View\ConfigInterface
+     * @since 2.0.0
      */
     protected $viewConfig;
 
     /**
      * @var \Magento\Directory\Model\Country\Postcode\ConfigInterface
+     * @since 2.0.0
      */
     protected $postCodesConfig;
 
     /**
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var Cart\ImageProvider
+     * @since 2.0.0
      */
     protected $imageProvider;
 
     /**
      * @var CartTotalRepositoryInterface
+     * @since 2.0.0
      */
     protected $cartTotalRepository;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Shipping\Model\Config
+     * @since 2.0.0
      */
     protected $shippingMethodConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
+     * @since 2.0.0
      */
     protected $paymentMethodManagement;
 
     /**
      * @var UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -188,6 +215,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param UrlInterface $urlBuilder
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -247,6 +275,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -302,6 +331,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     private function isAutocompleteEnabled()
     {
@@ -315,6 +345,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve customer data
      *
      * @return array
+     * @since 2.0.0
      */
     private function getCustomerData()
     {
@@ -334,6 +365,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
+     * @since 2.0.0
      */
     private function getCustomerAddressInline($address)
     {
@@ -348,6 +380,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve quote data
      *
      * @return array
+     * @since 2.0.0
      */
     private function getQuoteData()
     {
@@ -373,6 +406,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve quote item data
      *
      * @return array
+     * @since 2.0.0
      */
     private function getQuoteItemData()
     {
@@ -397,6 +431,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface $item
      * @return array
+     * @since 2.0.0
      */
     protected function getFormattedOptionValue($item)
     {
@@ -421,6 +456,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getRegisterUrl()
     {
@@ -432,6 +468,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getCheckoutUrl()
     {
@@ -443,6 +480,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function pageNotFoundUrl()
     {
@@ -454,6 +492,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getDefaultSuccessPageUrl()
     {
@@ -464,6 +503,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve selected shipping method
      *
      * @return array|null
+     * @since 2.0.0
      */
     private function getSelectedShippingMethod()
     {
@@ -485,6 +525,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     private function getStoreCode()
     {
@@ -496,6 +537,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     private function isGuestCheckoutAllowed()
     {
@@ -507,6 +549,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     private function isCustomerLoggedIn()
     {
@@ -518,6 +561,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     private function isCustomerLoginRequired()
     {
@@ -529,6 +573,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     private function getForgotPasswordUrl()
     {
@@ -540,6 +585,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function getStaticBaseUrl()
     {
@@ -549,6 +595,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Return quote totals data
      * @return array
+     * @since 2.0.0
      */
     private function getTotalsData()
     {
@@ -580,6 +627,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Returns active carriers codes
      * @return array
+     * @since 2.0.0
      */
     private function getActiveCarriers()
     {
@@ -593,6 +641,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Returns origin country code
      * @return string
+     * @since 2.0.0
      */
     private function getOriginCountryCode()
     {
@@ -606,6 +655,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Returns array of payment methods
      * @return array
+     * @since 2.0.0
      */
     private function getPaymentMethods()
     {

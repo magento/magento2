@@ -17,6 +17,7 @@ use Magento\Search\Model\QueryFactory;
  * Product search result block
  *
  * @api
+ * @since 2.0.0
  */
 class Result extends Template
 {
@@ -24,6 +25,7 @@ class Result extends Template
      * Catalog Product collection
      *
      * @var Collection
+     * @since 2.0.0
      */
     protected $productCollection;
 
@@ -31,6 +33,7 @@ class Result extends Template
      * Catalog search data
      *
      * @var Data
+     * @since 2.0.0
      */
     protected $catalogSearchData;
 
@@ -38,11 +41,13 @@ class Result extends Template
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     protected $catalogLayer;
 
     /**
      * @var QueryFactory
+     * @since 2.0.0
      */
     private $queryFactory;
 
@@ -52,6 +57,7 @@ class Result extends Template
      * @param Data $catalogSearchData
      * @param QueryFactory $queryFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -70,6 +76,7 @@ class Result extends Template
      * Retrieve query model object
      *
      * @return \Magento\Search\Model\Query
+     * @since 2.0.0
      */
     protected function _getQuery()
     {
@@ -80,6 +87,7 @@ class Result extends Template
      * Prepare layout
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -108,6 +116,7 @@ class Result extends Template
      * Retrieve additional blocks html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalHtml()
     {
@@ -118,6 +127,7 @@ class Result extends Template
      * Retrieve search list toolbar block
      *
      * @return ListProduct
+     * @since 2.0.0
      */
     public function getListBlock()
     {
@@ -128,6 +138,7 @@ class Result extends Template
      * Set search available list orders
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setListOrders()
     {
@@ -152,6 +163,7 @@ class Result extends Template
      * Set available view mode
      *
      * @return $this
+     * @since 2.0.0
      */
     public function setListModes()
     {
@@ -164,6 +176,7 @@ class Result extends Template
      * Retrieve Search result list HTML output
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductListHtml()
     {
@@ -174,6 +187,7 @@ class Result extends Template
      * Retrieve loaded category collection
      *
      * @return Collection
+     * @since 2.0.0
      */
     protected function _getProductCollection()
     {
@@ -188,6 +202,7 @@ class Result extends Template
      * Get search query text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getSearchQueryText()
     {
@@ -198,6 +213,7 @@ class Result extends Template
      * Retrieve search result count
      *
      * @return string
+     * @since 2.0.0
      */
     public function getResultCount()
     {
@@ -213,6 +229,7 @@ class Result extends Template
      * Retrieve No Result or Minimum query length Text
      *
      * @return \Magento\Framework\Phrase|string
+     * @since 2.0.0
      */
     public function getNoResultText()
     {
@@ -226,6 +243,7 @@ class Result extends Template
      * Retrieve Note messages
      *
      * @return array
+     * @since 2.0.0
      */
     public function getNoteMessages()
     {

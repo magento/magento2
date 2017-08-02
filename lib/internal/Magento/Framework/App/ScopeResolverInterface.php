@@ -7,6 +7,7 @@ namespace Magento\Framework\App;
 
 /**
  * Scopes provider
+ * @since 2.0.0
  */
 interface ScopeResolverInterface
 {
@@ -15,6 +16,7 @@ interface ScopeResolverInterface
      *
      * @param null|int $scopeId
      * @return \Magento\Framework\App\ScopeInterface
+     * @since 2.0.0
      */
     public function getScope($scopeId = null);
 
@@ -22,6 +24,7 @@ interface ScopeResolverInterface
      * Retrieve scopes array
      *
      * @return \Magento\Framework\App\ScopeInterface[]
+     * @since 2.0.0
      */
     public function getScopes();
 }

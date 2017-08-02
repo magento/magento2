@@ -8,16 +8,23 @@ namespace Magento\Weee\Block\Element\Weee;
 
 use \Magento\Framework\Currency;
 
+/**
+ * Class \Magento\Weee\Block\Element\Weee\Tax
+ *
+ * @since 2.0.0
+ */
 class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @since 2.0.0
      */
     protected $localeCurrency;
 
@@ -28,6 +35,7 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -44,6 +52,7 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +62,7 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
     /**
      * @param mixed $attribute
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected function getStore($attribute)
     {
@@ -67,6 +77,7 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param null|int|string $index
      * @return null|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getEscapedValue($index = null)
     {

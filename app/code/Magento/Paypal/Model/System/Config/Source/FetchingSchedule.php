@@ -7,11 +7,13 @@ namespace Magento\Paypal\Model\System\Config\Source;
 
 /**
  * Source model for available settlement report fetching intervals
+ * @since 2.0.0
  */
 class FetchingSchedule implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

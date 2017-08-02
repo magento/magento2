@@ -10,16 +10,19 @@ namespace Magento\Reports\Block\Adminhtml\Product;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'report/grid/container.phtml';
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,6 +42,7 @@ class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
      * Get filter url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFilterUrl()
     {

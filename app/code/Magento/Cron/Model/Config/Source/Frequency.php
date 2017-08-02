@@ -5,10 +5,16 @@
  */
 namespace Magento\Cron\Model\Config\Source;
 
+/**
+ * Class \Magento\Cron\Model\Config\Source\Frequency
+ *
+ * @since 2.0.0
+ */
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected static $_options;
 
@@ -20,6 +26,7 @@ class Frequency implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

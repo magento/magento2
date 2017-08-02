@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 2.0.0
  */
 interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -567,6 +568,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the negative adjustment value for the order.
      *
      * @return float|null Negative adjustment value.
+     * @since 2.0.0
      */
     public function getAdjustmentNegative();
 
@@ -574,6 +576,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the positive adjustment value for the order.
      *
      * @return float|null Positive adjustment value.
+     * @since 2.0.0
      */
     public function getAdjustmentPositive();
 
@@ -581,6 +584,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the applied rule IDs for the order.
      *
      * @return string|null Applied rule IDs.
+     * @since 2.0.0
      */
     public function getAppliedRuleIds();
 
@@ -588,6 +592,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base negative adjustment value for the order.
      *
      * @return float|null Base negative adjustment value.
+     * @since 2.0.0
      */
     public function getBaseAdjustmentNegative();
 
@@ -595,6 +600,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base positive adjustment value for the order.
      *
      * @return float|null Base positive adjustment value.
+     * @since 2.0.0
      */
     public function getBaseAdjustmentPositive();
 
@@ -602,6 +608,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base currency code for the order.
      *
      * @return string|null Base currency code.
+     * @since 2.0.0
      */
     public function getBaseCurrencyCode();
 
@@ -609,6 +616,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount amount for the order.
      *
      * @return float|null Base discount amount.
+     * @since 2.0.0
      */
     public function getBaseDiscountAmount();
 
@@ -616,6 +624,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount canceled for the order.
      *
      * @return float|null Base discount canceled.
+     * @since 2.0.0
      */
     public function getBaseDiscountCanceled();
 
@@ -623,6 +632,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount invoiced amount for the order.
      *
      * @return float|null Base discount invoiced.
+     * @since 2.0.0
      */
     public function getBaseDiscountInvoiced();
 
@@ -630,6 +640,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount refunded amount for the order.
      *
      * @return float|null Base discount refunded.
+     * @since 2.0.0
      */
     public function getBaseDiscountRefunded();
 
@@ -637,6 +648,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base grand total for the order.
      *
      * @return float Base grand total.
+     * @since 2.0.0
      */
     public function getBaseGrandTotal();
 
@@ -644,6 +656,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount tax compensation amount for the order.
      *
      * @return float|null Base discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -651,6 +664,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount tax compensation invoiced amount for the order.
      *
      * @return float|null Base discount tax compensation invoiced.
+     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationInvoiced();
 
@@ -658,6 +672,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base discount tax compensation refunded amount for the order.
      *
      * @return float|null Base discount tax compensation refunded.
+     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationRefunded();
 
@@ -665,6 +680,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping amount for the order.
      *
      * @return float|null Base shipping amount.
+     * @since 2.0.0
      */
     public function getBaseShippingAmount();
 
@@ -672,6 +688,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping canceled for the order.
      *
      * @return float|null Base shipping canceled.
+     * @since 2.0.0
      */
     public function getBaseShippingCanceled();
 
@@ -679,6 +696,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping discount amount for the order.
      *
      * @return float|null Base shipping discount amount.
+     * @since 2.0.0
      */
     public function getBaseShippingDiscountAmount();
 
@@ -686,6 +704,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping discount tax compensation amount for the order.
      *
      * @return float|null Base shipping discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -693,6 +712,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping including tax for the order.
      *
      * @return float|null Base shipping including tax.
+     * @since 2.0.0
      */
     public function getBaseShippingInclTax();
 
@@ -700,6 +720,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping invoiced amount for the order.
      *
      * @return float|null Base shipping invoiced.
+     * @since 2.0.0
      */
     public function getBaseShippingInvoiced();
 
@@ -707,6 +728,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping refunded amount for the order.
      *
      * @return float|null Base shipping refunded.
+     * @since 2.0.0
      */
     public function getBaseShippingRefunded();
 
@@ -714,6 +736,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping tax amount for the order.
      *
      * @return float|null Base shipping tax amount.
+     * @since 2.0.0
      */
     public function getBaseShippingTaxAmount();
 
@@ -721,6 +744,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base shipping tax refunded amount for the order.
      *
      * @return float|null Base shipping tax refunded.
+     * @since 2.0.0
      */
     public function getBaseShippingTaxRefunded();
 
@@ -728,6 +752,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base subtotal for the order.
      *
      * @return float|null Base subtotal.
+     * @since 2.0.0
      */
     public function getBaseSubtotal();
 
@@ -735,6 +760,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base subtotal canceled for the order.
      *
      * @return float|null Base subtotal canceled.
+     * @since 2.0.0
      */
     public function getBaseSubtotalCanceled();
 
@@ -742,6 +768,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base subtotal including tax for the order.
      *
      * @return float|null Base subtotal including tax.
+     * @since 2.0.0
      */
     public function getBaseSubtotalInclTax();
 
@@ -749,6 +776,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base subtotal invoiced amount for the order.
      *
      * @return float|null Base subtotal invoiced.
+     * @since 2.0.0
      */
     public function getBaseSubtotalInvoiced();
 
@@ -756,6 +784,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base subtotal refunded amount for the order.
      *
      * @return float|null Base subtotal refunded.
+     * @since 2.0.0
      */
     public function getBaseSubtotalRefunded();
 
@@ -763,6 +792,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base tax amount for the order.
      *
      * @return float|null Base tax amount.
+     * @since 2.0.0
      */
     public function getBaseTaxAmount();
 
@@ -770,6 +800,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base tax canceled for the order.
      *
      * @return float|null Base tax canceled.
+     * @since 2.0.0
      */
     public function getBaseTaxCanceled();
 
@@ -777,6 +808,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base tax invoiced amount for the order.
      *
      * @return float|null Base tax invoiced.
+     * @since 2.0.0
      */
     public function getBaseTaxInvoiced();
 
@@ -784,6 +816,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base tax refunded amount for the order.
      *
      * @return float|null Base tax refunded.
+     * @since 2.0.0
      */
     public function getBaseTaxRefunded();
 
@@ -791,6 +824,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total canceled for the order.
      *
      * @return float|null Base total canceled.
+     * @since 2.0.0
      */
     public function getBaseTotalCanceled();
 
@@ -798,6 +832,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total due for the order.
      *
      * @return float|null Base total due.
+     * @since 2.0.0
      */
     public function getBaseTotalDue();
 
@@ -805,6 +840,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total invoiced amount for the order.
      *
      * @return float|null Base total invoiced.
+     * @since 2.0.0
      */
     public function getBaseTotalInvoiced();
 
@@ -812,6 +848,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total invoiced cost for the order.
      *
      * @return float|null Base total invoiced cost.
+     * @since 2.0.0
      */
     public function getBaseTotalInvoicedCost();
 
@@ -819,6 +856,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total offline refunded amount for the order.
      *
      * @return float|null Base total offline refunded.
+     * @since 2.0.0
      */
     public function getBaseTotalOfflineRefunded();
 
@@ -826,6 +864,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total online refunded amount for the order.
      *
      * @return float|null Base total online refunded.
+     * @since 2.0.0
      */
     public function getBaseTotalOnlineRefunded();
 
@@ -833,6 +872,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total paid for the order.
      *
      * @return float|null Base total paid.
+     * @since 2.0.0
      */
     public function getBaseTotalPaid();
 
@@ -840,6 +880,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total quantity ordered for the order.
      *
      * @return float|null Base total quantity ordered.
+     * @since 2.0.0
      */
     public function getBaseTotalQtyOrdered();
 
@@ -847,6 +888,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base total refunded amount for the order.
      *
      * @return float|null Base total refunded.
+     * @since 2.0.0
      */
     public function getBaseTotalRefunded();
 
@@ -854,6 +896,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base-to-global rate for the order.
      *
      * @return float|null Base-to-global rate.
+     * @since 2.0.0
      */
     public function getBaseToGlobalRate();
 
@@ -861,6 +904,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the base-to-order rate for the order.
      *
      * @return float|null Base-to-order rate.
+     * @since 2.0.0
      */
     public function getBaseToOrderRate();
 
@@ -868,6 +912,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the billing address ID for the order.
      *
      * @return int|null Billing address ID.
+     * @since 2.0.0
      */
     public function getBillingAddressId();
 
@@ -875,6 +920,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the can-ship-partially flag value for the order.
      *
      * @return int|null Can-ship-partially flag value.
+     * @since 2.0.0
      */
     public function getCanShipPartially();
 
@@ -882,6 +928,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the can-ship-partially-item flag value for the order.
      *
      * @return int|null Can-ship-partially-item flag value.
+     * @since 2.0.0
      */
     public function getCanShipPartiallyItem();
 
@@ -889,6 +936,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the coupon code for the order.
      *
      * @return string|null Coupon code.
+     * @since 2.0.0
      */
     public function getCouponCode();
 
@@ -896,6 +944,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the created-at timestamp for the order.
      *
      * @return string|null Created-at timestamp.
+     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -904,6 +953,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $createdAt timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -911,6 +961,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer date-of-birth (DOB) for the order.
      *
      * @return string|null Customer date-of-birth (DOB).
+     * @since 2.0.0
      */
     public function getCustomerDob();
 
@@ -918,6 +969,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer email address for the order.
      *
      * @return string Customer email address.
+     * @since 2.0.0
      */
     public function getCustomerEmail();
 
@@ -925,6 +977,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer first name for the order.
      *
      * @return string|null Customer first name.
+     * @since 2.0.0
      */
     public function getCustomerFirstname();
 
@@ -932,6 +985,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer gender for the order.
      *
      * @return int|null Customer gender.
+     * @since 2.0.0
      */
     public function getCustomerGender();
 
@@ -939,6 +993,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer group ID for the order.
      *
      * @return int|null Customer group ID.
+     * @since 2.0.0
      */
     public function getCustomerGroupId();
 
@@ -946,6 +1001,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer ID for the order.
      *
      * @return int|null Customer ID.
+     * @since 2.0.0
      */
     public function getCustomerId();
 
@@ -953,6 +1009,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer-is-guest flag value for the order.
      *
      * @return int|null Customer-is-guest flag value.
+     * @since 2.0.0
      */
     public function getCustomerIsGuest();
 
@@ -960,6 +1017,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer last name for the order.
      *
      * @return string|null Customer last name.
+     * @since 2.0.0
      */
     public function getCustomerLastname();
 
@@ -967,6 +1025,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer middle name for the order.
      *
      * @return string|null Customer middle name.
+     * @since 2.0.0
      */
     public function getCustomerMiddlename();
 
@@ -974,6 +1033,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer note for the order.
      *
      * @return string|null Customer note.
+     * @since 2.0.0
      */
     public function getCustomerNote();
 
@@ -981,6 +1041,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer-note-notify flag value for the order.
      *
      * @return int|null Customer-note-notify flag value.
+     * @since 2.0.0
      */
     public function getCustomerNoteNotify();
 
@@ -988,6 +1049,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer prefix for the order.
      *
      * @return string|null Customer prefix.
+     * @since 2.0.0
      */
     public function getCustomerPrefix();
 
@@ -995,6 +1057,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer suffix for the order.
      *
      * @return string|null Customer suffix.
+     * @since 2.0.0
      */
     public function getCustomerSuffix();
 
@@ -1002,6 +1065,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the customer value-added tax (VAT) for the order.
      *
      * @return string|null Customer value-added tax (VAT).
+     * @since 2.0.0
      */
     public function getCustomerTaxvat();
 
@@ -1009,6 +1073,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount amount for the order.
      *
      * @return float|null Discount amount.
+     * @since 2.0.0
      */
     public function getDiscountAmount();
 
@@ -1016,6 +1081,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount canceled for the order.
      *
      * @return float|null Discount canceled.
+     * @since 2.0.0
      */
     public function getDiscountCanceled();
 
@@ -1023,6 +1089,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount description for the order.
      *
      * @return string|null Discount description.
+     * @since 2.0.0
      */
     public function getDiscountDescription();
 
@@ -1030,6 +1097,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount invoiced amount for the order.
      *
      * @return float|null Discount invoiced.
+     * @since 2.0.0
      */
     public function getDiscountInvoiced();
 
@@ -1037,6 +1105,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount refunded amount for the order.
      *
      * @return float|null Discount refunded amount.
+     * @since 2.0.0
      */
     public function getDiscountRefunded();
 
@@ -1044,6 +1113,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the edit increment value for the order.
      *
      * @return int|null Edit increment value.
+     * @since 2.0.0
      */
     public function getEditIncrement();
 
@@ -1051,6 +1121,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the email-sent flag value for the order.
      *
      * @return int|null Email-sent flag value.
+     * @since 2.0.0
      */
     public function getEmailSent();
 
@@ -1058,6 +1129,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the ID for the order.
      *
      * @return int|null Order ID.
+     * @since 2.0.0
      */
     public function getEntityId();
 
@@ -1066,6 +1138,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $entityId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityId($entityId);
 
@@ -1073,6 +1146,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the external customer ID for the order.
      *
      * @return string|null External customer ID.
+     * @since 2.0.0
      */
     public function getExtCustomerId();
 
@@ -1080,6 +1154,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the external order ID for the order.
      *
      * @return string|null External order ID.
+     * @since 2.0.0
      */
     public function getExtOrderId();
 
@@ -1087,6 +1162,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the forced-shipment-with-invoice flag value for the order.
      *
      * @return int|null Forced-shipment-with-invoice flag value.
+     * @since 2.0.0
      */
     public function getForcedShipmentWithInvoice();
 
@@ -1094,6 +1170,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the global currency code for the order.
      *
      * @return string|null Global currency code.
+     * @since 2.0.0
      */
     public function getGlobalCurrencyCode();
 
@@ -1101,6 +1178,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the grand total for the order.
      *
      * @return float Grand total.
+     * @since 2.0.0
      */
     public function getGrandTotal();
 
@@ -1108,6 +1186,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount tax compensation amount for the order.
      *
      * @return float|null Discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -1115,6 +1194,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount tax compensation invoiced amount for the order.
      *
      * @return float|null Discount tax compensation invoiced amount.
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationInvoiced();
 
@@ -1122,6 +1202,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the discount tax compensation refunded amount for the order.
      *
      * @return float|null Discount tax compensation refunded amount.
+     * @since 2.0.0
      */
     public function getDiscountTaxCompensationRefunded();
 
@@ -1129,6 +1210,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the hold before state for the order.
      *
      * @return string|null Hold before state.
+     * @since 2.0.0
      */
     public function getHoldBeforeState();
 
@@ -1136,6 +1218,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the hold before status for the order.
      *
      * @return string|null Hold before status.
+     * @since 2.0.0
      */
     public function getHoldBeforeStatus();
 
@@ -1143,6 +1226,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the increment ID for the order.
      *
      * @return string|null Increment ID.
+     * @since 2.0.0
      */
     public function getIncrementId();
 
@@ -1150,6 +1234,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the is-virtual flag value for the order.
      *
      * @return int|null Is-virtual flag value.
+     * @since 2.0.0
      */
     public function getIsVirtual();
 
@@ -1157,6 +1242,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the order currency code for the order.
      *
      * @return string|null Order currency code.
+     * @since 2.0.0
      */
     public function getOrderCurrencyCode();
 
@@ -1164,6 +1250,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the original increment ID for the order.
      *
      * @return string|null Original increment ID.
+     * @since 2.0.0
      */
     public function getOriginalIncrementId();
 
@@ -1171,6 +1258,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the payment authorization amount for the order.
      *
      * @return float|null Payment authorization amount.
+     * @since 2.0.0
      */
     public function getPaymentAuthorizationAmount();
 
@@ -1178,6 +1266,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the payment authorization expiration date for the order.
      *
      * @return int|null Payment authorization expiration date.
+     * @since 2.0.0
      */
     public function getPaymentAuthExpiration();
 
@@ -1185,6 +1274,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the protect code for the order.
      *
      * @return string|null Protect code.
+     * @since 2.0.0
      */
     public function getProtectCode();
 
@@ -1192,6 +1282,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the quote address ID for the order.
      *
      * @return int|null Quote address ID.
+     * @since 2.0.0
      */
     public function getQuoteAddressId();
 
@@ -1199,6 +1290,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the quote ID for the order.
      *
      * @return int|null Quote ID.
+     * @since 2.0.0
      */
     public function getQuoteId();
 
@@ -1206,6 +1298,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the relation child ID for the order.
      *
      * @return string|null Relation child ID.
+     * @since 2.0.0
      */
     public function getRelationChildId();
 
@@ -1213,6 +1306,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the relation child real ID for the order.
      *
      * @return string|null Relation child real ID.
+     * @since 2.0.0
      */
     public function getRelationChildRealId();
 
@@ -1220,6 +1314,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the relation parent ID for the order.
      *
      * @return string|null Relation parent ID.
+     * @since 2.0.0
      */
     public function getRelationParentId();
 
@@ -1227,6 +1322,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the relation parent real ID for the order.
      *
      * @return string|null Relation parent real ID.
+     * @since 2.0.0
      */
     public function getRelationParentRealId();
 
@@ -1234,6 +1330,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the remote IP address for the order.
      *
      * @return string|null Remote IP address.
+     * @since 2.0.0
      */
     public function getRemoteIp();
 
@@ -1241,6 +1338,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping amount for the order.
      *
      * @return float|null Shipping amount.
+     * @since 2.0.0
      */
     public function getShippingAmount();
 
@@ -1248,6 +1346,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping canceled amount for the order.
      *
      * @return float|null Shipping canceled amount.
+     * @since 2.0.0
      */
     public function getShippingCanceled();
 
@@ -1255,6 +1354,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping description for the order.
      *
      * @return string|null Shipping description.
+     * @since 2.0.0
      */
     public function getShippingDescription();
 
@@ -1262,6 +1362,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping discount amount for the order.
      *
      * @return float|null Shipping discount amount.
+     * @since 2.0.0
      */
     public function getShippingDiscountAmount();
 
@@ -1269,6 +1370,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping discount tax compensation amount for the order.
      *
      * @return float|null Shipping discount tax compensation amount.
+     * @since 2.0.0
      */
     public function getShippingDiscountTaxCompensationAmount();
 
@@ -1276,6 +1378,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping including tax amount for the order.
      *
      * @return float|null Shipping including tax amount.
+     * @since 2.0.0
      */
     public function getShippingInclTax();
 
@@ -1283,6 +1386,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping invoiced amount for the order.
      *
      * @return float|null Shipping invoiced amount.
+     * @since 2.0.0
      */
     public function getShippingInvoiced();
 
@@ -1290,6 +1394,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping refunded amount for the order.
      *
      * @return float|null Shipping refunded amount.
+     * @since 2.0.0
      */
     public function getShippingRefunded();
 
@@ -1297,6 +1402,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping tax amount for the order.
      *
      * @return float|null Shipping tax amount.
+     * @since 2.0.0
      */
     public function getShippingTaxAmount();
 
@@ -1304,6 +1410,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the shipping tax refunded amount for the order.
      *
      * @return float|null Shipping tax refunded amount.
+     * @since 2.0.0
      */
     public function getShippingTaxRefunded();
 
@@ -1311,6 +1418,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the state for the order.
      *
      * @return string|null State.
+     * @since 2.0.0
      */
     public function getState();
 
@@ -1318,6 +1426,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the status for the order.
      *
      * @return string|null Status.
+     * @since 2.0.0
      */
     public function getStatus();
 
@@ -1325,6 +1434,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the store currency code for the order.
      *
      * @return string|null Store currency code.
+     * @since 2.0.0
      */
     public function getStoreCurrencyCode();
 
@@ -1332,6 +1442,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the store ID for the order.
      *
      * @return int|null Store ID.
+     * @since 2.0.0
      */
     public function getStoreId();
 
@@ -1339,6 +1450,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the store name for the order.
      *
      * @return string|null Store name.
+     * @since 2.0.0
      */
     public function getStoreName();
 
@@ -1346,6 +1458,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the store-to-base rate for the order.
      *
      * @return float|null Store-to-base rate.
+     * @since 2.0.0
      */
     public function getStoreToBaseRate();
 
@@ -1353,6 +1466,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the store-to-order rate for the order.
      *
      * @return float|null Store-to-order rate.
+     * @since 2.0.0
      */
     public function getStoreToOrderRate();
 
@@ -1360,6 +1474,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the subtotal for the order.
      *
      * @return float|null Subtotal.
+     * @since 2.0.0
      */
     public function getSubtotal();
 
@@ -1367,6 +1482,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the subtotal canceled amount for the order.
      *
      * @return float|null Subtotal canceled amount.
+     * @since 2.0.0
      */
     public function getSubtotalCanceled();
 
@@ -1374,6 +1490,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the subtotal including tax amount for the order.
      *
      * @return float|null Subtotal including tax amount.
+     * @since 2.0.0
      */
     public function getSubtotalInclTax();
 
@@ -1381,6 +1498,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the subtotal invoiced amount for the order.
      *
      * @return float|null Subtotal invoiced amount.
+     * @since 2.0.0
      */
     public function getSubtotalInvoiced();
 
@@ -1388,6 +1506,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the subtotal refunded amount for the order.
      *
      * @return float|null Subtotal refunded amount.
+     * @since 2.0.0
      */
     public function getSubtotalRefunded();
 
@@ -1395,6 +1514,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the tax amount for the order.
      *
      * @return float|null Tax amount.
+     * @since 2.0.0
      */
     public function getTaxAmount();
 
@@ -1402,6 +1522,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the tax canceled amount for the order.
      *
      * @return float|null Tax canceled amount.
+     * @since 2.0.0
      */
     public function getTaxCanceled();
 
@@ -1409,6 +1530,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the tax invoiced amount for the order.
      *
      * @return float|null Tax invoiced amount.
+     * @since 2.0.0
      */
     public function getTaxInvoiced();
 
@@ -1416,6 +1538,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the tax refunded amount for the order.
      *
      * @return float|null Tax refunded amount.
+     * @since 2.0.0
      */
     public function getTaxRefunded();
 
@@ -1423,6 +1546,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total canceled for the order.
      *
      * @return float|null Total canceled.
+     * @since 2.0.0
      */
     public function getTotalCanceled();
 
@@ -1430,6 +1554,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total due for the order.
      *
      * @return float|null Total due.
+     * @since 2.0.0
      */
     public function getTotalDue();
 
@@ -1437,6 +1562,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total invoiced amount for the order.
      *
      * @return float|null Total invoiced amount.
+     * @since 2.0.0
      */
     public function getTotalInvoiced();
 
@@ -1444,6 +1570,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total item count for the order.
      *
      * @return int|null Total item count.
+     * @since 2.0.0
      */
     public function getTotalItemCount();
 
@@ -1451,6 +1578,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total offline refunded amount for the order.
      *
      * @return float|null Total offline refunded amount.
+     * @since 2.0.0
      */
     public function getTotalOfflineRefunded();
 
@@ -1458,6 +1586,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total online refunded amount for the order.
      *
      * @return float|null Total online refunded amount.
+     * @since 2.0.0
      */
     public function getTotalOnlineRefunded();
 
@@ -1465,6 +1594,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total paid for the order.
      *
      * @return float|null Total paid.
+     * @since 2.0.0
      */
     public function getTotalPaid();
 
@@ -1472,6 +1602,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total quantity ordered for the order.
      *
      * @return float|null Total quantity ordered.
+     * @since 2.0.0
      */
     public function getTotalQtyOrdered();
 
@@ -1479,6 +1610,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the total amount refunded amount for the order.
      *
      * @return float|null Total amount refunded.
+     * @since 2.0.0
      */
     public function getTotalRefunded();
 
@@ -1486,6 +1618,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the updated-at timestamp for the order.
      *
      * @return string|null Updated-at timestamp.
+     * @since 2.0.0
      */
     public function getUpdatedAt();
 
@@ -1493,6 +1626,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the weight for the order.
      *
      * @return float|null Weight.
+     * @since 2.0.0
      */
     public function getWeight();
 
@@ -1503,6 +1637,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * connecting to a web server through an HTTP proxy or load balancer.
      *
      * @return string|null X-Forwarded-For field value.
+     * @since 2.0.0
      */
     public function getXForwardedFor();
 
@@ -1510,6 +1645,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets items for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderItemInterface[] Array of items.
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -1518,6 +1654,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Sales\Api\Data\OrderItemInterface[] $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems($items);
 
@@ -1525,6 +1662,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets the billing address, if any, for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderAddressInterface|null Billing address. Otherwise, null.
+     * @since 2.0.0
      */
     public function getBillingAddress();
 
@@ -1533,6 +1671,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
      * @return $this
+     * @since 2.0.0
      */
     public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
 
@@ -1540,6 +1679,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets order payment
      *
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface|null
+     * @since 2.0.0
      */
     public function getPayment();
 
@@ -1548,6 +1688,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface|null $payment
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface
+     * @since 2.0.0
      */
     public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null);
 
@@ -1555,6 +1696,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Gets status histories for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]|null Array of status histories.
+     * @since 2.0.0
      */
     public function getStatusHistories();
 
@@ -1563,6 +1705,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] $statusHistories
      * @return $this
+     * @since 2.0.0
      */
     public function setStatusHistories(array $statusHistories = null);
 
@@ -1571,6 +1714,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $state
      * @return $this
+     * @since 2.0.0
      */
     public function setState($state);
 
@@ -1579,6 +1723,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $status
      * @return $this
+     * @since 2.0.0
      */
     public function setStatus($status);
 
@@ -1587,6 +1732,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setCouponCode($code);
 
@@ -1595,6 +1741,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setProtectCode($code);
 
@@ -1603,6 +1750,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $description
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingDescription($description);
 
@@ -1611,6 +1759,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $isVirtual
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVirtual($isVirtual);
 
@@ -1619,6 +1768,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($id);
 
@@ -1627,6 +1777,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerId($id);
 
@@ -1635,6 +1786,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountAmount($amount);
 
@@ -1643,6 +1795,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseDiscountCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountCanceled($baseDiscountCanceled);
 
@@ -1651,6 +1804,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseDiscountInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountInvoiced($baseDiscountInvoiced);
 
@@ -1659,6 +1813,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseDiscountRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountRefunded($baseDiscountRefunded);
 
@@ -1667,6 +1822,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseGrandTotal($amount);
 
@@ -1675,6 +1831,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingAmount($amount);
 
@@ -1683,6 +1840,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseShippingCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingCanceled($baseShippingCanceled);
 
@@ -1691,6 +1849,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseShippingInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingInvoiced($baseShippingInvoiced);
 
@@ -1699,6 +1858,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseShippingRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingRefunded($baseShippingRefunded);
 
@@ -1707,6 +1867,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingTaxAmount($amount);
 
@@ -1715,6 +1876,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseShippingTaxRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingTaxRefunded($baseShippingTaxRefunded);
 
@@ -1723,6 +1885,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotal($amount);
 
@@ -1731,6 +1894,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseSubtotalCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotalCanceled($baseSubtotalCanceled);
 
@@ -1739,6 +1903,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseSubtotalInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotalInvoiced($baseSubtotalInvoiced);
 
@@ -1747,6 +1912,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseSubtotalRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotalRefunded($baseSubtotalRefunded);
 
@@ -1755,6 +1921,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxAmount($amount);
 
@@ -1763,6 +1930,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTaxCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxCanceled($baseTaxCanceled);
 
@@ -1771,6 +1939,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTaxInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxInvoiced($baseTaxInvoiced);
 
@@ -1779,6 +1948,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTaxRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTaxRefunded($baseTaxRefunded);
 
@@ -1787,6 +1957,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseToGlobalRate($rate);
 
@@ -1795,6 +1966,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseToOrderRate($rate);
 
@@ -1803,6 +1975,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalCanceled($baseTotalCanceled);
 
@@ -1811,6 +1984,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalInvoiced($baseTotalInvoiced);
 
@@ -1819,6 +1993,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalInvoicedCost
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalInvoicedCost($baseTotalInvoicedCost);
 
@@ -1827,6 +2002,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalOfflineRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalOfflineRefunded($baseTotalOfflineRefunded);
 
@@ -1835,6 +2011,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalOnlineRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalOnlineRefunded($baseTotalOnlineRefunded);
 
@@ -1843,6 +2020,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalPaid
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalPaid($baseTotalPaid);
 
@@ -1851,6 +2029,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalQtyOrdered
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalQtyOrdered($baseTotalQtyOrdered);
 
@@ -1859,6 +2038,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalRefunded($baseTotalRefunded);
 
@@ -1867,6 +2047,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountAmount($amount);
 
@@ -1875,6 +2056,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountCanceled($discountCanceled);
 
@@ -1883,6 +2065,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountInvoiced($discountInvoiced);
 
@@ -1891,6 +2074,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountRefunded($discountRefunded);
 
@@ -1899,6 +2083,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setGrandTotal($amount);
 
@@ -1907,6 +2092,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingAmount($amount);
 
@@ -1915,6 +2101,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $shippingCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingCanceled($shippingCanceled);
 
@@ -1923,6 +2110,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $shippingInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingInvoiced($shippingInvoiced);
 
@@ -1931,6 +2119,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $shippingRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingRefunded($shippingRefunded);
 
@@ -1939,6 +2128,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingTaxAmount($amount);
 
@@ -1947,6 +2137,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $shippingTaxRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingTaxRefunded($shippingTaxRefunded);
 
@@ -1955,6 +2146,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreToBaseRate($rate);
 
@@ -1963,6 +2155,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $rate
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreToOrderRate($rate);
 
@@ -1971,6 +2164,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotal($amount);
 
@@ -1979,6 +2173,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $subtotalCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotalCanceled($subtotalCanceled);
 
@@ -1987,6 +2182,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $subtotalInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotalInvoiced($subtotalInvoiced);
 
@@ -1995,6 +2191,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $subtotalRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotalRefunded($subtotalRefunded);
 
@@ -2003,6 +2200,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxAmount($amount);
 
@@ -2011,6 +2209,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $taxCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxCanceled($taxCanceled);
 
@@ -2019,6 +2218,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $taxInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxInvoiced($taxInvoiced);
 
@@ -2027,6 +2227,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $taxRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setTaxRefunded($taxRefunded);
 
@@ -2035,6 +2236,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalCanceled
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalCanceled($totalCanceled);
 
@@ -2043,6 +2245,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalInvoiced($totalInvoiced);
 
@@ -2051,6 +2254,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalOfflineRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalOfflineRefunded($totalOfflineRefunded);
 
@@ -2059,6 +2263,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalOnlineRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalOnlineRefunded($totalOnlineRefunded);
 
@@ -2067,6 +2272,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalPaid
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalPaid($totalPaid);
 
@@ -2075,6 +2281,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalQtyOrdered
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalQtyOrdered($totalQtyOrdered);
 
@@ -2083,6 +2290,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalRefunded($totalRefunded);
 
@@ -2091,6 +2299,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setCanShipPartially($flag);
 
@@ -2099,6 +2308,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setCanShipPartiallyItem($flag);
 
@@ -2107,6 +2317,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $customerIsGuest
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerIsGuest($customerIsGuest);
 
@@ -2115,6 +2326,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $customerNoteNotify
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerNoteNotify($customerNoteNotify);
 
@@ -2123,6 +2335,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setBillingAddressId($id);
 
@@ -2131,6 +2344,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerGroupId($id);
 
@@ -2139,6 +2353,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $editIncrement
      * @return $this
+     * @since 2.0.0
      */
     public function setEditIncrement($editIncrement);
 
@@ -2147,6 +2362,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $emailSent
      * @return $this
+     * @since 2.0.0
      */
     public function setEmailSent($emailSent);
 
@@ -2155,6 +2371,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $forcedShipmentWithInvoice
      * @return $this
+     * @since 2.0.0
      */
     public function setForcedShipmentWithInvoice($forcedShipmentWithInvoice);
 
@@ -2163,6 +2380,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $paymentAuthExpiration
      * @return $this
+     * @since 2.0.0
      */
     public function setPaymentAuthExpiration($paymentAuthExpiration);
 
@@ -2171,6 +2389,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setQuoteAddressId($id);
 
@@ -2179,6 +2398,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $id
      * @return $this
+     * @since 2.0.0
      */
     public function setQuoteId($id);
 
@@ -2187,6 +2407,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $adjustmentNegative
      * @return $this
+     * @since 2.0.0
      */
     public function setAdjustmentNegative($adjustmentNegative);
 
@@ -2195,6 +2416,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $adjustmentPositive
      * @return $this
+     * @since 2.0.0
      */
     public function setAdjustmentPositive($adjustmentPositive);
 
@@ -2203,6 +2425,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseAdjustmentNegative
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAdjustmentNegative($baseAdjustmentNegative);
 
@@ -2211,6 +2434,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseAdjustmentPositive
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAdjustmentPositive($baseAdjustmentPositive);
 
@@ -2219,6 +2443,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingDiscountAmount($amount);
 
@@ -2227,6 +2452,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseSubtotalInclTax($amount);
 
@@ -2235,6 +2461,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseTotalDue
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalDue($baseTotalDue);
 
@@ -2243,6 +2470,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setPaymentAuthorizationAmount($amount);
 
@@ -2251,6 +2479,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingDiscountAmount($amount);
 
@@ -2259,6 +2488,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setSubtotalInclTax($amount);
 
@@ -2267,6 +2497,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $totalDue
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalDue($totalDue);
 
@@ -2275,6 +2506,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $weight
      * @return $this
+     * @since 2.0.0
      */
     public function setWeight($weight);
 
@@ -2283,6 +2515,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerDob
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerDob($customerDob);
 
@@ -2291,6 +2524,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setIncrementId($id);
 
@@ -2299,6 +2533,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $appliedRuleIds
      * @return $this
+     * @since 2.0.0
      */
     public function setAppliedRuleIds($appliedRuleIds);
 
@@ -2307,6 +2542,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseCurrencyCode($code);
 
@@ -2315,6 +2551,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerEmail
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerEmail($customerEmail);
 
@@ -2323,6 +2560,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerFirstname
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerFirstname($customerFirstname);
 
@@ -2331,6 +2569,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerLastname
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerLastname($customerLastname);
 
@@ -2339,6 +2578,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerMiddlename
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerMiddlename($customerMiddlename);
 
@@ -2347,6 +2587,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerPrefix
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerPrefix($customerPrefix);
 
@@ -2355,6 +2596,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerSuffix
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerSuffix($customerSuffix);
 
@@ -2363,6 +2605,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerTaxvat
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerTaxvat($customerTaxvat);
 
@@ -2371,6 +2614,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $description
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountDescription($description);
 
@@ -2379,6 +2623,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setExtCustomerId($id);
 
@@ -2387,6 +2632,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setExtOrderId($id);
 
@@ -2395,6 +2641,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setGlobalCurrencyCode($code);
 
@@ -2403,6 +2650,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $holdBeforeState
      * @return $this
+     * @since 2.0.0
      */
     public function setHoldBeforeState($holdBeforeState);
 
@@ -2411,6 +2659,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $holdBeforeStatus
      * @return $this
+     * @since 2.0.0
      */
     public function setHoldBeforeStatus($holdBeforeStatus);
 
@@ -2419,6 +2668,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setOrderCurrencyCode($code);
 
@@ -2427,6 +2677,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setOriginalIncrementId($id);
 
@@ -2435,6 +2686,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setRelationChildId($id);
 
@@ -2443,6 +2695,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $realId
      * @return $this
+     * @since 2.0.0
      */
     public function setRelationChildRealId($realId);
 
@@ -2451,6 +2704,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $id
      * @return $this
+     * @since 2.0.0
      */
     public function setRelationParentId($id);
 
@@ -2459,6 +2713,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $realId
      * @return $this
+     * @since 2.0.0
      */
     public function setRelationParentRealId($realId);
 
@@ -2467,6 +2722,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $remoteIp
      * @return $this
+     * @since 2.0.0
      */
     public function setRemoteIp($remoteIp);
 
@@ -2475,6 +2731,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreCurrencyCode($code);
 
@@ -2483,6 +2740,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $storeName
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreName($storeName);
 
@@ -2491,6 +2749,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $xForwardedFor
      * @return $this
+     * @since 2.0.0
      */
     public function setXForwardedFor($xForwardedFor);
 
@@ -2499,6 +2758,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $customerNote
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerNote($customerNote);
 
@@ -2507,6 +2767,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $timestamp
      * @return $this
+     * @since 2.0.0
      */
     public function setUpdatedAt($timestamp);
 
@@ -2515,6 +2776,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $totalItemCount
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalItemCount($totalItemCount);
 
@@ -2523,6 +2785,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $customerGender
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerGender($customerGender);
 
@@ -2531,6 +2794,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($amount);
 
@@ -2539,6 +2803,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationAmount($amount);
 
@@ -2547,6 +2812,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingDiscountTaxCompensationAmount($amount);
 
@@ -2555,6 +2821,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amnt
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingDiscountTaxCompensationAmnt($amnt);
 
@@ -2563,6 +2830,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountTaxCompensationInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced);
 
@@ -2571,6 +2839,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseDiscountTaxCompensationInvoiced
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced);
 
@@ -2579,6 +2848,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $discountTaxCompensationRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded);
 
@@ -2587,6 +2857,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $baseDiscountTaxCompensationRefunded
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded);
 
@@ -2595,6 +2866,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingInclTax($amount);
 
@@ -2603,6 +2875,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseShippingInclTax($amount);
 
@@ -2610,6 +2883,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -2618,6 +2892,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes);
 }

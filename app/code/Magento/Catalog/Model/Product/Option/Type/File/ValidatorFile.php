@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ValidatorFile extends Validator
 {
@@ -20,6 +21,7 @@ class ValidatorFile extends Validator
      * Relative path for main destination folder
      *
      * @var string
+     * @since 2.0.0
      */
     protected $path = 'custom_options';
 
@@ -27,6 +29,7 @@ class ValidatorFile extends Validator
      * Relative path for quote folder
      *
      * @var string
+     * @since 2.0.0
      */
     protected $quotePath = 'custom_options/quote';
 
@@ -34,31 +37,37 @@ class ValidatorFile extends Validator
      * Relative path for order folder
      *
      * @var string
+     * @since 2.0.0
      */
     protected $orderPath = 'custom_options/order';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory
+     * @since 2.0.0
      */
     protected $httpFactory;
 
     /**
      * @var Product
+     * @since 2.0.0
      */
     protected $product;
 
     /**
      * @var \Magento\Framework\Validator\File\IsImage
+     * @since 2.1.0
      */
     protected $isImageValidator;
 
@@ -69,6 +78,7 @@ class ValidatorFile extends Validator
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
      * @param \Magento\Framework\Validator\File\IsImage $isImageValidator
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -87,6 +97,7 @@ class ValidatorFile extends Validator
     /**
      * @param Product $product
      * @return $this
+     * @since 2.0.0
      */
     public function setProduct(Product $product)
     {
@@ -106,6 +117,7 @@ class ValidatorFile extends Validator
      * @throws \Zend_File_Transfer_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function validate($processingParams, $option)
     {
@@ -219,6 +231,7 @@ class ValidatorFile extends Validator
      *
      * @return void
      * @see \Magento\Catalog\Model\Product\Option\Type\File::_initFilesystem
+     * @since 2.0.0
      */
     protected function initFilesystem()
     {
@@ -236,6 +249,7 @@ class ValidatorFile extends Validator
     /**
      * @return bool
      * @todo need correctly name
+     * @since 2.0.0
      */
     protected function validateContentLength()
     {

@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Abstract class for Enable and Disable commands to consolidate common logic
+ * @since 2.0.0
  */
 abstract class AbstractModuleCommand extends AbstractSetupCommand
 {
@@ -27,6 +28,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -34,6 +36,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      * Inject dependencies
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
@@ -43,6 +46,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -65,6 +69,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      * Returns if module argument is required
      *
      * @return bool
+     * @since 2.0.0
      */
     abstract protected function isModuleRequired();
 
@@ -74,6 +79,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
+     * @since 2.0.0
      */
     protected function cleanup(InputInterface $input, OutputInterface $output)
     {

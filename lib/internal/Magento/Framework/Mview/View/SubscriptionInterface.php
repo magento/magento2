@@ -5,12 +5,18 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Interface \Magento\Framework\Mview\View\SubscriptionInterface
+ *
+ * @since 2.0.0
+ */
 interface SubscriptionInterface
 {
     /**
      * Create subsciption
      *
      * @return \Magento\Framework\Mview\View\SubscriptionInterface
+     * @since 2.0.0
      */
     public function create();
 
@@ -18,6 +24,7 @@ interface SubscriptionInterface
      * Remove subscription
      *
      * @return \Magento\Framework\Mview\View\SubscriptionInterface
+     * @since 2.0.0
      */
     public function remove();
 
@@ -25,6 +32,7 @@ interface SubscriptionInterface
      * Retrieve View related to subscription
      *
      * @return \Magento\Framework\Mview\ViewInterface
+     * @since 2.0.0
      */
     public function getView();
 
@@ -32,6 +40,7 @@ interface SubscriptionInterface
      * Retrieve table name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTableName();
 
@@ -39,6 +48,7 @@ interface SubscriptionInterface
      * Retrieve table column name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getColumnName();
 }

@@ -7,6 +7,7 @@ namespace Magento\Framework\Component;
 
 /**
  * Value-object for files found in components
+ * @since 2.0.0
  */
 class ComponentFile
 {
@@ -14,6 +15,7 @@ class ComponentFile
      * Component type
      *
      * @var string
+     * @since 2.0.0
      */
     private $componentType;
 
@@ -21,6 +23,7 @@ class ComponentFile
      * Component name
      *
      * @var string
+     * @since 2.0.0
      */
     private $componentName;
 
@@ -28,6 +31,7 @@ class ComponentFile
      * Full path
      *
      * @var string
+     * @since 2.0.0
      */
     private $path;
 
@@ -37,6 +41,7 @@ class ComponentFile
      * @param string $componentType
      * @param string $componentName
      * @param string $fullPath
+     * @since 2.0.0
      */
     public function __construct($componentType, $componentName, $fullPath)
     {
@@ -49,6 +54,7 @@ class ComponentFile
      * Get component type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentType()
     {
@@ -59,6 +65,7 @@ class ComponentFile
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -69,6 +76,7 @@ class ComponentFile
      * Get full path to the component
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFullPath()
     {

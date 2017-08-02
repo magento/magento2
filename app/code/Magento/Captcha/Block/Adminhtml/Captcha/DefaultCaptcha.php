@@ -8,16 +8,19 @@ namespace Magento\Captcha\Block\Adminhtml\Captcha;
 
 /**
  * Captcha block for adminhtml area
+ * @since 2.0.0
  */
 class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_url;
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -27,6 +30,7 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -44,6 +48,7 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
      * Returns URL to controller action which returns new captcha image
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRefreshUrl()
     {

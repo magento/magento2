@@ -8,15 +8,22 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Import\Start
+ *
+ * @since 2.0.0
+ */
 class Start extends ImportResultController
 {
     /**
      * @var \Magento\ImportExport\Model\Import
+     * @since 2.0.0
      */
     protected $importModel;
 
     /**
      * @var \Magento\Framework\Message\ExceptionMessageFactoryInterface
+     * @since 2.2.0
      */
     private $exceptionMessageFactory;
 
@@ -27,6 +34,7 @@ class Start extends ImportResultController
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\ImportExport\Model\Import $importModel
      * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,6 +53,7 @@ class Start extends ImportResultController
      * Start import process action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

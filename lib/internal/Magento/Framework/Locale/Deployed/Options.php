@@ -14,6 +14,7 @@ use Magento\Framework\View\DesignInterface;
 
 /**
  * Returns options array of locales that have deployed static content.
+ * @since 2.2.0
  */
 class Options implements OptionInterface
 {
@@ -21,6 +22,7 @@ class Options implements OptionInterface
      * Application state class.
      *
      * @var State
+     * @since 2.2.0
      */
     private $state;
 
@@ -28,6 +30,7 @@ class Options implements OptionInterface
      * Operates with available locales.
      *
      * @var AvailableLocalesInterface
+     * @since 2.2.0
      */
     private $availableLocales;
 
@@ -35,6 +38,7 @@ class Options implements OptionInterface
      * Operates with magento design settings.
      *
      * @var DesignInterface
+     * @since 2.2.0
      */
     private $design;
 
@@ -42,6 +46,7 @@ class Options implements OptionInterface
      * Locales lists.
      *
      * @var ListsInterface
+     * @since 2.2.0
      */
     private $localeLists;
 
@@ -50,6 +55,7 @@ class Options implements OptionInterface
      * @param State $state application state class
      * @param AvailableLocalesInterface $availableLocales operates with available locales
      * @param DesignInterface $design operates with magento design settings
+     * @since 2.2.0
      */
     public function __construct(
         ListsInterface $localeLists,
@@ -65,6 +71,7 @@ class Options implements OptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getOptionLocales()
     {
@@ -73,6 +80,7 @@ class Options implements OptionInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getTranslatedOptionLocales()
     {
@@ -112,6 +120,7 @@ class Options implements OptionInterface
      *
      * @param array $locales list of locales for filtering
      * @return array of filtered locales
+     * @since 2.2.0
      */
     private function filterLocales(array $locales)
     {

@@ -10,6 +10,7 @@ use Magento\Search\Api\SearchInterface;
 
 /**
  * Search extended implementation for WebApi
+ * @since 2.0.0
  */
 class Search extends FrameworkSearch implements SearchInterface
 {

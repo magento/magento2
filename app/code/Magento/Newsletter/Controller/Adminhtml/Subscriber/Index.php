@@ -6,12 +6,18 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**
      * Newsletter subscribers page
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

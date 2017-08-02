@@ -12,21 +12,25 @@ use Magento\Framework\App\ObjectManager;
  * Bundle Stock Status Indexer Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @since 2.2.0
      */
     private $activeTableSwitcher;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder
+     * @since 2.2.0
      */
     private $stockStatusSelectBuilder;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Indexer\BundleOptionStockDataSelectBuilder
+     * @since 2.2.0
      */
     private $bundleOptionStockDataSelectBuilder;
 
@@ -41,6 +45,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @param StockStatusSelectBuilder|null $stockStatusSelectBuilder
      * @param BundleOptionStockDataSelectBuilder|null $bundleOptionStockDataSelectBuilder
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -68,6 +73,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * Retrieve table name for temporary bundle option stock index
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getBundleOptionTable()
     {
@@ -80,6 +86,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareBundleOptionStockData($entityIds = null, $usePrimaryTable = false)
     {
@@ -123,6 +130,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
@@ -158,6 +166,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      *
      * @param int|array $entityIds  the product limitation
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareIndexTable($entityIds = null)
     {
@@ -172,6 +181,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      *
      * @param array|int $entityIds
      * @return $this
+     * @since 2.0.0
      */
     protected function _updateIndex($entityIds)
     {
@@ -185,6 +195,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * Clean temporary bundle options stock data
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _cleanBundleOptionStockData()
     {

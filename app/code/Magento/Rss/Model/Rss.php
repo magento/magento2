@@ -13,21 +13,25 @@ use Magento\Framework\Serialize\SerializerInterface;
  * Provides functionality to work with RSS feeds
  *
  * @api
+ * @since 2.0.0
  */
 class Rss
 {
     /**
      * @var DataProviderInterface
+     * @since 2.0.0
      */
     protected $dataProvider;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 2.0.0
      */
     protected $cache;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -36,6 +40,7 @@ class Rss
      *
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -47,6 +52,7 @@ class Rss
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -79,6 +85,7 @@ class Rss
     /**
      * @param DataProviderInterface $dataProvider
      * @return $this
+     * @since 2.0.0
      */
     public function setDataProvider(DataProviderInterface $dataProvider)
     {
@@ -88,6 +95,7 @@ class Rss
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function createRssXml()
     {

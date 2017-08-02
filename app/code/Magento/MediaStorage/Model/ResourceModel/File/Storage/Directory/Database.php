@@ -7,6 +7,7 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory;
 
 /**
  * Class Database
+ * @since 2.0.0
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {
@@ -14,6 +15,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * Define table name and id field for resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -24,6 +26,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * Create database scheme for storing files
      *
      * @return $this
+     * @since 2.0.0
      */
     public function createDatabaseScheme()
     {
@@ -96,6 +99,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param  \Magento\MediaStorage\Model\File\Storage\Directory\Database $object
      * @param  string $path
      * @return $this
+     * @since 2.0.0
      */
     public function loadByPath(\Magento\MediaStorage\Model\File\Storage\Directory\Database $object, $path)
     {
@@ -130,6 +134,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param string $path
      * @return int
+     * @since 2.0.0
      */
     public function getParentId($path)
     {
@@ -158,6 +163,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * Delete all directories from storage
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clearDirectories()
     {
@@ -173,6 +179,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param int $offset
      * @param int $count
      * @return array
+     * @since 2.0.0
      */
     public function exportDirectories($offset, $count = 100)
     {
@@ -196,6 +203,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @param string $directory
      * @return array
+     * @since 2.0.0
      */
     public function getSubdirectories($directory)
     {
@@ -220,6 +228,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      * @param string $name
      * @param string $path
      * @return void
+     * @since 2.0.0
      */
     public function deleteDirectory($name, $path)
     {

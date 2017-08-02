@@ -5,11 +5,17 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels
+ *
+ * @since 2.0.0
+ */
 class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
+     * @since 2.1.0
      */
     private $ruleFactory;
 
@@ -21,6 +27,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -35,12 +42,14 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $_nameInLayout = 'store_view_labels';
 
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getTabClass()
     {
@@ -50,6 +59,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function getTabUrl()
     {
@@ -59,6 +69,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.1.0
      */
     public function isAjaxLoaded()
     {
@@ -68,6 +79,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -77,6 +89,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -86,6 +99,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -95,6 +109,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -105,6 +120,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -141,6 +157,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\Form $form
      * @param array $labels
      * @return \Magento\Framework\Data\Form\Element\Fieldset
+     * @since 2.0.0
      */
     protected function _createStoreSpecificFieldset($form, $labels)
     {

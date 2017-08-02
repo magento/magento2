@@ -7,6 +7,7 @@ namespace Magento\Setup\Module\Dependency\Report\Circular\Data;
 
 /**
  * Module
+ * @since 2.0.0
  */
 class Module
 {
@@ -14,6 +15,7 @@ class Module
      * Module name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $name;
 
@@ -21,6 +23,7 @@ class Module
      * Circular dependencies chains
      *
      * @var \Magento\Setup\Module\Dependency\Report\Circular\Data\Chain[]
+     * @since 2.0.0
      */
     protected $chains;
 
@@ -29,6 +32,7 @@ class Module
      *
      * @param array $name
      * @param \Magento\Setup\Module\Dependency\Report\Circular\Data\Chain[] $chains
+     * @since 2.0.0
      */
     public function __construct($name, array $chains = [])
     {
@@ -40,6 +44,7 @@ class Module
      * Get name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName()
     {
@@ -50,6 +55,7 @@ class Module
      * Get circular dependencies chains
      *
      * @return \Magento\Setup\Module\Dependency\Report\Circular\Data\Chain[]
+     * @since 2.0.0
      */
     public function getChains()
     {
@@ -60,6 +66,7 @@ class Module
      * Get circular dependencies chains count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getChainsCount()
     {

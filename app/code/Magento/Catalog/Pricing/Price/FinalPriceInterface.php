@@ -10,6 +10,7 @@ namespace Magento\Catalog\Pricing\Price;
  * Special price interface
  *
  * @api
+ * @since 2.0.0
  */
 interface FinalPriceInterface
 {
@@ -17,6 +18,7 @@ interface FinalPriceInterface
      * Get Minimal Price Amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMinimalPrice();
 
@@ -24,6 +26,7 @@ interface FinalPriceInterface
      * Get Maximal Price Amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMaximalPrice();
 }

@@ -10,21 +10,29 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Theme\Model\Theme;
 
+/**
+ * Class \Magento\Theme\Observer\CheckThemeIsAssignedObserver
+ *
+ * @since 2.0.0
+ */
 class CheckThemeIsAssignedObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Theme\Model\Config\Customization
+     * @since 2.0.0
      */
     protected $themeConfig;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $eventDispatcher;
 
     /**
      * @param \Magento\Theme\Model\Config\Customization $themeConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventDispatcher
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Theme\Model\Config\Customization $themeConfig,
@@ -39,6 +47,7 @@ class CheckThemeIsAssignedObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

@@ -15,12 +15,18 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
+/**
+ * Class \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * Attribute instance
      *
      * @var Attribute
+     * @since 2.0.0
      */
     protected $_attribute = null;
 
@@ -28,21 +34,25 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Eav data
      *
      * @var \Magento\Eav\Helper\Data
+     * @since 2.0.0
      */
     protected $_eavData = null;
 
     /**
      * @var \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker
+     * @since 2.0.0
      */
     protected $propertyLocker;
 
     /**
      * @var \Magento\Config\Model\Config\Source\YesnoFactory
+     * @since 2.0.0
      */
     protected $_yesnoFactory;
 
     /**
      * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory
+     * @since 2.0.0
      */
     protected $_inputTypeFactory;
 
@@ -56,6 +66,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -80,6 +91,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * @param Attribute $attribute
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setAttributeObject($attribute)
     {
@@ -91,6 +103,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Return attribute object
      *
      * @return Attribute
+     * @since 2.0.0
      */
     public function getAttributeObject()
     {
@@ -105,6 +118,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -270,6 +284,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize form fileds values
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initFormValues()
     {
@@ -287,6 +302,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param   string $html
      * @return  string
+     * @since 2.0.0
      */
     protected function _afterToHtml($html)
     {

@@ -12,22 +12,26 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Observer model
+ * @since 2.0.0
  */
 class AddFieldsToAttributeObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
+     * @since 2.0.0
      */
     protected $yesNo;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $moduleManager;
 
     /**
      * @param Manager $moduleManager
      * @param Source\Yesno $yesNo
+     * @since 2.0.0
      */
     public function __construct(Manager $moduleManager, Source\Yesno $yesNo)
     {
@@ -38,6 +42,7 @@ class AddFieldsToAttributeObserver implements ObserverInterface
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

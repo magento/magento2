@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Factory class for \Magento\Framework\View\Design\Theme\Image
+ * @since 2.0.0
  */
 class ImageFactory
 {
@@ -14,6 +15,7 @@ class ImageFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -21,6 +23,7 @@ class ImageFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_instanceName;
 
@@ -29,6 +32,7 @@ class ImageFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -43,6 +47,7 @@ class ImageFactory
      *
      * @param array $data
      * @return Image
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

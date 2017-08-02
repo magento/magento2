@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Billing extends \Magento\Framework\View\Element\Template
 {
@@ -21,6 +22,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Sales Quote Billing Address instance
      *
      * @var \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     protected $address;
 
@@ -28,46 +30,55 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Customer Taxvat Widget block
      *
      * @var \Magento\Customer\Block\Widget\Taxvat
+     * @since 2.0.0
      */
     protected $taxvat;
 
     /**
      * @var \Magento\Quote\Model\Quote\AddressFactory
+     * @since 2.0.0
      */
     protected $addressFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected $customer;
 
     /**
      * @var Quote
+     * @since 2.0.0
      */
     protected $quote;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Framework\App\Http\Context
+     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
+     * @since 2.0.0
      */
     protected $countryCollectionFactory;
 
@@ -80,6 +91,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param Quote\AddressFactory $addressFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -105,6 +117,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Initialize billing address step
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -121,6 +134,7 @@ class Billing extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isUseBillingAddressForShipping()
     {
@@ -134,6 +148,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Return country collection
      *
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @since 2.0.0
      */
     public function getCountries()
     {
@@ -144,6 +159,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Return checkout method
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMethod()
     {
@@ -155,6 +171,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * If Sales Quote Address First Name is not defined - return Customer First Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFirstname()
     {
@@ -166,6 +183,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * If Sales Quote Address Last Name is not defined - return Customer Last Name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastname()
     {
@@ -176,6 +194,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Check is Quote items can ship to
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canShip()
     {
@@ -184,6 +203,7 @@ class Billing extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function getSaveUrl()
     {
@@ -193,6 +213,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Get Customer Taxvat Widget block
      *
      * @return \Magento\Customer\Block\Widget\Taxvat
+     * @since 2.0.0
      */
     protected function _getTaxvat()
     {
@@ -207,6 +228,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Check whether taxvat is enabled
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isTaxvatEnabled()
     {
@@ -215,6 +237,7 @@ class Billing extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTaxvatHtml()
     {
@@ -229,6 +252,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Return Sales Quote Address model
      *
      * @return \Magento\Quote\Model\Quote\Address
+     * @since 2.0.0
      */
     public function getAddress()
     {
@@ -254,6 +278,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      *
      * @param string $path
      * @return string|null
+     * @since 2.0.0
      */
     public function getConfig($path)
     {
@@ -264,6 +289,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Get logged in customer
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 2.0.0
      */
     protected function _getCustomer()
     {
@@ -277,6 +303,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Retrieve checkout session model
      *
      * @return \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -287,6 +314,7 @@ class Billing extends \Magento\Framework\View\Element\Template
      * Retrieve sales quote model
      *
      * @return Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -298,6 +326,7 @@ class Billing extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isCustomerLoggedIn()
     {

@@ -13,6 +13,7 @@ namespace Magento\Wishlist\Model\ResourceModel;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,6 +21,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store wishlist items count
      *
      * @var null|int
+     * @since 2.0.0
      */
     protected $_itemsCount = null;
 
@@ -27,6 +29,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store customer ID field name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_customerIdFieldName = 'customer_id';
 
@@ -34,6 +37,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Set main entity table name and primary key field name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -47,6 +51,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -61,6 +66,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Getter for customer ID field name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCustomerIdFieldName()
     {
@@ -72,6 +78,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $fieldName
      * @return $this
+     * @since 2.0.0
      */
     public function setCustomerIdFieldName($fieldName)
     {
@@ -81,6 +88,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

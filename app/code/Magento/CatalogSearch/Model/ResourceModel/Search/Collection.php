@@ -13,6 +13,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Search;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
 {
@@ -20,6 +21,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Attribute collection
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributesCollection;
 
@@ -27,6 +29,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Search query
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_searchQuery;
 
@@ -34,6 +37,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Attribute collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @since 2.0.0
      */
     protected $_attributeCollectionFactory;
 
@@ -62,6 +66,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -116,6 +121,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $query
      * @return $this
+     * @since 2.0.0
      */
     public function addSearchFilter($query)
     {
@@ -131,6 +137,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param string $query
      * @return $this
+     * @since 2.0.0
      */
     public function addBackendSearchFilter($query)
     {
@@ -146,6 +153,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Retrieve collection of all attributes
      *
      * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @since 2.0.0
      */
     protected function _getAttributesCollection()
     {
@@ -164,6 +172,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
      * @return boolean
+     * @since 2.0.0
      */
     protected function _isAttributeTextAndSearchable($attribute)
     {
@@ -185,6 +194,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
      * @return boolean
+     * @since 2.0.0
      */
     protected function _hasAttributeOptionsAndSearchable($attribute)
     {
@@ -202,6 +212,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param mixed $query
      * @param bool $searchOnlyInCurrentStore Search only in current store or in all stores
      * @return string
+     * @since 2.0.0
      */
     protected function _getSearchEntityIdsSql($query, $searchOnlyInCurrentStore = true)
     {
@@ -282,6 +293,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getSearchInOptionSql($query)
     {

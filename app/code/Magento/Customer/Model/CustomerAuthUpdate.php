@@ -8,22 +8,26 @@ namespace Magento\Customer\Model;
 
 /**
  * Customer Authentication update model.
+ * @since 2.2.0
  */
 class CustomerAuthUpdate
 {
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
+     * @since 2.2.0
      */
     protected $customerRegistry;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
+     * @since 2.2.0
      */
     protected $customerResourceModel;
 
     /**
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      * @param \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Customer\Model\CustomerRegistry $customerRegistry,
@@ -38,6 +42,7 @@ class CustomerAuthUpdate
      *
      * @param int $customerId
      * @return $this
+     * @since 2.2.0
      */
     public function saveAuth($customerId)
     {

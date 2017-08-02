@@ -22,21 +22,25 @@ use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollec
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 {
     /**
      * @var TaxClassCollectionFactory
+     * @since 2.0.0
      */
     protected $taxClassCollectionFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory
+     * @since 2.0.0
      */
     protected $searchResultsFactory;
 
     /**
      * @var ClassModelRegistry
+     * @since 2.0.0
      */
     protected $classModelRegistry;
 
@@ -46,6 +50,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * Search Criteria Builder
      *
      * @var SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -53,20 +58,26 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * Filter Builder
      *
      * @var FilterBuilder
+     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\TaxClass
+     * @since 2.0.0
      */
     protected $taxClassResource;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @since 2.0.0
      */
     protected $joinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * @since 2.2.0
+     */
     private $collectionProcessor;
 
     /**
@@ -78,6 +89,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param \Magento\Tax\Model\ResourceModel\TaxClass $taxClassResource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
+     * @since 2.0.0
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -101,6 +113,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
     {
@@ -133,6 +146,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get($taxClassId)
     {
@@ -141,6 +155,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function delete(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
     {
@@ -158,6 +173,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function deleteById($taxClassId)
     {
@@ -171,6 +187,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param \Magento\Tax\Api\Data\TaxClassInterface $taxClass
      * @return void
      * @throws InputException
+     * @since 2.0.0
      */
     protected function validateTaxClassData(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
     {
@@ -201,6 +218,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -220,7 +238,8 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param TaxClassCollection $collection
      * @return void
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, TaxClassCollection $collection)
     {
@@ -239,8 +258,9 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @return CollectionProcessorInterface
+     * @since 2.2.0
      */
     private function getCollectionProcessor()
     {

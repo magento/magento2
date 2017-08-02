@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Class RegularPrice
+ * @since 2.0.0
  */
 class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegularPriceInterface
 {
@@ -22,29 +23,37 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected $maxRegularAmount;
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected $minRegularAmount;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $values = [];
 
-    /** @var PriceResolverInterface */
+    /**
+     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @since 2.0.0
+     */
     protected $priceResolver;
 
     /**
      * @var ConfigurableOptionsProviderInterface
+     * @since 2.2.0
      */
     private $configurableOptionsProvider;
 
     /**
      * @var LowestPriceOptionsProviderInterface
+     * @since 2.2.0
      */
     private $lowestPriceOptionsProvider;
 
@@ -55,6 +64,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceResolverInterface $priceResolver
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Pricing\SaleableInterface $saleableItem,
@@ -72,6 +82,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -84,6 +95,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -92,6 +104,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMaxRegularAmount()
     {
@@ -105,6 +118,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      * Get max regular amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected function doGetMaxRegularAmount()
     {
@@ -120,6 +134,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMinRegularAmount()
     {
@@ -133,6 +148,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      * Get min regular amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected function doGetMinRegularAmount()
     {
@@ -150,6 +166,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      * Get children simple products
      *
      * @return Product[]
+     * @since 2.0.0
      */
     protected function getUsedProducts()
     {
@@ -158,7 +175,8 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConfigurableOptionsProvider()
     {

@@ -13,6 +13,7 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
  * Wysiwyg Config for Editor HTML Element
  *
  * @api
+ * @since 2.0.0
  */
 class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
@@ -48,21 +49,25 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
+     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
     /**
      * @var \Magento\Variable\Model\Variable\Config
+     * @since 2.0.0
      */
     protected $_variableConfig;
 
     /**
      * @var \Magento\Widget\Model\Widget\Config
+     * @since 2.0.0
      */
     protected $_widgetConfig;
 
@@ -70,6 +75,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -77,26 +83,31 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_windowSize;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var Filesystem
+     * @since 2.1.0
      */
     protected $filesystem;
 
@@ -113,6 +124,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * @param array $windowSize
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -155,6 +167,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      *
      * @param array|\Magento\Framework\DataObject $data Object constructor params to override default config values
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getConfig($data = [])
     {
@@ -219,6 +232,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * Return path for skin images placeholder
      *
      * @return string
+     * @since 2.0.0
      */
     public function getSkinImagePlaceholderPath()
     {
@@ -231,6 +245,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * Check whether Wysiwyg is enabled or not
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isEnabled()
     {
@@ -246,6 +261,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * Check whether Wysiwyg is loaded on demand or not
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isHidden()
     {

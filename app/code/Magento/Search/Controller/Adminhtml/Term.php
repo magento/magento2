@@ -8,6 +8,11 @@ namespace Magento\Search\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term
+ *
+ * @since 2.0.0
+ */
 abstract class Term extends Action
 {
     /**
@@ -19,6 +24,7 @@ abstract class Term extends Action
 
     /**
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     protected function createPage()
     {

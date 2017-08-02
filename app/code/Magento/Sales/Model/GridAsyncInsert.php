@@ -10,6 +10,7 @@ namespace Magento\Sales\Model;
  *
  * Performs handling of events and cron jobs related to indexing
  * of Order, Invoice, Shipment and Creditmemo grids.
+ * @since 2.0.0
  */
 class GridAsyncInsert
 {
@@ -17,6 +18,7 @@ class GridAsyncInsert
      * Entity grid model.
      *
      * @var \Magento\Sales\Model\ResourceModel\GridInterface
+     * @since 2.0.0
      */
     protected $entityGrid;
 
@@ -24,12 +26,14 @@ class GridAsyncInsert
      * Global configuration storage.
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $globalConfig;
 
     /**
      * @param \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid,
@@ -51,6 +55,7 @@ class GridAsyncInsert
      * in global settings.
      *
      * @return void
+     * @since 2.0.0
      */
     public function asyncInsert()
     {

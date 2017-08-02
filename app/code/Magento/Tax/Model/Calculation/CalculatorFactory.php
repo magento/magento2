@@ -8,6 +8,11 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\CalculatorFactory
+ *
+ * @since 2.0.0
+ */
 class CalculatorFactory
 {
     /**
@@ -27,6 +32,7 @@ class CalculatorFactory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -34,6 +40,7 @@ class CalculatorFactory
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -51,6 +58,7 @@ class CalculatorFactory
      * @param null|int $customerId
      * @return \Magento\Tax\Model\Calculation\AbstractCalculator
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function create(
         $type,

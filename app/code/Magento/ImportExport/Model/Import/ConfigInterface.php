@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\Import;
  * Provides import configuration
  *
  * @api
+ * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -16,6 +17,7 @@ interface ConfigInterface
      * Retrieve import entities configuration
      *
      * @return array
+     * @since 2.0.0
      */
     public function getEntities();
 
@@ -24,6 +26,7 @@ interface ConfigInterface
      *
      * @param string $entity
      * @return array
+     * @since 2.0.0
      */
     public function getEntityTypes($entity);
 
@@ -32,6 +35,7 @@ interface ConfigInterface
      *
      * @param string $entity
      * @return array
+     * @since 2.0.0
      */
     public function getRelatedIndexers($entity);
 }

@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Form
+ * @since 2.0.0
  */
 class Form extends \Magento\Framework\Data\Form
 {
@@ -22,6 +23,7 @@ class Form extends \Magento\Framework\Data\Form
      * Serializer that allow convert arrays to string.
      *
      * @var Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -33,6 +35,7 @@ class Form extends \Magento\Framework\Data\Form
      * @param FormKey $formKey
      * @param array $data
      * @param Json|null $serializer
+     * @since 2.2.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -48,6 +51,7 @@ class Form extends \Magento\Framework\Data\Form
     /**
      * @param array $values
      * @return $this
+     * @since 2.0.0
      */
     public function addValues($values)
     {
@@ -70,6 +74,7 @@ class Form extends \Magento\Framework\Data\Form
     /**
      * @param array $values
      * @return array
+     * @since 2.0.0
      */
     protected function getAdditionalData(array $values)
     {

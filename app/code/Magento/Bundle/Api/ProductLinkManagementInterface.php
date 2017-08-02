@@ -9,6 +9,7 @@ namespace Magento\Bundle\Api;
 /**
  * Interface for Management of ProductLink
  * @api
+ * @since 2.0.0
  */
 interface ProductLinkManagementInterface
 {
@@ -20,6 +21,7 @@ interface ProductLinkManagementInterface
      * @return \Magento\Bundle\Api\Data\LinkInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 2.0.0
      */
     public function getChildren($productSku, $optionId = null);
 
@@ -33,6 +35,7 @@ interface ProductLinkManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @return int
+     * @since 2.0.0
      */
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct);
 
@@ -43,6 +46,7 @@ interface ProductLinkManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @return bool
+     * @since 2.0.0
      */
     public function saveChild(
         $sku,
@@ -57,6 +61,7 @@ interface ProductLinkManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @return int
+     * @since 2.0.0
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -73,6 +78,7 @@ interface ProductLinkManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @return bool
+     * @since 2.0.0
      */
     public function removeChild($sku, $optionId, $childSku);
 }

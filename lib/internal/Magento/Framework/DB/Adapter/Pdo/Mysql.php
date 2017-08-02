@@ -27,6 +27,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 
 // @codingStandardsIgnoreStart
+
 /**
  * MySQL database adapter
  *
@@ -35,6 +36,7 @@ use Magento\Framework\Stdlib\StringUtils;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
@@ -69,6 +71,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Default class name for a DB statement.
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultStmtClass = \Magento\Framework\DB\Statement\Pdo\Mysql::class;
 
@@ -76,6 +79,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Current Transaction Level
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_transactionLevel    = 0;
 
@@ -83,6 +87,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Whether transaction was rolled back or not
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isRolledBack = false;
 
@@ -90,6 +95,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Set attribute to connection flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_connectionFlagsSet  = false;
 
@@ -97,6 +103,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Tables DDL cache
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_ddlCache            = [];
 
@@ -104,6 +111,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * SQL bind params. Used temporarily by regexp callback.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_bindParams          = [];
 
@@ -111,6 +119,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Autoincrement for bind value. Used by regexp callback.
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_bindIncrement       = 0;
 
@@ -118,12 +127,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Cache frontend adapter instance
      *
      * @var FrontendInterface
+     * @since 2.0.0
      */
     protected $_cacheAdapter;
 
     /**
      * DDL cache allowing flag
      * @var bool
+     * @since 2.0.0
      */
     protected $_isDdlCacheAllowed = true;
 
@@ -131,6 +142,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * MySQL column - Table DDL type pairs
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_ddlColumnTypes      = [
         Table::TYPE_BOOLEAN       => 'bool',
@@ -153,6 +165,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * First 3 symbols for each statement
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_ddlRoutines = ['alt', 'cre', 'ren', 'dro', 'tru'];
 
@@ -160,6 +173,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Allowed interval units array
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_intervalUnits = [
         self::INTERVAL_YEAR     => 'YEAR',
@@ -174,26 +188,31 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Hook callback to modify queries. Mysql specific property, designed only for backwards compatibility.
      *
      * @var array|null
+     * @since 2.0.0
      */
     protected $_queryHook = null;
 
     /**
      * @var String
+     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var SelectFactory
+     * @since 2.1.0
      */
     protected $selectFactory;
 
     /**
      * @var LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
@@ -201,16 +220,19 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Map that links database error code to corresponding Magento exception
      *
      * @var \Zend_Db_Adapter_Exception[]
+     * @since 2.2.0
      */
     private $exceptionMap;
 
     /**
      * @var QueryGenerator
+     * @since 2.2.0
      */
     private $queryGenerator;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -223,6 +245,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param SelectFactory $selectFactory
      * @param array $config
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         StringUtils $string,
@@ -261,6 +284,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function beginTransaction()
     {
@@ -281,6 +305,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function commit()
     {
@@ -302,6 +327,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function rollBack()
     {
@@ -323,6 +349,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Get adapter transaction level state. Return 0 if all transactions are complete
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTransactionLevel()
     {
@@ -334,6 +361,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param int|string|\DateTimeInterface $date
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function convertDate($date)
     {
@@ -345,6 +373,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param   int|string|\DateTimeInterface $datetime
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function convertDateTime($datetime)
     {
@@ -360,6 +389,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return void
      * @throws \Zend_Db_Adapter_Exception
      * @throws \Zend_Db_Statement_Exception
+     * @since 2.0.0
      */
     protected function _connect()
     {
@@ -426,6 +456,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $sql
      * @return \Zend_Db_Statement_Interface
      * @throws \PDOException
+     * @since 2.0.0
      */
     public function rawQuery($sql)
     {
@@ -449,6 +480,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $sql
      * @param string|int $field
      * @return mixed|null
+     * @since 2.0.0
      */
     public function rawFetchRow($sql, $field = null)
     {
@@ -475,6 +507,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql
      * @return void
      * @throws \Zend_Db_Adapter_Exception
+     * @since 2.0.0
      */
     protected function _checkDdlTransaction($sql)
     {
@@ -498,6 +531,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _query($sql, $bind = [])
     {
@@ -569,6 +603,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function query($sql, $bind = [])
     {
@@ -591,7 +626,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -606,6 +642,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param \Magento\Framework\DB\Select|string $sql
      * @param mixed $bind
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareQuery(&$sql, &$bind = [])
     {
@@ -646,6 +683,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string[] $matches
      * @return string
+     * @since 2.0.0
      */
     public function proccessBindCallback($matches)
     {
@@ -666,6 +704,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $string
      * @return string
+     * @since 2.0.0
      */
     protected function _unQuote($string)
     {
@@ -688,6 +727,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $sql
      * @param array $bind
      * @return $this
+     * @since 2.0.0
      */
     protected function _convertMixedBind(&$sql, &$bind)
     {
@@ -743,6 +783,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param array $hook
      * @return array|null
+     * @since 2.0.0
      */
     public function setQueryHook($hook)
     {
@@ -758,7 +799,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     protected function _splitMultiQuery($sql)
     {
@@ -822,6 +864,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $fkName
      * @param string $schemaName
      * @return $this
+     * @since 2.0.0
      */
     public function dropForeignKey($tableName, $fkName, $schemaName = null)
     {
@@ -853,6 +896,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refColumnName
      * @param string $onDelete
      * @return $this
+     * @since 2.0.0
      */
     public function purgeOrphanRecords(
         $tableName,
@@ -897,6 +941,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $columnName
      * @param string $schemaName
      * @return bool
+     * @since 2.0.0
      */
     public function tableColumnExists($tableName, $columnName, $schemaName = null)
     {
@@ -922,6 +967,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param   string $schemaName
      * @return  true|\Zend_Db_Statement_Pdo
      * @throws  \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
     {
@@ -963,6 +1009,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $columnName
      * @param string $schemaName
      * @return true|\Zend_Db_Statement_Pdo
+     * @since 2.0.0
      */
     public function dropColumn($tableName, $columnName, $schemaName = null)
     {
@@ -1011,6 +1058,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $columns
      * @param string|null $schemaName
      * @return array|null
+     * @since 2.0.0
      */
     protected function _getIndexByColumns($tableName, array $columns, $schemaName)
     {
@@ -1035,6 +1083,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $schemaName
      * @return \Zend_Db_Statement_Pdo
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function changeColumn(
         $tableName,
@@ -1086,6 +1135,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $schemaName
      * @return $this
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function modifyColumn($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
     {
@@ -1118,6 +1168,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return mixed
+     * @since 2.0.0
      */
     public function showTableStatus($tableName, $schemaName = null)
     {
@@ -1136,6 +1187,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return string
+     * @since 2.0.0
      */
     public function getCreateTable($tableName, $schemaName = null)
     {
@@ -1171,6 +1223,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return array
+     * @since 2.0.0
      */
     public function getForeignKeys($tableName, $schemaName = null)
     {
@@ -1210,6 +1263,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Retrieve the foreign keys tree for all tables
      *
      * @return array
+     * @since 2.0.0
      */
     public function getForeignKeysTree()
     {
@@ -1239,6 +1293,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function modifyTables($tables)
     {
@@ -1314,6 +1369,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return array|string|int
+     * @since 2.0.0
      */
     public function getIndexList($tableName, $schemaName = null)
     {
@@ -1372,6 +1428,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $fields
      * @param string[] $ids
      * @return $this
+     * @since 2.0.0
      */
     protected function _removeDuplicateEntry($table, $fields, $ids)
     {
@@ -1405,6 +1462,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Creates and returns a new \Magento\Framework\DB\Select object for this adapter.
      *
      * @return Select
+     * @since 2.0.0
      */
     public function select()
     {
@@ -1421,6 +1479,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string  $type  OPTIONAL SQL datatype
      * @param integer $count OPTIONAL count of placeholders to replace
      * @return string An SQL-safe quoted value placed into the orignal text.
+     * @since 2.0.0
      */
     public function quoteInto($text, $value, $type = null, $count = null)
     {
@@ -1441,6 +1500,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return string
+     * @since 2.0.0
      */
     protected function _getTableName($tableName, $schemaName = null)
     {
@@ -1453,6 +1513,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableKey
      * @param int $ddlType
      * @return string
+     * @since 2.0.0
      */
     protected function _getCacheId($tableKey, $ddlType)
     {
@@ -1466,6 +1527,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableCacheKey the table cache key
      * @param int $ddlType          the DDL constant
      * @return string|array|int|false
+     * @since 2.0.0
      */
     public function loadDdlCache($tableCacheKey, $ddlType)
     {
@@ -1496,6 +1558,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $ddlType
      * @param array $data
      * @return $this
+     * @since 2.0.0
      */
     public function saveDdlCache($tableCacheKey, $ddlType, $data)
     {
@@ -1520,6 +1583,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName OPTIONAL
      * @return $this
+     * @since 2.0.0
      */
     public function resetDdlCache($tableName = null, $schemaName = null)
     {
@@ -1553,6 +1617,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Disallow DDL caching
      * @return $this
+     * @since 2.0.0
      */
     public function disallowDdlCache()
     {
@@ -1563,6 +1628,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Allow DDL caching
      * @return $this
+     * @since 2.0.0
      */
     public function allowDdlCache()
     {
@@ -1597,6 +1663,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName OPTIONAL
      * @return array
+     * @since 2.0.0
      */
     public function describeTable($tableName, $schemaName = null)
     {
@@ -1628,6 +1695,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function getColumnCreateByDescribe($columnData)
     {
@@ -1677,6 +1745,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $newTableName
      * @return Table
+     * @since 2.0.0
      */
     public function createTableByDdl($tableName, $newTableName)
     {
@@ -1748,6 +1817,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param boolean $flushData
      * @param string $schemaName
      * @return $this
+     * @since 2.0.0
      */
     public function modifyColumnByDdl($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
     {
@@ -1766,6 +1836,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $column
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function _getColumnTypeByDdl($column)
     {
@@ -1812,6 +1883,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $engine
      * @param string $schemaName
      * @return \Zend_Db_Statement_Pdo
+     * @since 2.0.0
      */
     public function changeTableEngine($tableName, $engine, $schemaName = null)
     {
@@ -1828,6 +1900,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $comment
      * @param string $schemaName
      * @return \Zend_Db_Statement_Pdo
+     * @since 2.0.0
      */
     public function changeTableComment($tableName, $comment, $schemaName = null)
     {
@@ -1844,6 +1917,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $table
      * @param array $bind
      * @return int The number of affected rows.
+     * @since 2.0.0
      */
     public function insertForce($table, array $bind)
     {
@@ -1864,6 +1938,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function insertOnDuplicate($table, array $data, array $fields = [])
     {
@@ -1933,6 +2008,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $data Column-value pairs or array of Column-value pairs.
      * @return int The number of affected rows.
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function insertMultiple($table, array $data)
     {
@@ -1978,6 +2054,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param   int $strategy
      * @return int
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function insertArray($table, array $columns, array $data, $strategy = 0)
     {
@@ -2011,6 +2088,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param FrontendInterface $cacheAdapter
      * @return $this
+     * @since 2.0.0
      */
     public function setCacheAdapter(FrontendInterface $cacheAdapter)
     {
@@ -2024,6 +2102,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName the table name
      * @param string $schemaName the database/schema name
      * @return Table
+     * @since 2.0.0
      */
     public function newTable($tableName = null, $schemaName = null)
     {
@@ -2047,6 +2126,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Table $table
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Statement_Pdo
+     * @since 2.0.0
      */
     public function createTable(Table $table)
     {
@@ -2082,6 +2162,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Pdo_Statement
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function createTemporaryTable(\Magento\Framework\DB\Ddl\Table $table)
     {
@@ -2109,6 +2190,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $originTableName
      * @param bool $ifNotExists
      * @return \Zend_Db_Statement_Pdo
+     * @since 2.0.0
      */
     public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
     {
@@ -2127,6 +2209,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return boolean
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function renameTablesBatch(array $tablePairs)
     {
@@ -2161,6 +2244,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Table $table
      * @return string[]
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     protected function _getColumnsDefinition(Table $table)
     {
@@ -2199,6 +2283,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param Table $table
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getIndexesDefinition(Table $table)
     {
@@ -2248,6 +2333,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param Table $table
      * @return bool
+     * @since 2.0.0
      */
     protected function isNdb(Table $table)
     {
@@ -2260,6 +2346,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param Table $table
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getForeignKeysDefinition(Table $table)
     {
@@ -2289,6 +2376,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Table $table
      * @return string[]
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     protected function _getOptionsDefinition(Table $table)
     {
@@ -2327,6 +2415,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param  array $options
      * @param  null|string $ddlType
      * @return string
+     * @since 2.0.0
      */
     public function getColumnDefinitionFromDescribe($options, $ddlType = null)
     {
@@ -2349,6 +2438,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     protected function _getColumnDefinition($options, $ddlType = null)
     {
@@ -2488,6 +2578,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return true
+     * @since 2.0.0
      */
     public function dropTable($tableName, $schemaName = null)
     {
@@ -2504,6 +2595,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return boolean
+     * @since 2.0.0
      */
     public function dropTemporaryTable($tableName, $schemaName = null)
     {
@@ -2521,6 +2613,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $schemaName
      * @return $this
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function truncateTable($tableName, $schemaName = null)
     {
@@ -2541,6 +2634,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return bool
+     * @since 2.0.0
      */
     public function isTableExists($tableName, $schemaName = null)
     {
@@ -2555,6 +2649,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $schemaName
      * @return true
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function renameTable($oldTableName, $newTableName, $schemaName = null)
     {
@@ -2589,6 +2684,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function addIndex(
         $tableName,
@@ -2674,6 +2770,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $keyName
      * @param string $schemaName
      * @return true|\Zend_Db_Statement_Interface
+     * @since 2.0.0
      */
     public function dropIndex($tableName, $keyName, $schemaName = null)
     {
@@ -2714,6 +2811,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refSchemaName
      * @return \Zend_Db_Statement_Interface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function addForeignKey(
         $fkName,
@@ -2756,6 +2854,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int|string|\DateTimeInterface $date
      * @param bool $includeTime
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function formatDate($date, $includeTime = true)
     {
@@ -2772,6 +2871,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Run additional environment before setup
      *
      * @return $this
+     * @since 2.0.0
      */
     public function startSetup()
     {
@@ -2786,6 +2886,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Run additional environment after setup
      *
      * @return $this
+     * @since 2.0.0
      */
     public function endSetup()
     {
@@ -2825,6 +2926,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param integer|string|array $condition
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function prepareSqlCondition($fieldName, $condition)
     {
@@ -2897,6 +2999,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param  mixed $value
      * @param  string $fieldName
      * @return string
+     * @since 2.0.0
      */
     protected function _prepareQuotedSqlCondition($text, $value, $fieldName)
     {
@@ -2913,6 +3016,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $conditionKey
      * @param mixed $value
      * @return string
+     * @since 2.0.0
      */
     protected function _transformStringSqlCondition($conditionKey, $value)
     {
@@ -2934,6 +3038,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function prepareColumnValue(array $column, $value)
     {
@@ -3018,6 +3123,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $true  true value
      * @param string $false false value
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getCheckSql($expression, $true, $false)
     {
@@ -3036,6 +3142,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param \Zend_Db_Expr|\Magento\Framework\DB\Select|string $expression
      * @param string|int $value OPTIONAL. Applies when $expression is NULL
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getIfNullSql($expression, $value = 0)
     {
@@ -3056,6 +3163,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $casesResults Cases and results
      * @param string $defaultValue value to use if value doesn't confirm to any cases
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getCaseSql($valueName, $casesResults, $defaultValue = null)
     {
@@ -3078,6 +3186,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string[] $data
      * @param string $separator concatenate with separator
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getConcatSql(array $data, $separator = null)
     {
@@ -3091,6 +3200,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $string
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getLengthSql($string)
     {
@@ -3104,6 +3214,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string[] $data
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getLeastSql(array $data)
     {
@@ -3117,6 +3228,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string[] $data
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getGreatestSql(array $data)
     {
@@ -3130,6 +3242,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $unit
      * @return string
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     protected function _getIntervalUnitSql($interval, $unit)
     {
@@ -3149,6 +3262,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $interval
      * @param string $unit
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getDateAddSql($date, $interval, $unit)
     {
@@ -3165,6 +3279,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int|string $interval
      * @param string $unit
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getDateSubSql($date, $interval, $unit)
     {
@@ -3187,6 +3302,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $date  quoted date value or non quoted SQL statement(field)
      * @param string $format
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getDateFormatSql($date, $format)
     {
@@ -3199,6 +3315,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getDatePartSql($date)
     {
@@ -3212,6 +3329,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int|string|\Zend_Db_Expr $pos
      * @param int|string|\Zend_Db_Expr|null $len
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getSubstringSql($stringExpression, $pos, $len = null)
     {
@@ -3226,6 +3344,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param \Zend_Db_Expr|string $expressionField   quoted field name or SQL statement
      * @return \Zend_Db_Expr
+     * @since 2.0.0
      */
     public function getStandardDeviationSql($expressionField)
     {
@@ -3241,6 +3360,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $unit
      * @return \Zend_Db_Expr
      * @throws \Zend_Db_Exception
+     * @since 2.0.0
      */
     public function getDateExtractSql($date, $unit)
     {
@@ -3258,6 +3378,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTableName($tableName)
     {
@@ -3272,6 +3393,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTriggerName($tableName, $time, $event)
     {
@@ -3287,6 +3409,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string|string[] $fields  the columns list
      * @param string $indexType
      * @return string
+     * @since 2.0.0
      */
     public function getIndexName($tableName, $fields, $indexType = '')
     {
@@ -3318,6 +3441,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refColumnName
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
@@ -3331,6 +3455,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return $this
+     * @since 2.0.0
      */
     public function disableTableKeys($tableName, $schemaName = null)
     {
@@ -3347,6 +3472,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string $schemaName
      * @return $this
+     * @since 2.0.0
      */
     public function enableTableKeys($tableName, $schemaName = null)
     {
@@ -3365,6 +3491,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $fields
      * @param int|false $mode
      * @return string
+     * @since 2.0.0
      */
     public function insertFromSelect(Select $select, $table, array $fields = [], $mode = false)
     {
@@ -3394,6 +3521,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $table
      * @param array $fields
      * @return string
+     * @since 2.2.0
      */
     private function renderOnDuplicate($table, array $fields)
     {
@@ -3421,7 +3549,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.0.0
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
@@ -3437,7 +3566,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Get query generator
      *
      * @return QueryGenerator
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getQueryGenerator()
     {
@@ -3456,6 +3586,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function updateFromSelect(Select $select, $table)
     {
@@ -3533,6 +3664,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Select $select
      * @param string $table the table name or alias used in select
      * @return string
+     * @since 2.0.0
      */
     public function deleteFromSelect(Select $select, $table)
     {
@@ -3551,6 +3683,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array|string $tableNames array of tables names | table name
      * @param string $schemaName schema name
      * @return array
+     * @since 2.0.0
      */
     public function getTablesChecksum($tableNames, $schemaName = null)
     {
@@ -3570,6 +3703,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Check if the database support STRAIGHT JOIN
      *
      * @return true
+     * @since 2.0.0
      */
     public function supportStraightJoin()
     {
@@ -3583,6 +3717,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Select $select
      * @param string $field
      * @return $this
+     * @since 2.0.0
      */
     public function orderRand(Select $select, $field = null)
     {
@@ -3603,6 +3738,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $sql
      * @return string
+     * @since 2.0.0
      */
     public function forUpdate($sql)
     {
@@ -3615,6 +3751,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param mixed $row
      * @param array $bind
      * @return string
+     * @since 2.0.0
      */
     protected function _prepareInsertData($row, &$bind)
     {
@@ -3640,6 +3777,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $columns
      * @param array $values
      * @return string
+     * @since 2.0.0
      */
     protected function _getInsertSqlQuery($tableName, array $columns, array $values)
     {
@@ -3660,6 +3798,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $columns
      * @param array $values
      * @return string
+     * @since 2.2.0
      */
     protected function _getReplaceSqlQuery($tableName, array $columns, array $values)
     {
@@ -3678,6 +3817,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param array $options
      * @return string
+     * @since 2.0.0
      */
     protected function _getDdlType($options)
     {
@@ -3696,6 +3836,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $action
      * @return string
+     * @since 2.0.0
      */
     protected function _getDdlAction($action)
     {
@@ -3717,6 +3858,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $condition
      * @param string $key
      * @return string
+     * @since 2.0.0
      */
     protected function _prepareSqlDateCondition($condition, $key)
     {
@@ -3739,6 +3881,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName Table name
      * @param string $schemaName OPTIONAL
      * @return string Primary Key name
+     * @since 2.0.0
      */
     public function getPrimaryKeyName($tableName, $schemaName = null)
     {
@@ -3756,6 +3899,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string|int $size
      * @return int
+     * @since 2.0.0
      */
     protected function _parseTextSize($size)
     {
@@ -3790,6 +3934,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     public function decodeVarbinary($value)
     {
@@ -3802,6 +3947,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param \Magento\Framework\DB\Ddl\Trigger $trigger
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Statement_Pdo
+     * @since 2.0.0
      */
     public function createTrigger(\Magento\Framework\DB\Ddl\Trigger $trigger)
     {
@@ -3835,6 +3981,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string|null $schemaName
      * @return bool
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function dropTrigger($triggerName, $schemaName = null)
     {
@@ -3854,6 +4001,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Check if all transactions have been committed
      *
      * @return void
+     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -3867,6 +4015,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param null|string $likeCondition
      * @return array
+     * @since 2.0.0
      */
     public function getTables($likeCondition = null)
     {
@@ -3885,6 +4034,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string|null $schemaName
      * @return string|bool
+     * @since 2.1.0
      */
     public function getAutoIncrementField($tableName, $schemaName = null)
     {

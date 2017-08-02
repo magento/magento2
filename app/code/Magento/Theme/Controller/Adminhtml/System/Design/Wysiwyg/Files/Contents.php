@@ -6,12 +6,18 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Contents
+ *
+ * @since 2.0.0
+ */
 class Contents extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * Contents action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -9,6 +9,11 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 use Magento\Backend\App\Action;
 use Magento\ConfigurableProduct\Model\SuggestedAttributeList;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\SuggestConfigurableAttributes
+ *
+ * @since 2.0.0
+ */
 class SuggestConfigurableAttributes extends Action
 {
     /**
@@ -20,11 +25,13 @@ class SuggestConfigurableAttributes extends Action
 
     /**
      * @var \Magento\ConfigurableProduct\Model\SuggestedAttributeList
+     * @since 2.0.0
      */
     protected $attributeList;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -32,6 +39,7 @@ class SuggestConfigurableAttributes extends Action
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -40,6 +48,7 @@ class SuggestConfigurableAttributes extends Action
      * @param SuggestedAttributeList $attributeList
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -57,6 +66,7 @@ class SuggestConfigurableAttributes extends Action
      * Search for attributes by part of attribute's label in admin store
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -16,16 +16,19 @@ use Magento\Framework\View\Element\Template\Context;
  * Transparent form block
  *
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Payment\Block\Form\Cc
 {
     /**
      * @var Session
+     * @since 2.0.0
      */
     private $checkoutSession;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'Magento_Payment::transparent/form.phtml';
 
@@ -34,6 +37,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * @param Config $paymentConfig
      * @param Session $checkoutSession
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -47,6 +51,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -62,6 +67,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * basing on TransparentInterface presence in checkout session
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function shouldRender()
     {
@@ -78,6 +84,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Initializes method
      *
      * @return void
+     * @since 2.0.0
      */
     protected function initializeMethod()
     {
@@ -94,6 +101,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Parent rendering wrapper
      *
      * @return string
+     * @since 2.0.0
      */
     protected function processHtml()
     {
@@ -105,6 +113,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Get type of request
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAjaxRequest()
     {
@@ -115,6 +124,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Get delimiter for date
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDateDelim()
     {
@@ -126,6 +136,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Returns json formatted string
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCardFieldsMap()
     {
@@ -138,6 +149,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Retrieve place order url on front
      *
      * @return string
+     * @since 2.0.0
      */
     public function getOrderUrl()
     {
@@ -153,6 +165,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      * Retrieve gateway url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCgiUrl()
     {
@@ -166,6 +179,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      *
      * @param string $fieldName
      * @return mixed
+     * @since 2.0.0
      */
     public function getMethodConfigData($fieldName)
     {
@@ -181,6 +195,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      *
      * @return TransparentInterface
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function getMethod()
     {

@@ -10,6 +10,7 @@ namespace Magento\Review\Block\Adminhtml\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
@@ -17,6 +18,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Website collection
      *
      * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory
+     * @since 2.0.0
      */
     protected $_websitesFactory;
 
@@ -34,6 +36,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -67,6 +70,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Initialize review
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -79,6 +83,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Prepare product review grid
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -139,6 +144,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Get catalog product grid url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -150,6 +156,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {
@@ -160,6 +167,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * Prepare mass action
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareMassaction()
     {

@@ -8,10 +8,16 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\CreateBackup
+ *
+ * @since 2.0.0
+ */
 class CreateBackup extends AbstractActionController
 {
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function indexAction()
     {

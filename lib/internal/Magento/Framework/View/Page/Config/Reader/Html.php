@@ -10,6 +10,7 @@ use Magento\Framework\View\Page\Config as PageConfig;
 
 /**
  * Html reader is used for collecting attributes of html in to the scheduled page structure
+ * @since 2.0.0
  */
 class Html implements Layout\ReaderInterface
 {
@@ -29,6 +30,7 @@ class Html implements Layout\ReaderInterface
      * {@inheritdoc}
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getSupportedNodes()
     {
@@ -41,6 +43,7 @@ class Html implements Layout\ReaderInterface
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $htmlElement
      * @return $this
+     * @since 2.0.0
      */
     public function interpret(
         Layout\Reader\Context $readerContext,

@@ -10,6 +10,7 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 /**
  * Class DateRange
  * @api
+ * @since 2.0.0
  */
 class DateRange extends Range
 {
@@ -19,6 +20,7 @@ class DateRange extends Range
      * Wrapped component
      *
      * @var DataTypeDate
+     * @since 2.0.0
      */
     protected $wrappedComponent;
 
@@ -26,6 +28,7 @@ class DateRange extends Range
      * Prepare component configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {
@@ -46,6 +49,7 @@ class DateRange extends Range
      * @param string $type
      * @param string $value
      * @return void
+     * @since 2.0.0
      */
     protected function applyFilterByType($type, $value)
     {

@@ -15,6 +15,7 @@ use Magento\Ui\Component\Layout\Tabs\TabWrapper;
  *
  * @package Magento\Checkout\Block\Adminhtml
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class CartTab extends TabWrapper
 {
@@ -22,11 +23,13 @@ class CartTab extends TabWrapper
      * Core registry
      *
      * @var Registry
+     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $isAjaxLoaded = true;
 
@@ -36,6 +39,7 @@ class CartTab extends TabWrapper
      * @param Context $context
      * @param Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(Context $context, Registry $registry, array $data = [])
     {
@@ -45,6 +49,7 @@ class CartTab extends TabWrapper
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -55,6 +60,7 @@ class CartTab extends TabWrapper
      * Return Tab label
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -65,6 +71,7 @@ class CartTab extends TabWrapper
      * Return URL link to Tab content
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTabUrl()
     {

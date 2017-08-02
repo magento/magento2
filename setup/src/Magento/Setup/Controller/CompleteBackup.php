@@ -10,10 +10,16 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\CompleteBackup
+ *
+ * @since 2.0.0
+ */
 class CompleteBackup extends AbstractActionController
 {
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function indexAction()
     {
@@ -25,6 +31,7 @@ class CompleteBackup extends AbstractActionController
 
     /**
      * @return array|ViewModel
+     * @since 2.0.0
      */
     public function progressAction()
     {

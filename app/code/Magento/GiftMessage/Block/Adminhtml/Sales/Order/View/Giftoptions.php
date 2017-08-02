@@ -11,6 +11,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Giftoptions extends \Magento\Backend\Block\Template
 {
@@ -18,6 +19,7 @@ class Giftoptions extends \Magento\Backend\Block\Template
      * Get order item object from parent block
      *
      * @return \Magento\Sales\Model\Order\Item
+     * @since 2.0.0
      */
     public function getItem()
     {

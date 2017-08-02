@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Config\Reader;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Config\Reader\Dom
+ *
+ * @since 2.0.0
+ */
 class Dom extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -14,6 +19,7 @@ class Dom extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/config/preference' => 'for',
@@ -32,6 +38,7 @@ class Dom extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
@@ -59,6 +66,7 @@ class Dom extends \Magento\Framework\Config\Reader\Filesystem
      * Create and return a config merger instance that takes into account types of arguments
      *
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _createConfigMerger($mergerClass, $initialContents)
     {

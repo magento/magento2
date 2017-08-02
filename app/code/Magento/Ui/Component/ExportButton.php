@@ -10,6 +10,7 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class ExportButton
+ * @since 2.0.0
  */
 class ExportButton extends AbstractComponent
 {
@@ -20,6 +21,7 @@ class ExportButton extends AbstractComponent
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -28,6 +30,7 @@ class ExportButton extends AbstractComponent
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -43,6 +46,7 @@ class ExportButton extends AbstractComponent
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -51,6 +55,7 @@ class ExportButton extends AbstractComponent
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function prepare()
     {

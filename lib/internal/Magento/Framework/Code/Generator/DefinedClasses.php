@@ -10,6 +10,7 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 
 /**
  * DefinedClasses class detects if a class has been defined
+ * @since 2.0.0
  */
 class DefinedClasses
 {
@@ -18,6 +19,7 @@ class DefinedClasses
      *
      * @param string $className
      * @return bool
+     * @since 2.0.0
      */
     public function isClassLoadable($className)
     {
@@ -29,6 +31,7 @@ class DefinedClasses
      *
      * @param string $className
      * @return bool
+     * @since 2.0.0
      */
     public function isClassLoadableFromMemory($className)
     {
@@ -40,6 +43,7 @@ class DefinedClasses
      *
      * @param string $className
      * @return bool
+     * @since 2.0.0
      */
     public function isClassLoadableFromDisc($className)
     {

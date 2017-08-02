@@ -9,6 +9,7 @@ use Magento\Framework\Config\ConverterInterface;
 
 /**
  * Class Converter
+ * @since 2.0.0
  */
 class Converter implements ConverterInterface
 {
@@ -17,6 +18,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -54,6 +56,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMElement $node
      * @return array
+     * @since 2.0.0
      */
     protected function createEvents(\DOMElement $node)
     {
@@ -76,6 +79,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMElement $node
      * @return array
+     * @since 2.0.0
      */
     protected function createPredicate(\DOMElement $node)
     {
@@ -100,6 +104,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMElement $node
      * @return array
+     * @since 2.0.0
      */
     protected function createRelation(\DOMElement $node)
     {
@@ -122,6 +127,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMElement $node
      * @return array
+     * @since 2.0.0
      */
     protected function createArgument(\DOMElement $node)
     {
@@ -141,6 +147,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return bool
+     * @since 2.0.0
      */
     protected function hasNodeElement(\DOMNode $node)
     {

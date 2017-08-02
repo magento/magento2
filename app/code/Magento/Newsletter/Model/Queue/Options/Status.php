@@ -11,12 +11,18 @@
  */
 namespace Magento\Newsletter\Model\Queue\Options;
 
+/**
+ * Class \Magento\Newsletter\Model\Queue\Options\Status
+ *
+ * @since 2.0.0
+ */
 class Status implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Return statuses option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

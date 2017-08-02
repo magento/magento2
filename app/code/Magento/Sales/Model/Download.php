@@ -8,30 +8,40 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Sales\Model\Download
+ *
+ * @since 2.0.0
+ */
 class Download
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $_rootDir;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_fileStorageDatabase;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
+     * @since 2.0.0
      */
     protected $_storageDatabaseFactory;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @since 2.0.0
      */
     protected $_fileFactory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $rootDirBasePath;
 
@@ -41,6 +51,7 @@ class Download
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param string $rootDirBasePath
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -62,6 +73,7 @@ class Download
      * @param array $info
      * @return void
      * @throws \Exception
+     * @since 2.0.0
      */
     public function downloadFile($info)
     {
@@ -85,6 +97,7 @@ class Download
     /**
      * @param string $relativePath
      * @return bool
+     * @since 2.0.0
      */
     protected function _isCanProcessed($relativePath)
     {
@@ -101,6 +114,7 @@ class Download
      * @param string $filePath
      * @param string $relativePath
      * @return bool
+     * @since 2.0.0
      */
     protected function _processDatabaseFile($filePath, $relativePath)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Shippers Modesource model
+ * @since 2.0.0
  */
 class Mode implements OptionSourceInterface
 {
@@ -16,6 +17,7 @@ class Mode implements OptionSourceInterface
      * Returns array to be used in packages request type on back-end
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

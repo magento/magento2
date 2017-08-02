@@ -11,6 +11,7 @@ use Magento\Framework\Search\Request\BucketInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface DataProviderInterface
 {
@@ -18,12 +19,14 @@ interface DataProviderInterface
      * Get range
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRange();
 
     /**
      * @param EntityStorage $entityStorage
      * @return array
+     * @since 2.0.0
      */
     public function getAggregations(EntityStorage $entityStorage);
 
@@ -32,6 +35,7 @@ interface DataProviderInterface
      * @param array $dimensions
      * @param EntityStorage $entityStorage
      * @return IntervalInterface
+     * @since 2.0.0
      */
     public function getInterval(
         BucketInterface $bucket,
@@ -45,6 +49,7 @@ interface DataProviderInterface
      * @param int $range
      * @param EntityStorage $entityStorage
      * @return array
+     * @since 2.0.0
      */
     public function getAggregation(
         BucketInterface $bucket,
@@ -57,6 +62,7 @@ interface DataProviderInterface
      * @param int $range
      * @param array $dbRanges
      * @return array
+     * @since 2.0.0
      */
     public function prepareData($range, array $dbRanges);
 }

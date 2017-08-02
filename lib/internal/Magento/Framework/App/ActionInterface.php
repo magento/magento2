@@ -9,6 +9,7 @@ namespace Magento\Framework\App;
  * Magento application action controller type. Every action controller in Application should implement this interface.
  *
  * @api
+ * @since 2.0.0
  */
 interface ActionInterface
 {
@@ -29,6 +30,7 @@ interface ActionInterface
      *
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
+     * @since 2.0.0
      */
     public function execute();
 }

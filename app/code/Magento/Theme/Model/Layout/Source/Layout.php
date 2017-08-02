@@ -5,15 +5,22 @@
  */
 namespace Magento\Theme\Model\Layout\Source;
 
+/**
+ * Class \Magento\Theme\Model\Layout\Source\Layout
+ *
+ * @since 2.0.0
+ */
 class Layout implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Theme\Model\Layout\Config
+     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @param \Magento\Theme\Model\Layout\Config $config
+     * @since 2.0.0
      */
     public function __construct(\Magento\Theme\Model\Layout\Config $config)
     {
@@ -24,12 +31,14 @@ class Layout implements \Magento\Framework\Option\ArrayInterface
      * Page layout options
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_options = null;
 
     /**
      * Default option
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultValue = null;
 
@@ -37,6 +46,7 @@ class Layout implements \Magento\Framework\Option\ArrayInterface
      * Retrieve page layout options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -58,6 +68,7 @@ class Layout implements \Magento\Framework\Option\ArrayInterface
      *
      * @param bool $withEmpty
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray($withEmpty = false)
     {
@@ -77,6 +88,7 @@ class Layout implements \Magento\Framework\Option\ArrayInterface
     /**
      * Default options value getter
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultValue()
     {

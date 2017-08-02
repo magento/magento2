@@ -10,31 +10,37 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 
 /**
  * Shopping cart controller
+ * @since 2.0.0
  */
 abstract class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var \Magento\Checkout\Model\Cart
+     * @since 2.0.0
      */
     protected $cart;
 
@@ -46,6 +52,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -69,6 +76,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
      * @param null|string $backUrl
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     protected function _goBack($backUrl = null)
     {
@@ -86,6 +94,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
      *
      * @param string $url
      * @return bool
+     * @since 2.0.0
      */
     protected function _isInternalUrl($url)
     {
@@ -109,6 +118,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
      * @param null $defaultUrl
      *
      * @return mixed|null|string
+     * @since 2.0.0
      */
     protected function getBackUrl($defaultUrl = null)
     {

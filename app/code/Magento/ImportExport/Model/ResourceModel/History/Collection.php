@@ -11,6 +11,7 @@ use \Magento\ImportExport\Model\History;
  * Import history collection
  *
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -18,6 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Link table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_linkTable;
 
@@ -25,6 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model and assign link table name
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -39,6 +42,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Init select
      *
      * @return \Magento\ImportExport\Model\ResourceModel\History\Collection
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

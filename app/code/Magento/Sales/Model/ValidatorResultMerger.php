@@ -7,11 +7,13 @@ namespace Magento\Sales\Model;
 
 /**
  * Class ValidatorResultMerger
+ * @since 2.2.0
  */
 class ValidatorResultMerger
 {
     /**
      * @var ValidatorResultInterfaceFactory
+     * @since 2.2.0
      */
     private $validatorResultInterfaceFactory;
 
@@ -19,6 +21,7 @@ class ValidatorResultMerger
      * ValidatorResultMerger constructor.
      *
      * @param ValidatorResultInterfaceFactory $validatorResultInterfaceFactory
+     * @since 2.2.0
      */
     public function __construct(ValidatorResultInterfaceFactory $validatorResultInterfaceFactory)
     {
@@ -32,6 +35,7 @@ class ValidatorResultMerger
      * @param ValidatorResultInterface $second
      * @param \string[] $validatorMessages
      * @return ValidatorResultInterface
+     * @since 2.2.0
      */
     public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second, ... $validatorMessages)
     {

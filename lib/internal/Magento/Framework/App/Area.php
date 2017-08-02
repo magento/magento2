@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
  * Application area model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {
@@ -37,6 +38,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Array of area loaded parts
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_loadedParts;
 
@@ -44,6 +46,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Area code
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_code;
 
@@ -51,6 +54,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -58,6 +62,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Translator
      *
      * @var \Magento\Framework\TranslateInterface
+     * @since 2.0.0
      */
     protected $_translator;
 
@@ -65,16 +70,19 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var ConfigLoaderInterface
+     * @since 2.0.0
      */
     protected $_diConfigLoader;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -82,16 +90,19 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Core design
      *
      * @var \Magento\Framework\App\DesignInterface
+     * @since 2.0.0
      */
     protected $_design;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
+     * @since 2.0.0
      */
     protected $_scopeResolver;
 
     /**
      * @var \Magento\Framework\View\DesignExceptions
+     * @since 2.0.0
      */
     protected $_designExceptions;
 
@@ -105,6 +116,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\View\DesignExceptions $designExceptions
      * @param string $areaCode
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -133,6 +145,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @param   string|null $part
      * @return  $this
+     * @since 2.0.0
      */
     public function load($part = null)
     {
@@ -149,6 +162,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return void
+     * @since 2.0.0
      */
     public function detectDesign($request = null)
     {
@@ -169,6 +183,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
+     * @since 2.0.0
      */
     protected function _applyUserAgentDesignException($request)
     {
@@ -186,6 +201,7 @@ class Area implements \Magento\Framework\App\AreaInterface
 
     /**
      * @return \Magento\Framework\View\DesignInterface
+     * @since 2.0.0
      */
     protected function _getDesign()
     {
@@ -197,6 +213,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @param   string $part
      * @return  $this
+     * @since 2.0.0
      */
     protected function _loadPart($part)
     {
@@ -227,6 +244,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Load area configuration
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initConfig()
     {
@@ -238,6 +256,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Initialize translate object.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initTranslate()
     {
@@ -254,6 +273,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * Initialize design
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initDesign()
     {

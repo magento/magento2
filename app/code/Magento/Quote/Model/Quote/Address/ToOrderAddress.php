@@ -13,21 +13,25 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
  * Class ToOrderAddress
+ * @since 2.0.0
  */
 class ToOrderAddress
 {
     /**
      * @var Copy
+     * @since 2.0.0
      */
     protected $objectCopyService;
 
     /**
      * @var OrderAddressRepository
+     * @since 2.0.0
      */
     protected $orderAddressRepository;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
+     * @since 2.0.0
      */
     protected $dataObjectHelper;
 
@@ -35,6 +39,7 @@ class ToOrderAddress
      * @param OrderAddressRepository $orderAddressRepository
      * @param Copy $objectCopyService
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @since 2.0.0
      */
     public function __construct(
         OrderAddressRepository $orderAddressRepository,
@@ -50,6 +55,7 @@ class ToOrderAddress
      * @param Address $object
      * @param array $data
      * @return OrderAddressInterface
+     * @since 2.0.0
      */
     public function convert(Address $object, $data = [])
     {

@@ -14,6 +14,7 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget
 {
@@ -21,6 +22,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Session quote
      *
      * @var \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected $_sessionQuote;
 
@@ -28,11 +30,13 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Order create
      *
      * @var \Magento\Sales\Model\AdminOrder\Create
+     * @since 2.0.0
      */
     protected $_orderCreate;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -42,6 +46,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -60,6 +65,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Retrieve create order model object
      *
      * @return \Magento\Sales\Model\AdminOrder\Create
+     * @since 2.0.0
      */
     public function getCreateOrderModel()
     {
@@ -70,6 +76,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Retrieve quote session object
      *
      * @return \Magento\Backend\Model\Session\Quote
+     * @since 2.0.0
      */
     protected function _getSession()
     {
@@ -80,6 +87,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Retrieve quote model object
      *
      * @return \Magento\Quote\Model\Quote
+     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -90,6 +98,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Retrieve customer identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -100,6 +109,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Retrieve store model object
      *
      * @return \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     public function getStore()
     {
@@ -110,6 +120,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * Retrieve store identifier
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -121,6 +132,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      *
      * @param float $value
      * @return string
+     * @since 2.0.0
      */
     public function formatPrice($value)
     {
@@ -135,6 +147,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * @param Product $product
      * @return string
+     * @since 2.2.0
      */
     public function getItemPrice(Product $product)
     {
@@ -148,6 +161,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * @param int|float $value
      * @param bool $format
      * @return string|int|float
+     * @since 2.0.0
      */
     public function convertPrice($value, $format = true)
     {

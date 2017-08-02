@@ -12,6 +12,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
  * Gateway interface for online payment methods
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 interface GatewayInterface
 {
@@ -24,6 +25,7 @@ interface GatewayInterface
      * @return DataObject
      *
      * @throws \Exception
+     * @since 2.0.0
      */
     public function postRequest(DataObject $request, ConfigInterface $config);
 }

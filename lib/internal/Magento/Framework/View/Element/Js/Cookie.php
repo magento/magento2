@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Cookie extends Template
 {
@@ -18,11 +19,13 @@ class Cookie extends Template
      * Session config
      *
      * @var ConfigInterface
+     * @since 2.0.0
      */
     protected $sessionConfig;
 
     /**
      * @var \Magento\Framework\Validator\Ip
+     * @since 2.0.0
      */
     protected $ipValidator;
 
@@ -33,6 +36,7 @@ class Cookie extends Template
      * @param ConfigInterface $cookieConfig
      * @param \Magento\Framework\Validator\Ip $ipValidator
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -49,6 +53,7 @@ class Cookie extends Template
      * Get configured cookie domain
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDomain()
     {
@@ -68,6 +73,7 @@ class Cookie extends Template
      * Get configured cookie path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPath()
     {
@@ -76,6 +82,7 @@ class Cookie extends Template
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getLifetime()
     {

@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Data;
 
 /**
  * Class Option
+ * @since 2.0.0
  */
 class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\OptionInterface
@@ -18,6 +19,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      * Get option label
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -28,6 +30,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      * Get option value
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -38,6 +41,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      * Get nested options
      *
      * @return \Magento\Customer\Api\Data\OptionInterface[]|null
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -49,6 +53,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      *
      * @param string $label
      * @return $this
+     * @since 2.0.0
      */
     public function setLabel($label)
     {
@@ -60,6 +65,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -71,6 +77,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      *
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null)
     {

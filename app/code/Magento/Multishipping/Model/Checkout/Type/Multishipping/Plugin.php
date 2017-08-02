@@ -5,20 +5,28 @@
  */
 namespace Magento\Multishipping\Model\Checkout\Type\Multishipping;
 
+/**
+ * Class \Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin
+ *
+ * @since 2.0.0
+ */
 class Plugin
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $checkoutSession;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $checkoutStateBegin;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @since 2.0.0
      */
     public function __construct(\Magento\Checkout\Model\Session $checkoutSession)
     {
@@ -30,6 +38,7 @@ class Plugin
      * @param \Magento\Checkout\Model\Cart $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeSave(\Magento\Checkout\Model\Cart $subject)
     {

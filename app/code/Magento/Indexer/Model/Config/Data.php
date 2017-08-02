@@ -10,11 +10,13 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Provides indexer configuration
+ * @since 2.0.0
  */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
      * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection
+     * @since 2.0.0
      */
     protected $stateCollection;
 
@@ -26,6 +28,7 @@ class Data extends \Magento\Framework\Config\Data
      * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Indexer\Config\Reader $reader,
@@ -49,6 +52,7 @@ class Data extends \Magento\Framework\Config\Data
      * Delete all states that are not in configuration
      *
      * @return void
+     * @since 2.0.0
      */
     protected function deleteNonexistentStates()
     {

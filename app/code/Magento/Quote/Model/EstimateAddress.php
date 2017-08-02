@@ -9,12 +9,18 @@ namespace Magento\Quote\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 
+/**
+ * Class \Magento\Quote\Model\EstimateAddress
+ *
+ * @since 2.0.0
+ */
 class EstimateAddress extends AbstractExtensibleModel implements EstimateAddressInterface
 {
     /**
      * Get region name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRegion()
     {
@@ -26,6 +32,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      *
      * @param string $region
      * @return $this
+     * @since 2.0.0
      */
     public function setRegion($region)
     {
@@ -36,6 +43,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      * Get region id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getRegionId()
     {
@@ -47,6 +55,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      *
      * @param int $regionId
      * @return $this
+     * @since 2.0.0
      */
     public function setRegionId($regionId)
     {
@@ -57,6 +66,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      * Get country id
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCountryId()
     {
@@ -68,6 +78,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      *
      * @param string $countryId
      * @return $this
+     * @since 2.0.0
      */
     public function setCountryId($countryId)
     {
@@ -78,6 +89,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      * Get postcode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPostcode()
     {
@@ -89,6 +101,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      *
      * @param string $postcode
      * @return $this
+     * @since 2.0.0
      */
     public function setPostcode($postcode)
     {
@@ -99,6 +112,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\EstimateAddressExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -110,6 +124,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
      *
      * @param \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes

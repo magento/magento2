@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -16,6 +17,7 @@ class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abst
      * Resource collection initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -27,6 +29,7 @@ class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abst
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _initSelect()
     {

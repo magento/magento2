@@ -9,6 +9,7 @@ namespace Magento\Search\Block\Adminhtml\Reports;
  * Adminhtml search report page content block
  *
  * @api
+ * @since 2.0.0
  */
 class Search extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -16,6 +17,7 @@ class Search extends \Magento\Backend\Block\Widget\Grid\Container
      * Initialize Grid Container
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

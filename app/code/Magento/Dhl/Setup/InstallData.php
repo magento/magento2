@@ -14,6 +14,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -21,6 +22,7 @@ class InstallData implements InstallDataInterface
      * Locale list
      *
      * @var ResolverInterface
+     * @since 2.0.0
      */
     private $localeResolver;
 
@@ -28,6 +30,7 @@ class InstallData implements InstallDataInterface
      * Init
      *
      * @param ResolverInterface $localeResolver
+     * @since 2.0.0
      */
     public function __construct(ResolverInterface $localeResolver)
     {
@@ -36,6 +39,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

@@ -12,6 +12,7 @@ use Magento\Framework\Indexer\StateInterface;
  * Class Visitor
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
@@ -25,21 +26,25 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $ignoredUserAgents;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var \Magento\Framework\HTTP\Header
+     * @since 2.0.0
      */
     protected $httpHeader;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $skipRequestLogging = false;
 
@@ -47,6 +52,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Ignored Modules
      *
      * @var array
+     * @since 2.0.0
      */
     protected $ignores;
 
@@ -54,16 +60,19 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
+     * @since 2.0.0
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @since 2.0.0
      */
     protected $indexerRegistry;
 
@@ -82,6 +91,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -111,6 +121,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Object initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -128,6 +139,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $skipRequestLogging
      * @return \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     public function setSkipRequestLogging($skipRequestLogging)
     {
@@ -142,6 +154,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     public function initByRequest($observer)
     {
@@ -171,6 +184,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     public function saveByRequest($observer)
     {
@@ -193,6 +207,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return bool
+     * @since 2.0.0
      */
     public function isModuleIgnored($observer)
     {
@@ -212,6 +227,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     public function bindCustomerLogin($observer)
     {
@@ -232,6 +248,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function bindCustomerLogout($observer)
     {
@@ -246,6 +263,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     public function bindQuoteCreate($observer)
     {
@@ -263,6 +281,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Destroy binding of checkout quote
      * @param \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
+     * @since 2.0.0
      */
     public function bindQuoteDestroy($observer)
     {
@@ -277,6 +296,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Return clean time in seconds for visitor's outdated records
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCleanTime()
     {
@@ -290,6 +310,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Clean visitor's outdated records
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clean()
     {
@@ -301,6 +322,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Retrieve Online Interval (in minutes)
      *
      * @return int Minutes Interval
+     * @since 2.0.0
      */
     public function getOnlineInterval()
     {

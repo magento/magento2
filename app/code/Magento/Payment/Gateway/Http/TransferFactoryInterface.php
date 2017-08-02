@@ -9,6 +9,7 @@ namespace Magento\Payment\Gateway\Http;
  * Interface TransferFactoryInterface
  * @package Magento\Payment\Gateway\Http
  * @api
+ * @since 2.0.0
  */
 interface TransferFactoryInterface
 {
@@ -17,6 +18,7 @@ interface TransferFactoryInterface
      *
      * @param array $request
      * @return TransferInterface
+     * @since 2.0.0
      */
     public function create(array $request);
 }

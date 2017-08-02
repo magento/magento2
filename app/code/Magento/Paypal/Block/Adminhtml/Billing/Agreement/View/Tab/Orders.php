@@ -19,21 +19,25 @@ use Magento\Framework\Registry;
 /**
  * Adminhtml billing agreement related orders tab
  * @api
+ * @since 2.0.0
  */
 class Orders extends ExtendedGrid implements TabInterface
 {
     /**
      * @var  CollectionFactory
+     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var Registry
+     * @since 2.0.0
      */
     protected $coreRegistry;
 
     /**
      * @var BillingAgreementResource
+     * @since 2.0.0
      */
     protected $billingAgreementResource;
 
@@ -44,6 +48,7 @@ class Orders extends ExtendedGrid implements TabInterface
      * @param Registry $coreRegistry
      * @param BillingAgreementResource $billingAgreementResource
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         TemplateContext $context,
@@ -61,6 +66,7 @@ class Orders extends ExtendedGrid implements TabInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -69,6 +75,7 @@ class Orders extends ExtendedGrid implements TabInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -77,6 +84,7 @@ class Orders extends ExtendedGrid implements TabInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -85,6 +93,7 @@ class Orders extends ExtendedGrid implements TabInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -93,6 +102,7 @@ class Orders extends ExtendedGrid implements TabInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -105,6 +115,7 @@ class Orders extends ExtendedGrid implements TabInterface
      * Get grid url
      *
      * @return string
+     * @since 2.1.0
      */
     public function getGridUrl()
     {
@@ -115,6 +126,7 @@ class Orders extends ExtendedGrid implements TabInterface
      * Apply various selection filters to prepare the sales order grid collection.
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -147,6 +159,7 @@ class Orders extends ExtendedGrid implements TabInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

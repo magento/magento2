@@ -9,6 +9,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
  * Class File
  *
  * @api
+ * @since 2.0.0
  */
 class File
 {
@@ -16,6 +17,7 @@ class File
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'media_storage_file_storage_file';
 
@@ -23,6 +25,7 @@ class File
      * Store media base directory path
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_mediaBaseDirectory = null;
 
@@ -30,11 +33,13 @@ class File
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_storageHelper = null;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Media
+     * @since 2.0.0
      */
     protected $_mediaHelper = null;
 
@@ -42,6 +47,7 @@ class File
      * Data at storage
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data = null;
 
@@ -49,11 +55,13 @@ class File
      * Collect errors during sync process
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_errors = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $_logger;
 
@@ -62,6 +70,7 @@ class File
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $storageHelper
      * @param \Magento\MediaStorage\Helper\File\Media $mediaHelper
      * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
+     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -79,6 +88,7 @@ class File
      * Initialization
      *
      * @return $this
+     * @since 2.0.0
      */
     public function init()
     {
@@ -89,6 +99,7 @@ class File
      * Return storage name
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getStorageName()
     {
@@ -99,6 +110,7 @@ class File
      * Get files and directories from storage
      *
      * @return array
+     * @since 2.0.0
      */
     public function getStorageData()
     {
@@ -109,6 +121,7 @@ class File
      * Check if there was errors during sync process
      *
      * @return bool
+     * @since 2.0.0
      */
     public function hasErrors()
     {
@@ -119,6 +132,7 @@ class File
      * Clear files and directories in storage
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clear()
     {
@@ -134,6 +148,7 @@ class File
      * @param  string $type
      * @return array|bool
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function collectData($offset = 0, $count = 100, $type = 'files')
     {
@@ -159,6 +174,7 @@ class File
      * Retrieve connection name saved at config
      *
      * @return null
+     * @since 2.0.0
      */
     public function getConfigConnectionName()
     {
@@ -169,6 +185,7 @@ class File
      * Retrieve connection name
      *
      * @return null
+     * @since 2.0.0
      */
     public function getConnectionName()
     {
@@ -181,6 +198,7 @@ class File
      * @param  int $offset
      * @param  int $count
      * @return array|bool
+     * @since 2.0.0
      */
     public function exportDirectories($offset = 0, $count = 100)
     {
@@ -193,6 +211,7 @@ class File
      * @param  int $offset
      * @param  int $count
      * @return array|bool
+     * @since 2.0.0
      */
     public function exportFiles($offset = 0, $count = 1)
     {
@@ -223,6 +242,7 @@ class File
      * @param  array $data
      * @param  string $callback
      * @return $this
+     * @since 2.0.0
      */
     public function import($data, $callback)
     {
@@ -247,6 +267,7 @@ class File
      *
      * @param  array $dirs
      * @return $this
+     * @since 2.0.0
      */
     public function importDirectories($dirs)
     {
@@ -258,6 +279,7 @@ class File
      *
      * @param  array $files
      * @return $this
+     * @since 2.0.0
      */
     public function importFiles($files)
     {
@@ -269,6 +291,7 @@ class File
      *
      * @param  array $dir
      * @return bool
+     * @since 2.0.0
      */
     public function saveDir($dir)
     {
@@ -282,6 +305,7 @@ class File
      * @param  bool $overwrite
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function saveFile($file, $overwrite = true)
     {
@@ -314,6 +338,7 @@ class File
      * Retrieve media base directory path
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMediaBaseDirectory()
     {

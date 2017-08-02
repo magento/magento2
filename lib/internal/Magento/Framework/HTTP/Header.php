@@ -8,6 +8,7 @@ namespace Magento\Framework\HTTP;
 
 /**
  * Library for working with HTTP headers
+ * @since 2.0.0
  */
 class Header
 {
@@ -15,17 +16,20 @@ class Header
      * Request object
      *
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
+     * @since 2.0.0
      */
     protected $_converter;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\Stdlib\StringUtils $converter
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $httpRequest,
@@ -40,6 +44,7 @@ class Header
      *
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     public function getHttpHost($clean = true)
     {
@@ -51,6 +56,7 @@ class Header
      *
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     public function getHttpUserAgent($clean = true)
     {
@@ -62,6 +68,7 @@ class Header
      *
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     public function getHttpAcceptLanguage($clean = true)
     {
@@ -73,6 +80,7 @@ class Header
      *
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     public function getHttpAcceptCharset($clean = true)
     {
@@ -84,6 +92,7 @@ class Header
      *
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     public function getHttpReferer($clean = true)
     {
@@ -96,6 +105,7 @@ class Header
      *
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     public function getRequestUri($clean = false)
     {
@@ -112,6 +122,7 @@ class Header
      * @param string $var
      * @param boolean $clean clean non UTF-8 characters
      * @return string
+     * @since 2.0.0
      */
     protected function _getHttpCleanValue($var, $clean = true)
     {

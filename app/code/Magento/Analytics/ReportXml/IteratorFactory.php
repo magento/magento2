@@ -10,16 +10,19 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class IteratorFactory
+ * @since 2.2.0
  */
 class IteratorFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $defaultIteratorName;
 
@@ -28,6 +31,7 @@ class IteratorFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $defaultIteratorName
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -48,6 +52,7 @@ class IteratorFactory
      * @param \Traversable $result
      * @param string|null $iteratorName
      * @return \IteratorIterator
+     * @since 2.2.0
      */
     public function create(\Traversable $result, $iteratorName = null)
     {

@@ -7,12 +7,14 @@ namespace Magento\Quote\Model\Cart;
 
 /**
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Quote\Api\Data\CurrencyInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getGlobalCurrencyCode()
     {
@@ -21,6 +23,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBaseCurrencyCode()
     {
@@ -29,6 +32,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreCurrencyCode()
     {
@@ -37,6 +41,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getQuoteCurrencyCode()
     {
@@ -45,6 +50,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreToBaseRate()
     {
@@ -53,6 +59,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreToQuoteRate()
     {
@@ -61,6 +68,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBaseToGlobalRate()
     {
@@ -69,6 +77,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBaseToQuoteRate()
     {
@@ -80,6 +89,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param string $globalCurrencyCode
      * @return $this
+     * @since 2.0.0
      */
     public function setGlobalCurrencyCode($globalCurrencyCode)
     {
@@ -91,6 +101,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param string $baseCurrencyCode
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
@@ -102,6 +113,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param string $storeCurrencyCode
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreCurrencyCode($storeCurrencyCode)
     {
@@ -113,6 +125,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param string $quoteCurrencyCode
      * @return $this
+     * @since 2.0.0
      */
     public function setQuoteCurrencyCode($quoteCurrencyCode)
     {
@@ -124,6 +137,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param float $storeToBaseRate
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreToBaseRate($storeToBaseRate)
     {
@@ -135,6 +149,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param float $storeToQuoteRate
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreToQuoteRate($storeToQuoteRate)
     {
@@ -146,6 +161,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param float $baseToGlobalRate
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseToGlobalRate($baseToGlobalRate)
     {
@@ -157,6 +173,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param float $baseToQuoteRate
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseToQuoteRate($baseToQuoteRate)
     {
@@ -167,6 +184,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\CurrencyExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -178,6 +196,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      *
      * @param \Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes)
     {

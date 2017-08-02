@@ -7,6 +7,11 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\LinkTypeProvider
+ *
+ * @since 2.0.0
+ */
 class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterface
 {
     /**
@@ -15,21 +20,25 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
      * Represented by an assoc array with the following format 'product_link_name' => 'product_link_code'
      *
      * @var array
+     * @since 2.0.0
      */
     protected $linkTypes;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductLinkTypeInterfaceFactory
+     * @since 2.0.0
      */
     protected $linkTypeFactory;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory
+     * @since 2.0.0
      */
     protected $linkAttributeFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkFactory
+     * @since 2.0.0
      */
     protected $linkFactory;
 
@@ -38,6 +47,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
      * @param \Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory $linkAttributeFactory
      * @param LinkFactory $linkFactory
      * @param array $linkTypes
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductLinkTypeInterfaceFactory $linkTypeFactory,
@@ -55,6 +65,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
      * Retrieve information about available product link types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getLinkTypes()
     {
@@ -63,6 +74,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -79,6 +91,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getItemAttributes($type)
     {

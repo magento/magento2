@@ -7,15 +7,22 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractPrice extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
+     * @since 2.0.0
      */
     protected $groupRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -23,12 +30,14 @@ abstract class AbstractPrice extends AbstractImportValidator implements RowValid
      * Customer groups ID-to-name.
      *
      * @var array
+     * @since 2.0.0
      */
     protected $customerGroups = [];
 
     /**
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
@@ -40,6 +49,7 @@ abstract class AbstractPrice extends AbstractImportValidator implements RowValid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function init($context)
     {

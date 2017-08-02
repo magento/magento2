@@ -7,15 +7,22 @@ namespace Magento\CatalogRule\Plugin\Indexer\Product\Save;
 
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules
+ *
+ * @since 2.0.0
+ */
 class ApplyRules
 {
     /**
      * @var ProductRuleProcessor
+     * @since 2.0.0
      */
     protected $productRuleProcessor;
 
     /**
      * @param ProductRuleProcessor $productRuleProcessor
+     * @since 2.0.0
      */
     public function __construct(ProductRuleProcessor $productRuleProcessor)
     {
@@ -30,6 +37,7 @@ class ApplyRules
      * @param \Magento\Framework\Model\AbstractModel $product
      * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,

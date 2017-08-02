@@ -9,11 +9,13 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Class Quantity
+ * @since 2.0.0
  */
 class Quantity extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isValid($value)
     {

@@ -13,6 +13,7 @@ use Magento\Framework\Data\Tree\Node\Collection as NodeCollection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Tree
 {
@@ -20,12 +21,14 @@ class Tree
      * Nodes collection
      *
      * @var NodeCollection
+     * @since 2.0.0
      */
     protected $_nodes;
 
     /**
      * Enter description here...
      *
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -36,6 +39,7 @@ class Tree
      * Enter description here...
      *
      * @return \Magento\Framework\Data\Tree
+     * @since 2.0.0
      */
     public function getTree()
     {
@@ -48,6 +52,7 @@ class Tree
      * @param Node $parentNode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function load($parentNode = null)
     {
@@ -59,6 +64,7 @@ class Tree
      * @param int|string $nodeId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function loadNode($nodeId)
     {
@@ -72,6 +78,7 @@ class Tree
      * @param Node $prevNode
      * @return Node
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function appendChild($data, $parentNode, $prevNode = null)
     {
@@ -89,6 +96,7 @@ class Tree
      * @param Node $node
      * @param Node $parent
      * @return Node
+     * @since 2.0.0
      */
     public function addNode($node, $parent = null)
     {
@@ -108,6 +116,7 @@ class Tree
      * @param Node $prevNode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function moveNodeTo($node, $parentNode, $prevNode = null)
     {
@@ -121,6 +130,7 @@ class Tree
      * @param Node $prevNode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function copyNodeTo($node, $parentNode, $prevNode = null)
     {
@@ -131,6 +141,7 @@ class Tree
      *
      * @param Node $node
      * @return $this
+     * @since 2.0.0
      */
     public function removeNode($node)
     {
@@ -149,6 +160,7 @@ class Tree
      * @param Node $prevNode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function createNode($parentNode, $prevNode = null)
     {
@@ -160,6 +172,7 @@ class Tree
      * @param Node $node
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getChild($node)
     {
@@ -171,6 +184,7 @@ class Tree
      * @param Node $node
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getChildren($node)
     {
@@ -180,6 +194,7 @@ class Tree
      * Enter description here...
      *
      * @return NodeCollection
+     * @since 2.0.0
      */
     public function getNodes()
     {
@@ -191,6 +206,7 @@ class Tree
      *
      * @param Node $nodeId
      * @return Node
+     * @since 2.0.0
      */
     public function getNodeById($nodeId)
     {
@@ -202,6 +218,7 @@ class Tree
      *
      * @param Node $node
      * @return array
+     * @since 2.0.0
      */
     public function getPath($node)
     {

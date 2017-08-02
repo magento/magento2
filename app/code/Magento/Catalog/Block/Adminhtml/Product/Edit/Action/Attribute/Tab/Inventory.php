@@ -9,21 +9,25 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
  * Products mass update inventory tab
  *
  * @api
+ * @since 2.0.0
  */
 class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders
+     * @since 2.0.0
      */
     protected $_backorders;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @var array
+     * @since 2.1.0
      */
     protected $disabledFields = [];
 
@@ -32,6 +36,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,6 +53,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * Retrieve Backorders Options
      *
      * @return array
+     * @since 2.0.0
      */
     public function getBackordersOption()
     {
@@ -58,6 +64,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * Retrieve field suffix
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFieldSuffix()
     {
@@ -68,6 +75,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * Retrieve current store id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -80,6 +88,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      *
      * @param string $field
      * @return string|null
+     * @since 2.0.0
      */
     public function getDefaultConfigValue($field)
     {
@@ -90,6 +99,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * Tab settings
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -98,6 +108,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -106,6 +117,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -114,6 +126,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -124,6 +137,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * @param string $fieldName
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function isAvailable($fieldName)
     {

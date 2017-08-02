@@ -13,6 +13,7 @@ namespace Magento\Config\Model\Config\Backend\Email;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Sender extends \Magento\Framework\App\Config\Value
 {
@@ -21,6 +22,7 @@ class Sender extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function beforeSave()
     {

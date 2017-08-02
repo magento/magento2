@@ -7,21 +7,25 @@ namespace Magento\Config\Model\Config\Source\Email;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Template extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     private $_coreRegistry;
 
     /**
      * @var \Magento\Email\Model\Template\Config
+     * @since 2.0.0
      */
     private $_emailConfig;
 
     /**
      * @var \Magento\Email\Model\ResourceModel\Template\CollectionFactory
+     * @since 2.0.0
      */
     protected $_templatesFactory;
 
@@ -30,6 +34,7 @@ class Template extends \Magento\Framework\DataObject implements \Magento\Framewo
      * @param \Magento\Email\Model\ResourceModel\Template\CollectionFactory $templatesFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
@@ -47,6 +52,7 @@ class Template extends \Magento\Framework\DataObject implements \Magento\Framewo
      * Generate list of email templates
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -9,6 +9,11 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * Interface \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface
+ *
+ * @since 2.0.0
+ */
 interface AlgorithmInterface
 {
     /**
@@ -16,6 +21,7 @@ interface AlgorithmInterface
      * @param array $dimensions
      * @param EntityStorage $entityStorage
      * @return array
+     * @since 2.0.0
      */
     public function getItems(BucketInterface $bucket, array $dimensions, EntityStorage $entityStorage);
 }

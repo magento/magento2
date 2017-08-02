@@ -10,6 +10,11 @@
  */
 namespace Magento\Framework\Parse;
 
+/**
+ * Class \Magento\Framework\Parse\Zip
+ *
+ * @since 2.0.0
+ */
 class Zip
 {
     /**
@@ -18,6 +23,7 @@ class Zip
      * @param string $state
      * @param string $zip
      * @return string[]
+     * @since 2.0.0
      */
     public static function parseRegions($state, $zip)
     {
@@ -29,6 +35,7 @@ class Zip
      *
      * @param string $zip
      * @return string[]
+     * @since 2.0.0
      */
     public static function parseZip($zip)
     {
@@ -48,6 +55,7 @@ class Zip
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public static function zipRangeToZipPattern($zipRange)
     {

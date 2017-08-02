@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ContentTypeFactory
+ * @since 2.0.0
  */
 class ContentTypeFactory
 {
@@ -16,6 +17,7 @@ class ContentTypeFactory
      * Content types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $types;
 
@@ -23,6 +25,7 @@ class ContentTypeFactory
      * Object manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -31,6 +34,7 @@ class ContentTypeFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param array $types
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager, array $types)
     {
@@ -44,6 +48,7 @@ class ContentTypeFactory
      * @param string $type
      * @return ContentTypeInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function get($type)
     {

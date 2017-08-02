@@ -11,11 +11,13 @@ use Magento\ImportExport\Model\Import\AbstractEntity;
  * Data source with columns for Magento_ImportExport
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractSource implements \SeekableIterator
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_colNames = [];
 
@@ -23,6 +25,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Quantity of columns
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_colQty;
 
@@ -30,6 +33,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Current row
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_row = [];
 
@@ -39,11 +43,13 @@ abstract class AbstractSource implements \SeekableIterator
      * -1 means "out of bounds"
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_key = -1;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $_foundWrongQuoteFlag = false;
 
@@ -52,6 +58,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * @param array $colNames
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(array $colNames)
     {
@@ -69,6 +76,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Column names getter.
      *
      * @return array
+     * @since 2.0.0
      */
     public function getColNames()
     {
@@ -81,6 +89,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Returns the row in associative array format: array(<col_name> => <value>, ...)
      *
      * @return array
+     * @since 2.0.0
      */
     public function current()
     {
@@ -99,6 +108,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Move forward to next element (\Iterator interface)
      *
      * @return void
+     * @since 2.0.0
      */
     public function next()
     {
@@ -118,6 +128,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Return array or false on error
      *
      * @return array|false
+     * @since 2.0.0
      */
     abstract protected function _getNextRow();
 
@@ -125,6 +136,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Return the key of the current element (\Iterator interface)
      *
      * @return int -1 if out of bounds, 0 or more otherwise
+     * @since 2.0.0
      */
     public function key()
     {
@@ -135,6 +147,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Checks if current position is valid (\Iterator interface)
      *
      * @return bool
+     * @since 2.0.0
      */
     public function valid()
     {
@@ -145,6 +158,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Rewind the \Iterator to the first element (\Iterator interface)
      *
      * @return void
+     * @since 2.0.0
      */
     public function rewind()
     {
@@ -159,6 +173,7 @@ abstract class AbstractSource implements \SeekableIterator
      * @param int $position The position to seek to 0 or more
      * @return void
      * @throws \OutOfBoundsException
+     * @since 2.0.0
      */
     public function seek($position)
     {

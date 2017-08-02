@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api\Data;
 /**
  * Cost interface.
  * @api
+ * @since 2.2.0
  */
 interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -25,6 +26,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param float $cost
      * @return $this
+     * @since 2.2.0
      */
     public function setCost($cost);
 
@@ -32,6 +34,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get cost value.
      *
      * @return float
+     * @since 2.2.0
      */
     public function getCost();
 
@@ -40,6 +43,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param int $storeId
      * @return $this
+     * @since 2.2.0
      */
     public function setStoreId($storeId);
 
@@ -47,6 +51,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get store id.
      *
      * @return int
+     * @since 2.2.0
      */
     public function getStoreId();
 
@@ -55,6 +60,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $sku
      * @return $this
+     * @since 2.2.0
      */
     public function setSku($sku);
 
@@ -62,6 +68,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get SKU.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getSku();
 
@@ -69,6 +76,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\CostExtensionInterface|null
+     * @since 2.2.0
      */
     public function getExtensionAttributes();
 
@@ -77,6 +85,7 @@ interface CostInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\CostExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\CostExtensionInterface $extensionAttributes

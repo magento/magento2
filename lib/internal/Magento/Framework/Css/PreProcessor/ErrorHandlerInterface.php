@@ -7,6 +7,7 @@ namespace Magento\Framework\Css\PreProcessor;
 
 /**
  * Error handler interface
+ * @since 2.0.0
  */
 interface ErrorHandlerInterface
 {
@@ -15,6 +16,7 @@ interface ErrorHandlerInterface
      *
      * @param \Exception $e
      * @return void
+     * @since 2.0.0
      */
     public function processException(\Exception $e);
 }

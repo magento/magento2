@@ -19,51 +19,61 @@ use Magento\Wishlist\Helper\Data as WishlistHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ItemCarrier
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var LocaleQuantityProcessor
+     * @since 2.0.0
      */
     protected $quantityProcessor;
 
     /**
      * @var \Magento\Checkout\Model\Cart
+     * @since 2.0.0
      */
     protected $cart;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
+     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
+     * @since 2.0.0
      */
     protected $cartHelper;
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     protected $redirector;
 
@@ -77,6 +87,7 @@ class ItemCarrier
      * @param UrlInterface $urlBuilder
      * @param MessageManager $messageManager
      * @param RedirectInterface $redirector
+     * @since 2.0.0
      */
     public function __construct(
         Session $customerSession,
@@ -109,6 +120,7 @@ class ItemCarrier
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function moveAllToCart(Wishlist $wishlist, $qtys)
     {

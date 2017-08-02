@@ -13,11 +13,13 @@ use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Class MassHold
+ * @since 2.0.0
  */
 class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * @var OrderManagementInterface
+     * @since 2.0.0
      */
     protected $orderManagement;
 
@@ -26,6 +28,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param OrderManagementInterface $orderManagement
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -43,6 +46,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
      *
      * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

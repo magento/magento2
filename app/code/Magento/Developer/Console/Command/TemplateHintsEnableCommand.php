@@ -11,6 +11,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 
+/**
+ * Class \Magento\Developer\Console\Command\TemplateHintsEnableCommand
+ *
+ * @since 2.2.0
+ */
 class TemplateHintsEnableCommand extends Command
 {
 
@@ -26,6 +31,7 @@ class TemplateHintsEnableCommand extends Command
 
     /**
      * @var ConfigInterface
+     * @since 2.2.0
      */
     private $resourceConfig;
 
@@ -33,6 +39,7 @@ class TemplateHintsEnableCommand extends Command
      * Initialize dependencies.
      *
      * @param ConfigInterface $resourceConfig
+     * @since 2.2.0
      */
     public function __construct(ConfigInterface $resourceConfig)
     {
@@ -42,6 +49,7 @@ class TemplateHintsEnableCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected function configure()
     {
@@ -54,6 +62,7 @@ class TemplateHintsEnableCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

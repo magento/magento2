@@ -6,15 +6,22 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Widget\Chooser
+ *
+ * @since 2.0.0
+ */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
+     * @since 2.0.0
      */
     protected $resultRawFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -22,6 +29,7 @@ class Chooser extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -37,6 +45,7 @@ class Chooser extends \Magento\Backend\App\Action
      * Chooser Source action
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

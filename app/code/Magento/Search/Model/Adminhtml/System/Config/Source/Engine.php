@@ -9,6 +9,7 @@ namespace Magento\Search\Model\Adminhtml\System\Config\Source;
  * All registered search adapters
  *
  * @api
+ * @since 2.0.0
  */
 class Engine implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,6 +17,7 @@ class Engine implements \Magento\Framework\Option\ArrayInterface
      * Engines list
      *
      * @var array
+     * @since 2.0.0
      */
     private $engines;
 
@@ -23,6 +25,7 @@ class Engine implements \Magento\Framework\Option\ArrayInterface
      * Construct
      *
      * @param array $engines
+     * @since 2.0.0
      */
     public function __construct(
         array $engines
@@ -32,6 +35,7 @@ class Engine implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

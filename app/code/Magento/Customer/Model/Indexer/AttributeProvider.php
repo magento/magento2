@@ -10,6 +10,11 @@ use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Attribute;
 
+/**
+ * Class \Magento\Customer\Model\Indexer\AttributeProvider
+ *
+ * @since 2.0.0
+ */
 class AttributeProvider implements FieldsetInterface
 {
     /**
@@ -19,16 +24,19 @@ class AttributeProvider implements FieldsetInterface
 
     /**
      * @var Attribute[]
+     * @since 2.0.0
      */
     protected $attributes;
 
     /**
      * @var Config
+     * @since 2.0.0
      */
     protected $eavConfig;
 
     /**
      * @param Config $eavConfig
+     * @since 2.0.0
      */
     public function __construct(
         Config $eavConfig
@@ -41,6 +49,7 @@ class AttributeProvider implements FieldsetInterface
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     public function addDynamicData(array $data)
     {
@@ -53,6 +62,7 @@ class AttributeProvider implements FieldsetInterface
      * Retrieve all attributes
      *
      * @return Attribute[]
+     * @since 2.0.0
      */
     private function getAttributes()
     {
@@ -79,6 +89,7 @@ class AttributeProvider implements FieldsetInterface
      * @param Attribute[] $attributes
      * @param array $fieldset
      * @return array
+     * @since 2.0.0
      */
     protected function convert(array $attributes, array $fieldset)
     {
@@ -114,6 +125,7 @@ class AttributeProvider implements FieldsetInterface
      *
      * @param Attribute $attribute
      * @return string
+     * @since 2.0.0
      */
     protected function getType(Attribute $attribute)
     {
@@ -134,6 +146,7 @@ class AttributeProvider implements FieldsetInterface
      * @param array $dataFields
      * @param array $searchableFields
      * @return array
+     * @since 2.0.0
      */
     protected function merge(array $dataFields, array $searchableFields)
     {

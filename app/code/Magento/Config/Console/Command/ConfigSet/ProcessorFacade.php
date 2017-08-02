@@ -23,6 +23,7 @@ use Magento\Framework\App\Config;
  * @see ConfigSetCommand
  *
  * @api
+ * @since 2.2.0
  */
 class ProcessorFacade
 {
@@ -33,6 +34,7 @@ class ProcessorFacade
      * For example, scope "websites" and scope code "base" exist, and scope code "base" belongs to scope "website".
      *
      * @var ValidatorInterface
+     * @since 2.2.0
      */
     private $scopeValidator;
 
@@ -42,6 +44,7 @@ class ProcessorFacade
      * Checks whether the config path present in configuration structure.
      *
      * @var PathValidator
+     * @since 2.2.0
      */
     private $pathValidator;
 
@@ -49,6 +52,7 @@ class ProcessorFacade
      * The factory for config:set processors.
      *
      * @var ConfigSetProcessorFactory
+     * @since 2.2.0
      */
     private $configSetProcessorFactory;
 
@@ -56,6 +60,7 @@ class ProcessorFacade
      * The hash manager.
      *
      * @var Hash
+     * @since 2.2.0
      */
     private $hash;
 
@@ -63,6 +68,7 @@ class ProcessorFacade
      * The application config storage.
      *
      * @var ScopeConfigInterface
+     * @since 2.2.0
      */
     private $scopeConfig;
 
@@ -72,6 +78,7 @@ class ProcessorFacade
      * @param ConfigSetProcessorFactory $configSetProcessorFactory The factory for config:set processors
      * @param Hash $hash The hash manager
      * @param ScopeConfigInterface $scopeConfig The application config storage
+     * @since 2.2.0
      */
     public function __construct(
         ValidatorInterface $scopeValidator,
@@ -99,6 +106,7 @@ class ProcessorFacade
      * @throws ValidatorException If some validation is wrong
      * @throws CouldNotSaveException If cannot save config value
      * @throws ConfigurationMismatchException If processor can not be instantiated
+     * @since 2.2.0
      */
     public function process($path, $value, $scope, $scopeCode, $lock)
     {

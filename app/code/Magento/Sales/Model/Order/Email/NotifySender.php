@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class NotifySender
  * @api
+ * @since 2.0.0
  */
 abstract class NotifySender extends Sender
 {
@@ -22,6 +23,7 @@ abstract class NotifySender extends Sender
      * @param Order $order
      * @param bool $notify
      * @return bool
+     * @since 2.0.0
      */
     protected function checkAndSend(Order $order, $notify = true)
     {

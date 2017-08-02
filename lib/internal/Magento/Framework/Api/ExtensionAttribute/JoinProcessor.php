@@ -15,6 +15,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Join processor allows to join extension attributes during collections loading.
+ * @since 2.0.0
  */
 class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
 {
@@ -22,16 +23,26 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
-    /** @var TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @since 2.0.0
+     */
     private $typeProcessor;
 
-    /** @var ExtensionAttributesFactory */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     * @since 2.0.0
+     */
     private $extensionAttributesFactory;
 
-    /** @var JoinProcessorHelper */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorHelper
+     * @since 2.0.0
+     */
     private $joinProcessorHelper;
 
     /**
@@ -41,6 +52,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      * @param TypeProcessor $typeProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param JoinProcessorHelper $joinProcessorHelper
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -56,6 +68,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function process(DbCollection $collection, $extensibleEntityClass = null)
     {
@@ -82,6 +95,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * @param string $attributeCode
      * @return string
+     * @since 2.0.0
      */
     private function getReferenceTableAlias($attributeCode)
     {
@@ -90,6 +104,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function extractExtensionAttributes($extensibleEntityClass, array $data)
     {
@@ -125,6 +140,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      * @param array &$extensionData
      * @param string $extensibleEntityClass
      * @return void
+     * @since 2.0.0
      */
     private function populateAttributeCodeWithDirective(
         $attributeCode,
@@ -173,6 +189,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * @param string $extensibleEntityClass
      * @return array
+     * @since 2.0.0
      */
     private function getJoinDirectivesForType($extensibleEntityClass)
     {
@@ -201,6 +218,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * @param string $typeName
      * @return bool
+     * @since 2.0.0
      */
     private function isExtensibleAttributesImplemented($typeName)
     {

@@ -5,15 +5,22 @@
  */
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\EventFactory
+ *
+ * @since 2.0.0
+ */
 class EventFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -23,6 +30,7 @@ class EventFactory
     /**
      * @param array $arguments
      * @return Event
+     * @since 2.0.0
      */
     public function create($arguments = [])
     {

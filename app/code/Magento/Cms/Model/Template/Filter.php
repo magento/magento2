@@ -7,6 +7,7 @@ namespace Magento\Cms\Model\Template;
 
 /**
  * Cms Template Filter Model
+ * @since 2.0.0
  */
 class Filter extends \Magento\Email\Model\Template\Filter
 {
@@ -14,6 +15,7 @@ class Filter extends \Magento\Email\Model\Template\Filter
      * Whether to allow SID in store directive: AUTO
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_useSessionInUrl;
 
@@ -22,6 +24,7 @@ class Filter extends \Magento\Email\Model\Template\Filter
      *
      * @param bool $flag
      * @return $this
+     * @since 2.0.0
      */
     public function setUseSessionInUrl($flag)
     {
@@ -34,6 +37,7 @@ class Filter extends \Magento\Email\Model\Template\Filter
      *
      * @param string[] $construction
      * @return string
+     * @since 2.0.0
      */
     public function mediaDirective($construction)
     {

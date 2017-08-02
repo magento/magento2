@@ -7,6 +7,11 @@ namespace Magento\NewRelicReporting\Model\Apm;
 
 use \Magento\Framework\HTTP\ZendClient;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Apm\Deployments
+ *
+ * @since 2.0.0
+ */
 class Deployments
 {
     /**
@@ -16,16 +21,19 @@ class Deployments
 
     /**
      * @var \Magento\NewRelicReporting\Model\Config
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @since 2.0.0
      */
     protected $clientFactory;
 
@@ -35,6 +43,7 @@ class Deployments
      * @param \Magento\NewRelicReporting\Model\Config $config
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\NewRelicReporting\Model\Config $config,
@@ -54,6 +63,7 @@ class Deployments
      * @param bool $user
      *
      * @return bool|string
+     * @since 2.0.0
      */
     public function setDeployment($description, $change = false, $user = false)
     {

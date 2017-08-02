@@ -8,10 +8,16 @@ namespace Magento\Review\Controller\Adminhtml\Product;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Pending
+ *
+ * @since 2.0.0
+ */
 class Pending extends ProductController
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @since 2.0.0
      */
     public function execute()
     {

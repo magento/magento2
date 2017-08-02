@@ -10,15 +10,22 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
+/**
+ * Class \Magento\Sales\Model\Order\Payment\Transaction\Manager
+ *
+ * @since 2.0.0
+ */
 class Manager implements ManagerInterface
 {
     /**
      * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     * @since 2.0.0
      */
     protected $transactionRepository;
 
     /**
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @since 2.0.0
      */
     public function __construct(\Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository)
     {
@@ -27,6 +34,7 @@ class Manager implements ManagerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAuthorizationTransaction($parentTransactionId, $paymentId, $orderId)
     {
@@ -53,6 +61,7 @@ class Manager implements ManagerInterface
      * @param int $paymentId
      * @param int $orderId
      * @return bool
+     * @since 2.0.0
      */
     public function isTransactionExists($transactionId, $paymentId, $orderId)
     {
@@ -67,6 +76,7 @@ class Manager implements ManagerInterface
      * @param string $type
      * @param bool|Transaction $transactionBasedOn
      * @return string|null
+     * @since 2.0.0
      */
     public function generateTransactionId(OrderPaymentInterface $payment, $type, $transactionBasedOn = false)
     {

@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
  * Eav Form Type Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,6 +20,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize connection and define main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -35,6 +37,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
+     * @since 2.0.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -49,6 +52,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param FormType $object
      * @return array
+     * @since 2.0.0
      */
     public function getEntityTypes($object)
     {
@@ -75,6 +79,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param FormType|AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -114,6 +119,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|int $attribute
      * @return array
+     * @since 2.0.0
      */
     public function getFormTypesByAttribute($attribute)
     {

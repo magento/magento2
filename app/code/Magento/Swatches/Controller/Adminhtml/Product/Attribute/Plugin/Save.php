@@ -12,6 +12,7 @@ use Magento\Swatches\Model\Swatch;
 
 /**
  * Class Save
+ * @since 2.0.0
  */
 class Save
 {
@@ -20,6 +21,7 @@ class Save
      * @param RequestInterface $request
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function beforeDispatch(Attribute\Save $subject, RequestInterface $request)
     {

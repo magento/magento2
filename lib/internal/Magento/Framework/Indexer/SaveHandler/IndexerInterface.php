@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\Dimension;
  * Indexer persistence handler
  *
  * @api
+ * @since 2.0.0
  */
 interface IndexerInterface
 {
@@ -24,6 +25,7 @@ interface IndexerInterface
      * @param Dimension[] $dimensions
      * @param \Traversable $documents
      * @return IndexerInterface
+     * @since 2.0.0
      */
     public function saveIndex($dimensions, \Traversable $documents);
 
@@ -33,6 +35,7 @@ interface IndexerInterface
      * @param Dimension[] $dimensions
      * @param \Traversable $documents
      * @return IndexerInterface
+     * @since 2.0.0
      */
     public function deleteIndex($dimensions, \Traversable $documents);
 
@@ -41,6 +44,7 @@ interface IndexerInterface
      *
      * @param Dimension[] $dimensions
      * @return IndexerInterface
+     * @since 2.0.0
      */
     public function cleanIndex($dimensions);
 
@@ -48,6 +52,7 @@ interface IndexerInterface
      * Define if engine is available
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAvailable();
 }

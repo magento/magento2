@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class DataFactory
+ * @since 2.0.0
  */
 class DataFactory
 {
@@ -18,11 +19,13 @@ class DataFactory
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $helperMap = [
         self::AREA_FRONTEND => \Magento\Authorizenet\Helper\Data::class,
@@ -33,6 +36,7 @@ class DataFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -45,6 +49,7 @@ class DataFactory
      * @param string $area
      * @return \Magento\Authorizenet\Helper\Backend\Data|\Magento\Authorizenet\Helper\Data
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function create($area)
     {

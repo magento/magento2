@@ -9,21 +9,25 @@ use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
  * Class ItemCreation
+ * @since 2.2.0
  */
 class ItemCreation implements ShipmentItemCreationInterface
 {
     /**
      * @var int
+     * @since 2.2.0
      */
     private $orderItemId;
 
     /**
      * @var float
+     * @since 2.2.0
      */
     private $qty;
 
     /**
      * @var \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface
+     * @since 2.2.0
      */
     private $extensionAttributes;
 
@@ -31,6 +35,7 @@ class ItemCreation implements ShipmentItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getOrderItemId()
     {
@@ -39,6 +44,7 @@ class ItemCreation implements ShipmentItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setOrderItemId($orderItemId)
     {
@@ -47,6 +53,7 @@ class ItemCreation implements ShipmentItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getQty()
     {
@@ -55,6 +62,7 @@ class ItemCreation implements ShipmentItemCreationInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setQty($qty)
     {
@@ -65,6 +73,7 @@ class ItemCreation implements ShipmentItemCreationInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface|null
+     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -76,6 +85,7 @@ class ItemCreation implements ShipmentItemCreationInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes

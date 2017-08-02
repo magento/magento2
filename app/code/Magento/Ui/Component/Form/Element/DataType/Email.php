@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 /**
  * Class Email
+ * @since 2.0.0
  */
 class Email extends AbstractDataType
 {
@@ -16,6 +17,7 @@ class Email extends AbstractDataType
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName()
     {

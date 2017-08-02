@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface ProductCustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -85,6 +86,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get product SKU
      *
      * @return string
+     * @since 2.0.0
      */
     public function getProductSku();
 
@@ -93,6 +95,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setProductSku($sku);
 
@@ -100,6 +103,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get option id
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getOptionId();
 
@@ -108,6 +112,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param int $optionId
      * @return $this
+     * @since 2.0.0
      */
     public function setOptionId($optionId);
 
@@ -115,6 +120,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get option title
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTitle();
 
@@ -123,6 +129,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $title
      * @return $this
+     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -130,6 +137,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get option type
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType();
 
@@ -138,6 +146,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type);
 
@@ -145,6 +154,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get sort order
      *
      * @return int
+     * @since 2.0.0
      */
     public function getSortOrder();
 
@@ -153,6 +163,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder);
 
@@ -161,6 +172,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsRequire();
 
@@ -169,6 +181,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param bool $isRequired
      * @return $this
+     * @since 2.0.0
      */
     public function setIsRequire($isRequired);
 
@@ -176,6 +189,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get price
      *
      * @return float|null
+     * @since 2.0.0
      */
     public function getPrice();
 
@@ -184,6 +198,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param float $price
      * @return $this
+     * @since 2.0.0
      */
     public function setPrice($price);
 
@@ -191,6 +206,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get price type
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getPriceType();
 
@@ -199,6 +215,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $priceType
      * @return $this
+     * @since 2.0.0
      */
     public function setPriceType($priceType);
 
@@ -206,6 +223,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Get Sku
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSku();
 
@@ -214,61 +232,72 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku);
 
     /**
      * @return string|null
+     * @since 2.0.0
      */
     public function getFileExtension();
 
     /**
      * @param string $fileExtension
      * @return $this
+     * @since 2.0.0
      */
     public function setFileExtension($fileExtension);
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getMaxCharacters();
 
     /**
      * @param int $maxCharacters
      * @return $this
+     * @since 2.0.0
      */
     public function setMaxCharacters($maxCharacters);
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getImageSizeX();
 
     /**
      * @param int $imageSizeX
      * @return $this
+     * @since 2.0.0
      */
     public function setImageSizeX($imageSizeX);
 
     /**
      * @return int|null
+     * @since 2.0.0
      */
     public function getImageSizeY();
 
     /**
      * @param int $imageSizeY
      * @return $this
+     * @since 2.0.0
      */
     public function setImageSizeY($imageSizeY);
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface[]|null
+     * @since 2.0.0
      */
     public function getValues();
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface[] $values
      * @return $this
+     * @since 2.0.0
      */
     public function setValues(array $values = null);
 
@@ -276,6 +305,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -284,6 +314,7 @@ interface ProductCustomOptionInterface extends \Magento\Framework\Api\Extensible
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes

@@ -24,21 +24,25 @@ use Magento\Store\Model\StoreManagerInterface;
  * which will apply them to the Select
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class TableMapper
 {
     /**
      * @var FilterStrategyInterface
+     * @since 2.2.0
      */
     private $filterStrategy;
 
     /**
      * @var AliasResolver
+     * @since 2.2.0
      */
     private $aliasResolver;
 
     /**
      * @var AliasResolver
+     * @since 2.2.0
      */
     private $filtersExtractor;
 
@@ -53,6 +57,7 @@ class TableMapper
      * @param AliasResolver $aliasResolver
      * @param FiltersExtractor $filtersExtractor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         AppResource $resource,
@@ -84,6 +89,7 @@ class TableMapper
      * @param RequestInterface $request
      * @return Select
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function addTables(Select $select, RequestInterface $request)
     {
@@ -105,11 +111,12 @@ class TableMapper
      * This method is deprecated.
      * Please use \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver::getAlias() instead.
      *
-     * @deprecated
+     * @deprecated 2.2.0
      * @see AliasResolver::getAlias()
      *
      * @param FilterInterface $filter
      * @return string
+     * @since 2.0.0
      */
     public function getMappingAlias(FilterInterface $filter)
     {

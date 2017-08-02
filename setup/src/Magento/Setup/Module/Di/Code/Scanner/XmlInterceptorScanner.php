@@ -5,6 +5,11 @@
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\XmlInterceptorScanner
+ *
+ * @since 2.0.0
+ */
 class XmlInterceptorScanner implements ScannerInterface
 {
     /**
@@ -12,6 +17,7 @@ class XmlInterceptorScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {
@@ -30,6 +36,7 @@ class XmlInterceptorScanner implements ScannerInterface
      *
      * @param string $content
      * @return array
+     * @since 2.0.0
      */
     protected function _collectEntitiesFromString($content)
     {
@@ -55,6 +62,7 @@ class XmlInterceptorScanner implements ScannerInterface
      *
      * @param array $output
      * @return array
+     * @since 2.0.0
      */
     protected function _filterEntities(array $output)
     {
@@ -91,6 +99,7 @@ class XmlInterceptorScanner implements ScannerInterface
      *
      * @param string $className
      * @return void
+     * @since 2.0.0
      */
     protected function _handleControllerClassName($className)
     {

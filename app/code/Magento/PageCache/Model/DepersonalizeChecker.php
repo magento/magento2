@@ -7,6 +7,7 @@ namespace Magento\PageCache\Model;
 
 /**
  * Checks if session should be depersonalized in Depersonalize plugin
+ * @since 2.0.0
  */
 class DepersonalizeChecker
 {
@@ -14,6 +15,7 @@ class DepersonalizeChecker
      * Request
      *
      * @var \Magento\Framework\App\RequestInterface
+     * @since 2.0.0
      */
     private $request;
 
@@ -21,6 +23,7 @@ class DepersonalizeChecker
      * Module manager
      *
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     private $moduleManager;
 
@@ -28,6 +31,7 @@ class DepersonalizeChecker
      * Cache config
      *
      * @var Config
+     * @since 2.0.0
      */
     private $cacheConfig;
 
@@ -35,6 +39,7 @@ class DepersonalizeChecker
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param Config $cacheConfig
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -52,6 +57,7 @@ class DepersonalizeChecker
      * @param \Magento\Framework\View\LayoutInterface $subject
      * @return bool
      * @api
+     * @since 2.0.0
      */
     public function checkIfDepersonalize(\Magento\Framework\View\LayoutInterface $subject)
     {

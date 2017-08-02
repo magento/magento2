@@ -11,6 +11,11 @@
  */
 namespace Magento\Cron\Model\Config\Backend\Product;
 
+/**
+ * Class \Magento\Cron\Model\Config\Backend\Product\Alert
+ *
+ * @since 2.0.0
+ */
 class Alert extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -25,11 +30,13 @@ class Alert extends \Magento\Framework\App\Config\Value
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
+     * @since 2.0.0
      */
     protected $_configValueFactory;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_runModelPath = '';
 
@@ -43,6 +50,7 @@ class Alert extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param string $runModelPath
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -65,6 +73,7 @@ class Alert extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function afterSave()
     {

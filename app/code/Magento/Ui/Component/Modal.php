@@ -7,6 +7,7 @@ namespace Magento\Ui\Component;
 
 /**
  * @api
+ * @since 2.1.0
  */
 class Modal extends AbstractComponent
 {
@@ -14,6 +15,7 @@ class Modal extends AbstractComponent
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getComponentName()
     {

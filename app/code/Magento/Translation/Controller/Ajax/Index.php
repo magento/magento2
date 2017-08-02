@@ -6,16 +6,23 @@
  */
 namespace Magento\Translation\Controller\Ajax;
 
+/**
+ * Class \Magento\Translation\Controller\Ajax\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Translate\Inline\ParserInterface
+     * @since 2.0.0
      */
     protected $inlineParser;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -30,6 +37,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * Ajax action for inline translation
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

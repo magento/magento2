@@ -17,19 +17,25 @@ use Magento\Framework\View\Element\Template\Context;
  * Adminhtml block for fieldset of configurable product
  *
  * @api
+ * @since 2.0.0
  */
 class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
-    /** @var Image */
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
+     */
     protected $image;
 
     /**
      * @var ProductFactory
+     * @since 2.1.0
      */
     private $productFactory;
 
     /**
      * @var Config
+     * @since 2.1.0
      */
     private $catalogProductMediaConfig;
 
@@ -38,6 +44,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      * @param Image $image
      * @param Config $catalogProductMediaConfig
      * @param ProductFactory $productFactory
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -53,6 +60,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getCaption()
     {
@@ -61,6 +69,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getNoImageUrl()
     {
@@ -71,6 +80,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      * Get image types data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getImageTypes()
     {
@@ -90,6 +100,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getMediaAttributes()
     {

@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\OrderInterface;
  * Interface OrderStatisticInterface
  *
  * @api
+ * @since 2.2.0
  */
 interface InvoiceStatisticInterface
 {
@@ -20,6 +21,7 @@ interface InvoiceStatisticInterface
      * @param OrderInterface $order
      * @param InvoiceInterface $invoice
      * @return OrderInterface
+     * @since 2.2.0
      */
     public function register(OrderInterface $order, InvoiceInterface $invoice);
 }

@@ -17,31 +17,37 @@ use Magento\Framework\DataObject\Factory as ObjectFactory;
 
 /**
  * Interface StockStateProvider
+ * @since 2.0.0
  */
 class StockStateProvider implements StockStateProviderInterface
 {
     /**
      * @var MathDivision
+     * @since 2.0.0
      */
     protected $mathDivision;
 
     /**
      * @var FormatInterface
+     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @var ObjectFactory
+     * @since 2.0.0
      */
     protected $objectFactory;
 
     /**
      * @var ProductFactory
+     * @since 2.0.0
      */
     protected $productFactory;
 
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $qtyCheckApplicable;
 
@@ -51,6 +57,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param ObjectFactory $objectFactory
      * @param ProductFactory $productFactory
      * @param bool $qtyCheckApplicable
+     * @since 2.0.0
      */
     public function __construct(
         MathDivision $mathDivision,
@@ -69,6 +76,7 @@ class StockStateProvider implements StockStateProviderInterface
     /**
      * @param StockItemInterface $stockItem
      * @return bool
+     * @since 2.0.0
      */
     public function verifyStock(StockItemInterface $stockItem)
     {
@@ -86,6 +94,7 @@ class StockStateProvider implements StockStateProviderInterface
     /**
      * @param StockItemInterface $stockItem
      * @return bool
+     * @since 2.0.0
      */
     public function verifyNotification(StockItemInterface $stockItem)
     {
@@ -101,6 +110,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function checkQuoteItemQty(StockItemInterface $stockItem, $qty, $summaryQty, $origQty = 0)
     {
@@ -232,6 +242,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param int|float $qty
      * @exception \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function checkQty(StockItemInterface $stockItem, $qty)
     {
@@ -260,6 +271,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param StockItemInterface $stockItem
      * @param int|float $qty
      * @return int|float
+     * @since 2.0.0
      */
     public function suggestQty(StockItemInterface $stockItem, $qty)
     {
@@ -297,6 +309,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param StockItemInterface $stockItem
      * @param float|int $qty
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function checkQtyIncrements(StockItemInterface $stockItem, $qty)
     {
@@ -334,6 +347,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @return float
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function getStockQty(StockItemInterface $stockItem)
     {
@@ -371,6 +385,7 @@ class StockStateProvider implements StockStateProviderInterface
     /**
      * @param string|float|int|null $qty
      * @return float|null
+     * @since 2.0.0
      */
     protected function getNumber($qty)
     {

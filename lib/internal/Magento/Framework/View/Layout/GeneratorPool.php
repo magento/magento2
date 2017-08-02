@@ -10,26 +10,31 @@ use Magento\Framework\View\Layout\Condition\ConditionFactory;
 /**
  * Pool of generators for structural elements
  * @api
+ * @since 2.0.0
  */
 class GeneratorPool
 {
     /**
      * @var ScheduledStructure\Helper
+     * @since 2.0.0
      */
     protected $helper;
 
     /**
      * @var GeneratorInterface[]
+     * @since 2.0.0
      */
     protected $generators = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Framework\View\Layout\Condition\ConditionFactory
+     * @since 2.2.0
      */
     private $conditionFactory;
 
@@ -38,6 +43,7 @@ class GeneratorPool
      * @param ConditionFactory $conditionFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $generators
+     * @since 2.0.0
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
@@ -57,6 +63,7 @@ class GeneratorPool
      * @param string $type
      * @return GeneratorInterface
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function getGenerator($type)
     {
@@ -72,6 +79,7 @@ class GeneratorPool
      * @param Reader\Context $readerContext
      * @param Generator\Context $generatorContext
      * @return $this
+     * @since 2.0.0
      */
     public function process(Reader\Context $readerContext, Generator\Context $generatorContext)
     {
@@ -87,6 +95,7 @@ class GeneratorPool
      *
      * @param GeneratorInterface[] $generators
      * @return void
+     * @since 2.0.0
      */
     protected function addGenerators(array $generators)
     {
@@ -101,6 +110,7 @@ class GeneratorPool
      * @param ScheduledStructure $scheduledStructure
      * @param Data\Structure $structure
      * @return $this
+     * @since 2.0.0
      */
     protected function buildStructure(ScheduledStructure $scheduledStructure, Data\Structure $structure)
     {
@@ -137,6 +147,7 @@ class GeneratorPool
      * @param Data\Structure $structure
      * @param string $elementName
      * @return void
+     * @since 2.0.0
      */
     protected function reorderElements(
         ScheduledStructure $scheduledStructure,
@@ -178,6 +189,7 @@ class GeneratorPool
      * @param string $elementName
      * @param bool $isChild
      * @return $this
+     * @since 2.0.0
      */
     protected function removeElement(
         ScheduledStructure $scheduledStructure,
@@ -204,6 +216,7 @@ class GeneratorPool
      * @param Data\Structure $structure
      * @param string $element
      * @return $this
+     * @since 2.0.0
      */
     protected function moveElementInStructure(
         ScheduledStructure $scheduledStructure,
@@ -230,6 +243,7 @@ class GeneratorPool
      * @param array $data
      *
      * @return bool
+     * @since 2.2.0
      */
     protected function visibilityConditionsExistsIn(array $data)
     {

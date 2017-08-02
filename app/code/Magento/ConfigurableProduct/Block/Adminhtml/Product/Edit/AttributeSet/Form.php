@@ -11,16 +11,19 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\AttributeSet;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @since 2.0.0
      */
     protected $attributeSetRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\AttributeSet\Options
+     * @since 2.0.0
      */
     protected $attributeSetOptions;
 
@@ -31,6 +34,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Catalog\Api\AttributeSetRepositoryInterface $attributeSetRepository
      * @param \Magento\Catalog\Model\Product\AttributeSet\Options $attributeSetOptions
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,6 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepares attribute set form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -124,6 +129,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getCurrentAttributeSetName()
     {

@@ -7,10 +7,16 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
+/**
+ * Class \Magento\Theme\Model\Layout\Config\Converter
+ *
+ * @since 2.0.0
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function convert($source)
     {

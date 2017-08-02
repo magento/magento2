@@ -6,12 +6,18 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\Totals
+ *
+ * @since 2.0.0
+ */
 class Totals extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**
      * Customers by orders total action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

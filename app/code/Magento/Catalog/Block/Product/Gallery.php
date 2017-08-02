@@ -17,6 +17,7 @@ use Magento\Framework\Data\Collection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Gallery extends \Magento\Framework\View\Element\Template
 {
@@ -24,6 +25,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -31,6 +33,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -43,6 +46,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -52,6 +56,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -60,6 +65,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Collection
+     * @since 2.0.0
      */
     public function getGalleryCollection()
     {
@@ -68,6 +74,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Image|null
+     * @since 2.0.0
      */
     public function getCurrentImage()
     {
@@ -85,6 +92,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getImageUrl()
     {
@@ -93,6 +101,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getImageFile()
     {
@@ -103,6 +112,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
      * Retrieve image width
      *
      * @return bool|int
+     * @since 2.0.0
      */
     public function getImageWidth()
     {
@@ -124,6 +134,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Image|false
+     * @since 2.0.0
      */
     public function getPreviousImage()
     {
@@ -143,6 +154,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Image|false
+     * @since 2.0.0
      */
     public function getNextImage()
     {
@@ -166,6 +178,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return false|string
+     * @since 2.0.0
      */
     public function getPreviousImageUrl()
     {
@@ -178,6 +191,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
 
     /**
      * @return false|string
+     * @since 2.0.0
      */
     public function getNextImageUrl()
     {

@@ -31,11 +31,13 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
 {
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
+     * @since 2.1.0
      */
     protected $attributeLoader;
 
@@ -43,6 +45,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Connection name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $connectionName;
 
@@ -50,6 +53,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity type configuration
      *
      * @var Type
+     * @since 2.0.0
      */
     protected $_type;
 
@@ -57,6 +61,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Attributes array by attribute name
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributesByCode = [];
 
@@ -64,6 +69,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Two-dimensional array by table name and attribute name
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributesByTable = [];
 
@@ -71,6 +77,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Attributes that are static fields in entity table
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_staticAttributes = [];
 
@@ -78,6 +85,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity table
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityTable;
 
@@ -85,6 +93,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Describe data for tables
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_describeTable = [];
 
@@ -92,6 +101,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity table identification field name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityIdField;
 
@@ -99,6 +109,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity primary key for link field name
      *
      * @var string
+     * @since 2.1.0
      */
     protected $linkIdField;
 
@@ -106,6 +117,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity values table identification field name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_valueEntityIdField;
 
@@ -113,6 +125,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity value table prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_valueTablePrefix;
 
@@ -120,6 +133,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity table string
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityTablePrefix;
 
@@ -127,6 +141,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Partial load flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isPartialLoad = false;
 
@@ -134,6 +149,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Partial save flag
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isPartialSave = false;
 
@@ -141,6 +157,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Attribute set id which used for get sorted attributes
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_sortingSetId = null;
 
@@ -148,6 +165,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity attribute values per backend table to delete
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributeValuesToDelete = [];
 
@@ -155,6 +173,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Entity attribute values per backend table to save
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_attributeValuesToSave = [];
 
@@ -163,52 +182,62 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * The table name as key
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_attributeBackendTables = [];
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Set
+     * @since 2.0.0
      */
     protected $_attrSetEntity;
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $_localeFormat;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Helper
+     * @since 2.0.0
      */
     protected $_resourceHelper;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
+     * @since 2.0.0
      */
     protected $_universalFactory;
 
     /**
      * @var TransactionManagerInterface
+     * @since 2.0.0
      */
     protected $transactionManager;
 
     /**
      * @var ObjectRelationProcessor
+     * @since 2.0.0
      */
     protected $objectRelationProcessor;
 
     /**
      * @param Context $context
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(Context $context, $data = [])
     {
@@ -235,6 +264,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|string $connection
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setConnection($connection)
     {
@@ -246,6 +276,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Resource initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -256,6 +287,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getConnection()
     {
@@ -267,6 +299,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getIdFieldName()
     {
@@ -279,6 +312,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param string $alias
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getTable($alias)
     {
@@ -292,6 +326,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param string|Type $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -304,6 +339,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return Type
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -317,6 +353,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get entity type name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -327,6 +364,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get entity type id
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTypeId()
     {
@@ -342,6 +380,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array|string|null $attributes
      * @return $this
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function unsetAttributes($attributes = null)
     {
@@ -376,6 +415,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get EAV config model
      *
      * @return \Magento\Eav\Model\Config
+     * @since 2.0.0
      */
     protected function _getConfig()
     {
@@ -392,6 +432,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param string|int|Element $attribute
      * @return AbstractAttribute|false
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function getAttribute($attribute)
     {
@@ -453,6 +494,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param AbstractAttribute $attribute
      * @return $this
+     * @since 2.0.0
      */
     public function addAttribute(AbstractAttribute $attribute)
     {
@@ -475,6 +517,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param bool $flag
      * @return bool
+     * @since 2.0.0
      */
     public function isPartialLoad($flag = null)
     {
@@ -490,6 +533,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param bool $flag
      * @return bool
+     * @since 2.0.0
      */
     public function isPartialSave($flag = null)
     {
@@ -505,6 +549,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param null|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function loadAllAttributes($object = null)
     {
@@ -516,6 +561,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param int $setId
      * @return array
+     * @since 2.0.0
      */
     public function getSortedAttributes($setId = null)
     {
@@ -545,6 +591,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param Attribute $firstAttribute
      * @param Attribute $secondAttribute
      * @return int
+     * @since 2.0.0
      */
     public function attributesCompare($firstAttribute, $secondAttribute)
     {
@@ -567,6 +614,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   AbstractAttribute $attribute
      * @return  bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
@@ -589,6 +637,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
@@ -672,6 +721,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $args array of arguments
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
@@ -686,6 +736,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get attributes by name array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesByCode()
     {
@@ -696,6 +747,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get attributes by table and name array
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAttributesByTable()
     {
@@ -706,6 +758,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get entity table name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTable()
     {
@@ -724,6 +777,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get link id
      *
      * @return string
+     * @since 2.1.0
      */
     public function getLinkField()
     {
@@ -743,6 +797,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get entity id field name in entity table
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityIdField()
     {
@@ -760,6 +815,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get default entity id field name in attribute values tables
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueEntityIdField()
     {
@@ -770,6 +826,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get prefix for value tables
      *
      * @return string
+     * @since 2.0.0
      */
     public function getValueTablePrefix()
     {
@@ -793,6 +850,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get entity table prefix for value
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityTablePrefix()
     {
@@ -816,6 +874,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @see \Magento\Eav\Model\Entity\AbstractEntity::getAttribute for $attribute format
      * @param int|string|AbstractAttribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     public function isAttributeStatic($attribute)
     {
@@ -829,6 +888,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
      * @return true|array
+     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -854,6 +914,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function setNewIncrementId(\Magento\Framework\DataObject $object)
     {
@@ -876,6 +937,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param AbstractAttribute $attribute
      * @param \Magento\Framework\DataObject $object
      * @return bool
+     * @since 2.0.0
      */
     public function checkAttributeUniqueValue(AbstractAttribute $attribute, $object)
     {
@@ -931,6 +993,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Retrieve default source model
      *
      * @return string
+     * @since 2.0.0
      */
     public function getDefaultAttributeSourceModel()
     {
@@ -944,6 +1007,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   int $entityId
      * @param   array|null $attributes
      * @return $this
+     * @since 2.0.0
      */
     public function load($object, $entityId, $attributes = [])
     {
@@ -976,9 +1040,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
-     * @deprecated Use self::loadAttributesForObject instead
+     * @deprecated 2.2.0 Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
+     * @since 2.1.0
      */
     protected function loadAttributesMetadata($attributes)
     {
@@ -990,6 +1055,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _loadModelAttributes($object)
     {
@@ -1031,6 +1097,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param  array $selects
      * @return \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _prepareLoadSelect(array $selects)
     {
@@ -1044,6 +1111,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   string|int $rowId
      * @return  \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _getLoadRowSelect($object, $rowId)
     {
@@ -1063,6 +1131,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   \Magento\Framework\DataObject $object
      * @param   string $table
      * @return  \Magento\Framework\DB\Select
+     * @since 2.0.0
      */
     protected function _getLoadAttributesSelect($object, $table)
     {
@@ -1083,6 +1152,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   \Magento\Framework\DataObject $object
      * @param   array $valueRow
      * @return $this
+     * @since 2.0.0
      */
     protected function _setAttributeValue($object, $valueRow)
     {
@@ -1103,6 +1173,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return $this
      * @throws \Exception
      * @throws AlreadyExistsException
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -1160,6 +1231,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
+     * @since 2.1.0
      */
     protected function processSave($object)
     {
@@ -1171,6 +1243,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     protected function _getOrigObject($object)
     {
@@ -1189,6 +1262,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param AbstractAttribute $attribute
      * @param AbstractEntity $object
      * @return void
+     * @since 2.0.0
      */
     private function _aggregateDeleteData(&$delete, $attribute, $object)
     {
@@ -1212,6 +1286,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return  array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _collectSaveData($newObject)
     {
@@ -1318,6 +1393,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $origData
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $v, array &$origData)
     {
@@ -1329,6 +1405,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param string $field
      * @return array
+     * @since 2.0.0
      */
     protected function _getStaticFieldProperties($field)
     {
@@ -1351,6 +1428,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param string $key
      * @param mixed $value
      * @return mixed
+     * @since 2.0.0
      */
     protected function _prepareStaticValue($key, $value)
     {
@@ -1374,6 +1452,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _processSaveData($saveData)
     {
@@ -1469,6 +1548,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   AbstractAttribute $attribute
      * @param   mixed $value
      * @return $this
+     * @since 2.0.0
      */
     protected function _insertAttribute($object, $attribute, $value)
     {
@@ -1484,6 +1564,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   mixed $value
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
@@ -1499,6 +1580,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
+     * @since 2.0.0
      */
     protected function _saveAttribute($object, $attribute, $value)
     {
@@ -1528,6 +1610,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Save and delete collected attribute values
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _processAttributeValues()
     {
@@ -1553,6 +1636,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param mixed $value
      * @param AbstractAttribute $attribute
      * @return mixed
+     * @since 2.0.0
      */
     protected function _prepareValueForSave($value, AbstractAttribute $attribute)
     {
@@ -1578,6 +1662,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param   array $info
      * @return  \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     protected function _deleteAttributes($object, $table, $info)
     {
@@ -1607,6 +1692,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function saveAttribute(\Magento\Framework\DataObject $object, $attributeCode)
     {
@@ -1658,6 +1744,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param \Magento\Framework\DataObject $object
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array
+     * @since 2.0.0
      */
     protected function getAttributeRow($entity, $object, $attribute)
     {
@@ -1680,6 +1767,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function delete($object)
     {
@@ -1724,6 +1812,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.1.0
      */
     protected function evaluateDelete($object, $id, $connection)
     {
@@ -1753,6 +1842,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\DataObject $object)
     {
@@ -1767,6 +1857,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -1779,6 +1870,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\DataObject $object)
     {
@@ -1791,6 +1883,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -1803,6 +1896,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterDelete(\Magento\Framework\DataObject $object)
     {
@@ -1814,6 +1908,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Retrieve Default attribute model
      *
      * @return string
+     * @since 2.0.0
      */
     protected function _getDefaultAttributeModel()
     {
@@ -1824,6 +1919,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Retrieve default entity attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     protected function _getDefaultAttributes()
     {
@@ -1834,6 +1930,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Retrieve default entity static attributes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getDefaultAttributes()
     {
@@ -1849,6 +1946,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAttributeValueEmpty(AbstractAttribute $attribute, $value)
     {
@@ -1860,7 +1958,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return AttributeLoaderInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     protected function getAttributeLoader()
     {
@@ -1874,6 +1973,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity load
      *
      * @param \Magento\Framework\DataObject $object
+     * @since 2.1.0
      */
     public function afterLoad(\Magento\Framework\DataObject $object)
     {
@@ -1884,6 +1984,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions before entity save
      *
      * @param \Magento\Framework\DataObject $object
+     * @since 2.1.0
      */
     public function beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -1894,6 +1995,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity save
      *
      * @param \Magento\Framework\DataObject $object
+     * @since 2.1.0
      */
     public function afterSave(\Magento\Framework\DataObject $object)
     {
@@ -1904,6 +2006,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions before entity delete
      *
      * @param \Magento\Framework\DataObject $object
+     * @since 2.1.0
      */
     public function beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -1914,6 +2017,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity delete
      *
      * @param \Magento\Framework\DataObject $object
+     * @since 2.1.0
      */
     public function afterDelete(\Magento\Framework\DataObject $object)
     {
@@ -1927,6 +2031,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $attributes
      * @param AbstractEntity|null $object
      * @return void
+     * @since 2.2.0
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {

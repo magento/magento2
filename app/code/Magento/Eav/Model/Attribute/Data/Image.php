@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Attribute\Data;
  * EAV Entity Attribute Image File Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Image extends \Magento\Eav\Model\Attribute\Data\File
 {
@@ -20,6 +21,7 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _validateByRules($value)
     {

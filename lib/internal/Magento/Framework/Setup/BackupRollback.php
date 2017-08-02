@@ -21,6 +21,7 @@ use Magento\Framework\Phrase;
  * Class to deal with backup and rollback functionality for database and Code base
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class BackupRollback
 {
@@ -33,6 +34,7 @@ class BackupRollback
      * Path to backup folder
      *
      * @var string
+     * @since 2.0.0
      */
     private $backupsDir;
 
@@ -40,6 +42,7 @@ class BackupRollback
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
@@ -47,6 +50,7 @@ class BackupRollback
      * Logger
      *
      * @var LoggerInterface
+     * @since 2.0.0
      */
     private $log;
 
@@ -54,6 +58,7 @@ class BackupRollback
      * Filesystem Directory List
      *
      * @var DirectoryList
+     * @since 2.0.0
      */
     private $directoryList;
 
@@ -61,6 +66,7 @@ class BackupRollback
      * File
      *
      * @var File
+     * @since 2.0.0
      */
     private $file;
 
@@ -68,6 +74,7 @@ class BackupRollback
      * Filesystem Helper
      *
      * @var Helper
+     * @since 2.0.0
      */
     private $fsHelper;
 
@@ -79,6 +86,7 @@ class BackupRollback
      * @param DirectoryList $directoryList
      * @param File $file
      * @param Helper $fsHelper
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -103,6 +111,7 @@ class BackupRollback
      * @param string $type
      * @return string
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function codeBackup($time, $type = Factory::TYPE_FILESYSTEM)
     {
@@ -144,6 +153,7 @@ class BackupRollback
      * @param string $type
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function codeRollback($rollbackFile, $type = Factory::TYPE_FILESYSTEM)
     {
@@ -194,6 +204,7 @@ class BackupRollback
      *
      * @param int $time
      * @return string
+     * @since 2.0.0
      */
     public function dbBackup($time)
     {
@@ -220,6 +231,7 @@ class BackupRollback
      * @param string $rollbackFile
      * @return void
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function dbRollback($rollbackFile)
     {
@@ -252,6 +264,7 @@ class BackupRollback
      * Get paths that should be excluded during iterative searches for locations for code backup only
      *
      * @return array
+     * @since 2.0.0
      */
     private function getCodeBackupIgnorePaths()
     {
@@ -272,6 +285,7 @@ class BackupRollback
      * Get paths that should be excluded during iterative searches for locations for media backup only
      *
      * @return array
+     * @since 2.0.0
      */
     private function getMediaBackupIgnorePaths()
     {
@@ -295,6 +309,7 @@ class BackupRollback
      * @param string $type
      * @return int
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function getFSDiskSpace($type = Factory::TYPE_FILESYSTEM)
     {
@@ -322,6 +337,7 @@ class BackupRollback
      *
      * @return int
      * @throws LocalizedException
+     * @since 2.0.0
      */
     public function getDBDiskSpace()
     {

@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\DB;
 
+/**
+ * Class \Magento\Framework\DB\ExpressionConverter
+ *
+ * @since 2.0.0
+ */
 class ExpressionConverter
 {
     /**
@@ -18,6 +23,7 @@ class ExpressionConverter
      * Dictionary maps common words in identifiers to abbreviations
      *
      * @var array
+     * @since 2.0.0
      */
     protected static $_translateMap = [
         'address'       => 'addr',
@@ -71,6 +77,7 @@ class ExpressionConverter
      *
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     public static function shortName($name)
     {
@@ -83,6 +90,7 @@ class ExpressionConverter
      * @param string $from
      * @param string $to
      * @return void
+     * @since 2.0.0
      */
     public static function addTranslate($from, $to)
     {
@@ -96,6 +104,7 @@ class ExpressionConverter
      * @param string $entityName
      * @param string $prefix
      * @return string
+     * @since 2.0.0
      */
     public static function shortenEntityName($entityName, $prefix)
     {
@@ -122,6 +131,7 @@ class ExpressionConverter
      * @param  string $prefix
      * @param  int $maxCharacters
      * @return string
+     * @since 2.0.0
      */
     private static function trimHash($hash, $prefix, $maxCharacters)
     {

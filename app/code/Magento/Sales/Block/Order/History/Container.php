@@ -9,11 +9,13 @@ namespace Magento\Sales\Block\Order\History;
  * Sales order history extra container block
  *
  * @api
+ * @since 2.2.0
  */
 class Container extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Api\Data\OrderInterface
+     * @since 2.2.0
      */
     private $order;
 
@@ -22,6 +24,7 @@ class Container extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return $this
+     * @since 2.2.0
      */
     public function setOrder(\Magento\Sales\Api\Data\OrderInterface $order)
     {
@@ -33,6 +36,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get order
      *
      * @return \Magento\Sales\Api\Data\OrderInterface
+     * @since 2.2.0
      */
     private function getOrder()
     {
@@ -46,6 +50,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * @param bool $useCache
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.2.0
      */
     public function getChildHtml($alias = '', $useCache = false)
     {

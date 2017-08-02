@@ -19,37 +19,49 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @since 2.0.0
+     */
     protected $customerAccountManagement;
 
-    /** @var Validator */
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @since 2.0.0
+     */
     protected $formKeyValidator;
 
     /**
      * @var AccountRedirect
+     * @since 2.0.0
      */
     protected $accountRedirect;
 
     /**
      * @var Session
+     * @since 2.0.0
      */
     protected $session;
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.1.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.1.0
      */
     private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private $cookieMetadataManager;
 
@@ -60,6 +72,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
+     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -81,7 +94,8 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Get scope config
      *
      * @return ScopeConfigInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getScopeConfig()
     {
@@ -97,8 +111,9 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @since 2.1.0
      */
     private function getCookieManager()
     {
@@ -113,8 +128,9 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 2.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @since 2.1.0
      */
     private function getCookieMetadataFactory()
     {
@@ -131,6 +147,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function execute()
     {

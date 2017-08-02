@@ -7,6 +7,7 @@ namespace Magento\Framework\Convert;
 
 /**
  * Convert xml data (SimpleXMLElement object) to array
+ * @since 2.0.0
  */
 class Xml
 {
@@ -16,6 +17,7 @@ class Xml
      *
      * @param \SimpleXMLElement $xml
      * @return array
+     * @since 2.0.0
      */
     public function xmlToAssoc(\SimpleXMLElement $xml)
     {

@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Hash generator of config data.
+ * @since 2.2.0
  */
 class Generator
 {
@@ -16,11 +17,13 @@ class Generator
      * Serializes data into string.
      *
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
     /**
      * @param SerializerInterface $serializer the serializer that serializes data into string
+     * @since 2.2.0
      */
     public function __construct(SerializerInterface $serializer)
     {
@@ -32,6 +35,7 @@ class Generator
      *
      * @param array|string $data the deployment configuration data from files
      * @return string the hash
+     * @since 2.2.0
      */
     public function generate($data)
     {

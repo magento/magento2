@@ -6,12 +6,18 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Validate
+ *
+ * @since 2.0.0
+ */
 class Validate extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
      * Validate action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

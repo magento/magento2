@@ -7,11 +7,13 @@ namespace Magento\UrlRewrite\Block\Catalog\Category;
 
 /**
  * Block for Catalog Category URL rewrites
+ * @since 2.0.0
  */
 class Edit extends \Magento\UrlRewrite\Block\Edit
 {
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
+     * @since 2.0.0
      */
     protected $_categoryFactory;
 
@@ -21,6 +23,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -37,6 +40,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Prepare layout for URL rewrite creating for category
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareLayoutFeatures()
     {
@@ -62,6 +66,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Get or create new instance of category
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     private function _getCategory()
     {
@@ -75,6 +80,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child category link block
      *
      * @return void
+     * @since 2.0.0
      */
     private function _addCategoryLinkBlock()
     {
@@ -93,6 +99,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Add child category tree block
      *
      * @return void
+     * @since 2.0.0
      */
     private function _addCategoryTreeBlock()
     {
@@ -103,6 +110,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      * Creates edit form block
      *
      * @return \Magento\UrlRewrite\Block\Catalog\Edit\Form
+     * @since 2.0.0
      */
     protected function _createEditFormBlock()
     {

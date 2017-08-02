@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Api;
 /**
  * Interface OrderRepositoryInterface
  * @api
+ * @since 2.0.0
  */
 interface OrderRepositoryInterface
 {
@@ -17,6 +18,7 @@ interface OrderRepositoryInterface
      * @param int $orderId The order ID.
      * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function get($orderId);
 
@@ -30,6 +32,7 @@ interface OrderRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @since 2.0.0
      */
     public function save($orderId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage);
 }

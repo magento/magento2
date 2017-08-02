@@ -10,16 +10,19 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class Options
+ * @since 2.0.0
  */
 class Options implements OptionSourceInterface
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var InvoiceRepositoryInterface
+     * @since 2.0.0
      */
     protected $invoiceRepository;
 
@@ -27,6 +30,7 @@ class Options implements OptionSourceInterface
      * Constructor
      *
      * @param InvoiceRepositoryInterface $invoiceRepository
+     * @since 2.0.0
      */
     public function __construct(InvoiceRepositoryInterface $invoiceRepository)
     {
@@ -37,6 +41,7 @@ class Options implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

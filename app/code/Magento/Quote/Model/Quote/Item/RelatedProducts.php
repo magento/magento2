@@ -6,17 +6,24 @@
  */
 namespace Magento\Quote\Model\Quote\Item;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Item\RelatedProducts
+ *
+ * @since 2.0.0
+ */
 class RelatedProducts
 {
     /**
      * List of related product types
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_relatedProductTypes;
 
     /**
      * @param array $relatedProductTypes
+     * @since 2.0.0
      */
     public function __construct($relatedProductTypes = [])
     {
@@ -28,6 +35,7 @@ class RelatedProducts
      *
      * @param \Magento\Quote\Model\Quote\Item[] $quoteItems
      * @return int[]
+     * @since 2.0.0
      */
     public function getRelatedProductIds(array $quoteItems)
     {

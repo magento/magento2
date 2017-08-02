@@ -7,6 +7,11 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Hidden
+ *
+ * @since 2.0.0
+ */
 class Hidden extends Text
 {
 }

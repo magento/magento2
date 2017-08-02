@@ -9,20 +9,28 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option
+ *
+ * @since 2.0.0
+ */
 class Option
 {
     /**
      * @var QuoteItemQtyList
+     * @since 2.0.0
      */
     protected $quoteItemQtyList;
 
     /**
      * @var StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var StockStateInterface
+     * @since 2.0.0
      */
     protected $stockState;
 
@@ -30,6 +38,7 @@ class Option
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockRegistryInterface $stockRegistry
      * @param StockStateInterface $stockState
+     * @since 2.0.0
      */
     public function __construct(
         QuoteItemQtyList $quoteItemQtyList,
@@ -49,6 +58,7 @@ class Option
      *
      * @return \Magento\CatalogInventory\Model\Stock\Item
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getStockItem(
         \Magento\Quote\Model\Quote\Item\Option $option,
@@ -84,6 +94,7 @@ class Option
      *
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function initialize(
         \Magento\Quote\Model\Quote\Item\Option $option,

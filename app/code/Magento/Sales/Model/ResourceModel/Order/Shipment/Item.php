@@ -12,6 +12,7 @@ use Magento\Sales\Model\Spi\ShipmentItemResourceInterface;
  * Flat sales order shipment item resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Item extends SalesResource implements ShipmentItemResourceInterface
 {
@@ -19,6 +20,7 @@ class Item extends SalesResource implements ShipmentItemResourceInterface
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_shipment_item_resource';
 
@@ -26,6 +28,7 @@ class Item extends SalesResource implements ShipmentItemResourceInterface
      * Model initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -37,6 +40,7 @@ class Item extends SalesResource implements ShipmentItemResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

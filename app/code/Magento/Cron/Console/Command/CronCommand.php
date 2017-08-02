@@ -19,6 +19,7 @@ use Magento\Framework\Shell\ComplexParameter;
 
 /**
  * Command for executing cron jobs
+ * @since 2.0.0
  */
 class CronCommand extends Command
 {
@@ -31,6 +32,7 @@ class CronCommand extends Command
      * Object manager factory
      *
      * @var ObjectManagerFactory
+     * @since 2.0.0
      */
     private $objectManagerFactory;
 
@@ -38,6 +40,7 @@ class CronCommand extends Command
      * Constructor
      *
      * @param ObjectManagerFactory $objectManagerFactory
+     * @since 2.0.0
      */
     public function __construct(ObjectManagerFactory $objectManagerFactory)
     {
@@ -47,6 +50,7 @@ class CronCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -72,6 +76,7 @@ class CronCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

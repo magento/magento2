@@ -15,16 +15,19 @@ use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
  * Instead, it will try to find the first suitable child and return its result.
  *
  * @api
+ * @since 2.0.0
  */
 class CompositeUserContext implements \Magento\Authorization\Model\UserContextInterface
 {
     /**
      * @var UserContextInterface[]
+     * @since 2.0.0
      */
     protected $userContexts = [];
 
     /**
      * @var UserContextInterface|bool
+     * @since 2.0.0
      */
     protected $chosenUserContext;
 
@@ -33,6 +36,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
      *
      * @param CompositeHelper $compositeHelper
      * @param UserContextInterface[] $userContexts
+     * @since 2.0.0
      */
     public function __construct(CompositeHelper $compositeHelper, $userContexts = [])
     {
@@ -47,6 +51,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
      *
      * @param UserContextInterface $userContext
      * @return CompositeUserContext
+     * @since 2.0.0
      */
     protected function add(UserContextInterface $userContext)
     {
@@ -56,6 +61,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -64,6 +70,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getUserType()
     {
@@ -74,6 +81,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
      * Retrieve user context
      *
      * @return UserContextInterface|bool False if none of the registered user contexts can identify user type
+     * @since 2.0.0
      */
     protected function getUserContext()
     {

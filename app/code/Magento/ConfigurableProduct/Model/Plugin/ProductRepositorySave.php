@@ -14,21 +14,29 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave
+ *
+ * @since 2.2.0
+ */
 class ProductRepositorySave
 {
     /**
      * @var ProductAttributeRepositoryInterface
+     * @since 2.2.0
      */
     private $productAttributeRepository;
 
     /**
      * @var ProductFactory
+     * @since 2.2.0
      */
     private $productFactory;
 
     /**
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ProductFactory $productFactory
+     * @since 2.2.0
      */
     public function __construct(
         ProductAttributeRepositoryInterface $productAttributeRepository,
@@ -50,6 +58,7 @@ class ProductRepositorySave
      * @throws InputException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function afterSave(
         ProductRepositoryInterface $subject,
@@ -91,6 +100,7 @@ class ProductRepositorySave
      * @param array $linkIds
      * @return $this
      * @throws InputException
+     * @since 2.2.0
      */
     private function validateProductLinks(array $attributeCodes, array $linkIds)
     {

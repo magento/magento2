@@ -15,31 +15,37 @@ use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Class to locate types for Eav custom attributes
+ * @since 2.0.0
  */
 class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterface
 {
     /**
      * @var AttributeRepositoryInterface
+     * @since 2.0.0
      */
     private $attributeRepository;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $serviceEntityTypeMap;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $serviceBackendModelDataInterfaceMap;
 
     /**
      * @var ComplexTypeLocator
+     * @since 2.1.0
      */
     private $complexTypeLocator;
 
     /**
      * @var SimpleTypeLocator
+     * @since 2.1.0
      */
     private $simpleTypeLocator;
 
@@ -67,6 +73,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      *                             ]
      * ]
      * </pre>
+     * @since 2.0.0
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
@@ -81,6 +88,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType($attributeCode, $serviceClass)
     {
@@ -106,6 +114,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAllServiceDataInterfaces()
     {
@@ -126,7 +135,8 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * Get complex type locator instance
      *
      * @return ComplexTypeLocator
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getComplexTypeLocator()
     {
@@ -140,7 +150,8 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * Get simple type locator instance
      *
      * @return SimpleTypeLocator
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getSimpleTypeLocator()
     {

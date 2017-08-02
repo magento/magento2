@@ -8,12 +8,18 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
 use Magento\Reports\Model\Flag;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Coupons
+ *
+ * @since 2.0.0
+ */
 class Coupons extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Coupons report action
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

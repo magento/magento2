@@ -10,6 +10,7 @@ namespace Magento\Paypal\Model\ResourceModel\Report;
 
 /**
  * Report settlement resource model
+ * @since 2.0.0
  */
 class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,11 +18,13 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Table name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_rowsTable;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.0.0
      */
     protected $_coreDate;
 
@@ -29,6 +32,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -43,6 +47,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Init main table
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -55,6 +60,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Paypal\Model\Report\Settlement $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -104,6 +110,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $accountId
      * @param string $reportDate
      * @return $this
+     * @since 2.0.0
      */
     public function loadByAccountAndDate(\Magento\Paypal\Model\Report\Settlement $report, $accountId, $reportDate)
     {

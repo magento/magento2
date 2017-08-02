@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
+ * @since 2.0.0
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {
@@ -20,6 +21,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Configuration reader
      *
      * @var ReaderInterface
+     * @since 2.0.0
      */
     protected $_reader;
 
@@ -27,6 +29,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Configuration cache
      *
      * @var CacheInterface
+     * @since 2.0.0
      */
     protected $_cache;
 
@@ -34,6 +37,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Cache tag
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_cacheId;
 
@@ -41,6 +45,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Cache tags
      *
      * @var array
+     * @since 2.0.0
      */
     protected $cacheTags = [];
 
@@ -48,26 +53,31 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Config data
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_data = [];
 
     /**
      * @var ReaderInterface
+     * @since 2.0.0
      */
     private $reader;
 
     /**
      * @var CacheInterface
+     * @since 2.0.0
      */
     private $cache;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $cacheId;
 
     /**
      * @var SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -78,6 +88,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param CacheInterface $cache
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
+     * @since 2.0.0
      */
     public function __construct(
         ReaderInterface $reader,
@@ -96,6 +107,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Initialise data for configuration
      *
      * @return void
+     * @since 2.0.0
      */
     protected function initData()
     {
@@ -115,6 +127,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      *
      * @param array $config
      * @return void
+     * @since 2.0.0
      */
     public function merge(array $config)
     {
@@ -127,6 +140,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param string $path
      * @param mixed $default
      * @return array|mixed|null
+     * @since 2.0.0
      */
     public function get($path = null, $default = null)
     {
@@ -149,6 +163,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * Clear cache data
      *
      * @return void
+     * @since 2.0.0
      */
     public function reset()
     {

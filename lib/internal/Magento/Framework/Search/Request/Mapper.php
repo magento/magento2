@@ -12,46 +12,55 @@ use Magento\Framework\Phrase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Mapper
 {
     /**
      * @var QueryInterface
+     * @since 2.0.0
      */
     private $rootQuery;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $queries;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $filters;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $mappedQueries;
 
     /**
      * @var string[]
+     * @since 2.0.0
      */
     private $mappedFilters;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     private $aggregations;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $rootQueryName;
 
@@ -64,6 +73,7 @@ class Mapper
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws StateException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -86,6 +96,7 @@ class Mapper
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws StateException
+     * @since 2.0.0
      */
     public function getRootQuery()
     {
@@ -107,6 +118,7 @@ class Mapper
      * @throws \InvalidArgumentException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     private function mapQuery($queryName)
     {
@@ -176,6 +188,7 @@ class Mapper
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws StateException
+     * @since 2.0.0
      */
     private function mapFilter($filterName)
     {
@@ -241,6 +254,7 @@ class Mapper
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     private function aggregateFiltersByType($data)
     {
@@ -256,6 +270,7 @@ class Mapper
      *
      * @param array $data
      * @return array
+     * @since 2.0.0
      */
     private function aggregateQueriesByType($data)
     {
@@ -269,6 +284,7 @@ class Mapper
     /**
      * @return void
      * @throws StateException
+     * @since 2.0.0
      */
     private function validate()
     {
@@ -279,6 +295,7 @@ class Mapper
     /**
      * @return void
      * @throws StateException
+     * @since 2.0.0
      */
     private function validateQueries()
     {
@@ -291,6 +308,7 @@ class Mapper
      * @param string $errorMessage
      * @return void
      * @throws \Magento\Framework\Exception\StateException
+     * @since 2.0.0
      */
     private function validateNotUsed($elements, $mappedElements, $errorMessage)
     {
@@ -304,6 +322,7 @@ class Mapper
     /**
      * @return void
      * @throws StateException
+     * @since 2.0.0
      */
     private function validateFilters()
     {
@@ -315,6 +334,7 @@ class Mapper
      *
      * @return array
      * @throws StateException
+     * @since 2.0.0
      */
     public function getBuckets()
     {
@@ -364,6 +384,7 @@ class Mapper
      *
      * @param array $bucketData
      * @return array
+     * @since 2.0.0
      */
     private function mapMetrics(array $bucketData)
     {
@@ -387,6 +408,7 @@ class Mapper
      *
      * @param array $bucketData
      * @return array
+     * @since 2.0.0
      */
     private function mapRanges(array $bucketData)
     {

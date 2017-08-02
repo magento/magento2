@@ -19,6 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Product list
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ListProduct extends AbstractProduct implements IdentityInterface
 {
@@ -26,6 +27,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Default toolbar block name
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_defaultToolbarBlock = Toolbar::class;
 
@@ -33,6 +35,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Product Collection
      *
      * @var AbstractCollection
+     * @since 2.0.0
      */
     protected $_productCollection;
 
@@ -40,21 +43,25 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Catalog layer
      *
      * @var \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     protected $_catalogLayer;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
+     * @since 2.0.0
      */
     protected $_postDataHelper;
 
     /**
      * @var \Magento\Framework\Url\Helper\Data
+     * @since 2.0.0
      */
     protected $urlHelper;
 
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -65,6 +72,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -99,6 +107,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * even when it did not pass externally and therefore isn't cached yet
      *
      * @return AbstractCollection
+     * @since 2.0.0
      */
     protected function _getProductCollection()
     {
@@ -113,6 +122,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Get catalog layer model
      *
      * @return \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     public function getLayer()
     {
@@ -123,6 +133,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Retrieve loaded category collection
      *
      * @return AbstractCollection
+     * @since 2.0.0
      */
     public function getLoadedProductCollection()
     {
@@ -133,6 +144,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Retrieve current view mode
      *
      * @return string
+     * @since 2.0.0
      */
     public function getMode()
     {
@@ -143,6 +155,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Need use as _prepareLayout - but problem in declaring collection from
      * another block (was problem with search result)
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -157,6 +170,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Retrieve Toolbar block
      *
      * @return Toolbar
+     * @since 2.0.0
      */
     public function getToolbarBlock()
     {
@@ -175,6 +189,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Retrieve additional blocks html
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAdditionalHtml()
     {
@@ -185,6 +200,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Retrieve list toolbar HTML
      *
      * @return string
+     * @since 2.0.0
      */
     public function getToolbarHtml()
     {
@@ -194,6 +210,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * @param AbstractCollection $collection
      * @return $this
+     * @since 2.0.0
      */
     public function setCollection($collection)
     {
@@ -204,6 +221,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * @param array|string|integer|\Magento\Framework\App\Config\Element $code
      * @return $this
+     * @since 2.0.0
      */
     public function addAttribute($code)
     {
@@ -213,6 +231,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
     /**
      * @return mixed
+     * @since 2.0.0
      */
     public function getPriceBlockTemplate()
     {
@@ -223,6 +242,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Retrieve Catalog Config object
      *
      * @return \Magento\Catalog\Model\Config
+     * @since 2.0.0
      */
     protected function _getConfig()
     {
@@ -234,6 +254,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Block\Product\ListProduct
+     * @since 2.0.0
      */
     public function prepareSortableFieldsByCategory($category)
     {
@@ -260,6 +281,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Return identifiers for produced content
      *
      * @return array
+     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -279,6 +301,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
     {
@@ -295,6 +318,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     public function getProductPrice(\Magento\Catalog\Model\Product $product)
     {
@@ -322,6 +346,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * i.e. rendering happens in the scope of product list, but not single product
      *
      * @return \Magento\Framework\Pricing\Render
+     * @since 2.0.0
      */
     protected function getPriceRender()
     {
@@ -343,6 +368,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * when product collection initialized.
      *
      * @return Collection
+     * @since 2.2.0
      */
     private function initializeProductCollection()
     {
@@ -407,6 +433,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param ProductList\Toolbar $toolbar
      * @param Collection $collection
      * @return void
+     * @since 2.2.0
      */
     private function configureToolbar(Toolbar $toolbar, Collection $collection)
     {

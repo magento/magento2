@@ -13,16 +13,19 @@ use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Upgrade job
+ * @since 2.0.0
  */
 class JobUpgrade extends AbstractJob
 {
     /**
      * @var \Magento\Setup\Model\Cron\Status
+     * @since 2.0.0
      */
     protected $status;
 
     /**
      * @var \Magento\Setup\Model\Cron\Queue
+     * @since 2.0.0
      */
     private $queue;
 
@@ -36,6 +39,7 @@ class JobUpgrade extends AbstractJob
      * @param \Magento\Setup\Model\Cron\Status $status
      * @param string $name
      * @param array $params
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Setup\Console\Command\AbstractSetupCommand $command,
@@ -56,6 +60,7 @@ class JobUpgrade extends AbstractJob
      *
      * @throws \RuntimeException
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

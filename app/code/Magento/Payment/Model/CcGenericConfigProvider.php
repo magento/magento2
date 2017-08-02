@@ -14,16 +14,19 @@ use Magento\Payment\Helper\Data as PaymentHelper;
  * Direct injection as a dependency or extending of this class is not recommended.
  *
  * @api
+ * @since 2.0.0
  */
 class CcGenericConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CcConfig
+     * @since 2.0.0
      */
     protected $ccConfig;
 
     /**
      * @var MethodInterface[]
+     * @since 2.0.0
      */
     protected $methods = [];
 
@@ -31,6 +34,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * @param CcConfig $ccConfig
      * @param PaymentHelper $paymentHelper
      * @param array $methodCodes
+     * @since 2.0.0
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -45,6 +49,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -71,7 +76,8 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Solo/switch card start years
      *
      * @return array
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     protected function getSsStartYears()
     {
@@ -82,6 +88,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Retrieve credit card expire months
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getCcMonths()
     {
@@ -92,6 +99,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Retrieve credit card expire years
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getCcYears()
     {
@@ -102,6 +110,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Retrieve CVV tooltip image url
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getCvvImageUrl()
     {
@@ -113,6 +122,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return array
+     * @since 2.0.0
      */
     protected function getCcAvailableTypes($methodCode)
     {
@@ -134,6 +144,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return bool
+     * @since 2.0.0
      */
     protected function hasVerification($methodCode)
     {
@@ -150,7 +161,8 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return bool
-     * @deprecated unused
+     * @deprecated 2.1.0 unused
+     * @since 2.0.0
      */
     protected function hasSsCardType($methodCode)
     {

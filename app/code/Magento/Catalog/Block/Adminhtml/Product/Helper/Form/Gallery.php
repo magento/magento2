@@ -18,12 +18,18 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery
+ *
+ * @since 2.0.0
+ */
 class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * Gallery field name suffix
      *
      * @var string
+     * @since 2.1.0
      */
     protected $fieldNameSuffix = 'product';
 
@@ -31,6 +37,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Gallery html id
      *
      * @var string
+     * @since 2.1.0
      */
     protected $htmlId = 'media_gallery';
 
@@ -38,6 +45,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Gallery name
      *
      * @var string
+     * @since 2.1.0
      */
     protected $name = 'product[media_gallery]';
 
@@ -45,26 +53,31 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Html id for data scope
      *
      * @var string
+     * @since 2.1.0
      */
     protected $image = 'image';
 
     /**
      * @var string
+     * @since 2.1.0
      */
     protected $formName = 'product_form';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Data\Form
+     * @since 2.1.0
      */
     protected $form;
 
     /**
      * @var Registry
+     * @since 2.1.0
      */
     protected $registry;
 
@@ -74,6 +87,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * @param Registry $registry
      * @param \Magento\Framework\Data\Form $form
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -90,6 +104,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -101,6 +116,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Get product images
      *
      * @return array|null
+     * @since 2.1.0
      */
     public function getImages()
     {
@@ -111,6 +127,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Prepares content block
      *
      * @return string
+     * @since 2.0.0
      */
     public function getContentHtml()
     {
@@ -125,6 +142,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
+     * @since 2.1.0
      */
     protected function getHtmlId()
     {
@@ -133,6 +151,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getName()
     {
@@ -141,6 +160,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getFieldNameSuffix()
     {
@@ -149,6 +169,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
+     * @since 2.1.0
      */
     public function getDataScopeHtmlId()
     {
@@ -160,6 +181,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     public function canDisplayUseDefault($attribute)
     {
@@ -175,6 +197,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return bool
+     * @since 2.0.0
      */
     public function usedDefault($attribute)
     {
@@ -201,6 +224,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return string
+     * @since 2.0.0
      */
     public function getScopeLabel($attribute)
     {
@@ -223,6 +247,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Retrieve data object related with form
      *
      * @return ProductInterface|Product
+     * @since 2.0.0
      */
     public function getDataObject()
     {
@@ -235,6 +260,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @param Attribute $attribute
      * @return string
+     * @since 2.0.0
      */
     public function getAttributeFieldName($attribute)
     {
@@ -247,6 +273,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function toHtml()
     {
@@ -257,6 +284,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * Default sore ID getter
      *
      * @return integer
+     * @since 2.0.0
      */
     protected function _getDefaultStoreId()
     {

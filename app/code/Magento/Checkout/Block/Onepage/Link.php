@@ -10,16 +10,19 @@ namespace Magento\Checkout\Block\Onepage;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Session
+     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Checkout\Helper\Data
+     * @since 2.0.0
      */
     protected $_checkoutHelper;
 
@@ -28,6 +31,7 @@ class Link extends \Magento\Framework\View\Element\Template
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -43,6 +47,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getCheckoutUrl()
     {
@@ -51,6 +56,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isDisabled()
     {
@@ -59,6 +65,7 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isPossibleOnepageCheckout()
     {

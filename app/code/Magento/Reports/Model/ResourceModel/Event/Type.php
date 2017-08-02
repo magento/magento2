@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Event;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,6 +21,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Main table initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

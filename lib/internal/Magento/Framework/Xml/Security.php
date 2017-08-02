@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Class Security
+ * @since 2.0.0
  */
 class Security
 {
@@ -18,6 +19,7 @@ class Security
      *
      * @param string $xmlContent
      * @return bool
+     * @since 2.0.0
      */
     private function heuristicScan($xmlContent)
     {
@@ -28,6 +30,7 @@ class Security
      * Return true if PHP is running with PHP-FPM
      *
      * @return bool
+     * @since 2.0.0
      */
     private function isPhpFpm()
     {
@@ -41,6 +44,7 @@ class Security
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function scan($xmlContent)
     {

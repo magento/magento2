@@ -20,56 +20,67 @@ use Psr\Log\LoggerInterface;
 /**
  * Class RefundOrder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.2.0
  */
 class RefundOrder implements RefundOrderInterface
 {
     /**
      * @var ResourceConnection
+     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @var OrderStateResolverInterface
+     * @since 2.2.0
      */
     private $orderStateResolver;
 
     /**
      * @var OrderRepositoryInterface
+     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @var CreditmemoRepositoryInterface
+     * @since 2.2.0
      */
     private $creditmemoRepository;
 
     /**
      * @var RefundAdapterInterface
+     * @since 2.2.0
      */
     private $refundAdapter;
 
     /**
      * @var CreditmemoDocumentFactory
+     * @since 2.2.0
      */
     private $creditmemoDocumentFactory;
 
     /**
      * @var RefundOrderValidator
+     * @since 2.2.0
      */
     private $validator;
 
     /**
      * @var NotifierInterface
+     * @since 2.2.0
      */
     private $notifier;
 
     /**
      * @var OrderConfig
+     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -87,6 +98,7 @@ class RefundOrder implements RefundOrderInterface
      * @param OrderConfig $config
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -114,6 +126,7 @@ class RefundOrder implements RefundOrderInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function execute(
         $orderId,

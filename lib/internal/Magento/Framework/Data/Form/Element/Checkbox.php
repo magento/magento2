@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
  * Form checkbox element
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Checkbox extends AbstractElement
 {
@@ -19,6 +20,7 @@ class Checkbox extends AbstractElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         Factory $factoryElement,
@@ -33,6 +35,7 @@ class Checkbox extends AbstractElement
 
     /**
      * @return string[]
+     * @since 2.0.0
      */
     public function getHtmlAttributes()
     {
@@ -55,6 +58,7 @@ class Checkbox extends AbstractElement
     /**
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -71,6 +75,7 @@ class Checkbox extends AbstractElement
      *
      * @param bool $value
      * @return Checkbox
+     * @since 2.0.0
      */
     public function setIsChecked($value = false)
     {
@@ -83,6 +88,7 @@ class Checkbox extends AbstractElement
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getIsChecked()
     {

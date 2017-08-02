@@ -11,6 +11,7 @@ namespace Magento\Framework\Config\Dom;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ValidationException extends \InvalidArgumentException
 {

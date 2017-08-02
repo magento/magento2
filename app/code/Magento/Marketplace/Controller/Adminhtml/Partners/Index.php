@@ -6,21 +6,29 @@
  */
 namespace Magento\Marketplace\Controller\Adminhtml\Partners;
 
+/**
+ * Class \Magento\Marketplace\Controller\Adminhtml\Partners\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends \Magento\Marketplace\Controller\Adminhtml\Partners
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
+     * @since 2.0.0
      */
     protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     protected $layoutFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -32,6 +40,7 @@ class Index extends \Magento\Marketplace\Controller\Adminhtml\Partners
 
     /**
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -45,6 +54,7 @@ class Index extends \Magento\Marketplace\Controller\Adminhtml\Partners
 
     /**
      * @return \Magento\Framework\View\LayoutFactory
+     * @since 2.0.0
      */
     public function getLayoutFactory()
     {

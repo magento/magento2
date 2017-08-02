@@ -9,6 +9,7 @@ namespace Magento\Framework\Translate;
  * Inline translation interface
  *
  * @api
+ * @since 2.0.0
  */
 interface InlineInterface
 {
@@ -17,6 +18,7 @@ interface InlineInterface
      *
      * @param mixed $tagName
      * @return mixed
+     * @since 2.0.0
      */
     public function getAdditionalHtmlAttribute($tagName = null);
 
@@ -24,6 +26,7 @@ interface InlineInterface
      * Check if inline translates is allowed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed();
 
@@ -33,6 +36,7 @@ interface InlineInterface
      * @param array|string $body
      * @param bool $isJson
      * @return \Magento\Framework\Translate\InlineInterface
+     * @since 2.0.0
      */
     public function processResponseBody(&$body, $isJson = false);
 
@@ -40,6 +44,7 @@ interface InlineInterface
      * Retrieve Inline Parser instance
      *
      * @return Inline\ParserInterface
+     * @since 2.0.0
      */
     public function getParser();
 }

@@ -8,6 +8,7 @@ namespace Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Bestsellers\Collection
 {
@@ -15,6 +16,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Bestsellers\C
      * Tables per period
      *
      * @var array
+     * @since 2.0.0
      */
     protected $tableForPeriod = [
         'daily' => \Magento\Reports\Model\ResourceModel\Report\Product\Viewed::AGGREGATION_DAILY,
@@ -26,6 +28,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Bestsellers\C
      * Return ordered filed
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getOrderedField()
     {

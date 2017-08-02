@@ -10,22 +10,26 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 
 /**
  * Class RelationComposite
+ * @since 2.0.0
  */
 class RelationComposite
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $relationProcessors;
 
     /**
      * @var EventManager
+     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @param EventManager $eventManager
      * @param array $relationProcessors
+     * @since 2.0.0
      */
     public function __construct(
         EventManager $eventManager,
@@ -40,6 +44,7 @@ class RelationComposite
      *
      * @param AbstractModel $object
      * @return void
+     * @since 2.0.0
      */
     public function processRelations(AbstractModel $object)
     {

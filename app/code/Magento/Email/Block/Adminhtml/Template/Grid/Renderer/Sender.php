@@ -9,6 +9,7 @@ namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
  * Adminhtml system templates grid block sender item renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -17,6 +18,7 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {

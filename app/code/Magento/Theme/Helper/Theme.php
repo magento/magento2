@@ -9,17 +9,24 @@
  */
 namespace Magento\Theme\Helper;
 
+/**
+ * Class \Magento\Theme\Helper\Theme
+ *
+ * @since 2.0.0
+ */
 class Theme extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Layout merge factory
      *
      * @var \Magento\Framework\View\Layout\ProcessorFactory
+     * @since 2.0.0
      */
     protected $_layoutProcessorFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
      */
     protected $_assetRepo;
 
@@ -27,6 +34,7 @@ class Theme extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -47,6 +55,7 @@ class Theme extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return \Magento\Framework\View\Asset\LocalInterface[]
+     * @since 2.0.0
      */
     public function getCssAssets($theme)
     {

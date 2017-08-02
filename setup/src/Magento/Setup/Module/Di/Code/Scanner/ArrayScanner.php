@@ -5,6 +5,11 @@
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\ArrayScanner
+ *
+ * @since 2.0.0
+ */
 class ArrayScanner implements ScannerInterface
 {
     /**
@@ -12,6 +17,7 @@ class ArrayScanner implements ScannerInterface
      *
      * @param array $files
      * @return array
+     * @since 2.0.0
      */
     public function collectEntities(array $files)
     {

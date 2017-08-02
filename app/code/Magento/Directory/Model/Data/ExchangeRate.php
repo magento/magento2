@@ -11,6 +11,7 @@ namespace Magento\Directory\Model\Data;
  * Class Exchange Rate
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Directory\Api\Data\ExchangeRateInterface
@@ -20,6 +21,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getCurrencyTo()
     {
@@ -28,6 +30,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setCurrencyTo($code)
     {
@@ -36,6 +39,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getRate()
     {
@@ -44,6 +48,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setRate($rate)
     {
@@ -52,6 +57,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getExchangeRates()
     {
@@ -60,6 +66,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setExchangeRates(array $exchangeRates = null)
     {
@@ -68,6 +75,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -76,6 +84,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Directory\Api\Data\ExchangeRateExtensionInterface $extensionAttributes

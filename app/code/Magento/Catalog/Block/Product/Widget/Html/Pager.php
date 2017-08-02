@@ -11,6 +11,11 @@
  */
 namespace Magento\Catalog\Block\Product\Widget\Html;
 
+/**
+ * Class \Magento\Catalog\Block\Product\Widget\Html\Pager
+ *
+ * @since 2.0.0
+ */
 class Pager extends \Magento\Theme\Block\Html\Pager
 {
     /**
@@ -19,6 +24,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Size of collection which may has a manual limitation
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_collectionSize;
 
@@ -26,6 +32,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Current page
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_currentPage;
 
@@ -33,6 +40,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Last page
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_lastPage;
 
@@ -42,6 +50,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * It may be limited by manual
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCollectionSize()
     {
@@ -60,6 +69,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * If current page is grate then total count of page current page will be equals total count of page
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCurrentPage()
     {
@@ -80,6 +90,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Return items count per page
      *
      * @return int
+     * @since 2.0.0
      */
     public function getLimit()
     {
@@ -100,6 +111,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      *
      * @param   \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
      * @return  \Magento\Catalog\Block\Product\Widget\Html\Pager
+     * @since 2.0.0
      */
     public function setCollection($collection)
     {
@@ -119,6 +131,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Return position number in collection for first item on current page
      *
      * @return int
+     * @since 2.0.0
      */
     public function getFirstNum()
     {
@@ -129,6 +142,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Return position number in collection for last item on current page
      *
      * @return int
+     * @since 2.0.0
      */
     public function getLastNum()
     {
@@ -142,6 +156,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * It may be limited by manual
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTotalNum()
     {
@@ -153,6 +168,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getLastPageNum()
     {
@@ -169,6 +185,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Checks if current page is the first page
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isFirstPage()
     {
@@ -179,6 +196,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Checks if current page is the last page
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isLastPage()
     {
@@ -189,6 +207,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Return array of pages
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPages()
     {
@@ -216,6 +235,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Retrieve url for previous page
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPreviousPageUrl()
     {
@@ -226,6 +246,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Retrieve url for next page
      *
      * @return string
+     * @since 2.0.0
      */
     public function getNextPageUrl()
     {
@@ -236,6 +257,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Retrieve url for last page
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLastPageUrl()
     {
@@ -246,6 +268,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Initialize frame data, such as frame start, frame start etc.
      *
      * @return \Magento\Catalog\Block\Product\Widget\Html\Pager
+     * @since 2.0.0
      */
     protected function _initFrame()
     {

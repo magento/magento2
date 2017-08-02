@@ -11,6 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Options implements OptionsInterface
 {
@@ -20,11 +21,13 @@ class Options implements OptionsInterface
 
     /**
      * @var ScopeConfigInterface
+     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @since 2.0.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -33,6 +36,7 @@ class Options implements OptionsInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function get()
     {

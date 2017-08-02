@@ -10,12 +10,18 @@ use Magento\Backend\App\Action;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 
+/**
+ * Class \Magento\Integration\Controller\Adminhtml\Integration\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
      * Edit integration action.
      *
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

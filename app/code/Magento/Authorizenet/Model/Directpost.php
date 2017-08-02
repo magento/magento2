@@ -15,6 +15,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 2.0.0
  */
 class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements TransparentInterface, ConfigInterface
 {
@@ -22,11 +23,13 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
@@ -34,6 +37,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isGateway = true;
 
@@ -41,6 +45,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canAuthorize = true;
 
@@ -48,6 +53,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canCapture = true;
 
@@ -55,6 +61,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canRefund = true;
 
@@ -62,6 +69,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canRefundInvoicePartial = true;
 
@@ -69,6 +77,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canVoid = true;
 
@@ -76,6 +85,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_canFetchTransactionInfo = true;
 
@@ -83,26 +93,31 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Payment Method feature
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isInitializeNeeded = true;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Authorizenet\Model\Directpost\Response
+     * @since 2.0.0
      */
     protected $response;
 
     /**
      * @var OrderSender
+     * @since 2.0.0
      */
     protected $orderSender;
 
@@ -110,16 +125,19 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Order factory
      *
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
     /**
      * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     * @since 2.0.0
      */
     protected $transactionRepository;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 2.1.0
      */
     private $psrLogger;
 
@@ -147,6 +165,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -206,6 +225,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
      * @return void
+     * @since 2.0.0
      */
     public function setDataHelper(\Magento\Authorizenet\Helper\Data $dataHelper)
     {
@@ -216,6 +236,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Do not validate payment form using server methods
      *
      * @return bool
+     * @since 2.0.0
      */
     public function validate()
     {
@@ -229,6 +250,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param  float $amount
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -242,6 +264,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -274,6 +297,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function processCapture($result, $payment)
     {
@@ -320,6 +344,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -365,6 +390,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param float $amount
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -387,6 +413,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function processRefund(\Magento\Framework\DataObject $payment, $amount)
     {
@@ -432,6 +459,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Get CGI url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCgiUrl()
     {
@@ -444,6 +472,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param int $storeId
      * @return string
+     * @since 2.0.0
      */
     public function getRelayUrl($storeId = null)
     {
@@ -457,6 +486,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Return response.
      *
      * @return \Magento\Authorizenet\Model\Directpost\Response
+     * @since 2.0.0
      */
     public function getResponse()
     {
@@ -470,6 +500,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\DataObject $stateObject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -497,6 +528,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order $order Quote or order object.
      * @return \Magento\Authorizenet\Model\Directpost\Request
+     * @since 2.0.0
      */
     public function generateRequestFromOrder(\Magento\Sales\Model\Order $order)
     {
@@ -515,6 +547,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param array $postData
      * @return $this
+     * @since 2.0.0
      */
     public function setResponseData(array $postData)
     {
@@ -527,6 +560,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @return bool true in case of validation success.
      * @throws \Magento\Framework\Exception\LocalizedException In case of validation error
+     * @since 2.0.0
      */
     public function validateResponse()
     {
@@ -549,6 +583,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param array $responseData data from Authorize.net from $_POST
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException In case of validation error or order creation error
+     * @since 2.0.0
      */
     public function process(array $responseData)
     {
@@ -598,6 +633,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Framework\DataObject $payment
      * @return void
+     * @since 2.0.0
      */
     protected function fillPaymentByResponse(\Magento\Framework\DataObject $payment)
     {
@@ -623,6 +659,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @return true in case of Approved response
      * @throws \Magento\Framework\Exception\LocalizedException In case of Declined or Error response from Authorize.net
+     * @since 2.0.0
      */
     public function checkResponseCode()
     {
@@ -647,6 +684,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @return true in case of right transaction id
      * @throws \Magento\Framework\Exception\LocalizedException In case of bad transaction id.
+     * @since 2.0.0
      */
     public function checkTransId()
     {
@@ -663,6 +701,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param float $amount
      * @return bool
+     * @since 2.0.0
      */
     protected function matchAmount($amount)
     {
@@ -678,6 +717,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function processOrder(\Magento\Sales\Model\Order $order)
     {
@@ -731,6 +771,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return $this
+     * @since 2.0.0
      */
     protected function processPaymentFraudStatus(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -762,6 +803,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return $this
+     * @since 2.0.0
      */
     protected function addStatusComment(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -798,6 +840,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param string $message
      * @param bool $voidPayment
      * @return void
+     * @since 2.0.0
      */
     protected function declineOrder(\Magento\Sales\Model\Order $order, $message = '', $voidPayment = true)
     {
@@ -820,6 +863,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
+     * @since 2.0.0
      */
     protected function getRealParentTransactionId($payment)
     {
@@ -833,6 +877,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * {inheritdoc}
+     * @since 2.0.0
      */
     public function getConfigInterface()
     {
@@ -845,6 +890,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param mixed $key
      * @param null $storeId
      * @return mixed
+     * @since 2.0.0
      */
     public function getValue($key, $storeId = null)
     {
@@ -856,6 +902,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param bool $isInitializeNeeded
      * @return void
+     * @since 2.0.0
      */
     public function setIsInitializeNeeded($isInitializeNeeded = true)
     {
@@ -866,6 +913,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Get whether it is possible to capture
      *
      * @return bool
+     * @since 2.0.0
      */
     public function canCapture()
     {
@@ -880,6 +928,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
+     * @since 2.0.0
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
@@ -911,6 +960,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\DataObject $response
      * @param string $transactionId
      * @return $this
+     * @since 2.0.0
      */
     protected function addStatusCommentOnUpdate(
         \Magento\Sales\Model\Order\Payment $payment,
@@ -943,6 +993,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param string $methodCode
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
+     * @since 2.0.0
      */
     public function setMethodCode($methodCode)
     {
@@ -954,6 +1005,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param string $pathPattern
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
+     * @since 2.0.0
      */
     public function setPathPattern($pathPattern)
     {
@@ -967,6 +1019,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @throws \Magento\Framework\Exception\LocalizedException
      * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
      * @link http://developer.authorize.net/api/transaction_details/
+     * @since 2.0.0
      */
     protected function getTransactionResponse($transactionId)
     {
@@ -983,7 +1036,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.1.0
      */
     private function getPsrLogger()
     {
@@ -1000,6 +1054,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param string $fdsFilterAction
      * @return bool
+     * @since 2.2.0
      */
     private function fdsFilterActionIsReportOnly($fdsFilterAction)
     {

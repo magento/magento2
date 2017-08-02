@@ -12,12 +12,14 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 /**
  * Class Collection
  * Collection for displaying grid of sales documents
+ * @since 2.0.0
  */
 class Collection extends AbstractCollection implements SearchResultInterface
 {
 
     /**
      * @var AggregationInterface
+     * @since 2.0.0
      */
     protected $aggregations;
 
@@ -35,6 +37,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -65,6 +68,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
 
     /**
      * @return AggregationInterface
+     * @since 2.0.0
      */
     public function getAggregations()
     {
@@ -74,6 +78,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
     /**
      * @param AggregationInterface $aggregations
      * @return $this
+     * @since 2.0.0
      */
     public function setAggregations($aggregations)
     {
@@ -87,6 +92,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param int $limit
      * @param int $offset
      * @return array
+     * @since 2.0.0
      */
     public function getAllIds($limit = null, $offset = null)
     {
@@ -97,6 +103,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
+     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -109,6 +116,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
@@ -119,6 +127,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * Get total count.
      *
      * @return int
+     * @since 2.0.0
      */
     public function getTotalCount()
     {
@@ -131,6 +140,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param int $totalCount
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setTotalCount($totalCount)
     {
@@ -143,6 +153,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {

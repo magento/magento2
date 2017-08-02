@@ -12,25 +12,34 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\Plugin
+ *
+ * @since 2.0.0
+ */
 class Plugin
 {
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Wishlist\Model\AuthenticationStateInterface
+     * @since 2.0.0
      */
     protected $authenticationState;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
+     * @since 2.0.0
      */
     protected $redirector;
 
@@ -39,6 +48,7 @@ class Plugin
      * @param \Magento\Wishlist\Model\AuthenticationStateInterface $authenticationState
      * @param ScopeConfigInterface $config
      * @param RedirectInterface $redirector
+     * @since 2.0.0
      */
     public function __construct(
         CustomerSession $customerSession,
@@ -59,6 +69,7 @@ class Plugin
      * @param RequestInterface $request
      * @return void
      * @throws \Magento\Framework\Exception\NotFoundException
+     * @since 2.0.0
      */
     public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {

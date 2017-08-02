@@ -13,6 +13,7 @@ namespace Magento\Newsletter\Block;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Subscribe extends \Magento\Framework\View\Element\Template
 {
@@ -21,6 +22,7 @@ class Subscribe extends \Magento\Framework\View\Element\Template
      * message when we submit form from secure page to unsecure
      *
      * @return string
+     * @since 2.0.0
      */
     public function getFormActionUrl()
     {

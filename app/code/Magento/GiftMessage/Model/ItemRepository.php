@@ -14,6 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Shopping cart gift message item repository object for registered customer
+ * @since 2.0.0
  */
 class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
 {
@@ -21,6 +22,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -28,6 +30,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
      * Store manager interface.
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -35,6 +38,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
      * Gift message manager.
      *
      * @var \Magento\GiftMessage\Model\GiftMessageManager
+     * @since 2.0.0
      */
     protected $giftMessageManager;
 
@@ -42,6 +46,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
      * Message helper.
      *
      * @var \Magento\GiftMessage\Helper\Message
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -49,6 +54,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
      * Message factory.
      *
      * @var \Magento\GiftMessage\Model\MessageFactory
+     * @since 2.0.0
      */
     protected $messageFactory;
 
@@ -58,6 +64,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
      * @param GiftMessageManager $giftMessageManager
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -75,6 +82,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function get($cartId, $itemId)
     {
@@ -102,6 +110,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage, $itemId)
     {

@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterface
 {
@@ -21,6 +22,7 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
      * @param string $indexType
      * @param string $connectionName
      * @return string
+     * @since 2.0.0
      */
     public function getIdxName(
         $tableName,
@@ -40,6 +42,7 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
      * @param string $refColumnName the reference table column name
      * @param string $connectionName
      * @return string
+     * @since 2.0.0
      */
     public function getFkName(
         $priTableName,

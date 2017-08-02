@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 
 /**
  * Customer attribute metadata class.
+ * @since 2.0.0
  */
 class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\AttributeMetadataInterface,
@@ -17,6 +18,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getAttributeCode()
     {
@@ -25,6 +27,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFrontendInput()
     {
@@ -33,6 +36,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getInputFilter()
     {
@@ -41,6 +45,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getStoreLabel()
     {
@@ -49,6 +54,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getValidationRules()
     {
@@ -57,6 +63,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getMultilineCount()
     {
@@ -65,6 +72,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isVisible()
     {
@@ -73,6 +81,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isRequired()
     {
@@ -81,6 +90,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getDataModel()
     {
@@ -89,6 +99,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getOptions()
     {
@@ -97,6 +108,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFrontendClass()
     {
@@ -105,6 +117,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isUserDefined()
     {
@@ -113,6 +126,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSortOrder()
     {
@@ -121,6 +135,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getFrontendLabel()
     {
@@ -129,6 +144,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getNote()
     {
@@ -137,6 +153,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isSystem()
     {
@@ -145,6 +162,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getBackendType()
     {
@@ -156,6 +174,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $attributeCode
      * @return $this
+     * @since 2.0.0
      */
     public function setAttributeCode($attributeCode)
     {
@@ -167,6 +186,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $frontendInput
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendInput($frontendInput)
     {
@@ -178,6 +198,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $inputFilter
      * @return $this
+     * @since 2.0.0
      */
     public function setInputFilter($inputFilter)
     {
@@ -189,6 +210,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $storeLabel
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreLabel($storeLabel)
     {
@@ -200,6 +222,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param \Magento\Customer\Api\Data\ValidationRuleInterface[] $validationRules
      * @return $this
+     * @since 2.0.0
      */
     public function setValidationRules(array $validationRules)
     {
@@ -211,6 +234,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param int $multilineCount
      * @return $this
+     * @since 2.0.0
      */
     public function setMultilineCount($multilineCount)
     {
@@ -222,6 +246,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param bool $isVisible
      * @return $this
+     * @since 2.0.0
      */
     public function setIsVisible($isVisible)
     {
@@ -233,6 +258,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param bool $isRequired
      * @return $this
+     * @since 2.0.0
      */
     public function setIsRequired($isRequired)
     {
@@ -244,6 +270,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $dataModel
      * @return $this
+     * @since 2.0.0
      */
     public function setDataModel($dataModel)
     {
@@ -255,6 +282,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
+     * @since 2.0.0
      */
     public function setOptions(array $options = null)
     {
@@ -266,6 +294,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $frontendClass
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendClass($frontendClass)
     {
@@ -277,6 +306,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param bool $isUserDefined
      * @return $this
+     * @since 2.0.0
      */
     public function setIsUserDefined($isUserDefined)
     {
@@ -288,6 +318,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param int $sortOrder
      * @return $this
+     * @since 2.0.0
      */
     public function setSortOrder($sortOrder)
     {
@@ -299,6 +330,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $frontendLabel
      * @return $this
+     * @since 2.0.0
      */
     public function setFrontendLabel($frontendLabel)
     {
@@ -310,6 +342,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $note
      * @return $this
+     * @since 2.0.0
      */
     public function setNote($note)
     {
@@ -321,6 +354,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param bool $isSystem
      * @return $this
+     * @since 2.0.0
      */
     public function setIsSystem($isSystem)
     {
@@ -332,6 +366,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
      *
      * @param string $backendType
      * @return $this
+     * @since 2.0.0
      */
     public function setBackendType($backendType)
     {
@@ -340,6 +375,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getIsUsedInGrid()
     {
@@ -348,6 +384,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getIsVisibleInGrid()
     {
@@ -356,6 +393,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getIsFilterableInGrid()
     {
@@ -364,6 +402,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function getIsSearchableInGrid()
     {
@@ -372,6 +411,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setIsUsedInGrid($isUsedInGrid)
     {
@@ -380,6 +420,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid)
     {
@@ -388,6 +429,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid)
     {
@@ -396,6 +438,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritDoc
+     * @since 2.0.0
      */
     public function setIsSearchableInGrid($isSearchableInGrid)
     {
@@ -404,6 +447,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getDefaultValue()
     {
@@ -412,6 +456,7 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function setDefaultValue($defaultValue)
     {

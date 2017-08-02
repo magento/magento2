@@ -22,6 +22,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
  * @api
+ * @since 2.0.0
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
 {
@@ -34,6 +35,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Whether it is the first page after successful login
      *
      * @var boolean
+     * @since 2.0.0
      */
     protected $_isFirstAfterLogin;
 
@@ -41,16 +43,19 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Access Control List builder
      *
      * @var \Magento\Framework\Acl\Builder
+     * @since 2.0.0
      */
     protected $_aclBuilder;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
+     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 2.0.0
      */
     protected $_config;
 
@@ -69,6 +74,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param \Magento\Backend\App\ConfigInterface $config
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -105,6 +111,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @param  \Magento\User\Model\User $user
      * @return \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     public function refreshAcl($user = null)
     {
@@ -130,6 +137,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param   string $resource
      * @param   string $privilege
      * @return  boolean
+     * @since 2.0.0
      */
     public function isAllowed($resource, $privilege = null)
     {
@@ -155,6 +163,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Check if user is logged in
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isLoggedIn()
     {
@@ -165,6 +174,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Set session UpdatedAt to current time
      *
      * @return void
+     * @since 2.0.0
      */
     public function prolong()
     {
@@ -187,6 +197,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Check if it is the first page after successful login
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isFirstPageAfterLogin()
     {
@@ -201,6 +212,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      *
      * @param bool $value
      * @return \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     public function setIsFirstPageAfterLogin($value)
     {
@@ -212,6 +224,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Process of configuring of current auth storage when login was performed
      *
      * @return \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     public function processLogin()
     {
@@ -233,6 +246,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * Process of configuring of current auth storage when logout was performed
      *
      * @return \Magento\Backend\Model\Auth\Session
+     * @since 2.0.0
      */
     public function processLogout()
     {
@@ -247,6 +261,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isValidForPath($path)
     {

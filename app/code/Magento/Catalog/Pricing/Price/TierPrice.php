@@ -20,6 +20,7 @@ use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInt
 
 /**
  * @api
+ * @since 2.0.0
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
@@ -30,12 +31,14 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @var Session
+     * @since 2.0.0
      * @deprecated
      */
     protected $customerSession;
 
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $customerGroup;
 
@@ -43,6 +46,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Raw price list stored in DB
      *
      * @var array
+     * @since 2.0.0
      */
     protected $rawPriceList;
 
@@ -50,11 +54,13 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Applicable price list
      *
      * @var array
+     * @since 2.0.0
      */
     protected $priceList;
 
     /**
      * @var GroupManagementInterface
+     * @since 2.0.0
      */
     protected $groupManagement;
 
@@ -71,6 +77,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * @param Session $customerSession
      * @param GroupManagementInterface $groupManagement
      * @param CustomerGroupRetrieverInterface|null $customerGroupRetriever
+     * @since 2.0.0
      */
     public function __construct(
         Product $saleableItem,
@@ -98,6 +105,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Get price value
      *
      * @return bool|float
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -130,6 +138,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * @param float $firstPrice
      * @param float $secondPrice
      * @return bool
+     * @since 2.0.0
      */
     protected function isFirstPriceBetter($firstPrice, $secondPrice)
     {
@@ -138,6 +147,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getTierPriceCount()
     {
@@ -146,6 +156,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getTierPriceList()
     {
@@ -167,6 +178,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * @param array $priceList
      * @return array
+     * @since 2.0.0
      */
     protected function filterTierPrices(array $priceList)
     {
@@ -206,6 +218,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @return float
+     * @since 2.0.0
      */
     protected function getBasePrice()
     {
@@ -216,6 +229,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * @param AmountInterface $amount
      * @return float
+     * @since 2.0.0
      */
     public function getSavePercent(AmountInterface $amount)
     {
@@ -228,6 +242,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * @param float|string $price
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected function applyAdjustment($price)
     {
@@ -241,6 +256,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * @param int $prevPriceGroup
      * @param float|string $prevQty
      * @return bool
+     * @since 2.0.0
      */
     protected function canApplyTierPrice(array $currentTierPrice, $prevPriceGroup, $prevQty)
     {
@@ -275,6 +291,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     protected function getStoredTierPrices()
     {
@@ -309,6 +326,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isPercentageDiscount()
     {

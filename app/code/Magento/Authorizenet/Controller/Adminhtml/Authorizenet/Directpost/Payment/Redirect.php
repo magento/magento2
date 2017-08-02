@@ -13,6 +13,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -20,16 +21,19 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var LayoutFactory
+     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
     /**
      * @var \Magento\Authorizenet\Helper\Backend\Data
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -42,6 +46,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param \Magento\Framework\Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
      * @param \Magento\Authorizenet\Helper\Backend\Data $helper
+     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -71,6 +76,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param bool $cancelOrder
      * @param string $errorMsg
      * @return void
+     * @since 2.0.0
      */
     protected function _returnQuote($cancelOrder, $errorMsg)
     {
@@ -92,6 +98,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Retrieve params and put javascript into iframe
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @since 2.0.0
      */
     public function execute()
     {

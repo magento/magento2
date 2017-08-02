@@ -10,10 +10,16 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class \Magento\Setup\Controller\DatabaseCheck
+ *
+ * @since 2.0.0
+ */
 class DatabaseCheck extends AbstractActionController
 {
     /**
      * @var DbValidator
+     * @since 2.0.0
      */
     private $dbValidator;
 
@@ -21,6 +27,7 @@ class DatabaseCheck extends AbstractActionController
      * Constructor
      *
      * @param DbValidator $dbValidator
+     * @since 2.0.0
      */
     public function __construct(DbValidator $dbValidator)
     {
@@ -31,6 +38,7 @@ class DatabaseCheck extends AbstractActionController
      * Result of checking DB credentials
      *
      * @return JsonModel
+     * @since 2.0.0
      */
     public function indexAction()
     {

@@ -5,25 +5,34 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
+/**
+ * Class \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
+ *
+ * @since 2.0.0
+ */
 class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_resourceCollectionName = '';
 
     /**
      * @var null
+     * @since 2.0.0
      */
     protected $_currentCurrencyCode = null;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $_storeIds = [];
 
     /**
      * @var null
+     * @since 2.0.0
      */
     protected $_aggregatedColumns = null;
 
@@ -31,6 +40,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Reports data
      *
      * @var \Magento\Reports\Helper\Data
+     * @since 2.0.0
      */
     protected $_reportsData = null;
 
@@ -38,6 +48,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Reports grouped collection factory
      *
      * @var \Magento\Reports\Model\Grouped\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -45,6 +56,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Resource collection factory
      *
      * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory
+     * @since 2.0.0
      */
     protected $_resourceFactory;
 
@@ -55,6 +67,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory
      * @param \Magento\Reports\Helper\Data $reportsData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -74,6 +87,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Pseudo constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -93,6 +107,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @codeCoverageIgnore
      *
      * @return string
+     * @since 2.0.0
      */
     public function getResourceCollectionName()
     {
@@ -101,6 +116,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return \Magento\Framework\Data\Collection
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -112,6 +128,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return array
+     * @since 2.0.0
      */
     protected function _getAggregatedColumns()
     {
@@ -137,6 +154,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param string $columnId
      * @param array $column
      * @return $this
+     * @since 2.0.0
      */
     public function addColumn($columnId, $column)
     {
@@ -167,6 +185,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get allowed store ids array intersected with selected scope in store switcher
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getStoreIds()
     {
@@ -194,6 +213,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @return $this|\Magento\Backend\Block\Widget\Grid
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -281,6 +301,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getCountTotals()
     {
@@ -318,6 +339,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getSubTotals()
     {
@@ -350,6 +372,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param array $storeIds
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setStoreIds($storeIds)
     {
@@ -359,6 +382,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return string|\Magento\Directory\Model\Currency $currencyCode
+     * @since 2.0.0
      */
     public function getCurrentCurrencyCode()
     {
@@ -377,6 +401,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string|\Magento\Directory\Model\Currency $toCurrency
      * @return float
+     * @since 2.0.0
      */
     public function getRate($toCurrency)
     {
@@ -389,6 +414,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection $collection
      * @param \Magento\Framework\DataObject $filterData
      * @return $this
+     * @since 2.0.0
      */
     protected function _addOrderStatusFilter($collection, $filterData)
     {
@@ -405,6 +431,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function _addCustomFilter($collection, $filterData)
     {

@@ -8,20 +8,28 @@ namespace Magento\Framework\ObjectManager\Config\Mapper;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Config\Mapper\Dom
+ *
+ * @since 2.0.0
+ */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var BooleanUtils
+     * @since 2.0.0
      */
     private $booleanUtils;
 
     /**
      * @var ArgumentParser
+     * @since 2.0.0
      */
     private $argumentParser;
 
     /**
      * @var InterpreterInterface
+     * @since 2.0.0
      */
     private $argumentInterpreter;
 
@@ -29,6 +37,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      * @param BooleanUtils $booleanUtils
      * @param ArgumentParser $argumentParser
      * @param InterpreterInterface $argumentInterpreter
+     * @since 2.0.0
      */
     public function __construct(
         InterpreterInterface $argumentInterpreter,
@@ -50,6 +59,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function convert($config)
     {

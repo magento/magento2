@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * A service for handling Translation config files
+ * @since 2.0.0
  */
 class FileManager
 {
@@ -17,19 +18,29 @@ class FileManager
      */
     const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
 
-    /** @var \Magento\Framework\View\Asset\Repository */
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     * @since 2.0.0
+     */
     private $assetRepo;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList */
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     * @since 2.0.0
+     */
     private $directoryList;
 
-    /** @var \Magento\Framework\Filesystem\Driver\File */
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     * @since 2.0.0
+     */
     private $driverFile;
 
     /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile,
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -45,6 +56,7 @@ class FileManager
      * Create a view asset representing the requirejs config.config property for inline translation
      *
      * @return \Magento\Framework\View\Asset\File
+     * @since 2.0.0
      */
     public function createTranslateConfigAsset()
     {
@@ -58,6 +70,7 @@ class FileManager
      * gets current js-translation.json timestamp
      *
      * @return string|void
+     * @since 2.0.0
      */
     public function getTranslationFileTimestamp()
     {
@@ -72,6 +85,7 @@ class FileManager
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getTranslationFileFullPath()
     {
@@ -84,6 +98,7 @@ class FileManager
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getTranslationFilePath()
     {
@@ -93,6 +108,7 @@ class FileManager
     /**
      * @param string $content
      * @return void
+     * @since 2.1.0
      */
     public function updateTranslationFileContent($content)
     {

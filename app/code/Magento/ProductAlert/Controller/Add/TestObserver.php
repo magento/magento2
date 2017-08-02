@@ -8,10 +8,16 @@ namespace Magento\ProductAlert\Controller\Add;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Add\TestObserver
+ *
+ * @since 2.0.0
+ */
 class TestObserver extends AddController
 {
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

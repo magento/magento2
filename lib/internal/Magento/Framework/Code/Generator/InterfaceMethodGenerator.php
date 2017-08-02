@@ -7,11 +7,13 @@ namespace Magento\Framework\Code\Generator;
 
 /**
  * Interface method generator.
+ * @since 2.0.0
  */
 class InterfaceMethodGenerator extends \Zend\Code\Generator\MethodGenerator
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function generate()
     {
@@ -52,6 +54,7 @@ class InterfaceMethodGenerator extends \Zend\Code\Generator\MethodGenerator
      *
      * @throws \LogicException
      * @return void
+     * @since 2.0.0
      */
     protected function validateMethodModifiers()
     {

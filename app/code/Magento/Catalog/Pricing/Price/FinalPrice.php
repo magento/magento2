@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Final price model
+ * @since 2.0.0
  */
 class FinalPrice extends AbstractPrice implements FinalPriceInterface
 {
@@ -21,16 +22,19 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
 
     /**
      * @var BasePrice
+     * @since 2.0.0
      */
     private $basePrice;
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected $minimalPrice;
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     protected $maximalPrice;
 
@@ -38,6 +42,7 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
      * Get Value
      *
      * @return float|bool
+     * @since 2.0.0
      */
     public function getValue()
     {
@@ -48,6 +53,7 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
      * Get Minimal Price Amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMinimalPrice()
     {
@@ -67,6 +73,7 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
      * Get Maximal Price Amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @since 2.0.0
      */
     public function getMaximalPrice()
     {
@@ -86,6 +93,7 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
      * Retrieve base price instance lazily
      *
      * @return BasePrice|\Magento\Framework\Pricing\Price\PriceInterface
+     * @since 2.0.0
      */
     protected function getBasePrice()
     {

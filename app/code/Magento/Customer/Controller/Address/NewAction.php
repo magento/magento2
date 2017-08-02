@@ -6,10 +6,16 @@
  */
 namespace Magento\Customer\Controller\Address;
 
+/**
+ * Class \Magento\Customer\Controller\Address\NewAction
+ *
+ * @since 2.0.0
+ */
 class NewAction extends \Magento\Customer\Controller\Address
 {
     /**
      * @return \Magento\Framework\Controller\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,6 +10,7 @@ namespace Magento\Reports\Block\Adminhtml;
  * Adminhtml wishlist report page content block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Wishlist extends \Magento\Backend\Block\Template
 {
@@ -17,6 +18,7 @@ class Wishlist extends \Magento\Backend\Block\Template
      * Template file
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'report/wishlist.phtml';
 
@@ -24,6 +26,7 @@ class Wishlist extends \Magento\Backend\Block\Template
      * Reports wishlist collection factory
      *
      * @var \Magento\Reports\Model\ResourceModel\Wishlist\CollectionFactory
+     * @since 2.0.0
      */
     protected $_wishlistFactory;
 
@@ -33,6 +36,7 @@ class Wishlist extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Wishlist\CollectionFactory $wishlistFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -45,6 +49,7 @@ class Wishlist extends \Magento\Backend\Block\Template
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

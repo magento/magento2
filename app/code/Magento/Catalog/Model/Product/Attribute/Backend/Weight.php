@@ -11,16 +11,23 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Backend\Weight
+ *
+ * @since 2.0.0
+ */
 class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
+     * @since 2.0.0
      */
     protected $localeFormat;
 
     /**
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -34,6 +41,7 @@ class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Product $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -52,6 +60,7 @@ class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param mixed $value
      * @return bool
+     * @since 2.0.0
      */
     protected function isPositiveOrZero($value)
     {

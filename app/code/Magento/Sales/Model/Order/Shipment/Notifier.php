@@ -9,16 +9,19 @@ namespace Magento\Sales\Model\Order\Shipment;
  * Shipment notifier.
  *
  * @api
+ * @since 2.2.0
  */
 class Notifier implements \Magento\Sales\Model\Order\Shipment\NotifierInterface
 {
     /**
      * @var \Magento\Sales\Model\Order\Shipment\SenderInterface[]
+     * @since 2.2.0
      */
     private $senders;
 
     /**
      * @param \Magento\Sales\Model\Order\Shipment\SenderInterface[] $senders
+     * @since 2.2.0
      */
     public function __construct(array $senders = [])
     {
@@ -27,6 +30,7 @@ class Notifier implements \Magento\Sales\Model\Order\Shipment\NotifierInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

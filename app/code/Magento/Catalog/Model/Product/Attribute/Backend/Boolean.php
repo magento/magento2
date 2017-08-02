@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean as BooleanSource;
  * Product attribute for enable/disable option
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -19,6 +20,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {

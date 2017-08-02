@@ -11,6 +11,7 @@ use Magento\Backend\App\Action;
  * Adminhtml account controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 abstract class Account extends Action
 {

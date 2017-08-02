@@ -10,6 +10,7 @@ namespace Magento\Rule\Model\ResourceModel;
  * Abstract Rule entity resource model
  *
  * @api
+ * @since 2.0.0
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -32,6 +33,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * )
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_associatedEntitiesMap = [];
 
@@ -40,6 +42,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -53,6 +56,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $dateIdentifier
      * @return void
+     * @since 2.1.0
      */
     private function resolveDate(\Magento\Framework\Model\AbstractModel $object, $dateIdentifier)
     {
@@ -72,6 +76,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param string $entityType
      * @return $this
      * @throws \Exception
+     * @since 2.0.0
      */
     public function bindRuleToEntity($ruleIds, $entityIds, $entityType)
     {
@@ -96,6 +101,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param int|[] $entityIds
      * @param string $entityType
      * @return $this
+     * @since 2.0.0
      */
     protected function _multiplyBunchInsert($ruleIds, $entityIds, $entityType)
     {
@@ -156,6 +162,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param int[]|int|string $entityIds
      * @param string $entityType
      * @return $this
+     * @since 2.0.0
      */
     public function unbindRuleFromEntity($ruleIds, $entityIds, $entityType)
     {
@@ -188,6 +195,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param int $ruleId
      * @param string $entityType
      * @return array
+     * @since 2.0.0
      */
     public function getAssociatedEntityIds($ruleId, $entityType)
     {
@@ -209,6 +217,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param int $ruleId
      * @return array
+     * @since 2.0.0
      */
     public function getWebsiteIds($ruleId)
     {
@@ -220,6 +229,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param int $ruleId
      * @return array
+     * @since 2.0.0
      */
     public function getCustomerGroupIds($ruleId)
     {
@@ -233,6 +243,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @param string $entityType
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _getAssociatedEntityInfo($entityType)
     {

@@ -10,6 +10,7 @@ use Magento\Sales\Exception\DocumentValidationException;
 
 /**
  * Interface ValidatorInterface
+ * @since 2.2.0
  */
 interface ValidatorInterface
 {
@@ -18,6 +19,7 @@ interface ValidatorInterface
      * @return \Magento\Framework\Phrase[]
      * @throws DocumentValidationException
      * @throws NoSuchEntityException
+     * @since 2.2.0
      */
     public function validate($entity);
 }

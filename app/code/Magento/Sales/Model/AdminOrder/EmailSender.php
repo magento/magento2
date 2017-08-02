@@ -12,21 +12,25 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Class EmailSender
+ * @since 2.0.0
  */
 class EmailSender
 {
     /**
      * @var ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var Logger
+     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var OrderSender
+     * @since 2.0.0
      */
     protected $orderSender;
 
@@ -34,6 +38,7 @@ class EmailSender
      * @param ManagerInterface $messageManager
      * @param Logger $logger
      * @param OrderSender $orderSender
+     * @since 2.0.0
      */
     public function __construct(ManagerInterface $messageManager, Logger $logger, OrderSender $orderSender)
     {
@@ -48,6 +53,7 @@ class EmailSender
      *
      * @param Order $order
      * @return bool
+     * @since 2.0.0
      */
     public function send(Order $order)
     {

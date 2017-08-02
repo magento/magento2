@@ -11,12 +11,18 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as Con
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute
+ *
+ * @since 2.0.0
+ */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Label table name cache
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_labelTable;
 
@@ -24,6 +30,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
+     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -31,6 +38,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -39,6 +47,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -55,6 +64,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Inititalize connection and define tables
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,6 +77,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute
      * @return $this
+     * @since 2.0.0
      */
     public function saveLabel($attribute)
     {
@@ -110,6 +121,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $setId The specific attribute set
      * @return array
+     * @since 2.0.0
      */
     public function getUsedAttributes($setId)
     {
@@ -146,6 +158,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getIdByProductIdAndAttributeId($attribute, $productId, $attributeId)
     {
@@ -167,6 +180,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param mixed $productId
      * @return void
+     * @since 2.0.0
      */
     public function deleteAttributesByProductId($productId)
     {
@@ -183,6 +197,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -196,6 +211,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param ConfigurableAttribute $object
      * @return $this
+     * @since 2.0.0
      */
     protected function loadLabel(ConfigurableAttribute $object)
     {

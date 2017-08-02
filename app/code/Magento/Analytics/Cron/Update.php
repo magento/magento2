@@ -14,31 +14,37 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
  * Executes by cron schedule in case base url was changed
+ * @since 2.2.0
  */
 class Update
 {
     /**
      * @var Connector
+     * @since 2.2.0
      */
     private $connector;
 
     /**
      * @var WriterInterface
+     * @since 2.2.0
      */
     private $configWriter;
 
     /**
      * @var ReinitableConfigInterface
+     * @since 2.2.0
      */
     private $reinitableConfig;
 
     /**
      * @var FlagManager
+     * @since 2.2.0
      */
     private $flagManager;
 
     /**
      * @var AnalyticsToken
+     * @since 2.2.0
      */
     private $analyticsToken;
 
@@ -48,6 +54,7 @@ class Update
      * @param ReinitableConfigInterface $reinitableConfig
      * @param FlagManager $flagManager
      * @param AnalyticsToken $analyticsToken
+     * @since 2.2.0
      */
     public function __construct(
         Connector $connector,
@@ -67,6 +74,7 @@ class Update
      * Execute scheduled update operation
      *
      * @return bool
+     * @since 2.2.0
      */
     public function execute()
     {

@@ -19,6 +19,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Order extends SalesResource implements OrderResourceInterface
 {
@@ -26,6 +27,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * Event prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_order_resource';
 
@@ -33,11 +35,13 @@ class Order extends SalesResource implements OrderResourceInterface
      * Event object
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'resource';
 
     /**
      * @var StateHandler
+     * @since 2.0.0
      */
     protected $stateHandler;
 
@@ -45,6 +49,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * Model Initialization
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -59,6 +64,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param RelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -87,6 +93,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param array $productTypeIds
      * @param bool $isProductTypeIn
      * @return array
+     * @since 2.0.0
      */
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
@@ -116,6 +123,7 @@ class Order extends SalesResource implements OrderResourceInterface
      *
      * @param \Magento\Sales\Model\Order $object
      * @return int
+     * @since 2.0.0
      */
     protected function calculateItems(\Magento\Sales\Model\Order $object)
     {
@@ -139,6 +147,7 @@ class Order extends SalesResource implements OrderResourceInterface
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -166,6 +175,7 @@ class Order extends SalesResource implements OrderResourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -15,6 +15,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class PageActions
+ * @since 2.0.0
  */
 class PageActions extends Column
 {
@@ -22,19 +23,27 @@ class PageActions extends Column
     const CMS_URL_PATH_EDIT = 'cms/page/edit';
     const CMS_URL_PATH_DELETE = 'cms/page/delete';
 
-    /** @var UrlBuilder */
+    /**
+     * @var \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
+     * @since 2.0.0
+     */
     protected $actionUrlBuilder;
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     * @since 2.0.0
+     */
     protected $urlBuilder;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     private $editUrl;
 
     /**
      * @var Escaper
+     * @since 2.2.0
      */
     private $escaper;
 
@@ -46,6 +55,7 @@ class PageActions extends Column
      * @param array $components
      * @param array $data
      * @param string $editUrl
+     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -67,6 +77,7 @@ class PageActions extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -107,7 +118,8 @@ class PageActions extends Column
     /**
      * Get instance of escaper
      * @return Escaper
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getEscaper()
     {

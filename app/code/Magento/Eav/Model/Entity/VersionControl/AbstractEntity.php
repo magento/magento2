@@ -7,16 +7,19 @@ namespace Magento\Eav\Model\Entity\VersionControl;
 
 /**
  * Class AbstractEntity
+ * @since 2.0.0
  */
 abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
+     * @since 2.0.0
      */
     protected $entitySnapshot;
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite
+     * @since 2.0.0
      */
     protected $entityRelationComposite;
 
@@ -26,6 +29,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param array $data
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -41,6 +45,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     protected function _afterLoad(\Magento\Framework\DataObject $object)
     {
@@ -50,6 +55,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * @inheritdoc
+     * @since 2.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -112,6 +118,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {

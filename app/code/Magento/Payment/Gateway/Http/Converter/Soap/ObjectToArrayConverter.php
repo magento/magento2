@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Http\ConverterInterface;
  * Class ObjectToArrayConverter
  * @package Magento\Payment\Gateway\Http\Converter\Soap
  * @api
+ * @since 2.0.0
  */
 class ObjectToArrayConverter implements ConverterInterface
 {
@@ -20,6 +21,7 @@ class ObjectToArrayConverter implements ConverterInterface
      * @param mixed $response
      * @return array
      * @throws \Magento\Payment\Gateway\Http\ConverterException
+     * @since 2.0.0
      */
     public function convert($response)
     {

@@ -12,11 +12,13 @@ use Magento\Customer\Block\Account\SortLinkInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
 {
     /**
      * @var \Magento\Customer\Model\Url
+     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -24,6 +26,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -36,6 +39,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getHref()
     {
@@ -44,6 +48,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getSortOrder()
     {

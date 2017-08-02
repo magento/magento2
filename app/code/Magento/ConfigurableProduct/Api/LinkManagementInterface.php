@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Api;
  * Manage children products of configurable product
  *
  * @api
+ * @since 2.0.0
  */
 interface LinkManagementInterface
 {
@@ -18,6 +19,7 @@ interface LinkManagementInterface
      *
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
+     * @since 2.0.0
      */
     public function getChildren($sku);
 
@@ -25,6 +27,7 @@ interface LinkManagementInterface
      * @param  string $sku
      * @param  string $childSku
      * @return bool
+     * @since 2.0.0
      */
     public function addChild($sku, $childSku);
 
@@ -36,6 +39,7 @@ interface LinkManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @return bool
+     * @since 2.0.0
      */
     public function removeChild($sku, $childSku);
 }

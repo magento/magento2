@@ -10,16 +10,19 @@ namespace Magento\Backend\Block\Dashboard\Tab\Products;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Bestsellers\CollectionFactory
+     * @since 2.0.0
      */
     protected $_collectionFactory;
 
     /**
      * @var \Magento\Framework\Module\Manager
+     * @since 2.0.0
      */
     protected $_moduleManager;
 
@@ -29,6 +32,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Sales\Model\ResourceModel\Report\Bestsellers\CollectionFactory $collectionFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -44,6 +48,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -53,6 +58,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -82,6 +88,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -133,6 +140,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
      *
      * @param \Magento\Catalog\Model\Product $row
      * @return string
+     * @since 2.0.0
      */
     public function getRowUrl($row)
     {

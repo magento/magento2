@@ -8,6 +8,7 @@ namespace Magento\Cookie\Helper;
 /**
  * Cookie helper
  * @api
+ * @since 2.0.0
  */
 class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -28,11 +29,13 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Store\Model\Store
+     * @since 2.0.0
      */
     protected $_currentStore;
 
     /**
      * @var \Magento\Store\Model\Website
+     * @since 2.0.0
      */
     protected $_website;
 
@@ -42,6 +45,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $data
      *
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -66,6 +70,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if cookie restriction notice should be displayed
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isUserNotAllowSaveCookie()
     {
@@ -78,6 +83,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if cookie restriction mode is enabled for this store
      *
      * @return bool
+     * @since 2.2.0
      */
     public function isCookieRestrictionModeEnabled()
     {
@@ -92,6 +98,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Return serialized list of accepted save cookie website
      *
      * @return string
+     * @since 2.0.0
      */
     public function getAcceptedSaveCookiesWebsiteIds()
     {
@@ -104,6 +111,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Get accepted save cookies websites
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAcceptedSaveCookiesWebsites()
     {
@@ -119,6 +127,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Get cookie restriction lifetime (in seconds)
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCookieRestrictionLifetime()
     {

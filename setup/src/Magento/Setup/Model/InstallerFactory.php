@@ -14,6 +14,7 @@ use Magento\Framework\Setup\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class InstallerFactory
 {
@@ -21,11 +22,13 @@ class InstallerFactory
      * Zend Framework's service locator
      *
      * @var ServiceLocatorInterface
+     * @since 2.0.0
      */
     protected $serviceLocator;
 
     /**
      * @var ResourceFactory
+     * @since 2.0.0
      */
     private $resourceFactory;
 
@@ -34,6 +37,7 @@ class InstallerFactory
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @param ResourceFactory $resourceFactory
+     * @since 2.0.0
      */
     public function __construct(ServiceLocatorInterface $serviceLocator, ResourceFactory $resourceFactory)
     {
@@ -49,6 +53,7 @@ class InstallerFactory
      *
      * @param LoggerInterface $log
      * @return Installer
+     * @since 2.0.0
      */
     public function create(LoggerInterface $log)
     {
@@ -85,6 +90,7 @@ class InstallerFactory
      * creates Resource Factory
      *
      * @return Resource
+     * @since 2.0.0
      */
     private function getResource()
     {

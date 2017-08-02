@@ -12,11 +12,13 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory for Mysql adapter
+ * @since 2.2.0
  */
 class MysqlFactory
 {
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
@@ -24,6 +26,7 @@ class MysqlFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -40,6 +43,7 @@ class MysqlFactory
      * @param SelectFactory|null $selectFactory
      * @return Mysql
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function create(
         $className,

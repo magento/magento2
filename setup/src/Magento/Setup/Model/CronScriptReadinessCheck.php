@@ -15,6 +15,7 @@ use Magento\Setup\Model\Cron\ReadinessCheck;
  * This includes verifying file permission in Updater Cron and db privileges in Setup Cron.
  * It also verifies Cron time interval configuration.
  * This class only verifies the status files created by both Cron jobs. No actual checking logic is done in this class.
+ * @since 2.0.0
  */
 class CronScriptReadinessCheck
 {
@@ -46,6 +47,7 @@ class CronScriptReadinessCheck
 
     /**
      * @var Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
@@ -53,6 +55,7 @@ class CronScriptReadinessCheck
      * Constructor
      *
      * @param Filesystem $filesystem
+     * @since 2.0.0
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -63,6 +66,7 @@ class CronScriptReadinessCheck
      * Check Setup Cron job status file
      *
      * @return array
+     * @since 2.0.0
      */
     public function checkSetup()
     {
@@ -73,6 +77,7 @@ class CronScriptReadinessCheck
      * Check Updater Cron job status file
      *
      * @return array
+     * @since 2.0.0
      */
     public function checkUpdater()
     {
@@ -84,6 +89,7 @@ class CronScriptReadinessCheck
      *
      * @param string $type
      * @return array
+     * @since 2.0.0
      */
     private function checkJson($type)
     {
@@ -135,6 +141,7 @@ class CronScriptReadinessCheck
      *
      * @param array $jsonData
      * @return array
+     * @since 2.0.0
      */
     private function checkCronTime(array $jsonData)
     {

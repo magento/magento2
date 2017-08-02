@@ -9,16 +9,23 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Braintree\Gateway\Response\TransactionIdHandler
+ *
+ * @since 2.1.0
+ */
 class TransactionIdHandler implements HandlerInterface
 {
     /**
      * @var SubjectReader
+     * @since 2.1.0
      */
     private $subjectReader;
 
     /**
      * TransactionIdHandler constructor.
      * @param SubjectReader $subjectReader
+     * @since 2.1.0
      */
     public function __construct(
         SubjectReader $subjectReader
@@ -32,6 +39,7 @@ class TransactionIdHandler implements HandlerInterface
      * @param array $handlingSubject
      * @param array $response
      * @return void
+     * @since 2.1.0
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -58,6 +66,7 @@ class TransactionIdHandler implements HandlerInterface
      * @param Payment $orderPayment
      * @param \Braintree\Transaction $transaction
      * @return void
+     * @since 2.1.0
      */
     protected function setTransactionId(Payment $orderPayment, \Braintree\Transaction $transaction)
     {
@@ -68,6 +77,7 @@ class TransactionIdHandler implements HandlerInterface
      * Whether transaction should be closed
      *
      * @return bool
+     * @since 2.1.0
      */
     protected function shouldCloseTransaction()
     {
@@ -80,6 +90,7 @@ class TransactionIdHandler implements HandlerInterface
      * @param Payment $orderPayment
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     protected function shouldCloseParentTransaction(Payment $orderPayment)
     {

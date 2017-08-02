@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Tracking;
  * Tracking info link
  *
  * @api
+ * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Html\Link
 {
@@ -16,6 +17,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
@@ -23,6 +25,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Shipping data
      *
      * @var \Magento\Shipping\Helper\Data
+     * @since 2.0.0
      */
     protected $_shippingData;
 
@@ -31,6 +34,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Shipping\Helper\Data $shippingData
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -46,6 +50,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     /**
      * @param \Magento\Sales\Model\AbstractModel $model
      * @return string
+     * @since 2.0.0
      */
     public function getWindowUrl($model)
     {
@@ -56,6 +61,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Retrieve current order model instance
      *
      * @return \Magento\Sales\Model\Order
+     * @since 2.0.0
      */
     public function getOrder()
     {

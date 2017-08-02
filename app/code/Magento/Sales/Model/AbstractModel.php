@@ -14,6 +14,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractModel extends AbstractExtensibleModel
 {
@@ -25,6 +26,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -50,6 +52,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
      * Returns _eventObject
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEventObject()
     {

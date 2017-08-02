@@ -8,12 +8,18 @@ namespace Magento\Paypal\Controller\Billing\Agreement;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Paypal\Controller\Billing\Agreement\ReturnWizard
+ *
+ * @since 2.0.0
+ */
 class ReturnWizard extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**
      * Wizard return action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

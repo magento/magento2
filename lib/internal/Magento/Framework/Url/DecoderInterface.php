@@ -9,6 +9,7 @@ namespace Magento\Framework\Url;
  * Base64 decoder for URLs
  *
  * @api
+ * @since 2.0.0
  */
 interface DecoderInterface
 {
@@ -17,6 +18,7 @@ interface DecoderInterface
      *
      * @param    string $url
      * @return   string
+     * @since 2.0.0
      */
     public function decode($url);
 }

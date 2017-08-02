@@ -9,6 +9,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Interpreter of named parameters
+ * @since 2.0.0
  */
 class NamedParams implements InterpreterInterface
 {
@@ -16,11 +17,13 @@ class NamedParams implements InterpreterInterface
      * Interpreter of individual parameter
      *
      * @var InterpreterInterface
+     * @since 2.0.0
      */
     private $paramInterpreter;
 
     /**
      * @param InterpreterInterface $paramInterpreter
+     * @since 2.0.0
      */
     public function __construct(InterpreterInterface $paramInterpreter)
     {
@@ -31,6 +34,7 @@ class NamedParams implements InterpreterInterface
      * {@inheritdoc}
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function evaluate(array $data)
     {

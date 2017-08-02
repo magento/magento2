@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * Layer filter interface
  *
  * @api
+ * @since 2.0.0
  */
 interface FilterInterface
 {
@@ -17,6 +18,7 @@ interface FilterInterface
      *
      * @param   string $varName
      * @return  \Magento\Catalog\Model\Layer\Filter\FilterInterface
+     * @since 2.0.0
      */
     public function setRequestVar($varName);
 
@@ -24,6 +26,7 @@ interface FilterInterface
      * Get request variable name which is used for apply filter
      *
      * @return string
+     * @since 2.0.0
      */
     public function getRequestVar();
 
@@ -31,6 +34,7 @@ interface FilterInterface
      * Get filter value for reset current filter state
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getResetValue();
 
@@ -38,6 +42,7 @@ interface FilterInterface
      * Retrieve filter value for Clear All Items filter state
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getCleanValue();
 
@@ -46,6 +51,7 @@ interface FilterInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @since 2.0.0
      */
     public function apply(\Magento\Framework\App\RequestInterface $request);
 
@@ -53,6 +59,7 @@ interface FilterInterface
      * Get filter items count
      *
      * @return int
+     * @since 2.0.0
      */
     public function getItemsCount();
 
@@ -60,6 +67,7 @@ interface FilterInterface
      * Get all filter items
      *
      * @return array
+     * @since 2.0.0
      */
     public function getItems();
 
@@ -68,6 +76,7 @@ interface FilterInterface
      *
      * @param array $items
      * @return $this
+     * @since 2.0.0
      */
     public function setItems(array $items);
 
@@ -75,6 +84,7 @@ interface FilterInterface
      * Retrieve layer object
      *
      * @return \Magento\Catalog\Model\Layer
+     * @since 2.0.0
      */
     public function getLayer();
 
@@ -83,6 +93,7 @@ interface FilterInterface
      *
      * @param   \Magento\Eav\Model\Entity\Attribute $attribute
      * @return  \Magento\Catalog\Model\Layer\Filter\FilterInterface
+     * @since 2.0.0
      */
     public function setAttributeModel($attribute);
 
@@ -91,6 +102,7 @@ interface FilterInterface
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getAttributeModel();
 
@@ -99,6 +111,7 @@ interface FilterInterface
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function getName();
 
@@ -106,6 +119,7 @@ interface FilterInterface
      * Retrieve current store id scope
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId();
 
@@ -114,6 +128,7 @@ interface FilterInterface
      *
      * @param int $storeId
      * @return $this
+     * @since 2.0.0
      */
     public function setStoreId($storeId);
 
@@ -121,6 +136,7 @@ interface FilterInterface
      * Retrieve Website ID scope
      *
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteId();
 
@@ -129,6 +145,7 @@ interface FilterInterface
      *
      * @param int $websiteId
      * @return $this
+     * @since 2.0.0
      */
     public function setWebsiteId($websiteId);
 
@@ -136,6 +153,7 @@ interface FilterInterface
      * Clear current element link text, for example 'Clear Price'
      *
      * @return false|string
+     * @since 2.0.0
      */
     public function getClearLinkText();
 }

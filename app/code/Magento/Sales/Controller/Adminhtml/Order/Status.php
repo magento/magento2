@@ -7,6 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 /**
  * Order status management controller
+ * @since 2.0.0
  */
 abstract class Status extends \Magento\Backend\App\Action
 {
@@ -21,12 +22,14 @@ abstract class Status extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -40,6 +43,7 @@ abstract class Status extends \Magento\Backend\App\Action
      * Initialize status model based on status code in request
      *
      * @return \Magento\Sales\Model\Order\Status|false
+     * @since 2.0.0
      */
     protected function _initStatus()
     {

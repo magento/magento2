@@ -19,31 +19,37 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollect
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Cart extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var CustomerCart
+     * @since 2.0.0
      */
     protected $cart;
 
     /**
      * @var OptionFactory
+     * @since 2.0.0
      */
     protected $optionFactory;
 
     /**
      * @var ItemFactory
+     * @since 2.0.0
      */
     protected $itemFactory;
 
     /**
      * @var CartHelper
+     * @since 2.0.0
      */
     protected $cartHelper;
 
     /**
      * @var Escaper
+     * @since 2.0.0
      */
     protected $escaper;
 
@@ -54,6 +60,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      * @param ItemFactory $itemFactory
      * @param CartHelper $cartHelper
      * @param Escaper $escaper
+     * @since 2.0.0
      */
     public function __construct(
         ActionContext $context,
@@ -78,6 +85,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      * to product view page with message about needed defined required options
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @since 2.0.0
      */
     public function execute()
     {

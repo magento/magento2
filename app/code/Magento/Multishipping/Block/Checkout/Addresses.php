@@ -12,31 +12,37 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
  * Multishipping checkout choose item addresses block
  *
  * @api
+ * @since 2.0.0
  */
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
      * @var \Magento\Framework\Filter\DataObject\GridFactory
+     * @since 2.0.0
      */
     protected $_filterGridFactory;
 
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @since 2.0.0
      */
     protected $_multishipping;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
+     * @since 2.0.0
      */
     private $_addressConfig;
 
     /**
      * @var \Magento\Customer\Model\Address\Mapper
+     * @since 2.0.0
      */
     protected $addressMapper;
 
@@ -50,6 +56,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * @param AddressConfig $addressConfig
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -73,6 +80,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve multishipping checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -81,6 +89,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -92,6 +101,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getItems()
     {
@@ -108,6 +118,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * @param mixed $item
      * @param int $index
      * @return string
+     * @since 2.0.0
      */
     public function getAddressesHtmlSelect($item, $index)
     {
@@ -124,6 +135,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve options for addresses dropdown
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAddressOptions()
     {
@@ -159,6 +171,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve active customer ID
      *
      * @return int|null
+     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -168,6 +181,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param mixed $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemUrl($item)
     {
@@ -177,6 +191,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param mixed $item
      * @return string
+     * @since 2.0.0
      */
     public function getItemDeleteUrl($item)
     {
@@ -185,6 +200,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getPostActionUrl()
     {
@@ -193,6 +209,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getNewAddressUrl()
     {
@@ -201,6 +218,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getBackUrl()
     {
@@ -209,6 +227,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isContinueDisabled()
     {

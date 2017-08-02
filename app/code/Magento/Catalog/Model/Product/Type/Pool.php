@@ -9,12 +9,18 @@
  */
 namespace Magento\Catalog\Model\Product\Type;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Type\Pool
+ *
+ * @since 2.0.0
+ */
 class Pool
 {
     /**
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -22,6 +28,7 @@ class Pool
      * Construct
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -35,6 +42,7 @@ class Pool
      * @param array $data
      * @return \Magento\Catalog\Model\Product\Type\AbstractType
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function get($className, array $data = [])
     {

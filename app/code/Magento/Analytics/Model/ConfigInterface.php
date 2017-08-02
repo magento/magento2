@@ -8,6 +8,7 @@ namespace Magento\Analytics\Model;
 
 /**
  * Interface for Analytics Config.
+ * @since 2.2.0
  */
 interface ConfigInterface
 {
@@ -17,6 +18,7 @@ interface ConfigInterface
      * @param string|null $key
      * @param string|null $default
      * @return array
+     * @since 2.2.0
      */
     public function get($key = null, $default = null);
 }

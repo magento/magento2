@@ -9,26 +9,31 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class to uninstall a module component
+ * @since 2.0.0
  */
 class ModuleUninstaller
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Framework\Composer\Remove
+     * @since 2.0.0
      */
     private $remove;
 
     /**
      * @var UninstallCollector
+     * @since 2.0.0
      */
     private $collector;
 
     /**
      * @var \Magento\Setup\Module\SetupFactory
+     * @since 2.0.0
      */
     private $setupFactory;
 
@@ -39,6 +44,7 @@ class ModuleUninstaller
      * @param \Magento\Framework\Composer\Remove $remove
      * @param UninstallCollector $collector
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
@@ -58,6 +64,7 @@ class ModuleUninstaller
      * @param OutputInterface $output
      * @param array $modules
      * @return void
+     * @since 2.0.0
      */
     public function uninstallData(OutputInterface $output, array $modules)
     {
@@ -83,6 +90,7 @@ class ModuleUninstaller
      * @param OutputInterface $output
      * @param array $modules
      * @return void
+     * @since 2.0.0
      */
     public function uninstallCode(OutputInterface $output, array $modules)
     {

@@ -73,86 +73,103 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 2.0.0
  */
 class ConfigurableProductsFixture extends Fixture
 {
     /**
      * @var int
+     * @since 2.0.0
      */
     protected $priority = 50;
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private $searchConfig;
 
     /**
      * @var DataGenerator
+     * @since 2.2.0
      */
     private $dataGenerator;
 
     /**
      * @var AttributeSet\AttributeSetFixture
+     * @since 2.2.0
      */
     private $attributeSetsFixture;
 
     /**
      * @var AttributeSet\Pattern
+     * @since 2.2.0
      */
     private $attributePattern;
 
     /**
      * @var ProductGenerator
+     * @since 2.2.0
      */
     private $productGenerator;
 
     /**
      * @var CollectionFactory
+     * @since 2.2.0
      */
     private $attributeCollectionFactory;
 
     /**
      * @var ConfigurableProductGenerator
+     * @since 2.2.0
      */
     private $configurableProductGenerator;
 
     /**
      * @var ProductCollectionFactory
+     * @since 2.2.0
      */
     private $productCollectionFactory;
 
     /**
      * @var int
+     * @since 2.2.0
      */
     private $productStartIndex;
 
     /**
      * @var ProductsAmountProvider
+     * @since 2.2.0
      */
     private $productsAmountProvider;
 
     /**
      * @var CategoryResolver
+     * @since 2.2.0
      */
     private $categoryResolver;
 
     /**
      * @var WebsiteCategoryProvider
+     * @since 2.2.0
      */
     private $websiteCategoryProvider;
 
     /**
      * @var PriceProvider
+     * @since 2.2.0
      */
     private $priceProvider;
 
     /**
      * @var \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator
+     * @since 2.2.0
      */
     private $swatchesGenerator;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -171,6 +188,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param AttributeSet\SwatchesGenerator $swatchesGenerator
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.2.0
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -205,6 +223,7 @@ class ConfigurableProductsFixture extends Fixture
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD)
+     * @since 2.0.0
      */
     public function execute()
     {
@@ -298,6 +317,7 @@ class ConfigurableProductsFixture extends Fixture
     /**
      * @return \Closure
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.2.0
      */
     private function getConfigurableWebsiteIdsClosure()
     {
@@ -312,6 +332,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param array $defaultAttributeSets
      * @param int $configurableProductsCount
      * @return array
+     * @since 2.2.0
      */
     private function getDefaultAttributeSetsConfig(array $defaultAttributeSets, $configurableProductsCount)
     {
@@ -350,6 +371,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param array $configurableConfig
      * @see \Magento\Setup\Model\FixtureGenerator\ConfigurableProductTemplateGenerator
      * @return string
+     * @since 2.2.0
      */
     private function getFirstVariationSkuPattern($configurableConfig)
     {
@@ -362,6 +384,7 @@ class ConfigurableProductsFixture extends Fixture
      * Get start product index which used in product name, sku, url generation
      *
      * @return int
+     * @since 2.2.0
      */
     private function getNewProductStartIndex()
     {
@@ -380,6 +403,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param int $entityNumber
      * @param int $variationCount
      * @return float
+     * @since 2.2.0
      */
     private function getConfigurableProductIndex($entityNumber, $variationCount)
     {
@@ -392,6 +416,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param int $entityNumber
      * @param int $variationCount
      * @return float
+     * @since 2.2.0
      */
     private function getConfigurableVariationIndex($entityNumber, $variationCount)
     {
@@ -400,6 +425,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -408,6 +434,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function introduceParamLabels()
     {
@@ -417,6 +444,7 @@ class ConfigurableProductsFixture extends Fixture
     /**
      * {@inheritdoc}
      * @throws ValidatorException
+     * @since 2.2.0
      */
     public function printInfo(OutputInterface $output)
     {
@@ -437,6 +465,7 @@ class ConfigurableProductsFixture extends Fixture
      * @see config/attributeSets.xml
      *
      * @return array
+     * @since 2.2.0
      */
     private function getDefaultAttributeSetsWithAttributes()
     {
@@ -491,6 +520,7 @@ class ConfigurableProductsFixture extends Fixture
      * @return array
      * @throws ValidatorException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.2.0
      */
     private function getConfigurableProductConfig()
     {
@@ -566,6 +596,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param array $defaultAttributeSets
      * @return array
      * @throws ValidatorException
+     * @since 2.2.0
      */
     private function prepareConfigurableConfig($defaultAttributeSets)
     {
@@ -600,6 +631,7 @@ class ConfigurableProductsFixture extends Fixture
     /**
      * @param array $config
      * @return \Closure
+     * @since 2.2.0
      */
     private function getConfigurableCategory($config)
     {
@@ -624,6 +656,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param array $config
      * @param string $attributeSetName
      * @return string
+     * @since 2.2.0
      */
     private function getConfigurableSkuPattern($config, $attributeSetName)
     {
@@ -643,6 +676,7 @@ class ConfigurableProductsFixture extends Fixture
      *
      * @param array $attributes
      * @return array
+     * @since 2.2.0
      */
     private function getCustomAttributeSet(array $attributes)
     {
@@ -692,6 +726,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getSearchConfig()
     {
@@ -704,6 +739,7 @@ class ConfigurableProductsFixture extends Fixture
     /**
      * @param string $name
      * @return int|mixed
+     * @since 2.2.0
      */
     private function getSearchConfigValue($name)
     {
@@ -713,6 +749,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * @return array
+     * @since 2.2.0
      */
     private function getSearchTerms()
     {
@@ -728,6 +765,7 @@ class ConfigurableProductsFixture extends Fixture
      * Get configurable products variations value.
      *
      * @return int
+     * @since 2.2.0
      */
     private function getConfigurableProductsVariationsValue()
     {
@@ -741,6 +779,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param int $variationCount
      * @return \Closure
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.2.0
      */
     private function getAdditionalAttributesClosure(array $attributes, $variationCount)
     {
@@ -770,6 +809,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param int $attributesPerSet
      * @param int $optionsPerAttribute
      * @return array
+     * @since 2.2.0
      */
     private function generateVariationsMatrix($attributesPerSet, $optionsPerAttribute)
     {
@@ -784,6 +824,7 @@ class ConfigurableProductsFixture extends Fixture
      * Build all possible variations based on attributes and options count.
      * @param array|null $variationsMatrix
      * @return array
+     * @since 2.2.0
      */
     private function generateVariations($variationsMatrix)
     {
@@ -807,6 +848,7 @@ class ConfigurableProductsFixture extends Fixture
      *
      * @param string $skuPattern
      * @return string
+     * @since 2.2.0
      */
     private function getConfigurableOptionSkuPattern($skuPattern)
     {
@@ -821,6 +863,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param int $minAmountOfWordsDescription
      * @param string $descriptionPrefix
      * @return \Closure
+     * @since 2.2.0
      */
     private function getDescriptionClosure(
         $searchTerms,
@@ -866,6 +909,7 @@ class ConfigurableProductsFixture extends Fixture
      *
      * @param array $attributeSet
      * @return array
+     * @since 2.2.0
      */
     private function convertAttributesToDBFormat(array $attributeSet)
     {

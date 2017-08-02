@@ -6,12 +6,18 @@
 
 namespace Magento\Setup\Module\Di\Definition;
 
+/**
+ * Class \Magento\Setup\Module\Di\Definition\Collection
+ *
+ * @since 2.0.0
+ */
 class Collection
 {
     /**
      * List of definitions
      *
      * @var array
+     * @since 2.0.0
      */
     private $definitions = [];
 
@@ -19,6 +25,7 @@ class Collection
      * Returns definitions as [instance => list of arguments]
      *
      * @return array
+     * @since 2.0.0
      */
     public function getCollection()
     {
@@ -31,6 +38,7 @@ class Collection
      * @param array $definitions
      *
      * @return void
+     * @since 2.0.0
      */
     public function initialize(array $definitions)
     {
@@ -43,6 +51,7 @@ class Collection
      * @param Collection $collection
      *
      * @return void
+     * @since 2.0.0
      */
     public function addCollection(Collection $collection)
     {
@@ -56,6 +65,7 @@ class Collection
      * @param array|null $arguments
      *
      * @return void
+     * @since 2.0.0
      */
     public function addDefinition($instance, $arguments = [])
     {
@@ -67,6 +77,7 @@ class Collection
      *
      * @param string $instanceName
      * @return null|array
+     * @since 2.0.0
      */
     public function getInstanceArguments($instanceName)
     {
@@ -77,6 +88,7 @@ class Collection
      * Returns instances names list
      *
      * @return array
+     * @since 2.0.0
      */
     public function getInstancesNamesList()
     {
@@ -88,6 +100,7 @@ class Collection
      *
      * @param string $instanceName
      * @return bool
+     * @since 2.0.0
      */
     public function hasInstance($instanceName)
     {

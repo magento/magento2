@@ -13,16 +13,19 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_store;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\LabelFactory
+     * @since 2.0.0
      */
     protected $_themeLabelFactory;
 
@@ -33,6 +36,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @param \Magento\Store\Model\System\Store $store
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,6 +55,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Internal constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -62,6 +67,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare label for tab
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -72,6 +78,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -82,6 +89,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Returns status flag about this tab can be showen or not
      *
      * @return true
+     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -92,6 +100,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Returns status flag about this tab hidden or not
      *
      * @return true
+     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -102,6 +111,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Getter
      *
      * @return \Magento\Widget\Model\Widget\Instance
+     * @since 2.0.0
      */
     public function getWidgetInstance()
     {
@@ -113,6 +123,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -221,6 +232,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Retrieve array (widget_type => widget_name) of available widgets
      *
      * @return array
+     * @since 2.0.0
      */
     public function getTypesOptionsArray()
     {
@@ -231,6 +243,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Initialize form fileds values
      *
      * @return $this
+     * @since 2.0.0
      */
     protected function _initFormValues()
     {

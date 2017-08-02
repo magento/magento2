@@ -14,6 +14,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 /**
  * Document Factory
  * @api
+ * @since 2.0.0
  */
 class DocumentFactory
 {
@@ -21,12 +22,14 @@ class DocumentFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.1.0
+     * @since 2.0.0
      */
     protected $objectManager;
 
     /**
      * @var \Magento\Framework\Search\EntityMetadata
+     * @since 2.0.0
      */
     private $entityMetadata;
 
@@ -34,6 +37,7 @@ class DocumentFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Search\EntityMetadata $entityMetadata
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -47,6 +51,7 @@ class DocumentFactory
      *
      * @param mixed $rawDocument
      * @return \Magento\Framework\Api\Search\Document
+     * @since 2.0.0
      */
     public function create($rawDocument)
     {

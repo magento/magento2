@@ -7,6 +7,7 @@ namespace Magento\Framework;
 
 /**
  * @todo change this interface when i18n-related logic is moved to library
+ * @since 2.0.0
  */
 interface TranslateInterface
 {
@@ -21,6 +22,7 @@ interface TranslateInterface
      * @param string|null $area
      * @param bool $forceReload
      * @return \Magento\Framework\TranslateInterface
+     * @since 2.0.0
      */
     public function loadData($area = null, $forceReload = false);
 
@@ -28,6 +30,7 @@ interface TranslateInterface
      * Retrieve translation data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getData();
 
@@ -35,6 +38,7 @@ interface TranslateInterface
      * Retrieve locale
      *
      * @return string
+     * @since 2.0.0
      */
     public function getLocale();
 
@@ -43,6 +47,7 @@ interface TranslateInterface
      *
      * @param string $locale
      * @return \Magento\Framework\TranslateInterface
+     * @since 2.0.0
      */
     public function setLocale($locale);
 
@@ -50,6 +55,7 @@ interface TranslateInterface
      * Retrieve theme code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTheme();
 }

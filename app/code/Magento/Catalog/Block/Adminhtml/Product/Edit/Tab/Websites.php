@@ -11,15 +11,22 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites
+ *
+ * @since 2.0.0
+ */
 class Websites extends \Magento\Backend\Block\Store\Switcher
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_storeFromHtml;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/edit/websites.phtml';
 
@@ -27,6 +34,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -37,6 +45,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -54,6 +63,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * Retrieve edited product model instance
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -64,6 +74,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * Get store ID of current product
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -74,6 +85,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * Get ID of current product
      *
      * @return int
+     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -84,6 +96,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * Retrieve array of website IDs of current product
      *
      * @return array
+     * @since 2.0.0
      */
     public function getWebsites()
     {
@@ -95,6 +108,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      *
      * @param int $websiteId
      * @return bool
+     * @since 2.0.0
      */
     public function hasWebsite($websiteId)
     {
@@ -105,6 +119,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * Check websites block is readonly
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -116,6 +131,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      *
      * @param int $storeId
      * @return null|string
+     * @since 2.0.0
      */
     public function getStoreName($storeId)
     {
@@ -127,6 +143,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      *
      * @param \Magento\Store\Model\Store $storeTo
      * @return string
+     * @since 2.0.0
      */
     public function getChooseFromStoreHtml($storeTo)
     {

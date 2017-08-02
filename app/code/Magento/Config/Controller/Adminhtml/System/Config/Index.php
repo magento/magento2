@@ -6,10 +6,16 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
+/**
+ * Class \Magento\Config\Controller\Adminhtml\System\Config\Index
+ *
+ * @since 2.0.0
+ */
 class Index extends AbstractScopeConfig
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
@@ -19,6 +25,7 @@ class Index extends AbstractScopeConfig
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config $backendConfig
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -35,6 +42,7 @@ class Index extends AbstractScopeConfig
      * Index action
      *
      * @return \Magento\Backend\Model\View\Result\Forward
+     * @since 2.0.0
      */
     public function execute()
     {

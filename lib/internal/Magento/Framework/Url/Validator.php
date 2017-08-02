@@ -11,6 +11,11 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Class \Magento\Framework\Url\Validator
+ *
+ * @since 2.0.0
+ */
 class Validator extends \Zend_Validate_Abstract
 {
     /**#@+
@@ -21,6 +26,7 @@ class Validator extends \Zend_Validate_Abstract
 
     /**
      * Object constructor
+     * @since 2.0.0
      */
     public function __construct()
     {
@@ -32,6 +38,7 @@ class Validator extends \Zend_Validate_Abstract
      * Validation failure message template definitions
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_messageTemplates = [self::INVALID_URL => "Invalid URL '%value%'."];
 
@@ -40,6 +47,7 @@ class Validator extends \Zend_Validate_Abstract
      *
      * @param string $value
      * @return bool
+     * @since 2.0.0
      */
     public function isValid($value)
     {

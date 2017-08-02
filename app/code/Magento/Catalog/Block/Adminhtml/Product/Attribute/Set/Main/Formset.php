@@ -7,10 +7,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset
+ *
+ * @since 2.0.0
+ */
 class Formset extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @since 2.0.0
      */
     protected $_setFactory;
 
@@ -20,6 +26,7 @@ class Formset extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,6 +43,7 @@ class Formset extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepares attribute set form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

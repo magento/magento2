@@ -10,11 +10,13 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Customer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Customer\CollectionFactory
+     * @since 2.0.0
      */
     protected $_customersFactory;
 
@@ -23,6 +25,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Customer\CollectionFactory $customersFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,6 +39,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -45,6 +49,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid
+     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -61,6 +66,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid|void
+     * @since 2.0.0
      */
     protected function _afterLoadCollection()
     {
@@ -69,6 +75,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

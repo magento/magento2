@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Downloadable Products File Helper
  *
  * @api
+ * @since 2.0.0
  */
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -18,6 +19,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -25,6 +27,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * Filesystem object.
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     protected $_filesystem;
 
@@ -32,6 +35,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * Media Directory object (writable).
      *
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 2.0.0
      */
     protected $_mediaDirectory;
 
@@ -40,6 +44,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $mimeTypes
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -63,6 +68,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $tmpPath
      * @param \Magento\MediaStorage\Model\File\Uploader $uploader
      * @return array
+     * @since 2.0.0
      */
     public function uploadFromTmp($tmpPath, \Magento\MediaStorage\Model\File\Uploader $uploader)
     {
@@ -81,6 +87,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $file
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -104,6 +111,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if file exist in filesystem and try to re-create it from database record if negative.
      * @param string $file
      * @return bool|int
+     * @since 2.0.0
      */
     public function ensureFileInFilesystem($file)
     {
@@ -122,6 +130,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $basePath
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     protected function _moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -154,6 +163,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $path
      * @param string $file
      * @return string
+     * @since 2.0.0
      */
     public function getFilePath($path, $file)
     {
@@ -168,6 +178,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $pathFile
      * @return string
+     * @since 2.0.0
      */
     public function getFileFromPathFile($pathFile)
     {
@@ -180,6 +191,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * Get filesize in bytes.
      * @param string $file
      * @return int
+     * @since 2.0.0
      */
     public function getFileSize($file)
     {
@@ -189,6 +201,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $filePath
      * @return string
+     * @since 2.0.0
      */
     public function getFileType($filePath)
     {
@@ -199,6 +212,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param string $ext
      * @return string
+     * @since 2.0.0
      */
     protected function _getFileTypeByExt($ext)
     {
@@ -211,6 +225,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAllFileTypes()
     {
@@ -219,6 +234,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getAllMineTypes()
     {
@@ -227,6 +243,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected static $_mimeTypes = [
         'x123' => 'application/vnd.lotus-1-2-3',

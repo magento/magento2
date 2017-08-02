@@ -10,6 +10,7 @@ use Magento\Framework\Code\Minifier\AdapterInterface;
 
 /**
  * Adapter for CSSmin library
+ * @since 2.0.0
  */
 class CSSmin implements AdapterInterface
 {
@@ -20,12 +21,14 @@ class CSSmin implements AdapterInterface
 
     /**
      * @var CssMinLibrary
+     * @since 2.0.0
      */
     protected $cssMinifier;
 
     /**
      * @param CssMinLibrary $cssMinifier
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(CssMinLibrary $cssMinifier)
     {
@@ -36,6 +39,7 @@ class CSSmin implements AdapterInterface
      * Get CSS Minifier
      *
      * @return CssMinLibrary
+     * @since 2.1.0
      */
     private function getCssMin()
     {
@@ -50,6 +54,7 @@ class CSSmin implements AdapterInterface
      *
      * @param string $content
      * @return string
+     * @since 2.0.0
      */
     public function minify($content)
     {

@@ -10,11 +10,13 @@ namespace Magento\Catalog\Model\Product;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class ReservedAttributeList
 {
     /**
      * @var string[]
+     * @since 2.0.0
      */
     protected $_reservedAttributes;
 
@@ -22,6 +24,7 @@ class ReservedAttributeList
      * @param string $productModel
      * @param array $reservedAttributes
      * @param array $allowedAttributes
+     * @since 2.0.0
      */
     public function __construct($productModel, array $reservedAttributes = [], array $allowedAttributes = [])
     {
@@ -41,6 +44,7 @@ class ReservedAttributeList
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
      * @return boolean
+     * @since 2.0.0
      */
     public function isReservedAttribute($attribute)
     {

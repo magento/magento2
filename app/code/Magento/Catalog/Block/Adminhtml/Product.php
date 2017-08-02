@@ -13,16 +13,19 @@ namespace Magento\Catalog\Block\Adminhtml;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Product extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * @var \Magento\Catalog\Model\Product\TypeFactory
+     * @since 2.0.0
      */
     protected $_typeFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
+     * @since 2.0.0
      */
     protected $_productFactory;
 
@@ -31,6 +34,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
      * @param \Magento\Catalog\Model\Product\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -48,6 +52,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
      * Prepare button and grid
      *
      * @return \Magento\Catalog\Block\Adminhtml\Product
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -68,6 +73,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
      * Retrieve options for 'Add Product' split button
      *
      * @return array
+     * @since 2.0.0
      */
     protected function _getAddProductButtonOptions()
     {
@@ -96,6 +102,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
      *
      * @param string $type
      * @return string
+     * @since 2.0.0
      */
     protected function _getProductCreateUrl($type)
     {
@@ -109,6 +116,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
      * Check whether it is single store mode
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSingleStoreMode()
     {

@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend;
  * Quote address attribute frontend custbalance resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Custbalance extends \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend
 {
@@ -17,6 +18,7 @@ class Custbalance extends \Magento\Quote\Model\ResourceModel\Quote\Address\Attri
      *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
+     * @since 2.0.0
      */
     public function fetchTotals(\Magento\Quote\Model\Quote\Address $address)
     {

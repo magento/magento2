@@ -14,6 +14,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
+ * @since 2.0.0
  */
 abstract class Sales extends AbstractReport
 {
@@ -21,6 +22,7 @@ abstract class Sales extends AbstractReport
      * Add report/sales breadcrumbs
      *
      * @return $this
+     * @since 2.0.0
      */
     public function _initAction()
     {
@@ -33,6 +35,7 @@ abstract class Sales extends AbstractReport
      * Determine if action is allowed for reports module
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _isAllowed()
     {

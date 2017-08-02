@@ -9,11 +9,13 @@ namespace Magento\Sitemap\Block\Adminhtml\Edit;
  * Sitemap edit form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Store\Model\System\Store
+     * @since 2.0.0
      */
     protected $_systemStore;
 
@@ -23,6 +25,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,6 +42,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Init form
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,6 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareForm()
     {

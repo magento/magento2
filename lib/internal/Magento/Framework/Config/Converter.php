@@ -11,16 +11,19 @@ use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
  * Class Converter convert xml to appropriate array
  *
  * @package Magento\Framework\Config
+ * @since 2.0.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
+     * @since 2.0.0
      */
     protected $extractorPool;
 
     /**
      * @param TypeDataExtractorPool $extractorPool
+     * @since 2.0.0
      */
     public function __construct(TypeDataExtractorPool $extractorPool)
     {
@@ -33,6 +36,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
+     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -55,6 +59,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMElement $childNode
      * @return array
+     * @since 2.0.0
      */
     protected function parseNodes($childNode)
     {
@@ -92,6 +97,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMElement $node
      * @return string|boolean|number|null|[]
+     * @since 2.0.0
      */
     protected function parseVarElement(\DOMElement $node)
     {

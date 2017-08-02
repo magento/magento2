@@ -9,6 +9,7 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeSetManagementInterface
  * @api
+ * @since 2.0.0
  */
 interface AttributeSetManagementInterface
 {
@@ -21,6 +22,7 @@ interface AttributeSetManagementInterface
      * @return \Magento\Eav\Api\Data\AttributeSetInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 2.0.0
      */
     public function create(
         $entityTypeCode,

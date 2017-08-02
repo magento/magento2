@@ -12,26 +12,31 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Adminhtml weee tax item renderer
+ * @since 2.0.0
  */
 class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var AbstractElement|null
+     * @since 2.0.0
      */
     protected $_element = null;
 
     /**
      * @var array|null
+     * @since 2.0.0
      */
     protected $_countries = null;
 
     /**
      * @var array|null
+     * @since 2.0.0
      */
     protected $_websites = null;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'renderer/tax.phtml';
 
@@ -39,16 +44,19 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Directory\Model\Config\Source\Country
+     * @since 2.0.0
      */
     protected $_sourceCountry;
 
     /**
      * @var \Magento\Directory\Helper\Data
+     * @since 2.0.0
      */
     protected $_directoryHelper;
 
@@ -58,6 +66,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -74,6 +83,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return \Magento\Framework\DataObject
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -83,6 +93,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(AbstractElement $element)
     {
@@ -92,6 +103,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -113,6 +125,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
     /**
      * @param AbstractElement $element
      * @return $this
+     * @since 2.0.0
      */
     public function setElement(AbstractElement $element)
     {
@@ -122,6 +135,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return AbstractElement|null
+     * @since 2.0.0
      */
     public function getElement()
     {
@@ -130,6 +144,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getValues()
     {
@@ -147,6 +162,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
      * @param array $firstItem
      * @param array $secondItem
      * @return int
+     * @since 2.0.0
      */
     protected function _sortWeeeTaxes($firstItem, $secondItem)
     {
@@ -161,6 +177,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getWebsiteCount()
     {
@@ -169,6 +186,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return bool
+     * @since 2.0.0
      */
     public function isMultiWebsites()
     {
@@ -177,6 +195,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return array|null
+     * @since 2.0.0
      */
     public function getCountries()
     {
@@ -189,6 +208,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return array|null
+     * @since 2.0.0
      */
     public function getWebsites()
     {
@@ -226,6 +246,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getAddButtonHtml()
     {

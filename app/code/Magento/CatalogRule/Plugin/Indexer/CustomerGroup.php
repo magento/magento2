@@ -8,15 +8,22 @@ namespace Magento\CatalogRule\Plugin\Indexer;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Customer\Model\Group;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\CustomerGroup
+ *
+ * @since 2.0.0
+ */
 class CustomerGroup
 {
     /**
      * @var RuleProductProcessor
+     * @since 2.0.0
      */
     protected $ruleProductProcessor;
 
     /**
      * @param RuleProductProcessor $ruleProductProcessor
+     * @since 2.0.0
      */
     public function __construct(RuleProductProcessor $ruleProductProcessor)
     {
@@ -29,6 +36,7 @@ class CustomerGroup
      * @return Group
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function afterDelete(
         Group $subject,

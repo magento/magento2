@@ -13,6 +13,7 @@ namespace Magento\Framework\Data\Form\Element\Renderer;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface RendererInterface
 {
@@ -21,6 +22,7 @@ interface RendererInterface
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element);
 }

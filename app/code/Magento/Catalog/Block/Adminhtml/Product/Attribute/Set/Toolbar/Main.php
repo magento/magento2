@@ -13,16 +13,19 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Main extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'catalog/product/attribute/set/toolbar/main.phtml';
 
     /**
      * @return $this
+     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -40,6 +43,7 @@ class Main extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     public function getNewButtonHtml()
     {
@@ -48,6 +52,7 @@ class Main extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     protected function _getHeader()
     {
@@ -56,6 +61,7 @@ class Main extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function _toHtml()
     {

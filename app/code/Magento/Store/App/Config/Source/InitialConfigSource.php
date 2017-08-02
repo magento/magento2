@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
  * Config source. Retrieve all configuration data from files for specified config type
+ * @since 2.2.0
  */
 class InitialConfigSource implements ConfigSourceInterface
 {
@@ -18,6 +19,7 @@ class InitialConfigSource implements ConfigSourceInterface
      * The file reader
      *
      * @var Reader
+     * @since 2.2.0
      */
     private $reader;
 
@@ -25,6 +27,7 @@ class InitialConfigSource implements ConfigSourceInterface
      * The deployment config reader
      *
      * @var DeploymentConfig
+     * @since 2.2.0
      */
     private $deploymentConfig;
 
@@ -32,6 +35,7 @@ class InitialConfigSource implements ConfigSourceInterface
      * The config type
      *
      * @var string
+     * @since 2.2.0
      */
     private $configType;
 
@@ -39,6 +43,7 @@ class InitialConfigSource implements ConfigSourceInterface
      * @param Reader $reader The file reader
      * @param DeploymentConfig $deploymentConfig The deployment config reader
      * @param string $configType The config type
+     * @since 2.2.0
      */
     public function __construct(
         Reader $reader,
@@ -57,6 +62,7 @@ class InitialConfigSource implements ConfigSourceInterface
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.2.0
      */
     public function get($path = '')
     {

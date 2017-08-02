@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api\Data;
 /**
  * Interface ShippingInformationInterface
  * @api
+ * @since 2.0.0
  */
 interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -28,6 +29,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * Returns shipping address
      *
      * @return \Magento\Quote\Api\Data\AddressInterface
+     * @since 2.0.0
      */
     public function getShippingAddress();
 
@@ -36,6 +38,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      *
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address);
 
@@ -43,6 +46,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * Returns billing address
      *
      * @return \Magento\Quote\Api\Data\AddressInterface|null
+     * @since 2.0.0
      */
     public function getBillingAddress();
 
@@ -51,6 +55,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      *
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return $this
+     * @since 2.0.0
      */
     public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address);
 
@@ -58,6 +63,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * Returns shipping method code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShippingMethodCode();
 
@@ -66,6 +72,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingMethodCode($code);
 
@@ -73,6 +80,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * Returns carrier code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getShippingCarrierCode();
 
@@ -81,6 +89,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      *
      * @param string $code
      * @return $this
+     * @since 2.0.0
      */
     public function setShippingCarrierCode($code);
 
@@ -88,6 +97,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -96,6 +106,7 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      *
      * @param \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface $extensionAttributes

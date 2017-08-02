@@ -7,6 +7,7 @@ namespace Magento\Email\Model\Plugin;
 
 /**
  * Plugin for \Magento\Framework\Mail\TransportInterface
+ * @since 2.1.0
  */
 class WindowsSmtpConfig
 {
@@ -22,17 +23,20 @@ class WindowsSmtpConfig
 
     /**
      * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @since 2.1.0
      */
     private $config;
 
     /**
      * @var \Magento\Framework\OsInfo
+     * @since 2.1.0
      */
     private $osInfo;
 
     /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\OsInfo $osInfo
+     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
@@ -48,6 +52,7 @@ class WindowsSmtpConfig
      * @param \Magento\Framework\Mail\TransportInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.1.0
      */
     public function beforeSendMessage(\Magento\Framework\Mail\TransportInterface $subject)
     {

@@ -12,6 +12,7 @@ namespace Magento\Bundle\Model;
  * @method int getParentId()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method Option setParentId(int $value)
+ * @since 2.0.0
  */
 class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Bundle\Api\Data\OptionInterface
@@ -32,6 +33,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Default selection object
      *
      * @var \Magento\Catalog\Model\Product|null
+     * @since 2.0.0
      */
     protected $defaultSelection = null;
 
@@ -39,6 +41,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -51,6 +54,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Catalog\Model\Product $selection
      * @return void
+     * @since 2.0.0
      */
     public function addSelection(\Magento\Catalog\Model\Product $selection)
     {
@@ -66,6 +70,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Check Is Saleable Option
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSaleable()
     {
@@ -86,6 +91,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve default Selection object
      *
      * @return \Magento\Catalog\Model\Product|null
+     * @since 2.0.0
      */
     public function getDefaultSelection()
     {
@@ -104,6 +110,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Check is multi Option selection
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMultiSelection()
     {
@@ -116,6 +123,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param int $productId
      * @param int $storeId
      * @return array
+     * @since 2.0.0
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -127,6 +135,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $selectionId
      * @return \Magento\Catalog\Model\Product|null
+     * @since 2.0.0
      */
     public function getSelectionById($selectionId)
     {
@@ -144,6 +153,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getOptionId()
     {
@@ -152,6 +162,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -160,6 +171,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRequired()
     {
@@ -168,6 +180,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -176,6 +189,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getPosition()
     {
@@ -184,6 +198,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSku()
     {
@@ -192,6 +207,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getProductLinks()
     {
@@ -203,6 +219,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $optionId
      * @return $this
+     * @since 2.0.0
      */
     public function setOptionId($optionId)
     {
@@ -214,6 +231,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $title
      * @return $this
+     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -225,6 +243,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param bool $required
      * @return $this
+     * @since 2.0.0
      */
     public function setRequired($required)
     {
@@ -236,6 +255,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $type
      * @return $this
+     * @since 2.0.0
      */
     public function setType($type)
     {
@@ -247,6 +267,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param int $position
      * @return $this
+     * @since 2.0.0
      */
     public function setPosition($position)
     {
@@ -258,6 +279,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $sku
      * @return $this
+     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -269,6 +291,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $productLinks
      * @return $this
+     * @since 2.0.0
      */
     public function setProductLinks(array $productLinks = null)
     {
@@ -279,6 +302,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * {@inheritdoc}
      *
      * @return \Magento\Bundle\Api\Data\OptionExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -290,6 +314,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes)
     {

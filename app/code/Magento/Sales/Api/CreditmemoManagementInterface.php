@@ -15,6 +15,7 @@ namespace Magento\Sales\Api;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
  * @api
+ * @since 2.0.0
  */
 interface CreditmemoManagementInterface
 {
@@ -24,6 +25,7 @@ interface CreditmemoManagementInterface
      * @param int $id The credit memo ID.
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function cancel($id);
 
@@ -32,6 +34,7 @@ interface CreditmemoManagementInterface
      *
      * @param int $id The credit memo ID.
      * @return \Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface Credit memo comment search results interface.
+     * @since 2.0.0
      */
     public function getCommentsList($id);
 
@@ -40,6 +43,7 @@ interface CreditmemoManagementInterface
      *
      * @param int $id The credit memo ID.
      * @return bool
+     * @since 2.0.0
      */
     public function notify($id);
 
@@ -49,6 +53,7 @@ interface CreditmemoManagementInterface
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @param bool $offlineRequested
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 2.0.0
      */
     public function refund(
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,

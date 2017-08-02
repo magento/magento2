@@ -12,6 +12,7 @@ use Magento\Catalog\Pricing\Render as CatalogRender;
 
 /**
  * Class for final_price rendering
+ * @since 2.0.0
  */
 class FinalPriceBox extends CatalogRender\FinalPriceBox
 {
@@ -19,6 +20,7 @@ class FinalPriceBox extends CatalogRender\FinalPriceBox
      * Check if bundle product has one or more options, or custom options, with different prices
      *
      * @return bool
+     * @since 2.0.0
      */
     public function showRangePrice()
     {

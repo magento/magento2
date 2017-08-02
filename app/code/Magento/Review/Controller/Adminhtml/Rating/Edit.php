@@ -8,10 +8,16 @@ namespace Magento\Review\Controller\Adminhtml\Rating;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Rating\Edit
+ *
+ * @since 2.0.0
+ */
 class Edit extends RatingController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

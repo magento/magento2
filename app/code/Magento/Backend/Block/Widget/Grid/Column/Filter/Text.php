@@ -10,11 +10,13 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getHtml()
     {

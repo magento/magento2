@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\Api;
 
+/**
+ * Interface \Magento\Framework\Api\AttributeTypeResolverInterface
+ *
+ * @since 2.0.0
+ */
 interface AttributeTypeResolverInterface
 {
     /**
@@ -15,6 +20,7 @@ interface AttributeTypeResolverInterface
      * @param object $value
      * @param string $context
      * @return string
+     * @since 2.0.0
      */
     public function resolveObjectType($attributeCode, $value, $context);
 }

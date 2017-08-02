@@ -11,15 +11,22 @@ namespace Magento\Framework\Authorization\Policy;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Authorization\PolicyInterface;
 
+/**
+ * Class \Magento\Framework\Authorization\Policy\Acl
+ *
+ * @since 2.0.0
+ */
 class Acl implements PolicyInterface
 {
     /**
      * @var \Magento\Framework\Acl\Builder
+     * @since 2.0.0
      */
     protected $_aclBuilder;
 
     /**
      * @param Builder $aclBuilder
+     * @since 2.0.0
      */
     public function __construct(Builder $aclBuilder)
     {
@@ -33,6 +40,7 @@ class Acl implements PolicyInterface
      * @param string $resourceId
      * @param string $privilege
      * @return bool
+     * @since 2.0.0
      */
     public function isAllowed($roleId, $resourceId, $privilege = null)
     {

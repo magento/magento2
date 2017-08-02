@@ -13,11 +13,13 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
 
 /**
  * Command for showing numbers of dependencies on Magento Framework
+ * @since 2.0.0
  */
 class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 {
     /**
      * @var ComponentRegistrarInterface
+     * @since 2.0.0
      */
     private $registrar;
 
@@ -26,6 +28,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      *
      * @param ComponentRegistrarInterface $registrar
      * @param ObjectManagerProvider $objectManagerProvider
+     * @since 2.0.0
      */
     public function __construct(ComponentRegistrarInterface $registrar, ObjectManagerProvider $objectManagerProvider)
     {
@@ -35,6 +38,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     protected function configure()
     {
@@ -47,6 +51,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      * Return default output filename for framework dependencies report
      *
      * @return string
+     * @since 2.0.0
      */
     protected function getDefaultOutputFilename()
     {
@@ -58,6 +63,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      *
      * @param string $outputPath
      * @return void
+     * @since 2.0.0
      */
     protected function buildReport($outputPath)
     {

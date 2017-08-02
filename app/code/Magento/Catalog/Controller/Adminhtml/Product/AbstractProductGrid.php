@@ -10,10 +10,16 @@ use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\Result;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\AbstractProductGrid
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractProductGrid extends Product
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
+     * @since 2.0.0
      */
     protected $resultLayoutFactory;
 
@@ -21,6 +27,7 @@ abstract class AbstractProductGrid extends Product
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

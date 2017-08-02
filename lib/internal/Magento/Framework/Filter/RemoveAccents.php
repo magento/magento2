@@ -7,16 +7,19 @@ namespace Magento\Framework\Filter;
 
 /**
  * Remove accents from string
+ * @since 2.0.0
  */
 class RemoveAccents implements \Zend_Filter_Interface
 {
     /**
      * @var bool
+     * @since 2.0.0
      */
     protected $german;
 
     /**
      * @param bool $german
+     * @since 2.0.0
      */
     public function __construct($german = false)
     {
@@ -27,6 +30,7 @@ class RemoveAccents implements \Zend_Filter_Interface
      * @param string $string
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function filter($string)
     {

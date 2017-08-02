@@ -6,10 +6,16 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Categories
+ *
+ * @since 2.0.0
+ */
 class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
      * @var \Magento\Framework\View\Layout
+     * @since 2.0.0
      */
     protected $layout;
 
@@ -21,6 +27,7 @@ class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\View\Layout $layout
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -39,6 +46,7 @@ class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      * Categories chooser Action (Ajax request)
      *
      * @return \Magento\Framework\Controller\Result\Raw
+     * @since 2.0.0
      */
     public function execute()
     {

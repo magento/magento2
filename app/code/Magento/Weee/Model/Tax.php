@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Type;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 2.0.0
  */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {
@@ -40,6 +41,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var array|null
+     * @since 2.0.0
      */
     protected $_allAttributes = null;
 
@@ -47,26 +49,31 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
+     * @since 2.0.0
      */
     protected $_taxData = null;
 
     /**
      * @var \Magento\Eav\Model\Entity\AttributeFactory
+     * @since 2.0.0
      */
     protected $_attributeFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Tax\Model\CalculationFactory
+     * @since 2.0.0
      */
     protected $_calculationFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -74,16 +81,19 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * Weee config
      *
      * @var \Magento\Weee\Model\Config
+     * @since 2.0.0
      */
     protected $weeeConfig;
 
     /**
      * @var PriceCurrencyInterface
+     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var AccountManagementInterface
+     * @since 2.0.0
      */
     protected $accountManagement;
 
@@ -102,6 +112,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -133,6 +144,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -146,6 +158,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param Website $website
      * @param bool $calculateTax
      * @return float
+     * @since 2.0.0
      */
     public function getWeeeAmount(
         $product,
@@ -174,6 +187,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param null|false|\Magento\Framework\DataObject $billing
      * @param Website $website
      * @return float
+     * @since 2.0.0
      */
     public function getWeeeAmountExclTax(
         $product,
@@ -201,6 +215,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * @param bool $forceEnabled
      * @return array
+     * @since 2.0.0
      */
     public function getWeeeAttributeCodes($forceEnabled = false)
     {
@@ -213,6 +228,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param  null|string|bool|int|Store $store
      * @param  bool $forceEnabled
      * @return array
+     * @since 2.0.0
      */
     public function getWeeeTaxAttributeCodes($store = null, $forceEnabled = false)
     {
@@ -237,6 +253,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 2.0.0
      */
     public function getProductWeeeAttributes(
         $product,
@@ -367,6 +384,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param int $regionId
      * @param int $websiteId
      * @return boolean
+     * @since 2.0.0
      */
     public function isWeeeInLocation($countryId, $regionId, $websiteId)
     {

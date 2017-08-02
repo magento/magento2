@@ -13,41 +13,49 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Class Category
  * @package Magento\Catalog\Block\Rss
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
+     * @since 2.0.0
      */
     protected $categoryFactory;
 
     /**
      * @var \Magento\Catalog\Helper\Image
+     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $customerSession;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Category
+     * @since 2.0.0
      */
     protected $rssModel;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
     /**
      * @var CategoryRepositoryInterface
+     * @since 2.0.0
      */
     protected $categoryRepository;
 
@@ -61,6 +69,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -84,6 +93,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -98,6 +108,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -157,6 +168,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 2.0.0
      */
     protected function renderPriceHtml(\Magento\Catalog\Model\Product $product)
     {
@@ -188,6 +200,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * @return int
+     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -200,6 +213,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * @return int
+     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -208,6 +222,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -219,6 +234,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * @return array
+     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -258,6 +274,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function isAuthRequired()
     {

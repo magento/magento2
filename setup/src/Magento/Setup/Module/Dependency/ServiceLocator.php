@@ -16,6 +16,7 @@ use Magento\Setup\Module\Dependency\Report\Framework;
  * Service Locator (instead DI container)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.0.0
  */
 class ServiceLocator
 {
@@ -23,6 +24,7 @@ class ServiceLocator
      * Xml config dependencies parser
      *
      * @var \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     private static $xmlConfigParser;
 
@@ -30,6 +32,7 @@ class ServiceLocator
      * Composer Json parser
      *
      * @var \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     private static $composerJsonParser;
 
@@ -37,6 +40,7 @@ class ServiceLocator
      * Framework dependencies parser
      *
      * @var \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     private static $frameworkDependenciesParser;
 
@@ -44,6 +48,7 @@ class ServiceLocator
      * Modules dependencies report builder
      *
      * @var \Magento\Setup\Module\Dependency\Report\BuilderInterface
+     * @since 2.0.0
      */
     private static $dependenciesReportBuilder;
 
@@ -51,6 +56,7 @@ class ServiceLocator
      * Modules circular dependencies report builder
      *
      * @var \Magento\Setup\Module\Dependency\Report\BuilderInterface
+     * @since 2.0.0
      */
     private static $circularDependenciesReportBuilder;
 
@@ -58,6 +64,7 @@ class ServiceLocator
      * Framework dependencies report builder
      *
      * @var \Magento\Setup\Module\Dependency\Report\BuilderInterface
+     * @since 2.0.0
      */
     private static $frameworkDependenciesReportBuilder;
 
@@ -65,6 +72,7 @@ class ServiceLocator
      * Csv file writer
      *
      * @var \Magento\Framework\File\Csv
+     * @since 2.0.0
      */
     private static $csvWriter;
 
@@ -72,6 +80,7 @@ class ServiceLocator
      * Get modules dependencies report builder
      *
      * @return \Magento\Setup\Module\Dependency\Report\BuilderInterface
+     * @since 2.0.0
      */
     public static function getDependenciesReportBuilder()
     {
@@ -88,6 +97,7 @@ class ServiceLocator
      * Get modules circular dependencies report builder
      *
      * @return \Magento\Setup\Module\Dependency\Report\BuilderInterface
+     * @since 2.0.0
      */
     public static function getCircularDependenciesReportBuilder()
     {
@@ -105,6 +115,7 @@ class ServiceLocator
      * Get framework dependencies report builder
      *
      * @return \Magento\Setup\Module\Dependency\Report\BuilderInterface
+     * @since 2.0.0
      */
     public static function getFrameworkDependenciesReportBuilder()
     {
@@ -122,6 +133,7 @@ class ServiceLocator
      * Get modules dependencies parser
      *
      * @return \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     private static function getXmlConfigParser()
     {
@@ -135,6 +147,7 @@ class ServiceLocator
      * Get modules dependencies from composer.json parser
      *
      * @return \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     private static function getComposerJsonParser()
     {
@@ -148,6 +161,7 @@ class ServiceLocator
      * Get framework dependencies parser
      *
      * @return \Magento\Setup\Module\Dependency\ParserInterface
+     * @since 2.0.0
      */
     private static function getFrameworkDependenciesParser()
     {
@@ -161,6 +175,7 @@ class ServiceLocator
      * Get csv file writer
      *
      * @return \Magento\Framework\File\Csv
+     * @since 2.0.0
      */
     private static function getCsvWriter()
     {

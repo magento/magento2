@@ -12,21 +12,29 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\App\ActionInterface;
 
+/**
+ * Class \Magento\Framework\App\Router\DefaultRouter
+ *
+ * @since 2.0.0
+ */
 class DefaultRouter implements RouterInterface
 {
     /**
      * @var NoRouteHandlerList
+     * @since 2.0.0
      */
     protected $noRouteHandlerList;
 
     /**
      * @var ActionFactory
+     * @since 2.0.0
      */
     protected $actionFactory;
 
     /**
      * @param ActionFactory $actionFactory
      * @param NoRouteHandlerList $noRouteHandlerList
+     * @since 2.0.0
      */
     public function __construct(ActionFactory $actionFactory, NoRouteHandlerList $noRouteHandlerList)
     {
@@ -39,6 +47,7 @@ class DefaultRouter implements RouterInterface
      *
      * @param RequestInterface $request
      * @return ActionInterface
+     * @since 2.0.0
      */
     public function match(RequestInterface $request)
     {

@@ -8,6 +8,7 @@ namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Error extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
 {
@@ -15,6 +16,7 @@ class Error extends \Magento\AdminNotification\Model\System\Message\Media\Abstra
      * Message identity
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_identity = 'MEDIA_SYNCHRONIZATION_ERROR';
 
@@ -22,6 +24,7 @@ class Error extends \Magento\AdminNotification\Model\System\Message\Media\Abstra
      * Check whether
      *
      * @return bool
+     * @since 2.0.0
      */
     protected function _shouldBeDisplayed()
     {
@@ -33,6 +36,7 @@ class Error extends \Magento\AdminNotification\Model\System\Message\Media\Abstra
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
+     * @since 2.0.0
      */
     public function getText()
     {

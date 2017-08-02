@@ -7,17 +7,24 @@
  */
 namespace Magento\Framework\DB\Helper;
 
+/**
+ * Class \Magento\Framework\DB\Helper\AbstractHelper
+ *
+ * @since 2.0.0
+ */
 abstract class AbstractHelper
 {
     /**
      * Resource helper module prefix
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_modulePrefix;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
+     * @since 2.0.0
      */
     protected $_resource;
 
@@ -26,6 +33,7 @@ abstract class AbstractHelper
      *
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix)
     {
@@ -37,6 +45,7 @@ abstract class AbstractHelper
      * Retrieves connection to the resource
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @since 2.0.0
      */
     protected function getConnection()
     {
@@ -60,6 +69,7 @@ abstract class AbstractHelper
      * @param string $value
      * @param array $options
      * @return string
+     * @since 2.0.0
      */
     public function escapeLikeValue($value, $options = [])
     {
@@ -107,6 +117,7 @@ abstract class AbstractHelper
      * @return \Zend_Db_Expr
      *
      * @see escapeLikeValue()
+     * @since 2.0.0
      */
     abstract public function addLikeEscape($value, $options = []);
 
@@ -120,6 +131,7 @@ abstract class AbstractHelper
      * @return \Zend_Db_Expr
      *
      * @see escapeLikeValue()
+     * @since 2.0.0
      */
     public function getCILike($field, $value, $options = [])
     {

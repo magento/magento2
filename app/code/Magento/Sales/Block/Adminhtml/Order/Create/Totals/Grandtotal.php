@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 2.0.0
  */
 class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
@@ -19,6 +20,7 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
      * Template
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_template = 'order/create/totals/grandtotal.phtml';
 
@@ -26,6 +28,7 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
      * Tax config
      *
      * @var \Magento\Tax\Model\Config
+     * @since 2.0.0
      */
     protected $_taxConfig;
 
@@ -38,6 +41,7 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -57,6 +61,7 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
      * Include tax
      *
      * @return bool
+     * @since 2.0.0
      */
     public function includeTax()
     {
@@ -67,6 +72,7 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
      * Get total excluding tax
      *
      * @return float
+     * @since 2.0.0
      */
     public function getTotalExclTax()
     {

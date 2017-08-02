@@ -11,16 +11,19 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog inventory module observer
+ * @since 2.0.0
  */
 class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock
+     * @since 2.0.0
      */
     protected $resourceStock;
 
     /**
      * @param \Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock
+     * @since 2.0.0
      */
     public function __construct(\Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock)
     {
@@ -32,6 +35,7 @@ class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

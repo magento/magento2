@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * @codeCoverageIgnore
  * @api
+ * @since 2.0.0
  */
 class TemporaryStorageFactory
 {
@@ -19,6 +20,7 @@ class TemporaryStorageFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $objectManager = null;
 
@@ -26,6 +28,7 @@ class TemporaryStorageFactory
      * Instance name to create
      *
      * @var string
+     * @since 2.0.0
      */
     protected $instanceName = null;
 
@@ -34,6 +37,7 @@ class TemporaryStorageFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
+     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -48,6 +52,7 @@ class TemporaryStorageFactory
      *
      * @param array $data
      * @return \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

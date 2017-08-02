@@ -11,36 +11,43 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class LookupExpression
+ * @since 2.0.0
  */
 class LookupExpression extends Expression
 {
     /**
      * @var Resource
+     * @since 2.0.0
      */
     protected $resource;
 
     /**
      * @var AdapterInterface
+     * @since 2.0.0
      */
     protected $adapter;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $targetColumn;
 
     /**
      * @var string
+     * @since 2.0.0
      */
     protected $targetTable;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $referenceColumns;
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $sortOrder;
 
@@ -50,6 +57,7 @@ class LookupExpression extends Expression
      * @param string $targetTable
      * @param array $referenceColumns
      * @param array $sortOrder
+     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -71,6 +79,7 @@ class LookupExpression extends Expression
      *
      * @param Select $select
      * @return void
+     * @since 2.0.0
      */
     protected function processWhereCondition(Select $select)
     {
@@ -98,6 +107,7 @@ class LookupExpression extends Expression
      *
      * @param Select $select
      * @return void
+     * @since 2.0.0
      */
     protected function processSortOrder(Select $select)
     {
@@ -120,6 +130,7 @@ class LookupExpression extends Expression
      * Returns lookup SQL
      *
      * @return string
+     * @since 2.0.0
      */
     public function __toString()
     {

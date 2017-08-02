@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  * Interface UiComponentInterface
  *
  * @api
+ * @since 2.0.0
  */
 interface UiComponentInterface extends BlockInterface
 {
@@ -18,6 +19,7 @@ interface UiComponentInterface extends BlockInterface
      * Get component instance name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getName();
 
@@ -25,6 +27,7 @@ interface UiComponentInterface extends BlockInterface
      * Get component name
      *
      * @return string
+     * @since 2.0.0
      */
     public function getComponentName();
 
@@ -32,6 +35,7 @@ interface UiComponentInterface extends BlockInterface
      * Get component configuration
      *
      * @return array
+     * @since 2.0.0
      */
     public function getConfiguration();
 
@@ -39,6 +43,7 @@ interface UiComponentInterface extends BlockInterface
      * Render component
      *
      * @return string
+     * @since 2.0.0
      */
     public function render();
 
@@ -48,12 +53,14 @@ interface UiComponentInterface extends BlockInterface
      * @param string $name
      * @param UiComponentInterface $component
      * @return void
+     * @since 2.0.0
      */
     public function addComponent($name, UiComponentInterface $component);
 
     /**
      * @param string $name
      * @return UiComponentInterface
+     * @since 2.0.0
      */
     public function getComponent($name);
 
@@ -61,6 +68,7 @@ interface UiComponentInterface extends BlockInterface
      * Get child components
      *
      * @return UiComponentInterface[]
+     * @since 2.0.0
      */
     public function getChildComponents();
 
@@ -68,6 +76,7 @@ interface UiComponentInterface extends BlockInterface
      * Get template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTemplate();
 
@@ -75,6 +84,7 @@ interface UiComponentInterface extends BlockInterface
      * Get component context
      *
      * @return ContextInterface
+     * @since 2.0.0
      */
     public function getContext();
 
@@ -83,6 +93,7 @@ interface UiComponentInterface extends BlockInterface
      *
      * @param string $name
      * @return string
+     * @since 2.0.0
      */
     public function renderChildComponent($name);
 
@@ -92,6 +103,7 @@ interface UiComponentInterface extends BlockInterface
      * @param string|array $key
      * @param mixed $value
      * @return void
+     * @since 2.0.0
      */
     public function setData($key, $value = null);
 
@@ -101,6 +113,7 @@ interface UiComponentInterface extends BlockInterface
      * @param string $key
      * @param string|int $index
      * @return mixed
+     * @since 2.0.0
      */
     public function getData($key = '', $index = null);
 
@@ -108,6 +121,7 @@ interface UiComponentInterface extends BlockInterface
      * Prepare component configuration
      *
      * @return void
+     * @since 2.0.0
      */
     public function prepare();
 
@@ -116,6 +130,7 @@ interface UiComponentInterface extends BlockInterface
      *
      * @param array $dataSource
      * @return array
+     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource);
 
@@ -123,6 +138,7 @@ interface UiComponentInterface extends BlockInterface
      * Get Data Source data
      *
      * @return array
+     * @since 2.0.0
      */
     public function getDataSourceData();
 }

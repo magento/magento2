@@ -12,22 +12,26 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
+ * @since 2.0.0
  */
 class CancelOrderItemObserver implements ObserverInterface
 {
     /**
      * @var StockManagementInterface
+     * @since 2.0.0
      */
     protected $stockManagement;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @since 2.0.0
      */
     protected $priceIndexer;
 
     /**
      * @param StockManagementInterface $stockManagement
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @since 2.0.0
      */
     public function __construct(
         StockManagementInterface $stockManagement,
@@ -42,6 +46,7 @@ class CancelOrderItemObserver implements ObserverInterface
      *
      * @param   EventObserver $observer
      * @return  void
+     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

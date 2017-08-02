@@ -19,36 +19,43 @@ use Magento\Framework\DataObject;
  * @method int getShipmentId()
  * @method array getShipment()
  * @method array getTracking()
+ * @since 2.0.0
  */
 class ShipmentLoader extends DataObject
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
+     * @since 2.0.0
      */
     protected $messageManager;
 
     /**
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $registry;
 
     /**
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
+     * @since 2.0.0
      */
     protected $shipmentRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @since 2.0.0
      */
     protected $shipmentFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
+     * @since 2.0.0
      */
     protected $trackFactory;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @since 2.0.0
      */
     protected $orderRepository;
 
@@ -60,6 +67,7 @@ class ShipmentLoader extends DataObject
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -83,6 +91,7 @@ class ShipmentLoader extends DataObject
      * Initialize shipment items QTY
      *
      * @return array
+     * @since 2.0.0
      */
     protected function getItemQtys()
     {
@@ -96,6 +105,7 @@ class ShipmentLoader extends DataObject
      *
      * @return bool|\Magento\Sales\Model\Order\Shipment
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     public function load()
     {

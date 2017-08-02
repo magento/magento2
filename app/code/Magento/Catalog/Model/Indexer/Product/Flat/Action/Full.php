@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 /**
  * Class Full reindex action
  *
+ * @since 2.0.0
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
 {
@@ -20,6 +21,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function execute($ids = null)
     {

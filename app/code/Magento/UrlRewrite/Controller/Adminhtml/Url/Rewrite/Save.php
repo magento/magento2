@@ -10,18 +10,35 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\Save
+ *
+ * @since 2.0.0
+ */
 class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     * @since 2.0.0
+     */
     protected $cmsPageUrlPathGenerator;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @since 2.0.0
+     */
     protected $urlFinder;
 
     /**
@@ -30,6 +47,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -51,6 +69,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function _handleCatalogUrlRewrite($model)
     {
@@ -74,6 +93,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.0.0
      */
     protected function getTargetPath($model)
     {
@@ -99,6 +119,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 
     /**
      * @return string
+     * @since 2.0.0
      */
     protected function getCanonicalTargetPath()
     {
@@ -114,6 +135,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      *
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return void
+     * @since 2.0.0
      */
     private function _handleCmsPageUrlRewrite($model)
     {
@@ -133,6 +155,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 
     /**
      * @return void
+     * @since 2.0.0
      */
     public function execute()
     {

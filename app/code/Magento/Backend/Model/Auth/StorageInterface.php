@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Auth;
  * Backend Auth Storage interface
  *
  * @api
+ * @since 2.0.0
  */
 interface StorageInterface
 {
@@ -18,6 +19,7 @@ interface StorageInterface
      * @return $this
      * @abstract
      * @api
+     * @since 2.0.0
      */
     public function processLogin();
 
@@ -27,6 +29,7 @@ interface StorageInterface
      * @return $this
      * @abstract
      * @api
+     * @since 2.0.0
      */
     public function processLogout();
 
@@ -36,6 +39,7 @@ interface StorageInterface
      * @return bool
      * @abstract
      * @api
+     * @since 2.0.0
      */
     public function isLoggedIn();
 
@@ -45,6 +49,7 @@ interface StorageInterface
      * @return void
      * @abstract
      * @api
+     * @since 2.0.0
      */
     public function prolong();
 }

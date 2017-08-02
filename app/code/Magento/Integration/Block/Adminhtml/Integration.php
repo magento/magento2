@@ -10,6 +10,7 @@ namespace Magento\Integration\Block\Adminhtml;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Integration extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -17,6 +18,7 @@ class Integration extends \Magento\Backend\Block\Widget\Grid\Container
      * Define actions available on the integrations grid page.
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {

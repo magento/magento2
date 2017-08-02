@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Helper;
 
 /**
  * Path pattern creation helper
+ * @since 2.0.0
  */
 class PathPattern
 {
@@ -15,6 +16,7 @@ class PathPattern
      *
      * @param string $path
      * @return string
+     * @since 2.0.0
      */
     public function translatePatternFromGlob($path)
     {
@@ -35,6 +37,7 @@ class PathPattern
      *
      * @param string $pattern
      * @return string
+     * @since 2.0.0
      */
     protected function translateGroupsFromGlob($pattern)
     {
@@ -61,6 +64,7 @@ class PathPattern
      *
      * @param string $pattern
      * @return string
+     * @since 2.0.0
      */
     protected function translateCharacterGroupsFromGlob($pattern)
     {

@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Widget\Grid;
 
 /**
  * @api
+ * @since 2.0.0
  */
 interface TotalsInterface
 {
@@ -17,6 +18,7 @@ interface TotalsInterface
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Framework\DataObject
      * @api
+     * @since 2.0.0
      */
     public function countTotals($collection);
 }

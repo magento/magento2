@@ -12,10 +12,16 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
+/**
+ * Class \Magento\Customer\Ui\Component\DataProvider
+ *
+ * @since 2.0.0
+ */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
      * @var AttributeRepository
+     * @since 2.0.0
      */
     private $attributeRepository;
 
@@ -31,6 +37,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -60,6 +67,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getData()
     {

@@ -10,22 +10,26 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  * @api
+ * @since 2.0.0
  */
 class Language implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\GoogleAdwords\Helper\Data
+     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\GoogleAdwords\Model\Filter\UppercaseTitle
+     * @since 2.0.0
      */
     protected $_uppercaseFilter;
 
     /**
      * @param \Magento\GoogleAdwords\Helper\Data $helper
      * @param \Magento\GoogleAdwords\Model\Filter\UppercaseTitle $uppercaseFilter
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\GoogleAdwords\Helper\Data $helper,
@@ -39,6 +43,7 @@ class Language implements \Magento\Framework\Option\ArrayInterface
      * Return option array
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

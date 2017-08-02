@@ -13,6 +13,7 @@ use Magento\Setup\Module\Setup\SetupCache;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSetupInterface
 {
@@ -20,6 +21,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Tables data cache
      *
      * @var SetupCache
+     * @since 2.0.0
      */
     private $setupCache;
 
@@ -27,6 +29,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     private $_eventManager;
 
@@ -34,6 +37,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Logger
      *
      * @var \Psr\Log\LoggerInterface
+     * @since 2.0.0
      */
     private $_logger;
 
@@ -41,6 +45,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Migration factory
      *
      * @var \Magento\Framework\Module\Setup\MigrationFactory
+     * @since 2.0.0
      */
     private $_migrationFactory;
 
@@ -48,6 +53,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     private $filesystem;
 
@@ -56,6 +62,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      *
      * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $connectionName
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Module\Setup\Context $context,
@@ -71,6 +78,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
 
     /**
      * {@inheritdoc}
+     * @since 2.0.0
      */
     public function getSetupCache()
     {
@@ -87,6 +95,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * @param string|null $parentField
      * @param string|integer $parentId
      * @return mixed
+     * @since 2.0.0
      */
     public function getTableRow($table, $idField, $rowId, $field = null, $parentField = null, $parentId = 0)
     {
@@ -116,6 +125,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * @param null|string $parentField
      * @param int|string $parentId
      * @return $this
+     * @since 2.0.0
      */
     public function deleteTableRow($table, $idField, $rowId, $parentField = null, $parentId = 0)
     {
@@ -145,6 +155,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * @param string|integer $parentId
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function updateTableRow($table, $idField, $rowId, $field, $value = null, $parentField = null, $parentId = 0)
     {
@@ -176,6 +187,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Gets event manager
      *
      * @return \Magento\Framework\Event\ManagerInterface
+     * @since 2.0.0
      */
     public function getEventManager()
     {
@@ -186,6 +198,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      * Gets filesystem
      *
      * @return \Magento\Framework\Filesystem
+     * @since 2.0.0
      */
     public function getFilesystem()
     {
@@ -197,6 +210,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
      *
      * @param array $data
      * @return \Magento\Framework\Module\Setup\Migration
+     * @since 2.0.0
      */
     public function createMigrationSetup(array $data = [])
     {

@@ -6,6 +6,11 @@
 
 namespace Magento\Catalog\Block\Product;
 
+/**
+ * Interface \Magento\Catalog\Block\Product\ReviewRendererInterface
+ *
+ * @since 2.0.0
+ */
 interface ReviewRendererInterface
 {
     const SHORT_VIEW = 'short';
@@ -19,6 +24,7 @@ interface ReviewRendererInterface
      * @param string $templateType
      * @param bool $displayIfNoReviews
      * @return string
+     * @since 2.0.0
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,

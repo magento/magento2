@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity\VersionControl;
 
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
+ * @since 2.0.0
  */
 class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
 {
@@ -15,6 +16,7 @@ class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\
      *
      * @param \Magento\Framework\DataObject $entity
      * @return array
+     * @since 2.0.0
      */
     public function getFields(\Magento\Framework\DataObject $entity)
     {

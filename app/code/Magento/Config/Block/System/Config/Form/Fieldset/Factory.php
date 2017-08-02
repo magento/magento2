@@ -10,16 +10,19 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset;
  * Magento\Config\Block\System\Config\Form\Fieldset Class Factory
  *
  * @codeCoverageIgnore
+ * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -31,6 +34,7 @@ class Factory
      *
      * @param array $data
      * @return \Magento\Config\Block\System\Config\Form\Fieldset
+     * @since 2.0.0
      */
     public function create(array $data = [])
     {

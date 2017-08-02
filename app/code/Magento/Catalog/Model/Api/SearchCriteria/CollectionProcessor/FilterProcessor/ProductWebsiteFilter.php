@@ -10,6 +10,11 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Class \Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductWebsiteFilter
+ *
+ * @since 2.2.0
+ */
 class ProductWebsiteFilter implements CustomFilterInterface
 {
     /**
@@ -18,6 +23,7 @@ class ProductWebsiteFilter implements CustomFilterInterface
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool Whether the filter is applied
+     * @since 2.2.0
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {

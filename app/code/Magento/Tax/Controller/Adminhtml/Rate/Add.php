@@ -8,12 +8,18 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Tax\Controller\RegistryConstants;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rate\Add
+ *
+ * @since 2.0.0
+ */
 class Add extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Show Add Form
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 2.0.0
      */
     public function execute()
     {

@@ -34,6 +34,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  *
  * @api
+ * @since 2.0.0
  */
 class Subscriber extends \Magento\Framework\Model\AbstractModel
 {
@@ -55,6 +56,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Prefix of model events names
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventPrefix = 'newsletter_subscriber';
 
@@ -64,6 +66,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * In observe method you can use $observer->getEvent()->getObject() in this case
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_eventObject = 'subscriber';
 
@@ -71,6 +74,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * True if data changed
      *
      * @var bool
+     * @since 2.0.0
      */
     protected $_isStatusChanged = false;
 
@@ -78,6 +82,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Newsletter data
      *
      * @var \Magento\Newsletter\Helper\Data
+     * @since 2.0.0
      */
     protected $_newsletterData = null;
 
@@ -85,6 +90,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -92,6 +98,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
+     * @since 2.0.0
      */
     protected $_customerSession;
 
@@ -99,26 +106,31 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var CustomerRepositoryInterface
+     * @since 2.0.0
      */
     protected $customerRepository;
 
     /**
      * @var AccountManagementInterface
+     * @since 2.0.0
      */
     protected $customerAccountManagement;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
+     * @since 2.0.0
      */
     protected $inlineTranslation;
 
@@ -139,6 +151,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -170,6 +183,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -180,6 +194,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Alias for getSubscriberId()
      *
      * @return int
+     * @since 2.0.0
      */
     public function getId()
     {
@@ -191,6 +206,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $value
      * @return $this
+     * @since 2.0.0
      */
     public function setId($value)
     {
@@ -201,6 +217,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Alias for getSubscriberConfirmCode()
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCode()
     {
@@ -211,6 +228,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Return link for confirmation of subscription
      *
      * @return string
+     * @since 2.0.0
      */
     public function getConfirmationLink()
     {
@@ -221,6 +239,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Returns Unsubscribe url
      *
      * @return string
+     * @since 2.0.0
      */
     public function getUnsubscriptionLink()
     {
@@ -232,6 +251,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setCode($value)
     {
@@ -242,6 +262,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Alias for getSubscriberStatus()
      *
      * @return int
+     * @since 2.0.0
      */
     public function getStatus()
     {
@@ -253,6 +274,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $value
      * @return $this
+     * @since 2.0.0
      */
     public function setStatus($value)
     {
@@ -264,6 +286,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param boolean $scope
      * @return $this
+     * @since 2.0.0
      */
     public function setMessagesScope($scope)
     {
@@ -275,6 +298,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Alias for getSubscriberEmail()
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEmail()
     {
@@ -286,6 +310,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $value
      * @return $this
+     * @since 2.0.0
      */
     public function setEmail($value)
     {
@@ -297,6 +322,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param boolean $value
      * @return $this
+     * @since 2.0.0
      */
     public function setStatusChanged($value)
     {
@@ -308,6 +334,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Return status change flag value
      *
      * @return boolean
+     * @since 2.0.0
      */
     public function isStatusChanged()
     {
@@ -318,6 +345,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Return customer subscription status
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isSubscribed()
     {
@@ -333,6 +361,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $subscriberEmail
      * @return $this
+     * @since 2.0.0
      */
     public function loadByEmail($subscriberEmail)
     {
@@ -345,6 +374,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCustomerId($customerId)
     {
@@ -367,6 +397,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $length
      * @return string
+     * @since 2.0.0
      */
     public function randomSequence($length = 32)
     {
@@ -391,6 +422,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     public function subscribe($email)
     {
@@ -463,6 +495,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @since 2.0.0
      */
     public function unsubscribe()
     {
@@ -484,6 +517,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function subscribeCustomerById($customerId)
     {
@@ -495,6 +529,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function unsubscribeCustomerById($customerId)
     {
@@ -506,6 +541,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return $this
+     * @since 2.0.0
      */
     public function updateSubscription($customerId)
     {
@@ -523,6 +559,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 2.0.0
      */
     protected function _updateCustomerSubscription($customerId, $subscribe)
     {
@@ -608,6 +645,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return boolean
+     * @since 2.0.0
      */
     public function confirm($code)
     {
@@ -626,6 +664,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param  \Magento\Newsletter\Model\Queue $queue
      * @return boolean
+     * @since 2.0.0
      */
     public function received(\Magento\Newsletter\Model\Queue $queue)
     {
@@ -637,6 +676,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Sends out confirmation email
      *
      * @return $this
+     * @since 2.0.0
      */
     public function sendConfirmationRequestEmail()
     {
@@ -690,6 +730,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Sends out confirmation success email
      *
      * @return $this
+     * @since 2.0.0
      */
     public function sendConfirmationSuccessEmail()
     {
@@ -743,6 +784,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Sends out unsubscription email
      *
      * @return $this
+     * @since 2.0.0
      */
     public function sendUnsubscriptionEmail()
     {
@@ -795,6 +837,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Retrieve Subscribers Full Name if it was set
      *
      * @return string|null
+     * @since 2.0.0
      */
     public function getSubscriberFullName()
     {

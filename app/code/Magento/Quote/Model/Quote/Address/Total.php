@@ -9,16 +9,19 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getCode()
  *
  * @api
+ * @since 2.0.0
  */
 class Total extends \Magento\Framework\DataObject
 {
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $totalAmounts = [];
 
     /**
      * @var array
+     * @since 2.0.0
      */
     protected $baseTotalAmounts = [];
 
@@ -26,6 +29,7 @@ class Total extends \Magento\Framework\DataObject
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 2.2.0
      */
     private $serializer;
 
@@ -34,6 +38,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @since 2.2.0
      */
     public function __construct(
         array $data = [],
@@ -50,6 +55,7 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setTotalAmount($code, $amount)
     {
@@ -68,6 +74,7 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseTotalAmount($code, $amount)
     {
@@ -86,6 +93,7 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function addTotalAmount($code, $amount)
     {
@@ -101,6 +109,7 @@ class Total extends \Magento\Framework\DataObject
      * @param string $code
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function addBaseTotalAmount($code, $amount)
     {
@@ -115,6 +124,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param   string $code
      * @return  float|int
+     * @since 2.0.0
      */
     public function getTotalAmount($code)
     {
@@ -130,6 +140,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param   string $code
      * @return  float|int
+     * @since 2.0.0
      */
     public function getBaseTotalAmount($code)
     {
@@ -146,6 +157,7 @@ class Total extends \Magento\Framework\DataObject
      * Get all total amount values
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllTotalAmounts()
     {
@@ -156,6 +168,7 @@ class Total extends \Magento\Framework\DataObject
      * Get all total amount values in base currency
      *
      * @return array
+     * @since 2.0.0
      */
     public function getAllBaseTotalAmounts()
     {
@@ -170,6 +183,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param array|string $info
      * @return $this
+     * @since 2.1.0
      */
     public function setFullInfo($info)
     {
@@ -181,6 +195,7 @@ class Total extends \Magento\Framework\DataObject
      * Returns the full info, which is used to capture tax related information.
      *
      * @return array
+     * @since 2.1.0
      */
     public function getFullInfo()
     {

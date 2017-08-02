@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Eaccelerator
+ *
+ * @since 2.0.0
+ */
 class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -22,6 +27,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      *
      * @param  array $options associative array of options
      * @throws \Zend_Cache_Exception
+     * @since 2.0.0
      */
     public function __construct(array $options = [])
     {
@@ -40,6 +46,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param  boolean $doNotTestCacheValidity if set to true, the cache validity won't be tested
      * @return string cached datas (or false)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
@@ -55,6 +62,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      *
      * @param  string $id cache id
      * @return mixed false (a cache is not available) or "last modified" timestamp (int) of the available cache record
+     * @since 2.0.0
      */
     public function test($id)
     {
@@ -76,6 +84,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string[] $tags array of strings, the cache record will be tagged by each string entry
      * @param int|bool $specificLifetime Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
+     * @since 2.0.0
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -92,6 +101,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      *
      * @param  string $id cache id
      * @return bool true if no problem
+     * @since 2.0.0
      */
     public function remove($id)
     {
@@ -113,6 +123,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @throws \Zend_Cache_Exception
      * @return bool|void true if no problem
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -142,6 +153,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      *
      * @throws \Zend_Cache_Exception
      * @return int integer between 0 and 100
+     * @since 2.0.0
      */
     public function getFillingPercentage()
     {
@@ -162,6 +174,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * Return an array of stored tags
      *
      * @return string[] array of stored tags (string)
+     * @since 2.0.0
      */
     public function getTags()
     {
@@ -177,6 +190,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param array $tags array of tags
      * @return string[] array of matching cache ids (string)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -192,6 +206,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -207,6 +222,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string[] $tags array of tags
      * @return string[] array of any matching cache ids (string)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -219,6 +235,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      *
      * @return string[] array of stored cache ids (string)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function getIds()
     {
@@ -241,6 +258,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string $id cache id
      * @return array|false array of metadatas (false if the cache id is not found)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.0.0
      */
     public function getMetadatas($id)
     {
@@ -265,6 +283,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string $id cache id
      * @param int $extraLifetime
      * @return bool true if ok
+     * @since 2.0.0
      */
     public function touch($id, $extraLifetime)
     {
@@ -301,6 +320,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
+     * @since 2.0.0
      */
     public function getCapabilities()
     {

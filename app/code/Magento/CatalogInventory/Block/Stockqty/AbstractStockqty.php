@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Product stock qty abstract block
+ * @since 2.0.0
  */
 abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
 {
@@ -24,16 +25,19 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockStateInterface
+     * @since 2.0.0
      */
     protected $stockState;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @since 2.0.0
      */
     protected $stockRegistry;
 
@@ -43,6 +47,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -62,6 +67,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Retrieve current product object
      *
      * @return \Magento\Catalog\Model\Product
+     * @since 2.0.0
      */
     public function getProduct()
     {
@@ -72,6 +78,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Retrieve current product stock qty
      *
      * @return float
+     * @since 2.0.0
      */
     public function getStockQty()
     {
@@ -91,6 +98,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      *
      * @param Product $product
      * @return float
+     * @since 2.0.0
      */
     public function getProductStockQty($product)
     {
@@ -101,6 +109,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Retrieve threshold of qty to display stock qty message
      *
      * @return string
+     * @since 2.0.0
      */
     public function getThresholdQty()
     {
@@ -118,6 +127,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Retrieve id of message placeholder in template
      *
      * @return string
+     * @since 2.0.0
      */
     public function getPlaceholderId()
     {
@@ -128,6 +138,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Retrieve visibility of stock qty message
      *
      * @return bool
+     * @since 2.0.0
      */
     public function isMsgVisible()
     {
@@ -138,6 +149,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      * Retrieve current product qty left in stock
      *
      * @return float
+     * @since 2.0.0
      */
     public function getStockQtyLeft()
     {

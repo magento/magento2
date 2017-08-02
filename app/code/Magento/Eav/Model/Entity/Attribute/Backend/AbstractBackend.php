@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 2.0.0
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -19,6 +20,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Reference to the attribute instance
      *
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @since 2.0.0
      */
     protected $_attribute;
 
@@ -26,6 +28,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * PK value_id for loaded entity (for faster updates)
      *
      * @var integer
+     * @since 2.0.0
      */
     protected $_valueId;
 
@@ -33,6 +36,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * PK value_ids for each loaded entity
      *
      * @var array
+     * @since 2.0.0
      */
     protected $_valueIds = [];
 
@@ -40,6 +44,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Table name for this attribute
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_table;
 
@@ -47,6 +52,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Name of the entity_id field for the value table of this attribute
      *
      * @var string
+     * @since 2.0.0
      */
     protected $_entityIdField;
 
@@ -54,6 +60,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Default value for the attribute
      *
      * @var mixed
+     * @since 2.0.0
      */
     protected $_defaultValue = null;
 
@@ -63,6 +70,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setAttribute($attribute)
     {
@@ -75,6 +83,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -86,6 +95,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @return string
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getType()
     {
@@ -97,6 +107,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @return bool
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isStatic()
     {
@@ -107,6 +118,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Get table name for the values of the attribute
      *
      * @return string
+     * @since 2.0.0
      */
     public function getTable()
     {
@@ -129,6 +141,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Get entity_id field in the attribute values tables
      *
      * @return string
+     * @since 2.0.0
      */
     public function getEntityIdField()
     {
@@ -149,6 +162,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @param int $valueId
      * @return $this
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function setValueId($valueId)
     {
@@ -162,6 +176,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @param \Magento\Framework\DataObject $entity
      * @param int $valueId
      * @return $this
+     * @since 2.0.0
      */
     public function setEntityValueId($entity, $valueId)
     {
@@ -178,6 +193,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @return int
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function getValueId()
     {
@@ -189,6 +205,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\DataObject $entity
      * @return int
+     * @since 2.0.0
      */
     public function getEntityValueId($entity)
     {
@@ -203,6 +220,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Retrieve default value
      *
      * @return mixed
+     * @since 2.0.0
      */
     public function getDefaultValue()
     {
@@ -224,6 +242,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @return bool
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 2.0.0
      */
     public function validate($object)
     {
@@ -263,6 +282,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function afterLoad($object)
     {
@@ -274,6 +294,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave($object)
     {
@@ -292,6 +313,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function afterSave($object)
     {
@@ -305,6 +327,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function beforeDelete($object)
     {
@@ -318,6 +341,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function afterDelete($object)
     {
@@ -329,6 +353,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\DataObject $object
      * @return array
+     * @since 2.0.0
      */
     public function getAffectedFields($object)
     {
@@ -345,6 +370,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * {@inheritdoc}
      * @codeCoverageIgnore
+     * @since 2.0.0
      */
     public function isScalar()
     {

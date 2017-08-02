@@ -18,6 +18,7 @@ namespace Magento\SalesRule\Model\Rule;
  * @method \Magento\SalesRule\Model\Rule\Customer setTimesUsed(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Customer extends \Magento\Framework\Model\AbstractModel
 {
@@ -25,6 +26,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Constructor
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -38,6 +40,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param int $customerId
      * @param int $ruleId
      * @return $this
+     * @since 2.0.0
      */
     public function loadByCustomerRule($customerId, $ruleId)
     {

@@ -5,20 +5,28 @@
  */
 namespace Magento\SalesRule\Cron;
 
+/**
+ * Class \Magento\SalesRule\Cron\AggregateSalesReportCouponsData
+ *
+ * @since 2.0.0
+ */
 class AggregateSalesReportCouponsData
 {
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule
+     * @since 2.0.0
      */
     protected $_reportRule;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
+     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -26,6 +34,7 @@ class AggregateSalesReportCouponsData
      * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportRule
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportRule,
@@ -41,6 +50,7 @@ class AggregateSalesReportCouponsData
      * Refresh sales coupons report statistics for last day
      *
      * @return $this
+     * @since 2.0.0
      */
     public function execute()
     {

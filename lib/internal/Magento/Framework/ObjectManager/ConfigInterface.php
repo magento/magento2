@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\ConfigInterface
+ *
+ * @since 2.0.0
+ */
 interface ConfigInterface
 {
     /**
@@ -13,6 +18,7 @@ interface ConfigInterface
      * @param RelationsInterface $relations
      *
      * @return void
+     * @since 2.0.0
      */
     public function setRelations(RelationsInterface $relations);
 
@@ -22,6 +28,7 @@ interface ConfigInterface
      * @param ConfigCacheInterface $cache
      *
      * @return void
+     * @since 2.0.0
      */
     public function setCache(ConfigCacheInterface $cache);
 
@@ -30,6 +37,7 @@ interface ConfigInterface
      *
      * @param string $type
      * @return array|null
+     * @since 2.0.0
      */
     public function getArguments($type);
 
@@ -38,6 +46,7 @@ interface ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @since 2.0.0
      */
     public function isShared($type);
 
@@ -46,6 +55,7 @@ interface ConfigInterface
      *
      * @param string $instanceName
      * @return mixed
+     * @since 2.0.0
      */
     public function getInstanceType($instanceName);
 
@@ -55,6 +65,7 @@ interface ConfigInterface
      * @param string $type
      * @return string
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function getPreference($type);
 
@@ -62,6 +73,7 @@ interface ConfigInterface
      * Returns list of virtual types
      *
      * @return array
+     * @since 2.0.0
      */
     public function getVirtualTypes();
 
@@ -70,6 +82,7 @@ interface ConfigInterface
      *
      * @param array $configuration
      * @return void
+     * @since 2.0.0
      */
     public function extend(array $configuration);
 
@@ -77,6 +90,7 @@ interface ConfigInterface
      * Returns list on preferences
      *
      * @return array
+     * @since 2.0.0
      */
     public function getPreferences();
 }

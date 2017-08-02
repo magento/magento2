@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface ShippingMethodInterface
  * @api
+ * @since 2.0.0
  */
 interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -65,6 +66,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the shipping carrier code.
      *
      * @return string Shipping carrier code.
+     * @since 2.0.0
      */
     public function getCarrierCode();
 
@@ -73,6 +75,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $carrierCode
      * @return $this
+     * @since 2.0.0
      */
     public function setCarrierCode($carrierCode);
 
@@ -80,6 +83,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the shipping method code.
      *
      * @return string Shipping method code.
+     * @since 2.0.0
      */
     public function getMethodCode();
 
@@ -88,6 +92,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $methodCode
      * @return $this
+     * @since 2.0.0
      */
     public function setMethodCode($methodCode);
 
@@ -95,6 +100,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the shipping carrier title.
      *
      * @return string|null Shipping carrier title. Otherwise, null.
+     * @since 2.0.0
      */
     public function getCarrierTitle();
 
@@ -103,6 +109,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $carrierTitle
      * @return $this
+     * @since 2.0.0
      */
     public function setCarrierTitle($carrierTitle);
 
@@ -110,6 +117,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the shipping method title.
      *
      * @return string|null Shipping method title. Otherwise, null.
+     * @since 2.0.0
      */
     public function getMethodTitle();
 
@@ -118,6 +126,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $methodTitle
      * @return $this
+     * @since 2.0.0
      */
     public function setMethodTitle($methodTitle);
 
@@ -125,6 +134,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the shipping amount in store currency.
      *
      * @return float Shipping amount in store currency.
+     * @since 2.0.0
      */
     public function getAmount();
 
@@ -133,6 +143,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $amount
      * @return $this
+     * @since 2.0.0
      */
     public function setAmount($amount);
 
@@ -140,6 +151,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the shipping amount in base currency.
      *
      * @return float Shipping amount in base currency.
+     * @since 2.0.0
      */
     public function getBaseAmount();
 
@@ -148,6 +160,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $baseAmount
      * @return $this
+     * @since 2.0.0
      */
     public function setBaseAmount($baseAmount);
 
@@ -156,6 +169,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 2.0.0
      */
     public function getAvailable();
 
@@ -164,6 +178,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param bool $available
      * @return $this
+     * @since 2.0.0
      */
     public function setAvailable($available);
 
@@ -171,6 +186,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\ShippingMethodExtensionInterface|null
+     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -179,6 +195,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
      * @return $this
+     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
@@ -188,6 +205,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns an error message.
      *
      * @return string Shipping Error message.
+     * @since 2.0.0
      */
     public function getErrorMessage();
 
@@ -196,6 +214,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param string $errorMessage
      * @return $this
+     * @since 2.0.0
      */
     public function setErrorMessage($errorMessage);
 
@@ -203,6 +222,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns shipping price excl tax.
      *
      * @return float
+     * @since 2.0.0
      */
     public function getPriceExclTax();
 
@@ -211,6 +231,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $priceExclTax
      * @return $this
+     * @since 2.0.0
      */
     public function setPriceExclTax($priceExclTax);
 
@@ -218,6 +239,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns shipping price incl tax.
      *
      * @return float
+     * @since 2.0.0
      */
     public function getPriceInclTax();
 
@@ -226,6 +248,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @param float $priceInclTax
      * @return $this
+     * @since 2.0.0
      */
     public function setPriceInclTax($priceInclTax);
 }

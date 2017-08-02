@@ -10,11 +10,13 @@ use Magento\Framework\View\Design\Theme\Label\ListInterface;
 
 /**
  * Class Theme
+ * @since 2.0.0
  */
 class Theme implements OptionSourceInterface
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\Label\ListInterface
+     * @since 2.0.0
      */
     protected $themeList;
 
@@ -22,6 +24,7 @@ class Theme implements OptionSourceInterface
      * Constructor
      *
      * @param ListInterface $themeList
+     * @since 2.0.0
      */
     public function __construct(ListInterface $themeList)
     {
@@ -32,6 +35,7 @@ class Theme implements OptionSourceInterface
      * Get options
      *
      * @return array
+     * @since 2.0.0
      */
     public function toOptionArray()
     {

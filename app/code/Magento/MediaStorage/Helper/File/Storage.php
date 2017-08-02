@@ -10,6 +10,7 @@ namespace Magento\MediaStorage\Helper\File;
  * File storage helper
  *
  * @api
+ * @since 2.0.0
  */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -17,6 +18,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Current storage code
      *
      * @var int
+     * @since 2.0.0
      */
     protected $_currentStorage = null;
 
@@ -24,6 +26,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * List of internal storages
      *
      * @var int[]
+     * @since 2.0.0
      */
     protected $_internalStorageList = [\Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM];
 
@@ -31,11 +34,13 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 2.0.0
      */
     protected $_coreFileStorageDb = null;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage
+     * @since 2.0.0
      */
     protected $_storage;
 
@@ -43,6 +48,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * File system storage model
      *
      * @var \Magento\MediaStorage\Model\File\Storage\File
+     * @since 2.0.0
      */
     protected $_filesystemStorage;
 
@@ -51,6 +57,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Model\File\Storage $storage
      * @param \Magento\MediaStorage\Model\File\Storage\File $filesystemStorage
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -68,6 +75,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Return saved storage code
      *
      * @return int
+     * @since 2.0.0
      */
     public function getCurrentStorageCode()
     {
@@ -85,6 +93,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve file system storage model
      *
      * @return \Magento\MediaStorage\Model\File\Storage\File
+     * @since 2.0.0
      */
     public function getStorageFileModel()
     {
@@ -96,6 +105,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  int|null $storage
      * @return bool
+     * @since 2.0.0
      */
     public function isInternalStorage($storage = null)
     {
@@ -110,6 +120,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null $storage
      * @param  array $params
      * @return \Magento\Framework\Model\AbstractModel|bool
+     * @since 2.0.0
      */
     public function getStorageModel($storage = null, $params = [])
     {
@@ -122,6 +133,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  string $filename
      * @return bool|int
+     * @since 2.0.0
      */
     public function processStorageFile($filename)
     {
@@ -146,6 +158,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  \Magento\MediaStorage\Model\File\Storage\Database $file
      * @return bool|int
+     * @since 2.0.0
      */
     public function saveFileToFileSystem($file)
     {

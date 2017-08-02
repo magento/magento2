@@ -15,6 +15,7 @@ use Magento\Security\Model\SecurityChecker\SecurityCheckerInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 2.1.0
  */
 class SecurityManager
 {
@@ -25,36 +26,43 @@ class SecurityManager
 
     /**
      * @var ConfigInterface
+     * @since 2.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Security\Model\PasswordResetRequestEventFactory
+     * @since 2.1.0
      */
     protected $passwordResetRequestEventFactory;
 
     /**
      * @var ResourceModel\PasswordResetRequestEvent\CollectionFactory
+     * @since 2.1.0
      */
     protected $passwordResetRequestEventCollectionFactory;
 
     /**
      * @var SecurityCheckerInterface[]
+     * @since 2.1.0
      */
     protected $securityCheckers;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
+     * @since 2.1.0
      */
     private $eventManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 2.1.0
      */
     private $dateTime;
 
     /**
      * @var RemoteAddress
+     * @since 2.1.0
      */
     private $remoteAddress;
 
@@ -69,6 +77,7 @@ class SecurityManager
      * @param RemoteAddress $remoteAddress
      * @param array $securityCheckers
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 2.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,
@@ -104,6 +113,7 @@ class SecurityManager
      * @param int|null $longIp
      * @return $this
      * @throws SecurityViolationException
+     * @since 2.1.0
      */
     public function performSecurityCheck($requestType, $accountReference = null, $longIp = null)
     {
@@ -123,6 +133,7 @@ class SecurityManager
      * Clean expired Admin Sessions
      *
      * @return $this
+     * @since 2.1.0
      */
     public function cleanExpiredRecords()
     {
@@ -140,6 +151,7 @@ class SecurityManager
      * @param string|null $accountReference
      * @param int $longIp
      * @return PasswordResetRequestEvent
+     * @since 2.1.0
      */
     protected function createNewPasswordResetRequestEventRecord($requestType, $accountReference, $longIp)
     {

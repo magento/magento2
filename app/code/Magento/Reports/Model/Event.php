@@ -25,6 +25,7 @@ namespace Magento\Reports\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 2.0.0
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {
@@ -42,11 +43,13 @@ class Event extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
+     * @since 2.0.0
      */
     protected $_dateFactory;
 
     /**
      * @var \Magento\Reports\Model\Event\TypeFactory
+     * @since 2.0.0
      */
     protected $_eventTypeFactory;
 
@@ -58,6 +61,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -77,6 +81,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      * Initialize resource
      *
      * @return void
+     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -87,6 +92,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      * Before Event save process
      *
      * @return $this
+     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -102,6 +108,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      * @param int $customerId
      * @param array $types
      * @return $this
+     * @since 2.0.0
      */
     public function updateCustomerType($visitorId, $customerId, $types = null)
     {
@@ -122,6 +129,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      * Clean events (visitors)
      *
      * @return $this
+     * @since 2.0.0
      */
     public function clean()
     {

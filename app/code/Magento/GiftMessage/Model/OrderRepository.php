@@ -14,6 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Order gift message repository object.
+ * @since 2.0.0
  */
 class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterface
 {
@@ -21,6 +22,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * Order factory.
      *
      * @var \Magento\Sales\Model\OrderFactory
+     * @since 2.0.0
      */
     protected $orderFactory;
 
@@ -28,6 +30,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * Store manager interface.
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 2.0.0
      */
     protected $storeManager;
 
@@ -35,6 +38,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * Gift message save model.
      *
      * @var \Magento\GiftMessage\Model\Save
+     * @since 2.0.0
      */
     protected $giftMessageSaveModel;
 
@@ -42,6 +46,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * Message helper.
      *
      * @var \Magento\GiftMessage\Helper\Message
+     * @since 2.0.0
      */
     protected $helper;
 
@@ -49,6 +54,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * Message factory.
      *
      * @var \Magento\GiftMessage\Model\MessageFactory
+     * @since 2.0.0
      */
     protected $messageFactory;
 
@@ -58,6 +64,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * @param \Magento\GiftMessage\Model\Save $giftMessageSaveModel
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -75,6 +82,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function get($orderId)
     {
@@ -97,6 +105,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
 
     /**
      * {@inheritDoc}
+     * @since 2.0.0
      */
     public function save($orderId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {

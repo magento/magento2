@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -19,11 +20,13 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Currency factory
      *
      * @var \Magento\Directory\Model\CurrencyFactory
+     * @since 2.0.0
      */
     protected $_currencyFactory;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @since 2.0.0
      */
     protected $_localeCurrency;
 
@@ -35,6 +38,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
+     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -54,6 +58,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve avilable currency codes
      *
      * @return string[]
+     * @since 2.0.0
      */
     public function getAvailableCurrencies()
     {
@@ -78,6 +83,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getCurrencyName($code)
     {
@@ -89,6 +95,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param string $code
      * @return string
+     * @since 2.0.0
      */
     public function getCurrencySymbol($code)
     {
@@ -100,6 +107,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Retrieve current order currency code
      *
      * @return string
+     * @since 2.0.0
      */
     public function getCurrentCurrencyCode()
     {

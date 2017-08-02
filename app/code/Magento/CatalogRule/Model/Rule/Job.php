@@ -26,11 +26,13 @@ use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
 /**
  * @api
+ * @since 2.0.0
  */
 class Job extends \Magento\Framework\DataObject
 {
     /**
      * @var RuleProductProcessor
+     * @since 2.0.0
      */
     protected $ruleProcessor;
 
@@ -38,6 +40,7 @@ class Job extends \Magento\Framework\DataObject
      * Basic object initialization
      *
      * @param RuleProductProcessor $ruleProcessor
+     * @since 2.0.0
      */
     public function __construct(RuleProductProcessor $ruleProcessor)
     {
@@ -49,6 +52,7 @@ class Job extends \Magento\Framework\DataObject
      *
      * @return \Magento\CatalogRule\Model\Rule\Job
      * @api
+     * @since 2.0.0
      */
     public function applyAll()
     {

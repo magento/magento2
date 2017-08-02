@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
  * Import entity simple product type
  *
  * @api
+ * @since 2.0.0
  */
 class Simple extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -16,6 +17,7 @@ class Simple extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Attributes' codes which will be allowed anyway, independently from its visibility property.
      *
      * @var string[]
+     * @since 2.0.0
      */
     protected $_forcedAttributesCodes = [
         'related_tgtr_position_behavior',

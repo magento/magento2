@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Attribute\Backend;
  * Invoice backend model for item attribute
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 2.0.0
  */
 class Item extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -17,6 +18,7 @@ class Item extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @since 2.0.0
      */
     public function afterSave($object)
     {
