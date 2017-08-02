@@ -35,6 +35,7 @@ interface InvoiceItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface $entity The invoice item.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\InvoiceItemInterface $entity);
 
@@ -43,6 +44,7 @@ interface InvoiceItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface $entity The invoice item.
      * @return \Magento\Sales\Api\Data\InvoiceItemInterface Invoice item interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\InvoiceItemInterface $entity);
 }

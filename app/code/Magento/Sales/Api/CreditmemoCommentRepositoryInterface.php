@@ -43,6 +43,7 @@ interface CreditmemoCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface $entity The credit memo comment.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoCommentInterface $entity);
 
@@ -51,6 +52,7 @@ interface CreditmemoCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface $entity The credit memo comment.
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface Credit memo comment interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoCommentInterface $entity);
 }

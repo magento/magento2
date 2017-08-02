@@ -36,6 +36,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackInterface $entity The shipment track.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\ShipmentTrackInterface $entity);
 
@@ -44,6 +45,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackInterface $entity The shipment track.
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface Shipment track interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\ShipmentTrackInterface $entity);
 
@@ -52,6 +54,7 @@ interface ShipmentTrackRepositoryInterface
      *
      * @param int $id The shipment track ID.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function deleteById($id);
 }
