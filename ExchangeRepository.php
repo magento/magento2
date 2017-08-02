@@ -5,15 +5,22 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+/**
+ * Class \Magento\Framework\MessageQueue\ExchangeRepository
+ *
+ * @since 2.0.0
+ */
 class ExchangeRepository
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var ExchangeFactoryInterface
+     * @since 2.2.0
      */
     private $exchangeFactory;
 
@@ -21,6 +28,7 @@ class ExchangeRepository
      * Pool of exchange instances.
      *
      * @var ExchangeInterface[]
+     * @since 2.2.0
      */
     private $exchangePool = [];
 
@@ -29,6 +37,7 @@ class ExchangeRepository
      * @param string[] $exchanges
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $exchanges = [])
     {
@@ -39,6 +48,7 @@ class ExchangeRepository
      * @param string $connectionName
      * @return ExchangeInterface
      * @throws \LogicException
+     * @since 2.0.0
      */
     public function getByConnectionName($connectionName)
     {
@@ -53,7 +63,8 @@ class ExchangeRepository
      * Get exchange factory.
      *
      * @return ExchangeFactoryInterface
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getExchangeFactory()
     {

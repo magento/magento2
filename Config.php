@@ -12,17 +12,20 @@ use Magento\Framework\Phrase;
 /**
  * Queue configuration.
  *
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.1.0
  */
 class Config implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\MessageQueue\Config\Data
+     * @since 2.1.0
      */
     protected $queueConfigData;
 
     /**
      * @param Config\Data $queueConfigData
+     * @since 2.1.0
      */
     public function __construct(Config\Data $queueConfigData)
     {
@@ -31,6 +34,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getExchangeByTopic($topicName)
     {
@@ -42,6 +46,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getQueuesByTopic($topic)
     {
@@ -68,6 +73,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getConnectionByTopic($topic)
     {
@@ -83,6 +89,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getConnectionByConsumer($consumer)
     {
@@ -99,6 +106,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getMessageSchemaType($topic)
     {
@@ -110,6 +118,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getConsumerNames()
     {
@@ -119,6 +128,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getConsumer($name)
     {
@@ -128,6 +138,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getBinds()
     {
@@ -136,6 +147,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getPublishers()
     {
@@ -144,6 +156,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getConsumers()
     {
@@ -152,6 +165,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getTopic($name)
     {
@@ -160,6 +174,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getPublisher($name)
     {
@@ -168,6 +183,7 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.1.0
      */
     public function getResponseQueueName($topicName)
     {
@@ -180,6 +196,7 @@ class Config implements ConfigInterface
      * @param string $topicName
      * @return array|mixed|null
      * @throws LocalizedException
+     * @since 2.1.0
      */
     protected function getPublisherConfigByTopic($topicName)
     {

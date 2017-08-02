@@ -12,16 +12,19 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Converts MessageQueue consumers config from \DOMDocument to array
+ * @since 2.2.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private static $defaultInstance = ConsumerInterface::class;
 
     /**
      * @var ConfigParser
+     * @since 2.2.0
      */
     private $configParser;
 
@@ -29,6 +32,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Default value provider.
      *
      * @var DefaultValueProvider
+     * @since 2.2.0
      */
     private $defaultValueProvider;
 
@@ -37,6 +41,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param ConfigParser $configParser
      * @param DefaultValueProvider $defaultValueProvider
+     * @since 2.2.0
      */
     public function __construct(ConfigParser $configParser, DefaultValueProvider $defaultValueProvider)
     {
@@ -46,6 +51,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.2.0
      */
     public function convert($source)
     {
@@ -81,6 +87,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param string $attributeName
      * @param mixed $default
      * @return string|null
+     * @since 2.2.0
      */
     private function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
@@ -93,6 +100,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $handler
      * @return array
+     * @since 2.2.0
      */
     private function parseHandler($handler)
     {

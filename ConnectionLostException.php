@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Class ConnectionLostException
+ * @since 2.0.0
  */
 class ConnectionLostException extends \Exception
 {

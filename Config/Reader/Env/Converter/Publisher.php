@@ -8,17 +8,20 @@ namespace Magento\Framework\MessageQueue\Config\Reader\Env\Converter;
 
 /**
  * Converts publisher related data from env.php to MessageQueue config array
+ * @since 2.2.0
  */
 class Publisher implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Mapping between connection name and default exchange value
      * @var array
+     * @since 2.2.0
      */
     private $connectionToExchangeMap;
 
     /**
      * @param array $connectionToExchangeMap
+     * @since 2.2.0
      */
     public function __construct(
         $connectionToExchangeMap = []
@@ -28,6 +31,7 @@ class Publisher implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritDoc}
+     * @since 2.2.0
      */
     public function convert($source)
     {

@@ -9,11 +9,13 @@ use \Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface;
 
 /**
  * Reader for etc/queue_publisher.xml configs.
+ * @since 2.2.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     protected $_idAttributes = [
         '/config/publisher' => 'topic',
@@ -22,6 +24,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

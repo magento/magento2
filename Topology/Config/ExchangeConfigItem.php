@@ -10,6 +10,7 @@ use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\It
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class ExchangeConfigItem implements ExchangeConfigItemInterface
 {
@@ -17,6 +18,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Exchange name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $name;
 
@@ -24,6 +26,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Exchange type.
      *
      * @var string
+     * @since 2.2.0
      */
     private $type;
 
@@ -31,6 +34,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Connection name.
      *
      * @var string
+     * @since 2.2.0
      */
     private $connection;
 
@@ -38,6 +42,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Exchange bindings.
      *
      * @var BindingInterface[]
+     * @since 2.2.0
      */
     private $bindings;
 
@@ -45,6 +50,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Exchange arguments.
      *
      * @var array
+     * @since 2.2.0
      */
     private $arguments;
 
@@ -52,6 +58,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Flag. Is exchange durable.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isDurable;
 
@@ -59,6 +66,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Flag. Is auto-delete
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isAutoDelete;
 
@@ -66,6 +74,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Flag. Is exchange internal.
      *
      * @var bool
+     * @since 2.2.0
      */
     private $isInternal;
 
@@ -73,6 +82,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * Initialize dependencies.
      *
      * @param IteratorFactory $iteratorFactory
+     * @since 2.2.0
      */
     public function __construct(IteratorFactory $iteratorFactory)
     {
@@ -81,6 +91,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getName()
     {
@@ -89,6 +100,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getType()
     {
@@ -97,6 +109,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -105,6 +118,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isDurable()
     {
@@ -113,6 +127,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isAutoDelete()
     {
@@ -121,6 +136,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function isInternal()
     {
@@ -129,6 +145,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getBindings()
     {
@@ -137,6 +154,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getArguments()
     {
@@ -148,6 +166,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      *
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     public function setData(array $data)
     {

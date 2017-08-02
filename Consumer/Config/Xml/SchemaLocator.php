@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\Xml;
 
 /**
  * Schema locator for etc/queue_consumer.xml
+ * @since 2.2.0
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -14,6 +15,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Path to corresponding XSD file with validation rules for merged config
      *
      * @var string
+     * @since 2.2.0
      */
     protected $schema;
 
@@ -21,6 +23,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
+     * @since 2.2.0
      */
     protected $perFileSchema;
 
@@ -28,6 +31,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @since 2.2.0
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
@@ -39,6 +43,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to merged config schema
      *
      * @return string|null
+     * @since 2.2.0
      */
     public function getSchema()
     {
@@ -49,6 +54,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to per file validation schema
      *
      * @return string|null
+     * @since 2.2.0
      */
     public function getPerFileSchema()
     {
