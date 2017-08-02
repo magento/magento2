@@ -141,10 +141,16 @@ class ProductScopeRewriteGenerator
      * @param \Magento\Framework\Data\Collection|Category[] $productCategories
      * @param \Magento\Catalog\Model\Product $product
      * @param int|null $rootCategoryId
+     * @param MergeDataProvider|null $urlRewrites
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
-    {
+    public function generateForSpecificStoreView(
+        $storeId,
+        $productCategories,
+        Product $product,
+        $rootCategoryId = null,
+        $urlRewrites = null
+    ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $categories = [];
         foreach ($productCategories as $category) {
@@ -155,21 +161,22 @@ class ProductScopeRewriteGenerator
         $productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
 
         $mergeDataProvider->merge(
-            $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
+            $this->canonicalUrlRewriteGenerator->generate($storeId, $product, $urlRewrites)
         );
         $mergeDataProvider->merge(
-            $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories, $urlRewrites)
         );
         $mergeDataProvider->merge(
             $this->currentUrlRewritesRegenerator->generate(
                 $storeId,
                 $product,
                 $productCategories,
-                $rootCategoryId
+                $rootCategoryId,
+                $urlRewrites
             )
         );
         $mergeDataProvider->merge(
-            $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories, $urlRewrites)
         );
         $mergeDataProvider->merge(
             $this->currentUrlRewritesRegenerator->generateAnchor(

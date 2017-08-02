@@ -12,6 +12,7 @@ use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 
 /**
  * Class ProductUrlRewriteGenerator
@@ -123,10 +124,14 @@ class ProductUrlRewriteGenerator
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param int|null $rootCategoryId
+     * @param MergeDataProvider|null $urlRewrites
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate(Product $product, $rootCategoryId = null)
-    {
+    public function generate(
+        Product $product,
+        $rootCategoryId = null,
+        $urlRewrites = null
+    ) {
         if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
             return [];
         }
@@ -138,8 +143,14 @@ class ProductUrlRewriteGenerator
             ->addAttributeToSelect('url_path');
 
         $urls = $this->isGlobalScope($storeId)
-            ? $this->generateForGlobalScope($productCategories, $product, $rootCategoryId)
-            : $this->generateForSpecificStoreView($storeId, $productCategories, $product, $rootCategoryId);
+            ? $this->generateForGlobalScope($productCategories, $product, $rootCategoryId, $urlRewrites)
+            : $this->generateForSpecificStoreView(
+                $storeId,
+                $productCategories,
+                $product,
+                $rootCategoryId,
+                $urlRewrites
+            );
 
         return $urls;
     }
@@ -163,14 +174,20 @@ class ProductUrlRewriteGenerator
      * @param \Magento\Framework\Data\Collection $productCategories
      * @param \Magento\Catalog\Model\Product|null $product
      * @param int|null $rootCategoryId
+     * @param MergeDataProvider|null $urlRewrites
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generateForGlobalScope($productCategories, $product = null, $rootCategoryId = null)
-    {
+    protected function generateForGlobalScope(
+        $productCategories,
+        $product = null,
+        $rootCategoryId = null,
+        $urlRewrites = null
+    ) {
         return $this->getProductScopeRewriteGenerator()->generateForGlobalScope(
             $productCategories,
             $product,
-            $rootCategoryId
+            $rootCategoryId,
+            $urlRewrites
         );
     }
 
@@ -182,16 +199,18 @@ class ProductUrlRewriteGenerator
      * @param \Magento\Framework\Data\Collection $productCategories
      * @param Product|null $product
      * @param int|null $rootCategoryId
+     * @param MergeDataProvider|null $urlRewrites
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
     protected function generateForSpecificStoreView(
         $storeId,
         $productCategories,
         $product = null,
-        $rootCategoryId = null
+        $rootCategoryId = null,
+        $urlRewrites = null
     ) {
         return $this->getProductScopeRewriteGenerator()
-            ->generateForSpecificStoreView($storeId, $productCategories, $product, $rootCategoryId);
+            ->generateForSpecificStoreView($storeId, $productCategories, $product, $rootCategoryId, $urlRewrites);
     }
 
     /**

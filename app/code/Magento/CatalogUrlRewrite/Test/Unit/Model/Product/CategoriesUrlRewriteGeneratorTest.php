@@ -29,12 +29,17 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlRewrite;
 
+    /** @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $urlFinder;
+
     protected function setUp()
     {
         $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->urlFinder = $this->getMockBuilder(\Magento\UrlRewrite\Model\Storage\DbStorage::class)
             ->disableOriginalConstructor()->getMock();
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()->getMock();
@@ -47,7 +52,8 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator::class,
             [
                 'productUrlPathGenerator' => $this->productUrlPathGenerator,
-                'urlRewriteFactory' => $this->urlRewriteFactory
+                'urlRewriteFactory' => $this->urlRewriteFactory,
+                'urlFinder' => $this->urlFinder
             ]
         );
     }
