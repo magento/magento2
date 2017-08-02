@@ -19,25 +19,21 @@ use Psr\Log\LoggerInterface;
  * This could be used for both synchronous and asynchronous processing, depending on topic.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Consumer implements ConsumerInterface
 {
     /**
      * @var ConsumerConfigurationInterface
-     * @since 2.0.0
      */
     private $configuration;
 
     /**
      * @var ResourceConnection
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var MessageEncoder
-     * @since 2.0.0
      */
     private $messageEncoder;
 
@@ -99,7 +95,6 @@ class Consumer implements ConsumerInterface
      * @param LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -117,7 +112,6 @@ class Consumer implements ConsumerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function process($maxNumberOfMessages = null)
     {
@@ -137,7 +131,6 @@ class Consumer implements ConsumerInterface
      * @param boolean $isSync
      * @return string|null
      * @throws LocalizedException
-     * @since 2.0.0
      */
     private function dispatchMessage(EnvelopeInterface $message, $isSync = false)
     {
@@ -205,7 +198,6 @@ class Consumer implements ConsumerInterface
      *
      * @param QueueInterface $queue
      * @return \Closure
-     * @since 2.0.0
      */
     private function getTransactionCallback(QueueInterface $queue)
     {

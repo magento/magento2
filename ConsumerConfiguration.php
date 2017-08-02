@@ -11,7 +11,6 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Value class which stores the configuration
- * @since 2.0.0
  */
 class ConsumerConfiguration implements ConsumerConfigurationInterface
 {
@@ -29,7 +28,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $data;
 
@@ -59,7 +57,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @param array $data configuration data
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(QueueRepository $queueRepository, MessageQueueConfig $messageQueueConfig, $data = [])
     {
@@ -69,7 +66,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getConsumerName()
     {
@@ -78,7 +74,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getMaxMessages()
     {
@@ -87,7 +82,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getQueueName()
     {
@@ -175,7 +169,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @param string $key
      * @return string|null
-     * @since 2.0.0
      */
     private function getData($key)
     {
