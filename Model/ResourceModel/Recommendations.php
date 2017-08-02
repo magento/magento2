@@ -10,7 +10,6 @@ namespace Magento\AdvancedSearch\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -19,7 +18,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * Search query model
      *
      * @var \Magento\Search\Model\Query
-     * @since 2.0.0
      */
     protected $_searchQueryModel;
 
@@ -29,7 +27,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Search\Model\QueryFactory $queryFactory
      * @param string $connectionName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -44,7 +41,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * Init main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -57,7 +53,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * @param int $queryId
      * @param array $relatedQueries
      * @return $this
-     * @since 2.0.0
      */
     public function saveRelatedQueries($queryId, $relatedQueries = [])
     {
@@ -100,7 +95,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * @param bool $limit
      * @param bool $order
      * @return array
-     * @since 2.0.0
      */
     public function getRelatedQueries($queryId, $limit = false, $order = false)
     {
@@ -141,7 +135,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * @param array $params
      * @param int $searchRecommendationsCount
      * @return array
-     * @since 2.0.0
      */
     public function getRecommendationsByQuery($query, $params, $searchRecommendationsCount)
     {
@@ -176,7 +169,6 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      * @param string $query
      * @param int $searchRecommendationsCount
      * @return array
-     * @since 2.0.0
      */
     protected function loadByQuery($query, $searchRecommendationsCount)
     {

@@ -12,7 +12,6 @@ use Magento\Search\Model\EngineResolver;
 /**
  * Class \Magento\AdvancedSearch\Model\SuggestedQueries
  *
- * @since 2.0.0
  */
 class SuggestedQueries implements SuggestedQueriesInterface
 {
@@ -59,7 +58,6 @@ class SuggestedQueries implements SuggestedQueriesInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isResultsCountEnabled()
     {
@@ -68,7 +66,6 @@ class SuggestedQueries implements SuggestedQueriesInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems(QueryInterface $query)
     {

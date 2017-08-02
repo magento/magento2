@@ -9,25 +9,21 @@ namespace Magento\AdvancedSearch\Model\Adminhtml\Search\Grid;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Options implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registryManager;
 
     /**
      * @var \Magento\AdvancedSearch\Model\ResourceModel\Recommendations $_searchResourceModel
-     * @since 2.0.0
      */
     protected $_searchResourceModel;
 
@@ -35,7 +31,6 @@ class Options implements \Magento\Framework\Option\ArrayInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\AdvancedSearch\Model\ResourceModel\Recommendations $searchResourceModel
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -49,7 +44,6 @@ class Options implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

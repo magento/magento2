@@ -13,7 +13,6 @@ use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 /**
  * Class \Magento\AdvancedSearch\Model\Recommendations\DataProvider
  *
- * @since 2.0.0
  */
 class DataProvider implements SuggestedQueriesInterface
 {
@@ -37,25 +36,21 @@ class DataProvider implements SuggestedQueriesInterface
 
     /**
      * @var \Magento\Search\Model\QueryResultFactory
-     * @since 2.0.0
      */
     private $queryResultFactory;
 
     /**
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     protected $searchLayer;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory
-     * @since 2.0.0
      */
     private $recommendationsFactory;
 
@@ -64,7 +59,6 @@ class DataProvider implements SuggestedQueriesInterface
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory
      * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
-     * @since 2.0.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -80,7 +74,6 @@ class DataProvider implements SuggestedQueriesInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     public function isResultsCountEnabled()
     {
@@ -92,7 +85,6 @@ class DataProvider implements SuggestedQueriesInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItems(QueryInterface $query)
     {
@@ -116,7 +108,6 @@ class DataProvider implements SuggestedQueriesInterface
     /**
      * @param QueryInterface $query
      * @return array
-     * @since 2.0.0
      */
     private function getSearchRecommendations(\Magento\Search\Model\QueryInterface $query)
     {
@@ -140,7 +131,6 @@ class DataProvider implements SuggestedQueriesInterface
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     private function isSearchRecommendationsEnabled()
     {
@@ -152,7 +142,6 @@ class DataProvider implements SuggestedQueriesInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     private function getSearchRecommendationsCount()
     {
