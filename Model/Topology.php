@@ -18,7 +18,6 @@ use Magento\Framework\Amqp\TopologyInstaller;
  * Class Topology creates topology for Amqp messaging
  *
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Topology extends TopologyInstaller
 {
@@ -49,7 +48,6 @@ class Topology extends TopologyInstaller
      * @param CommunicationConfig $communicationConfig
      * @param \Psr\Log\LoggerInterface $logger
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function __construct(
         Config $amqpConfig,

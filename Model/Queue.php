@@ -9,7 +9,6 @@ namespace Magento\Amqp\Model;
  * {@inheritdoc}
  *
  * @deprecated 2.2.0
- * @since 2.0.0
  */
 class Queue extends \Magento\Framework\Amqp\Queue
 {

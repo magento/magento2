@@ -9,7 +9,6 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 /**
  * Class ConnectionValidator - validates Amqp related settings
- * @since 2.0.0
  */
 class ConnectionValidator
 {
@@ -22,7 +21,6 @@ class ConnectionValidator
      * @param string $password
      * @param string $virtualHost
      * @return bool true if the connection succeeded, false otherwise
-     * @since 2.0.0
      */
     public function isConnectionValid($host, $port, $user, $password = '', $virtualHost = '')
     {
