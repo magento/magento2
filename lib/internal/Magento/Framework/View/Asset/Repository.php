@@ -146,7 +146,7 @@ class Repository
         }
 
         if ($theme) {
-            $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $theme);
+            $params['themeModel'] = $this->getThemeProvider()->getThemeById($theme);
             if (!$params['themeModel']) {
                 throw new \UnexpectedValueException("Could not find theme '$theme' for area '$area'");
             }
