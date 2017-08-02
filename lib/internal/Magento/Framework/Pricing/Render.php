@@ -33,9 +33,7 @@ class Render extends AbstractBlock
     const ZONE_EMAIL     = 'email';
     const ZONE_CART      = 'cart';
     const ZONE_DEFAULT   = null;
-
     /**#@-*/
-
 
     /**
      * Default type renderer

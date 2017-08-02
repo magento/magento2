@@ -37,7 +37,7 @@ abstract class AbstractSchemaGenerator
 
      /**
       * @var ServiceMetadata
-     * @since 2.0.0
+      * @since 2.0.0
       */
     protected $serviceMetadata;
 
