@@ -19,7 +19,8 @@ $welcomeMessage = $block->getWelcome();
             </span>
             <!-- /ko -->
             <!-- ko ifnot: customer().fullname  -->
-            <span data-bind="html:'<?= $block->escapeHtml($welcomeMessage) ?>'"></span>
+            <span data-bind='html:"<?= $block->escapeHtmlAttr($welcomeMessage) ?>"'></span>
+            <?= $block->getBlockHtml('header.additional') ?>
             <!-- /ko -->
         </li>
         <script type="text/x-magento-init">

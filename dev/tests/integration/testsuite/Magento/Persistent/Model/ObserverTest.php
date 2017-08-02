@@ -115,8 +115,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $translation = __('Welcome, %1!', $customerName);
-        $this->assertStringMatchesFormat('%A' . $translation . '%A', $block->getWelcome());
+        $translation = __('Welcome, %1!', $customerName)->__toString();
+        $this->assertStringMatchesFormat('%A' . $translation . '%A', $block->getWelcome()->__toString());
         $this->_customerSession->logout();
     }
 }

@@ -95,16 +95,12 @@ class Observer
      */
     public function emulateWelcomeBlock($block)
     {
-        $escapedName = $this->_escaper->escapeHtml(
-            $this->_customerViewHelper->getCustomerName(
+        $customerName = $this->_customerViewHelper->getCustomerName(
                 $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId())
-            ),
-            null
         );
 
         $this->_applyAccountLinksPersistentData();
-        $welcomeMessage = __('Welcome, %1!', $escapedName)
-            . ' ' . $this->_layout->getBlock('header.additional')->toHtml();
+        $welcomeMessage = __('Welcome, %1!', $customerName);
         $block->setWelcome($welcomeMessage);
         return $this;
     }
