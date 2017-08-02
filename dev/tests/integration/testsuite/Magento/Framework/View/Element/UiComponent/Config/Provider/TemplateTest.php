@@ -44,7 +44,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTemplate()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $expected = file_get_contents(__DIR__ . '/../../../../_files/UiComponent/expected/config.xml');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');

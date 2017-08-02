@@ -392,7 +392,6 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddChildProductAlreadyExistsInOption()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $productLink = $this->getMockBuilder(\Magento\Bundle\Api\Data\LinkInterface::class)
             ->setMethods(['getSku', 'getOptionId', 'getSelectionId'])
             ->disableOriginalConstructor()
@@ -402,11 +401,14 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
         $productLink->expects($this->any())->method('getSelectionId')->will($this->returnValue(1));
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
-        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class,
-            ['getTypeId', 'getCopyFromView', 'getData']);
-        $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getTypeId', 'getCopyFromView', 'getData', 'getTypeInstance', 'getSku']
+        );
+        $productMock->expects($this->once())->method('getTypeId')->willReturn(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-        ));
+        );
+
         $productMock->expects($this->any())
             ->method('getData')
             ->with($this->linkField)

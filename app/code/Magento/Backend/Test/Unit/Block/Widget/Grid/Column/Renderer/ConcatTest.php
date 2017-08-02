@@ -17,7 +17,6 @@ class ConcatTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-//        $this->markTestSkipped('Test needs to be refactored.');
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
             \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat::class

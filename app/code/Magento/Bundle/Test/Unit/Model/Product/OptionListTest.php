@@ -55,12 +55,9 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
         );
         $this->dataObjectHelperMock = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $this->linkListMock = $this->createMock(\Magento\Bundle\Model\Product\LinksList::class);
-        $this->extensionAttributesFactoryMock = $this->getMockBuilder(
+        $this->extensionAttributesFactoryMock = $this->createMock(
             \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
-        )
-            ->setMethods(['process'])
-            ->disableOriginalConstructor()
-            ->getMockforAbstractClass();
+        );
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -77,7 +74,6 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetItems()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $optionId = 1;
         $optionData = ['title' => 'test title'];
         $productSku = 'product_sku';
@@ -90,7 +86,11 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
             ['getOptionId', 'getData', 'getTitle', 'getDefaultTitle']
         );
         $optionsCollMock = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
-            ->setConstructorArgs([$optionMock]);
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionsCollMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$optionMock]));
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)

@@ -1,18 +1,16 @@
 <?php
 /**
- * Test for \Magento\Integration\Model\AdminTokenService
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
+/**
+ * @codingStandardsIgnoreFile
+ */
 class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */
@@ -50,7 +48,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->_tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getToken', 'loadByAdminId', '__wakeup', 'delete'])->getMock();
+            ->setMethods(['getToken', 'loadByAdminId', 'delete', '__wakeup'])->getMock();
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class

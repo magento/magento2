@@ -47,9 +47,13 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->controller = new Save($this->context, $this->fileProcessor);
     }
 
+    protected function tearDown()
+    {
+        $_FILES = [];
+    }
+
     public function testExecute()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $_FILES['test_key'] = [];
         $result = [
             'file' => '',

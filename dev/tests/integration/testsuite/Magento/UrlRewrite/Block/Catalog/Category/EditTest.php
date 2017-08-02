@@ -23,7 +23,6 @@ class EditTest extends \PHPUnit\Framework\DOMTestCase
      */
     public function testPrepareLayout($blockAttributes, $expected)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layoutFactory = $objectManager->get(\Magento\Framework\View\LayoutFactory::class);
         /** @var $layout \Magento\Framework\View\LayoutInterface */
@@ -124,74 +123,90 @@ class EditTest extends \PHPUnit\Framework\DOMTestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCategory()->getId()) {
-                    $this->assertSelectCount(
-                        'button.back[onclick~="\/category"]',
+                    $this->assertXpathCount(
+                        '//button[contains(@class, "back") and contains(@onclick, "/category")]',
                         1,
                         $buttonsHtml,
                         'Back button is not present in category URL rewrite edit block'
                     );
                 } else {
-                    $this->assertSelectCount(
-                        'button.back',
+                    $this->assertEquals(
                         1,
-                        $buttonsHtml,
+                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                            '//button[contains(@class,"back")]',
+                            $buttonsHtml
+                        ),
                         'Back button is not present in category URL rewrite edit block'
                     );
                 }
             } else {
-                $this->assertSelectCount(
-                    'button.back',
+                $this->assertEquals(
                     0,
-                    $buttonsHtml,
+                    \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                        '//button[contains(@class,"back")]',
+                        $buttonsHtml
+                    ),
                     'Back button should not present in category URL rewrite edit block'
                 );
             }
         }
 
         if ($expected['save_button']) {
-            $this->assertSelectCount(
-                'button.save',
+            $this->assertEquals(
                 1,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"save")]',
+                    $buttonsHtml
+                ),
                 'Save button is not present in category URL rewrite edit block'
             );
         } else {
-            $this->assertSelectCount(
-                'button.save',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"save")]',
+                    $buttonsHtml
+                ),
                 'Save button should not present in category URL rewrite edit block'
             );
         }
 
         if ($expected['reset_button']) {
-            $this->assertSelectCount(
-                'button[title="Reset"]',
+            $this->assertEquals(
                 1,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[@title="Reset"]',
+                    $buttonsHtml
+                ),
                 'Reset button is not present in category URL rewrite edit block'
             );
         } else {
-            $this->assertSelectCount(
-                'button[title="Reset"]',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[@title="Reset"]',
+                    $buttonsHtml
+                ),
                 'Reset button should not present in category URL rewrite edit block'
             );
         }
 
         if ($expected['delete_button']) {
-            $this->assertSelectCount(
-                'button.delete',
+            $this->assertEquals(
                 1,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"delete")]',
+                    $buttonsHtml
+                ),
                 'Delete button is not present in category URL rewrite edit block'
             );
         } else {
-            $this->assertSelectCount(
-                'button.delete',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"delete")]',
+                    $buttonsHtml
+                ),
                 'Delete button should not present in category URL rewrite edit block'
             );
         }
@@ -324,5 +339,24 @@ class EditTest extends \PHPUnit\Framework\DOMTestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * Assert count of elements found by XPath in XML/HTML string
+     *
+     * @param string $xpath
+     * @param int $count
+     * @param string $html
+     * @param string|null $message
+     */
+    public function assertXpathCount($xpath, $count, $html, $message = '')
+    {
+        $domDocument = new \DOMDocument('1.0', 'UTF-8');
+        libxml_use_internal_errors(true);
+        $domDocument->loadHTML($html);
+        libxml_use_internal_errors(false);
+        $domXpath = new \DOMXPath($domDocument);
+        $nodes = $domXpath->query($xpath);
+        $this->assertEquals($count, $nodes->length, $message);
     }
 }

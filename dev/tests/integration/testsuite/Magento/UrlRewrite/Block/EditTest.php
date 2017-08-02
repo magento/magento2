@@ -102,32 +102,83 @@ class EditTest extends \PHPUnit\Framework\DOMTestCase
         $buttonsHtml = $block->getButtonsHtml();
 
         if ($expected['back_button']) {
-            $this->assertSelectCount('button.back', 1, $buttonsHtml, 'Back button is not present in block');
+            $this->assertEquals(
+                1,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"back")]',
+                    $buttonsHtml
+                ),
+                'Back button is not present in block'
+            );
         } else {
-            $this->assertSelectCount('button.back', 0, $buttonsHtml, 'Back button should not present in block');
+            $this->assertEquals(
+                0,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"back")]',
+                    $buttonsHtml
+                ),
+                'Back button should not present in block'
+            );
         }
 
         if ($expected['save_button']) {
-            $this->assertSelectCount('button.save', 1, $buttonsHtml, 'Save button is not present in block');
+            $this->assertEquals(
+                1,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"save")]',
+                    $buttonsHtml
+                ),
+                'Save button is not present in block'
+            );
         } else {
-            $this->assertSelectCount('button.save', 0, $buttonsHtml, 'Save button should not present in block');
+            $this->assertEquals(
+                0,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"save")]',
+                    $buttonsHtml
+                ),
+                'Save button should not present in block'
+            );
         }
 
         if ($expected['reset_button']) {
-            $this->assertSelectCount('button[title="Reset"]', 1, $buttonsHtml, 'Reset button is not present in block');
+            $this->assertEquals(
+                1,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[@title="Reset"]',
+                    $buttonsHtml
+                ),
+                'Reset button is not present in block'
+            );
         } else {
-            $this->assertSelectCount(
-                'button[title="Reset"]',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[@title="Reset"]',
+                    $buttonsHtml
+                ),
                 'Reset button should not present in block'
             );
         }
 
         if ($expected['delete_button']) {
-            $this->assertSelectCount('button.delete', 1, $buttonsHtml, 'Delete button is not present in block');
+            $this->assertEquals(
+                1,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"delete")]',
+                    $buttonsHtml
+                ),
+                'Delete button is not present in block'
+            );
         } else {
-            $this->assertSelectCount('button.delete', 0, $buttonsHtml, 'Delete button should not present in block');
+            $this->assertEquals(
+                0,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"delete")]',
+                    $buttonsHtml
+                ),
+                'Delete button should not present in block'
+            );
         }
     }
 

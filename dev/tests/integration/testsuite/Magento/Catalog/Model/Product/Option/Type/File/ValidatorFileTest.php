@@ -26,10 +26,14 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     protected $httpFactoryMock;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $maxFileSizeInMb;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $maxFileSize;
 
     protected function setUp()
@@ -68,6 +72,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @backupGlobals enabled
      * @return void
      */
     public function testLargeSizeFile()
@@ -100,7 +105,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testOptionRequiredException()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->prepareEnv();
         $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['getFileInfo']);
         $exception = function () {
@@ -144,7 +148,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidateFile()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
@@ -156,18 +159,29 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->prepareEnv();
-        $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['isValid', 'getErrors']);
-        $httpAdapterMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $httpAdapterMock->expects($this->exactly(2))->method('getErrors')->will($this->returnValue([
-            \Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION,
-            \Zend_Validate_File_Extension::FALSE_EXTENSION,
-            \Zend_Validate_File_ImageSize::WIDTH_TOO_BIG,
-            \Zend_Validate_File_FilesSize::TOO_BIG,
-        ]));
-        $property = new \ReflectionProperty($httpAdapterMock, '_files');
-        $property->setAccessible(true);
-        $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
-
+        $httpAdapterMock = $this->createPartialMock(
+            \Zend_File_Transfer_Adapter_Http::class,
+            ['isValid', 'getErrors', 'getFileInfo', 'isUploaded']
+        );
+        $httpAdapterMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(false);
+        $httpAdapterMock->expects($this->exactly(2))
+            ->method('getErrors')
+            ->willReturn(
+                [
+                    \Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION,
+                    \Zend_Validate_File_Extension::FALSE_EXTENSION,
+                    \Zend_Validate_File_ImageSize::WIDTH_TOO_BIG,
+                    \Zend_Validate_File_FilesSize::TOO_BIG,
+                ]
+            );
+        $this->httpFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($httpAdapterMock);
+        $httpAdapterMock->expects($this->once())
+            ->method('isUploaded')
+            ->willReturn(true);
         $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),
             $this->getProductOption()

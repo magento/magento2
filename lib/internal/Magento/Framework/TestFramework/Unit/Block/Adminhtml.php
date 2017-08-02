@@ -14,7 +14,6 @@ namespace Magento\Framework\TestFramework\Unit\Block;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Adminhtml extends \PHPUnit\Framework\TestCase
 {

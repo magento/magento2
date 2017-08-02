@@ -71,11 +71,22 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testItemColumnBlock()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->dispatch('wishlist/index/index');
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('img[src~="small_image.jpg"][alt="Simple Product"]', 1, $body);
-        $this->assertSelectCount('textarea[name~="description"]', 1, $body);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//img[contains(@src, "small_image.jpg") and @alt = "Simple Product"]',
+                $body
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//textarea[contains(@name, "description")]',
+                $body
+            )
+        );
     }
 
     /**

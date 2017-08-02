@@ -83,7 +83,20 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/admin/export/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('fieldset#base_fieldset', 1, $body);
-        $this->assertSelectCount('fieldset#base_fieldset div.field', 3, $body);
+
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset[@id="base_fieldset"]',
+                $body
+            )
+        );
+        $this->assertEquals(
+            3,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset[@id="base_fieldset"]/div[contains(@class,"field")]',
+                $body
+            )
+        );
     }
 }

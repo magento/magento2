@@ -20,17 +20,17 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testCustomerGrid()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->dispatch('backend/paypal/billing_agreement/customergrid/id/1');
-        $this->assertSelectCount(
-            'th[class="col-reference_id"]',
+        $this->assertEquals(
             1,
-            $this->getResponse()->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//th[contains(@class,"col-reference_id")]',
+                $this->getResponse()->getBody()
+            ),
             "Response for billing agreement orders doesn't contain billing agreement customers grid"
         );
-        $this->assertSelectRegExp(
-            'td',
-            '/REF-ID-TEST-678/',
+        $this->assertXpathCount(
+            '//td[contains(text(), "REF-ID-TEST-678")]',
             1,
             $this->getResponse()->getBody(),
             "Response for billing agreement info doesn't contain reference ID"

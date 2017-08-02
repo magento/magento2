@@ -57,6 +57,11 @@ class FileUploaderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
     }
 
+    protected function tearDown()
+    {
+        $_FILES = [];
+    }
+
     /**
      * @param string $entityTypeCode
      * @param string $scope

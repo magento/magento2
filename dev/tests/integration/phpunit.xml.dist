@@ -10,6 +10,7 @@
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
+         stderr="true"
 >
     <!-- Test suites definition -->
     <testsuites>

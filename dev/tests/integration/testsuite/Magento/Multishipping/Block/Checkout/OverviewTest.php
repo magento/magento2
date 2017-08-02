@@ -60,6 +60,12 @@ class OverviewTest extends \PHPUnit\Framework\DOMTestCase
         $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $item->setQuote($quote);
         // assure that default renderer was obtained
-        $this->assertSelectCount('.product.name a', 1, $this->_block->getRowItemHtml($item));
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"product") and contains(@class,"name")]/a',
+                $this->_block->getRowItemHtml($item)
+            )
+        );
     }
 }

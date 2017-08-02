@@ -28,10 +28,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->_layoutMock = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock', 'createBlock', 'helper']
+            ['getChildName', 'getBlock', 'createBlock', 'helper', 'renameElement', 'unsetChild', 'setChild']
         );
         $this->_columnSetMock = $this->_getColumnSetMock();
 

@@ -194,7 +194,13 @@ class AddressTest extends \PHPUnit\Framework\DOMTestCase
 
         /** @var \Magento\Framework\Data\Form\Element\Select $countryIdField */
         $countryIdField = $fieldset->getElements()->searchById('country_id');
-        $this->assertSelectCount('option', $this->getNumberOfCountryOptions(), $countryIdField->getElementHtml());
+        $this->assertEquals(
+            $this->getNumberOfCountryOptions(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//option',
+                $countryIdField->getElementHtml()
+            )
+        );
     }
 
     /**

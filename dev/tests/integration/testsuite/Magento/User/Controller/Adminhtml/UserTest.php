@@ -20,7 +20,13 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/user/index');
         $response = $this->getResponse()->getBody();
         $this->assertContains('Users', $response);
-        $this->assertSelectCount('#permissionsUserGrid_table', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="permissionsUserGrid_table"]',
+                $response
+            )
+        );
     }
 
     /**
@@ -233,7 +239,13 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         //check "User Information" header and fieldset
         $this->assertContains('data-ui-id="adminhtml-user-edit-tabs-title"', $response);
         $this->assertContains('User Information', $response);
-        $this->assertSelectCount('#user_base_fieldset', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="user_base_fieldset"]',
+                $response
+            )
+        );
     }
 
     /**

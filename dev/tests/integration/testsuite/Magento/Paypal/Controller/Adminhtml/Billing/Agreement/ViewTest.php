@@ -34,16 +34,17 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         parent::testAclHasAccess();
 
-        $this->assertSelectCount(
-            'a[name="billing_agreement_info"]',
+        $this->assertEquals(
             1,
-            $this->getResponse()->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//a[@name="billing_agreement_info"]',
+                $this->getResponse()->getBody()
+            ),
             "Response for billing agreement info doesn't contain billing agreement info tab"
         );
 
-        $this->assertSelectRegExp(
-            'a',
-            '/customer\@example.com/',
+        $this->assertXpathCount(
+            '//a[contains(text(), "customer@example.com")]',
             1,
             $this->getResponse()->getBody(),
             "Response for billing agreement info doesn't contain Customer info"

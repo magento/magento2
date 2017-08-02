@@ -99,7 +99,6 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testIndexAction()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $product = $this->productRepository->get('simple');
         /** @var $order \Magento\Sales\Model\AdminOrder\Create */
         $order = $this->_objectManager->get(\Magento\Sales\Model\AdminOrder\Create::class);
@@ -107,12 +106,45 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/sales/order_create/index');
         $html = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('div#order-customer-selector', true, $html);
-        $this->assertSelectCount('[data-grid-id=sales_order_create_customer_grid]', true, $html);
-        $this->assertSelectCount('div#order-billing_method_form', true, $html);
-        $this->assertSelectCount('#shipping-method-overlay', true, $html);
-        $this->assertSelectCount('div#sales_order_create_search_grid', true, $html);
-        $this->assertSelectCount('#coupons:code', true, $html);
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//div[@id="order-customer-selector"]',
+                $html
+            )
+        );
+        $this->assertXpathCountGreaterThanOrEqual(
+            '//*[@data-grid-id="sales_order_create_customer_grid"]',
+            1,
+            $html
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//div[@id="order-billing_method_form"]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="shipping-method-overlay"]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//div[@id="sales_order_create_search_grid"]',
+                $html
+            )
+        );
+
+        $this->assertXpathCountGreaterThanOrEqual(
+            '//*[@id="coupons:code"]',
+            1,
+            $html
+        );
     }
 
     /**
