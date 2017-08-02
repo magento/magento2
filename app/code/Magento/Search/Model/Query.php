@@ -41,6 +41,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Search\Model\Query setIsQueryTextExceeded(bool $value)
  * @method \Magento\Search\Model\Query setIsQueryTextShort(bool $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Query extends AbstractModel implements QueryInterface
 {

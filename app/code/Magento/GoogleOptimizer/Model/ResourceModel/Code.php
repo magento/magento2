@@ -7,6 +7,9 @@
  */
 namespace Magento\GoogleOptimizer\Model\ResourceModel;
 
+/**
+ * @api
+ */
 class Code extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

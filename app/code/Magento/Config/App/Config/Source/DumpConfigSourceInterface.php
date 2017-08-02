@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 
 /**
  * Interface DumpConfigSourceInterface
+ * @api
  */
 interface DumpConfigSourceInterface extends ConfigSourceInterface
 {

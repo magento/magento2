@@ -12,6 +12,9 @@ namespace Magento\Reports\Helper;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Stdlib\DateTime;
 
+/**
+ * @api
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const REPORT_PERIOD_TYPE_DAY = 'day';
