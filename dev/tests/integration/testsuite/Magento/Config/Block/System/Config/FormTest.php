@@ -98,7 +98,8 @@ class FormTest extends \PHPUnit\Framework\DOMTestCase
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
+        $fieldset = $this->_formFactory->create()
+            ->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Config\Block\System\Config\FormStub */
@@ -119,71 +120,49 @@ class FormTest extends \PHPUnit\Framework\DOMTestCase
         );
         $valueDisabledSel = sprintf('%s[@disabled="disabled"]', $valueSel);
         $useDefaultSel = sprintf(
-        '//input[@id="%s_%s_%s_inherit" and contains(@class,"checkbox")]',
+            '//input[@id="%s_%s_%s_inherit" and contains(@class,"checkbox")]',
             $this->_section->getId(),
             $this->_group->getId(),
             $this->_field->getId()
         );
         $useDefaultCheckedSel = sprintf('%s[@checked="checked"]', $useDefaultSel);
         $fieldsetHtml = $fieldset->getElementHtml();
-
         $this->assertGreaterThanOrEqual(
             1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//fieldset',
-                $fieldsetHtml
-            ),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath('//fieldset', $fieldsetHtml),
             'Fieldset HTML is invalid'
         );
         $this->assertEquals(
             $valueSelCtr,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                $valueSel,
-                $fieldsetHtml
-            ),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($valueSel, $fieldsetHtml),
             'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
         );
         $this->assertEquals(
             $valueSelCtr,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                $useDefaultSel,
-                $fieldsetHtml
-            ),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($useDefaultSel, $fieldsetHtml),
             '"Use Default" checkbox should appear' . $valueSelCtr . ' times  in fieldset HTML.'
         );
 
         if ($expectedUseDefault) {
             $this->assertGreaterThanOrEqual(
                 1,
-                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                    $useDefaultCheckedSel,
-                    $fieldsetHtml
-                ),
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should be checked'
             );
             $this->assertGreaterThanOrEqual(
                 1,
-                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                    $valueDisabledSel,
-                    $fieldsetHtml
-                ),
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
                 'Field input should be disabled'
             );
         } else {
             $this->assertEquals(
                 0,
-                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                    $useDefaultCheckedSel,
-                    $fieldsetHtml
-                ),
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should not be checked'
             );
             $this->assertEquals(
                 0,
-                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                    $valueDisabledSel,
-                    $fieldsetHtml
-                ),
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
                 'Field input should not be disabled'
             );
         }

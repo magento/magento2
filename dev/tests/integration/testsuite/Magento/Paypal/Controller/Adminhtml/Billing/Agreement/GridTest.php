@@ -49,6 +49,5 @@ class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ),
             "Response for billing agreement grid doesn't contain grid"
         );
-
     }
 }
