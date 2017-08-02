@@ -52,9 +52,9 @@ class InfoAdminUriCommand extends Command
     }
 
     /**
-      * {@inheritdoc}
+     * {@inheritdoc}
      * @since 2.0.0
-      */
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(
