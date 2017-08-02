@@ -233,7 +233,7 @@ class ValidateTest extends AttributeTest
                         "option_1" => "",
                         "option_2" => "",
                     ]
-                ], false
+                ], true
             ],
             'duplicate and deleted' => [
                 [

@@ -160,17 +160,17 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         if (is_array($options)
             && isset($options['value'])
             && isset($options['delete'])
-            && !$this->isUniqueAdminValues($options['value'], $options['delete'])
+            && !empty($options['value'])
+            && !empty($options['delete'])
         ) {
             $duplicates = $this->isUniqueAdminValues($options['value'], $options['delete']);
-            if ($duplicates) {
+            if (!empty($duplicates)) {
                 $this->setMessageToResponse(
                     $response,
                     [__('The value of Admin must be unique. (%1)', implode(', ', $duplicates))]
                 );
-
-                $response->setError(true);
             }
+            $response->setError(true);
         }
         return $this;
     }
