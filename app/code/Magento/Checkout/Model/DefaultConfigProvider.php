@@ -279,8 +279,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['totalsData'] = $this->getTotalsData();
         $output['shippingPolicy'] = [
             'isEnabled' => $this->scopeConfig->isSetFlag(
-                'shipping/shipping_policy/enable_shipping_policy',
-                ScopeInterface::SCOPE_STORE
+                'shipping/shipping_policy/enable_shipping_policy'
             ),
             'shippingPolicyContent' => nl2br(
                 $this->scopeConfig->getValue(

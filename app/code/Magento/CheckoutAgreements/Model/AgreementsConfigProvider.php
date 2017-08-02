@@ -63,8 +63,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     {
         $agreementConfiguration = [];
         $isAgreementsEnabled = $this->scopeConfiguration->isSetFlag(
-            AgreementsProvider::PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE
+            AgreementsProvider::PATH_ENABLED
         );
 
         $agreementsList = $this->checkoutAgreementsRepository->getList();

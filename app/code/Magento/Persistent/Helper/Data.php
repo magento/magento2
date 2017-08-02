@@ -155,8 +155,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getClearOnLogout()
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_LOGOUT_CLEAR,
-            ScopeInterface::SCOPE_STORE
+            self::XML_PATH_LOGOUT_CLEAR
         );
     }
 

@@ -292,8 +292,7 @@ class StoreManager implements
     protected function isSingleStoreModeEnabled()
     {
         return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PATH_SINGLE_STORE_MODE_ENABLED
         );
     }
 

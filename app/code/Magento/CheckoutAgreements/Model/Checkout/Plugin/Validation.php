@@ -106,8 +106,7 @@ class Validation
     protected function isAgreementEnabled()
     {
         $isAgreementsEnabled = $this->scopeConfiguration->isSetFlag(
-            AgreementsProvider::PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE
+            AgreementsProvider::PATH_ENABLED
         );
         $agreementsList = $isAgreementsEnabled ? $this->checkoutAgreementsRepository->getList() : [];
         return (bool)($isAgreementsEnabled && count($agreementsList) > 0);

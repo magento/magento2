@@ -57,7 +57,7 @@ class AgreementsProvider implements AgreementsProviderInterface
     public function getRequiredAgreementIds()
     {
         $agreementIds = [];
-        if ($this->scopeConfig->isSetFlag(self::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
+        if ($this->scopeConfig->isSetFlag(self::PATH_ENABLED)) {
             $agreementCollection = $this->agreementCollectionFactory->create();
             $agreementCollection->addStoreFilter($this->storeManager->getStore()->getId());
             $agreementCollection->addFieldToFilter('is_active', 1);

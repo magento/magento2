@@ -223,8 +223,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected function _isManageStock()
     {
         return $this->_scopeConfig->isSetFlag(
-            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK
         );
     }
 

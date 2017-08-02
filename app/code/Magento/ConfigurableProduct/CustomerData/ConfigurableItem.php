@@ -55,8 +55,7 @@ class ConfigurableItem extends DefaultItem
          * or if child thumbnail is not available
          */
         $config = $this->_scopeConfig->getValue(
-            \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::CONFIG_THUMBNAIL_SOURCE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::CONFIG_THUMBNAIL_SOURCE
         );
 
         $product = $config == ThumbnailSource::OPTION_USE_PARENT_IMAGE

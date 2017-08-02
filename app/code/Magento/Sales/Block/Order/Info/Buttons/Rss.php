@@ -68,8 +68,7 @@ class Rss extends \Magento\Framework\View\Element\Template
     public function isRssAllowed()
     {
         return $this->_scopeConfig->isSetFlag(
-            'rss/order/status',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'rss/order/status'
         );
     }
 

@@ -132,8 +132,7 @@ class Data extends \Magento\Framework\Url\Helper\Data
     public function isStockAlertAllowed()
     {
         return $this->scopeConfig->isSetFlag(
-            \Magento\ProductAlert\Model\Observer::XML_PATH_STOCK_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\ProductAlert\Model\Observer::XML_PATH_STOCK_ALLOW
         );
     }
 
@@ -145,8 +144,7 @@ class Data extends \Magento\Framework\Url\Helper\Data
     public function isPriceAlertAllowed()
     {
         return $this->scopeConfig->isSetFlag(
-            \Magento\ProductAlert\Model\Observer::XML_PATH_PRICE_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\ProductAlert\Model\Observer::XML_PATH_PRICE_ALLOW
         );
     }
 }

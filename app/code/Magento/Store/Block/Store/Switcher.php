@@ -110,8 +110,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     {
         $stores = [];
         $localeCode = $this->_scopeConfig->getValue(
-            Data::XML_PATH_DEFAULT_LOCALE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            Data::XML_PATH_DEFAULT_LOCALE
         );
         foreach ($this->_groups as $group) {
             if (!isset($this->_stores[$group->getId()])) {

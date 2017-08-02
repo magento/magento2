@@ -116,8 +116,7 @@ class Url
         $referer = $this->getRequestReferrer();
         if (!$referer
             && !$this->scopeConfig->isSetFlag(
-                self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-                ScopeInterface::SCOPE_STORE
+                self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
             )
             && !$this->customerSession->getNoReferer()
         ) {

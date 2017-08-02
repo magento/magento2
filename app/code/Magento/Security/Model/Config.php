@@ -109,8 +109,7 @@ class Config implements ConfigInterface
     public function isAdminAccountSharingEnabled()
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_ADMIN_ACCOUNT_SHARING,
-            StoreScopeInterface::SCOPE_STORE
+            self::XML_PATH_ADMIN_ACCOUNT_SHARING
         );
     }
 

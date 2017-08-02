@@ -88,8 +88,7 @@ class CarrierFactory implements CarrierFactoryInterface
     public function getIfActive($carrierCode)
     {
         return $this->_scopeConfig->isSetFlag(
-            'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'carriers/' . $carrierCode . '/active'
         ) ? $this->get(
             $carrierCode
         ) : false;

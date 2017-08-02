@@ -98,8 +98,7 @@ class Observer
 
         // check if scheduled generation enabled
         if (!$this->_scopeConfig->isSetFlag(
-            self::XML_PATH_GENERATION_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PATH_GENERATION_ENABLED
         )
         ) {
             return;

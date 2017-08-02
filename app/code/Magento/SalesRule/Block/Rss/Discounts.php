@@ -149,8 +149,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     public function isAllowed()
     {
         return $this->_scopeConfig->isSetFlag(
-            'rss/catalog/discounts',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'rss/catalog/discounts'
         );
     }
 

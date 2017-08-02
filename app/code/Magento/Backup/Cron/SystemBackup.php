@@ -101,11 +101,11 @@ class SystemBackup
      */
     public function execute()
     {
-        if (!$this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_ENABLED, ScopeInterface::SCOPE_STORE)) {
+        if (!$this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_ENABLED)) {
             return $this;
         }
 
-        if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {
+        if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE)) {
             $this->maintenanceMode->set(true);
         }
 
@@ -142,7 +142,7 @@ class SystemBackup
             throw $e;
         }
 
-        if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {
+        if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE)) {
             $this->maintenanceMode->set(false);
         }
 

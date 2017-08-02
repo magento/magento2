@@ -55,7 +55,7 @@ class Config implements ScopeConfigInterface
      */
     public function getValue(
         $path = null,
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_STORES,
         $scopeCode = null
     ) {
         if ($scope === 'store') {
@@ -88,7 +88,7 @@ class Config implements ScopeConfigInterface
      * @param null|string $scopeCode
      * @return bool
      */
-    public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
+    public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_STORES, $scopeCode = null)
     {
         return !!$this->getValue($path, $scope, $scopeCode);
     }

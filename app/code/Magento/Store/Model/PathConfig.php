@@ -53,18 +53,15 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
     {
         return parse_url(
             $this->scopeConfig->getValue(
-                Store::XML_PATH_UNSECURE_BASE_URL,
-                ScopeInterface::SCOPE_STORE
+                Store::XML_PATH_UNSECURE_BASE_URL
             ),
             PHP_URL_SCHEME
         ) === 'https'
         || $this->scopeConfig->isSetFlag(
-            Store::XML_PATH_SECURE_IN_FRONTEND,
-            ScopeInterface::SCOPE_STORE
+            Store::XML_PATH_SECURE_IN_FRONTEND
         ) && parse_url(
             $this->scopeConfig->getValue(
-                Store::XML_PATH_SECURE_BASE_URL,
-                ScopeInterface::SCOPE_STORE
+                Store::XML_PATH_SECURE_BASE_URL
             ),
             PHP_URL_SCHEME
         ) == 'https' && $this->urlSecurityInfo->isSecure($path);
@@ -77,6 +74,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      */
     public function getDefaultPath()
     {
-        return $this->scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue('web/default/front');
     }
 }

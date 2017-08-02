@@ -397,8 +397,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isCustomerMustBeLogged()
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PATH_CUSTOMER_MUST_BE_LOGGED
         );
     }
 

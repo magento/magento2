@@ -32,8 +32,7 @@ class Config implements ConfigInterface
     public function isEnabled()
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE
+            self::XML_PATH_ENABLED
         );
     }
 

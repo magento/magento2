@@ -94,7 +94,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      */
     public function getList()
     {
-        if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
+        if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements')) {
             return [];
         }
         $storeId = $this->storeManager->getStore()->getId();

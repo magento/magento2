@@ -79,8 +79,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
     public function getLinksTitle()
     {
         return $this->getLinks()->getLinkSectionTitle() ?: $this->_scopeConfig->getValue(
-            Link::XML_PATH_LINKS_TITLE,
-            ScopeInterface::SCOPE_STORE
+            Link::XML_PATH_LINKS_TITLE
         );
     }
 }

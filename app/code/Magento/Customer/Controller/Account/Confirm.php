@@ -202,8 +202,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     {
         $backUrl = $this->getRequest()->getParam('back_url', false);
         $redirectToDashboard = $this->scopeConfig->isSetFlag(
-            Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-            ScopeInterface::SCOPE_STORE
+            Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
         );
         if (!$redirectToDashboard && $this->session->getBeforeAuthUrl()) {
             $successUrl = $this->session->getBeforeAuthUrl(true);

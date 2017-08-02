@@ -57,7 +57,7 @@ abstract class AbstractFlatState
      */
     public function isFlatEnabled()
     {
-        return $this->scopeConfig->isSetFlag(static::INDEXER_ENABLED_XML_PATH, ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->isSetFlag(static::INDEXER_ENABLED_XML_PATH);
     }
 
     /**

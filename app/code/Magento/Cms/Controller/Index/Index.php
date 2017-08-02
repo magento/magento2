@@ -37,8 +37,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $pageId = $this->_objectManager->get(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
         )->getValue(
-            \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE
         );
         $resultPage = $this->_objectManager->get(\Magento\Cms\Helper\Page::class)->prepareResultPage($this, $pageId);
         if (!$resultPage) {

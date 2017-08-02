@@ -44,7 +44,7 @@ class TransportInterfacePlugin
         TransportInterface $subject,
         \Closure $proceed
     ) {
-        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)) {
+        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_SYSTEM_SMTP_DISABLE)) {
             $proceed();
         }
     }

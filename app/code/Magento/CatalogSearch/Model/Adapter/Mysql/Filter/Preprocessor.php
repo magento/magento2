@@ -296,8 +296,7 @@ class Preprocessor implements PreprocessorInterface
     private function isAddStockFilter()
     {
         $isShowOutOfStock = $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            ScopeInterface::SCOPE_STORE
+            'cataloginventory/options/show_out_of_stock'
         );
         return false === $isShowOutOfStock;
     }

@@ -60,8 +60,7 @@ class Layer
     protected function _isEnabledShowOutOfStock()
     {
         return $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'cataloginventory/options/show_out_of_stock'
         );
     }
 }

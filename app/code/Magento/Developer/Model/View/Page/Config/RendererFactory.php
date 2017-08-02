@@ -63,7 +63,7 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
     {
         $renderer = $this->objectManager->get(State::class)->getMode() === State::MODE_PRODUCTION ?
             WorkflowType::SERVER_SIDE_COMPILATION :
-            $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE);
+            $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
 
         return $this->objectManager->create(
             $this->rendererTypes[$renderer],

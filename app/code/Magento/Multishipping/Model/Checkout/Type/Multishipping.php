@@ -814,11 +814,9 @@ class Multishipping extends \Magento\Framework\DataObject
     public function validateMinimumAmount()
     {
         return !($this->_scopeConfig->isSetFlag(
-            'sales/minimum_order/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'sales/minimum_order/active'
         ) && $this->_scopeConfig->isSetFlag(
-            'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'sales/minimum_order/multi_address'
         ) && !$this->getQuote()->validateMinimumAmount());
     }
 

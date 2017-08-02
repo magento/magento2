@@ -199,8 +199,7 @@ class Redirect
         $this->applyRedirect($this->customerUrl->getAccountUrl());
 
         if (!$this->scopeConfig->isSetFlag(
-            CustomerUrl::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-            ScopeInterface::SCOPE_STORE
+            CustomerUrl::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
         )
         ) {
             $referer = $this->request->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);

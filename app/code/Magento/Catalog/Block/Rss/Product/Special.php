@@ -239,8 +239,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     public function isAllowed()
     {
         return $this->_scopeConfig->isSetFlag(
-            'rss/catalog/special',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'rss/catalog/special'
         );
     }
 

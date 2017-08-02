@@ -65,8 +65,7 @@ class Link extends \Magento\Framework\View\Element\Template
     public function isRssAllowed()
     {
         return $this->_scopeConfig->isSetFlag(
-            'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            'rss/wishlist/active'
         );
     }
 
