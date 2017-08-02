@@ -77,6 +77,7 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @var Processor
+     * @deprecated
      */
     protected $indexProcessor;
 
