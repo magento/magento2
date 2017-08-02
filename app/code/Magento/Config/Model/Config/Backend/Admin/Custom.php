@@ -55,7 +55,7 @@ class Custom extends \Magento\Framework\App\Config\Value
     const XML_PATH_PAYMENT = 'payment';
 
     /**
-     * @var 
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
      * @since 2.0.0
      */
     protected $_configWriter;

@@ -19,7 +19,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class Router implements \Magento\Framework\App\RouterInterface
 {
     /**
-     * @var 
+     * @var \Magento\Framework\App\ActionFactory
      * @since 2.0.0
      */
     protected $actionFactory;

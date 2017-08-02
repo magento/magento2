@@ -12,7 +12,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Recurring data upgrade for SalesSequence module.
  */
-class InstallData implements InstallDataInterface
+class RecurringData implements InstallDataInterface
 {
     /**
      * @var SequenceCreator
