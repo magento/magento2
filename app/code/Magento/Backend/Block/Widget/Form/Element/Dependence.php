@@ -13,14 +13,12 @@ namespace Magento\Backend\Block\Widget\Form\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Dependence extends \Magento\Backend\Block\AbstractBlock
 {
     /**
      * name => id mapper
      * @var array
-     * @since 2.0.0
      */
     protected $_fields = [];
 
@@ -34,7 +32,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      *     )
      * )
      * @var array
-     * @since 2.0.0
      */
     protected $_depends = [];
 
@@ -42,19 +39,16 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      * Additional configuration options for the dependencies javascript controller
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_configOptions = [];
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory
-     * @since 2.0.0
      */
     protected $_fieldFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -63,7 +57,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -82,7 +75,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      * @param string $fieldId - element ID in DOM
      * @param string $fieldName - element name in their fieldset/form namespace
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
-     * @since 2.0.0
      */
     public function addFieldMap($fieldId, $fieldName)
     {
@@ -97,7 +89,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      * @param string $fieldNameFrom
      * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Field|string $refField
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
-     * @since 2.0.0
      */
     public function addFieldDependence($fieldName, $fieldNameFrom, $refField)
     {
@@ -116,7 +107,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      *
      * @param array $options
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
-     * @since 2.0.0
      */
     public function addConfigOptions(array $options)
     {
@@ -127,7 +117,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     /**
      * HTML output getter
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -147,7 +136,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     /**
      * Field dependences JSON map generator
      * @return string
-     * @since 2.0.0
      */
     protected function _getDependsJson()
     {

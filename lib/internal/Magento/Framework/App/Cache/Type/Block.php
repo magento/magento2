@@ -14,7 +14,6 @@ namespace Magento\Framework\App\Cache\Type;
 /**
  * Class \Magento\Framework\App\Cache\Type\Block
  *
- * @since 2.0.0
  */
 class Block extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
@@ -30,7 +29,6 @@ class Block extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {

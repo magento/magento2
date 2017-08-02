@@ -8,19 +8,16 @@ namespace Magento\CatalogImportExport\Model\Indexer\Stock\Plugin;
 /**
  * Class \Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import
  *
- * @since 2.0.0
  */
 class Import
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     * @since 2.0.0
      */
     protected $_stockndexerProcessor;
 
     /**
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockndexerProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockndexerProcessor)
     {
@@ -35,7 +32,6 @@ class Import
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {

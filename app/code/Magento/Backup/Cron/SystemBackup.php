@@ -11,7 +11,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Backup\Cron\SystemBackup
  *
- * @since 2.0.0
  */
 class SystemBackup
 {
@@ -25,7 +24,6 @@ class SystemBackup
      * Error messages
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_errors = [];
 
@@ -33,7 +31,6 @@ class SystemBackup
      * Backup data
      *
      * @var \Magento\Backup\Helper\Data
-     * @since 2.0.0
      */
     protected $_backupData = null;
 
@@ -41,13 +38,11 @@ class SystemBackup
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
@@ -55,7 +50,6 @@ class SystemBackup
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
@@ -63,19 +57,16 @@ class SystemBackup
      * Filesystem facade
      *
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     protected $_filesystem;
 
     /**
      * @var \Magento\Framework\Backup\Factory
-     * @since 2.0.0
      */
     protected $_backupFactory;
 
     /**
      * @var \Magento\Framework\App\MaintenanceMode
-     * @since 2.0.0
      */
     protected $maintenanceMode;
 
@@ -87,7 +78,6 @@ class SystemBackup
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Backup\Factory $backupFactory
      * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
@@ -112,7 +102,6 @@ class SystemBackup
      *
      * @return $this
      * @throws \Exception
-     * @since 2.0.0
      */
     public function execute()
     {

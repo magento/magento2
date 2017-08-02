@@ -7,7 +7,6 @@ namespace Magento\Setup\Module\I18n\Parser;
 
 /**
  * Adapter Interface
- * @since 2.0.0
  */
 interface AdapterInterface
 {
@@ -16,7 +15,6 @@ interface AdapterInterface
      *
      * @param string $file
      * @return array
-     * @since 2.0.0
      */
     public function parse($file);
 
@@ -24,7 +22,6 @@ interface AdapterInterface
      * Get parsed phrases
      *
      * @return array
-     * @since 2.0.0
      */
     public function getPhrases();
 }

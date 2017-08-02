@@ -10,7 +10,6 @@ use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 /**
  * Class \Magento\CatalogRule\Model\Indexer\Rule\RuleProductIndexer
  *
- * @since 2.0.0
  */
 class RuleProductIndexer extends AbstractIndexer
 {
@@ -18,7 +17,6 @@ class RuleProductIndexer extends AbstractIndexer
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function doExecuteList($ids)
     {
@@ -30,7 +28,6 @@ class RuleProductIndexer extends AbstractIndexer
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function doExecuteRow($id)
     {

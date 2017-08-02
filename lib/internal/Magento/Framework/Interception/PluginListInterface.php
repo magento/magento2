@@ -10,7 +10,6 @@ namespace Magento\Framework\Interception;
 /**
  * Interface \Magento\Framework\Interception\PluginListInterface
  *
- * @since 2.0.0
  */
 interface PluginListInterface
 {
@@ -21,7 +20,6 @@ interface PluginListInterface
      * @param string $method
      * @param string $code
      * @return array
-     * @since 2.0.0
      */
     public function getNext($type, $method, $code = null);
 
@@ -31,7 +29,6 @@ interface PluginListInterface
      * @param string $type
      * @param string $code
      * @return mixed
-     * @since 2.0.0
      */
     public function getPlugin($type, $code);
 }

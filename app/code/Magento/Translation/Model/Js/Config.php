@@ -10,7 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Js Translation config
- * @since 2.0.0
  */
 class Config extends FrameworkJsConfig
 {
@@ -43,7 +42,6 @@ class Config extends FrameworkJsConfig
      * Core store config
      *
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
@@ -51,14 +49,12 @@ class Config extends FrameworkJsConfig
      * Patterns to match strings for translation
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $patterns;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param string[] $patterns
-     * @since 2.0.0
      */
     public function __construct(ScopeConfigInterface $scopeConfig, array $patterns)
     {
@@ -74,7 +70,6 @@ class Config extends FrameworkJsConfig
      * Is Embedded Strategy selected
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isEmbeddedStrategy()
     {
@@ -85,7 +80,6 @@ class Config extends FrameworkJsConfig
      * Is Dictionary Strategy selected
      *
      * @return bool
-     * @since 2.0.0
      */
     public function dictionaryEnabled()
     {
@@ -96,7 +90,6 @@ class Config extends FrameworkJsConfig
      * Retrieve translation patterns
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getPatterns()
     {

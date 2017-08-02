@@ -9,7 +9,6 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Bookmark Collection
- * @since 2.0.0
  */
 class Collection extends AbstractCollection
 {
@@ -17,7 +16,6 @@ class Collection extends AbstractCollection
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

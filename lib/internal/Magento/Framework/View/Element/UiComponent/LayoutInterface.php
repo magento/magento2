@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface LayoutInterface
- * @since 2.0.0
  */
 interface LayoutInterface
 {
@@ -26,7 +25,6 @@ interface LayoutInterface
     /**
      * @param UiComponentInterface $component
      * @return array
-     * @since 2.0.0
      */
     public function build(UiComponentInterface $component);
 }

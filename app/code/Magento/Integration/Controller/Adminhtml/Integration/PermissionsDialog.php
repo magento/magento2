@@ -11,7 +11,6 @@ use Magento\Framework\Exception\IntegrationException;
 /**
  * Class \Magento\Integration\Controller\Adminhtml\Integration\PermissionsDialog
  *
- * @since 2.0.0
  */
 class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -19,7 +18,6 @@ class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integr
      * Show permissions popup.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

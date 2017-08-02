@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Plugin;
 /**
  * Class \Magento\SalesRule\Model\Plugin\Rule
  *
- * @since 2.0.0
  */
 class Rule
 {
@@ -17,7 +16,6 @@ class Rule
      * @param \Closure $proceed
      * @return \Magento\SalesRule\Model\Rule
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundLoadRelations(
         \Magento\SalesRule\Model\Rule $subject,

@@ -10,25 +10,21 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class AggregateSalesReportBestsellersData
- * @since 2.0.0
  */
 class AggregateSalesReportBestsellersData
 {
     /**
      * @var ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
     /**
      * @var TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory
-     * @since 2.0.0
      */
     protected $bestsellersFactory;
 
@@ -36,7 +32,6 @@ class AggregateSalesReportBestsellersData
      * @param ResolverInterface $localeResolver
      * @param TimezoneInterface $timezone
      * @param \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory $bestsellersFactory
-     * @since 2.0.0
      */
     public function __construct(
         ResolverInterface $localeResolver,
@@ -52,7 +47,6 @@ class AggregateSalesReportBestsellersData
      * Refresh bestsellers report statistics for last day
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -16,19 +16,16 @@ use Magento\Authorizenet\Model\Authorizenet;
  * Authorize.net Data Helper
  *
  * @api
- * @since 2.0.0
  */
 class Data extends AbstractHelper
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
-     * @since 2.0.0
      */
     protected $orderFactory;
 
@@ -36,7 +33,6 @@ class Data extends AbstractHelper
      * Allowed currencies
      *
      * @var array
-     * @since 2.0.0
      */
     protected $allowedCurrencyCodes = ['USD'];
 
@@ -44,7 +40,6 @@ class Data extends AbstractHelper
      * Transaction statuses key to value map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $transactionStatuses = [
         'authorizedPendingCapture' => 'Authorized/Pending Capture',
@@ -62,7 +57,6 @@ class Data extends AbstractHelper
      * Fraud filter actions key to value map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $fdsFilterActions = [
         'decline ' => 'Decline',
@@ -75,7 +69,6 @@ class Data extends AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -93,7 +86,6 @@ class Data extends AbstractHelper
      * @param string $route
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     protected function _getUrl($route, $params = [])
     {
@@ -111,7 +103,6 @@ class Data extends AbstractHelper
      *
      * @param string $controller
      * @return array
-     * @since 2.0.0
      */
     public function getSaveOrderUrlParams($controller)
     {
@@ -142,7 +133,6 @@ class Data extends AbstractHelper
      *
      * @param array $params
      * @return string
-     * @since 2.0.0
      */
     public function getRedirectIframeUrl($params)
     {
@@ -154,7 +144,6 @@ class Data extends AbstractHelper
      *
      * @param array $params
      * @return  string
-     * @since 2.0.0
      */
     public function getSuccessOrderUrl($params)
     {
@@ -167,7 +156,6 @@ class Data extends AbstractHelper
      *
      * @param \Magento\Sales\Model\Order $order
      * @return void
-     * @since 2.0.0
      */
     public function updateOrderEditIncrements(\Magento\Sales\Model\Order $order)
     {
@@ -190,7 +178,6 @@ class Data extends AbstractHelper
      *
      * @param  array $messages
      * @return string
-     * @since 2.0.0
      */
     public function convertMessagesToMessage($messages)
     {
@@ -208,7 +195,6 @@ class Data extends AbstractHelper
      * @param bool|string $exception
      * @param bool|string $additionalMessage
      * @return bool|string
-     * @since 2.0.0
      */
     public function getTransactionMessage(
         $payment,
@@ -247,7 +233,6 @@ class Data extends AbstractHelper
      *
      * @param  string $requestType
      * @return \Magento\Framework\Phrase|bool
-     * @since 2.0.0
      */
     protected function getOperation($requestType)
     {
@@ -272,7 +257,6 @@ class Data extends AbstractHelper
      * @param  \Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return string
-     * @since 2.0.0
      */
     protected function formatPrice($payment, $amount)
     {
@@ -284,7 +268,6 @@ class Data extends AbstractHelper
      *
      * @param \Magento\Framework\App\ViewInterface $view
      * @return string
-     * @since 2.0.0
      */
     public function getPaymentMethodsHtml(\Magento\Framework\App\ViewInterface $view)
     {
@@ -302,7 +285,6 @@ class Data extends AbstractHelper
      *
      * @param null|int|string $storeId
      * @return string
-     * @since 2.0.0
      */
     public function getRelayUrl($storeId = null)
     {
@@ -315,7 +297,6 @@ class Data extends AbstractHelper
      * Get allowed currencies
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedCurrencyCodes()
     {
@@ -327,7 +308,6 @@ class Data extends AbstractHelper
      *
      * @param string $key
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getFdsFilterActionLabel($key)
     {
@@ -339,7 +319,6 @@ class Data extends AbstractHelper
      *
      * @param string $key
      * @return \Magento\Framework\Phrase|string
-     * @since 2.0.0
      */
     public function getTransactionStatusLabel($key)
     {
@@ -351,7 +330,6 @@ class Data extends AbstractHelper
      *
      * @param string $text
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function wrapGatewayError($text)
     {

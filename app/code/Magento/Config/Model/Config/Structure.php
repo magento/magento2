@@ -42,7 +42,6 @@ use Magento\Framework\Exception\LocalizedException;
  * - the configuration path section/group/field
  *
  * @api
- * @since 2.0.0
  */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {
@@ -55,7 +54,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * Configuration structure represented as tree
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_data;
 
@@ -63,7 +61,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * Config tab iterator
      *
      * @var \Magento\Config\Model\Config\Structure\Element\Iterator\Tab
-     * @since 2.0.0
      */
     protected $_tabIterator;
 
@@ -71,7 +68,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * Pool of config element flyweight objects
      *
      * @var \Magento\Config\Model\Config\Structure\Element\FlyweightFactory
-     * @since 2.0.0
      */
     protected $_flyweightFactory;
 
@@ -79,7 +75,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * Provider of current config scope
      *
      * @var ScopeDefiner
-     * @since 2.0.0
      */
     protected $_scopeDefiner;
 
@@ -87,7 +82,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * List of cached elements
      *
      * @var \Magento\Config\Model\Config\Structure\ElementInterface[]
-     * @since 2.0.0
      */
     protected $_elements;
 
@@ -123,7 +117,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * @param \Magento\Config\Model\Config\Structure\Element\Iterator\Tab $tabIterator
      * @param \Magento\Config\Model\Config\Structure\Element\FlyweightFactory $flyweightFactory
      * @param ScopeDefiner $scopeDefiner
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Config\Model\Config\Structure\Data $structureData,
@@ -141,7 +134,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * Retrieve tab iterator
      *
      * @return \Magento\Config\Model\Config\Structure\Element\Iterator
-     * @since 2.0.0
      */
     public function getTabs()
     {
@@ -182,7 +174,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param string $path The structure path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
-     * @since 2.0.0
      */
     public function getElement($path)
     {
@@ -212,7 +203,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @return Structure\ElementInterface
      * @throws LocalizedException
-     * @since 2.0.0
      */
     public function getFirstSection()
     {
@@ -233,7 +223,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param string[] $pathParts
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
-     * @since 2.0.0
      */
     public function getElementByPathParts(array $pathParts)
     {
@@ -265,7 +254,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param string[] $pathParts
      * @return array
-     * @since 2.0.0
      */
     protected function _createEmptyElement(array $pathParts)
     {
@@ -289,7 +277,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * @param string $attributeName
      * @param mixed $attributeValue
      * @return array
-     * @since 2.0.0
      */
     public function getFieldPathsByAttribute($attributeName, $attributeValue)
     {
@@ -324,7 +311,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * @param string $attributeName
      * @param mixed $attributeValue
      * @return array
-     * @since 2.0.0
      */
     protected function _getGroupFieldPathsByAttribute(array $fields, $parentPath, $attributeName, $attributeValue)
     {

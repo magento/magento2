@@ -13,7 +13,6 @@ use Magento\Framework\Data\Form;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Stock extends \Magento\Framework\Data\Form\Element\Select
 {
@@ -23,7 +22,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Quantity field element
      *
      * @var \Magento\Framework\Data\Form\Element\Text
-     * @since 2.0.0
      */
     protected $_qty;
 
@@ -31,7 +29,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Is product composite
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isProductComposite;
 
@@ -39,7 +36,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Text element factory
      *
      * @var \Magento\Framework\Data\Form\Element\TextFactory
-     * @since 2.0.0
      */
     protected $_factoryText;
 
@@ -47,7 +43,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry;
 
@@ -58,7 +53,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * @param \Magento\Framework\Data\Form\Element\TextFactory $factoryText
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -80,7 +74,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Create quantity field
      *
      * @return \Magento\Framework\Data\Form\Element\Text
-     * @since 2.0.0
      */
     protected function _createQtyElement()
     {
@@ -94,7 +87,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Join quantity and in stock elements' html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {
@@ -110,7 +102,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      *
      * @param Form $form
      * @return Form
-     * @since 2.0.0
      */
     public function setForm($form)
     {
@@ -123,7 +114,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      *
      * @param array|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -139,7 +129,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      *
      * @param string $name
      * @return void
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -151,7 +140,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Get whether product is composite
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _isProductComposite()
     {
@@ -165,7 +153,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * Disable fields depending on product type
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _disableFields()
     {
@@ -187,7 +174,6 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      * @param string $quantityFieldId
      * @param string $inStockFieldId
      * @return string
-     * @since 2.0.0
      */
     protected function _getJs($quantityFieldId, $inStockFieldId)
     {

@@ -9,7 +9,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface DirectiveInterface
- * @since 2.0.0
  */
 interface DirectiveInterface
 {
@@ -19,7 +18,6 @@ interface DirectiveInterface
      * @param array $directive
      * @param DataObject $processedObject
      * @return string
-     * @since 2.0.0
      */
     public function execute($directive, DataObject $processedObject);
 
@@ -27,7 +25,6 @@ interface DirectiveInterface
      * Get regexp search pattern
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPattern();
 }

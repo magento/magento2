@@ -12,61 +12,51 @@ use Magento\Framework\App\Rss\DataProviderInterface;
  * Class Special
  * @package Magento\Catalog\Block\Rss\Product
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Special extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
     /**
      * @var \Magento\Catalog\Helper\Image
-     * @since 2.0.0
      */
     protected $imageHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Output
-     * @since 2.0.0
      */
     protected $outputHelper;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Product\Special
-     * @since 2.0.0
      */
     protected $rssModel;
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 2.0.0
      */
     protected $httpContext;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
-     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
     /**
      * @var \Magento\Msrp\Helper\Data
-     * @since 2.0.0
      */
     protected $msrpHelper;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     private $localeResolver;
 
@@ -82,7 +72,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -110,7 +99,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -120,7 +108,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -171,7 +158,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     /**
      * @param \Magento\Catalog\Model\Product $item
      * @return array
-     * @since 2.0.0
      */
     protected function getEntryData(\Magento\Catalog\Model\Product $item)
     {
@@ -221,7 +207,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * Get store id
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getStoreId()
     {
@@ -236,7 +221,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * Get customer group id
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getCustomerGroupId()
     {
@@ -251,7 +235,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * Check if RSS feed allowed
      *
      * @return mixed
-     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -263,7 +246,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -272,7 +254,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -286,7 +267,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isAuthRequired()
     {

@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\View;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
@@ -18,7 +17,6 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -26,7 +24,6 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -41,7 +38,6 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Retrieve creditmemo model instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
-     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -52,7 +48,6 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -63,7 +58,6 @@ class Comments extends \Magento\Backend\Block\Text\ListText
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
-     * @since 2.0.0
      */
     public function getSource()
     {

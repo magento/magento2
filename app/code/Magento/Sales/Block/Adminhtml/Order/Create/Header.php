@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Create order form header
  *
  * @api
- * @since 2.0.0
  */
 class Header extends AbstractCreate
 {
@@ -19,7 +18,6 @@ class Header extends AbstractCreate
      * Customer repository
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     * @since 2.0.0
      */
     protected $customerRepository;
 
@@ -27,7 +25,6 @@ class Header extends AbstractCreate
      * Customer view helper
      *
      * @var \Magento\Customer\Helper\View
-     * @since 2.0.0
      */
     protected $_customerViewHelper;
 
@@ -41,7 +38,6 @@ class Header extends AbstractCreate
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,7 +55,6 @@ class Header extends AbstractCreate
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -74,7 +69,6 @@ class Header extends AbstractCreate
      * Generate title for new order creation page.
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getCreateOrderTitle()
     {
@@ -107,7 +101,6 @@ class Header extends AbstractCreate
      *
      * @param int $customerId
      * @return string
-     * @since 2.0.0
      */
     protected function _getCustomerName($customerId)
     {

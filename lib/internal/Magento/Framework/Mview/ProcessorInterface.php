@@ -8,7 +8,6 @@ namespace Magento\Framework\Mview;
 /**
  * Interface \Magento\Framework\Mview\ProcessorInterface
  *
- * @since 2.0.0
  */
 interface ProcessorInterface
 {
@@ -17,7 +16,6 @@ interface ProcessorInterface
      *
      * @param string $group
      * @return void
-     * @since 2.0.0
      */
     public function update($group = '');
 
@@ -26,7 +24,6 @@ interface ProcessorInterface
      *
      * @param string $group
      * @return void
-     * @since 2.0.0
      */
     public function clearChangelog($group = '');
 }

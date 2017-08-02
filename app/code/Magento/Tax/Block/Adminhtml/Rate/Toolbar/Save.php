@@ -14,25 +14,21 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 /**
  * Class \Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save
  *
- * @since 2.0.0
  */
 class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'toolbar/rate/save.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
-     * @since 2.0.0
      */
     protected $buttonList;
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
-     * @since 2.0.0
      */
     protected $toolbar;
 
@@ -41,7 +37,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,7 +51,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -73,7 +67,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * @param integer $sortOrder
      * @param string|null $region That button should be displayed in ('toolbar', 'header', 'footer', null)
      * @return $this
-     * @since 2.0.0
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -86,7 +79,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      *
      * @param string $buttonId
      * @return $this
-     * @since 2.0.0
      */
     public function removeButton($buttonId)
     {
@@ -101,7 +93,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * @param string|null $key
      * @param string $data
      * @return $this
-     * @since 2.0.0
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -111,7 +102,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -165,7 +155,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      *
      * @param \Magento\Backend\Block\Widget\Button\Item $item
      * @return bool
-     * @since 2.0.0
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {

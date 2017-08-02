@@ -12,7 +12,6 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class \Magento\Framework\Acl\AclResourceFactory
  *
- * @since 2.0.0
  */
 class AclResourceFactory
 {
@@ -20,13 +19,11 @@ class AclResourceFactory
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -38,7 +35,6 @@ class AclResourceFactory
      *
      * @param array $arguments
      * @return AclResource
-     * @since 2.0.0
      */
     public function createResource(array $arguments = [])
     {

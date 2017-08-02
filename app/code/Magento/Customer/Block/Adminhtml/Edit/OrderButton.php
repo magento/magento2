@@ -9,13 +9,11 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class OrderButton
- * @since 2.0.0
  */
 class OrderButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $authorization;
 
@@ -24,7 +22,6 @@ class OrderButton extends GenericButton implements ButtonProviderInterface
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -36,7 +33,6 @@ class OrderButton extends GenericButton implements ButtonProviderInterface
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getButtonData()
     {
@@ -57,7 +53,6 @@ class OrderButton extends GenericButton implements ButtonProviderInterface
      * Retrieve the Url for creating an order.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateOrderUrl()
     {

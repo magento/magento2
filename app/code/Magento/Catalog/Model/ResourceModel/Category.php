@@ -15,7 +15,6 @@ use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Category extends AbstractResource
 {
@@ -23,7 +22,6 @@ class Category extends AbstractResource
      * Category tree object
      *
      * @var \Magento\Framework\Data\Tree\Db
-     * @since 2.0.0
      */
     protected $_tree;
 
@@ -31,7 +29,6 @@ class Category extends AbstractResource
      * Catalog products table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_categoryProductTable;
 
@@ -45,7 +42,6 @@ class Category extends AbstractResource
      * Id of 'is_active' category attribute
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_isActiveAttributeId = null;
 
@@ -53,7 +49,6 @@ class Category extends AbstractResource
      * Store id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_storeId = null;
 
@@ -61,7 +56,6 @@ class Category extends AbstractResource
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager = null;
 
@@ -69,7 +63,6 @@ class Category extends AbstractResource
      * Category collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @since 2.0.0
      */
     protected $_categoryCollectionFactory;
 
@@ -77,7 +70,6 @@ class Category extends AbstractResource
      * Category tree factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
-     * @since 2.0.0
      */
     protected $_categoryTreeFactory;
 
@@ -103,7 +95,6 @@ class Category extends AbstractResource
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -134,7 +125,6 @@ class Category extends AbstractResource
      *
      * @return \Magento\Eav\Model\Entity\Type
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getEntityType()
     {
@@ -148,7 +138,6 @@ class Category extends AbstractResource
      * Category product table name getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryProductTable()
     {
@@ -163,7 +152,6 @@ class Category extends AbstractResource
      *
      * @param integer $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function setStoreId($storeId)
     {
@@ -175,7 +163,6 @@ class Category extends AbstractResource
      * Return store id
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -189,7 +176,6 @@ class Category extends AbstractResource
      * Retrieve category tree object
      *
      * @return \Magento\Framework\Data\Tree\Db
-     * @since 2.0.0
      */
     protected function _getTree()
     {
@@ -206,7 +192,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -220,7 +205,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
@@ -252,7 +236,6 @@ class Category extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -300,7 +283,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _afterSave(\Magento\Framework\DataObject $object)
     {
@@ -321,7 +303,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $object
      * @return $this
-     * @since 2.0.0
      */
     protected function _savePath($object)
     {
@@ -341,7 +322,6 @@ class Category extends AbstractResource
      *
      * @param string $path
      * @return int
-     * @since 2.0.0
      */
     protected function _getMaxPosition($path)
     {
@@ -372,7 +352,6 @@ class Category extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _saveCategoryProducts($category)
     {
@@ -466,7 +445,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return array
-     * @since 2.0.0
      */
     public function getProductsPosition($category)
     {
@@ -486,7 +464,6 @@ class Category extends AbstractResource
      *
      * @param int $categoryId
      * @return int
-     * @since 2.0.0
      */
     public function getChildrenCount($categoryId)
     {
@@ -506,7 +483,6 @@ class Category extends AbstractResource
      *
      * @param int $entityId
      * @return bool
-     * @since 2.0.0
      */
     public function checkId($entityId)
     {
@@ -526,7 +502,6 @@ class Category extends AbstractResource
      *
      * @param array $ids
      * @return array
-     * @since 2.0.0
      */
     public function verifyIds(array $ids)
     {
@@ -551,7 +526,6 @@ class Category extends AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param bool $isActiveFlag
      * @return int
-     * @since 2.0.0
      */
     public function getChildrenAmount($category, $isActiveFlag = true)
     {
@@ -591,7 +565,6 @@ class Category extends AbstractResource
      * Get "is_active" attribute identifier
      *
      * @return int
-     * @since 2.0.0
      */
     public function getIsActiveAttributeId()
     {
@@ -610,7 +583,6 @@ class Category extends AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param mixed $expectedValue
      * @return array
-     * @since 2.0.0
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
@@ -647,7 +619,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return int
-     * @since 2.0.0
      */
     public function getProductCount($category)
     {
@@ -675,7 +646,6 @@ class Category extends AbstractResource
      * @param boolean $asCollection
      * @param boolean $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -696,7 +666,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getParentCategories($category)
     {
@@ -723,7 +692,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Model\Category
-     * @since 2.0.0
      */
     public function getParentDesignCategory($category)
     {
@@ -764,7 +732,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
-     * @since 2.0.0
      */
     public function getChildrenCategories($category)
     {
@@ -797,7 +764,6 @@ class Category extends AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
      * @return array
-     * @since 2.0.0
      */
     public function getChildren($category, $recursive = true)
     {
@@ -841,7 +807,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return array
-     * @since 2.0.0
      */
     public function getAllChildren($category)
     {
@@ -857,7 +822,6 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return boolean
-     * @since 2.0.0
      */
     public function isInRootCategoryList($category)
     {
@@ -872,7 +836,6 @@ class Category extends AbstractResource
      *
      * @param integer $categoryId
      * @return boolean
-     * @since 2.0.0
      */
     public function isForbiddenToDelete($categoryId)
     {
@@ -895,7 +858,6 @@ class Category extends AbstractResource
      *
      * @param int $categoryId
      * @return string
-     * @since 2.0.0
      */
     public function getCategoryPathById($categoryId)
     {
@@ -917,7 +879,6 @@ class Category extends AbstractResource
      * @param \Magento\Catalog\Model\Category $newParent
      * @param null|int $afterCategoryId
      * @return $this
-     * @since 2.0.0
      */
     public function changeParent(
         \Magento\Catalog\Model\Category $category,
@@ -997,7 +958,6 @@ class Category extends AbstractResource
      * @param \Magento\Catalog\Model\Category $newParent
      * @param null|int $afterCategoryId
      * @return int
-     * @since 2.0.0
      */
     protected function _processPositions($category, $newParent, $afterCategoryId)
     {
@@ -1034,7 +994,6 @@ class Category extends AbstractResource
      * Get total number of persistent categories in the system, excluding the default category
      *
      * @return int
-     * @since 2.0.0
      */
     public function countVisible()
     {

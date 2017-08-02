@@ -7,7 +7,6 @@ namespace Magento\Framework\Filesystem;
 
 /**
  * Contains logic for finding class filepaths based on include_path configuration.
- * @since 2.0.0
  */
 class FileResolver
 {
@@ -16,7 +15,6 @@ class FileResolver
      *
      * @param string $class
      * @return string|bool
-     * @since 2.0.0
      */
     public function getFile($class)
     {
@@ -29,7 +27,6 @@ class FileResolver
      *
      * @param string $class
      * @return string
-     * @since 2.0.0
      */
     public function getFilePath($class)
     {
@@ -42,7 +39,6 @@ class FileResolver
      * @param string|array $path
      * @param bool         $prepend Whether to prepend paths or to append them
      * @return void
-     * @since 2.0.0
      */
     public static function addIncludePath($path, $prepend = true)
     {

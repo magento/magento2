@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class \Magento\Customer\Controller\Adminhtml\File\Address\Upload
  *
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Upload extends Action
 {
@@ -30,19 +30,19 @@ class Upload extends Action
 
     /**
      * @var FileUploaderFactory
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $fileUploaderFactory;
 
     /**
      * @var AddressMetadataInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $addressMetadataService;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $logger;
 
@@ -51,7 +51,7 @@ class Upload extends Action
      * @param FileUploaderFactory $fileUploaderFactory
      * @param AddressMetadataInterface $addressMetadataService
      * @param LoggerInterface $logger
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         Context $context,
@@ -67,7 +67,7 @@ class Upload extends Action
 
     /**
      * @inheritDoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function execute()
     {
@@ -121,7 +121,7 @@ class Upload extends Action
      * NOTE: This conversion is required to use \Magento\Framework\File\Uploader::_setUploadFileId($fileId) method.
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function convertFilesArray()
     {

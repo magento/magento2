@@ -25,7 +25,6 @@ use Symfony\Component\Console\Helper\ProgressBar;
 /**
  * Command to run compile in single-tenant mode
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class DiCompileCommand extends Command
 {
@@ -34,49 +33,41 @@ class DiCompileCommand extends Command
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
-     * @since 2.0.0
      */
     private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     private $objectManager;
 
     /**
      * @var \Magento\Setup\Module\Di\App\Task\Manager
-     * @since 2.0.0
      */
     private $taskManager;
 
     /**
      * @var \Magento\Framework\App\Filesystem\DirectoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     private $excludedPathsList;
 
     /**
      * @var \Magento\Framework\Filesystem\DriverInterface
-     * @since 2.0.0
      */
     private $fileDriver;
 
     /**
      * @var ComponentRegistrar
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -90,7 +81,6 @@ class DiCompileCommand extends Command
      * @param Filesystem $filesystem
      * @param DriverInterface $fileDriver
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
-     * @since 2.0.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -113,7 +103,6 @@ class DiCompileCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -128,7 +117,6 @@ class DiCompileCommand extends Command
      * Checks that application is installed and DI resources are cleared
      *
      * @return string[]
-     * @since 2.0.0
      */
     private function checkEnvironment()
     {
@@ -144,7 +132,6 @@ class DiCompileCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -233,7 +220,7 @@ class DiCompileCommand extends Command
      *
      * @param string[] $modulePaths
      * @return string[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getExcludedModulePaths(array $modulePaths)
     {
@@ -269,7 +256,7 @@ class DiCompileCommand extends Command
      *
      * @param string[] $libraryPaths
      * @return string[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
@@ -299,7 +286,6 @@ class DiCompileCommand extends Command
      *
      * @param array $directoryCodeList
      * @return void
-     * @since 2.0.0
      */
     private function cleanupFilesystem($directoryCodeList)
     {
@@ -313,7 +299,6 @@ class DiCompileCommand extends Command
      *
      * @param OutputInterface $output
      * @return void
-     * @since 2.0.0
      */
     private function configureObjectManager(OutputInterface $output)
     {
@@ -365,7 +350,6 @@ class DiCompileCommand extends Command
      *
      * @param array $compiledPathsList
      * @return array
-     * @since 2.0.0
      */
     private function getOperationsConfiguration(
         array $compiledPathsList

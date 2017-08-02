@@ -10,19 +10,16 @@ use Magento\Framework\Code\Generator;
 /**
  * Class \Magento\Framework\Code\Generator\Autoloader
  *
- * @since 2.0.0
  */
 class Autoloader
 {
     /**
      * @var \Magento\Framework\Code\Generator
-     * @since 2.0.0
      */
     protected $_generator;
 
     /**
      * @param \Magento\Framework\Code\Generator $generator
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Code\Generator $generator
@@ -35,7 +32,6 @@ class Autoloader
      *
      * @param string $className
      * @return bool True if class was loaded
-     * @since 2.0.0
      */
     public function load($className)
     {

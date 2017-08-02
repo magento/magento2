@@ -7,7 +7,6 @@ namespace Magento\Msrp\Model\Product\Attribute\Source\Type;
 
 /**
  * Source model for 'msrp_display_actual_price_type' product attribute
- * @since 2.0.0
  */
 class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
 {
@@ -20,7 +19,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      * Entity attribute factory
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory
-     * @since 2.0.0
      */
     protected $entityAttributeFactory;
 
@@ -28,7 +26,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      * Eav resource helper
      *
      * @var \Magento\Eav\Model\ResourceModel\Helper
-     * @since 2.0.0
      */
     protected $eavResourceHelper;
 
@@ -37,7 +34,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $entityAttributeFactory
      * @param \Magento\Eav\Model\ResourceModel\Helper $eavResourceHelper
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $entityAttributeFactory,
@@ -51,7 +47,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      * Get all options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {
@@ -68,7 +63,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      * Retrieve flat column definition
      *
      * @return array
-     * @since 2.0.0
      */
     public function getFlatColumns()
     {
@@ -91,7 +85,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      *
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
-     * @since 2.0.0
      */
     public function getFlatUpdateSelect($store)
     {

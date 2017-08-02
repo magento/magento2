@@ -11,7 +11,6 @@ use Magento\Security\Model\SecurityManager;
 /**
  * Class \Magento\User\Controller\Adminhtml\Auth\Forgotpassword
  *
- * @since 2.0.0
  */
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
@@ -41,7 +40,6 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {

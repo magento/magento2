@@ -14,13 +14,11 @@ use Magento\Framework\UrlInterface;
  * Class ProductActions
  *
  * @api
- * @since 2.0.0
  */
 class Actions extends Column
 {
     /**
      * @var UrlInterface
-     * @since 2.0.0
      */
     protected $urlBuilder;
 
@@ -30,7 +28,6 @@ class Actions extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -48,7 +45,6 @@ class Actions extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

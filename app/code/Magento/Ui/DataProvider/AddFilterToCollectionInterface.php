@@ -9,7 +9,6 @@ use Magento\Framework\Data\Collection;
 
 /**
  * AddFilterToCollection interface
- * @since 2.0.0
  */
 interface AddFilterToCollectionInterface
 {
@@ -18,7 +17,6 @@ interface AddFilterToCollectionInterface
      * @param string $field
      * @param string|null $condition
      * @return void
-     * @since 2.0.0
      */
     public function addFilter(Collection $collection, $field, $condition = null);
 }

@@ -13,7 +13,6 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 /**
  * Class \Magento\Newsletter\Controller\Adminhtml\Template
  *
- * @since 2.0.0
  */
 abstract class Template extends \Magento\Backend\App\Action
 {

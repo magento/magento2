@@ -11,7 +11,6 @@ use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 /**
  * Class \Magento\Quote\Model\ShippingAssignment
  *
- * @since 2.0.0
  */
 class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel implements ShippingAssignmentInterface
 {
@@ -20,7 +19,6 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getShipping()
     {
@@ -29,7 +27,6 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -38,7 +35,6 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setShipping(\Magento\Quote\Api\Data\ShippingInterface $value)
     {
@@ -48,7 +44,6 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setItems($value)
     {
@@ -58,7 +53,6 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -67,7 +61,6 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
 
     /**
      * @inheritDoc
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\ShippingAssignmentExtensionInterface $extensionAttributes

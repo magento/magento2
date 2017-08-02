@@ -17,7 +17,6 @@ namespace Magento\Store\Model;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -30,19 +29,16 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_cacheTag = true;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'store_group';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'store_group';
 
@@ -50,7 +46,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Group Store collection array
      *
      * @var \Magento\Store\Model\ResourceModel\Store\Collection[]
-     * @since 2.0.0
      */
     protected $_stores;
 
@@ -58,7 +53,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Group store ids array
      *
      * @var int[]
-     * @since 2.0.0
      */
     protected $_storeIds = [];
 
@@ -66,7 +60,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Group store codes array
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_storeCodes = [];
 
@@ -74,7 +67,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * The number of stores in a group
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_storesCount = 0;
 
@@ -82,31 +74,26 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Group default store
      *
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_defaultStore;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $_isReadOnly = false;
 
     /**
      * @var \Magento\Config\Model\ResourceModel\Config\Data
-     * @since 2.0.0
      */
     protected $_configDataResource;
 
     /**
      * @var \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     protected $_storeListFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -122,7 +109,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -154,7 +140,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Init model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -165,7 +150,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Load store collection and set internal data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _loadStores()
     {
@@ -187,7 +171,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param \Magento\Store\Model\Store[] $stores
      * @return void
-     * @since 2.0.0
      */
     public function setStores($stores)
     {
@@ -208,7 +191,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve new (not loaded) Store collection object with group filter
      *
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
-     * @since 2.0.0
      */
     public function getStoreCollection()
     {
@@ -219,7 +201,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve website store objects
      *
      * @return \Magento\Store\Model\ResourceModel\Store\Collection[]
-     * @since 2.0.0
      */
     public function getStores()
     {
@@ -233,7 +214,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve website store ids
      *
      * @return int[]
-     * @since 2.0.0
      */
     public function getStoreIds()
     {
@@ -247,7 +227,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve website store codes
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStoreCodes()
     {
@@ -259,7 +238,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getStoresCount()
     {
@@ -273,7 +251,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve default store model
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getDefaultStore()
     {
@@ -293,7 +270,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $locale
      * @return \Magento\Store\Model\Store|null
-     * @since 2.0.0
      */
     public function getDefaultStoreByLocale($locale)
     {
@@ -314,7 +290,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $locale
      * @return \Magento\Store\Model\Store[]
-     * @since 2.0.0
      */
     public function getStoresByLocale($locale)
     {
@@ -333,7 +308,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param Website $website
      * @return void
-     * @since 2.0.0
      */
     public function setWebsite(Website $website)
     {
@@ -344,7 +318,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Retrieve website model
      *
      * @return Website|bool
-     * @since 2.0.0
      */
     public function getWebsite()
     {
@@ -358,7 +331,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Is can delete group
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCanDelete()
     {
@@ -371,7 +343,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getDefaultStoreId()
     {
@@ -380,7 +351,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setDefaultStoreId($defaultStoreId)
     {
@@ -389,7 +359,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getRootCategoryId()
     {
@@ -398,7 +367,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setRootCategoryId($rootCategoryId)
     {
@@ -407,7 +375,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getWebsiteId()
     {
@@ -416,7 +383,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setWebsiteId($websiteId)
     {
@@ -425,7 +391,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function beforeDelete()
     {
@@ -463,7 +428,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param bool $value
      * @return bool
-     * @since 2.0.0
      */
     public function isReadOnly($value = null)
     {
@@ -477,7 +441,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get identities
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {
@@ -486,7 +449,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -495,7 +457,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -522,7 +483,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -531,7 +491,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes

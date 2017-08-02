@@ -10,13 +10,11 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Class \Magento\Tax\Block\Adminhtml\Frontend\Region\Updater
  *
- * @since 2.0.0
  */
 class Updater extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var \Magento\Directory\Helper\Data
-     * @since 2.0.0
      */
     protected $_directoryHelper;
 
@@ -24,7 +22,6 @@ class Updater extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,7 +35,6 @@ class Updater extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @param AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getElementHtml(AbstractElement $element)
     {

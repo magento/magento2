@@ -8,7 +8,6 @@ namespace Magento\Store\Model\StoreResolver;
 /**
  * Interface \Magento\Store\Model\StoreResolver\ReaderInterface
  *
- * @since 2.0.0
  */
 interface ReaderInterface
 {
@@ -17,7 +16,6 @@ interface ReaderInterface
      *
      * @param string $scopeCode
      * @return array
-     * @since 2.0.0
      */
     public function getAllowedStoreIds($scopeCode);
 
@@ -26,7 +24,6 @@ interface ReaderInterface
      *
      * @param string $scopeCode
      * @return int
-     * @since 2.0.0
      */
     public function getDefaultStoreId($scopeCode);
 }

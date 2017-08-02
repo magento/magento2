@@ -7,14 +7,12 @@ namespace Magento\Checkout\Model;
 
 /**
  * @codeCoverageIgnoreStart
- * @since 2.0.0
  */
 class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Checkout\Api\Data\PaymentDetailsInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPaymentMethods()
     {
@@ -23,7 +21,6 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPaymentMethods($paymentMethods)
     {
@@ -32,7 +29,6 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTotals()
     {
@@ -41,7 +37,6 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTotals($totals)
     {
@@ -52,7 +47,6 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
      * {@inheritdoc}
      *
      * @return \Magento\Checkout\Api\Data\PaymentDetailsExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -64,7 +58,6 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
      *
      * @param \Magento\Checkout\Api\Data\PaymentDetailsExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Checkout\Api\Data\PaymentDetailsExtensionInterface $extensionAttributes

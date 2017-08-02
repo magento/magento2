@@ -13,7 +13,6 @@ namespace Magento\Framework\Event\Observer;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection
 {
@@ -21,13 +20,11 @@ class Collection
      * Array of observers
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_observers;
 
     /**
      * Initializes observers
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -38,7 +35,6 @@ class Collection
      * Returns all observers in the collection
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllObservers()
     {
@@ -50,7 +46,6 @@ class Collection
      *
      * @param string $observerName
      * @return \Magento\Framework\Event\Observer
-     * @since 2.0.0
      */
     public function getObserverByName($observerName)
     {
@@ -62,7 +57,6 @@ class Collection
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function addObserver(\Magento\Framework\Event\Observer $observer)
     {
@@ -75,7 +69,6 @@ class Collection
      *
      * @param string $observerName
      * @return $this
-     * @since 2.0.0
      */
     public function removeObserverByName($observerName)
     {
@@ -88,7 +81,6 @@ class Collection
      *
      * @param \Magento\Framework\Event $event
      * @return $this
-     * @since 2.0.0
      */
     public function dispatch(\Magento\Framework\Event $event)
     {

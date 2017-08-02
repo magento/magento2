@@ -13,7 +13,6 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
 {
@@ -21,7 +20,6 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
      * Adding product form elements for editing attribute
      *
      * @return \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {

@@ -10,7 +10,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface StockStatusInterface
  * @api
- * @since 2.0.0
  */
 interface StockStatusInterface extends ExtensibleDataInterface
 {
@@ -27,59 +26,50 @@ interface StockStatusInterface extends ExtensibleDataInterface
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getProductId();
 
     /**
      * @param int $productId
      * @return $this
-     * @since 2.0.0
      */
     public function setProductId($productId);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getStockId();
 
     /**
      * @param int $stockId
      * @return $this
-     * @since 2.0.0
      */
     public function setStockId($stockId);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getQty();
 
     /**
      * @param int $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty);
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getStockStatus();
 
     /**
      * @param int $stockStatus
      * @return $this
-     * @since 2.0.0
      */
     public function setStockStatus($stockStatus);
 
     /**
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
-     * @since 2.0.0
      */
     public function getStockItem();
 
@@ -87,7 +77,6 @@ interface StockStatusInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -96,7 +85,6 @@ interface StockStatusInterface extends ExtensibleDataInterface
      *
      * @param \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes

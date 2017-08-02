@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Ignore implements \Magento\Config\Model\Config\Structure\MapperInterface
 {
@@ -20,7 +19,6 @@ class Ignore implements \Magento\Config\Model\Config\Structure\MapperInterface
      *
      * @param array $data
      * @return array
-     * @since 2.0.0
      */
     public function map(array $data)
     {

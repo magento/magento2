@@ -13,13 +13,11 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class \Magento\Customer\Model\Metadata\Form\Multiselect
  *
- * @since 2.0.0
  */
 class Multiselect extends Select
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function extractValue(RequestInterface $request)
     {
@@ -32,7 +30,6 @@ class Multiselect extends Select
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function compactValue($value)
     {
@@ -48,7 +45,6 @@ class Multiselect extends Select
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {

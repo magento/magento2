@@ -17,7 +17,6 @@ use Magento\CatalogImportExport\Model\Import\Product;
  * Class Bundle
  * @package Magento\BundleImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @since 2.0.0
  */
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -61,7 +60,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Array of cached options.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_cachedOptions = [];
 
@@ -69,7 +67,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Array of cached skus.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_cachedSkus = [];
 
@@ -77,7 +74,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Mapping array between cached skus and products.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_cachedSkuToProducts = [];
 
@@ -85,7 +81,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Array of queries selecting cached options.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_cachedOptionSelectQuery = [];
 
@@ -93,7 +88,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Column names that holds values with particular meaning.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_specialAttributes = [
         'price_type',
@@ -105,7 +99,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Custom fields mapping.
      *
      * @inherited
-     * @since 2.0.0
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',
@@ -119,7 +112,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Bundle field mapping.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_bundleFieldMapping = [
         'is_default' => 'default',
@@ -131,7 +123,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Option type mapping.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_optionTypeMapping = [
         'dropdown' => 'select',
@@ -153,7 +144,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $params
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -176,7 +166,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $entityId
      *
      * @return array
-     * @since 2.0.0
      */
     protected function parseSelections($rowData, $entityId)
     {
@@ -219,7 +208,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $values
      *
      * @return array
-     * @since 2.0.0
      */
     protected function parseOption($values)
     {
@@ -248,7 +236,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $index
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function populateOptionTemplate($option, $entityId, $index = null)
     {
@@ -273,7 +260,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $storeId
      *
      * @return array|bool
-     * @since 2.0.0
      */
     protected function populateOptionValueTemplate($option, $optionId, $storeId = 0)
     {
@@ -298,7 +284,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function populateSelectionTemplate($selection, $optionId, $parentId, $index)
     {
@@ -333,7 +318,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Retrieve mapping between skus and products.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function retrieveProducsByCachedSkus()
     {
@@ -353,7 +337,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Save product type specific data.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     public function saveData()
     {
@@ -399,7 +382,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $rowNum
      * @param bool $isNewProduct
      * @return bool
-     * @since 2.0.0
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
@@ -416,7 +398,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $rowData
      * @param bool $withDefaultValue
      * @return array
-     * @since 2.0.0
      */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
@@ -430,7 +411,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @param array $rowData
      * @return array
-     * @since 2.0.0
      */
     protected function transformBundleCustomAttributes($rowData)
     {
@@ -460,7 +440,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Populates existing options.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function populateExistingOptions()
     {
@@ -494,7 +473,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $existingOptions
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function populateExistingSelections($existingOptions)
     {
@@ -536,7 +514,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Insert options.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function insertOptions()
     {
@@ -581,7 +558,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Populate array for insert option values
      * @param array $optionIds
      * @return array
-     * @since 2.0.0
      */
     protected function populateInsertOptionValues($optionIds)
     {
@@ -606,7 +582,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Insert selections.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function insertSelections()
     {
@@ -641,7 +616,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Initialize attributes parameters for all attributes' sets.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAttributes()
     {
@@ -673,7 +647,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $productIds
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function deleteOptionsAndSelections($productIds)
     {
@@ -710,7 +683,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Clear cached values between bunches
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     * @since 2.0.0
      */
     protected function clear()
     {

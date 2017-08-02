@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -25,37 +24,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
     /**
      * @var PriceCurrencyInterface
-     * @since 2.0.0
      */
     protected $priceCurrency;
 
@@ -68,7 +61,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param PriceCurrencyInterface $priceCurrency
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -93,7 +85,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Checkout\Model\Session
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getCheckout()
     {
@@ -105,7 +96,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Quote\Model\Quote
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getQuote()
     {
@@ -115,7 +105,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param float $price
      * @return string
-     * @since 2.0.0
      */
     public function formatPrice($price)
     {
@@ -131,7 +120,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param float $price
      * @param bool $format
      * @return float
-     * @since 2.0.0
      */
     public function convertPrice($price, $format = true)
     {
@@ -144,7 +132,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get onepage checkout availability
      *
      * @return bool
-     * @since 2.0.0
      */
     public function canOnepageCheckout()
     {
@@ -159,7 +146,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   \Magento\Framework\DataObject $item
      * @return  float
-     * @since 2.0.0
      */
     public function getPriceInclTax($item)
     {
@@ -177,7 +163,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param   \Magento\Framework\DataObject $item
      * @return  float
-     * @since 2.0.0
      */
     public function getSubtotalInclTax($item)
     {
@@ -191,7 +176,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getBasePriceInclTax($item)
     {
@@ -204,7 +188,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param AbstractItem $item
      * @return float
-     * @since 2.0.0
      */
     public function getBaseSubtotalInclTax($item)
     {
@@ -221,7 +204,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
     {
@@ -348,7 +330,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $configPath
      * @param null|string|bool|int|Store $storeId
      * @return array|false
-     * @since 2.0.0
      */
     protected function _getEmails($configPath, $storeId)
     {
@@ -370,7 +351,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Quote\Model\Quote $quote
      * @param int|Store $store
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowedGuestCheckout(\Magento\Quote\Model\Quote $quote, $store = null)
     {
@@ -402,7 +382,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isContextCheckout()
     {
@@ -414,7 +393,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return boolean
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isCustomerMustBeLogged()
     {
@@ -428,7 +406,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Checks if display billing address on payment method is available, otherwise
      * billing address should be display on payment page
      * @return bool
-     * @since 2.2.0
+     * @since 2.1.4
      */
     public function isDisplayBillingOnPaymentMethodAvailable()
     {

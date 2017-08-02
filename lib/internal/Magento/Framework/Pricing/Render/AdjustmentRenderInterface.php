@@ -13,7 +13,6 @@ use Magento\Framework\Pricing\Price\PriceInterface;
  * Adjustment render interface
  *
  * @api
- * @since 2.0.0
  */
 interface AdjustmentRenderInterface
 {
@@ -21,19 +20,16 @@ interface AdjustmentRenderInterface
      * @param AmountRenderInterface $amountRender
      * @param array $arguments
      * @return string
-     * @since 2.0.0
      */
     public function render(AmountRenderInterface $amountRender, array $arguments = []);
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getAdjustmentCode();
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getData();
 
@@ -41,7 +37,6 @@ interface AdjustmentRenderInterface
      * (to use in templates only)
      *
      * @return AmountRenderInterface
-     * @since 2.0.0
      */
     public function getAmountRender();
 
@@ -49,7 +44,6 @@ interface AdjustmentRenderInterface
      * (to use in templates only)
      *
      * @return PriceInterface
-     * @since 2.0.0
      */
     public function getPrice();
 
@@ -57,7 +51,6 @@ interface AdjustmentRenderInterface
      * (to use in templates only)
      *
      * @return SaleableInterface
-     * @since 2.0.0
      */
     public function getSaleableItem();
 
@@ -65,7 +58,6 @@ interface AdjustmentRenderInterface
      * (to use in templates only)
      *
      * @return \Magento\Framework\Pricing\Adjustment\AdjustmentInterface
-     * @since 2.0.0
      */
     public function getAdjustment();
 }

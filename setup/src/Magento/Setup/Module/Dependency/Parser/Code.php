@@ -9,7 +9,6 @@ use Magento\Setup\Module\Dependency\ParserInterface;
 
 /**
  * Code parser
- * @since 2.0.0
  */
 class Code implements ParserInterface
 {
@@ -17,7 +16,6 @@ class Code implements ParserInterface
      * Declared namespaces
      *
      * @var array
-     * @since 2.0.0
      */
     protected $declaredNamespaces;
 
@@ -25,7 +23,6 @@ class Code implements ParserInterface
      * Template method. Main algorithm
      *
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function parse(array $options)
     {
@@ -74,7 +71,6 @@ class Code implements ParserInterface
      * @param array $options
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function checkOptions($options)
     {
@@ -102,7 +98,6 @@ class Code implements ParserInterface
      *
      * @param string $file
      * @return string
-     * @since 2.0.0
      */
     protected function extractModuleName($file)
     {

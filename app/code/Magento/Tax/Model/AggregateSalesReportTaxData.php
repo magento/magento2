@@ -9,25 +9,21 @@ namespace Magento\Tax\Model;
 /**
  * Class \Magento\Tax\Model\AggregateSalesReportTaxData
  *
- * @since 2.0.0
  */
 class AggregateSalesReportTaxData
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $localeDate;
 
     /**
      * @var \Magento\Tax\Model\ResourceModel\Report\TaxFactory
-     * @since 2.0.0
      */
     protected $reportTaxFactory;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $localeResolver;
 
@@ -35,7 +31,6 @@ class AggregateSalesReportTaxData
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Tax\Model\ResourceModel\Report\TaxFactory $reportTaxFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -51,7 +46,6 @@ class AggregateSalesReportTaxData
      * Refresh sales tax report statistics for last day
      *
      * @return $this
-     * @since 2.0.0
      */
     public function invoke()
     {

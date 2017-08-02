@@ -9,7 +9,6 @@ namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 /**
  * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Edit
  *
- * @since 2.0.0
  */
 class Edit extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
@@ -17,7 +16,6 @@ class Edit extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      * Edit widget instance action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

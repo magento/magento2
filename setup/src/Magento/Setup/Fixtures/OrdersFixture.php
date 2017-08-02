@@ -41,7 +41,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
  * @see setup/performance-toolkit/profiles/ce/small.xml
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class OrdersFixture extends Fixture
 {
@@ -105,7 +104,6 @@ class OrdersFixture extends Fixture
      * Fixture execution priority.
      *
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 135;
 
@@ -205,7 +203,6 @@ class OrdersFixture extends Fixture
      * @throws \Exception Any exception raised during DB query.
      * @return void
      * @SuppressWarnings(PHPMD)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -732,7 +729,6 @@ class OrdersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -741,7 +737,6 @@ class OrdersFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {
@@ -757,7 +752,6 @@ class OrdersFixture extends Fixture
      * @param string $tableName
      * @param string $resourceName
      * @return string
-     * @since 2.0.0
      */
     public function getTableName($tableName, $resourceName)
     {

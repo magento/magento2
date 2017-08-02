@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface ProductAttributeTypesListInterface
 {
@@ -16,7 +15,6 @@ interface ProductAttributeTypesListInterface
      * Retrieve list of product attribute types
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeTypeInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 }

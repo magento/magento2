@@ -9,25 +9,21 @@ namespace Magento\Sales\Block\Order;
  * Sales order history block
  *
  * @api
- * @since 2.0.0
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @since 2.0.0
      */
     protected $_orderCollectionFactory;
 
     /**
      * @var \Magento\Customer\Model\Session
-     * @since 2.0.0
      */
     protected $_customerSession;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
-     * @since 2.0.0
      */
     protected $_orderConfig;
 
@@ -37,7 +33,6 @@ class Recent extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -55,7 +50,6 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -80,7 +74,6 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getViewUrl($order)
     {
@@ -90,7 +83,6 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getTrackUrl($order)
     {
@@ -99,7 +91,6 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {
@@ -112,7 +103,6 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * @param object $order
      * @return string
-     * @since 2.0.0
      */
     public function getReorderUrl($order)
     {

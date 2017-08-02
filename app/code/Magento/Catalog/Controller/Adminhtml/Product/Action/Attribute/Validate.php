@@ -9,19 +9,16 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate
  *
- * @since 2.0.0
  */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -30,7 +27,6 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -47,7 +43,6 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
      * Attributes validation action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

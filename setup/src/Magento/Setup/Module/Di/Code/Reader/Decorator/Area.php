@@ -13,26 +13,22 @@ use Magento\Framework\Exception\FileSystemException;
  * Class Area
  *
  * @package Magento\Setup\Module\Di\Code\Reader\Decorator
- * @since 2.0.0
  */
 class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
     /**
      * @var ClassReaderDecorator
-     * @since 2.0.0
      */
     private $classReaderDecorator;
 
     /**
      * @var ClassesScanner
-     * @since 2.0.0
      */
     private $classesScanner;
 
     /**
      * @param ClassesScanner $classesScanner
      * @param ClassReaderDecorator $classReaderDecorator
-     * @since 2.0.0
      */
     public function __construct(
         ClassesScanner $classesScanner,
@@ -49,7 +45,6 @@ class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterfa
      *
      * @return array
      * @throws FileSystemException
-     * @since 2.0.0
      */
     public function getList($path)
     {

@@ -14,7 +14,6 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 /**
  * Class \Magento\Setup\Model\ModuleStatus
  *
- * @since 2.0.0
  */
 class ModuleStatus
 {
@@ -22,7 +21,6 @@ class ModuleStatus
      * List of Modules
      *
      * @var array
-     * @since 2.0.0
      */
     protected $allModules;
 
@@ -30,7 +28,6 @@ class ModuleStatus
      * Deployment Config
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     protected $deploymentConfig;
 
@@ -38,7 +35,6 @@ class ModuleStatus
      * Dependency Checker
      *
      * @var DependencyChecker
-     * @since 2.0.0
      */
     private $dependencyChecker;
 
@@ -48,7 +44,6 @@ class ModuleStatus
      * @param ModuleLoader $moduleLoader
      * @param DeploymentConfig $deploymentConfig
      * @param ObjectManagerProvider $objectManagerProvider
-     * @since 2.0.0
      */
     public function __construct(
         ModuleLoader $moduleLoader,
@@ -70,7 +65,6 @@ class ModuleStatus
      *
      * @param array $selectedModules
      * @return array
-     * @since 2.0.0
      */
     public function getAllModules(array $selectedModules = null)
     {
@@ -104,7 +98,6 @@ class ModuleStatus
      * Returns list of modules that can be disabled
      *
      * @return array
-     * @since 2.0.0
      */
     private function getListOfDisableModules()
     {
@@ -126,7 +119,6 @@ class ModuleStatus
      * Returns list of enabled modules
      *
      * @return array
-     * @since 2.0.0
      */
     private function getListOfEnabledModules()
     {
@@ -144,7 +136,6 @@ class ModuleStatus
      * @param String $moduleName
      *
      * @return void
-     * @since 2.0.0
      */
     public function setIsEnabled($status, $moduleName)
     {
@@ -155,7 +146,6 @@ class ModuleStatus
      * Marks modules that are disabled in deploymentConfig as unselected.
      *
      * @return void
-     * @since 2.0.0
      */
     private function deselectDisabledModules()
     {

@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Transactions\Detail;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,7 +17,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -26,7 +24,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Collection factory
      *
      * @var \Magento\Framework\Data\CollectionFactory
-     * @since 2.0.0
      */
     protected $_collectionFactory;
 
@@ -36,7 +33,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -54,7 +50,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Initialize default sorting and html ID
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -67,7 +62,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection for grid
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -85,7 +79,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add columns to grid
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -121,7 +114,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Retrieve Transaction addtitional info
      *
      * @return array
-     * @since 2.0.0
      */
     public function getTransactionAdditionalInfo()
     {

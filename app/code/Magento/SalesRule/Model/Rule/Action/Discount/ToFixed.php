@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
 /**
  * Class \Magento\SalesRule\Model\Rule\Action\Discount\ToFixed
  *
- * @since 2.0.0
  */
 class ToFixed extends AbstractDiscount
 {
@@ -17,7 +16,6 @@ class ToFixed extends AbstractDiscount
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
-     * @since 2.0.0
      */
     public function calculate($rule, $item, $qty)
     {

@@ -10,7 +10,6 @@ namespace Magento\Ui\Api\Data;
  * Interface for bookmark search results
  *
  * @api
- * @since 2.0.0
  */
 interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
@@ -18,7 +17,6 @@ interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * Get customers list
      *
      * @return \Magento\Ui\Api\Data\BookmarkInterface[]
-     * @since 2.0.0
      */
     public function getItems();
 
@@ -28,7 +26,6 @@ interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * @api
      * @param \Magento\Ui\Api\Data\BookmarkInterface[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items);
 }

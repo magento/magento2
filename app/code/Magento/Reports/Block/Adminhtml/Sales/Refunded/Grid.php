@@ -11,7 +11,6 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Refunded;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
@@ -19,14 +18,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * GROUP BY criteria
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_columnGroupBy = 'period';
 
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -36,7 +33,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getResourceCollectionName()
     {
@@ -47,7 +43,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {

@@ -13,7 +13,6 @@ namespace Magento\Config\Block\System\Config\Form\Field;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Heading extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
@@ -23,7 +22,6 @@ class Heading extends \Magento\Backend\Block\AbstractBlock implements
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

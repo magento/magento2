@@ -10,7 +10,6 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * List of theme package value objects
- * @since 2.0.0
  */
 class ThemePackageList
 {
@@ -18,7 +17,6 @@ class ThemePackageList
      * Component registrar
      *
      * @var ComponentRegistrarInterface
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -26,7 +24,6 @@ class ThemePackageList
      * Factory for ThemePackage
      *
      * @var ThemePackageFactory
-     * @since 2.0.0
      */
     private $factory;
 
@@ -35,7 +32,6 @@ class ThemePackageList
      *
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param ThemePackageFactory $factory
-     * @since 2.0.0
      */
     public function __construct(ComponentRegistrarInterface $componentRegistrar, ThemePackageFactory $factory)
     {
@@ -49,7 +45,6 @@ class ThemePackageList
      * @param string $key
      * @return ThemePackage
      * @throws \UnexpectedValueException
-     * @since 2.0.0
      */
     public function getTheme($key)
     {
@@ -64,7 +59,6 @@ class ThemePackageList
      * Get all themes
      *
      * @return ThemePackage[]
-     * @since 2.0.0
      */
     public function getThemes()
     {

@@ -13,7 +13,6 @@ namespace Magento\Reports\Model\ResourceModel\Wishlist;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -21,13 +20,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Wishlist table name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_wishlistTable;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
-     * @since 2.0.0
      */
     protected $_customerResFactory;
 
@@ -39,7 +36,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerResFactory
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -58,7 +54,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -72,7 +67,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setWishlistTable($value)
     {
@@ -85,7 +79,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @codeCoverageIgnore
      *
      * @return string
-     * @since 2.0.0
      */
     public function getWishlistTable()
     {
@@ -96,7 +89,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Retrieve wishlist customer count
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWishlistCustomerCount()
     {
@@ -127,7 +119,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get shared items collection count
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSharedCount()
     {

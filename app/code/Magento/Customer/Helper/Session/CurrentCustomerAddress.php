@@ -10,26 +10,22 @@ use Magento\Customer\Api\Data\AddressInterface;
 
 /**
  * Class CurrentCustomerAddress
- * @since 2.0.0
  */
 class CurrentCustomerAddress
 {
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     * @since 2.0.0
      */
     protected $currentCustomer;
 
     /**
      * @var AccountManagementInterface
-     * @since 2.0.0
      */
     protected $accountManagement;
 
     /**
      * @param CurrentCustomer $currentCustomer
      * @param AccountManagementInterface $accountManagement
-     * @since 2.0.0
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
@@ -43,7 +39,6 @@ class CurrentCustomerAddress
      * Returns default billing address form current customer
      *
      * @return AddressInterface|null
-     * @since 2.0.0
      */
     public function getDefaultBillingAddress()
     {
@@ -54,7 +49,6 @@ class CurrentCustomerAddress
      * Returns default shipping address for current customer
      *
      * @return AddressInterface|null
-     * @since 2.0.0
      */
     public function getDefaultShippingAddress()
     {

@@ -18,49 +18,41 @@ use Zend\Code\Reflection\MethodReflection;
  * Processes extension attributes and produces an array for the data.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ExtensionAttributesProcessor
 {
     /**
      * @var DataObjectProcessor
-     * @since 2.0.0
      */
     private $dataObjectProcessor;
 
     /**
      * @var MethodsMap
-     * @since 2.0.0
      */
     private $methodsMapProcessor;
 
     /**
      * @var AuthorizationInterface
-     * @since 2.0.0
      */
     private $authorization;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $isPermissionChecked;
 
     /**
      * @var FieldNamer
-     * @since 2.0.0
      */
     private $fieldNamer;
 
     /**
      * @var TypeCaster
-     * @since 2.0.0
      */
     private $typeCaster;
 
@@ -72,7 +64,6 @@ class ExtensionAttributesProcessor
      * @param AuthorizationInterface $authorization
      * @param Config $config
      * @param bool $isPermissionChecked
-     * @since 2.0.0
      */
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
@@ -99,7 +90,6 @@ class ExtensionAttributesProcessor
      * @param string $dataObjectType
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function buildOutputDataArray(ExtensionAttributesInterface $dataObject, $dataObjectType)
     {
@@ -154,7 +144,6 @@ class ExtensionAttributesProcessor
      * @param string $dataObjectType
      * @param string $attributeCode
      * @return bool
-     * @since 2.0.0
      */
     private function isAttributePermissionValid($dataObjectType, $attributeCode)
     {
@@ -172,7 +161,6 @@ class ExtensionAttributesProcessor
     /**
      * @param string $name
      * @return string
-     * @since 2.0.0
      */
     private function getRegularTypeForExtensionAttributesType($name)
     {
@@ -183,7 +171,6 @@ class ExtensionAttributesProcessor
      * @param string $typeName
      * @param string $attributeCode
      * @return string[] A list of permissions
-     * @since 2.0.0
      */
     private function getPermissionsForTypeAndMethod($typeName, $attributeCode)
     {

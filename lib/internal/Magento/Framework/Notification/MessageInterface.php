@@ -14,7 +14,6 @@ namespace Magento\Framework\Notification;
  * Interface MessageInterface
  *
  * @api
- * @since 2.0.0
  */
 interface MessageInterface
 {
@@ -30,7 +29,6 @@ interface MessageInterface
      * Retrieve unique message identity
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdentity();
 
@@ -38,7 +36,6 @@ interface MessageInterface
      * Check whether
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isDisplayed();
 
@@ -46,7 +43,6 @@ interface MessageInterface
      * Retrieve message text
      *
      * @return string
-     * @since 2.0.0
      */
     public function getText();
 
@@ -54,7 +50,6 @@ interface MessageInterface
      * Retrieve message severity
      *
      * @return int
-     * @since 2.0.0
      */
     public function getSeverity();
 }

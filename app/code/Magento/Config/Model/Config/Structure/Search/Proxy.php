@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure\Search;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Proxy implements
     \Magento\Config\Model\Config\Structure\SearchInterface,
@@ -16,19 +15,16 @@ class Proxy implements
     /**
      * Object manager
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Config\Model\Config\Structure
-     * @since 2.0.0
      */
     protected $_subject;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -39,7 +35,6 @@ class Proxy implements
      * Retrieve subject
      *
      * @return \Magento\Config\Model\Config\Structure\SearchInterface
-     * @since 2.0.0
      */
     protected function _getSubject()
     {
@@ -54,7 +49,6 @@ class Proxy implements
      *
      * @param string $path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
-     * @since 2.0.0
      */
     public function getElement($path)
     {

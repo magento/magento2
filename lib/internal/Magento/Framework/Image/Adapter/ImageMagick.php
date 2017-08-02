@@ -8,7 +8,6 @@ namespace Magento\Framework\Image\Adapter;
 /**
  * Class \Magento\Framework\Image\Adapter\ImageMagick
  *
- * @since 2.0.0
  */
 class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
@@ -28,7 +27,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Options Container
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_options = [
         'resolution' => ['x' => 72, 'y' => 72],
@@ -41,7 +39,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int|string|array $color
      * @return int
-     * @since 2.0.0
      */
     public function backgroundColor($color = null)
     {
@@ -74,7 +71,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $filename
      * @return void
      * @throws \Exception
-     * @since 2.0.0
      */
     public function open($filename)
     {
@@ -100,7 +96,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param null|string $newName
      * @return void
      * @throws \Exception  If destination path is not writable
-     * @since 2.0.0
      */
     public function save($destination = null, $newName = null)
     {
@@ -115,7 +110,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Apply options to image. Will be usable later when create an option container
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyOptions()
     {
@@ -136,7 +130,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     /**
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
-     * @since 2.0.0
      */
     public function getImage()
     {
@@ -150,7 +143,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param null|int $frameWidth
      * @param null|int $frameHeight
      * @return void
-     * @since 2.0.0
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -207,7 +199,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
-     * @since 2.0.0
      */
     public function rotate($angle)
     {
@@ -229,7 +220,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $right
      * @param int $bottom
      * @return bool
-     * @since 2.0.0
      */
     public function crop($top = 0, $left = 0, $right = 0, $bottom = 0)
     {
@@ -258,7 +248,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
@@ -348,7 +337,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @return void
      * @throws \Exception If some of dependencies are missing
-     * @since 2.0.0
      */
     public function checkDependencies()
     {
@@ -361,7 +349,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Reassign image dimensions
      *
      * @return void
-     * @since 2.0.0
      */
     public function refreshImageDimensions()
     {
@@ -372,7 +359,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Standard destructor. Destroy stored information about image
-     * @since 2.0.0
      */
     public function __destruct()
     {
@@ -383,7 +369,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Destroy stored information about image
      *
      * @return $this
-     * @since 2.0.0
      */
     public function destroy()
     {
@@ -401,7 +386,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $x
      * @param int $y
      * @return array
-     * @since 2.0.0
      */
     public function getColorAt($x, $y)
     {
@@ -422,7 +406,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @throws \LogicException
      * @return true
-     * @since 2.0.0
      */
     protected function _checkCanProcess()
     {
@@ -438,7 +421,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $text
      * @param string $font
      * @return \Magento\Framework\Image\Adapter\AbstractAdapter
-     * @since 2.0.0
      */
     public function createPngFromString($text, $font = '')
     {
@@ -480,7 +462,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param mixed $files
      * @return \Imagick
-     * @since 2.0.0
      */
     protected function _getImagickObject($files = null)
     {
@@ -491,7 +472,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Get ImagickDraw object
      *
      * @return \ImagickDraw
-     * @since 2.0.0
      */
     protected function _getImagickDrawObject()
     {
@@ -503,7 +483,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string|null $color
      * @return \ImagickPixel
-     * @since 2.0.0
      */
     protected function _getImagickPixelObject($color = null)
     {

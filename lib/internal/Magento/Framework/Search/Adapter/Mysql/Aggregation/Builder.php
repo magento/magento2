@@ -16,31 +16,26 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Builder
 {
     /**
      * @var DataProviderContainer
-     * @since 2.0.0
      */
     private $dataProviderContainer;
 
     /**
      * @var Builder\Container
-     * @since 2.0.0
      */
     private $aggregationContainer;
 
     /**
      * @var EntityMetadata
-     * @since 2.0.0
      */
     private $entityMetadata;
 
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
@@ -56,7 +51,6 @@ class Builder
      * @param AggregationContainer $aggregationContainer
      * @param EntityMetadata $entityMetadata
      * @param AggregationResolverInterface $aggregationResolver
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -77,7 +71,6 @@ class Builder
      * @param Table $documentsTable
      * @param array $documents
      * @return array
-     * @since 2.0.0
      */
     public function build(RequestInterface $request, Table $documentsTable, array $documents = [])
     {
@@ -89,7 +82,6 @@ class Builder
      * @param Table $documentsTable
      * @param array $documents
      * @return array
-     * @since 2.0.0
      */
     private function processAggregations(RequestInterface $request, Table $documentsTable, $documents)
     {

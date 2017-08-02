@@ -13,26 +13,22 @@ use Magento\Framework\Phrase;
 /**
  * Class \Magento\Framework\Webapi\Rest\Request\Deserializer\Json
  *
- * @since 2.0.0
  */
 class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
     /**
      * @var \Magento\Framework\Json\Decoder
-     * @since 2.0.0
      */
     protected $decoder;
 
     /**
      * @var State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @param \Magento\Framework\Json\Decoder $decoder
      * @param \Magento\Framework\App\State $appState
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Json\Decoder $decoder, State $appState)
     {
@@ -47,7 +43,6 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
      * @return array|null Return NULL if content is invalid.
      * @throws \InvalidArgumentException
      * @throws \Magento\Framework\Webapi\Exception If decoding error was encountered.
-     * @since 2.0.0
      */
     public function deserialize($encodedBody)
     {

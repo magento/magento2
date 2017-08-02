@@ -14,19 +14,16 @@ use Magento\Framework\View\Url\CssResolver;
  * Support of notation "{{variable}}" in CSS-files
  *
  * Used to replace placeholder variables (such as {{base_url_path}}) with dynamic values.
- * @since 2.0.0
  */
 class VariableNotation implements Asset\PreProcessorInterface
 {
     /**
      * @var \Magento\Framework\View\Url\CssResolver
-     * @since 2.0.0
      */
     private $cssResolver;
 
     /**
      * @var NotationResolver\Variable
-     * @since 2.0.0
      */
     private $notationResolver;
 
@@ -35,7 +32,6 @@ class VariableNotation implements Asset\PreProcessorInterface
      *
      * @param CssResolver $cssResolver
      * @param NotationResolver\Variable $notationResolver
-     * @since 2.0.0
      */
     public function __construct(
         CssResolver $cssResolver,
@@ -47,7 +43,6 @@ class VariableNotation implements Asset\PreProcessorInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function process(Chain $chain)
     {

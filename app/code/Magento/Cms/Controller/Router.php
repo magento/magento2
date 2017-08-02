@@ -7,13 +7,11 @@ namespace Magento\Cms\Controller;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
     /**
      * @var \Magento\Framework\App\ActionFactory
-     * @since 2.0.0
      */
     protected $actionFactory;
 
@@ -21,7 +19,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
@@ -29,7 +26,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -37,7 +33,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Page factory
      *
      * @var \Magento\Cms\Model\PageFactory
-     * @since 2.0.0
      */
     protected $_pageFactory;
 
@@ -45,7 +40,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Config primary
      *
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
@@ -53,7 +47,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Url
      *
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_url;
 
@@ -61,7 +54,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Response
      *
      * @var \Magento\Framework\App\ResponseInterface
-     * @since 2.0.0
      */
     protected $_response;
 
@@ -72,7 +64,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResponseInterface $response
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\ActionFactory $actionFactory,
@@ -95,7 +86,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ActionInterface|null
-     * @since 2.0.0
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {

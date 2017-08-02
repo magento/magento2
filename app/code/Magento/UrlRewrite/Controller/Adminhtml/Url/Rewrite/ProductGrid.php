@@ -9,7 +9,6 @@ namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 /**
  * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\ProductGrid
  *
- * @since 2.0.0
  */
 class ProductGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
@@ -17,7 +16,6 @@ class ProductGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      * Ajax products grid action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

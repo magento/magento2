@@ -10,7 +10,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
@@ -18,7 +17,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Rating limit
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_ratingLimit = 5;
 
@@ -26,7 +24,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Selected columns
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_selectedColumns = [];
 
@@ -34,7 +31,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Tables per period
      *
      * @var array
-     * @since 2.0.0
      */
     protected $tableForPeriod = [
         'daily'   => 'sales_bestsellers_aggregated_daily',
@@ -49,7 +45,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -67,7 +62,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Return ordered filed
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getOrderedField()
     {
@@ -79,7 +73,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      *
      * @param string $period
      * @return mixed
-     * @since 2.0.0
      */
     public function getTableByAggregationPeriod($period)
     {
@@ -90,7 +83,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Retrieve selected columns
      *
      * @return array
-     * @since 2.0.0
      */
     protected function _getSelectedColumns()
     {
@@ -123,7 +115,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @param string $from
      * @param string $to
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected function _makeBoundarySelect($from, $to)
     {
@@ -156,7 +147,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Init collection select
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _applyAggregatedTable()
     {
@@ -208,7 +198,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Get SQL for get record count
      *
      * @return \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     public function getSelectCountSql()
     {
@@ -223,7 +212,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      *
      * @param  int|int[] $storeIds
      * @return $this
-     * @since 2.0.0
      */
     public function addStoreRestrictions($storeIds)
     {
@@ -256,7 +244,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _beforeLoad()
     {

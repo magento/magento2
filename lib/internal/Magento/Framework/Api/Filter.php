@@ -13,7 +13,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
  *
  * @api
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Filter extends AbstractSimpleObject
 {
@@ -28,7 +27,6 @@ class Filter extends AbstractSimpleObject
      * Get field
      *
      * @return string
-     * @since 2.0.0
      */
     public function getField()
     {
@@ -40,7 +38,6 @@ class Filter extends AbstractSimpleObject
      *
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     public function setField($field)
     {
@@ -51,7 +48,6 @@ class Filter extends AbstractSimpleObject
      * Get value
      *
      * @return string
-     * @since 2.0.0
      */
     public function getValue()
     {
@@ -63,7 +59,6 @@ class Filter extends AbstractSimpleObject
      *
      * @param string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setValue($value)
     {
@@ -74,7 +69,6 @@ class Filter extends AbstractSimpleObject
      * Get condition type
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getConditionType()
     {
@@ -86,7 +80,6 @@ class Filter extends AbstractSimpleObject
      *
      * @param string $conditionType
      * @return $this
-     * @since 2.0.0
      */
     public function setConditionType($conditionType)
     {

@@ -19,25 +19,21 @@ use Magento\Framework\App\ObjectManager;
  * Class SearchResult
  * Generic Search Result
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class SearchResult extends AbstractCollection implements Api\Search\SearchResultInterface
 {
     /**
      * @var Api\Search\AggregationInterface
-     * @since 2.0.0
      */
     protected $aggregations;
 
     /**
      * @var Api\Search\SearchCriteriaInterface
-     * @since 2.0.0
      */
     protected $searchCriteria;
 
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $totalCount;
 
@@ -70,7 +66,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param null|string $identifierName
      * @param null|string $connectionName
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -117,7 +112,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
 
     /**
      * @return \Magento\Framework\Api\Search\AggregationInterface
-     * @since 2.0.0
      */
     public function getAggregations()
     {
@@ -141,7 +135,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     /**
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return void
-     * @since 2.0.0
      */
     public function setAggregations($aggregations)
     {
@@ -150,7 +143,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
 
     /**
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface|null
-     * @since 2.0.0
      */
     public function getSearchCriteria()
     {
@@ -161,7 +153,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -171,7 +162,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getTotalCount()
     {
@@ -184,7 +174,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     /**
      * @param int $totalCount
      * @return $this
-     * @since 2.0.0
      */
     public function setTotalCount($totalCount)
     {
@@ -197,7 +186,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      *
      * @param Document[] $items
      * @return $this
-     * @since 2.0.0
      */
     public function setItems(array $items = null)
     {

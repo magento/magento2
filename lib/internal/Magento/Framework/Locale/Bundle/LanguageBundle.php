@@ -8,13 +8,11 @@ namespace Magento\Framework\Locale\Bundle;
 /**
  * Class \Magento\Framework\Locale\Bundle\LanguageBundle
  *
- * @since 2.0.0
  */
 class LanguageBundle extends DataBundle
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $path = 'ICUDATA-lang';
 }

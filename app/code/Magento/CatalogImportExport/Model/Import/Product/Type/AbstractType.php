@@ -17,7 +17,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractType
 {
@@ -25,7 +24,6 @@ abstract class AbstractType
      * Common attributes cache
      *
      * @var array
-     * @since 2.0.0
      */
     public static $commonAttributesCache = [];
 
@@ -33,7 +31,6 @@ abstract class AbstractType
      * Attribute Code to Id cache
      *
      * @var array
-     * @since 2.0.0
      */
     public static $attributeCodeToId = [];
 
@@ -51,7 +48,6 @@ abstract class AbstractType
      * ...
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributes = [];
 
@@ -59,7 +55,6 @@ abstract class AbstractType
      * Attributes' codes which will be allowed anyway, independently from its visibility property.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_forcedAttributesCodes = [];
 
@@ -67,7 +62,6 @@ abstract class AbstractType
      * Attributes with index (not label) value.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_indexValueAttributes = [];
 
@@ -75,7 +69,6 @@ abstract class AbstractType
      * Validation failure entity specific message template definitions
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_messageTemplates = [];
 
@@ -83,7 +76,6 @@ abstract class AbstractType
      * Validation failure general message template definitions
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_genericMessageTemplates = [
         RowValidatorInterface::ERROR_INVALID_WEIGHT => 'Weight value is incorrect',
@@ -94,7 +86,6 @@ abstract class AbstractType
      * Column names that holds values with particular meaning.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_specialAttributes = [];
 
@@ -102,7 +93,6 @@ abstract class AbstractType
      * Custom entity type fields mapping.
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_customFieldsMapping = [];
 
@@ -110,7 +100,6 @@ abstract class AbstractType
      * Product entity object.
      *
      * @var \Magento\CatalogImportExport\Model\Import\Product
-     * @since 2.0.0
      */
     protected $_entityModel;
 
@@ -118,31 +107,26 @@ abstract class AbstractType
      * Product type (simple, etc.).
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_type;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
-     * @since 2.0.0
      */
     protected $_attrSetColFac;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @since 2.0.0
      */
     protected $_prodAttrColFac;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
-     * @since 2.0.0
      */
     protected $_resource;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.0.0
      */
     protected $connection;
 
@@ -171,7 +155,6 @@ abstract class AbstractType
      * @param array $params
      * @param MetadataPool|null $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -207,7 +190,6 @@ abstract class AbstractType
     /**
      * @param array $templateCollection
      * @return $this
-     * @since 2.0.0
      */
     protected function initMessageTemplates(array $templateCollection)
     {
@@ -226,7 +208,6 @@ abstract class AbstractType
      * @param mixed $attribute
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
     {
@@ -242,7 +223,6 @@ abstract class AbstractType
      * @param string $attributeCode
      * @param string $attributeSet
      * @return array
-     * @since 2.0.0
      */
     public function retrieveAttribute($attributeCode, $attributeSet)
     {
@@ -257,7 +237,6 @@ abstract class AbstractType
      *
      * @param array|string $attrSetData Product row data or simply attribute set name.
      * @return array
-     * @since 2.0.0
      */
     protected function _getProductAttributes($attrSetData)
     {
@@ -272,7 +251,6 @@ abstract class AbstractType
      * Initialize attributes parameters for all attributes' sets.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAttributes()
     {
@@ -321,7 +299,6 @@ abstract class AbstractType
      * @param string $attributeSetName
      * @param array $attributeIds
      * @return void
-     * @since 2.0.0
      */
     protected function attachAttributesById($attributeSetName, $attributeIds)
     {
@@ -366,7 +343,6 @@ abstract class AbstractType
      *
      * @param string $attributeCode
      * @return mixed
-     * @since 2.0.0
      */
     public function retrieveAttributeFromCache($attributeCode)
     {
@@ -387,7 +363,6 @@ abstract class AbstractType
      * @param string $optionValue
      *
      * @return $this
-     * @since 2.0.0
      */
     public function addAttributeOption($code, $optionKey, $optionValue)
     {
@@ -405,7 +380,6 @@ abstract class AbstractType
      * @param string $attrCode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _isAttributeRequiredCheckNeeded($attrCode)
     {
@@ -419,7 +393,6 @@ abstract class AbstractType
      * @param int $rowNum
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _isParticularAttributesValid(array $rowData, $rowNum)
     {
@@ -431,7 +404,6 @@ abstract class AbstractType
      *
      * @param string $value
      * @return int
-     * @since 2.0.0
      */
     protected function _isPriceCorr($value)
     {
@@ -442,7 +414,6 @@ abstract class AbstractType
      * Particular attribute names getter.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getParticularAttributes()
     {
@@ -453,7 +424,6 @@ abstract class AbstractType
      * Return entity custom Fields mapping.
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getCustomFieldsMapping()
     {
@@ -468,7 +438,6 @@ abstract class AbstractType
      * @param bool $isNewProduct Optional
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
@@ -510,7 +479,6 @@ abstract class AbstractType
      * Additional check for model availability. If method returns FALSE - model is not suitable for data processing.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isSuitable()
     {
@@ -526,7 +494,6 @@ abstract class AbstractType
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
@@ -563,7 +530,6 @@ abstract class AbstractType
      *
      * @param array $rowData
      * @return array
-     * @since 2.0.0
      */
     public function clearEmptyData(array $rowData)
     {
@@ -579,7 +545,6 @@ abstract class AbstractType
      * Save product type specific data.
      *
      * @return $this
-     * @since 2.0.0
      */
     public function saveData()
     {

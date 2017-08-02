@@ -7,19 +7,16 @@ namespace Magento\Payment\Model\Cart\SalesModel;
 
 /**
  * Factory for creating payment cart sales models
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -32,7 +29,6 @@ class Factory
      * @param \Magento\Quote\Api\Data\CartInterface $salesModel
      * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($salesModel)
     {

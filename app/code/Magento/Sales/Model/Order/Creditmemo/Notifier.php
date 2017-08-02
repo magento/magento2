@@ -9,19 +9,19 @@ namespace Magento\Sales\Model\Order\Creditmemo;
  * CreditMemo notifier.
  *
  * @api
- * @since 2.2.0
+ * @since 2.1.3
  */
 class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterface
 {
     /**
      * @var \Magento\Sales\Model\Order\CreditMemo\SenderInterface[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $senders;
 
     /**
      * @param \Magento\Sales\Model\Order\CreditMemo\SenderInterface[] $senders
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(array $senders = [])
     {
@@ -30,7 +30,7 @@ class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterfac
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

@@ -12,7 +12,6 @@ use Magento\Framework\Profiler\DriverInterface;
 /**
  * Class \Magento\Framework\Profiler\Driver\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
@@ -20,7 +19,6 @@ class Factory
      * Default driver type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultDriverType;
 
@@ -28,7 +26,6 @@ class Factory
      * Default driver class prefix
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultDriverPrefix;
 
@@ -37,7 +34,6 @@ class Factory
      *
      * @param string $defaultDriverPrefix
      * @param string $defaultDriverType
-     * @since 2.0.0
      */
     public function __construct(
         $defaultDriverPrefix = 'Magento\Framework\Profiler\Driver\\',
@@ -53,7 +49,6 @@ class Factory
      * @param array $config|null
      * @return DriverInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create(array $config = null)
     {

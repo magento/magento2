@@ -9,7 +9,6 @@ namespace Magento\Directory\Model\ResourceModel\Country;
  * Directory country format resource model
  *
  * @api
- * @since 2.0.0
  */
 class Format extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Format extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -28,7 +26,6 @@ class Format extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return \Magento\Directory\Model\ResourceModel\Country\Format
-     * @since 2.0.0
      */
     protected function _initUniqueFields()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
  * Gift Message Observer Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class SalesEventOrderToQuoteObserver implements ObserverInterface
 {
@@ -19,20 +18,17 @@ class SalesEventOrderToQuoteObserver implements ObserverInterface
      * Gift message message
      *
      * @var \Magento\GiftMessage\Helper\Message|null
-     * @since 2.0.0
      */
     protected $_giftMessageMessage = null;
 
     /**
      * @var \Magento\GiftMessage\Model\MessageFactory
-     * @since 2.0.0
      */
     protected $_messageFactory;
 
     /**
      * @param \Magento\GiftMessage\Model\MessageFactory $messageFactory
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\GiftMessage\Model\MessageFactory $messageFactory,
@@ -47,7 +43,6 @@ class SalesEventOrderToQuoteObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @since 2.0.0
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

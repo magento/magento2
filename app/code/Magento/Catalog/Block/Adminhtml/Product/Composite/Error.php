@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
  * Adminhtml block for showing product options fieldsets
  *
  * @api
- * @since 2.0.0
  */
 class Error extends \Magento\Framework\View\Element\Template
 {
@@ -17,13 +16,11 @@ class Error extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -32,7 +29,6 @@ class Error extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,7 +46,6 @@ class Error extends \Magento\Framework\View\Element\Template
      * configuration controls
      *
      * @return string
-     * @since 2.0.0
      */
     public function _toHtml()
     {

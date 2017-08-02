@@ -13,7 +13,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEntity
 {
@@ -26,7 +25,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -34,7 +32,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Entity type id
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_entityTypeId;
 
@@ -42,7 +39,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Attributes with index (not label) value
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_indexValueAttributes = [];
 
@@ -50,7 +46,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Website code-to-ID
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_websiteCodeToId = [];
 
@@ -58,7 +53,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * All stores code-ID pairs.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_storeCodeToId = [];
 
@@ -73,7 +67,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      *  ...
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributes = [];
 
@@ -81,7 +74,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Attributes collection
      *
      * @var \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     protected $_attributeCollection;
 
@@ -98,7 +90,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -133,7 +124,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      *
      * @param string $websiteCode
      * @return int|false
-     * @since 2.0.0
      */
     public function getWebsiteId($websiteCode)
     {
@@ -149,7 +139,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      *
      * @param bool $withDefault
      * @return $this
-     * @since 2.0.0
      */
     protected function _initWebsites($withDefault = false)
     {
@@ -165,7 +154,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      *
      * @param bool $withDefault
      * @return $this
-     * @since 2.0.0
      */
     protected function _initStores($withDefault = false)
     {
@@ -180,7 +168,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Initialize entity attributes
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initAttributes()
     {
@@ -205,7 +192,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Entity type ID getter
      *
      * @return int
-     * @since 2.0.0
      */
     public function getEntityTypeId()
     {
@@ -218,7 +204,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param array $indexAttributes OPTIONAL Additional attribute codes with index values.
      * @return array
-     * @since 2.0.0
      */
     public function getAttributeOptions(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
@@ -262,7 +247,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * Get attribute collection
      *
      * @return \Magento\Framework\Data\Collection
-     * @since 2.0.0
      */
     public function getAttributeCollection()
     {

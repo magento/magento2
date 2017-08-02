@@ -16,31 +16,26 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
- * @since 2.0.0
  */
 class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $_columnCount = 4;
 
     /**
      * @var  \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     protected $_items;
 
     /**
      * @var Collection
-     * @since 2.0.0
      */
     protected $_itemCollection;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_itemLimits = [];
 
@@ -48,7 +43,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
-     * @since 2.0.0
      */
     protected $_checkoutSession;
 
@@ -56,7 +50,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_catalogProductVisibility;
 
@@ -64,13 +57,11 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      * Checkout cart
      *
      * @var \Magento\Checkout\Model\ResourceModel\Cart
-     * @since 2.0.0
      */
     protected $_checkoutCart;
 
     /**
      * @var \Magento\Framework\Module\Manager
-     * @since 2.0.0
      */
     protected $moduleManager;
 
@@ -81,7 +72,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -103,7 +93,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareData()
     {
@@ -134,7 +123,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {
@@ -144,7 +132,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return Collection
-     * @since 2.0.0
      */
     public function getItemCollection()
     {
@@ -160,7 +147,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return \Magento\Framework\DataObject[]
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -172,7 +158,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return float
-     * @since 2.0.0
      */
     public function getRowCount()
     {
@@ -182,7 +167,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     /**
      * @param string $columns
      * @return $this
-     * @since 2.0.0
      */
     public function setColumnCount($columns)
     {
@@ -194,7 +178,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return int
-     * @since 2.0.0
      */
     public function getColumnCount()
     {
@@ -203,7 +186,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return void
-     * @since 2.0.0
      */
     public function resetItemsIterator()
     {
@@ -213,7 +195,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * @return mixed
-     * @since 2.0.0
      */
     public function getIterableItem()
     {
@@ -229,7 +210,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      * @param string $type
      * @param int $limit
      * @return \Magento\Catalog\Block\Product\ProductList\Upsell
-     * @since 2.0.0
      */
     public function setItemLimit($type, $limit)
     {
@@ -242,7 +222,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     /**
      * @param string $type
      * @return array|int
-     * @since 2.0.0
      */
     public function getItemLimit($type = '')
     {
@@ -260,7 +239,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      * Return identifiers for produced content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getIdentities()
     {

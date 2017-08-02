@@ -16,25 +16,21 @@ use Psr\Log\LoggerInterface;
 /**
  * Class \Magento\Checkout\Controller\Sidebar\UpdateItemQty
  *
- * @since 2.0.0
  */
 class UpdateItemQty extends Action
 {
     /**
      * @var Sidebar
-     * @since 2.0.0
      */
     protected $sidebar;
 
     /**
      * @var LoggerInterface
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -44,7 +40,6 @@ class UpdateItemQty extends Action
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -60,7 +55,6 @@ class UpdateItemQty extends Action
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -84,7 +78,6 @@ class UpdateItemQty extends Action
      *
      * @param string $error
      * @return Http
-     * @since 2.0.0
      */
     protected function jsonResponse($error = '')
     {

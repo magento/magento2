@@ -8,7 +8,6 @@ namespace Magento\Customer\Api;
 /**
  * Customer group CRUD interface
  * @api
- * @since 2.0.0
  */
 interface GroupRepositoryInterface
 {
@@ -22,7 +21,6 @@ interface GroupRepositoryInterface
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      *      If saving customer group with customer group code that is used by an existing customer group
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\Customer\Api\Data\GroupInterface $group);
 
@@ -33,7 +31,6 @@ interface GroupRepositoryInterface
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($id);
 
@@ -50,7 +47,6 @@ interface GroupRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\GroupSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -61,7 +57,6 @@ interface GroupRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\StateException If customer group cannot be deleted
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function delete(\Magento\Customer\Api\Data\GroupInterface $group);
 
@@ -73,7 +68,6 @@ interface GroupRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException If customer group cannot be deleted
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($id);
 }

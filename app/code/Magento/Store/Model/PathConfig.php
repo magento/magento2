@@ -8,25 +8,21 @@ namespace Magento\Store\Model;
 /**
  * Class \Magento\Store\Model\PathConfig
  *
- * @since 2.0.0
  */
 class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Url\SecurityInfoInterface
-     * @since 2.0.0
      */
     private $urlSecurityInfo;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     private $storeManager;
 
@@ -34,7 +30,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -51,7 +46,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return string
-     * @since 2.0.0
      */
     public function getCurrentSecureUrl(\Magento\Framework\App\RequestInterface $request)
     {
@@ -64,7 +58,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      *
      * @param string $path
      * @return bool
-     * @since 2.0.0
      */
     public function shouldBeSecure($path)
     {
@@ -91,7 +84,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      * {@inheritdoc}
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultPath()
     {

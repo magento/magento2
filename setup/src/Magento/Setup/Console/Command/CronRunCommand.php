@@ -14,31 +14,26 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run scheduled jobs, this command should be run as a cron job
- * @since 2.0.0
  */
 class CronRunCommand extends AbstractSetupCommand
 {
     /**
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     protected $deploymentConfig;
 
     /**
      * @var Queue
-     * @since 2.0.0
      */
     protected $queue;
 
     /**
      * @var Status
-     * @since 2.0.0
      */
     protected $status;
 
     /**
      * @var ReadinessCheck
-     * @since 2.0.0
      */
     protected $readinessCheck;
 
@@ -47,7 +42,6 @@ class CronRunCommand extends AbstractSetupCommand
      * @param Queue $queue
      * @param ReadinessCheck $readinessCheck
      * @param Status $status
-     * @since 2.0.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -66,7 +60,6 @@ class CronRunCommand extends AbstractSetupCommand
      * Initialization of the command
      *
      * @return void
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -78,7 +71,6 @@ class CronRunCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -116,7 +108,6 @@ class CronRunCommand extends AbstractSetupCommand
      * Check if Cron job can be run
      *
      * @return bool
-     * @since 2.0.0
      */
     private function checkRun()
     {

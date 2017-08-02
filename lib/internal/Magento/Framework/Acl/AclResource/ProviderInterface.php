@@ -9,7 +9,6 @@ namespace Magento\Framework\Acl\AclResource;
  * Acl resources provider interface
  *
  * @api
- * @since 2.0.0
  */
 interface ProviderInterface
 {
@@ -17,7 +16,6 @@ interface ProviderInterface
      * Retrieve ACL resources
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAclResources();
 }

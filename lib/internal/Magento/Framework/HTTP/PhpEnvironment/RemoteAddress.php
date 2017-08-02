@@ -7,7 +7,6 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 
 /**
  * Library for working with client ip address
- * @since 2.0.0
  */
 class RemoteAddress
 {
@@ -15,7 +14,6 @@ class RemoteAddress
      * Request object
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
@@ -23,20 +21,17 @@ class RemoteAddress
      * Remote address cache
      *
      * @var string
-     * @since 2.0.0
      */
     protected $remoteAddress;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $alternativeHeaders;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param array $alternativeHeaders
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\RequestInterface $httpRequest, array $alternativeHeaders = [])
     {
@@ -49,7 +44,6 @@ class RemoteAddress
      *
      * @param bool $ipToLong converting IP to long format
      * @return string IPv4|long
-     * @since 2.0.0
      */
     public function getRemoteAddress($ipToLong = false)
     {
@@ -82,7 +76,6 @@ class RemoteAddress
      * Returns internet host name corresponding to remote server
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getRemoteHost()
     {

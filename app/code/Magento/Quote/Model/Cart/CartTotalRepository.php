@@ -16,7 +16,6 @@ use Magento\Quote\Api\CouponManagementInterface;
 /**
  * Cart totals data object.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class CartTotalRepository implements CartTotalRepositoryInterface
 {
@@ -24,7 +23,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      * Cart totals factory.
      *
      * @var Api\Data\TotalsInterfaceFactory
-     * @since 2.0.0
      */
     private $totalsFactory;
 
@@ -32,31 +30,26 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     private $quoteRepository;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * @since 2.0.0
      */
     private $dataObjectHelper;
 
     /**
      * @var ConfigurationPool
-     * @since 2.0.0
      */
     private $itemConverter;
 
     /**
      * @var CouponManagementInterface
-     * @since 2.0.0
      */
     protected $couponService;
 
     /**
      * @var TotalsConverter
-     * @since 2.0.0
      */
     protected $totalsConverter;
 
@@ -67,7 +60,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      * @param CouponManagementInterface $couponService
      * @param TotalsConverter $totalsConverter
      * @param ItemConverter $converter
-     * @since 2.0.0
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
@@ -90,7 +82,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      *
      * @param int $cartId The cart ID.
      * @return Totals Quote totals data.
-     * @since 2.0.0
      */
     public function get($cartId)
     {

@@ -10,7 +10,6 @@ use Magento\Backend\App\Action;
 /**
  * Catalog product controller
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 2.0.0
  */
 abstract class Product extends \Magento\Backend\App\Action
 {
@@ -23,14 +22,12 @@ abstract class Product extends \Magento\Backend\App\Action
 
     /**
      * @var Product\Builder
-     * @since 2.0.0
      */
     protected $productBuilder;
 
     /**
      * @param Action\Context $context
      * @param Product\Builder $productBuilder
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

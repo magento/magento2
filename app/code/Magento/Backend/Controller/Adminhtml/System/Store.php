@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem;
  * Store controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 abstract class Store extends Action
 {
@@ -29,25 +28,21 @@ abstract class Store extends Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
-     * @since 2.0.0
      */
     protected $filterManager;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     * @since 2.0.0
      */
     protected $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -57,7 +52,6 @@ abstract class Store extends Action
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -77,7 +71,6 @@ abstract class Store extends Action
      * Init actions
      *
      * @return \Magento\Backend\Model\View\Result\Page
-     * @since 2.0.0
      */
     protected function createPage()
     {
@@ -93,7 +86,6 @@ abstract class Store extends Action
      * Backup database
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function _backupDatabase()
     {
@@ -130,7 +122,6 @@ abstract class Store extends Action
      *
      * @param string $typeTitle
      * @return $this
-     * @since 2.0.0
      */
     protected function _addDeletionNotice($typeTitle)
     {

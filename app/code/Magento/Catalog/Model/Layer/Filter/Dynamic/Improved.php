@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class \Magento\Catalog\Model\Layer\Filter\Dynamic\Improved
  *
- * @since 2.0.0
  */
 class Improved implements AlgorithmInterface
 {
@@ -23,31 +22,26 @@ class Improved implements AlgorithmInterface
 
     /**
      * @var Algorithm
-     * @since 2.0.0
      */
     private $algorithm;
 
     /**
      * @var \Magento\Catalog\Model\Layer
-     * @since 2.0.0
      */
     private $layer;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.0.0
      */
     private $scopeConfig;
 
     /**
      * @var Render
-     * @since 2.0.0
      */
     private $render;
 
     /**
      * @var IntervalFactory
-     * @since 2.0.0
      */
     private $intervalFactory;
 
@@ -57,7 +51,6 @@ class Improved implements AlgorithmInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param Render $render
      * @param IntervalFactory $intervalFactory
-     * @since 2.0.0
      */
     public function __construct(
         Algorithm $algorithm,
@@ -75,7 +68,6 @@ class Improved implements AlgorithmInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getItemsData(array $intervals = [], $additionalRequestData = '')
     {
@@ -115,7 +107,6 @@ class Improved implements AlgorithmInterface
      * Get interval division limit
      *
      * @return int
-     * @since 2.0.0
      */
     private function getIntervalDivisionLimit()
     {

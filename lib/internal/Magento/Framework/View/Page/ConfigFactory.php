@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Page;
 
 /**
  * Factory class for \Magento\Framework\View\Page\Config
- * @since 2.0.0
  */
 class ConfigFactory
 {
@@ -16,7 +15,6 @@ class ConfigFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager = null;
 
@@ -24,7 +22,6 @@ class ConfigFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.0.0
      */
     protected $instanceName = null;
 
@@ -33,7 +30,6 @@ class ConfigFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -48,7 +44,6 @@ class ConfigFactory
      *
      * @param array $data
      * @return \Magento\Framework\View\Page\Config
-     * @since 2.0.0
      */
     public function create(array $data = [])
     {

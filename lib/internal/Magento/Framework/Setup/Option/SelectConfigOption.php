@@ -7,7 +7,6 @@ namespace Magento\Framework\Setup\Option;
 
 /**
  * Select option in deployment config tool
- * @since 2.0.0
  */
 class SelectConfigOption extends AbstractConfigOption
 {
@@ -18,12 +17,7 @@ class SelectConfigOption extends AbstractConfigOption
     const FRONTEND_WIZARD_SELECT = 'select';
     /**#@- */
 
-    /**
-     * Available options
-     *
-     * @var array
-     * @since 2.0.0
-     */
+    /**#@- */
     private $selectOptions;
 
     /**
@@ -37,7 +31,6 @@ class SelectConfigOption extends AbstractConfigOption
      * @param string|null $defaultValue
      * @param string|array|null $shortCut
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function __construct(
         $name,
@@ -70,7 +63,6 @@ class SelectConfigOption extends AbstractConfigOption
      * Get available options
      *
      * @return array
-     * @since 2.0.0
      */
     public function getSelectOptions()
     {
@@ -83,7 +75,6 @@ class SelectConfigOption extends AbstractConfigOption
      * @param mixed $data
      * @return void
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function validate($data)
     {

@@ -15,7 +15,6 @@ use Magento\Framework\Validator\EmailAddress;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractData
 {
@@ -23,7 +22,6 @@ abstract class AbstractData
      * Request Scope name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_requestScope;
 
@@ -31,7 +29,6 @@ abstract class AbstractData
      * Scope visibility flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_requestScopeOnly = true;
 
@@ -39,7 +36,6 @@ abstract class AbstractData
      * Is AJAX request flag
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_isAjax = false;
 
@@ -48,7 +44,6 @@ abstract class AbstractData
      * Needed for depends attributes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_extractedData = [];
 
@@ -56,43 +51,36 @@ abstract class AbstractData
      * Date filter format
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_dateFilterFormat;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Customer\Api\Data\AttributeMetadataInterface
-     * @since 2.0.0
      */
     protected $_attribute;
 
     /**
      * @var string|int|bool
-     * @since 2.0.0
      */
     protected $_value;
 
     /**
      * @var  string
-     * @since 2.0.0
      */
     protected $_entityTypeCode;
 
@@ -104,7 +92,6 @@ abstract class AbstractData
      * @param string|int|bool $value
      * @param string $entityTypeCode
      * @param bool $isAjax
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -129,7 +116,6 @@ abstract class AbstractData
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getAttribute()
     {
@@ -144,7 +130,6 @@ abstract class AbstractData
      *
      * @param string $scope
      * @return $this
-     * @since 2.0.0
      */
     public function setRequestScope($scope)
     {
@@ -158,7 +143,6 @@ abstract class AbstractData
      *
      * @param boolean $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setRequestScopeOnly($flag)
     {
@@ -171,7 +155,6 @@ abstract class AbstractData
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function setExtractedData(array $data)
     {
@@ -184,7 +167,6 @@ abstract class AbstractData
      *
      * @param string $index
      * @return array|null
-     * @since 2.0.0
      */
     public function getExtractedData($index = null)
     {
@@ -202,7 +184,6 @@ abstract class AbstractData
      *
      * @param string $value
      * @return string|bool
-     * @since 2.0.0
      */
     protected function _applyInputFilter($value)
     {
@@ -222,7 +203,6 @@ abstract class AbstractData
      * Return Data Form Input/Output Filter
      *
      * @return \Magento\Framework\Data\Form\Filter\FilterInterface|false
-     * @since 2.0.0
      */
     protected function _getFormFilter()
     {
@@ -244,7 +224,6 @@ abstract class AbstractData
      *
      * @param string|null|false $format
      * @return $this|string
-     * @since 2.0.0
      */
     protected function _dateFilterFormat($format = null)
     {
@@ -269,7 +248,6 @@ abstract class AbstractData
      *
      * @param string $value
      * @return string
-     * @since 2.0.0
      */
     protected function _applyOutputFilter($value)
     {
@@ -288,7 +266,6 @@ abstract class AbstractData
      * @return array|true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function _validateInputRule($value)
     {
@@ -466,7 +443,6 @@ abstract class AbstractData
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsAjaxRequest()
     {
@@ -478,7 +454,6 @@ abstract class AbstractData
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
-     * @since 2.0.0
      */
     protected function _getRequestValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -518,7 +493,6 @@ abstract class AbstractData
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return array|string
-     * @since 2.0.0
      */
     abstract public function extractValue(\Magento\Framework\App\RequestInterface $request);
 
@@ -528,7 +502,6 @@ abstract class AbstractData
      * @param array|string|null $value
      * @return array|bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     abstract public function validateValue($value);
 
@@ -537,7 +510,6 @@ abstract class AbstractData
      *
      * @param array|string $value
      * @return array|string|bool
-     * @since 2.0.0
      */
     abstract public function compactValue($value);
 
@@ -546,7 +518,6 @@ abstract class AbstractData
      *
      * @param array|string $value
      * @return array|string|bool
-     * @since 2.0.0
      */
     abstract public function restoreValue($value);
 
@@ -555,7 +526,6 @@ abstract class AbstractData
      *
      * @param string $format
      * @return string|array
-     * @since 2.0.0
      */
     abstract public function outputValue(
         $format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT

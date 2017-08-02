@@ -7,7 +7,6 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Section extends AbstractComposite
 {
@@ -15,7 +14,6 @@ class Section extends AbstractComposite
      * Authorization service
      *
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
@@ -24,7 +22,6 @@ class Section extends AbstractComposite
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param Iterator $childrenIterator
      * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -40,7 +37,6 @@ class Section extends AbstractComposite
      * Retrieve section header css
      *
      * @return string
-     * @since 2.0.0
      */
     public function getHeaderCss()
     {
@@ -51,7 +47,6 @@ class Section extends AbstractComposite
      * Check whether section is allowed for current user
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -62,7 +57,6 @@ class Section extends AbstractComposite
      * Check whether element should be displayed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isVisible()
     {

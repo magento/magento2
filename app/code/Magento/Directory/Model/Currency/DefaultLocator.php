@@ -8,7 +8,6 @@ namespace Magento\Directory\Model\Currency;
 /**
  * Class \Magento\Directory\Model\Currency\DefaultLocator
  *
- * @since 2.0.0
  */
 class DefaultLocator
 {
@@ -16,7 +15,6 @@ class DefaultLocator
      * Config object
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_configuration;
 
@@ -24,14 +22,12 @@ class DefaultLocator
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
@@ -46,7 +42,6 @@ class DefaultLocator
      * @todo: Refactor to ScopeDefiner
      * @param \Magento\Framework\App\RequestInterface $request
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultCurrency(\Magento\Framework\App\RequestInterface $request)
     {

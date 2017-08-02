@@ -10,7 +10,6 @@ namespace Magento\Shipping\Block\Adminhtml\View;
  * Adminhtml sales item renderer
  *
  * @api
- * @since 2.0.0
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -18,7 +17,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve shipment model instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getShipment()
     {
@@ -29,7 +27,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve invoice order
      *
      * @return \Magento\Sales\Model\Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -40,7 +37,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve source
      *
      * @return \Magento\Sales\Model\Order\Shipment
-     * @since 2.0.0
      */
     public function getSource()
     {

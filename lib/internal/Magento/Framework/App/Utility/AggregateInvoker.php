@@ -8,13 +8,11 @@ namespace Magento\Framework\App\Utility;
 /**
  * Runs given callback across given array of data and collects all PhpUnit assertion results.
  * Should be used in case data provider is huge to minimize overhead.
- * @since 2.0.0
  */
 class AggregateInvoker
 {
     /**
      * @var \PHPUnit_Framework_TestCase
-     * @since 2.0.0
      */
     protected $_testCase;
 
@@ -24,14 +22,12 @@ class AggregateInvoker
      * Only data sets for failed assertions are gathered otherwise.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_options = ['verbose' => false];
 
     /**
      * @param \PHPUnit_Framework_TestCase $testCase
      * @param array $options
-     * @since 2.0.0
      */
     public function __construct($testCase, array $options = [])
     {
@@ -46,7 +42,6 @@ class AggregateInvoker
      * @param callable $callback
      * @param array[] $dataSource
      * @return void
-     * @since 2.0.0
      */
     public function __invoke(callable $callback, array $dataSource)
     {
@@ -80,7 +75,6 @@ class AggregateInvoker
      * @param string $dataSetName
      * @param mixed $dataSet
      * @return string
-     * @since 2.0.0
      */
     protected function prepareMessage(\Exception $exception, $dataSetName, $dataSet)
     {
@@ -105,7 +99,6 @@ class AggregateInvoker
      * @param array $results
      * @param int $passed
      * @return void
-     * @since 2.0.0
      */
     protected function processResults(array $results, $passed)
     {

@@ -8,7 +8,6 @@ namespace Magento\Framework\Code\Generator;
 /**
  * Interface \Magento\Framework\Code\Generator\CodeGeneratorInterface
  *
- * @since 2.0.0
  */
 interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
 {
@@ -17,7 +16,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param string $name
      * @return $this
-     * @since 2.0.0
      */
     public function setName($name);
 
@@ -26,7 +24,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param array $docBlock
      * @return $this
-     * @since 2.0.0
      */
     public function setClassDocBlock(array $docBlock);
 
@@ -35,7 +32,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param array $properties
      * @return $this
-     * @since 2.0.0
      */
     public function addProperties(array $properties);
 
@@ -44,7 +40,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param array $methods
      * @return $this
-     * @since 2.0.0
      */
     public function addMethods(array $methods);
 
@@ -53,7 +48,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param string $extendedClass
      * @return $this
-     * @since 2.0.0
      */
     public function setExtendedClass($extendedClass);
 
@@ -62,7 +56,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param array $interfaces
      * @return $this
-     * @since 2.0.0
      */
     public function setImplementedInterfaces(array $interfaces);
 
@@ -71,7 +64,6 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
      *
      * @param string $trait
      * @return $this
-     * @since 2.0.0
      */
     public function addTrait($trait);
 }

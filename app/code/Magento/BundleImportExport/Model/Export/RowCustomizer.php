@@ -15,7 +15,6 @@ use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class RowCustomizer
- * @since 2.0.0
  */
 class RowCustomizer implements RowCustomizerInterface
 {
@@ -43,7 +42,6 @@ class RowCustomizer implements RowCustomizerInterface
      * Mapping for bundle types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $typeMapping = [
         '0' => self::VALUE_DYNAMIC,
@@ -54,7 +52,6 @@ class RowCustomizer implements RowCustomizerInterface
      * Mapping for price views
      *
      * @var array
-     * @since 2.0.0
      */
     protected $priceViewMapping = [
         '0' => self::VALUE_PRICE_RANGE,
@@ -65,7 +62,6 @@ class RowCustomizer implements RowCustomizerInterface
      * Mapping for price types
      *
      * @var array
-     * @since 2.0.0
      */
     protected $priceTypeMapping = [
         '0' => self::VALUE_FIXED,
@@ -76,7 +72,6 @@ class RowCustomizer implements RowCustomizerInterface
      * Bundle product columns
      *
      * @var array
-     * @since 2.0.0
      */
     protected $bundleColumns = [
         self::BUNDLE_PRICE_TYPE_COL,
@@ -90,7 +85,6 @@ class RowCustomizer implements RowCustomizerInterface
      * Product's bundle data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $bundleData = [];
 
@@ -129,7 +123,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param int[] $productIds
      * @return $this
-     * @since 2.0.0
      */
     public function prepareData($collection, $productIds)
     {
@@ -150,7 +143,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param array $columns
      * @return array
-     * @since 2.0.0
      */
     public function addHeaderColumns($columns)
     {
@@ -165,7 +157,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param array $dataRow
      * @param int $productId
      * @return array
-     * @since 2.0.0
      */
     public function addData($dataRow, $productId)
     {
@@ -183,7 +174,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param int $productId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {
@@ -195,7 +185,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
-     * @since 2.0.0
      */
     protected function populateBundleData($collection)
     {
@@ -218,7 +207,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
-     * @since 2.0.0
      */
     protected function getFormattedBundleOptionValues($product)
     {
@@ -246,7 +234,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param string $optionValues
      * @param SelectionCollection $selections
      * @return string
-     * @since 2.0.0
      */
     protected function getFormattedBundleSelections($optionValues, SelectionCollection $selections)
     {
@@ -283,7 +270,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param \Magento\Bundle\Model\Option $option
      * @return string
-     * @since 2.0.0
      */
     protected function getFormattedOptionValues($option)
     {
@@ -300,7 +286,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     protected function getTypeValue($type)
     {
@@ -312,7 +297,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     protected function getPriceViewValue($type)
     {
@@ -324,7 +308,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     protected function getPriceTypeValue($type)
     {
@@ -348,7 +331,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param array $dataRow
      * @return array
-     * @since 2.0.0
      */
     protected function cleanNotBundleAdditionalAttributes($dataRow)
     {
@@ -365,7 +347,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param array $additionalAttributes
      * @return string
-     * @since 2.0.0
      */
     protected function getNotBundleAttributes($additionalAttributes)
     {
@@ -383,7 +364,7 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param string $additionalAttributes
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private function parseAdditionalAttributes($additionalAttributes)
     {

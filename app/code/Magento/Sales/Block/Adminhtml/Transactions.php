@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Transactions extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -18,7 +17,6 @@ class Transactions extends \Magento\Backend\Block\Widget\Grid\Container
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

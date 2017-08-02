@@ -13,20 +13,17 @@ use Magento\Framework\Exception\StateException;
 
 /**
  * Magento Version controller
- * @since 2.0.0
  */
 class Index extends Action
 {
     /**
      * @var ProductMetadataInterface
-     * @since 2.0.0
      */
     protected $productMetadata;
 
     /**
      * @param Context $context
      * @param ProductMetadataInterface $productMetadata
-     * @since 2.0.0
      */
     public function __construct(Context $context, ProductMetadataInterface $productMetadata)
     {
@@ -39,7 +36,6 @@ class Index extends Action
      * version from response
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

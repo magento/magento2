@@ -9,13 +9,11 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
  * Bundle selection renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Selection extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'product/edit/bundle/option/selection.phtml';
 
@@ -23,7 +21,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
-     * @since 2.0.0
      */
     protected $_catalogData = null;
 
@@ -31,19 +28,16 @@ class Selection extends \Magento\Backend\Block\Widget
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Bundle\Model\Source\Option\Selection\Price\Type
-     * @since 2.0.0
      */
     protected $_priceType;
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
-     * @since 2.0.0
      */
     protected $_yesno;
 
@@ -54,7 +48,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -75,7 +68,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Initialize bundle option selection block
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -87,7 +79,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Return field id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFieldId()
     {
@@ -98,7 +89,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Return field name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFieldName()
     {
@@ -109,7 +99,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Prepare block layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {
@@ -125,7 +114,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Retrieve delete button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectionDeleteButtonHtml()
     {
@@ -136,7 +124,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Retrieve price type select html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPriceTypeSelectHtml()
     {
@@ -162,7 +149,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Retrieve qty type select html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getQtyTypeSelectHtml()
     {
@@ -183,7 +169,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Return search url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectionSearchUrl()
     {
@@ -194,7 +179,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Check if used website scope price
      *
      * @return string
-     * @since 2.0.0
      */
     public function isUsedWebsitePrice()
     {
@@ -206,7 +190,6 @@ class Selection extends \Magento\Backend\Block\Widget
      * Retrieve price scope checkbox html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCheckboxScopeHtml()
     {

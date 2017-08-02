@@ -13,7 +13,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Tax extends \Magento\Framework\View\Element\Template
 {
@@ -21,19 +20,16 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Tax configuration model
      *
      * @var \Magento\Tax\Model\Config
-     * @since 2.0.0
      */
     protected $_config;
 
     /**
      * @var Order
-     * @since 2.0.0
      */
     protected $_order;
 
     /**
      * @var \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected $_source;
 
@@ -41,7 +37,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,7 +51,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Check if we nedd display full tax total info
      *
      * @return bool
-     * @since 2.0.0
      */
     public function displayFullSummary()
     {
@@ -67,7 +61,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Get data (totals) source model
      *
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -78,7 +71,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Initialize all order totals relates with tax
      *
      * @return \Magento\Tax\Block\Sales\Order\Tax
-     * @since 2.0.0
      */
     public function initTotals()
     {
@@ -106,7 +98,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      *
      * @param string $after
      * @return \Magento\Tax\Block\Sales\Order\Tax
-     * @since 2.0.0
      */
     protected function _addTax($after = 'discount')
     {
@@ -119,7 +110,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Get order store object
      *
      * @return \Magento\Store\Model\Store
-     * @since 2.0.0
      */
     public function getStore()
     {
@@ -129,7 +119,6 @@ class Tax extends \Magento\Framework\View\Element\Template
     /**
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _initSubtotal()
     {
@@ -210,7 +199,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _initShipping()
     {
@@ -272,7 +260,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _initDiscount()
     {
@@ -286,7 +273,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     protected function _initGrandTotal()
     {
@@ -331,7 +317,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Order
-     * @since 2.0.0
      */
     public function getOrder()
     {
@@ -340,7 +325,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getLabelProperties()
     {
@@ -349,7 +333,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getValueProperties()
     {

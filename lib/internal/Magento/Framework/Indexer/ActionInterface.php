@@ -7,7 +7,6 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Implement custom Action Interface
- * @since 2.0.0
  */
 interface ActionInterface
 {
@@ -15,7 +14,6 @@ interface ActionInterface
      * Execute full indexation
      *
      * @return void
-     * @since 2.0.0
      */
     public function executeFull();
 
@@ -24,7 +22,6 @@ interface ActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @since 2.0.0
      */
     public function executeList(array $ids);
 
@@ -33,7 +30,6 @@ interface ActionInterface
      *
      * @param int $id
      * @return void
-     * @since 2.0.0
      */
     public function executeRow($id);
 }

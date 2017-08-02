@@ -11,13 +11,11 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Usesecretkey extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_backendUrl;
 
@@ -30,7 +28,6 @@ class Usesecretkey extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -48,7 +45,6 @@ class Usesecretkey extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {

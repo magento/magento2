@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Exception extends LocalizedException
 {

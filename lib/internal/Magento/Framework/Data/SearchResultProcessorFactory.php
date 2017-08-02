@@ -7,7 +7,6 @@ namespace Magento\Framework\Data;
 
 /**
  * Class SearchResultProcessorFactory
- * @since 2.0.0
  */
 class SearchResultProcessorFactory
 {
@@ -17,7 +16,6 @@ class SearchResultProcessorFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,7 +23,6 @@ class SearchResultProcessorFactory
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager
@@ -38,7 +35,6 @@ class SearchResultProcessorFactory
      *
      * @param AbstractSearchResult $collection
      * @return SearchResultProcessor
-     * @since 2.0.0
      */
     public function create(AbstractSearchResult $collection)
     {

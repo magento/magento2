@@ -10,7 +10,6 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * Class Passthrough
- * @since 2.0.0
  */
 class Passthrough implements PreProcessorInterface
 {
@@ -19,7 +18,6 @@ class Passthrough implements PreProcessorInterface
      *
      * @param Chain $chain
      * @return void
-     * @since 2.0.0
      */
     public function process(Chain $chain)
     {

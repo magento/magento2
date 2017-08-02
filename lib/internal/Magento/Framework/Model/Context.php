@@ -19,37 +19,31 @@ namespace Magento\Framework\Model;
  * the classes they were introduced for.
  *
  * @api
- * @since 2.0.0
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventDispatcher;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     protected $_cacheManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
     /**
      * @var \Magento\Framework\Model\ActionValidator\RemoveAction
-     * @since 2.0.0
      */
     protected $_actionValidator;
 
@@ -59,7 +53,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\App\CacheInterface $cacheManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Model\ActionValidator\RemoveAction $actionValidator
-     * @since 2.0.0
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -77,7 +70,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\CacheInterface
-     * @since 2.0.0
      */
     public function getCacheManager()
     {
@@ -86,7 +78,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     public function getEventDispatcher()
     {
@@ -95,7 +86,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     public function getLogger()
     {
@@ -104,7 +94,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\App\State
-     * @since 2.0.0
      */
     public function getAppState()
     {
@@ -113,7 +102,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * @return \Magento\Framework\Model\ActionValidator\RemoveAction
-     * @since 2.0.0
      */
     public function getActionValidator()
     {

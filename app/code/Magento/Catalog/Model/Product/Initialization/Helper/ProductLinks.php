@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Product\Initialization\Helper;
 /**
  * Class \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
  *
- * @since 2.0.0
  */
 class ProductLinks
 {
@@ -19,7 +18,6 @@ class ProductLinks
      * @param array $links link data
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function initializeLinks(\Magento\Catalog\Model\Product $product, array $links)
     {

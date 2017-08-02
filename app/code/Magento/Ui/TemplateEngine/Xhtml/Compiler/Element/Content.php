@@ -12,7 +12,6 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterfac
 
 /**
  * Class Content
- * @since 2.0.0
  */
 class Content implements ElementInterface
 {
@@ -24,7 +23,6 @@ class Content implements ElementInterface
      * @param DataObject $processedObject
      * @param DataObject $context
      * @return void
-     * @since 2.0.0
      */
     public function compile(
         CompilerInterface $compiler,

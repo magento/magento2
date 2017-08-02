@@ -11,7 +11,6 @@ namespace Magento\ProductAlert\Model\ResourceModel\Stock;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +18,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define stock collection
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param mixed $website
      * @return $this
-     * @since 2.0.0
      */
     public function addWebsiteFilter($website)
     {
@@ -55,7 +52,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $status
      * @return $this
-     * @since 2.0.0
      */
     public function addStatusFilter($status)
     {
@@ -69,7 +65,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $sort
      * @return $this
-     * @since 2.0.0
      */
     public function setCustomerOrder($sort = 'ASC')
     {

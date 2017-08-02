@@ -8,37 +8,31 @@ namespace Magento\Framework\Xml;
 /**
  * Class \Magento\Framework\Xml\Parser
  *
- * @since 2.0.0
  */
 class Parser
 {
     /**
      * @var \DOMDocument|null
-     * @since 2.0.0
      */
     protected $_dom = null;
 
     /**
      * @var \DOMDocument
-     * @since 2.0.0
      */
     protected $_currentDom;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_content = [];
 
     /**
      * @var boolean
-     * @since 2.0.0
      */
     protected $errorHandlerIsActive = false;
 
     /**
      *
-     * @since 2.0.0
      */
     public function __construct()
     {
@@ -51,7 +45,6 @@ class Parser
      * Initializes error handler
      *
      * @return void
-     * @since 2.0.0
      */
     public function initErrorHandler()
     {
@@ -60,7 +53,6 @@ class Parser
 
     /**
      * @return \DOMDocument|null
-     * @since 2.0.0
      */
     public function getDom()
     {
@@ -69,7 +61,6 @@ class Parser
 
     /**
      * @return \DOMDocument
-     * @since 2.0.0
      */
     protected function _getCurrentDom()
     {
@@ -79,7 +70,6 @@ class Parser
     /**
      * @param \DOMDocument $node
      * @return $this
-     * @since 2.0.0
      */
     protected function _setCurrentDom($node)
     {
@@ -89,7 +79,6 @@ class Parser
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function xmlToArray()
     {
@@ -102,7 +91,6 @@ class Parser
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _xmlToArray($currentNode = false)
     {
@@ -155,7 +143,6 @@ class Parser
     /**
      * @param string $file
      * @return $this
-     * @since 2.0.0
      */
     public function load($file)
     {
@@ -167,7 +154,6 @@ class Parser
      * @param string $string
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function loadXML($string)
     {
@@ -201,7 +187,6 @@ class Parser
      * @param int $errorLine
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     * @since 2.0.0
      */
     public function errorHandler($errorNo, $errorStr, $errorFile, $errorLine)
     {

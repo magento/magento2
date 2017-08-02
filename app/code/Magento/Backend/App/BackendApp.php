@@ -9,25 +9,21 @@ namespace Magento\Backend\App;
 /**
  * Backend Application which uses Magento Backend authentication process
  * @api
- * @since 2.0.0
  */
 class BackendApp
 {
     /**
      * @var null
-     * @since 2.0.0
      */
     private $cookiePath;
 
     /**
      * @var null
-     * @since 2.0.0
      */
     private $startupPage;
 
     /**
      * @var null
-     * @since 2.0.0
      */
     private $aclResourceName;
 
@@ -35,7 +31,6 @@ class BackendApp
      * @param string $cookiePath
      * @param string $startupPage
      * @param string $aclResourceName
-     * @since 2.0.0
      */
     public function __construct(
         $cookiePath,
@@ -51,7 +46,6 @@ class BackendApp
      * Cookie path for the application to set cookie to
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCookiePath()
     {
@@ -62,7 +56,6 @@ class BackendApp
      * Startup Page of the application to redirect after login
      *
      * @return string
-     * @since 2.0.0
      */
     public function getStartupPage()
     {
@@ -73,7 +66,6 @@ class BackendApp
      * ACL resource name to authorize access to
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAclResource()
     {

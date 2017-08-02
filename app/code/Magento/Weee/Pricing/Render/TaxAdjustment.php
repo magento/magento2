@@ -12,7 +12,6 @@ use Magento\Weee\Model\Tax;
 
 /**
  * Weee Price Adjustment that overrides part of the Tax module's Adjustment
- * @since 2.0.0
  */
 class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
 {
@@ -20,7 +19,6 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
      * Weee helper
      *
      * @var \Magento\Weee\Helper\Data
-     * @since 2.0.0
      */
     protected $weeeHelper;
 
@@ -30,7 +28,6 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
      * @param \Magento\Tax\Helper\Data $helper
      * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Template\Context $context,
@@ -47,7 +44,6 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
      * Returns the list of default exclusions
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDefaultExclusions()
     {
@@ -68,7 +64,6 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
      * @param int|int[]|null $compareTo
      * @param \Magento\Store\Model\Store|null $store
      * @return bool|int
-     * @since 2.0.0
      */
     protected function typeOfDisplay($compareTo = null, $store = null)
     {

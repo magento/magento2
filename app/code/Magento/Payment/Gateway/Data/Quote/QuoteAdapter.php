@@ -12,26 +12,22 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
 /**
  * Class QuoteAdapter
- * @since 2.0.0
  */
 class QuoteAdapter implements OrderAdapterInterface
 {
     /**
      * @var CartInterface
-     * @since 2.0.0
      */
     private $quote;
 
     /**
      * @var AddressAdapter
-     * @since 2.0.0
      */
     private $addressAdapterFactory;
 
     /**
      * @param CartInterface $quote
      * @param AddressAdapterFactory $addressAdapterFactory
-     * @since 2.0.0
      */
     public function __construct(
         CartInterface $quote,
@@ -45,7 +41,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns currency code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCurrencyCode()
     {
@@ -56,7 +51,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns order increment id
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOrderIncrementId()
     {
@@ -67,7 +61,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns customer ID
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -78,7 +71,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns billing address
      *
      * @return AddressAdapterInterface|null
-     * @since 2.0.0
      */
     public function getBillingAddress()
     {
@@ -95,7 +87,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns shipping address
      *
      * @return AddressAdapterInterface|null
-     * @since 2.0.0
      */
     public function getShippingAddress()
     {
@@ -112,7 +103,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns order store id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getStoreId()
     {
@@ -123,7 +113,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns order id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -134,7 +123,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns order grand total amount
      *
      * @return null
-     * @since 2.0.0
      */
     public function getGrandTotalAmount()
     {
@@ -145,7 +133,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Returns list of line items in the cart
      *
      * @return \Magento\Quote\Api\Data\CartItemInterface[]|null
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -156,7 +143,6 @@ class QuoteAdapter implements OrderAdapterInterface
      * Gets the remote IP address for the order.
      *
      * @return string|null Remote IP address.
-     * @since 2.0.0
      */
     public function getRemoteIp()
     {

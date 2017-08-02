@@ -10,7 +10,6 @@ namespace Magento\Reports\Block\Adminhtml\Product\Viewed;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 2.0.0
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
@@ -18,7 +17,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Column for grid to be grouped by
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_columnGroupBy = 'period';
 
@@ -26,7 +24,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Grid resource collection name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_resourceCollectionName = \Magento\Reports\Model\ResourceModel\Report\Product\Viewed\Collection::class;
 
@@ -34,7 +31,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Init grid parameters
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -46,7 +42,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Custom columns preparation
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -123,7 +118,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * @param \Magento\Framework\DataObject $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _addOrderStatusFilter($collection, $filterData)
     {

@@ -13,7 +13,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  *
  * Encapsulates information about whether modules are enabled or not.
  * Represents only enabled modules through its interface
- * @since 2.0.0
  */
 class ModuleList implements ModuleListInterface
 {
@@ -21,7 +20,6 @@ class ModuleList implements ModuleListInterface
      * Deployment configuration
      *
      * @var DeploymentConfig
-     * @since 2.0.0
      */
     private $config;
 
@@ -29,7 +27,6 @@ class ModuleList implements ModuleListInterface
      * Loader of module information from source code
      *
      * @var ModuleList\Loader
-     * @since 2.0.0
      */
     private $loader;
 
@@ -39,7 +36,6 @@ class ModuleList implements ModuleListInterface
      * The possible values are 1 (enabled) or 0 (disabled)
      *
      * @var int[]
-     * @since 2.0.0
      */
     private $configData;
 
@@ -47,7 +43,6 @@ class ModuleList implements ModuleListInterface
      * Enumeration of the enabled module names
      *
      * @var string[]
-     * @since 2.0.0
      */
     private $enabled;
 
@@ -56,7 +51,6 @@ class ModuleList implements ModuleListInterface
      *
      * @param DeploymentConfig $config
      * @param ModuleList\Loader $loader
-     * @since 2.0.0
      */
     public function __construct(DeploymentConfig $config, ModuleList\Loader $loader)
     {
@@ -71,7 +65,6 @@ class ModuleList implements ModuleListInterface
      * Use this method only when you actually need modules' declared meta-information.
      *
      * @see getNames()
-     * @since 2.0.0
      */
     public function getAll()
     {
@@ -93,7 +86,6 @@ class ModuleList implements ModuleListInterface
     /**
      * {@inheritdoc}
      * @see has()
-     * @since 2.0.0
      */
     public function getOne($name)
     {
@@ -103,7 +95,6 @@ class ModuleList implements ModuleListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getNames()
     {
@@ -117,7 +108,6 @@ class ModuleList implements ModuleListInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function has($name)
     {
@@ -132,7 +122,6 @@ class ModuleList implements ModuleListInterface
      * Checks if module list information is available.
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isModuleInfoAvailable()
     {
@@ -147,7 +136,6 @@ class ModuleList implements ModuleListInterface
      * Loads configuration data only
      *
      * @return void
-     * @since 2.0.0
      */
     private function loadConfigData()
     {

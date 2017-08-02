@@ -11,31 +11,26 @@ use Magento\Framework\RequireJs\Config;
 
 /**
  * A service for handling RequireJS files in the application
- * @since 2.0.0
  */
 class FileManager
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $config;
 
     /**
      * @var \Magento\Framework\Filesystem
-     * @since 2.0.0
      */
     private $filesystem;
 
     /**
      * @var AppState
-     * @since 2.0.0
      */
     private $appState;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
-     * @since 2.0.0
      */
     private $assetRepo;
 
@@ -44,7 +39,6 @@ class FileManager
      * @param \Magento\Framework\Filesystem $appFilesystem
      * @param AppState $appState
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @since 2.0.0
      */
     public function __construct(
         Config $config,
@@ -62,7 +56,6 @@ class FileManager
      * Create a view asset representing the aggregated configuration file
      *
      * @return \Magento\Framework\View\Asset\File
-     * @since 2.0.0
      */
     public function createRequireJsConfigAsset()
     {
@@ -75,7 +68,6 @@ class FileManager
      * Create '.min' files resolver asset
      *
      * @return \Magento\Framework\View\Asset\File
-     * @since 2.0.0
      */
     public function createMinResolverAsset()
     {
@@ -88,7 +80,6 @@ class FileManager
      * Create a view asset representing the aggregated configuration file
      *
      * @return \Magento\Framework\View\Asset\File
-     * @since 2.0.0
      */
     public function createRequireJsMixinsAsset()
     {
@@ -99,7 +90,6 @@ class FileManager
      * Create a view asset representing the aggregated configuration file
      *
      * @return \Magento\Framework\View\Asset\File
-     * @since 2.0.0
      */
     public function createRequireJsAsset()
     {
@@ -139,7 +129,6 @@ class FileManager
      *
      * @param string $relPath
      * @return void
-     * @since 2.0.0
      */
     private function ensureSourceFile($relPath)
     {
@@ -154,7 +143,6 @@ class FileManager
      *
      * @param string $relPath
      * @return void
-     * @since 2.0.0
      */
     private function ensureMinResolverFile($relPath)
     {
@@ -168,7 +156,6 @@ class FileManager
      * Create a view asset representing the static js functionality
      *
      * @return \Magento\Framework\View\Asset\File|false
-     * @since 2.0.0
      */
     public function createStaticJsAsset()
     {
@@ -182,7 +169,6 @@ class FileManager
      * Create a view assets representing the bundle js functionality
      *
      * @return \Magento\Framework\View\Asset\File[]
-     * @since 2.0.0
      */
     public function createBundleJsPool()
     {
@@ -209,10 +195,9 @@ class FileManager
 
     /**
      * Remove all bundles from pool
-     * @deprecated 2.2.0
+     * @deprecated 2.1.1
      *
      * @return bool
-     * @since 2.0.0
      */
     public function clearBundleJsPool()
     {

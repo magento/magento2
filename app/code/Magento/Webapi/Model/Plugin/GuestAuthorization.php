@@ -12,7 +12,6 @@ use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationServic
  * Plugin around \Magento\Framework\Authorization::isAllowed
  *
  * Plugin to allow guest users to access resources with anonymous permission
- * @since 2.0.0
  */
 class GuestAuthorization
 {
@@ -26,7 +25,6 @@ class GuestAuthorization
      * @return bool true If resource permission is anonymous,
      * to allow any user access without further checks in parent method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundIsAllowed(
         \Magento\Framework\Authorization $subject,

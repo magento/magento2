@@ -14,25 +14,21 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\Helper
-     * @since 2.0.0
      */
     protected $initializationHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product\Copier
-     * @since 2.0.0
      */
     protected $productCopier;
 
     /**
      * @var \Magento\Catalog\Model\Product\TypeTransitionManager
-     * @since 2.0.0
      */
     protected $productTypeManager;
 
@@ -44,7 +40,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -69,7 +64,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -92,7 +86,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -198,7 +191,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param array $postData
      * @param int $productId
      * @return void
-     * @since 2.0.0
      */
     private function handleImageRemoveError($postData, $productId)
     {

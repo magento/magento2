@@ -15,13 +15,11 @@ use Magento\Framework\DataObject;
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -29,13 +27,11 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Massaction items
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_items = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Backend::widget/grid/massaction.phtml';
 
@@ -43,7 +39,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,7 +51,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -88,7 +82,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * @param string $itemId
      * @param array|DataObject $item
      * @return $this
-     * @since 2.0.0
      */
     public function addItem($itemId, $item)
     {
@@ -124,7 +117,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @param string $itemId
      * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item|null
-     * @since 2.0.0
      */
     public function getItem($itemId)
     {
@@ -139,7 +131,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve massaction items
      *
      * @return array
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -150,7 +141,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve massaction items JSON
      *
      * @return string
-     * @since 2.0.0
      */
     public function getItemsJson()
     {
@@ -166,7 +156,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve massaction items count
      *
      * @return integer
-     * @since 2.0.0
      */
     public function getCount()
     {
@@ -177,7 +166,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Checks are massactions available
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isAvailable()
     {
@@ -188,7 +176,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve global form field name for all massaction items
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormFieldName()
     {
@@ -199,7 +186,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve form field name for internal use. Based on $this->getFormFieldName()
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFormFieldNameInternal()
     {
@@ -210,7 +196,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve massaction block js object name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getJsObjectName()
     {
@@ -221,7 +206,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve grid block js object name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridJsObjectName()
     {
@@ -232,7 +216,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve JSON string of selected checkboxes
      *
      * @return string
-     * @since 2.0.0
      */
     public function getSelectedJson()
     {
@@ -248,7 +231,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve array of selected checkboxes
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getSelected()
     {
@@ -264,7 +246,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve apply button html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getApplyButtonHtml()
     {
@@ -273,7 +254,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getJavaScript()
     {
@@ -290,7 +270,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getGridIdsJson()
     {
@@ -315,7 +294,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHtmlId()
     {
@@ -327,7 +305,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @param string $itemId
      * @return $this
-     * @since 2.0.0
      */
     public function removeItem($itemId)
     {
@@ -343,7 +320,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getUseSelectAll()
     {
@@ -355,7 +331,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @param boolean $flag
      * @return $this
-     * @since 2.0.0
      */
     public function setUseSelectAll($flag)
     {
@@ -367,7 +342,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Prepare grid massaction column
      *
      * @return $this
-     * @since 2.0.0
      */
     public function prepareMassactionColumn()
     {

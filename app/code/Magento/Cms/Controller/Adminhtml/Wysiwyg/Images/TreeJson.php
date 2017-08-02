@@ -9,19 +9,16 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 /**
  * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\TreeJson
  *
- * @since 2.0.0
  */
 class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
-     * @since 2.0.0
      */
     protected $resultJsonFactory;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @since 2.0.0
      */
     protected $layoutFactory;
 
@@ -30,7 +27,6 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -47,7 +43,6 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * Tree json action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

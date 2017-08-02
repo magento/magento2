@@ -10,7 +10,6 @@ namespace Magento\Framework\Pricing\Amount;
  * Class AmountFactory
  *
  * @api
- * @since 2.0.0
  */
 class AmountFactory
 {
@@ -21,7 +20,6 @@ class AmountFactory
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -29,7 +27,6 @@ class AmountFactory
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -43,7 +40,6 @@ class AmountFactory
      * @param array $adjustmentAmounts
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function create($amount, array $adjustmentAmounts = [])
     {

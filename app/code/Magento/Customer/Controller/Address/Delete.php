@@ -9,13 +9,11 @@ namespace Magento\Customer\Controller\Address;
 /**
  * Class \Magento\Customer\Controller\Address\Delete
  *
- * @since 2.0.0
  */
 class Delete extends \Magento\Customer\Controller\Address
 {
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

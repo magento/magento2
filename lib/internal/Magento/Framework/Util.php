@@ -10,7 +10,6 @@ namespace Magento\Framework;
 /**
  * Class \Magento\Framework\Util
  *
- * @since 2.0.0
  */
 class Util
 {
@@ -18,7 +17,6 @@ class Util
      * Return PHP version without optional suffix
      * Scheme: major.minor.release
      * @return string
-     * @since 2.0.0
      */
     public function getTrimmedPhpVersion()
     {

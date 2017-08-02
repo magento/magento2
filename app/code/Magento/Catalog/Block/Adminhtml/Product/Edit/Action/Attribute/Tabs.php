@@ -10,13 +10,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

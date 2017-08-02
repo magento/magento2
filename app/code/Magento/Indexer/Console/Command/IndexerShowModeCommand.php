@@ -10,13 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for displaying current index mode for indexers.
- * @since 2.0.0
  */
 class IndexerShowModeCommand extends AbstractIndexerManageCommand
 {
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -29,7 +27,6 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

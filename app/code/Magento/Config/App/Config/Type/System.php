@@ -12,7 +12,7 @@ use Magento\Config\App\Config\Type\System\Reader;
 /**
  * System configuration type
  * @api
- * @since 2.2.0
+ * @since 2.1.3
  */
 class System implements ConfigTypeInterface
 {
@@ -22,43 +22,43 @@ class System implements ConfigTypeInterface
 
     /**
      * @var \Magento\Framework\App\Config\ConfigSourceInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $source;
 
     /**
      * @var array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $data = [];
 
     /**
      * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $postProcessor;
 
     /**
      * @var \Magento\Framework\App\Config\Spi\PreProcessorInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $preProcessor;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $cache;
 
     /**
      * @var int
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $cachingNestedLevel;
 
     /**
      * @var \Magento\Store\Model\Config\Processor\Fallback
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $fallback;
 
@@ -102,7 +102,7 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader $reader
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
@@ -142,7 +142,7 @@ class System implements ConfigTypeInterface
      * '{scopeType}/{scopeCode}/some/config/variable' - will return value of the config variable in the specified scope
      *
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($path = '')
     {
@@ -307,7 +307,7 @@ class System implements ConfigTypeInterface
      * - All records in cache storage tagged with CACHE_TAG
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function clean()
     {

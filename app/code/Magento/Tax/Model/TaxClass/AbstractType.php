@@ -12,13 +12,11 @@ namespace Magento\Tax\Model\TaxClass;
 /**
  * Class \Magento\Tax\Model\TaxClass\AbstractType
  *
- * @since 2.0.0
  */
 abstract class AbstractType extends \Magento\Framework\DataObject implements Type\TypeInterface
 {
     /**
      * @var \Magento\Tax\Model\Calculation\Rule
-     * @since 2.0.0
      */
     protected $_calculationRule;
 
@@ -26,14 +24,12 @@ abstract class AbstractType extends \Magento\Framework\DataObject implements Typ
      * Class Type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_classType;
 
     /**
      * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(\Magento\Tax\Model\Calculation\Rule $calculationRule, array $data = [])
     {
@@ -45,7 +41,6 @@ abstract class AbstractType extends \Magento\Framework\DataObject implements Typ
      * Get Collection of Tax Rules that are assigned to this tax class
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @since 2.0.0
      */
     public function getAssignedToRules()
     {

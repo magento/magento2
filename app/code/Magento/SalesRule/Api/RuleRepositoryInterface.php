@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Api;
  * Sales rule CRUD interface
  *
  * @api
- * @since 2.0.0
  */
 interface RuleRepositoryInterface
 {
@@ -21,7 +20,6 @@ interface RuleRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      * @throws \Magento\Framework\Exception\NoSuchEntityException If a rule ID is sent but the rule does not exist
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule);
 
@@ -32,7 +30,6 @@ interface RuleRepositoryInterface
      * @return \Magento\SalesRule\Api\Data\RuleInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getById($ruleId);
 
@@ -46,7 +43,6 @@ interface RuleRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\SalesRule\Api\Data\RuleSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -57,7 +53,6 @@ interface RuleRepositoryInterface
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function deleteById($ruleId);
 }

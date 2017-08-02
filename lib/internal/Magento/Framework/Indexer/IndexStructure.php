@@ -16,31 +16,26 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Class \Magento\Framework\Indexer\IndexStructure
  *
- * @since 2.0.0
  */
 class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
-     * @since 2.0.0
      */
     private $indexScopeResolver;
 
     /**
      * @var FlatScopeResolver
-     * @since 2.0.0
      */
     private $flatScopeResolver;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
@@ -53,7 +48,6 @@ class IndexStructure implements IndexStructureInterface
      * @param IndexScopeResolver $indexScopeResolver
      * @param \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
-     * @since 2.0.0
      */
     public function __construct(
         ResourceConnection $resource,
@@ -71,7 +65,6 @@ class IndexStructure implements IndexStructureInterface
      * @param string $index
      * @param Dimension[] $dimensions
      * @return void
-     * @since 2.0.0
      */
     public function delete($index, array $dimensions = [])
     {
@@ -84,7 +77,6 @@ class IndexStructure implements IndexStructureInterface
      * @param array $fields
      * @param Dimension[] $dimensions
      * @return void
-     * @since 2.0.0
      */
     public function create($index, array $fields, array $dimensions = [])
     {
@@ -98,7 +90,6 @@ class IndexStructure implements IndexStructureInterface
      * @param string $tableName
      * @throws \Zend_Db_Exception
      * @return void
-     * @since 2.0.0
      */
     protected function createFulltextIndex($tableName)
     {
@@ -109,7 +100,6 @@ class IndexStructure implements IndexStructureInterface
     /**
      * @param Table $table
      * @return Table
-     * @since 2.0.0
      */
     protected function configureFulltextTable(Table $table)
     {
@@ -147,7 +137,6 @@ class IndexStructure implements IndexStructureInterface
      * @param array $fields
      * @throws \Zend_Db_Exception
      * @return void
-     * @since 2.0.0
      */
     protected function createFlatIndex($tableName, array $fields)
     {
@@ -178,7 +167,6 @@ class IndexStructure implements IndexStructureInterface
      * @param AdapterInterface $connection
      * @param string $tableName
      * @return void
-     * @since 2.0.0
      */
     private function dropTable(AdapterInterface $connection, $tableName)
     {

@@ -8,13 +8,11 @@ namespace Magento\Framework\Code;
 /**
  * Class \Magento\Framework\Code\Validator
  *
- * @since 2.0.0
  */
 class Validator implements ValidatorInterface
 {
     /**
      * @var ValidatorInterface[]
-     * @since 2.0.0
      */
     protected $_validators = [];
 
@@ -23,7 +21,6 @@ class Validator implements ValidatorInterface
      *
      * @param ValidatorInterface $validator
      * @return void
-     * @since 2.0.0
      */
     public function add(ValidatorInterface $validator)
     {
@@ -36,7 +33,6 @@ class Validator implements ValidatorInterface
      * @param string $className
      * @return bool
      * @throws \Magento\Framework\Exception\ValidatorException
-     * @since 2.0.0
      */
     public function validate($className)
     {

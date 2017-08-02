@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Interface CollectionDataSourceInterface
- * @since 2.0.0
  */
 interface CollectionDataSourceInterface extends ArgumentInterface
 {

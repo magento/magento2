@@ -12,26 +12,22 @@ namespace Magento\Directory\Model\Currency\Import;
  * Factory for currency import services
  *
  * @api
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Directory\Model\Currency\Import\Config
-     * @since 2.0.0
      */
     protected $_serviceConfig;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Directory\Model\Currency\Import\Config $serviceConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -49,7 +45,6 @@ class Factory
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      * @return \Magento\Directory\Model\Currency\Import\ImportInterface
-     * @since 2.0.0
      */
     public function create($serviceName, array $data = [])
     {

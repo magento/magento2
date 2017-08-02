@@ -8,20 +8,17 @@ namespace Magento\Eav\Model\Form;
 /**
  * EAV form object factory
  * @api
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -35,7 +32,6 @@ class Factory
      * @param array $data
      * @throws \InvalidArgumentException
      * @return \Magento\Eav\Model\Form
-     * @since 2.0.0
      */
     public function create($form, array $data = [])
     {

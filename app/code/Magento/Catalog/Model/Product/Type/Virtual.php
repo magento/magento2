@@ -14,7 +14,6 @@ namespace Magento\Catalog\Model\Product\Type;
 /**
  * Class \Magento\Catalog\Model\Product\Type\Virtual
  *
- * @since 2.0.0
  */
 class Virtual extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -23,7 +22,6 @@ class Virtual extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @since 2.0.0
      */
     public function isVirtual($product)
     {
@@ -34,7 +32,6 @@ class Virtual extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Check that product of this type has weight
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasWeight()
     {
@@ -46,7 +43,6 @@ class Virtual extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     * @since 2.0.0
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {

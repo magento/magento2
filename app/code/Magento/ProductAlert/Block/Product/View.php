@@ -7,13 +7,11 @@ namespace Magento\ProductAlert\Block\Product;
 
 /**
  * Product view price and stock alerts
- * @since 2.0.0
  */
 class View extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_registry;
 
@@ -21,13 +19,11 @@ class View extends \Magento\Framework\View\Element\Template
      * Helper instance
      *
      * @var \Magento\ProductAlert\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Framework\Data\Helper\PostHelper
-     * @since 2.0.0
      */
     protected $coreHelper;
 
@@ -37,7 +33,6 @@ class View extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\Helper\PostHelper $coreHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,7 +51,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Retrieve currently edited product object
      *
      * @return \Magento\Catalog\Model\Product|boolean
-     * @since 2.0.0
      */
     protected function getProduct()
     {
@@ -71,7 +65,6 @@ class View extends \Magento\Framework\View\Element\Template
      * Retrieve post action config
      *
      * @return string
-     * @since 2.0.0
      */
     public function getPostAction()
     {

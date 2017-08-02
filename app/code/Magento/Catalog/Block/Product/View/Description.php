@@ -15,13 +15,11 @@ use Magento\Catalog\Model\Product;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Description extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var Product
-     * @since 2.0.0
      */
     protected $_product = null;
 
@@ -29,7 +27,6 @@ class Description extends \Magento\Framework\View\Element\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -37,7 +34,6 @@ class Description extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -50,7 +46,6 @@ class Description extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Product
-     * @since 2.0.0
      */
     public function getProduct()
     {

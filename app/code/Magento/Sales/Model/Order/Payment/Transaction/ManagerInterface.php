@@ -11,7 +11,6 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * Manage payment transaction
- * @since 2.0.0
  */
 interface ManagerInterface
 {
@@ -22,7 +21,6 @@ interface ManagerInterface
      * @param int $paymentId
      * @param int $orderId
      * @return false|Transaction
-     * @since 2.0.0
      */
     public function getAuthorizationTransaction($parentTransactionId, $paymentId, $orderId);
 
@@ -33,7 +31,6 @@ interface ManagerInterface
      * @param int $paymentId
      * @param int $orderId
      * @return bool
-     * @since 2.0.0
      */
     public function isTransactionExists($transactionId, $paymentId, $orderId);
 
@@ -45,7 +42,6 @@ interface ManagerInterface
      * @param string $type
      * @param bool|Transaction $transactionBasedOn
      * @return string|null
-     * @since 2.0.0
      */
     public function generateTransactionId(OrderPaymentInterface $payment, $type, $transactionBasedOn = false);
 }

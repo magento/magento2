@@ -11,19 +11,16 @@ use Magento\ImportExport\Model\Import;
 /**
  * Class \Magento\CatalogRule\Plugin\Indexer\ImportExport
  *
- * @since 2.0.0
  */
 class ImportExport
 {
     /**
      * @var RuleProductProcessor
-     * @since 2.0.0
      */
     protected $ruleProductProcessor;
 
     /**
      * @param RuleProductProcessor $ruleProductProcessor
-     * @since 2.0.0
      */
     public function __construct(RuleProductProcessor $ruleProductProcessor)
     {
@@ -38,7 +35,6 @@ class ImportExport
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterImportSource(Import $subject, $result)
     {

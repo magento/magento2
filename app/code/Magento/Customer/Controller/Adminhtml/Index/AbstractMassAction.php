@@ -15,7 +15,6 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Class AbstractMassStatus
- * @since 2.0.0
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
@@ -28,19 +27,16 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $redirectUrl = '*/*/index';
 
     /**
      * @var Filter
-     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
@@ -48,7 +44,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
@@ -62,7 +57,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -82,7 +76,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      * TODO: Technical dept referer url should be implement as a part of Action configuration in in appropriate way
      *
      * @return null|string
-     * @since 2.0.0
      */
     protected function getComponentRefererUrl()
     {
@@ -94,7 +87,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|ResultInterface
-     * @since 2.0.0
      */
     abstract protected function massAction(AbstractCollection $collection);
 }

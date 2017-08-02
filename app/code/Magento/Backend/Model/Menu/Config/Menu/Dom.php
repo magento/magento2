@@ -8,7 +8,6 @@ namespace Magento\Backend\Model\Menu\Config\Menu;
 /**
  * Menu configuration files handler
  * @api
- * @since 2.0.0
  */
 class Dom extends \Magento\Framework\Config\Dom
 {
@@ -19,7 +18,6 @@ class Dom extends \Magento\Framework\Config\Dom
      * @return \DOMElement|null
      * @throws \Magento\Framework\Exception\LocalizedException an exception is possible if original document contains
      * multiple fixed nodes
-     * @since 2.0.0
      */
     protected function _getMatchedNode($nodePath)
     {

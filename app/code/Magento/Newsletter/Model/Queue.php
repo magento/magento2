@@ -36,7 +36,6 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
- * @since 2.0.0
  */
 class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTypesInterface
 {
@@ -44,7 +43,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Newsletter Template object
      *
      * @var \Magento\Newsletter\Model\Template
-     * @since 2.0.0
      */
     protected $_template;
 
@@ -52,7 +50,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Subscribers collection
      *
      * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
-     * @since 2.0.0
      */
     protected $_subscribersCollection;
 
@@ -60,7 +57,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Save stores flag.
      *
      * @var boolean
-     * @since 2.0.0
      */
     protected $_saveStoresFlag = false;
 
@@ -68,7 +64,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Stores assigned to queue.
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_stores = [];
 
@@ -86,7 +81,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Filter for newsletter text
      *
      * @var \Magento\Newsletter\Model\Template\Filter
-     * @since 2.0.0
      */
     protected $_templateFilter;
 
@@ -94,7 +88,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Date
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_date;
 
@@ -102,7 +95,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Problem factory
      *
      * @var \Magento\Newsletter\Model\ProblemFactory
-     * @since 2.0.0
      */
     protected $_problemFactory;
 
@@ -110,13 +102,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Template factory
      *
      * @var \Magento\Newsletter\Model\TemplateFactory
-     * @since 2.0.0
      */
     protected $_templateFactory;
 
     /**
      * @var \Magento\Newsletter\Model\Queue\TransportBuilder
-     * @since 2.0.0
      */
     protected $_transportBuilder;
 
@@ -133,7 +123,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -167,7 +156,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -179,7 +167,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Return: is this queue newly created or not.
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isNew()
     {
@@ -191,7 +178,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      *
      * @param string|null $startAt start date of the mailing queue
      * @return $this
-     * @since 2.0.0
      */
     public function setQueueStartAtByString($startAt)
     {
@@ -210,7 +196,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param int $count
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function sendPerSubscriber($count = 20)
     {
@@ -282,7 +267,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Finish queue: set status SENT and update finish date
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _finishQueue()
     {
@@ -297,7 +281,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Getter data for saving
      *
      * @return array
-     * @since 2.0.0
      */
     public function getDataForSave()
     {
@@ -314,7 +297,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      *
      * @param array $subscriberIds
      * @return $this
-     * @since 2.0.0
      */
     public function addSubscribersToQueue(array $subscriberIds)
     {
@@ -327,7 +309,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      *
      * @param boolean|integer|string $value
      * @return $this
-     * @since 2.0.0
      */
     public function setSaveStoresFlag($value)
     {
@@ -340,7 +321,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getSaveStoresFlag()
     {
@@ -352,7 +332,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      *
      * @param array $storesIds
      * @return $this
-     * @since 2.0.0
      */
     public function setStores(array $storesIds)
     {
@@ -365,7 +344,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Getter for stores of queue.
      *
      * @return array
-     * @since 2.0.0
      */
     public function getStores()
     {
@@ -380,7 +358,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Retrieve Newsletter Template object
      *
      * @return \Magento\Newsletter\Model\Template
-     * @since 2.0.0
      */
     public function getTemplate()
     {
@@ -394,7 +371,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Return true if template type eq text
      *
      * @return boolean
-     * @since 2.0.0
      */
     public function isPlain()
     {
@@ -405,7 +381,6 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * Getter for template type
      *
      * @return int|string
-     * @since 2.0.0
      */
     public function getType()
     {

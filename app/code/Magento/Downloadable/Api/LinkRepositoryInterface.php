@@ -12,7 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Interface LinkRepositoryInterface
  * @package Magento\Downloadable\Api
  * @api
- * @since 2.0.0
  */
 interface LinkRepositoryInterface
 {
@@ -21,7 +20,6 @@ interface LinkRepositoryInterface
      *
      * @param string $sku
      * @return \Magento\Downloadable\Api\Data\LinkInterface[]
-     * @since 2.0.0
      */
     public function getList($sku);
 
@@ -30,7 +28,6 @@ interface LinkRepositoryInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Downloadable\Api\Data\LinkInterface[]
-     * @since 2.0.0
      */
     public function getLinksByProduct(ProductInterface $product);
 
@@ -41,7 +38,6 @@ interface LinkRepositoryInterface
      * @param \Magento\Downloadable\Api\Data\LinkInterface $link
      * @param bool $isGlobalScopeContent
      * @return int
-     * @since 2.0.0
      */
     public function save($sku, LinkInterface $link, $isGlobalScopeContent = true);
 
@@ -50,7 +46,6 @@ interface LinkRepositoryInterface
      *
      * @param int $id
      * @return bool
-     * @since 2.0.0
      */
     public function delete($id);
 }

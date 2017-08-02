@@ -11,13 +11,11 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
 /**
  * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample
  *
- * @since 2.0.0
  */
 class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link
 {
     /**
      * @return \Magento\Downloadable\Model\Sample
-     * @since 2.0.0
      */
     protected function _createLink()
     {
@@ -26,7 +24,6 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
 
     /**
      * @return \Magento\Downloadable\Model\Sample
-     * @since 2.0.0
      */
     protected function _getLink()
     {
@@ -37,7 +34,6 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
      * Download sample action
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

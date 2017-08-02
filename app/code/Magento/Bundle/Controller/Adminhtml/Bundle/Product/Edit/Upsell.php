@@ -9,7 +9,6 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 /**
  * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Upsell
  *
- * @since 2.0.0
  */
 class Upsell extends \Magento\Catalog\Controller\Adminhtml\Product\Upsell
 {

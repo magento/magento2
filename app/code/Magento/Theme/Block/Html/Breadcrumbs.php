@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\Template;
  * Html page breadcrumbs block
  *
  * @api
- * @since 2.0.0
  */
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
@@ -20,7 +19,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * Current template name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'html/breadcrumbs.phtml';
 
@@ -28,7 +26,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * List of available breadcrumb properties
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_properties = ['label', 'title', 'link', 'first', 'last', 'readonly'];
 
@@ -36,7 +33,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * List of breadcrumbs
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_crumbs;
 
@@ -44,7 +40,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * Cache key info
      *
      * @var null|array
-     * @since 2.0.0
      */
     protected $_cacheKeyInfo;
 
@@ -76,7 +71,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param string $crumbName
      * @param array $crumbInfo
      * @return $this
-     * @since 2.0.0
      */
     public function addCrumb($crumbName, $crumbInfo)
     {
@@ -99,7 +93,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * Provide string array key to share specific info item with FPC placeholder
      *
      * @return array
-     * @since 2.0.0
      */
     public function getCacheKeyInfo()
     {
@@ -116,7 +109,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

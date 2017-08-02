@@ -7,13 +7,11 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\System\Config;
 
 /**
  * Price scope backend model
- * @since 2.0.0
  */
 class PriceScope extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
@@ -26,7 +24,6 @@ class PriceScope extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -46,7 +43,6 @@ class PriceScope extends \Magento\Framework\App\Config\Value
      * Set after commit callback
      *
      * @return $this
-     * @since 2.0.0
      */
     public function afterSave()
     {
@@ -58,7 +54,6 @@ class PriceScope extends \Magento\Framework\App\Config\Value
      * Process product price scope change
      *
      * @return void
-     * @since 2.0.0
      */
     public function processValue()
     {

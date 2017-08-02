@@ -7,7 +7,6 @@ namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 /**
  * Interface ResultInterface
- * @since 2.0.0
  */
 interface ResultInterface
 {
@@ -15,7 +14,6 @@ interface ResultInterface
      * Get result document root element \DOMElement
      *
      * @return \DOMElement
-     * @since 2.0.0
      */
     public function getDocumentElement();
 
@@ -23,7 +21,6 @@ interface ResultInterface
      * Append layout configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function appendLayoutConfiguration();
 
@@ -31,7 +28,6 @@ interface ResultInterface
      * Returns the string representation
      *
      * @return string
-     * @since 2.0.0
      */
     public function __toString();
 }

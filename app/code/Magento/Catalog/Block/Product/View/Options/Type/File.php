@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
  * Product options text type block
  *
  * @api
- * @since 2.0.0
  */
 class File extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
@@ -17,7 +16,6 @@ class File extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Returns info of file
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileInfo()
     {

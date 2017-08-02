@@ -13,7 +13,6 @@ use Magento\Sales\Model\Order;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Messages extends \Magento\Framework\View\Element\Messages
 {
@@ -21,7 +20,6 @@ class Messages extends \Magento\Framework\View\Element\Messages
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $coreRegistry = null;
 
@@ -33,7 +31,6 @@ class Messages extends \Magento\Framework\View\Element\Messages
      * @param InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -59,7 +56,6 @@ class Messages extends \Magento\Framework\View\Element\Messages
      * Retrieve order model instance
      *
      * @return Order
-     * @since 2.0.0
      */
     protected function _getOrder()
     {
@@ -70,7 +66,6 @@ class Messages extends \Magento\Framework\View\Element\Messages
      * Preparing global layout
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

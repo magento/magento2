@@ -12,7 +12,6 @@ use Magento\Framework\View\RenderInterface;
  * Class RenderFactory
  *
  * @api
- * @since 2.0.0
  */
 class RenderFactory
 {
@@ -20,7 +19,6 @@ class RenderFactory
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -28,7 +26,6 @@ class RenderFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -41,7 +38,6 @@ class RenderFactory
      * @param string $type
      * @return RenderInterface
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function get($type)
     {

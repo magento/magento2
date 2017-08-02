@@ -10,19 +10,16 @@ use Magento\Framework\View\Page;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Context
 {
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure
-     * @since 2.0.0
      */
     protected $scheduledStructure;
 
     /**
      * @var \Magento\Framework\View\Page\Config\Structure
-     * @since 2.0.0
      */
     protected $pageConfigStructure;
 
@@ -31,7 +28,6 @@ class Context
      *
      * @param Layout\ScheduledStructure $scheduledStructure
      * @param \Magento\Framework\View\Page\Config\Structure $pageConfigStructure
-     * @since 2.0.0
      */
     public function __construct(
         Layout\ScheduledStructure $scheduledStructure,
@@ -43,7 +39,6 @@ class Context
 
     /**
      * @return \Magento\Framework\View\Layout\ScheduledStructure
-     * @since 2.0.0
      */
     public function getScheduledStructure()
     {
@@ -52,7 +47,6 @@ class Context
 
     /**
      * @return \Magento\Framework\View\Page\Config\Structure
-     * @since 2.0.0
      */
     public function getPageConfigStructure()
     {

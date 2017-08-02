@@ -16,13 +16,11 @@ use Magento\Backend\Block\Widget\Form\Generic;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Form
  *
- * @since 2.0.0
  */
 class Form extends Generic
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareLayout()
     {

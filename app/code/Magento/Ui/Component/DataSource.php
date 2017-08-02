@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * @api
- * @since 2.0.0
  */
 class DataSource extends AbstractComponent implements DataSourceInterface
 {
@@ -19,7 +18,6 @@ class DataSource extends AbstractComponent implements DataSourceInterface
 
     /**
      * @var DataProviderInterface
-     * @since 2.0.0
      */
     protected $dataProvider;
 
@@ -30,7 +28,6 @@ class DataSource extends AbstractComponent implements DataSourceInterface
      * @param DataProviderInterface $dataProvider
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -47,7 +44,6 @@ class DataSource extends AbstractComponent implements DataSourceInterface
      * Get component name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getComponentName()
     {
@@ -58,7 +54,6 @@ class DataSource extends AbstractComponent implements DataSourceInterface
      * Prepare component configuration
      *
      * @return void
-     * @since 2.0.0
      */
     public function prepare()
     {
@@ -69,7 +64,6 @@ class DataSource extends AbstractComponent implements DataSourceInterface
 
     /**
      * @return DataProviderInterface
-     * @since 2.0.0
      */
     public function getDataProvider()
     {

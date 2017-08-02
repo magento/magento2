@@ -7,7 +7,6 @@ namespace Magento\Widget\Model\ResourceModel\Layout;
 
 /**
  * Layout Link resource model
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -15,7 +14,6 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Define main table
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

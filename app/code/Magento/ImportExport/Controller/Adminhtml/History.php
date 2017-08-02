@@ -9,7 +9,6 @@ use Magento\Backend\App\Action;
 
 /**
  * History controller
- * @since 2.0.0
  */
 abstract class History extends Action
 {

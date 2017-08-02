@@ -9,7 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ContextFactory
- * @since 2.0.0
  */
 class ContextFactory
 {
@@ -17,7 +16,6 @@ class ContextFactory
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -25,7 +23,6 @@ class ContextFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -37,7 +34,6 @@ class ContextFactory
      *
      * @param array $arguments
      * @return ContextInterface
-     * @since 2.0.0
      */
     public function create(array $arguments = [])
     {

@@ -10,7 +10,6 @@ use Magento\Framework\View\Layout;
 
 /**
  * Class Page layout reader
- * @since 2.0.0
  */
 class Reader
 {
@@ -21,31 +20,26 @@ class Reader
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ResolverInterface
-     * @since 2.0.0
      */
     protected $themeResolver;
 
     /**
      * @var \Magento\Framework\View\Layout\ProcessorFactory
-     * @since 2.0.0
      */
     protected $processorFactory;
 
     /**
      * @var \Magento\Framework\View\File\CollectorInterface
-     * @since 2.0.0
      */
     protected $pageLayoutFileSource;
 
     /**
      * @var \Magento\Framework\View\Layout\ProcessorInterface
-     * @since 2.0.0
      */
     protected $pageLayoutMerge;
 
     /**
      * @var \Magento\Framework\View\Layout\ReaderPool
-     * @since 2.0.0
      */
     protected $reader;
 
@@ -56,7 +50,6 @@ class Reader
      * @param \Magento\Framework\View\Layout\ProcessorFactory $processorFactory
      * @param \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource
      * @param \Magento\Framework\View\Layout\ReaderPool $reader
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\ResolverInterface $themeResolver,
@@ -74,7 +67,6 @@ class Reader
      * Retrieve the layout update instance
      *
      * @return \Magento\Framework\View\Layout\ProcessorInterface
-     * @since 2.0.0
      */
     protected function getPageLayoutMerge()
     {
@@ -95,7 +87,6 @@ class Reader
      * @param Layout\Reader\Context $readerContext
      * @param string $pageLayout
      * @return void
-     * @since 2.0.0
      */
     public function read(Layout\Reader\Context $readerContext, $pageLayout)
     {

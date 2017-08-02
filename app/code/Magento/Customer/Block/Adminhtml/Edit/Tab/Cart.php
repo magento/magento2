@@ -13,7 +13,6 @@ use Magento\Directory\Model\Currency;
  * Adminhtml customer orders grid block
  *
  * @api
- * @since 2.0.0
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -21,37 +20,31 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Framework\Data\CollectionFactory
-     * @since 2.0.0
      */
     protected $_dataCollectionFactory;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected $quote = null;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_parentTemplate;
 
     /**
      * @var \Magento\Quote\Model\QuoteFactory
-     * @since 2.0.0
      */
     protected $quoteFactory;
 
@@ -63,7 +56,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -83,7 +75,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -97,7 +88,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _prepareGrid()
     {
@@ -109,7 +99,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareCollection()
     {
@@ -130,7 +119,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _prepareColumns()
     {
@@ -205,7 +193,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Gets customer assigned to this block
      *
      * @return int
-     * @since 2.0.0
      */
     public function getCustomerId()
     {
@@ -214,7 +201,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getGridUrl()
     {
@@ -225,7 +211,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Gets grid parent html
      *
      * @return string
-     * @since 2.0.0
      */
     public function getGridParentHtml()
     {
@@ -235,7 +220,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRowUrl($row)
     {
@@ -246,7 +230,6 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get the quote of the cart
      *
      * @return \Magento\Quote\Model\Quote
-     * @since 2.0.0
      */
     protected function getQuote()
     {

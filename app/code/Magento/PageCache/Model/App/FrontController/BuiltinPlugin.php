@@ -9,31 +9,26 @@ use Magento\Framework\App\Response\Http as ResponseHttp;
 
 /**
  * Plugin for processing builtin cache
- * @since 2.0.0
  */
 class BuiltinPlugin
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var \Magento\Framework\App\PageCache\Version
-     * @since 2.0.0
      */
     protected $version;
 
     /**
      * @var \Magento\Framework\App\PageCache\Kernel
-     * @since 2.0.0
      */
     protected $kernel;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $state;
 
@@ -44,7 +39,6 @@ class BuiltinPlugin
      * @param \Magento\Framework\App\PageCache\Version $version
      * @param \Magento\Framework\App\PageCache\Kernel $kernel
      * @param \Magento\Framework\App\State $state
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
@@ -64,7 +58,6 @@ class BuiltinPlugin
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\Response\Http
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundDispatch(
         \Magento\Framework\App\FrontControllerInterface $subject,
@@ -93,7 +86,6 @@ class BuiltinPlugin
      *
      * @param ResponseHttp $result
      * @return ResponseHttp
-     * @since 2.0.0
      */
     protected function addDebugHeaders(ResponseHttp $result)
     {
@@ -113,7 +105,6 @@ class BuiltinPlugin
      * @param string $value
      * @param bool $replace
      * @return void
-     * @since 2.0.0
      */
     protected function addDebugHeader(ResponseHttp $response, $name, $value, $replace = false)
     {

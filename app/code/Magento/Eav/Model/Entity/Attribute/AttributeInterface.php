@@ -8,7 +8,6 @@ namespace Magento\Eav\Model\Entity\Attribute;
 /**
  * Interface \Magento\Eav\Model\Entity\Attribute\AttributeInterface
  *
- * @since 2.0.0
  */
 interface AttributeInterface
 {

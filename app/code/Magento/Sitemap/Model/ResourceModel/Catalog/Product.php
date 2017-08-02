@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -24,7 +23,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Collection Zend Db select
      *
      * @var \Magento\Framework\DB\Select
-     * @since 2.0.0
      */
     protected $_select;
 
@@ -32,7 +30,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Attribute cache
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_attributesCache = [];
 
@@ -46,31 +43,26 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Sitemap data
      *
      * @var \Magento\Sitemap\Helper\Data
-     * @since 2.0.0
      */
     protected $_sitemapData = null;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
-     * @since 2.0.0
      */
     protected $_productResource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
-     * @since 2.0.0
      */
     protected $_productVisibility;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
-     * @since 2.0.0
      */
     protected $_productStatus;
 
@@ -83,7 +75,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
      * @deprecated 2.2.0 unused
-     * @since 2.0.0
      */
     protected $_mediaConfig;
 
@@ -113,7 +104,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Image $catalogImageHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -145,7 +135,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -160,7 +149,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $type
      * @return \Magento\Framework\DB\Select|bool
-     * @since 2.0.0
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
@@ -206,7 +194,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param string $attributeCode
      * @return void
-     * @since 2.0.0
      */
     protected function _joinAttribute($storeId, $attributeCode)
     {
@@ -239,7 +226,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $attributeCode
      * @return array
-     * @since 2.0.0
      */
     protected function _getAttribute($attributeCode)
     {
@@ -263,7 +249,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param null|string|bool|int|Store $storeId
      * @return array|bool
-     * @since 2.0.0
      */
     public function getCollection($storeId)
     {
@@ -339,7 +324,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $productRow
      * @param int $storeId
      * @return \Magento\Framework\DataObject
-     * @since 2.0.0
      */
     protected function _prepareProduct(array $productRow, $storeId)
     {
@@ -361,7 +345,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\DataObject $product
      * @param int $storeId
      * @return void
-     * @since 2.0.0
      */
     protected function _loadProductImages($product, $storeId)
     {
@@ -407,7 +390,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\DataObject $product
      * @param int $storeId
      * @return array
-     * @since 2.0.0
      */
     protected function _getAllProductImages($product, $storeId)
     {
@@ -438,7 +420,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return \Magento\Catalog\Model\Product\Media\Config
      * @deprecated 2.2.0 No longer used, as we're getting full image URL from getProductImageUrl method
      * @see getProductImageUrl()
-     * @since 2.0.0
      */
     protected function _getMediaConfig()
     {

@@ -15,7 +15,6 @@ use \Magento\Framework\Composer\ComposerInformation;
 /**
  * Class ProductMetadata
  * @package Magento\Framework\App
- * @since 2.0.0
  */
 class ProductMetadata implements ProductMetadataInterface
 {
@@ -63,7 +62,6 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product version
      *
      * @return string
-     * @since 2.0.0
      */
     public function getVersion()
     {
@@ -83,7 +81,6 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product edition
      *
      * @return string
-     * @since 2.0.0
      */
     public function getEdition()
     {
@@ -94,7 +91,6 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product name
      *
      * @return string
-     * @since 2.0.0
      */
     public function getName()
     {

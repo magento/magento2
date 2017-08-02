@@ -9,7 +9,6 @@ namespace Magento\ImportExport\Model\Export\Adapter;
  * Export adapter csv.
  *
  * @api
- * @since 2.0.0
  */
 class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
 {
@@ -17,7 +16,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * Field delimiter.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_delimiter = ',';
 
@@ -25,7 +23,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * Field enclosure character.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_enclosure = '"';
 
@@ -33,13 +30,11 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * Source file handler.
      *
      * @var \Magento\Framework\Filesystem\File\Write
-     * @since 2.0.0
      */
     protected $_fileHandler;
 
     /**
      * {@inheritdoc }
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\Filesystem $filesystem, $destination = null)
     {
@@ -51,7 +46,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * Object destructor.
      *
      * @return void
-     * @since 2.0.0
      */
     public function destruct()
     {
@@ -64,7 +58,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * Method called as last step of object instance creation. Can be overrided in child classes.
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _init()
     {
@@ -76,7 +69,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * MIME-type for 'Content-Type' header.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentType()
     {
@@ -87,7 +79,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * Return file extension for downloading.
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFileExtension()
     {
@@ -100,7 +91,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * @param array $headerColumns
      * @throws \Exception
      * @return $this
-     * @since 2.0.0
      */
     public function setHeaderCols(array $headerColumns)
     {
@@ -122,7 +112,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * @param array $rowData
      * @throws \Exception
      * @return $this
-     * @since 2.0.0
      */
     public function writeRow(array $rowData)
     {

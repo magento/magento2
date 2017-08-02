@@ -10,7 +10,6 @@ namespace Magento\Framework\App\AreaList;
 /**
  * Class \Magento\Framework\App\AreaList\Proxy
  *
- * @since 2.0.0
  */
 class Proxy extends \Magento\Framework\App\AreaList implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
@@ -19,7 +18,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager = null;
 
@@ -27,7 +25,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Proxied instance name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_instanceName = null;
 
@@ -35,7 +32,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Proxied instance
      *
      * @var \Magento\Framework\Locale\Resolver
-     * @since 2.0.0
      */
     protected $_subject = null;
 
@@ -43,7 +39,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Instance shareability flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isShared = null;
 
@@ -53,7 +48,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -67,7 +61,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function __sleep()
     {
@@ -78,7 +71,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
-     * @since 2.0.0
      */
     public function __wakeup()
     {
@@ -89,7 +81,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Clone proxied instance
      *
      * @return void
-     * @since 2.0.0
      */
     public function __clone()
     {
@@ -100,7 +91,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Get proxied instance
      *
      * @return \Magento\Framework\Locale\Resolver
-     * @since 2.0.0
      */
     protected function _getSubject()
     {
@@ -117,7 +107,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      *
      * @param string $frontName
      * @return null|string
-     * @since 2.0.0
      */
     public function getCodeByFrontName($frontName)
     {
@@ -129,7 +118,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      *
      * @param string $areaCode
      * @return string
-     * @since 2.0.0
      */
     public function getFrontName($areaCode)
     {
@@ -140,7 +128,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Retrieve area codes
      *
      * @return string[]
-     * @since 2.0.0
      */
     public function getCodes()
     {
@@ -152,7 +139,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      *
      * @param string $areaCode
      * @return string
-     * @since 2.0.0
      */
     public function getDefaultRouter($areaCode)
     {
@@ -164,7 +150,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      *
      * @param   string $code
      * @return  \Magento\Framework\App\Area
-     * @since 2.0.0
      */
     public function getArea($code)
     {

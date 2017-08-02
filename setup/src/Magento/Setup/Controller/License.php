@@ -13,7 +13,6 @@ use Zend\View\Model\ViewModel;
  * Class LicenseController
  *
  * @package Magento\Setup\Controller
- * @since 2.0.0
  */
 class License extends AbstractActionController
 {
@@ -21,7 +20,6 @@ class License extends AbstractActionController
      * Licence Model
      *
      * @var LicenseModel
-     * @since 2.0.0
      */
     protected $license;
 
@@ -29,7 +27,6 @@ class License extends AbstractActionController
      * Constructor
      *
      * @param LicenseModel $license
-     * @since 2.0.0
      */
     public function __construct(LicenseModel $license)
     {
@@ -40,7 +37,6 @@ class License extends AbstractActionController
      * Displays license
      *
      * @return ViewModel
-     * @since 2.0.0
      */
     public function indexAction()
     {

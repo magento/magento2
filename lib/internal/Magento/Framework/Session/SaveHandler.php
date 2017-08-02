@@ -12,7 +12,6 @@ use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * Magento session save handler
- * @since 2.0.0
  */
 class SaveHandler implements SaveHandlerInterface
 {
@@ -20,7 +19,6 @@ class SaveHandler implements SaveHandlerInterface
      * Session handler
      *
      * @var \SessionHandler
-     * @since 2.0.0
      */
     protected $saveHandlerAdapter;
 
@@ -28,7 +26,7 @@ class SaveHandler implements SaveHandlerInterface
      * Config
      *
      * @var ConfigInterface
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private $config;
 
@@ -38,7 +36,6 @@ class SaveHandler implements SaveHandlerInterface
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param DeploymentConfig $deploymentConfig
      * @param string $default
-     * @since 2.0.0
      */
     public function __construct(
         SaveHandlerFactory $saveHandlerFactory,
@@ -70,7 +67,6 @@ class SaveHandler implements SaveHandlerInterface
      * @param string $savePath
      * @param string $name
      * @return bool
-     * @since 2.0.0
      */
     public function open($savePath, $name)
     {
@@ -81,7 +77,6 @@ class SaveHandler implements SaveHandlerInterface
      * Close Session - free resources
      *
      * @return bool
-     * @since 2.0.0
      */
     public function close()
     {
@@ -93,7 +88,6 @@ class SaveHandler implements SaveHandlerInterface
      *
      * @param string $sessionId
      * @return string
-     * @since 2.0.0
      */
     public function read($sessionId)
     {
@@ -106,7 +100,6 @@ class SaveHandler implements SaveHandlerInterface
      * @param string $sessionId
      * @param string $data
      * @return bool
-     * @since 2.0.0
      */
     public function write($sessionId, $data)
     {
@@ -118,7 +111,6 @@ class SaveHandler implements SaveHandlerInterface
      *
      * @param string $sessionId
      * @return bool
-     * @since 2.0.0
      */
     public function destroy($sessionId)
     {
@@ -132,7 +124,6 @@ class SaveHandler implements SaveHandlerInterface
      * @param int $maxLifetime
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @since 2.0.0
      */
     public function gc($maxLifetime)
     {
@@ -143,8 +134,8 @@ class SaveHandler implements SaveHandlerInterface
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 2.0.6
+     * @since 2.0.6
      */
     private function getConfig()
     {
@@ -159,7 +150,7 @@ class SaveHandler implements SaveHandlerInterface
      *
      * @param string $saveHandler
      * @return $this
-     * @since 2.1.0
+     * @since 2.0.6
      */
     private function setSaveHandler($saveHandler)
     {

@@ -7,19 +7,16 @@ namespace Magento\Framework\Data\Collection;
 
 /**
  * Model object factory
- * @since 2.0.0
  */
 class ModelFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -33,7 +30,6 @@ class ModelFactory
      * @param array $data
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\Model\AbstractModel
-     * @since 2.0.0
      */
     public function create($model, array $data = [])
     {

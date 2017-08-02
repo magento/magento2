@@ -9,13 +9,11 @@ namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 /**
  * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -12,13 +12,11 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 /**
  * Class \Magento\Framework\Setup\SampleData\FixtureManager
  *
- * @since 2.0.0
  */
 class FixtureManager
 {
     /**
      * @var ComponentRegistrar
-     * @since 2.0.0
      */
     private $componentRegistrar;
 
@@ -26,20 +24,17 @@ class FixtureManager
      * Modules root directory
      *
      * @var ReadInterface
-     * @since 2.0.0
      */
     protected $_modulesDirectory;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $_string;
 
     /**
      * @param ComponentRegistrar $componentRegistrar
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @since 2.0.0
      */
     public function __construct(ComponentRegistrar $componentRegistrar, \Magento\Framework\Stdlib\StringUtils $string)
     {
@@ -51,7 +46,6 @@ class FixtureManager
      * @param string $fileId
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function getFixture($fileId)
     {
@@ -68,7 +62,6 @@ class FixtureManager
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public static function normalizePath($path)
     {

@@ -8,19 +8,16 @@ namespace Magento\Widget\Model\Template;
 /**
  * Template Filter Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
     /**
      * @var \Magento\Widget\Model\ResourceModel\Widget
-     * @since 2.0.0
      */
     protected $_widgetResource;
 
     /**
      * @var \Magento\Widget\Model\Widget
-     * @since 2.0.0
      */
     protected $_widget;
 
@@ -41,7 +38,6 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
@@ -84,7 +80,6 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function generateWidget($construction)
     {
@@ -127,7 +122,6 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function widgetDirective($construction)
     {
@@ -139,7 +133,6 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function mediaDirective($construction)
     {

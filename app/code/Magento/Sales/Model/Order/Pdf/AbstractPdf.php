@@ -16,7 +16,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 abstract class AbstractPdf extends \Magento\Framework\DataObject
 {
@@ -24,7 +23,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Y coordinate
      *
      * @var int
-     * @since 2.0.0
      */
     public $y;
 
@@ -34,7 +32,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * renderer => the renderer model
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_renderers = [];
 
@@ -51,7 +48,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Zend PDF object
      *
      * @var \Zend_Pdf
-     * @since 2.0.0
      */
     protected $_pdf;
 
@@ -59,7 +55,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Retrieve PDF
      *
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     abstract public function getPdf();
 
@@ -67,19 +62,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
-     * @since 2.0.0
      */
     protected $_paymentData;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
-     * @since 2.0.0
      */
     protected $string;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -87,49 +79,41 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @since 2.0.0
      */
     protected $_mediaDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @since 2.0.0
      */
     protected $_rootDirectory;
 
     /**
      * @var Config
-     * @since 2.0.0
      */
     protected $_pdfConfig;
 
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Total\Factory
-     * @since 2.0.0
      */
     protected $_pdfTotalFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Pdf\ItemsFactory
-     * @since 2.0.0
      */
     protected $_pdfItemsFactory;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
-     * @since 2.0.0
      */
     protected $inlineTranslation;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Renderer
-     * @since 2.0.0
      */
     protected $addressRenderer;
 
@@ -146,7 +130,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
@@ -188,7 +171,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Resource_Font $font
      * @param  float $fontSize Font size in points
      * @return float
-     * @since 2.0.0
      */
     public function widthForStringUsingFontSize($string, $font, $fontSize)
     {
@@ -222,7 +204,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  int $fontSize
      * @param  int $padding
      * @return int
-     * @since 2.0.0
      */
     public function getAlignRight($string, $x, $columnWidth, \Zend_Pdf_Resource_Font $font, $fontSize, $padding = 5)
     {
@@ -239,7 +220,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Resource_Font $font
      * @param  int $fontSize
      * @return int
-     * @since 2.0.0
      */
     public function getAlignCenter($string, $x, $columnWidth, \Zend_Pdf_Resource_Font $font, $fontSize)
     {
@@ -254,7 +234,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param null $store
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function insertLogo(&$page, $store = null)
     {
@@ -309,7 +288,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Zend_Pdf_Page &$page
      * @param null $store
      * @return void
-     * @since 2.0.0
      */
     protected function insertAddress(&$page, $store = null)
     {
@@ -347,7 +325,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @param  string $address
      * @return array
-     * @since 2.0.0
      */
     protected function _formatAddress($address)
     {
@@ -369,7 +346,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  array $address
      * @return int Height
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _calcAddressHeight($address)
     {
@@ -398,7 +374,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     protected function insertOrder(&$page, $obj, $putOrderId = true)
     {
@@ -642,7 +617,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Page $page
      * @param  string $text
      * @return void
-     * @since 2.0.0
      */
     public function insertDocumentNumber(\Zend_Pdf_Page $page, $text)
     {
@@ -658,7 +632,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  array $a
      * @param  array $b
      * @return int
-     * @since 2.0.0
      */
     protected function _sortTotalsList($a, $b)
     {
@@ -677,7 +650,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Return total list
      *
      * @return \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal[] Array of totals
-     * @since 2.0.0
      */
     protected function _getTotalsList()
     {
@@ -700,7 +672,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Page $page
      * @param  \Magento\Sales\Model\AbstractModel $source
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     protected function insertTotals($page, $source)
     {
@@ -743,7 +714,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @param  \Magento\Framework\DataObject $item
      * @return array
-     * @since 2.0.0
      */
     protected function _parseItemDescription($item)
     {
@@ -760,7 +730,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Before getPdf processing
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _beforeGetPdf()
     {
@@ -771,7 +740,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * After getPdf processing
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _afterGetPdf()
     {
@@ -784,7 +752,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  array|string $value
      * @param  \Magento\Sales\Model\Order $order
      * @return string
-     * @since 2.0.0
      */
     protected function _formatOptionValue($value, $order)
     {
@@ -810,7 +777,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @param string $type
      * @return void
-     * @since 2.0.0
      */
     protected function _initRenderer($type)
     {
@@ -826,7 +792,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  string $type
      * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getRenderer($type)
     {
@@ -852,7 +817,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @param  string $type
      * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
-     * @since 2.0.0
      */
     public function getRenderer($type)
     {
@@ -866,7 +830,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Page $page
      * @param  \Magento\Sales\Model\Order $order
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     protected function _drawItem(\Magento\Framework\DataObject $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
     {
@@ -889,7 +852,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Page $object
      * @param  int $size
      * @return \Zend_Pdf_Resource_Font
-     * @since 2.0.0
      */
     protected function _setFontRegular($object, $size = 7)
     {
@@ -906,7 +868,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Page $object
      * @param  int $size
      * @return \Zend_Pdf_Resource_Font
-     * @since 2.0.0
      */
     protected function _setFontBold($object, $size = 7)
     {
@@ -923,7 +884,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Zend_Pdf_Page $object
      * @param  int $size
      * @return \Zend_Pdf_Resource_Font
-     * @since 2.0.0
      */
     protected function _setFontItalic($object, $size = 7)
     {
@@ -939,7 +899,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @param  \Zend_Pdf $pdf
      * @return $this
-     * @since 2.0.0
      */
     protected function _setPdf(\Zend_Pdf $pdf)
     {
@@ -952,7 +911,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Zend_Pdf
-     * @since 2.0.0
      */
     protected function _getPdf()
     {
@@ -968,7 +926,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @param  array $settings
      * @return \Zend_Pdf_Page
-     * @since 2.0.0
      */
     public function newPage(array $settings = [])
     {
@@ -1007,7 +964,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.0.0
      */
     public function drawLineBlocks(\Zend_Pdf_Page $page, array $draw, array $pageSettings = [])
     {

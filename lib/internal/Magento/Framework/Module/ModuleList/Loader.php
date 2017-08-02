@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem\DriverInterface;
  * Loader of module list information from the filesystem
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Loader
 {
@@ -24,7 +23,6 @@ class Loader
      * Converter of XML-files to associative arrays (specific to module.xml file format)
      *
      * @var Dom
-     * @since 2.0.0
      */
     private $converter;
 
@@ -32,7 +30,6 @@ class Loader
      * Parser
      *
      * @var \Magento\Framework\Xml\Parser
-     * @since 2.0.0
      */
     private $parser;
 
@@ -40,7 +37,6 @@ class Loader
      * Module registry
      *
      * @var ComponentRegistrarInterface
-     * @since 2.0.0
      */
     private $moduleRegistry;
 
@@ -48,7 +44,6 @@ class Loader
      * Filesystem driver to allow reading of module.xml files which live outside of app/code
      *
      * @var DriverInterface
-     * @since 2.0.0
      */
     private $filesystemDriver;
 
@@ -59,7 +54,6 @@ class Loader
      * @param Parser $parser
      * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
-     * @since 2.0.0
      */
     public function __construct(
         Dom $converter,
@@ -80,7 +74,6 @@ class Loader
      * @param array $exclude
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
-     * @since 2.0.0
      */
     public function load(array $exclude = [])
     {
@@ -118,7 +111,6 @@ class Loader
      * @return \Traversable
      *
      * @author Josh Di Fabio <joshdifabio@gmail.com>
-     * @since 2.0.0
      */
     private function getModuleConfigs()
     {
@@ -135,7 +127,6 @@ class Loader
      * @param array $origList
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     private function sortBySequence($origList)
     {
@@ -176,7 +167,6 @@ class Loader
      * @param array $accumulated
      * @return array
      * @throws \Exception
-     * @since 2.0.0
      */
     private function expandSequence($list, $name, $accumulated = [])
     {

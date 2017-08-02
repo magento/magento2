@@ -12,7 +12,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
  * Class InstallSchema adds new table `catalog_product_entity_media_gallery_value_video`
- * @since 2.0.0
  */
 class InstallSchema implements InstallSchemaInterface
 {
@@ -23,7 +22,6 @@ class InstallSchema implements InstallSchemaInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $contextInterface)
     {

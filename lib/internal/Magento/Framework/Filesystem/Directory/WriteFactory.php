@@ -10,7 +10,6 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * Class \Magento\Framework\Filesystem\Directory\WriteFactory
  *
- * @since 2.0.0
  */
 class WriteFactory
 {
@@ -18,7 +17,6 @@ class WriteFactory
      * Pool of filesystem drivers
      *
      * @var DriverPool
-     * @since 2.0.0
      */
     private $driverPool;
 
@@ -26,7 +24,6 @@ class WriteFactory
      * Constructor
      *
      * @param DriverPool $driverPool
-     * @since 2.0.0
      */
     public function __construct(DriverPool $driverPool)
     {
@@ -40,7 +37,6 @@ class WriteFactory
      * @param string $driverCode
      * @param int $createPermissions
      * @return \Magento\Framework\Filesystem\Directory\Write
-     * @since 2.0.0
      */
     public function create($path, $driverCode = DriverPool::FILE, $createPermissions = null)
     {

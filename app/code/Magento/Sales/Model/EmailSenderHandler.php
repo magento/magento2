@@ -10,7 +10,6 @@ namespace Magento\Sales\Model;
  *
  * Performs handling of cron jobs related to sending emails to customers
  * after creation/modification of Order, Invoice, Shipment or Creditmemo.
- * @since 2.0.0
  */
 class EmailSenderHandler
 {
@@ -18,7 +17,6 @@ class EmailSenderHandler
      * Email sender model.
      *
      * @var \Magento\Sales\Model\Order\Email\Sender
-     * @since 2.0.0
      */
     protected $emailSender;
 
@@ -26,7 +24,6 @@ class EmailSenderHandler
      * Entity resource model.
      *
      * @var \Magento\Sales\Model\ResourceModel\EntityAbstract
-     * @since 2.0.0
      */
     protected $entityResource;
 
@@ -34,7 +31,6 @@ class EmailSenderHandler
      * Entity collection model.
      *
      * @var \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
-     * @since 2.0.0
      */
     protected $entityCollection;
 
@@ -42,7 +38,6 @@ class EmailSenderHandler
      * Global configuration storage.
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $globalConfig;
 
@@ -51,7 +46,6 @@ class EmailSenderHandler
      * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
      * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
@@ -68,7 +62,6 @@ class EmailSenderHandler
     /**
      * Handles asynchronous email sending
      * @return void
-     * @since 2.0.0
      */
     public function sendEmails()
     {

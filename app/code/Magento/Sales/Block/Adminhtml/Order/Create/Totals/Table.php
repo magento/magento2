@@ -11,7 +11,6 @@ use Magento\Store\Model\ResourceModel\Website\Collection;
  * Adminhtml sales order create totals table block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Table extends \Magento\Backend\Block\Template
 {
@@ -19,7 +18,6 @@ class Table extends \Magento\Backend\Block\Template
      * Website collection
      *
      * @var Collection|null
-     * @since 2.0.0
      */
     protected $_websiteCollection = null;
 
@@ -27,7 +25,6 @@ class Table extends \Magento\Backend\Block\Template
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {

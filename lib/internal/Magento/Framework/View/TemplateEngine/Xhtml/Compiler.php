@@ -14,37 +14,31 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
 
 /**
  * Class Compiler
- * @since 2.0.0
  */
 class Compiler implements CompilerInterface
 {
     /**
      * @var TextInterface
-     * @since 2.0.0
      */
     protected $compilerText;
 
     /**
      * @var AttributeInterface
-     * @since 2.0.0
      */
     protected $compilerAttribute;
 
     /**
      * @var CdataInterface
-     * @since 2.0.0
      */
     protected $compilerCdata;
 
     /**
      * @var CommentInterface
-     * @since 2.0.0
      */
     protected $compilerComment;
 
     /**
      * @var ElementInterface[]
-     * @since 2.0.0
      */
     protected $elementCompilers;
 
@@ -52,7 +46,6 @@ class Compiler implements CompilerInterface
      * Postprocessing data
      *
      * @var array
-     * @since 2.0.0
      */
     protected $data;
 
@@ -64,7 +57,6 @@ class Compiler implements CompilerInterface
      * @param AttributeInterface|CdataInterface $compilerCdata
      * @param CommentInterface $compilerComment
      * @param ElementInterface[] $elementCompilers
-     * @since 2.0.0
      */
     public function __construct(
         TextInterface $compilerText,
@@ -87,7 +79,6 @@ class Compiler implements CompilerInterface
      * @param DataObject $processedObject
      * @param DataObject $context
      * @return void
-     * @since 2.0.0
      */
     public function compile(\DOMNode $node, DataObject $processedObject, DataObject $context)
     {
@@ -124,7 +115,6 @@ class Compiler implements CompilerInterface
      *
      * @param string $content
      * @return string
-     * @since 2.0.0
      */
     public function postprocessing($content)
     {
@@ -144,7 +134,6 @@ class Compiler implements CompilerInterface
      * @param string $key
      * @param string $content
      * @return void
-     * @since 2.0.0
      */
     public function setPostprocessingData($key, $content)
     {
@@ -156,7 +145,6 @@ class Compiler implements CompilerInterface
      *
      * @param \DOMElement $node
      * @return \DOMElement[]
-     * @since 2.0.0
      */
     protected function getChildNodes(\DOMElement $node)
     {
@@ -173,7 +161,6 @@ class Compiler implements CompilerInterface
      *
      * @param string $name
      * @return ElementInterface
-     * @since 2.0.0
      */
     protected function getElementCompiler($name)
     {

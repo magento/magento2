@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product;
 /**
  * Bundle selection price factory
  * @api
- * @since 2.0.0
  */
 class BundleSelectionFactory
 {
@@ -24,7 +23,6 @@ class BundleSelectionFactory
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -32,7 +30,6 @@ class BundleSelectionFactory
      * Construct
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -47,7 +44,6 @@ class BundleSelectionFactory
      * @param float $quantity
      * @param array $arguments
      * @return BundleSelectionPrice
-     * @since 2.0.0
      */
     public function create(
         Product $bundleProduct,

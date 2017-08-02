@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem;
 /**
  * Class \Magento\Framework\Module\Dir
  *
- * @since 2.0.0
  */
 class Dir
 {
@@ -27,17 +26,11 @@ class Dir
     const MODULE_CONTROLLER_DIR = 'Controller';
     /**#@-*/
 
-    /**
-     * Module registry
-     *
-     * @var ComponentRegistrarInterface
-     * @since 2.0.0
-     */
+    /**#@-*/
     private $componentRegistrar;
 
     /**
      * @param ComponentRegistrarInterface $componentRegistrar
-     * @since 2.0.0
      */
     public function __construct(ComponentRegistrarInterface $componentRegistrar)
     {
@@ -51,7 +44,6 @@ class Dir
      * @param string $type Type of module's directory to retrieve
      * @return string
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function getDir($moduleName, $type = '')
     {

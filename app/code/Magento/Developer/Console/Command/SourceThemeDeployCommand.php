@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class SourceThemeDeployCommand
  *
  * Collects and publishes source files for theme
- * @since 2.0.0
  */
 class SourceThemeDeployCommand extends Command
 {
@@ -50,19 +49,16 @@ class SourceThemeDeployCommand extends Command
 
     /**
      * @var Locale
-     * @since 2.0.0
      */
     private $validator;
 
     /**
      * @var Publisher
-     * @since 2.0.0
      */
     private $assetPublisher;
 
     /**
      * @var Repository
-     * @since 2.0.0
      */
     private $assetRepository;
 
@@ -72,7 +68,6 @@ class SourceThemeDeployCommand extends Command
      * @param Locale $validator
      * @param Publisher $assetPublisher
      * @param Repository $assetRepository
-     * @since 2.0.0
      */
     public function __construct(
         Locale $validator,
@@ -87,7 +82,6 @@ class SourceThemeDeployCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -137,7 +131,6 @@ class SourceThemeDeployCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

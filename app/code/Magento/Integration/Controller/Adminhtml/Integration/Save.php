@@ -16,7 +16,6 @@ use Magento\Security\Model\SecurityCookie;
  * Integration Save controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -46,7 +45,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Save integration action.
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -137,7 +135,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Redirect merchant to 'Edit integration' or 'New integration' if error happened during integration save.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _redirectOnSaveError()
     {

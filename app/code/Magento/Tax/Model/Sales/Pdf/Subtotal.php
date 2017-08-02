@@ -8,7 +8,6 @@ namespace Magento\Tax\Model\Sales\Pdf;
 /**
  * Class \Magento\Tax\Model\Sales\Pdf\Subtotal
  *
- * @since 2.0.0
  */
 class Subtotal extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
@@ -22,7 +21,6 @@ class Subtotal extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      *  )
      * )
      * @return array
-     * @since 2.0.0
      */
     public function getTotalsForDisplay()
     {

@@ -19,65 +19,55 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
 {
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
-     * @since 2.0.0
      */
     protected $paymentMethodManagement;
 
     /**
      * @var PaymentDetailsFactory
-     * @since 2.0.0
      */
     protected $paymentDetailsFactory;
 
     /**
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
-     * @since 2.0.0
      */
     protected $cartTotalsRepository;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
     /**
      * @var Logger
-     * @since 2.0.0
      */
     protected $logger;
 
     /**
      * @var QuoteAddressValidator
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $addressValidator;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
      * @deprecated 2.2.0
-     * @since 2.0.0
      */
     protected $totalsCollector;
 
@@ -115,7 +105,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param ShippingAssignmentFactory|null $shippingAssignmentFactory,
      * @param ShippingFactory|null $shippingFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
@@ -150,7 +139,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * {@inheritDoc}
-     * @since 2.0.0
      */
     public function saveAddressInformation(
         $cartId,
@@ -209,7 +197,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @throws InputException
      * @throws NoSuchEntityException
      * @return void
-     * @since 2.0.0
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {

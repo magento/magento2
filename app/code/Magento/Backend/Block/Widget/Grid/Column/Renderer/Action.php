@@ -11,13 +11,11 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  *
  * @api
  * @deprecated 2.2.0 in favour of UI component implementation
- * @since 2.0.0
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -25,7 +23,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -41,7 +38,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -77,7 +73,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * @param array $action
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     protected function _toOptionHtml($action, \Magento\Framework\DataObject $row)
     {
@@ -99,7 +94,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * @param array $action
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @since 2.0.0
      */
     protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
@@ -128,7 +122,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @since 2.0.0
      */
     protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\DataObject $row)
     {

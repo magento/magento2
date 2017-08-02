@@ -12,13 +12,11 @@ use Magento\Payment\Helper\Data;
 
 /**
  * Class PaymentMethod
- * @since 2.0.0
  */
 class PaymentMethod extends Column
 {
     /**
      * @var Data
-     * @since 2.0.0
      */
     protected $paymentHelper;
 
@@ -30,7 +28,6 @@ class PaymentMethod extends Column
      * @param Data $paymentHelper
      * @param array $components
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -48,7 +45,6 @@ class PaymentMethod extends Column
      *
      * @param array $dataSource
      * @return array
-     * @since 2.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

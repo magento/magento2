@@ -9,7 +9,6 @@ namespace Magento\Customer\Model\Config;
  * Customer sharing config model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Share extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Option\ArrayInterface
 {
@@ -29,13 +28,11 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
-     * @since 2.0.0
      */
     protected $_customerResource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
@@ -51,7 +48,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -73,7 +69,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * Check whether current customers sharing scope is global
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isGlobalScope()
     {
@@ -84,7 +79,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * Check whether current customers sharing scope is website
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isWebsiteScope()
     {
@@ -98,7 +92,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * Get possible sharing configuration options
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {
@@ -110,7 +103,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -134,7 +126,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      *
      * @param int $websiteId the ID to use if website scope is on
      * @return int[]
-     * @since 2.0.0
      */
     public function getSharedWebsiteIds($websiteId)
     {

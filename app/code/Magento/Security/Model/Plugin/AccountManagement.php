@@ -30,7 +30,7 @@ class AccountManagement
 
     /**
      * @var int
-     * @since 2.2.0
+     * @since 2.1.4
      */
     protected $passwordRequestEvent;
 

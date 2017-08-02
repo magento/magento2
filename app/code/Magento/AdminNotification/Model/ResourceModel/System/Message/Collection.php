@@ -7,7 +7,6 @@ namespace Magento\AdminNotification\Model\ResourceModel\System\Message;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -15,7 +14,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * System message list
      *
      * @var \Magento\Framework\Notification\MessageList
-     * @since 2.0.0
      */
     protected $_messageList;
 
@@ -23,7 +21,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Number of messages by severity
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_countBySeverity = [];
 
@@ -35,7 +32,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Notification\MessageList $messageList
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -54,7 +50,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource collection initialization
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -68,7 +63,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize db query
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initSelect()
     {
@@ -80,7 +74,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize system messages after load
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _afterLoad()
     {
@@ -104,7 +97,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $severity
      * @return $this
-     * @since 2.0.0
      */
     public function setSeverity($severity)
     {
@@ -117,7 +109,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $severity
      * @return int
-     * @since 2.0.0
      */
     public function getCountBySeverity($severity)
     {

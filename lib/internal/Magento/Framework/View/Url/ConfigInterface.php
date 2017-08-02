@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Url;
 /**
  * Url Config Interface
  * @api
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -17,7 +16,6 @@ interface ConfigInterface
      *
      * @param string $path
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue($path);
 }

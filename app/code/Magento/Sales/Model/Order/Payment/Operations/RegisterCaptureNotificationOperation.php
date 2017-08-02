@@ -13,7 +13,6 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 /**
  * Class \Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOperation
  *
- * @since 2.0.0
  */
 class RegisterCaptureNotificationOperation extends AbstractOperation
 {
@@ -24,7 +23,6 @@ class RegisterCaptureNotificationOperation extends AbstractOperation
      * @param string|float $amount
      * @param bool|int $skipFraudDetection
      * @return OrderPaymentInterface
-     * @since 2.0.0
      */
     public function registerCaptureNotification(OrderPaymentInterface $payment, $amount, $skipFraudDetection = false)
     {

@@ -10,19 +10,16 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 
 /**
  * Service to manage customer related custom attributes
- * @since 2.0.0
  */
 class CustomerMetadataManagement implements CustomerMetadataManagementInterface
 {
     /**
      * @var AttributeResolver
-     * @since 2.0.0
      */
     protected $attributeResolver;
 
     /**
      * @param AttributeResolver $attributeResolver
-     * @since 2.0.0
      */
     public function __construct(
         AttributeResolver $attributeResolver
@@ -32,7 +29,6 @@ class CustomerMetadataManagement implements CustomerMetadataManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canBeSearchableInGrid(AttributeMetadataInterface $attribute)
     {
@@ -42,7 +38,6 @@ class CustomerMetadataManagement implements CustomerMetadataManagementInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function canBeFilterableInGrid(AttributeMetadataInterface $attribute)
     {

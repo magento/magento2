@@ -8,7 +8,6 @@ namespace Magento\Framework\Mview;
 /**
  * Interface \Magento\Framework\Mview\ConfigInterface
  *
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -16,7 +15,6 @@ interface ConfigInterface
      * Get views list
      *
      * @return array[]
-     * @since 2.0.0
      */
     public function getViews();
 
@@ -25,7 +23,6 @@ interface ConfigInterface
      *
      * @param string $viewId
      * @return array
-     * @since 2.0.0
      */
     public function getView($viewId);
 }

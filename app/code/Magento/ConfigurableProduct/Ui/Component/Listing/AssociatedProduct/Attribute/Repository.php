@@ -7,13 +7,11 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Att
 
 /**
  * @api
- * @since 2.0.0
  */
 class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\AbstractRepository
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
@@ -21,7 +19,6 @@ class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\Abstrac
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
@@ -34,7 +31,6 @@ class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\Abstrac
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function buildSearchCriteria()
     {

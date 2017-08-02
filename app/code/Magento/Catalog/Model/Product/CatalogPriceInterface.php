@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Product;
  * Product price interface for external catalogs
  *
  * @api
- * @since 2.0.0
  */
 interface CatalogPriceInterface
 {
@@ -21,7 +20,6 @@ interface CatalogPriceInterface
      * @param null|\Magento\Store\Api\Data\StoreInterface $store Store view
      * @param bool $inclTax
      * @return null|float
-     * @since 2.0.0
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,
@@ -34,7 +32,6 @@ interface CatalogPriceInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return float|null
-     * @since 2.0.0
      */
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product);
 }

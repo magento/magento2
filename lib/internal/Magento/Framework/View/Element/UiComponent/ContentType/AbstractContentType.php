@@ -10,19 +10,16 @@ use Magento\Framework\View\TemplateEnginePool;
 
 /**
  * Class AbstractContentType
- * @since 2.0.0
  */
 abstract class AbstractContentType implements ContentTypeInterface
 {
     /**
      * @var FileSystem
-     * @since 2.0.0
      */
     protected $filesystem;
 
     /**
      * @var TemplateEnginePool
-     * @since 2.0.0
      */
     protected $templateEnginePool;
 
@@ -31,7 +28,6 @@ abstract class AbstractContentType implements ContentTypeInterface
      *
      * @param FileSystem $filesystem
      * @param TemplateEnginePool $templateEnginePool
-     * @since 2.0.0
      */
     public function __construct(
         FileSystem $filesystem,

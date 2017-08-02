@@ -10,7 +10,6 @@ namespace Magento\Framework\Event;
 /**
  * Interface \Magento\Framework\Event\ConfigInterface
  *
- * @since 2.0.0
  */
 interface ConfigInterface
 {
@@ -26,7 +25,6 @@ interface ConfigInterface
      *
      * @param string $eventName
      * @return array
-     * @since 2.0.0
      */
     public function getObservers($eventName);
 }

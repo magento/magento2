@@ -14,13 +14,11 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Title;
 /**
  * Class \Magento\Tax\Block\Adminhtml\Rate\Title\Fieldset
  *
- * @since 2.0.0
  */
 class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
 {
     /**
      * @var \Magento\Tax\Block\Adminhtml\Rate\Title
-     * @since 2.0.0
      */
     protected $_title;
 
@@ -30,7 +28,6 @@ class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Tax\Block\Adminhtml\Rate\Title $title
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -45,7 +42,6 @@ class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getBasicChildrenHtml()
     {

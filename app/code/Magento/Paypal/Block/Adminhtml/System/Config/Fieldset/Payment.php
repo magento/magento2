@@ -7,13 +7,11 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
 /**
  * Fieldset renderer for PayPal solution
- * @since 2.0.0
  */
 class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Config\Model\Config
-     * @since 2.0.0
      */
     protected $_backendConfig;
 
@@ -23,7 +21,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Config\Model\Config $backendConfig
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -41,7 +38,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.0.0
      */
     protected function _getFrontendClass($element)
     {
@@ -54,7 +50,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return bool
-     * @since 2.0.0
      */
     protected function _isPaymentEnabled($element)
     {
@@ -80,7 +75,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     protected function _getHeaderTitleHtml($element)
     {
@@ -138,7 +132,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _getHeaderCommentHtml($element)
     {
@@ -151,7 +144,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return false
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     protected function _isCollapseState($element)
     {
@@ -162,7 +154,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
+     * @since 2.1.3
      */
     protected function _getExtraJs($element)
     {

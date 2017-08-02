@@ -10,7 +10,6 @@ namespace Magento\Framework\App;
 /**
  * Class \Magento\Framework\App\AreaList
  *
- * @since 2.0.0
  */
 class AreaList
 {
@@ -18,31 +17,26 @@ class AreaList
      * Area configuration list
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_areas = [];
 
     /**
      * @var \Magento\Framework\App\AreaInterface[]
-     * @since 2.0.0
      */
     protected $_areaInstances = [];
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_defaultAreaCode;
 
     /**
      * @var Area\FrontNameResolverFactory
-     * @since 2.0.0
      */
     protected $_resolverFactory;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -51,7 +45,6 @@ class AreaList
      * @param Area\FrontNameResolverFactory $resolverFactory
      * @param array $areas
      * @param string|null $default
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -75,7 +68,6 @@ class AreaList
      * @param string $frontName
      * @return null|string
      * @api
-     * @since 2.0.0
      */
     public function getCodeByFrontName($frontName)
     {
@@ -97,7 +89,6 @@ class AreaList
      * @param string $areaCode
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getFrontName($areaCode)
     {
@@ -109,7 +100,6 @@ class AreaList
      *
      * @return string[]
      * @api
-     * @since 2.0.0
      */
     public function getCodes()
     {
@@ -122,7 +112,6 @@ class AreaList
      * @param string $areaCode
      * @return string
      * @api
-     * @since 2.0.0
      */
     public function getDefaultRouter($areaCode)
     {
@@ -134,7 +123,6 @@ class AreaList
      *
      * @param   string $code
      * @return  \Magento\Framework\App\Area
-     * @since 2.0.0
      */
     public function getArea($code)
     {

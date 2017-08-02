@@ -62,7 +62,6 @@ namespace Magento\Shipping\Model\Shipment;
  * @method float getPackageWeight()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Request extends \Magento\Framework\DataObject
 {

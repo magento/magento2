@@ -15,37 +15,31 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
- * @since 2.0.0
  */
 class Item extends AbstractModel implements CreditmemoItemInterface
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_creditmemo_item';
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'creditmemo_item';
 
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo|null
-     * @since 2.0.0
      */
     protected $_creditmemo = null;
 
     /**
      * @var \Magento\Sales\Model\Order\Item|null
-     * @since 2.0.0
      */
     protected $_orderItem = null;
 
     /**
      * @var \Magento\Sales\Model\Order\ItemFactory
-     * @since 2.0.0
      */
     protected $_orderItemFactory;
 
@@ -58,7 +52,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -86,7 +79,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Initialize resource model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -98,7 +90,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
-     * @since 2.0.0
      */
     public function setCreditmemo(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -110,7 +101,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Retrieve creditmemo instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
-     * @since 2.0.0
      */
     public function getCreditmemo()
     {
@@ -122,7 +112,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return $this
-     * @since 2.0.0
      */
     public function setOrderItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -135,7 +124,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Retrieve order item instance
      *
      * @return \Magento\Sales\Model\Order\Item
-     * @since 2.0.0
      */
     public function getOrderItem()
     {
@@ -168,7 +156,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      *
      * @param float $qty
      * @return $this
-     * @since 2.0.0
      */
     public function setQty($qty)
     {
@@ -180,7 +167,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Applying qty to order item
      *
      * @return \Magento\Sales\Model\Order\Creditmemo\Item
-     * @since 2.0.0
      */
     public function register()
     {
@@ -230,7 +216,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function cancel()
     {
@@ -255,7 +240,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Invoice item row total calculation
      *
      * @return \Magento\Sales\Model\Order\Invoice\Item
-     * @since 2.0.0
      */
     public function calcRowTotal()
     {
@@ -293,7 +277,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Checking if the item is last
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isLast()
     {
@@ -309,7 +292,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns additional_data
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getAdditionalData()
     {
@@ -320,7 +302,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_cost
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBaseCost()
     {
@@ -331,7 +312,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_discount_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseDiscountAmount()
     {
@@ -342,7 +322,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_discount_tax_compensation_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -353,7 +332,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_price
      *
      * @return float
-     * @since 2.0.0
      */
     public function getBasePrice()
     {
@@ -364,7 +342,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_price_incl_tax
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBasePriceInclTax()
     {
@@ -375,7 +352,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_row_total
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseRowTotal()
     {
@@ -386,7 +362,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_row_total_incl_tax
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseRowTotalInclTax()
     {
@@ -397,7 +372,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_tax_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseTaxAmount()
     {
@@ -408,7 +382,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_weee_tax_applied_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxAppliedAmount()
     {
@@ -419,7 +392,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_weee_tax_applied_row_amnt
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxAppliedRowAmnt()
     {
@@ -430,7 +402,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_weee_tax_disposition
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxDisposition()
     {
@@ -441,7 +412,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns base_weee_tax_row_disposition
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getBaseWeeeTaxRowDisposition()
     {
@@ -452,7 +422,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns description
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getDescription()
     {
@@ -463,7 +432,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns discount_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getDiscountAmount()
     {
@@ -474,7 +442,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns discount_tax_compensation_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -485,7 +452,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns name
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getName()
     {
@@ -496,7 +462,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns order_item_id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getOrderItemId()
     {
@@ -507,7 +472,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns parent_id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -518,7 +482,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns price
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getPrice()
     {
@@ -529,7 +492,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns price_incl_tax
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getPriceInclTax()
     {
@@ -540,7 +502,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns product_id
      *
      * @return int|null
-     * @since 2.0.0
      */
     public function getProductId()
     {
@@ -551,7 +512,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns qty
      *
      * @return float
-     * @since 2.0.0
      */
     public function getQty()
     {
@@ -562,7 +522,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns row_total
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getRowTotal()
     {
@@ -573,7 +532,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns row_total_incl_tax
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getRowTotalInclTax()
     {
@@ -584,7 +542,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns sku
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getSku()
     {
@@ -595,7 +552,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns tax_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getTaxAmount()
     {
@@ -606,7 +562,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns weee_tax_applied
      *
      * @return string|null
-     * @since 2.0.0
      */
     public function getWeeeTaxApplied()
     {
@@ -617,7 +572,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns weee_tax_applied_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedAmount()
     {
@@ -628,7 +582,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns weee_tax_applied_row_amount
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getWeeeTaxAppliedRowAmount()
     {
@@ -639,7 +592,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns weee_tax_disposition
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getWeeeTaxDisposition()
     {
@@ -650,7 +602,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * Returns weee_tax_row_disposition
      *
      * @return float|null
-     * @since 2.0.0
      */
     public function getWeeeTaxRowDisposition()
     {
@@ -661,7 +612,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setParentId($id)
     {
@@ -670,7 +620,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBasePrice($price)
     {
@@ -679,7 +628,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTaxAmount($amount)
     {
@@ -688,7 +636,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseRowTotal($amount)
     {
@@ -697,7 +644,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setDiscountAmount($amount)
     {
@@ -706,7 +652,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setRowTotal($amount)
     {
@@ -715,7 +660,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -724,7 +668,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPriceInclTax($amount)
     {
@@ -733,7 +676,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseTaxAmount($amount)
     {
@@ -742,7 +684,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBasePriceInclTax($amount)
     {
@@ -751,7 +692,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseCost($baseCost)
     {
@@ -760,7 +700,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPrice($price)
     {
@@ -769,7 +708,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseRowTotalInclTax($amount)
     {
@@ -778,7 +716,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setRowTotalInclTax($amount)
     {
@@ -787,7 +724,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setProductId($id)
     {
@@ -796,7 +732,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setOrderItemId($id)
     {
@@ -805,7 +740,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setAdditionalData($additionalData)
     {
@@ -814,7 +748,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setDescription($description)
     {
@@ -823,7 +756,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setSku($sku)
     {
@@ -832,7 +764,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setName($name)
     {
@@ -841,7 +772,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -850,7 +780,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -859,7 +788,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setWeeeTaxDisposition($weeeTaxDisposition)
     {
@@ -868,7 +796,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setWeeeTaxRowDisposition($weeeTaxRowDisposition)
     {
@@ -877,7 +804,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition)
     {
@@ -886,7 +812,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
@@ -895,7 +820,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setWeeeTaxApplied($weeeTaxApplied)
     {
@@ -904,7 +828,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxAppliedAmount($amount)
     {
@@ -913,7 +836,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setBaseWeeeTaxAppliedRowAmnt($amnt)
     {
@@ -922,7 +844,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setWeeeTaxAppliedAmount($amount)
     {
@@ -931,7 +852,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setWeeeTaxAppliedRowAmount($amount)
     {
@@ -942,7 +862,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -954,7 +873,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes

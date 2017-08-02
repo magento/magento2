@@ -16,25 +16,21 @@ use Magento\Framework\Search\Request\Query\BoolExpression;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Builder implements BuilderInterface
 {
     /**
      * @var ConditionManager
-     * @since 2.0.0
      */
     private $conditionManager;
 
     /**
      * @var FilterInterface[]
-     * @since 2.0.0
      */
     private $filters;
 
     /**
      * @var PreprocessorInterface
-     * @since 2.0.0
      */
     private $preprocessor;
 
@@ -44,7 +40,6 @@ class Builder implements BuilderInterface
      * @param Wildcard $wildcard
      * @param ConditionManager $conditionManager
      * @param PreprocessorInterface $preprocessor
-     * @since 2.0.0
      */
     public function __construct(
         Range $range,
@@ -64,7 +59,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function build(RequestFilterInterface $filter, $conditionType)
     {
@@ -75,7 +69,6 @@ class Builder implements BuilderInterface
      * @param RequestFilterInterface $filter
      * @param bool $isNegation
      * @return string
-     * @since 2.0.0
      */
     private function processFilter(RequestFilterInterface $filter, $isNegation)
     {
@@ -97,7 +90,6 @@ class Builder implements BuilderInterface
      * @param RequestFilterInterface|\Magento\Framework\Search\Request\Filter\Bool $filter
      * @param bool $isNegation
      * @return string
-     * @since 2.0.0
      */
     private function processBoolFilter(RequestFilterInterface $filter, $isNegation)
     {
@@ -123,7 +115,6 @@ class Builder implements BuilderInterface
      * @param string $unionOperator
      * @param bool $isNegation
      * @return string
-     * @since 2.0.0
      */
     private function buildFilters(array $filters, $unionOperator, $isNegation)
     {
@@ -138,7 +129,6 @@ class Builder implements BuilderInterface
     /**
      * @param string $conditionType
      * @return bool
-     * @since 2.0.0
      */
     private function isNegation($conditionType)
     {

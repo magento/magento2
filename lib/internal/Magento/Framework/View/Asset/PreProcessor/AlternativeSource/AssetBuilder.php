@@ -10,43 +10,36 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * Class AssetBuilder
- * @since 2.0.0
  */
 class AssetBuilder
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     private $area;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $theme;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $locale;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $module;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     private $path;
 
     /**
      * @var Repository
-     * @since 2.0.0
      */
     private $repository;
 
@@ -54,7 +47,6 @@ class AssetBuilder
      * Constructor
      *
      * @param Repository $repository
-     * @since 2.0.0
      */
     public function __construct(Repository $repository)
     {
@@ -66,7 +58,6 @@ class AssetBuilder
      *
      * @param string $area
      * @return $this
-     * @since 2.0.0
      */
     public function setArea($area)
     {
@@ -79,7 +70,6 @@ class AssetBuilder
      *
      * @param string $theme
      * @return $this
-     * @since 2.0.0
      */
     public function setTheme($theme)
     {
@@ -92,7 +82,6 @@ class AssetBuilder
      *
      * @param string $locale
      * @return $this
-     * @since 2.0.0
      */
     public function setLocale($locale)
     {
@@ -105,7 +94,6 @@ class AssetBuilder
      *
      * @param string $module
      * @return $this
-     * @since 2.0.0
      */
     public function setModule($module)
     {
@@ -118,7 +106,6 @@ class AssetBuilder
      *
      * @param string $path
      * @return $this
-     * @since 2.0.0
      */
     public function setPath($path)
     {
@@ -128,7 +115,6 @@ class AssetBuilder
 
     /**
      * @return File
-     * @since 2.0.0
      */
     public function build()
     {

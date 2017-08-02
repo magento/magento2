@@ -11,7 +11,6 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterfac
 
 /**
  * Class Form
- * @since 2.0.0
  */
 class Form implements ElementInterface
 {
@@ -23,7 +22,6 @@ class Form implements ElementInterface
      * @param DataObject $processedObject
      * @param DataObject $context
      * @return void
-     * @since 2.0.0
      */
     public function compile(
         CompilerInterface $compiler,
@@ -41,7 +39,6 @@ class Form implements ElementInterface
      *
      * @param \DOMElement $node
      * @return \DOMElement[]
-     * @since 2.0.0
      */
     protected function getChildNodes(\DOMElement $node)
     {

@@ -9,7 +9,6 @@ namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 /**
  * Class \Magento\Indexer\Controller\Adminhtml\Indexer\MassChangelog
  *
- * @since 2.0.0
  */
 class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
@@ -17,7 +16,6 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
      * Turn mview on for the given indexers
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

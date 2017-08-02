@@ -11,20 +11,17 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * this class should be abstract, but kept usual for legacy purposes
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_optionsData;
 
     /**
      * @param array $options
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(array $options)
     {
@@ -36,7 +33,6 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
-     * @since 2.0.0
      */
     public function getAllOptions()
     {

@@ -12,20 +12,18 @@ use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
 
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
- * @since 2.0.0
  */
 class Placeholder implements PostProcessorInterface
 {
     /**
      * @var ConfigPlaceholder
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $configPlaceholder;
 
     /**
      * Placeholder constructor.
      * @param ConfigPlaceholder $configPlaceholder
-     * @since 2.0.0
      */
     public function __construct(ConfigPlaceholder $configPlaceholder)
     {
@@ -34,7 +32,6 @@ class Placeholder implements PostProcessorInterface
 
     /**
      * @inheritdoc
-     * @since 2.0.0
      */
     public function process(array $data)
     {

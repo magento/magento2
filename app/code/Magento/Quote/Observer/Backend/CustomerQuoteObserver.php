@@ -13,25 +13,21 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class CustomerQuote
- * @since 2.0.0
  */
 class CustomerQuoteObserver implements ObserverInterface
 {
     /**
      * @var ShareConfig
-     * @since 2.0.0
      */
     protected $config;
 
     /**
      * @var StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -39,7 +35,6 @@ class CustomerQuoteObserver implements ObserverInterface
      * @param StoreManagerInterface $storeManager
      * @param ShareConfig $config
      * @param CartRepositoryInterface $quoteRepository
-     * @since 2.0.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -56,7 +51,6 @@ class CustomerQuoteObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(Observer $observer)
     {

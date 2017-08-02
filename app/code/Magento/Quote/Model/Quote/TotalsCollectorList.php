@@ -14,7 +14,6 @@ use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 /**
  * Class \Magento\Quote\Model\Quote\TotalsCollectorList
  *
- * @since 2.0.0
  */
 class TotalsCollectorList
 {
@@ -23,13 +22,11 @@ class TotalsCollectorList
      * Total models collector
      *
      * @var \Magento\Quote\Model\Quote\Address\Total\Collector
-     * @since 2.0.0
      */
     protected $totalCollector;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\Total\CollectorFactory
-     * @since 2.0.0
      */
     protected $totalCollectorFactory;
 
@@ -37,7 +34,6 @@ class TotalsCollectorList
      * Prefix of model events
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'sales_quote_address';
 
@@ -45,7 +41,6 @@ class TotalsCollectorList
      * Name of event object
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventObject = 'quote_address';
 
@@ -53,19 +48,16 @@ class TotalsCollectorList
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
-     * @since 2.0.0
      */
     protected $totalFactory;
 
@@ -75,7 +67,6 @@ class TotalsCollectorList
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Address\TotalFactory $totalFactory
-     * @since 2.0.0
      */
     public function __construct(
         Collector $totalCollector,
@@ -94,7 +85,6 @@ class TotalsCollectorList
     /**
      * @param int $storeId
      * @return Collector
-     * @since 2.0.0
      */
     private function getTotalCollector($storeId)
     {
@@ -111,7 +101,6 @@ class TotalsCollectorList
     /**
      * @param int $storeId
      * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal[]
-     * @since 2.0.0
      */
     public function getCollectors($storeId)
     {

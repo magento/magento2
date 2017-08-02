@@ -7,7 +7,6 @@ namespace Magento\CatalogInventory\Model\ResourceModel;
 
 /**
  * Correct particular stock products qty
- * @since 2.0.0
  */
 interface QtyCounterInterface
 {
@@ -18,7 +17,6 @@ interface QtyCounterInterface
      * @param int $websiteId
      * @param string $operator +/-
      * @return void
-     * @since 2.0.0
      */
     public function correctItemsQty(array $items, $websiteId, $operator);
 }

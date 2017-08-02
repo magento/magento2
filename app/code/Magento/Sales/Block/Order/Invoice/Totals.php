@@ -9,7 +9,6 @@ use Magento\Sales\Model\Order;
 
 /**
  * @api
- * @since 2.0.0
  */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
@@ -17,7 +16,6 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -30,13 +28,11 @@ class Totals extends \Magento\Sales\Block\Order\Totals
 
     /**
      * @var Order|null
-     * @since 2.0.0
      */
     protected $_invoice = null;
 
     /**
      * @return Order
-     * @since 2.0.0
      */
     public function getInvoice()
     {
@@ -55,7 +51,6 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * @param Order $invoice
      * @return $this
-     * @since 2.0.0
      */
     public function setInvoice($invoice)
     {
@@ -67,7 +62,6 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * Get totals source object
      *
      * @return Order
-     * @since 2.0.0
      */
     public function getSource()
     {
@@ -78,7 +72,6 @@ class Totals extends \Magento\Sales\Block\Order\Totals
      * Initialize order totals array
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _initTotals()
     {

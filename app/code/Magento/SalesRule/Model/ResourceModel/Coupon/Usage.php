@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Coupon;
  * SalesRule Model Resource Coupon_Usage
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,7 +16,6 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -30,7 +28,6 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $customerId
      * @param mixed $couponId
      * @return void
-     * @since 2.0.0
      */
     public function updateCustomerCouponTimesUsed($customerId, $couponId)
     {
@@ -68,7 +65,6 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $customerId
      * @param mixed $couponId
      * @return $this
-     * @since 2.0.0
      */
     public function loadByCustomerCoupon(\Magento\Framework\DataObject $object, $customerId, $couponId)
     {

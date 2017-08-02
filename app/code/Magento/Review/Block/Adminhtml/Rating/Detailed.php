@@ -12,7 +12,6 @@ use Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection as VoteColl
 
 /**
  * Adminhtml detailed rating stars
- * @since 2.0.0
  */
 class Detailed extends \Magento\Backend\Block\Template
 {
@@ -20,7 +19,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Vote collection
      *
      * @var VoteCollection
-     * @since 2.0.0
      */
     protected $_voteCollection = false;
 
@@ -28,7 +26,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Rating detail template name
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Review::rating/detailed.phtml';
 
@@ -36,7 +33,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
@@ -44,7 +40,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Rating resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Rating\CollectionFactory
-     * @since 2.0.0
      */
     protected $_ratingsFactory;
 
@@ -52,7 +47,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Rating resource option model
      *
      * @var \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory
-     * @since 2.0.0
      */
     protected $_votesFactory;
 
@@ -62,7 +56,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * @param \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $votesFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -81,7 +74,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Initialize review data
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -96,7 +88,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Get collection of ratings
      *
      * @return RatingCollection
-     * @since 2.0.0
      */
     public function getRating()
     {
@@ -145,7 +136,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * Set independent mode
      *
      * @return $this
-     * @since 2.0.0
      */
     public function setIndependentMode()
     {
@@ -160,7 +150,6 @@ class Detailed extends \Magento\Backend\Block\Template
      * @param \Magento\Review\Model\Rating $rating
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isSelected($option, $rating)
     {

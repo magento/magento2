@@ -12,13 +12,11 @@ namespace Magento\Tax\Model\TaxClass;
 /**
  * Class \Magento\Tax\Model\TaxClass\Factory
  *
- * @since 2.0.0
  */
 class Factory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $_objectManager;
 
@@ -26,7 +24,6 @@ class Factory
      * Type to class map
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_types = [
         \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER => \Magento\Tax\Model\TaxClass\Type\Customer::class,
@@ -35,7 +32,6 @@ class Factory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
@@ -48,7 +44,6 @@ class Factory
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @return \Magento\Tax\Model\TaxClass\Type\TypeInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function create(\Magento\Tax\Model\ClassModel $taxClass)
     {

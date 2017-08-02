@@ -11,26 +11,22 @@ use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 /**
  * Class \Magento\Framework\View\Element\Message\InterpretationStrategy
  *
- * @since 2.0.0
  */
 class InterpretationStrategy implements InterpretationStrategyInterface
 {
     /**
      * @var RenderersPool
-     * @since 2.0.0
      */
     private $renderersPool;
 
     /**
      * @var MessageConfigurationsPool
-     * @since 2.0.0
      */
     private $messageConfigurationsPool;
 
     /**
      * @param RenderersPool $renderersPool
      * @param MessageConfigurationsPool $messageConfigurationsPool
-     * @since 2.0.0
      */
     public function __construct(
         RenderersPool $renderersPool,
@@ -46,7 +42,6 @@ class InterpretationStrategy implements InterpretationStrategyInterface
      * @param MessageInterface $message
      * @return string
      * @throws \LogicException
-     * @since 2.0.0
      */
     public function interpret(MessageInterface $message)
     {

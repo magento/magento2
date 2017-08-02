@@ -9,7 +9,6 @@ namespace Magento\Framework\Api;
 /**
  * Builder for sort order data object.
  * @method SortOrder create()
- * @since 2.0.0
  */
 class SortOrderBuilder extends AbstractSimpleObjectBuilder
 {
@@ -18,7 +17,6 @@ class SortOrderBuilder extends AbstractSimpleObjectBuilder
      *
      * @param string $field
      * @return $this
-     * @since 2.0.0
      */
     public function setField($field)
     {
@@ -31,7 +29,6 @@ class SortOrderBuilder extends AbstractSimpleObjectBuilder
      *
      * @param string $direction
      * @return $this
-     * @since 2.0.0
      */
     public function setDirection($direction)
     {
@@ -41,7 +38,6 @@ class SortOrderBuilder extends AbstractSimpleObjectBuilder
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function setAscendingDirection()
     {
@@ -51,7 +47,6 @@ class SortOrderBuilder extends AbstractSimpleObjectBuilder
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function setDescendingDirection()
     {

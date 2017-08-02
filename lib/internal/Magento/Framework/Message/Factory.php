@@ -10,7 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Message model factory
- * @since 2.0.0
  */
 class Factory
 {
@@ -18,7 +17,6 @@ class Factory
      * Allowed message types
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $types = [
         MessageInterface::TYPE_ERROR,
@@ -31,7 +29,6 @@ class Factory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -39,7 +36,6 @@ class Factory
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -54,7 +50,6 @@ class Factory
      * @param string $text The text to inject into the message
      * @throws \InvalidArgumentException Exception gets thrown if type does not correspond to a valid Magento message
      * @return MessageInterface
-     * @since 2.0.0
      */
     public function create($type, $text = null)
     {

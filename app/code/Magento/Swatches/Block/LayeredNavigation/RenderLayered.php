@@ -15,7 +15,6 @@ use Magento\Catalog\Model\Layer\Filter\Item as FilterItem;
  * Class RenderLayered Render Swatches at Layered Navigation
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class RenderLayered extends Template
 {
@@ -28,37 +27,31 @@ class RenderLayered extends Template
      * Path to template file.
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'Magento_Swatches::product/layered/renderer.phtml';
 
     /**
      * @var \Magento\Eav\Model\Attribute
-     * @since 2.0.0
      */
     protected $eavAttribute;
 
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @since 2.0.0
      */
     protected $filter;
 
     /**
      * @var AttributeFactory
-     * @since 2.0.0
      */
     protected $layerAttribute;
 
     /**
      * @var \Magento\Swatches\Helper\Data
-     * @since 2.0.0
      */
     protected $swatchHelper;
 
     /**
      * @var \Magento\Swatches\Helper\Media
-     * @since 2.0.0
      */
     protected $mediaHelper;
 
@@ -69,7 +62,6 @@ class RenderLayered extends Template
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      * @param \Magento\Swatches\Helper\Media $mediaHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -91,7 +83,6 @@ class RenderLayered extends Template
      * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function setSwatchFilter(\Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter)
     {
@@ -103,7 +94,6 @@ class RenderLayered extends Template
 
     /**
      * @return array
-     * @since 2.0.0
      */
     public function getSwatchData()
     {
@@ -138,7 +128,6 @@ class RenderLayered extends Template
      * @param string $attributeCode
      * @param int $optionId
      * @return string
-     * @since 2.0.0
      */
     public function buildUrl($attributeCode, $optionId)
     {
@@ -149,7 +138,6 @@ class RenderLayered extends Template
     /**
      * @param Option $swatchOption
      * @return array
-     * @since 2.0.0
      */
     protected function getUnusedOption(Option $swatchOption)
     {
@@ -164,7 +152,6 @@ class RenderLayered extends Template
      * @param FilterItem[] $filterItems
      * @param Option $swatchOption
      * @return array
-     * @since 2.0.0
      */
     protected function getFilterOption(array $filterItems, Option $swatchOption)
     {
@@ -181,7 +168,6 @@ class RenderLayered extends Template
      * @param FilterItem $filterItem
      * @param Option $swatchOption
      * @return array
-     * @since 2.0.0
      */
     protected function getOptionViewData(FilterItem $filterItem, Option $swatchOption)
     {
@@ -202,7 +188,6 @@ class RenderLayered extends Template
     /**
      * @param FilterItem $filterItem
      * @return bool
-     * @since 2.0.0
      */
     protected function isOptionVisible(FilterItem $filterItem)
     {
@@ -211,7 +196,6 @@ class RenderLayered extends Template
 
     /**
      * @return bool
-     * @since 2.0.0
      */
     protected function isShowEmptyResults()
     {
@@ -221,7 +205,6 @@ class RenderLayered extends Template
     /**
      * @param FilterItem $filterItem
      * @return bool
-     * @since 2.0.0
      */
     protected function isOptionDisabled(FilterItem $filterItem)
     {
@@ -232,7 +215,6 @@ class RenderLayered extends Template
      * @param FilterItem[] $filterItems
      * @param integer $id
      * @return bool|FilterItem
-     * @since 2.0.0
      */
     protected function getFilterItemById(array $filterItems, $id)
     {
@@ -248,7 +230,6 @@ class RenderLayered extends Template
      * @param string $type
      * @param string $filename
      * @return string
-     * @since 2.0.0
      */
     public function getSwatchPath($type, $filename)
     {

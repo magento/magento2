@@ -9,7 +9,6 @@ namespace Magento\Payment\Gateway\Request;
  * Interface BuilderInterface
  * @package Magento\Payment\Gateway\Request
  * @api
- * @since 2.0.0
  */
 interface BuilderInterface
 {
@@ -18,7 +17,6 @@ interface BuilderInterface
      *
      * @param array $buildSubject
      * @return array
-     * @since 2.0.0
      */
     public function build(array $buildSubject);
 }

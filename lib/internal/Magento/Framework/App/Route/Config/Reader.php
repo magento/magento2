@@ -10,7 +10,6 @@ namespace Magento\Framework\App\Route\Config;
 /**
  * Class \Magento\Framework\App\Route\Config\Reader
  *
- * @since 2.0.0
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -18,7 +17,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of paths to identifiable nodes
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_idAttributes = [
         '/config/router' => 'id',
@@ -32,7 +30,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

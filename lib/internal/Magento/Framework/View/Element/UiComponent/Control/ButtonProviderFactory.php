@@ -9,13 +9,11 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ButtonProviderFactory
- * @since 2.0.0
  */
 class ButtonProviderFactory
 {
     /**
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -23,7 +21,6 @@ class ButtonProviderFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @since 2.0.0
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -36,7 +33,6 @@ class ButtonProviderFactory
      * @param string $providerClass
      * @param array $arguments
      * @return ButtonProviderInterface
-     * @since 2.0.0
      */
     public function create($providerClass, array $arguments = [])
     {

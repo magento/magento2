@@ -13,7 +13,6 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Class \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable
  *
- * @since 2.0.0
  */
 class Configurable
 {
@@ -21,13 +20,11 @@ class Configurable
      * Request instance
      *
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $request;
 
     /**
      * @param RequestInterface $request
-     * @since 2.0.0
      */
     public function __construct(RequestInterface $request)
     {
@@ -42,7 +39,6 @@ class Configurable
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function aroundProcessProduct(
         \Magento\Catalog\Model\Product\TypeTransitionManager $subject,

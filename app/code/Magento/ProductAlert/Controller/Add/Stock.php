@@ -16,13 +16,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\ProductAlert\Controller\Add\Stock
  *
- * @since 2.0.0
  */
 class Stock extends AddController
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -30,7 +28,6 @@ class Stock extends AddController
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -43,7 +40,6 @@ class Stock extends AddController
 
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

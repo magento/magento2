@@ -9,13 +9,11 @@ namespace Magento\GiftMessage\Model;
  * Adminhtml giftmessage save model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Save extends \Magento\Framework\DataObject
 {
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_saved = false;
 
@@ -23,25 +21,21 @@ class Save extends \Magento\Framework\DataObject
      * Gift message message
      *
      * @var \Magento\GiftMessage\Helper\Message|null
-     * @since 2.0.0
      */
     protected $_giftMessageMessage = null;
 
     /**
      * @var \Magento\Backend\Model\Session\Quote
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\GiftMessage\Model\MessageFactory
-     * @since 2.0.0
      */
     protected $_messageFactory;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
@@ -50,7 +44,6 @@ class Save extends \Magento\Framework\DataObject
      * @param \Magento\GiftMessage\Model\MessageFactory $messageFactory
      * @param \Magento\Backend\Model\Session\Quote $session
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -68,7 +61,6 @@ class Save extends \Magento\Framework\DataObject
      * Save all seted giftmessages
      *
      * @return $this
-     * @since 2.0.0
      */
     public function saveAllInQuote()
     {
@@ -90,7 +82,6 @@ class Save extends \Magento\Framework\DataObject
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getSaved()
     {
@@ -99,7 +90,6 @@ class Save extends \Magento\Framework\DataObject
 
     /**
      * @return $this
-     * @since 2.0.0
      */
     public function saveAllInOrder()
     {
@@ -124,7 +114,6 @@ class Save extends \Magento\Framework\DataObject
      * @param array $giftmessage
      * @param string $entityType
      * @return $this
-     * @since 2.0.0
      */
     protected function _saveOne($entityId, $giftmessage, $entityType)
     {
@@ -177,7 +166,6 @@ class Save extends \Magento\Framework\DataObject
      * @param \Magento\Framework\DataObject $entityModel
      * @param \Magento\GiftMessage\Model\Message|null $giftmessageModel
      * @return $this
-     * @since 2.0.0
      */
     protected function _deleteOne($entityModel, $giftmessageModel = null)
     {
@@ -194,7 +182,6 @@ class Save extends \Magento\Framework\DataObject
      *
      * @param array $items
      * @return $this
-     * @since 2.0.0
      */
     public function setAllowQuoteItems($items)
     {
@@ -207,7 +194,6 @@ class Save extends \Magento\Framework\DataObject
      *
      * @param int $item
      * @return $this
-     * @since 2.0.0
      */
     public function addAllowQuoteItem($item)
     {
@@ -224,7 +210,6 @@ class Save extends \Magento\Framework\DataObject
      * Retrieve allowed quote items for gift messages
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowQuoteItems()
     {
@@ -239,7 +224,6 @@ class Save extends \Magento\Framework\DataObject
      * Retrieve allowed quote items products for gift messages
      *
      * @return array
-     * @since 2.0.0
      */
     public function getAllowQuoteItemsProducts()
     {
@@ -260,7 +244,6 @@ class Save extends \Magento\Framework\DataObject
      * @param  \Magento\Framework\DataObject $item
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getIsAllowedQuoteItem($item)
     {
@@ -280,7 +263,6 @@ class Save extends \Magento\Framework\DataObject
      *
      * @param \Magento\Framework\DataObject $item
      * @return bool
-     * @since 2.0.0
      */
     public function isGiftMessagesAvailable($item)
     {
@@ -292,7 +274,6 @@ class Save extends \Magento\Framework\DataObject
      *
      * @param mixed $products
      * @return $this
-     * @since 2.0.0
      */
     public function importAllowQuoteItemsFromProducts($products)
     {
@@ -322,7 +303,6 @@ class Save extends \Magento\Framework\DataObject
     /**
      * @param mixed $items
      * @return $this
-     * @since 2.0.0
      */
     public function importAllowQuoteItemsFromItems($items)
     {
@@ -354,7 +334,6 @@ class Save extends \Magento\Framework\DataObject
      *
      * @param string $type
      * @return string|null
-     * @since 2.0.0
      */
     protected function getMappedType($type)
     {
@@ -376,7 +355,6 @@ class Save extends \Magento\Framework\DataObject
      *
      * @return \Magento\Quote\Model\Quote
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     protected function _getQuote()
     {

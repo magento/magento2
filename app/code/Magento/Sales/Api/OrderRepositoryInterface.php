@@ -12,7 +12,6 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
- * @since 2.0.0
  */
 interface OrderRepositoryInterface
 {
@@ -25,7 +24,6 @@ interface OrderRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\OrderSearchResultInterface Order search result interface.
-     * @since 2.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -34,7 +32,6 @@ interface OrderRepositoryInterface
      *
      * @param int $id The order ID.
      * @return \Magento\Sales\Api\Data\OrderInterface Order interface.
-     * @since 2.0.0
      */
     public function get($id);
 
@@ -43,7 +40,6 @@ interface OrderRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderInterface $entity The order ID.
      * @return bool
-     * @since 2.0.0
      */
     public function delete(\Magento\Sales\Api\Data\OrderInterface $entity);
 
@@ -52,7 +48,6 @@ interface OrderRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderInterface $entity The order ID.
      * @return \Magento\Sales\Api\Data\OrderInterface Order interface.
-     * @since 2.0.0
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity);
 }

@@ -9,7 +9,6 @@ namespace Magento\Ui\Api\Data;
  * Bookmark interface
  *
  * @api
- * @since 2.0.0
  */
 interface BookmarkInterface extends BookmarkExtensionInterface
 {
@@ -31,7 +30,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get ID
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId();
 
@@ -39,7 +37,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get user id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getUserId();
 
@@ -47,7 +44,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNamespace();
 
@@ -55,7 +51,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdentifier();
 
@@ -63,7 +58,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle();
 
@@ -71,7 +65,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get config content
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfig();
 
@@ -79,7 +72,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get creation time
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreatedAt();
 
@@ -87,7 +79,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get update time
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdatedAt();
 
@@ -95,7 +86,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Get user bookmark is current
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCurrent();
 
@@ -104,7 +94,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param int $id
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setId($id);
 
@@ -113,7 +102,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param int $userId
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setUserId($userId);
 
@@ -122,7 +110,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param string $namespace
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setNamespace($namespace);
 
@@ -131,7 +118,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param string $identifier
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setIdentifier($identifier);
 
@@ -140,7 +126,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param string $title
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setTitle($title);
 
@@ -149,7 +134,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param string $config
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setConfig($config);
 
@@ -158,7 +142,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param string $createdAt
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt);
 
@@ -167,7 +150,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param string $updatedAt
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt);
 
@@ -176,7 +158,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param bool $isCurrent
      * @return \Magento\Ui\Api\Data\BookmarkInterface
-     * @since 2.0.0
      */
     public function setCurrent($isCurrent);
 
@@ -184,7 +165,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      * Retrieve existing extension attributes object or create a new one
      *
      * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes();
 
@@ -193,7 +173,6 @@ interface BookmarkInterface extends BookmarkExtensionInterface
      *
      * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(
         \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes

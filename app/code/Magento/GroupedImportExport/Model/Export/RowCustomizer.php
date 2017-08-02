@@ -10,7 +10,6 @@ use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 /**
  * Class \Magento\GroupedImportExport\Model\Export\RowCustomizer
  *
- * @since 2.0.0
  */
 class RowCustomizer implements RowCustomizerInterface
 {
@@ -21,7 +20,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param int $productIds
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function prepareData($collection, $productIds)
     {
@@ -33,7 +31,6 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * @param array $columns
      * @return mixed
-     * @since 2.0.0
      */
     public function addHeaderColumns($columns)
     {
@@ -53,7 +50,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param int $productId
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function addData($dataRow, $productId)
     {
@@ -67,7 +63,6 @@ class RowCustomizer implements RowCustomizerInterface
      * @param int $productId
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {

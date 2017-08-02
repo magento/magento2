@@ -9,25 +9,21 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class Page
- * @since 2.0.0
  */
 class Page implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $options;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @param CollectionFactory $collectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         CollectionFactory $collectionFactory
@@ -39,7 +35,6 @@ class Page implements \Magento\Framework\Option\ArrayInterface
      * To option array
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

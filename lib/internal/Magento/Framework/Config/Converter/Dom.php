@@ -8,7 +8,6 @@ namespace Magento\Framework\Config\Converter;
 /**
  * Class \Magento\Framework\Config\Converter\Dom
  *
- * @since 2.0.0
  */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
@@ -21,7 +20,6 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      *
      * @param mixed $source
      * @return array
-     * @since 2.0.0
      */
     public function convert($source)
     {

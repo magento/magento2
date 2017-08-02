@@ -8,19 +8,16 @@ namespace Magento\Backend\Block\Widget\Button;
 
 /**
  * @api
- * @since 2.0.0
  */
 class ButtonList
 {
     /**
      * @var ItemFactory
-     * @since 2.0.0
      */
     protected $itemFactory;
 
     /**
      * @param ItemFactory $itemFactory
-     * @since 2.0.0
      */
     public function __construct(ItemFactory $itemFactory)
     {
@@ -29,7 +26,6 @@ class ButtonList
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $_buttons = [-1 => [], 0 => [], 1 => []];
 
@@ -43,7 +39,6 @@ class ButtonList
      * @param string|null $region That button should be displayed in ('toolbar', 'header', 'footer', null)
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function add($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -65,7 +60,6 @@ class ButtonList
      *
      * @param string $buttonId
      * @return void
-     * @since 2.0.0
      */
     public function remove($buttonId)
     {
@@ -86,7 +80,6 @@ class ButtonList
      * @param string|null $key
      * @param string $data
      * @return void
-     * @since 2.0.0
      */
     public function update($buttonId, $key, $data)
     {
@@ -115,7 +108,6 @@ class ButtonList
      * Get all buttons
      *
      * @return array
-     * @since 2.0.0
      */
     public function getItems()
     {
@@ -131,7 +123,6 @@ class ButtonList
      * @param Item $itemA
      * @param Item $itemB
      * @return int
-     * @since 2.0.0
      */
     public function sortButtons(Item $itemA, Item $itemB)
     {

@@ -8,7 +8,6 @@ namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 /**
  * Class \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
  *
- * @since 2.0.0
  */
 class Inputtype implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,7 +15,6 @@ class Inputtype implements \Magento\Framework\Option\ArrayInterface
      * Return array of options
      *
      * @return array
-     * @since 2.0.0
      */
     public function toOptionArray()
     {

@@ -31,7 +31,6 @@ use Magento\Framework\DataObject;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -49,7 +48,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Real file path
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_filePath;
 
@@ -57,7 +55,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Sitemap items
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_sitemapItems = [];
 
@@ -65,7 +62,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Current sitemap increment
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_sitemapIncrement = 0;
 
@@ -73,7 +69,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Sitemap start and end tags
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_tags = [];
 
@@ -81,7 +76,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Number of lines in sitemap
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_lineCount = 0;
 
@@ -89,7 +83,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Current sitemap file size
      *
      * @var int
-     * @since 2.0.0
      */
     protected $_fileSize = 0;
 
@@ -97,19 +90,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * New line possible symbols
      *
      * @var array
-     * @since 2.0.0
      */
     private $_crlf = ["win" => "\r\n", "unix" => "\n", "mac" => "\r"];
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
-     * @since 2.0.0
      */
     protected $_directory;
 
     /**
      * @var \Magento\Framework\Filesystem\File\Write
-     * @since 2.0.0
      */
     protected $_stream;
 
@@ -117,55 +107,46 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Sitemap data
      *
      * @var \Magento\Sitemap\Helper\Data
-     * @since 2.0.0
      */
     protected $_sitemapData;
 
     /**
      * @var \Magento\Framework\Escaper
-     * @since 2.0.0
      */
     protected $_escaper;
 
     /**
      * @var \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory
-     * @since 2.0.0
      */
     protected $_categoryFactory;
 
     /**
      * @var \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory
-     * @since 2.0.0
      */
     protected $_cmsFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 2.0.0
      */
     protected $_dateModel;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $_storeManager;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @since 2.0.0
      */
     protected $_request;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @since 2.0.0
      */
     protected $dateTime;
 
@@ -197,7 +178,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param array $data
      * @param DocumentRoot|null $documentRoot
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -236,7 +216,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Init model
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -248,7 +227,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return \Magento\Framework\Filesystem\File\WriteInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _getStream()
     {
@@ -314,7 +292,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Initialize sitemap
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initSitemapItems()
     {
@@ -345,7 +322,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -399,7 +375,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @see http://www.sitemaps.org/protocol.html
      *
      * @return $this
-     * @since 2.0.0
      */
     public function generateXml()
     {
@@ -457,7 +432,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Generate sitemap index XML file
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _createSitemapIndex()
     {
@@ -473,7 +447,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get current date time
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getCurrentDateTime()
     {
@@ -485,7 +458,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $row
      * @return bool
-     * @since 2.0.0
      */
     protected function _isSplitRequired($row)
     {
@@ -517,7 +489,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * Sitemap PageMap
      * @see http://support.google.com/customsearch/bin/answer.py?hl=en&answer=1628213
-     * @since 2.0.0
      */
     protected function _getSitemapRow($url, $lastmod = null, $changefreq = null, $priority = null, $images = null)
     {
@@ -559,7 +530,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param string $sitemapFilename
      * @param null|string $lastmod
      * @return string
-     * @since 2.0.0
      */
     protected function _getSitemapIndexRow($sitemapFilename, $lastmod = null)
     {
@@ -579,7 +549,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param string $type
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     protected function _createSitemap($fileName = null, $type = self::TYPE_URL)
     {
@@ -601,7 +570,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $row
      * @return void
-     * @since 2.0.0
      */
     protected function _writeSitemapRow($row)
     {
@@ -613,7 +581,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $type
      * @return void
-     * @since 2.0.0
      */
     protected function _finalizeSitemap($type = self::TYPE_URL)
     {
@@ -632,7 +599,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param int $index
      * @return string
-     * @since 2.0.0
      */
     protected function _getCurrentSitemapFilename($index)
     {
@@ -643,7 +609,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get base dir
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getBaseDir()
     {
@@ -655,7 +620,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     protected function _getStoreBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
     {
@@ -671,7 +635,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param string $url
      * @param string $type
      * @return string
-     * @since 2.0.0
      */
     protected function _getUrl($url, $type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
     {
@@ -685,7 +648,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @return string
      * @deprecated 2.2.0 No longer used, as we're generating product image URLs inside collection instead
      * @see \Magento\Sitemap\Model\ResourceModel\Catalog\Product::_loadProductImages()
-     * @since 2.0.0
      */
     protected function _getMediaUrl($url)
     {
@@ -697,7 +659,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $date
      * @return string
-     * @since 2.0.0
      */
     protected function _getFormattedLastmodDate($date)
     {
@@ -708,7 +669,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get Document root of Magento instance
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getDocumentRoot()
     {
@@ -719,7 +679,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get domain from store base url
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getStoreBaseDomain()
     {
@@ -748,7 +707,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param string $sitemapPath
      * @param string $sitemapFileName
      * @return string
-     * @since 2.0.0
      */
     public function getSitemapUrl($sitemapPath, $sitemapFileName)
     {
@@ -761,7 +719,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @return bool
      * @deprecated 2.2.0 Because the robots.txt file is not generated anymore,
      *             this method is not needed and will be removed in major release.
-     * @since 2.0.0
      */
     protected function _isEnabledSubmissionRobots()
     {
@@ -778,7 +735,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @return void
      * @deprecated 2.2.0 Because the robots.txt file is not generated anymore,
      *             this method is not needed and will be removed in major release.
-     * @since 2.0.0
      */
     protected function _addSitemapToRobotsTxt($sitemapFileName)
     {
@@ -805,7 +761,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $text
      * @return string
-     * @since 2.0.0
      */
     private function _findNewLinesDelimiter($text)
     {

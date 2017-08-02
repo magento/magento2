@@ -9,13 +9,11 @@ use Magento\Framework\Autoload\AutoloaderInterface;
 
 /**
  * Registry to store a static member autoloader
- * @since 2.0.0
  */
 class AutoloaderRegistry
 {
     /**
      * @var AutoloaderInterface
-     * @since 2.0.0
      */
     protected static $autoloader;
 
@@ -24,7 +22,6 @@ class AutoloaderRegistry
      *
      * @param AutoloaderInterface $newAutoloader
      * @return void
-     * @since 2.0.0
      */
     public static function registerAutoloader(AutoloaderInterface $newAutoloader)
     {
@@ -36,7 +33,6 @@ class AutoloaderRegistry
      *
      * @throws \Exception
      * @return AutoloaderInterface
-     * @since 2.0.0
      */
     public static function getAutoloader()
     {

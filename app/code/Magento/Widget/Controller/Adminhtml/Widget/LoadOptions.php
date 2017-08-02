@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
  *
- * @since 2.0.0
  */
 class LoadOptions extends \Magento\Backend\App\Action
 {
@@ -25,7 +24,6 @@ class LoadOptions extends \Magento\Backend\App\Action
      * Ajax responder for loading plugin options form
      *
      * @return void
-     * @since 2.0.0
      */
     public function execute()
     {

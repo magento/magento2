@@ -13,7 +13,6 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -21,7 +20,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Store rule combine conditions model
      *
      * @var \Magento\Rule\Model\Condition\Combine
-     * @since 2.0.0
      */
     protected $_conditions;
 
@@ -29,7 +27,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Store rule actions model
      *
      * @var \Magento\Rule\Model\Action\Collection
-     * @since 2.0.0
      */
     protected $_actions;
 
@@ -37,7 +34,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Store rule form instance
      *
      * @var \Magento\Framework\Data\Form
-     * @since 2.0.0
      */
     protected $_form;
 
@@ -45,7 +41,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Is model can be deleted flag
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isDeleteable = true;
 
@@ -53,7 +48,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Is model readonly
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_isReadonly = false;
 
@@ -67,7 +61,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Getter for rule combine conditions instance
      *
      * @return \Magento\Rule\Model\Condition\Combine
-     * @since 2.0.0
      */
     abstract public function getConditionsInstance();
 
@@ -75,7 +68,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Getter for rule actions collection instance
      *
      * @return \Magento\Rule\Model\Action\Collection
-     * @since 2.0.0
      */
     abstract public function getActionsInstance();
 
@@ -83,7 +75,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Form factory
      *
      * @var \Magento\Framework\Data\FormFactory
-     * @since 2.0.0
      */
     protected $_formFactory;
 
@@ -91,7 +82,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Timezone instance
      *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @since 2.0.0
      */
     protected $_localeDate;
 
@@ -109,7 +99,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param AttributeValueFactory|null $customAttributeFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -145,7 +134,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function beforeSave()
     {
@@ -199,7 +187,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param \Magento\Rule\Model\Condition\Combine $conditions
      * @return $this
-     * @since 2.0.0
      */
     public function setConditions($conditions)
     {
@@ -211,7 +198,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Retrieve rule combine conditions model
      *
      * @return \Magento\Rule\Model\Condition\Combine
-     * @since 2.0.0
      */
     public function getConditions()
     {
@@ -239,7 +225,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param \Magento\Rule\Model\Action\Collection $actions
      * @return $this
-     * @since 2.0.0
      */
     public function setActions($actions)
     {
@@ -251,7 +236,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Retrieve rule actions model
      *
      * @return \Magento\Rule\Model\Action\Collection
-     * @since 2.0.0
      */
     public function getActions()
     {
@@ -279,7 +263,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param null|\Magento\Rule\Model\Condition\Combine $conditions
      * @return $this
-     * @since 2.0.0
      */
     protected function _resetConditions($conditions = null)
     {
@@ -297,7 +280,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param null|\Magento\Rule\Model\Action\Collection $actions
      * @return $this
-     * @since 2.0.0
      */
     protected function _resetActions($actions = null)
     {
@@ -314,7 +296,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Rule form getter
      *
      * @return \Magento\Framework\Data\Form
-     * @since 2.0.0
      */
     public function getForm()
     {
@@ -329,7 +310,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param array $data
      * @return $this
-     * @since 2.0.0
      */
     public function loadPost(array $data)
     {
@@ -352,7 +332,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param array $data
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     protected function _convertFlatToRecursive(array $data)
     {
@@ -391,7 +370,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param \Magento\Framework\DataObject $object
      * @return bool
-     * @since 2.0.0
      */
     public function validate(\Magento\Framework\DataObject $object)
     {
@@ -405,7 +383,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 2.0.0
      */
     public function validateData(\Magento\Framework\DataObject $dataObject)
     {
@@ -447,7 +424,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isDeleteable()
     {
@@ -460,7 +436,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param bool $value
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setIsDeleteable($value)
     {
@@ -473,7 +448,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @return bool
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isReadonly()
     {
@@ -486,7 +460,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param bool $value
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function setIsReadonly($value)
     {
@@ -498,7 +471,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Get rule associated website Ids
      *
      * @return array
-     * @since 2.0.0
      */
     public function getWebsiteIds()
     {

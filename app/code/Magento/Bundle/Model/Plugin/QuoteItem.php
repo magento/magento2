@@ -11,7 +11,6 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem
- * @since 2.0.0
  */
 class QuoteItem
 {

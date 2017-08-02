@@ -14,7 +14,6 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 /**
  * Class \Magento\Catalog\Block\Adminhtml\Category\Helper\Pricestep
  *
- * @since 2.0.0
  */
 class Pricestep extends \Magento\Framework\Data\Form\Element\Text
 {
@@ -22,7 +21,6 @@ class Pricestep extends \Magento\Framework\Data\Form\Element\Text
      * Returns js code that is used instead of default toggle code for "Use default config" checkbox
      *
      * @return string
-     * @since 2.0.0
      */
     public function getToggleCode()
     {
@@ -35,7 +33,6 @@ class Pricestep extends \Magento\Framework\Data\Form\Element\Text
      * Retrieve Element HTML fragment
      *
      * @return string
-     * @since 2.0.0
      */
     public function getElementHtml()
     {

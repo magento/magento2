@@ -14,7 +14,6 @@ namespace Magento\Newsletter\Model\Template;
 /**
  * Class \Magento\Newsletter\Model\Template\Filter
  *
- * @since 2.0.0
  */
 class Filter extends \Magento\Widget\Model\Template\FilterEmulate
 {
@@ -23,7 +22,6 @@ class Filter extends \Magento\Widget\Model\Template\FilterEmulate
      *
      * @param string[] $construction
      * @return string
-     * @since 2.0.0
      */
     public function widgetDirective($construction)
     {

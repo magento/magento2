@@ -20,37 +20,31 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class DataProvider implements DataProviderInterface
 {
     /**
      * @var Config
-     * @since 2.0.0
      */
     private $eavConfig;
 
     /**
      * @var Resource
-     * @since 2.0.0
      */
     private $resource;
 
     /**
      * @var ScopeResolverInterface
-     * @since 2.0.0
      */
     private $scopeResolver;
 
     /**
      * @var Session
-     * @since 2.0.0
      */
     private $customerSession;
 
     /**
      * @var AdapterInterface
-     * @since 2.0.0
      */
     private $connection;
 
@@ -59,7 +53,6 @@ class DataProvider implements DataProviderInterface
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
-     * @since 2.0.0
      */
     public function __construct(
         Config $eavConfig,
@@ -76,7 +69,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getDataSet(
         BucketInterface $bucket,
@@ -133,7 +125,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute(Select $select)
     {
@@ -142,7 +133,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @return Select
-     * @since 2.0.0
      */
     private function getSelect()
     {

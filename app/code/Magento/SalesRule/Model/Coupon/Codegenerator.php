@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Coupon;
 /**
  * Class \Magento\SalesRule\Model\Coupon\Codegenerator
  *
- * @since 2.0.0
  */
 class Codegenerator extends \Magento\Framework\DataObject implements CodegeneratorInterface
 {
@@ -36,7 +35,6 @@ class Codegenerator extends \Magento\Framework\DataObject implements Codegenerat
      * Retrieve generated code
      *
      * @return string
-     * @since 2.0.0
      */
     public function generateCode()
     {
@@ -54,7 +52,6 @@ class Codegenerator extends \Magento\Framework\DataObject implements Codegenerat
      * Getting actual code length
      *
      * @return int
-     * @since 2.0.0
      */
     protected function getActualLength()
     {
@@ -68,7 +65,6 @@ class Codegenerator extends \Magento\Framework\DataObject implements Codegenerat
      * Retrieve delimiter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDelimiter()
     {

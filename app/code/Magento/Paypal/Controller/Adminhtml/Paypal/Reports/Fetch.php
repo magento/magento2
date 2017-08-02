@@ -14,7 +14,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Paypal\Controller\Adminhtml\Paypal\Reports\Fetch
  *
- * @since 2.0.0
  */
 class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
@@ -29,7 +28,6 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      * Forced fetch reports action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @since 2.0.0
      */
     public function execute()
     {

@@ -10,25 +10,21 @@ use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Plugin for \Magento\Framework\Url\RouteParamsResolver
- * @since 2.0.0
  */
 class RouteParamsResolver
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Framework\Url\QueryParamsResolverInterface
-     * @since 2.0.0
      */
     protected $queryParamsResolver;
 
@@ -38,7 +34,6 @@ class RouteParamsResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

@@ -7,19 +7,16 @@ namespace Magento\Catalog\Block\Adminhtml\Rss\Grid;
 
 /**
  * Class Link
- * @since 2.0.0
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $_template = 'rss/grid/link.phtml';
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
-     * @since 2.0.0
      */
     protected $rssUrlBuilder;
 
@@ -27,7 +24,6 @@ class Link extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -40,7 +36,6 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -49,7 +44,6 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getLink()
     {
@@ -58,7 +52,6 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getLabel()
     {
@@ -69,7 +62,6 @@ class Link extends \Magento\Framework\View\Element\Template
      * Check whether status notification is allowed
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isRssAllowed()
     {
@@ -78,7 +70,6 @@ class Link extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function getLinkParams()
     {

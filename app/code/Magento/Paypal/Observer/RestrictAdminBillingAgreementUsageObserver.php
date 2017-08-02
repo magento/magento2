@@ -12,19 +12,16 @@ use Magento\Framework\Event\Observer as EventObserver;
 /**
  * Class \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver
  *
- * @since 2.0.0
  */
 class RestrictAdminBillingAgreementUsageObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\AuthorizationInterface $authorization
@@ -37,7 +34,6 @@ class RestrictAdminBillingAgreementUsageObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
-     * @since 2.0.0
      */
     public function execute(EventObserver $observer)
     {

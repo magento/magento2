@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 /**
  * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels
  *
- * @since 2.0.0
  */
 class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
@@ -79,7 +78,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTabLabel()
     {
@@ -89,7 +87,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function getTabTitle()
     {
@@ -99,7 +96,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function canShowTab()
     {
@@ -109,7 +105,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function isHidden()
     {
@@ -120,7 +115,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -157,7 +151,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\Form $form
      * @param array $labels
      * @return \Magento\Framework\Data\Form\Element\Fieldset
-     * @since 2.0.0
      */
     protected function _createStoreSpecificFieldset($form, $labels)
     {

@@ -15,61 +15,51 @@ use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class Builder build transaction
- * @since 2.0.0
  */
 class Builder implements BuilderInterface
 {
     /**
      * @var OrderPaymentInterface
-     * @since 2.0.0
      */
     protected $payment;
 
     /**
      * @var OrderInterface
-     * @since 2.0.0
      */
     protected $order;
 
     /**
      * @var AbstractModel
-     * @since 2.0.0
      */
     protected $document;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $failSafe = false;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $message;
 
     /**
      * @var string
-     * @since 2.0.0
      */
     protected $transactionId;
 
     /**
      * @var array
-     * @since 2.0.0
      */
     protected $transactionAdditionalInfo = [];
 
     /**
      * @var TransactionRepositoryInterface
-     * @since 2.0.0
      */
     protected $transactionRepository;
 
     /**
      * @param TransactionRepositoryInterface $transactionRepository
-     * @since 2.0.0
      */
     public function __construct(TransactionRepositoryInterface $transactionRepository)
     {
@@ -78,7 +68,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setPayment(OrderPaymentInterface $payment)
     {
@@ -88,7 +77,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setOrder(OrderInterface $order)
     {
@@ -98,7 +86,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setSalesDocument(\Magento\Sales\Model\AbstractModel $document)
     {
@@ -108,7 +95,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setFailSafe($failSafe)
     {
@@ -118,7 +104,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setMessage($message)
     {
@@ -128,7 +113,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setTransactionId($transactionId)
     {
@@ -138,7 +122,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function setAdditionalInformation(array $value)
     {
@@ -148,7 +131,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function addAdditionalInformation($key, $value)
     {
@@ -158,7 +140,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function reset()
     {
@@ -176,7 +157,6 @@ class Builder implements BuilderInterface
      * Checks if payment was set
      *
      * @return bool
-     * @since 2.0.0
      */
     protected function isPaymentExists()
     {
@@ -192,7 +172,6 @@ class Builder implements BuilderInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function build($type)
     {
@@ -239,7 +218,6 @@ class Builder implements BuilderInterface
      *
      * @param TransactionInterface $transaction
      * @return TransactionInterface
-     * @since 2.0.0
      */
     protected function linkWithParentTransaction(TransactionInterface $transaction)
     {

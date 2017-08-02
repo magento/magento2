@@ -10,7 +10,6 @@ namespace Magento\Framework\Model\ActionValidator\RemoveAction;
 /**
  * Class \Magento\Framework\Model\ActionValidator\RemoveAction\Allowed
  *
- * @since 2.0.0
  */
 class Allowed extends \Magento\Framework\Model\ActionValidator\RemoveAction
 {
@@ -21,7 +20,6 @@ class Allowed extends \Magento\Framework\Model\ActionValidator\RemoveAction
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function isAllowed(\Magento\Framework\Model\AbstractModel $model)
     {

@@ -16,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command prints list of available backup files
- * @since 2.0.0
  */
 class InfoBackupsListCommand extends Command
 {
@@ -24,7 +23,6 @@ class InfoBackupsListCommand extends Command
      * File
      *
      * @var File
-     * @since 2.0.0
      */
     private $file;
 
@@ -32,14 +30,12 @@ class InfoBackupsListCommand extends Command
      * Filesystem Directory List
      *
      * @var DirectoryList
-     * @since 2.0.0
      */
     private $directoryList;
 
     /**
      * @param DirectoryList $directoryList
      * @param File $file
-     * @since 2.0.0
      */
     public function __construct(
         DirectoryList $directoryList,
@@ -52,7 +48,6 @@ class InfoBackupsListCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
@@ -64,7 +59,6 @@ class InfoBackupsListCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

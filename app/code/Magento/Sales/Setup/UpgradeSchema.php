@@ -17,7 +17,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @var string
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private static $connectionName = 'sales';
 
@@ -114,7 +114,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $installer
      * @return void
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private function addColumnBaseGrandTotal(SchemaSetupInterface $installer)
     {
@@ -135,7 +135,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param SchemaSetupInterface $installer
      * @return void
-     * @since 2.2.0
+     * @since 2.1.1
      */
     private function addIndexBaseGrandTotal(SchemaSetupInterface $installer)
     {

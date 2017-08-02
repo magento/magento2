@@ -16,7 +16,6 @@ use Magento\Integration\Model\Config\Integration\Reader;
  *
  * This is a parent class for storing information about Integrations.
  * @deprecated 2.1.0
- * @since 2.0.0
  */
 class IntegrationConfig
 {
@@ -24,13 +23,11 @@ class IntegrationConfig
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
     /**
      * @var \Magento\Integration\Model\Config\Integration\Reader
-     * @since 2.0.0
      */
     protected $_configReader;
 
@@ -38,7 +35,6 @@ class IntegrationConfig
      * Array of integrations with resource permissions from api config
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_integrations;
 
@@ -52,7 +48,6 @@ class IntegrationConfig
      * @param TypeIntegration $configCacheType
      * @param Reader $configReader
      * @param SerializerInterface $serializer
-     * @since 2.0.0
      */
     public function __construct(
         TypeIntegration $configCacheType,
@@ -69,7 +64,6 @@ class IntegrationConfig
      *
      * @return array
      * @api
-     * @since 2.0.0
      */
     public function getIntegrations()
     {

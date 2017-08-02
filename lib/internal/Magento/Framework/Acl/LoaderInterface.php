@@ -12,7 +12,6 @@ namespace Magento\Framework\Acl;
  * with data (roles/rules/resources) persisted in external storage.
  *
  * @api
- * @since 2.0.0
  */
 interface LoaderInterface
 {
@@ -22,7 +21,6 @@ interface LoaderInterface
      * @param \Magento\Framework\Acl $acl
      * @return void
      * @abstract
-     * @since 2.0.0
      */
     public function populateAcl(\Magento\Framework\Acl $acl);
 }

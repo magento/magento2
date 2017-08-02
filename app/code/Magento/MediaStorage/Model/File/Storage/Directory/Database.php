@@ -12,7 +12,6 @@ namespace Magento\MediaStorage\Model\File\Storage\Directory;
  * Class Database
  *
  * @api
- * @since 2.0.0
  */
 class Database extends \Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase
 {
@@ -20,7 +19,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Prefix of model events names
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_eventPrefix = 'media_storage_file_storage_directory_database';
 
@@ -28,13 +26,11 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Collect errors during sync process
      *
      * @var string[]
-     * @since 2.0.0
      */
     protected $_errors = [];
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory
-     * @since 2.0.0
      */
     protected $_directoryFactory;
 
@@ -50,7 +46,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param string $connectionName
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -84,7 +79,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  string $path
      * @return $this
-     * @since 2.0.0
      */
     public function loadByPath($path)
     {
@@ -104,7 +98,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Check if there was errors during sync process
      *
      * @return bool
-     * @since 2.0.0
      */
     public function hasErrors()
     {
@@ -115,7 +108,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Retrieve directory parent id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getParentId()
     {
@@ -136,7 +128,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param  string $path
      * @return $this
-     * @since 2.0.0
      */
     public function createRecursive($path)
     {
@@ -169,7 +160,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param  int $offset
      * @param  int $count
      * @return bool
-     * @since 2.0.0
      */
     public function exportDirectories($offset = 0, $count = 100)
     {
@@ -191,7 +181,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param  array $dirs
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function importDirectories($dirs)
     {
@@ -232,7 +221,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * Clean directories at storage
      *
      * @return $this
-     * @since 2.0.0
      */
     public function clearDirectories()
     {
@@ -245,7 +233,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param string $directory
      * @return array
-     * @since 2.0.0
      */
     public function getSubdirectories($directory)
     {
@@ -259,7 +246,6 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @param string $dirPath
      * @return $this
-     * @since 2.0.0
      */
     public function deleteDirectory($dirPath)
     {

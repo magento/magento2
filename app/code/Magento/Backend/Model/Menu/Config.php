@@ -8,7 +8,6 @@ namespace Magento\Backend\Model\Menu;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Config
 {
@@ -18,19 +17,16 @@ class Config
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
-     * @since 2.0.0
      */
     protected $_configCacheType;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
-     * @since 2.0.0
      */
     protected $_eventManager;
 
     /**
      * @var \Magento\Backend\Model\MenuFactory
-     * @since 2.0.0
      */
     protected $_menuFactory;
 
@@ -38,37 +34,31 @@ class Config
      * Menu model
      *
      * @var \Magento\Backend\Model\Menu
-     * @since 2.0.0
      */
     protected $_menu;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.0.0
      */
     protected $_logger;
 
     /**
      * @var \Magento\Backend\Model\Menu\Config\Reader
-     * @since 2.0.0
      */
     protected $_configReader;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @since 2.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var \Magento\Backend\Model\Menu\AbstractDirector
-     * @since 2.0.0
      */
     protected $_director;
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.0.0
      */
     protected $_appState;
 
@@ -82,7 +72,6 @@ class Config
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\State $appState
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Model\Menu\Builder $menuBuilder,
@@ -114,7 +103,6 @@ class Config
      * @throws \Exception
      * @throws \BadMethodCallException|\Exception
      * @throws \Exception|\OutOfRangeException
-     * @since 2.0.0
      */
     public function getMenu()
     {
@@ -139,7 +127,6 @@ class Config
      * Initialize menu object
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _initMenu()
     {

@@ -20,55 +20,46 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Context extends \Magento\Framework\App\Action\Context
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     protected $_authorization;
 
     /**
      * @var \Magento\Backend\Model\Auth
-     * @since 2.0.0
      */
     protected $_auth;
 
     /**
      * @var \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     protected $_helper;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     protected $_backendUrl;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     protected $_formKeyValidator;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     protected $_canUseBaseUrl;
 
     /**
      * @var \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     protected $_session;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     protected $_localeResolver;
 
@@ -93,7 +84,6 @@ class Context extends \Magento\Framework\App\Action\Context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param bool $canUseBaseUrl
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -142,7 +132,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Backend\Model\Auth
-     * @since 2.0.0
      */
     public function getAuth()
     {
@@ -151,7 +140,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Framework\AuthorizationInterface
-     * @since 2.0.0
      */
     public function getAuthorization()
     {
@@ -160,7 +148,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Backend\Model\UrlInterface
-     * @since 2.0.0
      */
     public function getBackendUrl()
     {
@@ -170,7 +157,6 @@ class Context extends \Magento\Framework\App\Action\Context
     /**
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getCanUseBaseUrl()
     {
@@ -179,7 +165,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey\Validator
-     * @since 2.0.0
      */
     public function getFormKeyValidator()
     {
@@ -188,7 +173,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Backend\Helper\Data
-     * @since 2.0.0
      */
     public function getHelper()
     {
@@ -197,7 +181,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Framework\Locale\ResolverInterface
-     * @since 2.0.0
      */
     public function getLocaleResolver()
     {
@@ -206,7 +189,6 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return \Magento\Backend\Model\Session
-     * @since 2.0.0
      */
     public function getSession()
     {

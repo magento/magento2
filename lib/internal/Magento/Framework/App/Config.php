@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Config
- * @since 2.0.0
  */
 class Config implements ScopeConfigInterface
 {
@@ -24,13 +23,13 @@ class Config implements ScopeConfigInterface
 
     /**
      * @var ScopeCodeResolver
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $scopeCodeResolver;
 
     /**
      * @var ConfigTypeInterface[]
-     * @since 2.2.0
+     * @since 2.1.3
      */
     private $types;
 
@@ -39,7 +38,6 @@ class Config implements ScopeConfigInterface
      *
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param array $types
-     * @since 2.0.0
      */
     public function __construct(
         ScopeCodeResolver $scopeCodeResolver,
@@ -56,7 +54,6 @@ class Config implements ScopeConfigInterface
      * @param string $scope
      * @param null|string $scopeCode
      * @return mixed
-     * @since 2.0.0
      */
     public function getValue(
         $path = null,
@@ -92,7 +89,6 @@ class Config implements ScopeConfigInterface
      * @param string $scope
      * @param null|string $scopeCode
      * @return bool
-     * @since 2.0.0
      */
     public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
@@ -104,7 +100,7 @@ class Config implements ScopeConfigInterface
      * Clean scopeCodeResolver
      *
      * @return void
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function clean()
     {
@@ -130,7 +126,7 @@ class Config implements ScopeConfigInterface
      * @param string|null $path
      * @param mixed|null $default
      * @return array
-     * @since 2.2.0
+     * @since 2.1.3
      */
     public function get($configType, $path = '', $default = null)
     {

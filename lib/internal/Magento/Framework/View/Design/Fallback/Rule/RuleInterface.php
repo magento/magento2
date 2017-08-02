@@ -9,7 +9,6 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
  * Rule Interface
  *
  * Interface for search path resolution during fallback process
- * @since 2.0.0
  */
 interface RuleInterface
 {
@@ -18,7 +17,6 @@ interface RuleInterface
      *
      * @param array $params Values to substitute placeholders with
      * @return array folders to perform a search
-     * @since 2.0.0
      */
     public function getPatternDirs(array $params);
 }

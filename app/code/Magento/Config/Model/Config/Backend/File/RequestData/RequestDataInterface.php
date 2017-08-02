@@ -11,7 +11,6 @@ namespace Magento\Config\Model\Config\Backend\File\RequestData;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface RequestDataInterface
 {
@@ -20,7 +19,6 @@ interface RequestDataInterface
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public function getTmpName($path);
 
@@ -29,7 +27,6 @@ interface RequestDataInterface
      *
      * @param string $path
      * @return string
-     * @since 2.0.0
      */
     public function getName($path);
 }

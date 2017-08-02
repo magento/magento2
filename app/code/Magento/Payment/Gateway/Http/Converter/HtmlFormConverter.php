@@ -12,7 +12,6 @@ use Magento\Payment\Gateway\Http\ConverterInterface;
  * Class HtmlFormConverter
  * @package Magento\Payment\Gateway\Http\Converter
  * @api
- * @since 2.0.0
  */
 class HtmlFormConverter implements ConverterInterface
 {
@@ -22,7 +21,6 @@ class HtmlFormConverter implements ConverterInterface
      * @param string $response
      * @return array
      * @throws ConverterException
-     * @since 2.0.0
      */
     public function convert($response)
     {

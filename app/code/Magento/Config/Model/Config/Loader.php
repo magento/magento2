@@ -14,7 +14,6 @@ namespace Magento\Config\Model\Config;
  *
  * @package Magento\Config\Model\Config
  * @api
- * @since 2.0.0
  */
 class Loader
 {
@@ -22,13 +21,11 @@ class Loader
      * Config data factory
      *
      * @var \Magento\Framework\App\Config\ValueFactory
-     * @since 2.0.0
      */
     protected $_configValueFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\App\Config\ValueFactory $configValueFactory)
     {
@@ -43,7 +40,6 @@ class Loader
      * @param string $scopeId
      * @param bool $full
      * @return array
-     * @since 2.0.0
      */
     public function getConfigByPath($path, $scope, $scopeId, $full = true)
     {

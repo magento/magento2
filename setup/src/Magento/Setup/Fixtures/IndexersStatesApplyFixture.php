@@ -8,19 +8,16 @@ namespace Magento\Setup\Fixtures;
 
 /**
  * Class IndexersStatesApplyFixture
- * @since 2.0.0
  */
 class IndexersStatesApplyFixture extends Fixture
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     protected $priority = 170;
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function execute()
     {
@@ -38,7 +35,6 @@ class IndexersStatesApplyFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getActionTitle()
     {
@@ -47,7 +43,6 @@ class IndexersStatesApplyFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function introduceParamLabels()
     {

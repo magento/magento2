@@ -12,7 +12,6 @@ use Magento\Integration\Model\IntegrationConfig;
 /**
  * Plugin for @see \Magento\Integration\Model\ConfigBasedIntegrationManager model to manage resource permissions of
  * integration installed from config file
- * @since 2.0.0
  */
 class Manager
 {
@@ -20,13 +19,11 @@ class Manager
      * Integration service
      *
      * @var \Magento\Integration\Api\IntegrationServiceInterface
-     * @since 2.0.0
      */
     protected $_integrationService;
 
     /**
      * @var IntegrationAuthorizationInterface
-     * @since 2.0.0
      */
     protected $integrationAuthorizationService;
 
@@ -44,7 +41,6 @@ class Manager
      * @param IntegrationAuthorizationInterface $integrationAuthorizationService
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param IntegrationConfig $integrationConfig
-     * @since 2.0.0
      */
     public function __construct(
         IntegrationAuthorizationInterface $integrationAuthorizationService,
@@ -65,7 +61,6 @@ class Manager
      * @return string[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated 2.1.0
-     * @since 2.0.0
      */
     public function afterProcessIntegrationConfig(
         ConfigBasedIntegrationManager $subject,

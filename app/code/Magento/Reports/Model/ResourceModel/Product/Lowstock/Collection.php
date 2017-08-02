@@ -16,7 +16,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 2.0.0
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
 {
@@ -24,7 +23,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Flag about is joined CatalogInventory Stock Item
      *
      * @var bool
-     * @since 2.0.0
      */
     protected $_inventoryItemJoined = false;
 
@@ -32,25 +30,21 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Alias for CatalogInventory Stock Item Table
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_inventoryItemTableAlias = 'lowstock_inventory_item';
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @since 2.0.0
      */
     protected $stockRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @since 2.0.0
      */
     protected $stockConfiguration;
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item
-     * @since 2.0.0
      */
     protected $_itemResource;
 
@@ -85,7 +79,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -151,7 +144,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Retrieve CatalogInventory Stock Item Table
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getInventoryItemTable()
     {
@@ -162,7 +154,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Retrieve CatalogInventory Stock Item Table Id field name
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getInventoryItemIdField()
     {
@@ -173,7 +164,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Retrieve alias for CatalogInventory Stock Item Table
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _getInventoryItemTableAlias()
     {
@@ -186,7 +176,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param string $field
      * @param string $alias
      * @return $this
-     * @since 2.0.0
      */
     protected function _addInventoryItemFieldToSelect($field, $alias = null)
     {
@@ -209,7 +198,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      *
      * @param string $field
      * @return string
-     * @since 2.0.0
      */
     protected function _getInventoryItemField($field)
     {
@@ -221,7 +209,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      *
      * @param array $fields
      * @return $this
-     * @since 2.0.0
      */
     public function joinInventoryItem($fields = [])
     {
@@ -262,7 +249,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param array|string $typeFilter
      * @throws LocalizedException
      * @return $this
-     * @since 2.0.0
      */
     public function filterByProductType($typeFilter)
     {
@@ -277,7 +263,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Add filter by product types from config - only types which have QTY parameter
      *
      * @return $this
-     * @since 2.0.0
      */
     public function filterByIsQtyProductTypes()
     {
@@ -290,7 +275,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      *
      * @param null|int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function useManageStockFilter($storeId = null)
     {
@@ -309,7 +293,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      *
      * @param null|int $storeId
      * @return $this
-     * @since 2.0.0
      */
     public function useNotifyStockQtyFilter($storeId = null)
     {

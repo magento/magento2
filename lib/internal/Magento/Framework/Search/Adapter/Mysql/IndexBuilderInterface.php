@@ -10,7 +10,6 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * Build base Query for Index
- * @since 2.0.0
  */
 interface IndexBuilderInterface
 {
@@ -19,7 +18,6 @@ interface IndexBuilderInterface
      *
      * @param RequestInterface $request
      * @return Select
-     * @since 2.0.0
      */
     public function build(RequestInterface $request);
 }

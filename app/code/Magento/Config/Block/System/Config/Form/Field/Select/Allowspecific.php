@@ -16,7 +16,6 @@ namespace Magento\Config\Block\System\Config\Form\Field\Select;
 /**
  * Class \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific
  *
- * @since 2.0.0
  */
 class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
 {
@@ -24,7 +23,6 @@ class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
      * Add additional Javascript code
      *
      * @return string
-     * @since 2.0.0
      */
     public function getAfterElementHtml()
     {
@@ -58,7 +56,6 @@ HTML;
 
     /**
      * @return string
-     * @since 2.0.0
      */
     public function getHtml()
     {
@@ -71,7 +68,6 @@ HTML;
 
     /**
      * @return string
-     * @since 2.0.0
      */
     protected function _getSpecificCountryElementId()
     {

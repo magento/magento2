@@ -7,7 +7,6 @@ namespace Magento\Cron\Model\Config\Converter;
 
 /**
  * Converts cron parameters from XML files
- * @since 2.0.0
  */
 class Xml implements \Magento\Framework\Config\ConverterInterface
 {
@@ -17,7 +16,6 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     public function convert($source)
     {
@@ -61,7 +59,6 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMElement $jobConfig
      * @return array
      * @throws \InvalidArgumentException
-     * @since 2.0.0
      */
     protected function convertCronConfig(\DOMElement $jobConfig)
     {
@@ -83,7 +80,6 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMElement $jobConfig
      * @return array
-     * @since 2.0.0
      */
     protected function convertCronSchedule(\DOMElement $jobConfig)
     {
@@ -107,7 +103,6 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMElement $jobConfig
      * @return array
-     * @since 2.0.0
      */
     protected function convertCronConfigPath(\DOMElement $jobConfig)
     {

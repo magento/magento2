@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 
 /**
  * Catalog composite product configuration controller
- * @since 2.0.0
  */
 abstract class Wishlist extends \Magento\Backend\App\Action
 {
@@ -24,7 +23,6 @@ abstract class Wishlist extends \Magento\Backend\App\Action
      * Wishlist we're working with.
      *
      * @var \Magento\Wishlist\Model\Wishlist
-     * @since 2.0.0
      */
     protected $_wishlist = null;
 
@@ -32,7 +30,6 @@ abstract class Wishlist extends \Magento\Backend\App\Action
      * Wishlist item we're working with.
      *
      * @var \Magento\Wishlist\Model\Wishlist
-     * @since 2.0.0
      */
     protected $_wishlistItem = null;
 
@@ -41,7 +38,6 @@ abstract class Wishlist extends \Magento\Backend\App\Action
      *
      * @return $this
      * @throws CoreException
-     * @since 2.0.0
      */
     protected function _initData()
     {

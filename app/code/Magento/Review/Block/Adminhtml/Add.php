@@ -12,7 +12,6 @@ namespace Magento\Review\Block\Adminhtml;
  * Adminhtml add Review main block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Add extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -20,7 +19,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize add review
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -123,7 +121,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
      * Get add new review header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

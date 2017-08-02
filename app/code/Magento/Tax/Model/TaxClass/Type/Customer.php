@@ -10,25 +10,21 @@ use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
 
 /**
  * Customer Tax Class
- * @since 2.0.0
  */
 class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**
      * @var CustomerGroupRepository
-     * @since 2.0.0
      */
     protected $customerGroupRepository;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
-     * @since 2.0.0
      */
     protected $filterBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     * @since 2.0.0
      */
     protected $searchCriteriaBuilder;
 
@@ -36,7 +32,6 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      * Class Type
      *
      * @var string
-     * @since 2.0.0
      */
     protected $_classType = \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER;
 
@@ -46,7 +41,6 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Tax\Model\Calculation\Rule $calculationRule,
@@ -63,7 +57,6 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isAssignedToObjects()
     {
@@ -83,7 +76,6 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      * Get Name of Objects that use this Tax Class Type
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getObjectTypeName()
     {

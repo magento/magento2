@@ -7,7 +7,6 @@ namespace Magento\Newsletter\Model;
 
 /**
  * Newsletter session model
- * @since 2.0.0
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -16,7 +15,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param string $message
      * @return $this
-     * @since 2.0.0
      */
     public function addError($message)
     {
@@ -29,7 +27,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param string $message
      * @return $this
-     * @since 2.0.0
      */
     public function addSuccess($message)
     {
@@ -41,7 +38,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Get error message
      *
      * @return string $message
-     * @since 2.0.0
      */
     public function getError()
     {
@@ -54,7 +50,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Get success message
      *
      * @return string $message
-     * @since 2.0.0
      */
     public function getSuccess()
     {

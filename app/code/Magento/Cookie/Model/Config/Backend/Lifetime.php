@@ -7,13 +7,11 @@ namespace Magento\Cookie\Model\Config\Backend;
 
 /**
  * Backend model for domain config value
- * @since 2.0.0
  */
 class Lifetime extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator
-     * @since 2.0.0
      */
     protected $configValidator;
 
@@ -27,7 +25,6 @@ class Lifetime extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -48,7 +45,6 @@ class Lifetime extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 2.0.0
      */
     public function beforeSave()
     {

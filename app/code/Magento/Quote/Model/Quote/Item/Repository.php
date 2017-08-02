@@ -13,7 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class \Magento\Quote\Model\Quote\Item\Repository
  *
- * @since 2.0.0
  */
 class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 {
@@ -21,7 +20,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      * Quote repository.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
-     * @since 2.0.0
      */
     protected $quoteRepository;
 
@@ -29,19 +27,16 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      * Product repository.
      *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @since 2.0.0
      */
     protected $productRepository;
 
     /**
      * @var \Magento\Quote\Api\Data\CartItemInterfaceFactory
-     * @since 2.0.0
      */
     protected $itemDataFactory;
 
     /**
      * @var CartItemProcessorInterface[]
-     * @since 2.0.0
      */
     protected $cartItemProcessors;
 
@@ -56,7 +51,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
      * @param CartItemProcessorInterface[] $cartItemProcessors
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -72,7 +66,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getList($cartId)
     {
@@ -90,7 +83,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
@@ -108,7 +100,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function deleteById($cartId, $itemId)
     {

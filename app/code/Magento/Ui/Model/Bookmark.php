@@ -18,13 +18,11 @@ use Magento\Ui\Model\ResourceModel\Bookmark as ResourceBookmark;
 /**
  * Domain class Bookmark
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
 {
     /**
      * @var DecoderInterface
-     * @since 2.0.0
      */
     protected $jsonDecoder;
 
@@ -37,7 +35,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * @param Collection $resourceCollection
      * @param DecoderInterface $jsonDecoder
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -65,7 +62,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get Id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getId()
     {
@@ -76,7 +72,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get user Id
      *
      * @return int
-     * @since 2.0.0
      */
     public function getUserId()
     {
@@ -87,7 +82,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get namespace
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNamespace()
     {
@@ -98,7 +92,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get identifier
      *
      * @return string
-     * @since 2.0.0
      */
     public function getIdentifier()
     {
@@ -109,7 +102,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Is current
      *
      * @return bool
-     * @since 2.0.0
      */
     public function isCurrent()
     {
@@ -120,7 +112,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get title
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTitle()
     {
@@ -131,7 +122,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get config
      *
      * @return array
-     * @since 2.0.0
      */
     public function getConfig()
     {
@@ -146,7 +136,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get created at
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreatedAt()
     {
@@ -157,7 +146,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * Get updated at
      *
      * @return string
-     * @since 2.0.0
      */
     public function getUpdatedAt()
     {
@@ -169,7 +157,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param int $id
      * @return $this
-     * @since 2.0.0
      */
     public function setId($id)
     {
@@ -181,7 +168,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param int $userId
      * @return $this
-     * @since 2.0.0
      */
     public function setUserId($userId)
     {
@@ -193,7 +179,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param string $namespace
      * @return $this
-     * @since 2.0.0
      */
     public function setNamespace($namespace)
     {
@@ -205,7 +190,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param string $identifier
      * @return $this
-     * @since 2.0.0
      */
     public function setIdentifier($identifier)
     {
@@ -217,7 +201,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param bool $isCurrent
      * @return $this
-     * @since 2.0.0
      */
     public function setCurrent($isCurrent)
     {
@@ -229,7 +212,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param string $title
      * @return $this
-     * @since 2.0.0
      */
     public function setTitle($title)
     {
@@ -241,7 +223,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param string $config
      * @return $this
-     * @since 2.0.0
      */
     public function setConfig($config)
     {
@@ -253,7 +234,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param string $createdAt
      * @return $this
-     * @since 2.0.0
      */
     public function setCreatedAt($createdAt)
     {
@@ -265,7 +245,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param string $updatedAt
      * @return $this
-     * @since 2.0.0
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -276,7 +255,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * {@inheritdoc}
      *
      * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -288,7 +266,6 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      *
      * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes)
     {

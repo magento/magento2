@@ -10,7 +10,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @since 2.0.0
  */
 class Viewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -18,7 +17,6 @@ class Viewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstrac
      * Constructor
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -31,7 +29,6 @@ class Viewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstrac
      * Retrieve display block availability
      *
      * @return false
-     * @since 2.0.0
      */
     public function canDisplay()
     {
@@ -42,7 +39,6 @@ class Viewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstrac
      * Retrieve availability removing items in block
      *
      * @return false
-     * @since 2.0.0
      */
     public function canRemoveItems()
     {
@@ -53,7 +49,6 @@ class Viewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstrac
      * Get header text
      *
      * @return \Magento\Framework\Phrase
-     * @since 2.0.0
      */
     public function getHeaderText()
     {

@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class \Magento\Contact\Controller\Index\Index
  *
- * @since 2.0.0
  */
 class Index extends \Magento\Contact\Controller\Index
 {
@@ -19,7 +18,6 @@ class Index extends \Magento\Contact\Controller\Index
      * Show Contact Us page
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @since 2.0.0
      */
     public function execute()
     {

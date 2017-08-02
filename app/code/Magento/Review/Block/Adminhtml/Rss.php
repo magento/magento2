@@ -10,19 +10,16 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class Rss
  * @package Magento\Catalog\Block\Adminhtml\Rss
- * @since 2.0.0
  */
 class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 2.0.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Product\Review
-     * @since 2.0.0
      */
     protected $rssModel;
 
@@ -31,7 +28,6 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Rss $rssModel
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -46,7 +42,6 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRssData()
     {
@@ -86,7 +81,6 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getCacheLifetime()
     {
@@ -95,7 +89,6 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isAllowed()
     {
@@ -104,7 +97,6 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getFeeds()
     {
@@ -113,7 +105,6 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function isAuthRequired()
     {

@@ -8,19 +8,16 @@ namespace Magento\Catalog\Model\Product\Option;
 /**
  * Class \Magento\Catalog\Model\Product\Option\UrlBuilder
  *
- * @since 2.0.0
  */
 class UrlBuilder
 {
     /**
      * @var \Magento\Framework\UrlInterface
-     * @since 2.0.0
      */
     protected $_frontendUrlBuilder;
 
     /**
      * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
-     * @since 2.0.0
      */
     public function __construct(\Magento\Framework\UrlInterface $frontendUrlBuilder)
     {
@@ -31,7 +28,6 @@ class UrlBuilder
      * @param string|null $route
      * @param array|null $params
      * @return string
-     * @since 2.0.0
      */
     public function getUrl($route, $params)
     {

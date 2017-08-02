@@ -12,7 +12,6 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
- * @since 2.0.0
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -20,7 +19,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Report type options
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_reportTypeOptions = [];
 
@@ -28,7 +26,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Report field visibility
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_fieldVisibility = [];
 
@@ -36,7 +33,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Report field opions
      *
      * @var array
-     * @since 2.0.0
      */
     protected $_fieldOptions = [];
 
@@ -48,7 +44,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @codeCoverageIgnore
      * @return void
-     * @since 2.0.0
      */
     public function setFieldVisibility($fieldId, $visibility)
     {
@@ -62,7 +57,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param bool $defaultVisibility
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @since 2.0.0
      */
     public function getFieldVisibility($fieldId, $defaultVisibility = true)
     {
@@ -80,7 +74,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param mixed|null $value Field option value
      *
      * @return void
-     * @since 2.0.0
      */
     public function setFieldOption($fieldId, $option, $value = null)
     {
@@ -104,7 +97,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $value
      * @return $this
      * @codeCoverageIgnore
-     * @since 2.0.0
      */
     public function addReportTypeOption($key, $value)
     {
@@ -116,7 +108,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add fieldset with general report fields
      *
      * @return $this
-     * @since 2.0.0
      */
     protected function _prepareForm()
     {
@@ -212,7 +203,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Method will be called after prepareForm and can be used for field values initialization
      *
      * @return \Magento\Backend\Block\Widget\Form
-     * @since 2.0.0
      */
     protected function _initFormValues()
     {
@@ -230,7 +220,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * This method is called before rendering HTML
      *
      * @return \Magento\Backend\Block\Widget\Form
-     * @since 2.0.0
      */
     protected function _beforeToHtml()
     {

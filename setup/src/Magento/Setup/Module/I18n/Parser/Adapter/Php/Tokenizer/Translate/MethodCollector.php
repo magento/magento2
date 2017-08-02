@@ -9,7 +9,6 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 
 /**
  * MethodCollector
- * @since 2.0.0
  */
 class MethodCollector extends PhraseCollector
 {
@@ -17,7 +16,6 @@ class MethodCollector extends PhraseCollector
      * Extract phrases from given tokens. e.g.: __('phrase', ...)
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _extractPhrases()
     {
@@ -37,7 +35,6 @@ class MethodCollector extends PhraseCollector
      *
      * @param \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token $token
      * @return bool
-     * @since 2.0.0
      */
     protected function _isTranslateFunction($token)
     {

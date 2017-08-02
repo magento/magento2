@@ -9,13 +9,11 @@ namespace Magento\Customer\Block\Form\Login;
  * Customer login info block
  *
  * @api
- * @since 2.0.0
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Model\Url
-     * @since 2.0.0
      */
     protected $_customerUrl;
 
@@ -23,7 +21,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Checkout data
      *
      * @var \Magento\Checkout\Helper\Data
-     * @since 2.0.0
      */
     protected $checkoutData;
 
@@ -31,7 +28,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Core url
      *
      * @var \Magento\Framework\Url\Helper\Data
-     * @since 2.0.0
      */
     protected $coreUrl;
 
@@ -39,7 +35,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Registration
      *
      * @var \Magento\Customer\Model\Registration
-     * @since 2.0.0
      */
     protected $registration;
 
@@ -50,7 +45,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * @param \Magento\Checkout\Helper\Data $checkoutData
      * @param \Magento\Framework\Url\Helper\Data $coreUrl
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -71,7 +65,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Return registration
      *
      * @return \Magento\Customer\Model\Registration
-     * @since 2.0.0
      */
     public function getRegistration()
     {
@@ -82,7 +75,6 @@ class Info extends \Magento\Framework\View\Element\Template
      * Retrieve create new account url
      *
      * @return string
-     * @since 2.0.0
      */
     public function getCreateAccountUrl()
     {

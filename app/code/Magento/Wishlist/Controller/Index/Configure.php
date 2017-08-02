@@ -11,7 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Configure extends \Magento\Wishlist\Controller\AbstractIndex
 {
@@ -19,19 +18,16 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry;
 
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     * @since 2.0.0
      */
     protected $wishlistProvider;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
-     * @since 2.0.0
      */
     protected $resultPageFactory;
 
@@ -40,7 +36,6 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @since 2.0.0
      */
     public function __construct(
         Action\Context $context,
@@ -59,7 +54,6 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @throws NotFoundException
-     * @since 2.0.0
      */
     public function execute()
     {

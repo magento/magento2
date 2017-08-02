@@ -11,7 +11,6 @@ use Magento\Store\Model\Store;
  * JSON products custom options
  *
  * @api
- * @since 2.0.0
  */
 class Ajax extends \Magento\Backend\Block\AbstractBlock
 {
@@ -19,19 +18,16 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
      * Core registry
      *
      * @var \Magento\Framework\Registry
-     * @since 2.0.0
      */
     protected $_coreRegistry = null;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
-     * @since 2.0.0
      */
     protected $_productFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
-     * @since 2.0.0
      */
     protected $_jsonEncoder;
 
@@ -41,7 +37,6 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -60,7 +55,6 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
      * Return product custom options in JSON format
      *
      * @return string
-     * @since 2.0.0
      */
     protected function _toHtml()
     {

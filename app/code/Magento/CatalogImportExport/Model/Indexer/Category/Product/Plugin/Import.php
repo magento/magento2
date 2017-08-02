@@ -11,19 +11,16 @@ namespace Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin;
 /**
  * Class \Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin\Import
  *
- * @since 2.0.0
  */
 class Import
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Product\Processor
-     * @since 2.0.0
      */
     protected $_indexerCategoryProductProcessor;
 
     /**
      * @param \Magento\Catalog\Model\Indexer\Category\Product\Processor $indexerCategoryProductProcessor
-     * @since 2.0.0
      */
     public function __construct(\Magento\Catalog\Model\Indexer\Category\Product\Processor $indexerCategoryProductProcessor)
     {
@@ -38,7 +35,6 @@ class Import
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.0.0
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {

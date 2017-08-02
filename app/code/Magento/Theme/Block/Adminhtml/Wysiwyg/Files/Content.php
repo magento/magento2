@@ -10,19 +10,16 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class Content extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * @var \Magento\Theme\Helper\Storage
-     * @since 2.0.0
      */
     protected $_storageHelper;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.0.0
      */
     protected $jsonHelper;
 
@@ -31,7 +28,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -48,7 +44,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Block construction
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
@@ -104,7 +99,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Files action source URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getContentsUrl()
     {
@@ -118,7 +112,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Javascript setup object for filebrowser instance
      *
      * @return string
-     * @since 2.0.0
      */
     public function getFilebrowserSetupObject()
     {
@@ -147,7 +140,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * New directory action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getNewfolderUrl()
     {
@@ -158,7 +150,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Delete directory action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     protected function getDeletefolderUrl()
     {
@@ -169,7 +160,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Delete files action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getDeleteFilesUrl()
     {
@@ -180,7 +170,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Insert file action target URL
      *
      * @return string
-     * @since 2.0.0
      */
     public function getOnInsertUrl()
     {
@@ -191,7 +180,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
      * Target element ID getter
      *
      * @return string
-     * @since 2.0.0
      */
     public function getTargetElementId()
     {

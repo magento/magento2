@@ -10,7 +10,6 @@ use Magento\Tax\Api\Data\AppliedTaxInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.0.0
  */
 class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
 {
@@ -25,7 +24,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getTaxRateKey()
     {
@@ -34,7 +32,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getPercent()
     {
@@ -43,7 +40,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getAmount()
     {
@@ -52,7 +48,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function getRates()
     {
@@ -64,7 +59,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      *
      * @param string $taxRateKey
      * @return $this
-     * @since 2.0.0
      */
     public function setTaxRateKey($taxRateKey)
     {
@@ -76,7 +70,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      *
      * @param float $percent
      * @return $this
-     * @since 2.0.0
      */
     public function setPercent($percent)
     {
@@ -88,7 +81,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      *
      * @param float $amount
      * @return $this
-     * @since 2.0.0
      */
     public function setAmount($amount)
     {
@@ -100,7 +92,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
-     * @since 2.0.0
      */
     public function setRates(array $rates = null)
     {
@@ -111,7 +102,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      * {@inheritdoc}
      *
      * @return \Magento\Tax\Api\Data\AppliedTaxExtensionInterface|null
-     * @since 2.0.0
      */
     public function getExtensionAttributes()
     {
@@ -123,7 +113,6 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      *
      * @param \Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.0.0
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes)
     {

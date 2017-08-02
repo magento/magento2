@@ -20,7 +20,6 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -33,25 +32,21 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
 
     /**
      * @var LabelGenerator
-     * @since 2.0.0
      */
     protected $labelGenerator;
 
     /**
      * @var FileFactory
-     * @since 2.0.0
      */
     protected $fileFactory;
 
     /**
      * @var CollectionFactory
-     * @since 2.0.0
      */
     protected $collectionFactory;
 
     /**
      * @var ShipmentCollectionFactory
-     * @since 2.0.0
      */
     protected $shipmentCollectionFactory;
 
@@ -62,7 +57,6 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
      * @param FileFactory $fileFactory
      * @param LabelGenerator $labelGenerator
      * @param ShipmentCollectionFactory $shipmentCollectionFactory
-     * @since 2.0.0
      */
     public function __construct(
         Context $context,
@@ -85,7 +79,6 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|ResultInterface
-     * @since 2.0.0
      */
     protected function massAction(AbstractCollection $collection)
     {

@@ -23,7 +23,6 @@ use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.0.0
  */
 class UiComponentFactory extends DataObject
 {
@@ -31,7 +30,6 @@ class UiComponentFactory extends DataObject
      * Object manager
      *
      * @var ObjectManagerInterface
-     * @since 2.0.0
      */
     protected $objectManager;
 
@@ -39,13 +37,11 @@ class UiComponentFactory extends DataObject
      * Argument interpreter
      *
      * @var InterpreterInterface
-     * @since 2.0.0
      */
     protected $argumentInterpreter;
 
     /**
      * @var ContextFactory
-     * @since 2.0.0
      */
     protected $contextFactory;
 
@@ -54,7 +50,6 @@ class UiComponentFactory extends DataObject
      *
      * @deprecated 2.2.0 since 2.2.0
      * @var ManagerInterface
-     * @since 2.0.0
      */
     protected $componentManager;
 
@@ -85,7 +80,6 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param array $componentChildFactories
      * @param DataInterface|null $definitionData
-     * @since 2.0.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -116,7 +110,6 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $arguments
      * @return UiComponentInterface
-     * @since 2.0.0
      */
     protected function createChildComponent(
         array &$bundleComponents,
@@ -170,7 +163,6 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $componentData
      * @return array
-     * @since 2.0.0
      */
     protected function argumentsResolver($identifier, array $componentData)
     {
@@ -197,7 +189,6 @@ class UiComponentFactory extends DataObject
      * @return UiComponentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @since 2.0.0
      */
     public function create($identifier, $name = null, array $arguments = [])
     {

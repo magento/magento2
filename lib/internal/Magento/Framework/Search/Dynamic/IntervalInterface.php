@@ -7,7 +7,6 @@ namespace Magento\Framework\Search\Dynamic;
 
 /**
  * @api
- * @since 2.0.0
  */
 interface IntervalInterface
 {
@@ -17,7 +16,6 @@ interface IntervalInterface
      * @param null|int $lower
      * @param null|int $upper
      * @return array
-     * @since 2.0.0
      */
     public function load($limit, $offset = null, $lower = null, $upper = null);
 
@@ -26,7 +24,6 @@ interface IntervalInterface
      * @param int $index
      * @param null|int $lower
      * @return array
-     * @since 2.0.0
      */
     public function loadPrevious($data, $index, $lower = null);
 
@@ -35,7 +32,6 @@ interface IntervalInterface
      * @param int $rightIndex
      * @param null|int $upper
      * @return array
-     * @since 2.0.0
      */
     public function loadNext($data, $rightIndex, $upper = null);
 }

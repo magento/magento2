@@ -8,7 +8,6 @@ namespace Magento\Framework\Mview\View;
 /**
  * Class \Magento\Framework\Mview\View\SubscriptionFactory
  *
- * @since 2.0.0
  */
 class SubscriptionFactory extends AbstractFactory
 {

@@ -11,31 +11,26 @@ use Magento\Framework\Debug;
 /**
  * Class \Magento\Framework\DB\Logger\LoggerAbstract
  *
- * @since 2.0.0
  */
 abstract class LoggerAbstract implements LoggerInterface
 {
     /**
      * @var int
-     * @since 2.0.0
      */
     private $timer;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $logAllQueries;
 
     /**
      * @var float
-     * @since 2.0.0
      */
     private $logQueryTime;
 
     /**
      * @var bool
-     * @since 2.0.0
      */
     private $logCallStack;
 
@@ -43,7 +38,6 @@ abstract class LoggerAbstract implements LoggerInterface
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
-     * @since 2.0.0
      */
     public function __construct($logAllQueries = false, $logQueryTime = 0.05, $logCallStack = false)
     {
@@ -54,7 +48,6 @@ abstract class LoggerAbstract implements LoggerInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     public function startTimer()
     {
@@ -70,7 +63,6 @@ abstract class LoggerAbstract implements LoggerInterface
      * @param \Zend_Db_Statement_Pdo|null $result
      * @return string
      * @throws \Zend_Db_Statement_Exception
-     * @since 2.0.0
      */
     public function getStats($type, $sql, $bind = [], $result = null)
     {

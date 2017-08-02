@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Indexer\Category\Flat\State;
 /**
  * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup
  *
- * @since 2.0.0
  */
 class StoreGroup
 {
@@ -25,20 +24,17 @@ class StoreGroup
 
     /**
      * @var IndexerRegistry
-     * @since 2.0.0
      */
     protected $indexerRegistry;
 
     /**
      * @var State
-     * @since 2.0.0
      */
     protected $state;
 
     /**
      * @param IndexerRegistry $indexerRegistry
      * @param State $state
-     * @since 2.0.0
      */
     public function __construct(IndexerRegistry $indexerRegistry, State $state)
     {
@@ -51,7 +47,6 @@ class StoreGroup
      *
      * @param AbstractModel $group
      * @return bool
-     * @since 2.0.0
      */
     protected function validate(AbstractModel $group)
     {
