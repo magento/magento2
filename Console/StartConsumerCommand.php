@@ -14,7 +14,6 @@ use Magento\Framework\MessageQueue\ConsumerFactory;
 
 /**
  * Command for starting MessageQueue consumers.
- * @since 2.0.0
  */
 class StartConsumerCommand extends Command
 {
@@ -26,7 +25,6 @@ class StartConsumerCommand extends Command
 
     /**
      * @var ConsumerFactory
-     * @since 2.0.0
      */
     private $consumerFactory;
 
@@ -43,7 +41,6 @@ class StartConsumerCommand extends Command
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
-     * @since 2.0.0
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
@@ -57,7 +54,6 @@ class StartConsumerCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -77,7 +73,6 @@ class StartConsumerCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @since 2.0.0
      */
     protected function configure()
     {
