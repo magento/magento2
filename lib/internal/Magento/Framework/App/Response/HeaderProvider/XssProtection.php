@@ -16,7 +16,7 @@ use Magento\Framework\HTTP\Header;
 class XssProtection extends AbstractHeaderProvider
 {
     /**
-     * @var 
+     * @var string
      * @since 2.1.0
      */
     protected $headerName = 'X-XSS-Protection';
