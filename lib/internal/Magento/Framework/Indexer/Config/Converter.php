@@ -6,6 +6,8 @@
 namespace Magento\Framework\Indexer\Config;
 
 use Magento\Framework\Config\ConverterInterface;
+use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Phrase;
 
 /**
  * Class \Magento\Framework\Indexer\Config\Converter
@@ -47,8 +49,13 @@ class Converter implements ConverterInterface
                 /** @var $childNode \DOMElement */
                 $data = $this->convertChild($childNode, $data);
             }
+            if (!isset($data['dependencies'])) {
+                $data['dependencies'] = [];
+            }
             $output[$indexerId] = $data;
         }
+        $output = $this->sortByDependencies($output);
+
         return $output;
     }
 
@@ -93,6 +100,9 @@ class Converter implements ConverterInterface
                 break;
             case 'fieldset':
                 $data = $this->convertFieldset($childNode, $data);
+                break;
+            case 'dependencies':
+                $data = $this->convertDependencies($childNode, $data);
                 break;
         }
         return $data;
@@ -162,6 +172,29 @@ class Converter implements ConverterInterface
             }
         }
         return $this->sorting($data);
+    }
+
+    /**
+     * Convert dependencies node
+     *
+     * @param \DOMElement $node
+     * @param array $data
+     * @return array
+     */
+    private function convertDependencies(\DOMElement $node, array $data)
+    {
+        $data['dependencies'] = $data['dependencies'] ?? [];
+
+        /** @var $childNode \DOMNode */
+        foreach ($node->childNodes as $childNode) {
+            switch ($childNode->nodeName) {
+                case 'indexer':
+                    $indexerId = $this->getAttributeValue($childNode, 'id');
+                    $data['dependencies'][] = $indexerId;
+                    break;
+            }
+        }
+        return $data;
     }
 
     /**
@@ -251,5 +284,85 @@ class Converter implements ConverterInterface
             }
         });
         return $data;
+    }
+
+    /**
+     * Sort the list of indexers using "dependencies" node data.
+     *
+     * This method also sort data in the "dependencies" node of indexers.
+     *
+     * @param array $indexers
+     * @return array
+     */
+    private function sortByDependencies($indexers)
+    {
+        $expanded = [];
+        foreach (array_keys($indexers) as $indexerId) {
+            $expanded[] = [
+                'indexerId' => $indexerId,
+                'dependencies' => $this->expandDependencies($indexers, $indexerId),
+            ];
+        }
+        // Use "bubble sorting" because usort (which is using quicksort) is not a stable sort
+        $total = count($expanded);
+        for ($i = 0; $i < $total - 1; $i++) {
+            for ($j = $i; $j < $total; $j++) {
+                if (in_array($expanded[$j]['indexerId'], $expanded[$i]['dependencies'])) {
+                    $temp = $expanded[$i];
+                    $expanded[$i] = $expanded[$j];
+                    $expanded[$j] = $temp;
+                }
+            }
+        }
+
+        $orderedIndexerIds = array_map(
+            function ($item) {
+                return $item['indexerId'];
+            },
+            $expanded
+        );
+
+        $result = [];
+        foreach ($orderedIndexerIds as $indexerId) {
+            $result[$indexerId] = $indexers[$indexerId];
+            $result[$indexerId]['dependencies'] = array_values(
+                array_intersect($orderedIndexerIds, $result[$indexerId]['dependencies'])
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Accumulate information about all transitive "dependencies" references.
+     *
+     * @param array $list
+     * @param string $indexerId
+     * @param array $accumulated
+     * @return array
+     * @throws ConfigurationMismatchException
+     */
+    private function expandDependencies($list, $indexerId, $accumulated = [])
+    {
+        $accumulated[] = $indexerId;
+        $result = $list[$indexerId]['dependencies'];
+        foreach ($result as $relatedIndexerId) {
+            if (in_array($relatedIndexerId, $accumulated)) {
+                throw new ConfigurationMismatchException(
+                    new Phrase("Circular dependency references from '{$indexerId}' to '{$relatedIndexerId}'.")
+                );
+            }
+            if (!isset($list[$relatedIndexerId])) {
+                throw new ConfigurationMismatchException(
+                    new Phrase(
+                        "Dependency declaration '{$relatedIndexerId}' in "
+                        . "'{$indexerId}' to the non-existing indexer."
+                    )
+                );
+            }
+            $relatedResult = $this->expandDependencies($list, $relatedIndexerId, $accumulated);
+            $result = array_unique(array_merge($result, $relatedResult));
+        }
+        return $result;
     }
 }

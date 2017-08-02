@@ -44,5 +44,8 @@
     </indexer>
     <indexer id="indexer_4" view_id="indexer_4"
              class="Magento\Module\IndexerFourth">
+        <dependencies>
+            <indexer id="catalogsearch_fulltext" />
+        </dependencies>
     </indexer>
 </config>

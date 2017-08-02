@@ -6,8 +6,6 @@
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\Indexer\IndexerInterface;
@@ -54,14 +52,24 @@ abstract class AbstractIndexerCommand extends Command
     }
 
     /**
-     * Get all indexers
+     * Return the array of all indexers with keys as indexer ids.
      *
      * @return IndexerInterface[]
      * @since 2.0.0
      */
     protected function getAllIndexers()
     {
-        return $this->getCollectionFactory()->create()->getItems();
+        $indexers = $this->getCollectionFactory()->create()->getItems();
+        return array_combine(
+            array_map(
+                function ($item) {
+                    /** @var IndexerInterface $item */
+                    return $item->getId();
+                },
+                $indexers
+            ),
+            $indexers
+        );
     }
 
     /**
