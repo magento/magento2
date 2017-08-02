@@ -9,7 +9,6 @@ namespace Magento\MysqlMq\Model\ResourceModel;
  * Message Status collection.
  *
  * @api
- * @since 2.0.0
  */
 class MessageStatusCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -17,7 +16,6 @@ class MessageStatusCollection extends \Magento\Framework\Model\ResourceModel\Db\
      * Resource collection initialization.
      *
      * @return void
-     * @since 2.0.0
      */
     protected function _construct()
     {
