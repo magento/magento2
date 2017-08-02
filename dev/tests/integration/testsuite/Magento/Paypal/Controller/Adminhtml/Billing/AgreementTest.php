@@ -29,10 +29,12 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             ),
             "Response for billing agreement orders doesn't contain billing agreement customers grid"
         );
-        $this->assertXpathCount(
-            '//td[contains(text(), "REF-ID-TEST-678")]',
+        $this->assertEquals(
             1,
-            $this->getResponse()->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//td[contains(text(), "REF-ID-TEST-678")]',
+                $this->getResponse()->getBody()
+            ),
             "Response for billing agreement info doesn't contain reference ID"
         );
     }

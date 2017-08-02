@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block;
  * Test for \Magento\UrlRewrite\Block\Edit
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit\Framework\DOMTestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test prepare layout

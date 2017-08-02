@@ -29,10 +29,12 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             'Response for billing agreement info doesn\'t contain billing agreement info tab'
         );
 
-        $this->assertXpathCount(
-            '//a[contains(text(), "customer@example.com")]',
+        $this->assertEquals(
             1,
-            $this->getResponse()->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//a[contains(text(), "customer@example.com")]',
+                $this->getResponse()->getBody()
+            ),
             'Response for billing agreement info doesn\'t contain Customer info'
         );
     }

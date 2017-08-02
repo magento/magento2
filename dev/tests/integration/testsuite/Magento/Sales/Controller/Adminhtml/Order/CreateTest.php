@@ -113,10 +113,12 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
                 $html
             )
         );
-        $this->assertXpathCountGreaterThanOrEqual(
-            '//*[@data-grid-id="sales_order_create_customer_grid"]',
+        $this->assertGreaterThanOrEqual(
             1,
-            $html
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@data-grid-id="sales_order_create_customer_grid"]',
+                $html
+            )
         );
         $this->assertGreaterThanOrEqual(
             1,
@@ -140,10 +142,9 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             )
         );
 
-        $this->assertXpathCountGreaterThanOrEqual(
-            '//*[@id="coupons:code"]',
+        $this->assertGreaterThanOrEqual(
             1,
-            $html
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath('//*[@id="coupons:code"]', $html)
         );
     }
 

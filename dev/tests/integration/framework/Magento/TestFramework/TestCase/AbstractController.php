@@ -17,7 +17,7 @@ use Magento\Theme\Controller\Result\MessagePlugin;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractController extends \PHPUnit\Framework\DOMTestCase
+abstract class AbstractController extends \PHPUnit\Framework\TestCase
 {
     protected $_runCode = '';
 
@@ -288,57 +288,5 @@ abstract class AbstractController extends \PHPUnit\Framework\DOMTestCase
         }
 
         return $actualMessages;
-    }
-
-    /**
-     * Assert count of elements found by XPath in XML/HTML string
-     *
-     * @param string $xpath
-     * @param int $count
-     * @param string $html
-     * @param string|null $message
-     */
-    public function assertXpathCount($xpath, $count, $html, $message = '')
-    {
-        $this->assertEquals(
-            $count,
-            $this->getElementsCountForXpath($xpath, $html),
-            $message
-        );
-    }
-
-    /**
-     * Assert count of elements found by XPath in XML/HTML string greater or equal to specified value
-     *
-     * @param string $xpath
-     * @param int $count
-     * @param string $html
-     * @param string|null $message
-     */
-    public function assertXpathCountGreaterThanOrEqual($xpath, $count, $html, $message = '')
-    {
-        $this->assertGreaterThanOrEqual(
-            $count,
-            $this->getElementsCountForXpath($xpath, $html),
-            $message
-        );
-    }
-
-    /**
-     * Get elements count for XPath
-     *
-     * @param string $xpath
-     * @param string $html
-     * @return int
-     */
-    private function getElementsCountForXpath($xpath, $html)
-    {
-        $domDocument = new \DOMDocument('1.0', 'UTF-8');
-        libxml_use_internal_errors(true);
-        $domDocument->loadHTML($html);
-        libxml_use_internal_errors(false);
-        $domXpath = new \DOMXPath($domDocument);
-        $nodes = $domXpath->query($xpath);
-        return $nodes->length;
     }
 }

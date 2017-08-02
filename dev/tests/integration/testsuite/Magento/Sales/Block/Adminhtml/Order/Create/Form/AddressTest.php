@@ -10,7 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
  *
  * @magentoAppArea adminhtml
  */
-class AddressTest extends \PHPUnit\Framework\DOMTestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;

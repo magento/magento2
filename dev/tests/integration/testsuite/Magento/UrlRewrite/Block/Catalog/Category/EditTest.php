@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block\Catalog\Category;
  * Test for \Magento\UrlRewrite\Block\Catalog\Category\Edit
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit\Framework\DOMTestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test prepare layout
@@ -123,10 +123,12 @@ class EditTest extends \PHPUnit\Framework\DOMTestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCategory()->getId()) {
-                    $this->assertXpathCount(
-                        '//button[contains(@class, "back") and contains(@onclick, "/category")]',
+                    $this->assertEquals(
                         1,
-                        $buttonsHtml,
+                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                            '//button[contains(@class, "back") and contains(@onclick, "/category")]',
+                            $buttonsHtml
+                        ),
                         'Back button is not present in category URL rewrite edit block'
                     );
                 } else {
@@ -339,24 +341,5 @@ class EditTest extends \PHPUnit\Framework\DOMTestCase
                 ]
             ]
         ];
-    }
-
-    /**
-     * Assert count of elements found by XPath in XML/HTML string
-     *
-     * @param string $xpath
-     * @param int $count
-     * @param string $html
-     * @param string|null $message
-     */
-    public function assertXpathCount($xpath, $count, $html, $message = '')
-    {
-        $domDocument = new \DOMDocument('1.0', 'UTF-8');
-        libxml_use_internal_errors(true);
-        $domDocument->loadHTML($html);
-        libxml_use_internal_errors(false);
-        $domXpath = new \DOMXPath($domDocument);
-        $nodes = $domXpath->query($xpath);
-        $this->assertEquals($count, $nodes->length, $message);
     }
 }

@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test price rendering according to is_product_list flag
  */
-class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\DOMTestCase
+class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterface
