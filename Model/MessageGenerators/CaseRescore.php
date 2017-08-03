@@ -9,11 +9,13 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 
 /**
  * Generates message based on previous and current Case scores.
+ * @since 2.2.0
  */
 class CaseRescore implements GeneratorInterface
 {
     /**
      * @var CaseRepositoryInterface
+     * @since 2.2.0
      */
     private $caseRepository;
 
@@ -21,6 +23,7 @@ class CaseRescore implements GeneratorInterface
      * CaseRescore constructor.
      *
      * @param CaseRepositoryInterface $caseRepository
+     * @since 2.2.0
      */
     public function __construct(CaseRepositoryInterface $caseRepository)
     {
@@ -29,6 +32,7 @@ class CaseRescore implements GeneratorInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function generate(array $data)
     {

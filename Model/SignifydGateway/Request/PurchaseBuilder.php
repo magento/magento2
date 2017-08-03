@@ -16,31 +16,37 @@ use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 
 /**
  * Prepare data related to purchase event represented in case creation request.
+ * @since 2.2.0
  */
 class PurchaseBuilder
 {
     /**
      * @var DateTimeFactory
+     * @since 2.2.0
      */
     private $dateTimeFactory;
 
     /**
      * @var ScopeInterface
+     * @since 2.2.0
      */
     private $scope;
 
     /**
      * @var SignifydOrderSessionId
+     * @since 2.2.0
      */
     private $signifydOrderSessionId;
 
     /**
      * @var PaymentVerificationFactory
+     * @since 2.2.0
      */
     private $paymentVerificationFactory;
 
     /**
      * @var PaymentMethodMapper
+     * @since 2.2.0
      */
     private $paymentMethodMapper;
 
@@ -52,6 +58,7 @@ class PurchaseBuilder
      * @param SignifydOrderSessionId     $signifydOrderSessionId
      * @param PaymentVerificationFactory $paymentVerificationFactory
      * @param PaymentMethodMapper        $paymentMethodMapper
+     * @since 2.2.0
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
@@ -72,6 +79,7 @@ class PurchaseBuilder
      *
      * @param Order $order
      * @return array
+     * @since 2.2.0
      */
     public function build(Order $order)
     {
@@ -123,6 +131,7 @@ class PurchaseBuilder
      *
      * @param Order $order
      * @return array
+     * @since 2.2.0
      */
     private function getProducts(Order $order)
     {
@@ -146,6 +155,7 @@ class PurchaseBuilder
      *
      * @param string $shippingDescription
      * @return string
+     * @since 2.2.0
      */
     private function getShipper($shippingDescription)
     {
@@ -159,6 +169,7 @@ class PurchaseBuilder
      *
      * @param string $shippingDescription
      * @return string
+     * @since 2.2.0
      */
     private function getShippingMethod($shippingDescription)
     {
@@ -172,6 +183,7 @@ class PurchaseBuilder
      *
      * @param string $gatewayCode
      * @return string
+     * @since 2.2.0
      */
     private function getPaymentGateway($gatewayCode)
     {
@@ -191,6 +203,7 @@ class PurchaseBuilder
      * Returns WEB for web-orders, PHONE for orders created by Admin
      *
      * @return string
+     * @since 2.2.0
      */
     private function getOrderChannel()
     {
@@ -202,6 +215,7 @@ class PurchaseBuilder
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @since 2.2.0
      */
     private function getAvsCode(OrderPaymentInterface $orderPayment)
     {
@@ -214,6 +228,7 @@ class PurchaseBuilder
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @since 2.2.0
      */
     private function getCvvCode(OrderPaymentInterface $orderPayment)
     {

@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
  * Responsible for handling webhook posts from Signifyd service.
  *
  * @see https://www.signifyd.com/docs/api/#/reference/webhooks/
+ * @since 2.2.0
  */
 class Handler extends Action
 {
@@ -27,41 +28,49 @@ class Handler extends Action
      * Event topic of test webhook request.
      *
      * @var string
+     * @since 2.2.0
      */
     private static $eventTopicTest = 'cases/test';
 
     /**
      * @var WebhookRequest
+     * @since 2.2.0
      */
     private $webhookRequest;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var WebhookMessageReader
+     * @since 2.2.0
      */
     private $webhookMessageReader;
 
     /**
      * @var UpdatingServiceFactory
+     * @since 2.2.0
      */
     private $caseUpdatingServiceFactory;
 
     /**
      * @var WebhookRequestValidator
+     * @since 2.2.0
      */
     private $webhookRequestValidator;
 
     /**
      * @var CaseRepositoryInterface
+     * @since 2.2.0
      */
     private $caseRepository;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
@@ -74,6 +83,7 @@ class Handler extends Action
      * @param WebhookRequestValidator $webhookRequestValidator
      * @param CaseRepositoryInterface $caseRepository
      * @param Config $config
+     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -99,6 +109,7 @@ class Handler extends Action
      * Processes webhook request data and updates case entity
      *
      * @return void
+     * @since 2.2.0
      */
     public function execute()
     {

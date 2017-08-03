@@ -13,22 +13,26 @@ use Magento\Signifyd\Model\CaseManagement;
 
 /**
  * Checks if is possible to cancel Guarantee for order.
+ * @since 2.2.0
  */
 class CancelGuaranteeAbility
 {
     /**
      * @var CaseManagement
+     * @since 2.2.0
      */
     private $caseManagement;
 
     /**
      * @var OrderRepositoryInterface
+     * @since 2.2.0
      */
     private $orderRepository;
 
     /**
      * @param CaseManagement $caseManagement
      * @param OrderRepositoryInterface $orderRepository
+     * @since 2.2.0
      */
     public function __construct(
         CaseManagement $caseManagement,
@@ -43,6 +47,7 @@ class CancelGuaranteeAbility
      *
      * @param int $orderId
      * @return bool
+     * @since 2.2.0
      */
     public function isAvailable($orderId)
     {
@@ -68,6 +73,7 @@ class CancelGuaranteeAbility
      *
      * @param int $orderId
      * @return OrderInterface|null
+     * @since 2.2.0
      */
     private function getOrder($orderId)
     {

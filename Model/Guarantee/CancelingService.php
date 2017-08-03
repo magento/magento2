@@ -14,31 +14,37 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Sends request to Signifyd to cancel guarantee and updates case entity.
+ * @since 2.2.0
  */
 class CancelingService implements GuaranteeCancelingServiceInterface
 {
     /**
      * @var CaseManagementInterface
+     * @since 2.2.0
      */
     private $caseManagement;
 
     /**
      * @var UpdatingServiceFactory
+     * @since 2.2.0
      */
     private $serviceFactory;
 
     /**
      * @var Gateway
+     * @since 2.2.0
      */
     private $gateway;
 
     /**
      * @var CancelGuaranteeAbility
+     * @since 2.2.0
      */
     private $cancelGuaranteeAbility;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -50,6 +56,7 @@ class CancelingService implements GuaranteeCancelingServiceInterface
      * @param Gateway $gateway
      * @param CancelGuaranteeAbility $cancelGuaranteeAbility
      * @param LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
@@ -67,6 +74,7 @@ class CancelingService implements GuaranteeCancelingServiceInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function cancelForOrder($orderId)
     {

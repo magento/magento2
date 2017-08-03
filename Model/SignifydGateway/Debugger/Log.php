@@ -10,11 +10,13 @@ use Exception;
 
 /**
  * Debugger writes information about request, response and possible exception to standard system log.
+ * @since 2.2.0
  */
 class Log implements DebuggerInterface
 {
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
@@ -22,6 +24,7 @@ class Log implements DebuggerInterface
      * Log constructor.
      *
      * @param LoggerInterface $logger
+     * @since 2.2.0
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -30,6 +33,7 @@ class Log implements DebuggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function success($requestUrl, $requestData, $responseStatus, $responseBody)
     {
@@ -44,6 +48,7 @@ class Log implements DebuggerInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function failure($requestUrl, $requestData, Exception $exception)
     {
@@ -62,6 +67,7 @@ class Log implements DebuggerInterface
      * @param string $requestUrl
      * @param string $requestData
      * @return string
+     * @since 2.2.0
      */
     private function buildRequestInfo($requestUrl, $requestData)
     {
@@ -78,6 +84,7 @@ class Log implements DebuggerInterface
      * @param string $responseStatus
      * @param string $responseBody
      * @return string
+     * @since 2.2.0
      */
     private function buildResponseInfo($responseStatus, $responseBody)
     {
@@ -93,6 +100,7 @@ class Log implements DebuggerInterface
      *
      * @param Exception $exception
      * @return string
+     * @since 2.2.0
      */
     private function buildExceptionInfo(Exception $exception)
     {
@@ -106,6 +114,7 @@ class Log implements DebuggerInterface
      *
      * @param string $info
      * @return void
+     * @since 2.2.0
      */
     private function writeToLog($info)
     {
@@ -119,6 +128,7 @@ class Log implements DebuggerInterface
      * @param string $title
      * @param string $content
      * @return string
+     * @since 2.2.0
      */
     private function buildInfoSection($title, $content)
     {
@@ -133,6 +143,7 @@ class Log implements DebuggerInterface
      * @param string $content
      * @param string $indent
      * @return string
+     * @since 2.2.0
      */
     private function addIndent($content, $indent = '    ')
     {

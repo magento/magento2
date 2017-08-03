@@ -17,26 +17,31 @@ use Magento\Framework\DB\Adapter\DuplicateException;
 /**
  *
  * Default case management implementation
+ * @since 2.2.0
  */
 class CaseManagement implements CaseManagementInterface
 {
     /**
      * @var CaseRepositoryInterface
+     * @since 2.2.0
      */
     private $caseRepository;
 
     /**
      * @var CaseInterfaceFactory
+     * @since 2.2.0
      */
     private $caseFactory;
 
     /**
      * @var FilterBuilder
+     * @since 2.2.0
      */
     private $filterBuilder;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 2.2.0
      */
     private $searchCriteriaBuilder;
 
@@ -46,6 +51,7 @@ class CaseManagement implements CaseManagementInterface
      * @param CaseInterfaceFactory $caseFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @since 2.2.0
      */
     public function __construct(
         CaseRepositoryInterface $caseRepository,
@@ -61,6 +67,7 @@ class CaseManagement implements CaseManagementInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function create($orderId)
     {
@@ -78,6 +85,7 @@ class CaseManagement implements CaseManagementInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function getByOrderId($orderId)
     {

@@ -13,27 +13,32 @@ use Magento\Signifyd\Model\Config;
  * Creates instance of case updating service configured with specific message generator.
  * The message generator initialization depends on specified type (like, case creation, re-scoring, review and
  * guarantee completion).
+ * @since 2.2.0
  */
 class UpdatingServiceFactory
 {
     /**
      * Type of testing Signifyd case
      * @var string
+     * @since 2.2.0
      */
     private static $caseTest = 'cases/test';
 
     /**
      * @var ObjectManagerInterface
+     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var GeneratorFactory
+     * @since 2.2.0
      */
     private $generatorFactory;
 
     /**
      * @var Config
+     * @since 2.2.0
      */
     private $config;
 
@@ -43,6 +48,7 @@ class UpdatingServiceFactory
      * @param ObjectManagerInterface $objectManager
      * @param GeneratorFactory $generatorFactory
      * @param Config $config
+     * @since 2.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -61,6 +67,7 @@ class UpdatingServiceFactory
      * @param string $type
      * @return UpdatingServiceInterface
      * @throws \InvalidArgumentException
+     * @since 2.2.0
      */
     public function create($type)
     {

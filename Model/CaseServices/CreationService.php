@@ -18,36 +18,43 @@ use Psr\Log\LoggerInterface;
  * Case Creation Service
  *
  * Creates new Case entity and register it at Signifyd
+ * @since 2.2.0
  */
 class CreationService implements CaseCreationServiceInterface
 {
     /**
      * @var CaseManagementInterface
+     * @since 2.2.0
      */
     private $caseManagement;
 
     /**
      * @var Gateway;
+     * @since 2.2.0
      */
     private $signifydGateway;
 
     /**
      * @var LoggerInterface
+     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var CaseRepositoryInterface
+     * @since 2.2.0
      */
     private $caseRepository;
 
     /**
      * @var OrderGridUpdater
+     * @since 2.2.0
      */
     private $orderGridUpdater;
 
     /**
      * @var OrderStateService
+     * @since 2.2.0
      */
     private $orderStateService;
 
@@ -60,6 +67,7 @@ class CreationService implements CaseCreationServiceInterface
      * @param CaseRepositoryInterface $caseRepository
      * @param OrderGridUpdater $orderGridUpdater
      * @param OrderStateService $orderStateService
+     * @since 2.2.0
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
@@ -79,6 +87,7 @@ class CreationService implements CaseCreationServiceInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function createForOrder($orderId)
     {

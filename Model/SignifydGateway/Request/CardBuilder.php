@@ -9,16 +9,19 @@ use Magento\Sales\Model\Order;
 
 /**
  * Prepare data related to the card that was used for the purchase and its cardholder.
+ * @since 2.2.0
  */
 class CardBuilder
 {
     /**
      * @var AddressBuilder
+     * @since 2.2.0
      */
     private $addressBuilder;
 
     /**
      * @param AddressBuilder $addressBuilder
+     * @since 2.2.0
      */
     public function __construct(
         AddressBuilder $addressBuilder
@@ -31,6 +34,7 @@ class CardBuilder
      *
      * @param Order $order
      * @return array
+     * @since 2.2.0
      */
     public function build(Order $order)
     {

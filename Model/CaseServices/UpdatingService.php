@@ -16,31 +16,37 @@ use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 
 /**
  * Performs Signifyd case entity updating operations.
+ * @since 2.2.0
  */
 class UpdatingService implements UpdatingServiceInterface
 {
     /**
      * @var GeneratorInterface
+     * @since 2.2.0
      */
     private $messageGenerator;
 
     /**
      * @var CaseRepositoryInterface
+     * @since 2.2.0
      */
     private $caseRepository;
 
     /**
      * @var CommentsHistoryUpdater
+     * @since 2.2.0
      */
     private $commentsHistoryUpdater;
 
     /**
      * @var \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater
+     * @since 2.2.0
      */
     private $orderGridUpdater;
 
     /**
      * @var OrderStateService
+     * @since 2.2.0
      */
     private $orderStateService;
 
@@ -52,6 +58,7 @@ class UpdatingService implements UpdatingServiceInterface
      * @param CommentsHistoryUpdater $commentsHistoryUpdater
      * @param \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater $orderGridUpdater
      * @param OrderStateService $orderStateService
+     * @since 2.2.0
      */
     public function __construct(
         GeneratorInterface $messageGenerator,
@@ -75,6 +82,7 @@ class UpdatingService implements UpdatingServiceInterface
      * @return void
      * @throws NotFoundException
      * @throws LocalizedException
+     * @since 2.2.0
      */
     public function update(CaseInterface $case, array $data)
     {
@@ -103,6 +111,7 @@ class UpdatingService implements UpdatingServiceInterface
      * @param CaseInterface $case
      * @param array $data
      * @return void
+     * @since 2.2.0
      */
     private function setCaseData(CaseInterface $case, array $data)
     {

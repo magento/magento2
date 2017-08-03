@@ -10,21 +10,25 @@ use Magento\Signifyd\Model\CustomerOrders;
 
 /**
  * Prepares details based on registered user account info
+ * @since 2.2.0
  */
 class UserAccountBuilder
 {
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @since 2.2.0
      */
     private $customerRepository;
 
     /**
      * @var \Magento\Framework\Intl\DateTimeFactory
+     * @since 2.2.0
      */
     private $dateTimeFactory;
 
     /**
      * @var CustomerOrders
+     * @since 2.2.0
      */
     private $customerOrders;
 
@@ -32,6 +36,7 @@ class UserAccountBuilder
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param CustomerOrders $customerOrders
      * @param \Magento\Framework\Intl\DateTimeFactory $dateTimeFactory
+     * @since 2.2.0
      */
     public function __construct(
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
@@ -49,6 +54,7 @@ class UserAccountBuilder
      *
      * @param Order $order
      * @return array
+     * @since 2.2.0
      */
     public function build(Order $order)
     {
@@ -87,6 +93,7 @@ class UserAccountBuilder
      *
      * @param string $date
      * @return string
+     * @since 2.2.0
      */
     private function formatDate($date)
     {

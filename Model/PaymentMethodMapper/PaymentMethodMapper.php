@@ -9,11 +9,13 @@ use Magento\Framework\Config\Data;
 
 /**
  * Load and cache configuration data.
+ * @since 2.2.0
  */
 class PaymentMethodMapper
 {
     /**
      * @var Data
+     * @since 2.2.0
      */
     private $paymentMethodMapping;
 
@@ -21,6 +23,7 @@ class PaymentMethodMapper
      * PaymentMapper constructor.
      *
      * @param Data $paymentMapping
+     * @since 2.2.0
      */
     public function __construct(Data $paymentMapping)
     {
@@ -32,6 +35,7 @@ class PaymentMethodMapper
      *
      * @param string $paymentMethod
      * @return string
+     * @since 2.2.0
      */
     public function getSignifydPaymentMethodCode($paymentMethod)
     {
