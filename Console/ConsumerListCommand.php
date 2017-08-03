@@ -20,6 +20,7 @@ class ConsumerListCommand extends Command
 
     /**
      * @var ConsumerConfig
+     * @since 2.2.0
      */
     private $consumerConfig;
 
@@ -78,7 +79,8 @@ HELP
      *
      * @return ConsumerConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getConsumerConfig()
     {
