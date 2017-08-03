@@ -28,16 +28,19 @@ class Publisher implements PublisherInterface
 
     /**
      * @var MessageEncoder
+     * @since 2.1.0
      */
     private $messageEncoder;
 
     /**
      * @var MessageValidator
+     * @since 2.1.0
      */
     private $messageValidator;
 
     /**
      * @var PublisherConfig
+     * @since 2.2.0
      */
     private $publisherConfig;
 
@@ -93,7 +96,8 @@ class Publisher implements PublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getPublisherConfig()
     {

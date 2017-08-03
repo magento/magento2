@@ -9,6 +9,7 @@ namespace Magento\Framework\MessageQueue;
  * Factory class for @see \Magento\Framework\MessageQueue\QueueInterface
  *
  * @api
+ * @since 2.2.0
  */
 interface QueueFactoryInterface
 {
@@ -18,6 +19,7 @@ interface QueueFactoryInterface
      * @param string $queueName
      * @param string $connectionName
      * @return QueueInterface
+     * @since 2.2.0
      */
     public function create($queueName, $connectionName);
 }

@@ -9,7 +9,8 @@ namespace Magento\Framework\MessageQueue\Rpc;
 /**
  * A MessageQueue Consumer to handle receiving, processing and replying to an RPC message.
  *
- * @deprecated
+ * @deprecated 2.2.0
+ * @since 2.1.0
  */
 class Consumer extends \Magento\Framework\MessageQueue\Consumer
 {

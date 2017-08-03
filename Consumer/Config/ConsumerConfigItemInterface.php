@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInt
 
 /**
  * Items of this class represent config items declared in etc/queue_consumer.xsd
+ * @since 2.2.0
  */
 interface ConsumerConfigItemInterface
 {
@@ -16,6 +17,7 @@ interface ConsumerConfigItemInterface
      * Get consumer name.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getName();
 
@@ -23,6 +25,7 @@ interface ConsumerConfigItemInterface
      * Get connection name.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getConnection();
 
@@ -30,6 +33,7 @@ interface ConsumerConfigItemInterface
      * Get name of the queue current consumer is listening to.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getQueue();
 
@@ -37,6 +41,7 @@ interface ConsumerConfigItemInterface
      * Get consumer class name.
      *
      * @return string
+     * @since 2.2.0
      */
     public function getConsumerInstance();
 
@@ -44,6 +49,7 @@ interface ConsumerConfigItemInterface
      * Get information about custom handlers to be used by current consumer.
      *
      * @return HandlerInterface[]
+     * @since 2.2.0
      */
     public function getHandlers();
 
@@ -51,6 +57,7 @@ interface ConsumerConfigItemInterface
      * Get maximum number of messages to be consumed from queue before terminating consumer.
      *
      * @return int
+     * @since 2.2.0
      */
     public function getMaxMessages();
 }

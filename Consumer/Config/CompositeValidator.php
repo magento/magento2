@@ -10,11 +10,13 @@ use Magento\Framework\Phrase;
 
 /**
  * Composite validator for consumer config.
+ * @since 2.2.0
  */
 class CompositeValidator implements ValidatorInterface
 {
     /**
      * @var ValidatorInterface[]
+     * @since 2.2.0
      */
     private $validators;
 
@@ -22,6 +24,7 @@ class CompositeValidator implements ValidatorInterface
      * Initialize dependencies.
      *
      * @param ValidatorInterface[] $validators
+     * @since 2.2.0
      */
     public function __construct(array $validators)
     {
@@ -30,6 +33,7 @@ class CompositeValidator implements ValidatorInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function validate($configData)
     {

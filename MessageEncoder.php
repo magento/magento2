@@ -43,6 +43,7 @@ class MessageEncoder
 
     /**
      * @var CommunicationConfig
+     * @since 2.2.0
      */
     private $communicationConfig;
 
@@ -219,7 +220,8 @@ class MessageEncoder
      *
      * @return CommunicationConfig
      *
-     * @deprecated
+     * @deprecated 2.2.0
+     * @since 2.2.0
      */
     private function getCommunicationConfig()
     {

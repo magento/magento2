@@ -10,36 +10,43 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\It
 
 /**
  * {@inheritdoc}
+ * @since 2.2.0
  */
 class ConsumerConfigItem implements ConsumerConfigItemInterface
 {
     /**
      * @var string
+     * @since 2.2.0
      */
     private $name;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $queue;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $consumerInstance;
 
     /**
      * @var HandlerIterator
+     * @since 2.2.0
      */
     private $handlers;
 
     /**
      * @var string
+     * @since 2.2.0
      */
     private $maxMessages;
 
@@ -47,6 +54,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
      * Initialize dependencies.
      *
      * @param HandlerIteratorFactory $handlerIteratorFactory
+     * @since 2.2.0
      */
     public function __construct(HandlerIteratorFactory $handlerIteratorFactory)
     {
@@ -55,6 +63,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getName()
     {
@@ -63,6 +72,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getConnection()
     {
@@ -71,6 +81,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getQueue()
     {
@@ -79,6 +90,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getConsumerInstance()
     {
@@ -87,6 +99,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getHandlers()
     {
@@ -95,6 +108,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function getMaxMessages()
     {
@@ -103,6 +117,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function setData(array $data)
     {

@@ -13,36 +13,43 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * A MessageQueue Publisher to handle publishing messages in bulk.
+ * @since 2.2.0
  */
 class Publisher implements PublisherInterface
 {
     /**
      * @var ExchangeRepository
+     * @since 2.2.0
      */
     private $exchangeRepository;
 
     /**
      * @var EnvelopeFactory
+     * @since 2.2.0
      */
     private $envelopeFactory;
 
     /**
      * @var MessageEncoder
+     * @since 2.2.0
      */
     private $messageEncoder;
 
     /**
      * @var MessageValidator
+     * @since 2.2.0
      */
     private $messageValidator;
 
     /**
      * @var PublisherConfig
+     * @since 2.2.0
      */
     private $publisherConfig;
 
     /**
      * @var \Magento\Framework\MessageQueue\MessageIdGeneratorInterface
+     * @since 2.2.0
      */
     private $messageIdGenerator;
 
@@ -53,6 +60,7 @@ class Publisher implements PublisherInterface
      * @param MessageValidator $messageValidator
      * @param PublisherConfig $publisherConfig
      * @param \Magento\Framework\MessageQueue\MessageIdGeneratorInterface $messageIdGenerator
+     * @since 2.2.0
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
@@ -72,6 +80,7 @@ class Publisher implements PublisherInterface
 
     /**
      * @inheritdoc
+     * @since 2.2.0
      */
     public function publish($topicName, $data)
     {

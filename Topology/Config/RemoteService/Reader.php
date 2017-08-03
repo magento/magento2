@@ -14,26 +14,31 @@ use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 
 /**
  * Reader for queue topology configs based on remote service declaration in DI configs.
+ * @since 2.2.0
  */
 class Reader implements ReaderInterface
 {
     /**
      * @var DefaultValueProvider
+     * @since 2.2.0
      */
     private $defaultValueProvider;
 
     /**
      * @var ObjectManagerConfig
+     * @since 2.2.0
      */
     private $objectManagerConfig;
 
     /**
      * @var ReflectionGenerator
+     * @since 2.2.0
      */
     private $reflectionGenerator;
 
     /**
      * @var ServiceMethodsMap
+     * @since 2.2.0
      */
     private $serviceMethodsMap;
 
@@ -44,6 +49,7 @@ class Reader implements ReaderInterface
      * @param ObjectManagerConfig $objectManagerConfig
      * @param ReflectionGenerator $reflectionGenerator
      * @param ServiceMethodsMap $serviceMethodsMap
+     * @since 2.2.0
      */
     public function __construct(
         DefaultValueProvider $defaultValueProvider,
@@ -59,6 +65,7 @@ class Reader implements ReaderInterface
 
     /**
      * {@inheritdoc}
+     * @since 2.2.0
      */
     public function read($scope = null)
     {
@@ -85,6 +92,7 @@ class Reader implements ReaderInterface
      * @throws \LogicException
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 2.2.0
      */
     private function generateBindings()
     {
@@ -117,6 +125,7 @@ class Reader implements ReaderInterface
      * Get list of remote services declared in DI config.
      *
      * @return array
+     * @since 2.2.0
      */
     private function getRemoteServices()
     {
